@@ -1,0 +1,22 @@
+
+<project xmlns:maven="jelly:maven" xmlns:j="jelly:core">
+
+	<goal name="jremoting:install">
+ 		<attainGoal name="multiproject:install"/>
+	</goal>
+
+    <goal name="jremoting:itests" prereqs="jremoting:install">
+    		<maven:reactor basedir="${basedir}/itests"
+                postProcessing="true"
+                includes="project.xml"
+                excludes=""
+                goals="test"
+                banner="Running integration tests"
+                ignoreFailures="true"/>
+     </goal>
+	
+  	<goal name="jremoting:clean">
+		<attainGoal name="multiproject:clean"/>
+  	</goal>
+
+</project>

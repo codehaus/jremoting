@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project>
+
+  <pomVersion>3</pomVersion>
+  <groupId>codehaus</groupId>
+  <id>codehaus-remoting</id>
+  <name>JRemoting</name>
+  <currentVersion>${jremoting.version}</currentVersion>
+  <organization>
+    <name>JRemoting</name>
+  </organization>
+  <inceptionYear>2005</inceptionYear>
+
+  <package></package>
+
+  <developers>
+    <developer>
+      <name>Paul Hammant</name>
+      <id>hammant</id>
+      <organization>ThoughtWorks</organization>
+    </developer>
+    <developer>
+      <name>Vinay Chandran</name>
+      <id>vinayc</id>
+      <email>vinayc@apache.org</email>
+    </developer>
+  </developers>
+
+  <!-- TODO . get people who have contributed to AltRMI and after -->
+  <contributors/>
+
+  <build>
+	<!-- TODO -->
+    <sourceDirectory>${basedir}/src/java</sourceDirectory>
+    <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
+    <integrationUnitTestSourceDirectory/>
+    <aspectSourceDirectory/>
+
+    <unitTest>
+      <includes>
+        <include>**/*TestCase.*</include>
+      </includes>
+      <excludes>
+        <exclude>**/Abstract*.*</exclude>
+      </excludes>
+      <resources/>
+    </unitTest>
+
+    <integrationUnitTestPatterns></integrationUnitTestPatterns>
+    
+    <resources/>
+    
+    <jars></jars>
+  </build>
+
+	<!-- Reports -->
+	<reports>
+		<report>maven-junit-report-plugin</report>
+	</reports>
+</project>

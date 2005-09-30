@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project>
+
+  <extend>${basedir}/../project.xml</extend>
+
+  <groupId>jremoting</groupId>
+  <id>jremoting-server</id>
+  <name>JRemoting Server</name>
+  <package>org.codehaus.jremoting.server</package>
+
+  <inceptionYear>2005</inceptionYear>
+  <shortDescription>
+    JRemoting Server Implementation.
+  </shortDescription>
+
+  <dependencies>
+	<dependency>
+		<groupId>jremoting</groupId>
+		<artifactId>jremoting-api</artifactId>
+		<version>${pom.currentVersion}</version>
+	</dependency>
+	<dependency>
+		<id>commons-logging</id>
+		<version>1.0.4</version>
+	</dependency>
+	<dependency>
+		<id>commons-attributes</id>
+        <artifactId>commons-attributes-api</artifactId>
+		<version>2.1</version>
+	</dependency>
+	<dependency>
+		<id>log4j</id>
+		<version>1.2.8</version>
+	</dependency>
+  </dependencies>
+
+</project>

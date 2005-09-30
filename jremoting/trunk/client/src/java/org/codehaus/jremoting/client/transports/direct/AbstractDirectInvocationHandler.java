@@ -1,0 +1,158 @@
+/* ====================================================================
+ * Copyright 2005 JRemoting Committers
+ * Portions copyright 2001 - 2004 Apache Software Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.codehaus.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+package org.codehaus.jremoting.client.transports.direct;
+
+import java.io.IOException;
+
+import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.commands.Request;
+import org.codehaus.jremoting.client.NotPublishedException;
+import org.codehaus.jremoting.commands.PublishedNameRequest;
+import org.codehaus.jremoting.commands.TryLaterResponse;
+import org.codehaus.jremoting.commands.RequestConstants;
+import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.*;
+import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
+import org.codehaus.jremoting.commands.MethodRequest;
+import org.codehaus.jremoting.commands.NotPublishedResponse;
+import org.codehaus.jremoting.commands.*;
+
+/**
+ * Class DirectInvocationHandler
+ *
+ *
+ * @author Paul Hammant
+ * @version $Revision: 1.2 $
+ */
+public abstract class AbstractDirectInvocationHandler extends AbstractClientInvocationHandler
+{
+
+    protected boolean m_methodLogging = false;
+    protected long m_lastRealRequest = System.currentTimeMillis();
+
+
+    public AbstractDirectInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger)
+    {
+        super(threadPool, clientMonitor, connectionPinger);
+    }
+
+    /**
+     * Method handleInvocation
+     *
+     *
+     * @param request
+     *
+     * @return
+     *
+     */
+    public Response handleInvocation( Request request )
+    {
+
+        if( request.getRequestCode() != RequestConstants.PINGREQUEST )
+        {
+            m_lastRealRequest = System.currentTimeMillis();
+        }
+
+        boolean again = true;
+        Response response = null;
+        int tries = 0;
+        long start = 0;
+
+        if( m_methodLogging )
+        {
+            start = System.currentTimeMillis();
+        }
+
+        while( again )
+        {
+            tries++;
+
+            again = false;
+
+            try
+            {
+                response = performInvocation( request );
+            }
+            catch( IOException ioe )
+            {
+                ioe.printStackTrace();
+            }
+
+            //if ((response instanceof ProblemReply))  // slower by 11%
+            if( response.getReplyCode() >= 100 )
+            {
+                if( response instanceof TryLaterResponse )
+                {
+                    int millis = ( (TryLaterResponse)response ).getSuggestedDelayMillis();
+
+                    m_clientMonitor.serviceSuspended(this.getClass(), request, tries, millis );
+
+                    again = true;
+                }
+                else if( response instanceof NoSuchReferenceResponse )
+                {
+                    throw new NoSuchReferenceException( ( (NoSuchReferenceResponse)response )
+                                                        .getReferenceID() );
+                }
+                else if( response instanceof NotPublishedResponse )
+                {
+                    PublishedNameRequest pnr = (PublishedNameRequest)request;
+
+                    throw new NotPublishedException( pnr.getPublishedServiceName(),
+                                                     pnr.getObjectName() );
+                }
+            }
+        }
+
+        if( m_methodLogging )
+        {
+            if( request instanceof MethodRequest )
+            {
+                m_clientMonitor.methodCalled(
+                        this.getClass(), ( (MethodRequest)request ).getMethodSignature(),
+                    System.currentTimeMillis() - start, "" );
+            }
+        }
+
+        return response;
+    }
+
+    protected boolean tryReconnect()
+    {
+
+        // blimey how do we reconnect this?
+        throw new InvocationException( "Direct connection broken, unable to reconnect." );
+    }
+
+    /**
+     * Method getLastRealRequest
+     *
+     *
+     * @return
+     *
+     */
+    public long getLastRealRequest()
+    {
+        return m_lastRealRequest;
+    }
+
+    protected abstract Response performInvocation( Request request ) throws IOException;
+}
