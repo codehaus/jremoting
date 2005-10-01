@@ -17,6 +17,13 @@
 	
   	<goal name="jremoting:clean">
 		<attainGoal name="multiproject:clean"/>
-  	</goal>
+		<maven:reactor basedir="${basedir}/itests"
+                postProcessing="true"
+                includes="project.xml"
+                excludes=""
+                goals="clean"
+                banner="Cleaning integration tests"
+                ignoreFailures="true"/>
+    	</goal>
 
 </project>
