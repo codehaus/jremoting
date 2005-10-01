@@ -1,61 +1,85 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
 <project>
 
-  <pomVersion>3</pomVersion>
-  <groupId>codehaus</groupId>
-  <id>codehaus-remoting</id>
-  <name>JRemoting</name>
-  <currentVersion>${jremoting.version}</currentVersion>
-  <organization>
-    <name>JRemoting</name>
-  </organization>
-  <inceptionYear>2005</inceptionYear>
+	<pomVersion>3</pomVersion>
+	<groupId>jremoting</groupId>
+	<id>jremoting</id>
+	<name>JRemoting</name>
+	<currentVersion>${jremoting.version}</currentVersion>
+	<organization>
+		<name>JRemoting</name>
+	</organization>
+	<inceptionYear>2005</inceptionYear>
 
-  <package></package>
+	<package>org.codehaus.jremoting</package>
+    <logo>/images/jremoting-logo.png</logo>
+    <description>
+        Please refer to the &lt;a href="http://jremoting.codehaus.org/"&gt;main website&lt;/a&gt; for documentation.    
+    </description>
+    <shortDescription>Java Remoting framework which supports RMI but adds remoting facilities not found in RMI.</shortDescription>
+    <url>http://jremoting.codehaus.org/</url>
+    <issueTrackingUrl>http://jira.codehaus.org/browse/JRMT</issueTrackingUrl>
+    <siteAddress>beaver.codehaus.org</siteAddress>
+    <siteDirectory>/home/projects/jremoting/public_html/versions/${pom.currentVersion}/${pom.artifactId}</siteDirectory>
 
-  <developers>
-    <developer>
-      <name>Paul Hammant</name>
-      <id>hammant</id>
-      <organization>ThoughtWorks</organization>
-    </developer>
-    <developer>
-      <name>Vinay Chandran</name>
-      <id>vinayc</id>
-      <email>vinayc@apache.org</email>
-    </developer>
-  </developers>
+    <distributionSite>beaver.codehaus.org</distributionSite>
+    <distributionDirectory>/dist</distributionDirectory>
 
-  <!-- TODO . get people who have contributed to AltRMI and after -->
-  <contributors/>
+    <repository>
+        <connection>scm:svn:https://svn.codehaus.org/jremoting/jremoting/trunk</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/jremoting/jremoting/trunk</developerConnection>
+        <url>https://svn.codehaus.org/jremoting/jremoting/trunk</url>
+    </repository>
 
-  <build>
-	<!-- TODO -->
-    <sourceDirectory>${basedir}/src/java</sourceDirectory>
-    <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
-    <integrationUnitTestSourceDirectory/>
-    <aspectSourceDirectory/>
 
-    <unitTest>
-      <includes>
-        <include>**/*TestCase.*</include>
-      </includes>
-      <excludes>
-        <exclude>**/Abstract*.*</exclude>
-      </excludes>
-      <resources/>
-    </unitTest>
+	<developers>
+		<developer>
+			<name>Paul Hammant</name>
+			<id>paul</id>
+			<organization>ThoughtWorks</organization>
+		</developer>
+		<developer>
+			<name>Vinay Chandran</name>
+			<id>vinayc</id>
+			<email>vinayc@apache.org</email>
+		</developer>
+		<developer>
+			<name>Mauro Talevi</name>
+			<id>mauro</id>
+		</developer>
+	</developers>
 
-    <integrationUnitTestPatterns></integrationUnitTestPatterns>
-    
-    <resources/>
-    
-    <jars></jars>
-  </build>
+	<!-- TODO add people who have contributed to AltRMI and after -->
+	<contributors/>
 
-	<!-- Reports -->
-	<reports>
-		<report>maven-junit-report-plugin</report>
-	</reports>
+	<build>
+        <sourceDirectory>${basedir}/src/java</sourceDirectory>
+        <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
+        <unitTest>
+            <includes>
+                <include>**/*Test.java</include>
+                <include>**/*TestCase.java</include>
+            </includes>
+            <excludes>
+                <exclude>**/Abstract*</exclude>
+            </excludes>
+            <resources>
+                <resource>
+                    <directory>${basedir}/src/test</directory>
+                    <includes>
+                        <include>**/*</include>
+                    </includes>
+                </resource>
+            </resources>
+        </unitTest>
+    </build>
+
+    <reports>
+        <report>maven-license-plugin</report>
+        <report>maven-simian-plugin</report>
+        <report>maven-javadoc-plugin</report>
+        <report>maven-clover-plugin</report>
+        <report>maven-junit-report-plugin</report>
+    </reports>
+
 </project>
