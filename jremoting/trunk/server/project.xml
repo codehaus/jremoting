@@ -3,8 +3,6 @@
 <project>
 
   <extend>${basedir}/../project.xml</extend>
-
-  <groupId>jremoting</groupId>
   <id>jremoting-server</id>
   <name>JRemoting Server</name>
   <package>org.codehaus.jremoting.server</package>

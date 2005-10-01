@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <project>
-
     <extend>${basedir}/../project.xml</extend>
-
-    <groupId>jremoting</groupId>
     <id>jremoting-tools</id>
     <name>JRemoting Tools</name>
     <package>org.codehaus.jremoting.tools</package>

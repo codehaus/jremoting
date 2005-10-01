@@ -5,6 +5,14 @@
  		<attainGoal name="multiproject:install"/>
 	</goal>
 
+	<goal name="jremoting:deploy">
+ 		<attainGoal name="multiproject:deploy"/>
+	</goal>
+
+	<goal name="jremoting:site-deploy">
+ 		<attainGoal name="multiproject:site-deploy"/>
+	</goal>
+
     <goal name="jremoting:itests" prereqs="jremoting:install">
     		<maven:reactor basedir="${basedir}/itests"
                 postProcessing="true"

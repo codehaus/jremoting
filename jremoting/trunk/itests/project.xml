@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <project>
-
     <extend>${basedir}/../project.xml</extend>
-
-    <groupId>jremoting</groupId>
-    <id>jremoting-integration-tests</id>
+    <id>jremoting-itests</id>
     <name>JRemoting Integration tests</name>
     <package>org.codehaus.jremoting.tests</package>
 
