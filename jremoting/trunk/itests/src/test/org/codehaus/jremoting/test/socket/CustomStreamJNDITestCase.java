@@ -57,8 +57,8 @@ public class CustomStreamJNDITestCase extends AbstractHelloTestCase {
         // JNDI lookup.  Note there are no imports of JRemoting Remoting classes in this test.
         Hashtable env = new Hashtable();
 
-        env.put(Context.INITIAL_CONTEXT_FACTORY, "org.codehaus.jremoting.client.impl.naming.DefaultInitialContextFactory");
-        env.put(Context.PROVIDER_URL, "codehaus-remoting://localhost:10006/SocketCustomStream");
+        env.put(Context.INITIAL_CONTEXT_FACTORY, "org.codehaus.jremoting.client.naming.DefaultInitialContextFactory");
+        env.put(Context.PROVIDER_URL, "jremoting://localhost:10006/SocketCustomStream");
         env.put("proxy.type", "ClientSideClasses");
         env.put("bean.type", "NotBeanOnly");
         env.put("optimize", "false");

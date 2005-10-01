@@ -26,6 +26,7 @@ import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostCon
  *
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  * @version $Revision: 1.2 $
+ * @todo - turn into a TestCase
  */
 public class MemoryLeakClientTest {
 

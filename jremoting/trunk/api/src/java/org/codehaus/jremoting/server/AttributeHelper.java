@@ -24,15 +24,15 @@ import java.lang.reflect.Method;
 public class AttributeHelper {
 
     protected boolean isMethodAsync(Method method) {
-        return Attributes.hasAttribute(method, "codehaus-remoting:method:async");
+        return Attributes.hasAttribute(method, "jremoting:method:async");
     }
 
     protected boolean isMethodAsyncCommit(Method method) {
-        return Attributes.hasAttribute(method, "codehaus-remoting:method:commit");
+        return Attributes.hasAttribute(method, "jremoting:method:commit");
     }
 
     protected boolean isMethodAsyncRollback(Method method) {
-        return Attributes.hasAttribute(method, "codehaus-remoting:method:rollback");
+        return Attributes.hasAttribute(method, "jremoting:method:rollback");
     }
 
 }

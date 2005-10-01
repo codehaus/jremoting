@@ -18,32 +18,32 @@
 package org.codehaus.jremoting.test.async;
 
 /**
- * @codehaus-remoting:facade async-mode1
+ * @jremoting:facade async-mode1
  */
 public interface AsyncTest {
 
     /**
-     * @codehaus-remoting:method:async
+     * @jremoting:method:async
      */
     void setOne(String one);
 
     /**
-     * @codehaus-remoting:method:async
+     * @jremoting:method:async
      */
     void setTwo(String two);
 
     /**
-     * @codehaus-remoting:method:async
+     * @jremoting:method:async
      */
     void setThree(String three);
 
     /**
-     * @codehaus-remoting:method:commit
+     * @jremoting:method:commit
      */
     void fire();
 
     /**
-     * @codehaus-remoting:method:rollback
+     * @jremoting:method:rollback
      */
     void whoa();
 
