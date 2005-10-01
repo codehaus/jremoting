@@ -31,7 +31,7 @@ public class ConnectionException extends IOException {
 
     // For the time being, this is backwards compatible with 1.3. It could
     // just as easily use the 1.4 constructors for Exception.
-    private Throwable m_throwableCause;
+    private Throwable throwableCause;
 
     /**
      * Constructor ConnectionException
@@ -44,14 +44,14 @@ public class ConnectionException extends IOException {
 
     public ConnectionException(String message, Throwable cause) {
         super(message);
-        m_throwableCause = cause;
+        throwableCause = cause;
     }
 
     public Throwable getCause() {
-        return m_throwableCause;
+        return throwableCause;
     }
 
     public String getMessage() {
-        return super.getMessage() + (m_throwableCause != null ? " : " + m_throwableCause.getMessage() : "");
+        return super.getMessage() + (throwableCause != null ? " : " + throwableCause.getMessage() : "");
     }
 }

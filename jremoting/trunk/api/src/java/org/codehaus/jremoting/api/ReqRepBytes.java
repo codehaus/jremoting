@@ -27,41 +27,41 @@ import java.io.IOException;
  * @version $Revision: 1.2 $
  */
 public class ReqRepBytes {
-    int m_byteSize;
-    byte[] m_bytes;
-    Boolean m_isRequest;
-    IOException m_ioe;
+    int byteSize;
+    byte[] bytes;
+    Boolean isRequest;
+    IOException ioe;
 
     public ReqRepBytes(int byteSize, byte[] bytes, Boolean isRequest, IOException ioe) {
-        m_byteSize = byteSize;
-        m_bytes = bytes;
-        m_isRequest = isRequest;
-        m_ioe = ioe;
+        this.byteSize = byteSize;
+        this.bytes = bytes;
+        this.isRequest = isRequest;
+        this.ioe = ioe;
     }
 
     public boolean ioeDuringReadInt() {
-        return (m_ioe != null & m_byteSize == 0);
+        return (ioe != null & byteSize == 0);
     }
 
     public boolean hadIOE() {
-        return (m_ioe != null);
+        return (ioe != null);
     }
 
     public int getByteSize() {
-        return m_byteSize;
+        return byteSize;
     }
 
     public byte[] getBytes() {
-        return m_bytes;
+        return bytes;
     }
 
     // request or reply
     public boolean isRequest() {
-        return m_isRequest.booleanValue();
+        return isRequest.booleanValue();
     }
 
     public IOException getIOException() {
-        return m_ioe;
+        return ioe;
     }
 
     public static ReqRepBytes getRequestReplyBytesFromDataStream(DataInputStream dis) {

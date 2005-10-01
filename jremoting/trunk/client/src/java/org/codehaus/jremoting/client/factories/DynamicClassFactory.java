@@ -56,6 +56,6 @@ public class DynamicClassFactory extends AbstractFactory {
      */
 
     public void close() {
-        m_hostContext.getInvocationHandler().close();
+        hostContext.getInvocationHandler().close();
     }
 }

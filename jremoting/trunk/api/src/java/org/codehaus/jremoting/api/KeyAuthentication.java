@@ -33,8 +33,8 @@ public final class KeyAuthentication extends Authentication {
 
     static final long serialVersionUID = -6587101868869375750L;
 
-    private String m_publicKey;
-    private String m_signedText;
+    private String publicKey;
+    private String signedText;
 
     /**
      * Constructor KeyAuthentication
@@ -43,8 +43,8 @@ public final class KeyAuthentication extends Authentication {
      * @param signedText the signed text
      */
     public KeyAuthentication(String publicKey, String signedText) {
-        m_publicKey = publicKey;
-        m_signedText = signedText;
+        this.publicKey = publicKey;
+        this.signedText = signedText;
     }
 
     /**
@@ -59,7 +59,7 @@ public final class KeyAuthentication extends Authentication {
      * @return the public key
      */
     public String getPublicKey() {
-        return m_publicKey;
+        return publicKey;
     }
 
     /**
@@ -68,7 +68,7 @@ public final class KeyAuthentication extends Authentication {
      * @return the signed text
      */
     public String getSignedText() {
-        return m_signedText;
+        return signedText;
     }
 
     /**
@@ -86,8 +86,8 @@ public final class KeyAuthentication extends Authentication {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_publicKey);
-        out.writeObject(m_signedText);
+        out.writeObject(publicKey);
+        out.writeObject(signedText);
     }
 
     /**
@@ -103,7 +103,7 @@ public final class KeyAuthentication extends Authentication {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_publicKey = (String) in.readObject();
-        m_signedText = (String) in.readObject();
+        publicKey = (String) in.readObject();
+        signedText = (String) in.readObject();
     }
 }

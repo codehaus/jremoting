@@ -32,8 +32,8 @@ import java.io.ObjectOutput;
 public final class UserPasswordAuthentication extends Authentication {
     static final long serialVersionUID = -1387784311223571160L;
 
-    private String m_userID;
-    private String m_password;
+    private String userID;
+    private String password;
 
     /**
      * Constructor UserPasswordAuthentication
@@ -42,8 +42,8 @@ public final class UserPasswordAuthentication extends Authentication {
      * @param password the password
      */
     public UserPasswordAuthentication(String userID, String password) {
-        m_userID = userID;
-        m_password = password;
+        this.userID = userID;
+        this.password = password;
     }
 
     /**
@@ -58,7 +58,7 @@ public final class UserPasswordAuthentication extends Authentication {
      * @return the user ID
      */
     public String getUserID() {
-        return m_userID;
+        return userID;
     }
 
     /**
@@ -67,7 +67,7 @@ public final class UserPasswordAuthentication extends Authentication {
      * @return the password
      */
     public String getPassword() {
-        return m_password;
+        return password;
     }
 
     /**
@@ -85,8 +85,8 @@ public final class UserPasswordAuthentication extends Authentication {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_userID);
-        out.writeObject(m_password);
+        out.writeObject(userID);
+        out.writeObject(password);
     }
 
     /**
@@ -102,7 +102,7 @@ public final class UserPasswordAuthentication extends Authentication {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_userID = (String) in.readObject();
-        m_password = (String) in.readObject();
+        userID = (String) in.readObject();
+        password = (String) in.readObject();
     }
 }

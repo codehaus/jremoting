@@ -55,10 +55,10 @@ import javax.swing.*;
 public abstract class AbstractStreamClientInvocationHandler extends AbstractClientInvocationHandler
 {
 
-    private ClientStreamReadWriter m_objectReadWriter;
-    private boolean m_methodLogging = false;
-    private long m_lastRealRequest = System.currentTimeMillis();
-    protected final ClassLoader m_interfacesClassLoader;
+    private ClientStreamReadWriter objectReadWriter;
+    private boolean methodLogging = false;
+    private long lastRealRequest = System.currentTimeMillis();
+    protected final ClassLoader interfacesClassLoader;
 
     /**
      * Constructor AbstractStreamClientInvocationHandler
@@ -71,7 +71,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
     public AbstractStreamClientInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader)
     {
         super(threadPool, clientMonitor, connectionPinger);
-        m_interfacesClassLoader = interfacesClassLoader;
+        this.interfacesClassLoader = interfacesClassLoader;
     }
 
     /**
@@ -83,12 +83,12 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
      */
     public ClassLoader getInterfacesClassLoader()
     {
-        return m_interfacesClassLoader;
+        return interfacesClassLoader;
     }
 
     protected void setObjectReadWriter( ClientStreamReadWriter objectReadWriter )
     {
-        m_objectReadWriter = objectReadWriter;
+        this.objectReadWriter = objectReadWriter;
     }
 
     protected void requestWritten()
@@ -108,7 +108,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
     {
         if( request.getRequestCode() != RequestConstants.PINGREQUEST )
         {
-            m_lastRealRequest = System.currentTimeMillis();
+            lastRealRequest = System.currentTimeMillis();
         }
 
         try
@@ -120,7 +120,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
                 int tries = 0;
                 long start = 0;
 
-                if( m_methodLogging )
+                if( methodLogging )
                 {
                     start = System.currentTimeMillis();
                 }
@@ -135,7 +135,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
                     {
                         long t1 = System.currentTimeMillis();
 
-                        response = (Response)m_objectReadWriter.postRequest( request );
+                        response = (Response)objectReadWriter.postRequest( request );
 
                         long t2 = System.currentTimeMillis();
 
@@ -152,7 +152,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
                             {
                                 int millis = ( (TryLaterResponse)response ).getSuggestedDelayMillis();
 
-                                m_clientMonitor.serviceSuspended(this.getClass(), request, tries,
+                                clientMonitor.serviceSuspended(this.getClass(), request, tries,
                                                                             millis );
 
                                 again = true;
@@ -186,7 +186,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
 
                             while( !tryReconnect() )
                             {
-                                m_clientMonitor.serviceAbend(this.getClass(), retryConnectTries, ioe);
+                                clientMonitor.serviceAbend(this.getClass(), retryConnectTries, ioe);
 
                                 retryConnectTries++;
                             }
@@ -200,11 +200,11 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
                         }
                     }
                 }
-                if( m_methodLogging )
+                if( methodLogging )
                 {
                     if( request instanceof MethodRequest )
                     {
-                        m_clientMonitor.methodCalled(
+                        clientMonitor.methodCalled(
                                 this.getClass(), ( (MethodRequest)request ).getMethodSignature(),
                             System.currentTimeMillis() - start, "" );
                     }
@@ -243,6 +243,6 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
      */
     public long getLastRealRequest()
     {
-        return m_lastRealRequest;
+        return lastRealRequest;
     }
 }

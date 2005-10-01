@@ -73,6 +73,6 @@ public class PipedCustomStreamHostContext extends AbstractHostContext
      */
     public void initialize() throws ConnectionException
     {
-         m_invocationHandler.initialize();
+         invocationHandler.initialize();
     }
 }

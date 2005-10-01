@@ -46,7 +46,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
 {
 
     protected boolean m_methodLogging = false;
-    protected long m_lastRealRequest = System.currentTimeMillis();
+    protected long lastRealRequest = System.currentTimeMillis();
 
 
     public AbstractDirectInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger)
@@ -68,7 +68,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
 
         if( request.getRequestCode() != RequestConstants.PINGREQUEST )
         {
-            m_lastRealRequest = System.currentTimeMillis();
+            lastRealRequest = System.currentTimeMillis();
         }
 
         boolean again = true;
@@ -103,7 +103,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
                 {
                     int millis = ( (TryLaterResponse)response ).getSuggestedDelayMillis();
 
-                    m_clientMonitor.serviceSuspended(this.getClass(), request, tries, millis );
+                    clientMonitor.serviceSuspended(this.getClass(), request, tries, millis );
 
                     again = true;
                 }
@@ -126,7 +126,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
         {
             if( request instanceof MethodRequest )
             {
-                m_clientMonitor.methodCalled(
+                clientMonitor.methodCalled(
                         this.getClass(), ( (MethodRequest)request ).getMethodSignature(),
                     System.currentTimeMillis() - start, "" );
             }
@@ -151,7 +151,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
      */
     public long getLastRealRequest()
     {
-        return m_lastRealRequest;
+        return lastRealRequest;
     }
 
     protected abstract Response performInvocation( Request request ) throws IOException;

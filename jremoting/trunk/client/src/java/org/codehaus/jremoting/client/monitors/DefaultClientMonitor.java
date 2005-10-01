@@ -32,7 +32,7 @@ import java.io.IOException;
  */
 public class DefaultClientMonitor implements ClientMonitor {
 
-    private int m_maxReconnectAttempts;
+    private int maxReconnectAttempts;
 
     /**
      * Creates a new DefaultClientMonitor.
@@ -51,7 +51,7 @@ public class DefaultClientMonitor implements ClientMonitor {
      *                             attempts should be made.
      */
     public DefaultClientMonitor(int maxReconnectAttempts) {
-        m_maxReconnectAttempts = maxReconnectAttempts;
+        this.maxReconnectAttempts = maxReconnectAttempts;
     }
 
     /**
@@ -106,9 +106,9 @@ public class DefaultClientMonitor implements ClientMonitor {
     public void serviceAbend(Class clazz, int attempt, IOException cause) {
 
         // Lets say that ten retries is too many.
-        if (attempt >= m_maxReconnectAttempts) {
+        if (attempt >= maxReconnectAttempts) {
             String msg;
-            if (m_maxReconnectAttempts <= 0) {
+            if (maxReconnectAttempts <= 0) {
                 msg = "Reconnect to abended service disabled.";
             } else {
                 msg = "Too many retries on abended service. ";

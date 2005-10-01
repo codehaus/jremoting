@@ -72,6 +72,6 @@ public class PipedObjectStreamHostContext extends AbstractHostContext
      */
     public void initialize() throws ConnectionException
     {
-        ( m_invocationHandler ).initialize();
+        ( invocationHandler ).initialize();
     }
 }

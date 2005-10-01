@@ -77,6 +77,6 @@ public class ClientSideClassFactory extends AbstractFactory {
      * Method close
      */
     public void close() {
-        m_hostContext.getInvocationHandler().close();
+        hostContext.getInvocationHandler().close();
     }
 }

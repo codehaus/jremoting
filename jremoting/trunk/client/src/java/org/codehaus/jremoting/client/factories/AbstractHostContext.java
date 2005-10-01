@@ -28,7 +28,7 @@ import org.codehaus.jremoting.client.HostContext;
  */
 public abstract class AbstractHostContext implements HostContext {
 
-    protected final ClientInvocationHandler m_invocationHandler;
+    protected final ClientInvocationHandler invocationHandler;
 
     /**
      * Constructor AbstractHostContext
@@ -36,7 +36,7 @@ public abstract class AbstractHostContext implements HostContext {
      * @param clientInvocationHandler
      */
     public AbstractHostContext(ClientInvocationHandler clientInvocationHandler) {
-        m_invocationHandler = clientInvocationHandler;
+        invocationHandler = clientInvocationHandler;
     }
 
     /**
@@ -45,7 +45,7 @@ public abstract class AbstractHostContext implements HostContext {
      * @return
      */
     public ClientInvocationHandler getInvocationHandler() {
-        return m_invocationHandler;
+        return invocationHandler;
     }
 
 

@@ -59,11 +59,11 @@ public class DynamicInvoker {
     /**
      * Factory
      */
-    private DynamicClassFactory m_factory;
+    private DynamicClassFactory factory;
     /**
      * ClientInvocationHandler
      */
-    private ClientInvocationHandler m_clientInvocationHandler;
+    private ClientInvocationHandler clientInvocationHandler;
     /**
      * Cache of  stubs lookeup by the client
      */
@@ -78,9 +78,9 @@ public class DynamicInvoker {
      */
     public DynamicInvoker(HostContext hostContext) throws Exception {
 
-        m_factory = new DynamicClassFactory(hostContext, false);
+        factory = new DynamicClassFactory(hostContext, false);
         //cache the invocationhandler
-        m_clientInvocationHandler = hostContext.getInvocationHandler();
+        clientInvocationHandler = hostContext.getInvocationHandler();
     }
 
     //--------Methods---------------//
@@ -89,7 +89,7 @@ public class DynamicInvoker {
      * Close the underlying transport
      */
     public void close() {
-        m_factory.close();
+        factory.close();
     }
 
     /**
@@ -97,7 +97,7 @@ public class DynamicInvoker {
      * Re-uses the impl within AbstractFactory.
      */
     public String[] list() {
-        return m_factory.list();
+        return factory.list();
     }
 
     /**
@@ -108,7 +108,7 @@ public class DynamicInvoker {
      */
 
     public String[] listOfMethods(String publishedName) {
-        Response ar = m_clientInvocationHandler.handleInvocation(new ListMethodsRequest(publishedName));
+        Response ar = clientInvocationHandler.handleInvocation(new ListMethodsRequest(publishedName));
         return ((ListMethodsResponse) ar).getListOfMethods();
     }
 
@@ -131,7 +131,7 @@ public class DynamicInvoker {
         //check the stub cache
         DynamicStub stub = (DynamicStub) m_stubs.get(publishedName);
         if (stub == null) {
-            stub = (DynamicStub) m_factory.lookup(publishedName);
+            stub = (DynamicStub) factory.lookup(publishedName);
             m_stubs.put(publishedName, stub);
         }
         if (args == null) {

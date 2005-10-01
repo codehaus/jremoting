@@ -40,9 +40,9 @@ import org.codehaus.jremoting.client.ClientStreamReadWriter;
 public class ClientCustomStreamReadWriter implements ClientStreamReadWriter
 {
 
-    private DataInputStream m_dataInputStream;
-    private DataOutputStream m_dataOutputStream;
-    private ClassLoader m_interfacesClassLoader;
+    private DataInputStream dataInputStream;
+    private DataOutputStream dataOutputStream;
+    private ClassLoader interfacesClassLoader;
 
 
 
@@ -62,9 +62,9 @@ public class ClientCustomStreamReadWriter implements ClientStreamReadWriter
         throws ConnectionException
     {
 
-        m_dataOutputStream = new DataOutputStream( new BufferedOutputStream( outputStream ) );
-        m_dataInputStream = new DataInputStream( inputStream );
-        m_interfacesClassLoader = interfacesClassLoader;
+        dataOutputStream = new DataOutputStream( new BufferedOutputStream( outputStream ) );
+        dataInputStream = new DataInputStream( inputStream );
+        this.interfacesClassLoader = interfacesClassLoader;
     }
 
     public synchronized Response postRequest( Request request )
@@ -83,27 +83,27 @@ public class ClientCustomStreamReadWriter implements ClientStreamReadWriter
 
         byte[] aBytes = SerializationHelper.getBytesFromInstance( request );
 
-        m_dataOutputStream.writeInt( aBytes.length );
-        m_dataOutputStream.write( aBytes );
-        m_dataOutputStream.flush();
+        dataOutputStream.writeInt( aBytes.length );
+        dataOutputStream.write( aBytes );
+        dataOutputStream.flush();
     }
 
     private Response readReply() throws IOException, ClassNotFoundException
     {
 
-        int byteArraySize = m_dataInputStream.readInt();
+        int byteArraySize = dataInputStream.readInt();
         byte[] byteArray = new byte[ byteArraySize ];
         int pos = 0;
         int cnt = 0;
         // Loop here until the entire array has been read in.
         while( pos < byteArraySize )
         {
-            int read = m_dataInputStream.read( byteArray, pos, byteArraySize - pos );
+            int read = dataInputStream.read( byteArray, pos, byteArraySize - pos );
             pos += read;
             cnt++;
         }
         Object reply = SerializationHelper.getInstanceFromBytes( byteArray,
-                                                                      m_interfacesClassLoader );
+                                                                      interfacesClassLoader );
         return (Response) reply;
     }
 }

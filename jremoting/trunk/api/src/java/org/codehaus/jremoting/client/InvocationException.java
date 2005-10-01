@@ -27,7 +27,7 @@ import java.io.Serializable;
  */
 public class InvocationException extends RuntimeException implements Serializable {
 
-    private Throwable m_throwableCause;
+    private Throwable throwableCause;
 
     /**
      * Constructor InvocationException
@@ -40,15 +40,15 @@ public class InvocationException extends RuntimeException implements Serializabl
 
     public InvocationException(String message, Throwable cause) {
         super(message);
-        m_throwableCause = cause;
+        throwableCause = cause;
     }
 
     public Throwable getCause() {
-        return m_throwableCause;
+        return throwableCause;
     }
 
     public String getMessage() {
-        return super.getMessage() + (m_throwableCause != null ? " : " + m_throwableCause.getMessage() : "");
+        return super.getMessage() + (throwableCause != null ? " : " + throwableCause.getMessage() : "");
     }
 
 }

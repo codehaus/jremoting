@@ -144,7 +144,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
         int tries = 0;
         long start = 0;
 
-        if( m_methodLogging )
+        if( methodLogging )
         {
             start = System.currentTimeMillis();
         }
@@ -165,7 +165,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
                     {
                         int millis = ( (TryLaterResponse)response ).getSuggestedDelayMillis();
 
-                        m_clientMonitor.serviceSuspended(this.getClass(), request, tries, millis );
+                        clientMonitor.serviceSuspended(this.getClass(), request, tries, millis );
 
                         again = true;
                     }
@@ -193,7 +193,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
 
                     while( !tryReconnect() )
                     {
-                        m_clientMonitor.serviceAbend(this.getClass(), retryConnectTries, re);
+                        clientMonitor.serviceAbend(this.getClass(), retryConnectTries, re);
 
                         retryConnectTries++;
                     }
@@ -206,11 +206,11 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
             }
         }
 
-        if( m_methodLogging )
+        if( methodLogging )
         {
             if( request instanceof MethodRequest )
             {
-                m_clientMonitor.methodCalled(
+                clientMonitor.methodCalled(
                         this.getClass(), ( (MethodRequest)request ).getMethodSignature(),
                     System.currentTimeMillis() - start, "" );
             }

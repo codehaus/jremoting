@@ -69,6 +69,6 @@ public final class SocketCustomStreamInvocationHandler
     protected ClientStreamReadWriter createClientStreamReadWriter(
         InputStream in, OutputStream out ) throws ConnectionException
     {
-        return new ClientCustomStreamReadWriter( in, out, m_interfacesClassLoader );
+        return new ClientCustomStreamReadWriter( in, out, interfacesClassLoader );
     }
 }

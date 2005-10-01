@@ -43,8 +43,8 @@ import java.io.OutputStream;
 public class ClientObjectStreamReadWriter implements ClientStreamReadWriter
 {
 
-    private ObjectInputStream m_objectInputStream;
-    private ObjectOutputStream m_objectOutputStream;
+    private ObjectInputStream objectInputStream;
+    private ObjectOutputStream objectOutputStream;
 
     /**
      * Constructor ClientObjectStreamReadWriter
@@ -62,8 +62,8 @@ public class ClientObjectStreamReadWriter implements ClientStreamReadWriter
 
         try
         {
-            m_objectOutputStream = new ObjectOutputStream(outputStream);
-            m_objectInputStream = new ObjectInputStream(inputStream);
+            objectOutputStream = new ObjectOutputStream(outputStream);
+            objectInputStream = new ObjectInputStream(inputStream);
         }
         catch(EOFException eofe)
         {
@@ -85,14 +85,14 @@ public class ClientObjectStreamReadWriter implements ClientStreamReadWriter
     private void writeRequest( Request request ) throws IOException
     {
 
-        m_objectOutputStream.writeObject( request );
-        m_objectOutputStream.flush();
+        objectOutputStream.writeObject( request );
+        objectOutputStream.flush();
 
         //m_objectOutputStream.reset();
     }
 
     private Response readReply() throws IOException, ClassNotFoundException
     {
-        return (Response)m_objectInputStream.readObject();
+        return (Response)objectInputStream.readObject();
     }
 }

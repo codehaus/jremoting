@@ -31,10 +31,10 @@ import java.util.Vector;
  */
 public abstract class AbstractInterfaceLookupFactory implements InterfaceLookupFactory {
 
-    private Vector m_factories = new Vector();
+    private Vector factories = new Vector();
 
     protected void addFactory(String factoryStringPrefix, InterfaceLookupFactory factory) {
-        m_factories.add(new Factory(factoryStringPrefix, factory));
+        factories.add(new Factory(factoryStringPrefix, factory));
     }
 
     /**
@@ -58,8 +58,8 @@ public abstract class AbstractInterfaceLookupFactory implements InterfaceLookupF
      */
     public InterfaceLookup getInterfaceLookup(String factoryString, ClassLoader interfacesClassLoader, boolean optimize) throws ConnectionException {
 
-        for (int i = 0; i < m_factories.size(); i++) {
-            Factory factory = (Factory) m_factories.elementAt(i);
+        for (int i = 0; i < factories.size(); i++) {
+            Factory factory = (Factory) factories.elementAt(i);
 
             if (factoryString.startsWith(factory.factoryStringPrefix)) {
 

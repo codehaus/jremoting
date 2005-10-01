@@ -30,12 +30,12 @@ public class Session {
     /**
      * Session ID
      */
-    private Long m_session;
+    private Long session;
 
     /**
      * A map of in-use beans
      */
-    private HashMap m_beansInUse = new HashMap();
+    private HashMap beansInUse = new HashMap();
 
     /**
      * Construct an Session with a session ID
@@ -43,7 +43,7 @@ public class Session {
      * @param session the session ID
      */
     public Session(Long session) {
-        m_session = session;
+        this.session = session;
     }
 
     /**
@@ -52,7 +52,7 @@ public class Session {
      * @return The session ID
      */
     public Long getSession() {
-        return m_session;
+        return session;
     }
 
     /**
@@ -62,7 +62,7 @@ public class Session {
      * @param bean        The bean to use.
      */
     public void addBeanInUse(Long referenceID, Object bean) {
-        m_beansInUse.put(referenceID, bean);
+        beansInUse.put(referenceID, bean);
     }
 
     /**
@@ -71,6 +71,6 @@ public class Session {
      * @param referenceID The reference ID.
      */
     public void removeBeanInUse(Long referenceID) {
-        m_beansInUse.remove(referenceID);
+        beansInUse.remove(referenceID);
     }
 }

@@ -41,30 +41,30 @@ public abstract class AbstractClientInvocationHandler
     implements ClientInvocationHandler
 {
 
-    protected final ConnectionPinger m_connectionPinger;
-    protected final ClientMonitor m_clientMonitor;
-    protected boolean m_stopped = false;
-    protected final ThreadPool m_threadPool;
-    protected final boolean m_methodLogging;
+    protected final ConnectionPinger connectionPinger;
+    protected final ClientMonitor clientMonitor;
+    protected boolean stopped = false;
+    protected final ThreadPool threadPool;
+    protected final boolean methodLogging;
 
 
     public AbstractClientInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor,
                                            ConnectionPinger connectionPinger)
     {
-        m_threadPool = threadPool;
-        m_clientMonitor = clientMonitor;
-        m_methodLogging = clientMonitor.methodLogging();
-        m_connectionPinger = connectionPinger;
+        this.threadPool = threadPool;
+        this.clientMonitor = clientMonitor;
+        methodLogging = clientMonitor.methodLogging();
+        this.connectionPinger = connectionPinger;
     }
 
     public ThreadPool getThreadPool()
     {
-        return m_threadPool;
+        return threadPool;
     }
 
     public ClientMonitor getClientMonitor()
     {
-        return m_clientMonitor;
+        return clientMonitor;
     }
 
     /**
@@ -76,8 +76,8 @@ public abstract class AbstractClientInvocationHandler
      */
     public void initialize() throws ConnectionException
     {
-        m_connectionPinger.setInvocationHandler( this );
-        m_connectionPinger.start();
+        connectionPinger.setInvocationHandler( this );
+        connectionPinger.start();
     }
 
     /**
@@ -88,9 +88,9 @@ public abstract class AbstractClientInvocationHandler
     public void close()
     {
 
-        m_connectionPinger.stop();
+        connectionPinger.stop();
 
-        m_stopped = true;
+        stopped = true;
     }
 
     /**
@@ -101,7 +101,7 @@ public abstract class AbstractClientInvocationHandler
     public void ping()
     {
 
-        if( m_stopped )
+        if( stopped )
         {
             throw new ConnectionClosedException( "Connection closed" );
         }

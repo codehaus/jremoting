@@ -26,15 +26,15 @@ import org.codehaus.jremoting.api.ThreadPool;
 
 public abstract class AbstractSameVmBindableHostContext extends AbstractHostContext {
 
-    protected final ThreadPool m_threadPool;
-    protected final ClientMonitor m_clientMonitor;
-    protected final ConnectionPinger m_connectionPinger;
+    protected final ThreadPool threadPool;
+    protected final ClientMonitor clientMonitor;
+    protected final ConnectionPinger connectionPinger;
 
     public AbstractSameVmBindableHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClientInvocationHandler clientInvocationHandler) {
         super(clientInvocationHandler);
-        m_threadPool = threadPool;
-        m_clientMonitor = clientMonitor;
-        m_connectionPinger = connectionPinger;
+        this.threadPool = threadPool;
+        this.clientMonitor = clientMonitor;
+        this.connectionPinger = connectionPinger;
     }
 
 

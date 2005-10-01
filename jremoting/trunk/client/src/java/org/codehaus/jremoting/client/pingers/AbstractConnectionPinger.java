@@ -31,12 +31,12 @@ import org.codehaus.jremoting.client.InvocationException;
  */
 public abstract class AbstractConnectionPinger implements ConnectionPinger {
 
-    private ClientInvocationHandler m_clientInvocationHandler;
+    private ClientInvocationHandler clientInvocationHandler;
     private boolean m_continue = true;
-    private Runnable m_runnable;
-    private ThreadContext m_threadContext;
-    private final long m_pingInterval;
-    private final long m_giveupInterval;
+    private Runnable runnable;
+    private ThreadContext threadContext;
+    private final long pingInterval;
+    private final long giveupInterval;
 
     /**
      * Construct a AbstractConnectionPinger with seconds for interval.
@@ -45,8 +45,8 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
      * @param giveupIntervalSeconds when to give up
      */
     public AbstractConnectionPinger(int pingIntervalSeconds, int giveupIntervalSeconds) {
-        m_pingInterval = pingIntervalSeconds * 1000;
-        m_giveupInterval = giveupIntervalSeconds * 1000;
+        pingInterval = pingIntervalSeconds * 1000;
+        giveupInterval = giveupIntervalSeconds * 1000;
     }
 
     /**
@@ -56,8 +56,8 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
      * @param giveupIntervalMilliSeconds when to give up
      */
     public AbstractConnectionPinger(long pingIntervalMilliSeconds, long giveupIntervalMilliSeconds) {
-        m_pingInterval = pingIntervalMilliSeconds;
-        m_giveupInterval = giveupIntervalMilliSeconds;
+        pingInterval = pingIntervalMilliSeconds;
+        giveupInterval = giveupIntervalMilliSeconds;
     }
 
 
@@ -65,15 +65,15 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
      * Constructor AbstractConnectionPinger
      */
     public AbstractConnectionPinger() {
-        m_pingInterval = 10 * 1000;       // ten seconds
-        m_giveupInterval = 100 * 1000;    // one hundred seconds.
+        pingInterval = 10 * 1000;       // ten seconds
+        giveupInterval = 100 * 1000;    // one hundred seconds.
     }
 
     /**
      * Method setInvocationHandler
      */
     public void setInvocationHandler(ClientInvocationHandler invocationHandler) {
-        m_clientInvocationHandler = invocationHandler;
+        clientInvocationHandler = invocationHandler;
     }
 
     /**
@@ -82,7 +82,7 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
      * @return
      */
     protected ClientInvocationHandler getInvocationHandler() {
-        return m_clientInvocationHandler;
+        return clientInvocationHandler;
     }
 
     /**
@@ -90,32 +90,32 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
      */
     public void start() {
 
-        m_runnable = new Runnable() {
+        runnable = new Runnable() {
             public void run() {
 
                 try {
                     while (m_continue) {
-                        Thread.sleep(m_pingInterval);
+                        Thread.sleep(pingInterval);
                         if (m_continue) {
                             ping();
                         }
                     }
                 } catch (InvocationException ie) {
-                    m_clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
+                    clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
                     // no need to ping anymore.
                 } catch (ConnectionClosedException cce) {
-                    m_clientInvocationHandler.getClientMonitor().unexpectedClosedConnection(this.getClass(), this.getClass().getName(), cce);
+                    clientInvocationHandler.getClientMonitor().unexpectedClosedConnection(this.getClass(), this.getClass().getName(), cce);
                     // no need to ping anymore.
                 } catch (InterruptedException e) {
                     if (m_continue) {
-                        m_clientInvocationHandler.getClientMonitor().unexpectedInterruption(this.getClass(), this.getClass().getName(), e);
+                        clientInvocationHandler.getClientMonitor().unexpectedInterruption(this.getClass(), this.getClass().getName(), e);
                     }
                 }
             }
         };
 
-        m_threadContext = m_clientInvocationHandler.getThreadPool().getThreadContext(m_runnable);
-        m_threadContext.start();
+        threadContext = clientInvocationHandler.getThreadPool().getThreadContext(runnable);
+        threadContext.start();
     }
 
     /**
@@ -123,13 +123,13 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
      */
     public void stop() {
         m_continue = false;
-        m_threadContext.interrupt();
-        m_threadContext = null;
+        threadContext.interrupt();
+        threadContext = null;
     }
 
     protected abstract void ping();
 
     public long getGiveupInterval() {
-        return m_giveupInterval;
+        return giveupInterval;
     }
 }

@@ -52,37 +52,37 @@ public abstract class AbstractFactory implements Factory {
 
     private static final UID U_ID = new UID((short) 20729);
     private static final int STEM_LEN = "JRemotingGenerated".length();
-    protected final HostContext m_hostContext;
-    protected ClientInvocationHandler m_clientInvocationHandler;
-    protected final HashMap m_refObjs = new HashMap();
-    private transient String m_textToSign;
-    protected Long m_session;
+    protected final HostContext hostContext;
+    protected ClientInvocationHandler clientInvocationHandler;
+    protected final HashMap refObjs = new HashMap();
+    private transient String textToSign;
+    protected Long session;
 
 
     public AbstractFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
-        m_hostContext = hostContext;
-        m_clientInvocationHandler = m_hostContext.getInvocationHandler();
-        m_clientInvocationHandler.initialize();
+        this.hostContext = hostContext;
+        clientInvocationHandler = this.hostContext.getInvocationHandler();
+        clientInvocationHandler.initialize();
 
         UID machineID = allowOptimize ? U_ID : null;
 
-        if (!(m_hostContext instanceof AbstractSameVmBindableHostContext)) {
+        if (!(this.hostContext instanceof AbstractSameVmBindableHostContext)) {
             machineID = null;
         }
-        Response response = m_clientInvocationHandler.handleInvocation(new OpenConnectionRequest(machineID));
+        Response response = clientInvocationHandler.handleInvocation(new OpenConnectionRequest(machineID));
 
         if (response instanceof SameVMResponse) {
-            if (m_hostContext instanceof AbstractSameVmBindableHostContext) {
-                AbstractSameVmBindableHostContext sameVmBindableHostContext = (AbstractSameVmBindableHostContext) m_hostContext;
+            if (this.hostContext instanceof AbstractSameVmBindableHostContext) {
+                AbstractSameVmBindableHostContext sameVmBindableHostContext = (AbstractSameVmBindableHostContext) this.hostContext;
                 HostContext hContext = sameVmBindableHostContext.makeSameVmHostContext();
                 if (hContext == null) {
                     // Registry not found, or a different instance to the one
                     // the server placed its piped instance in.
                     // revert to non optimized.
-                    response = m_clientInvocationHandler.handleInvocation(new OpenConnectionRequest(null));
+                    response = clientInvocationHandler.handleInvocation(new OpenConnectionRequest(null));
                 } else {
-                    m_clientInvocationHandler = m_hostContext.getInvocationHandler();
-                    response = m_clientInvocationHandler.handleInvocation(new OpenConnectionRequest());
+                    clientInvocationHandler = this.hostContext.getInvocationHandler();
+                    response = clientInvocationHandler.handleInvocation(new OpenConnectionRequest());
                 }
             } else {
                 throw new ConnectionException("SameVM instruction for non rebindable host context.");
@@ -90,8 +90,8 @@ public abstract class AbstractFactory implements Factory {
         }
 
         if (response instanceof OpenConnectionResponse) {
-            m_textToSign = ((OpenConnectionResponse) response).getTextToSign();
-            m_session = ((OpenConnectionResponse) response).getSession();
+            textToSign = ((OpenConnectionResponse) response).getTextToSign();
+            session = ((OpenConnectionResponse) response).getSession();
         } else {
 
             throw new ConnectionException("Setting of host context blocked for reasons of unknown, server-side response: (" + response.getClass().getName() + ")");
@@ -109,7 +109,7 @@ public abstract class AbstractFactory implements Factory {
      */
     public Object lookup(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
-        Response ar = m_clientInvocationHandler.handleInvocation(new LookupRequest(publishedServiceName, authentication, m_session));
+        Response ar = clientInvocationHandler.handleInvocation(new LookupRequest(publishedServiceName, authentication, session));
 
         if (ar.getReplyCode() >= ReplyConstants.PROBLEMREPLY) {
             if (ar instanceof NotPublishedResponse) {
@@ -139,7 +139,7 @@ public abstract class AbstractFactory implements Factory {
         }
 
         LookupResponse lr = (LookupResponse) ar;
-        DefaultProxyHelper baseObj = new DefaultProxyHelper(this, m_clientInvocationHandler, publishedServiceName, "Main", lr.getReferenceID(), m_session);
+        DefaultProxyHelper baseObj = new DefaultProxyHelper(this, clientInvocationHandler, publishedServiceName, "Main", lr.getReferenceID(), session);
         Object retVal = getInstance(publishedServiceName, "Main", baseObj);
 
         baseObj.registerImplObject(retVal);
@@ -160,7 +160,7 @@ public abstract class AbstractFactory implements Factory {
     public final void registerReferenceObject(Object obj, Long referenceID) {
 
         synchronized (this) {
-            m_refObjs.put(referenceID, new WeakReference(obj));
+            refObjs.put(referenceID, new WeakReference(obj));
         }
 
         //Object o = m_refObjs.get(referenceID);
@@ -187,7 +187,7 @@ public abstract class AbstractFactory implements Factory {
         WeakReference wr = null;
 
         synchronized (this) {
-            wr = (WeakReference) m_refObjs.get(referenceID);
+            wr = (WeakReference) refObjs.get(referenceID);
         }
 
         if (wr == null) {
@@ -197,7 +197,7 @@ public abstract class AbstractFactory implements Factory {
         Object obj = wr.get();
 
         if (obj == null) {
-            m_refObjs.remove(referenceID);
+            refObjs.remove(referenceID);
         }
 
         return obj;
@@ -220,7 +220,7 @@ public abstract class AbstractFactory implements Factory {
      * @return
      */
     public String getTextToSignForAuthentication() {
-        return m_textToSign;
+        return textToSign;
     }
 
     /**
@@ -228,7 +228,7 @@ public abstract class AbstractFactory implements Factory {
      */
     public String[] list() {
 
-        Response ar = m_clientInvocationHandler.handleInvocation(new ListRequest());
+        Response ar = clientInvocationHandler.handleInvocation(new ListRequest());
 
         if (ar instanceof ListResponse) {
             return ((ListResponse) ar).getListOfPublishedObjects();
@@ -290,7 +290,7 @@ public abstract class AbstractFactory implements Factory {
                 }
             } else // Let the specific InvocationHandlers be given the last chance to modify the arguments.
             {
-                args[i] = m_clientInvocationHandler.resolveArgument(remoteObjName, methodSignature, argClasses[i], args[i]);
+                args[i] = clientInvocationHandler.resolveArgument(remoteObjName, methodSignature, argClasses[i], args[i]);
             }
         }
     }

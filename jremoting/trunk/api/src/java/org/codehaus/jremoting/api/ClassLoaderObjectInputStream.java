@@ -31,7 +31,7 @@ import java.io.StreamCorruptedException;
  */
 public class ClassLoaderObjectInputStream extends ObjectInputStream {
 
-    private ClassLoader m_classLoader;
+    private ClassLoader classLoader;
 
     /**
      * Constructor ClassLoaderObjectInputStream
@@ -45,7 +45,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
 
         super(new ByteArrayInputStream(byteArray));
 
-        m_classLoader = classLoader;
+        this.classLoader = classLoader;
     }
 
 
@@ -62,7 +62,7 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
         Class clazz = null;
 
         try {
-            clazz = m_classLoader.loadClass(objectStreamClass.getName());
+            clazz = classLoader.loadClass(objectStreamClass.getName());
         } catch (ClassNotFoundException cnfe) {
             // this may be OK, see below.
         }

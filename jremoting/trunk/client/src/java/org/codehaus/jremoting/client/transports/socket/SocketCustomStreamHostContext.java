@@ -124,7 +124,7 @@ public class SocketCustomStreamHostContext extends AbstractSameVmBindableHostCon
                 return null;
             }
             PipedCustomStreamHostContext pipedCustomStreamHostContext
-                    = new PipedCustomStreamHostContext(m_threadPool, m_clientMonitor, m_connectionPinger, in, out);
+                    = new PipedCustomStreamHostContext(threadPool, clientMonitor, connectionPinger, in, out);
             pipedCustomStreamHostContext.initialize();
             return pipedCustomStreamHostContext;
         }

@@ -38,8 +38,8 @@ import java.util.Hashtable;
  */
 public class DefaultContext implements Context {
 
-    InterfaceLookupFactory m_interfaceLookupFactory = new DefaultInterfaceLookupFactory();
-    InterfaceLookup m_interfaceLookup;
+    InterfaceLookupFactory interfaceLookupFactory = new DefaultInterfaceLookupFactory();
+    InterfaceLookup interfaceLookup;
 
     /**
      * Constructor DefaultContext
@@ -94,8 +94,8 @@ public class DefaultContext implements Context {
 
             try {
 
-                m_interfaceLookup = m_interfaceLookupFactory.getInterfaceLookup(transportStream + ":" + host + ":" + port + ":" + proxyDetails, interfacesClassLoader, optimize);
-                if (m_interfaceLookup == null) {
+                interfaceLookup = interfaceLookupFactory.getInterfaceLookup(transportStream + ":" + host + ":" + port + ":" + proxyDetails, interfacesClassLoader, optimize);
+                if (interfaceLookup == null) {
                     throw new IllegalArgumentException("InterfaceLookupFactory not found for '" + transportStream + " " + host + " " + port);
                 }
             } catch (ConnectionException ace) {
@@ -126,7 +126,7 @@ public class DefaultContext implements Context {
      */
     public Object lookup(String name) throws NamingException {
         try {
-            return m_interfaceLookup.lookup(name);
+            return interfaceLookup.lookup(name);
         } catch (ConnectionException ace) {
             throw new NamingException(ace.getMessage());
         }
@@ -238,7 +238,7 @@ public class DefaultContext implements Context {
      */
     public NamingEnumeration list(String name) throws NamingException {
 
-        final String[] names = m_interfaceLookup.list();
+        final String[] names = interfaceLookup.list();
 
         return new NamingEnumeration() {
 
@@ -437,7 +437,7 @@ public class DefaultContext implements Context {
      * @throws NamingException
      */
     public void close() throws NamingException {
-        m_interfaceLookup.close();
+        interfaceLookup.close();
     }
 
     /**

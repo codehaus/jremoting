@@ -55,10 +55,10 @@ import org.codehaus.jremoting.commands.*;
 public abstract class StreamInvocationHandler extends AbstractClientInvocationHandler
 {
 
-    private ClientStreamReadWriter m_objectReadWriter;
-    private boolean m_methodLogging = false;
-    private long m_lastRealRequest = System.currentTimeMillis();
-    protected final ClassLoader m_interfacesClassLoader;
+    private ClientStreamReadWriter objectReadWriter;
+    private boolean methodLogging = false;
+    private long lastRealRequest = System.currentTimeMillis();
+    protected final ClassLoader interfacesClassLoader;
 
     /**
      * Constructor StreamInvocationHandler
@@ -72,8 +72,8 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
     public StreamInvocationHandler( ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader )
     {
         super(threadPool, clientMonitor, connectionPinger);
-        m_interfacesClassLoader = interfacesClassLoader;
-        m_methodLogging = clientMonitor.methodLogging();
+        this.interfacesClassLoader = interfacesClassLoader;
+        methodLogging = clientMonitor.methodLogging();
 
     }
 
@@ -86,12 +86,12 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
      */
     public ClassLoader getInterfacesClassLoader()
     {
-        return m_interfacesClassLoader;
+        return interfacesClassLoader;
     }
 
     protected void setObjectReadWriter( ClientStreamReadWriter objectReadWriter )
     {
-        m_objectReadWriter = objectReadWriter;
+        this.objectReadWriter = objectReadWriter;
     }
 
     protected void requestWritten()
@@ -112,7 +112,7 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
 
         if( request.getRequestCode() != RequestConstants.PINGREQUEST )
         {
-            m_lastRealRequest = System.currentTimeMillis();
+            lastRealRequest = System.currentTimeMillis();
         }
 
         try
@@ -124,7 +124,7 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
                 int tries = 0;
                 long start = 0;
 
-                if( m_methodLogging )
+                if( methodLogging )
                 {
                     start = System.currentTimeMillis();
                 }
@@ -139,7 +139,7 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
                     {
                         long t1 = System.currentTimeMillis();
 
-                        response = (Response)m_objectReadWriter.postRequest( request );
+                        response = (Response)objectReadWriter.postRequest( request );
 
                         long t2 = System.currentTimeMillis();
 
@@ -156,7 +156,7 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
                             {
                                 int millis = ( (TryLaterResponse)response ).getSuggestedDelayMillis();
 
-                                m_clientMonitor.serviceSuspended(this.getClass(), request, tries,
+                                clientMonitor.serviceSuspended(this.getClass(), request, tries,
                                                                             millis );
 
                                 again = true;
@@ -190,7 +190,7 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
 
                             while( !tryReconnect() )
                             {
-                                m_clientMonitor.serviceAbend(this.getClass(), retryConnectTries, ioe);
+                                clientMonitor.serviceAbend(this.getClass(), retryConnectTries, ioe);
 
                                 retryConnectTries++;
                             }
@@ -205,11 +205,11 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
                     }
                 }
 
-                if( m_methodLogging )
+                if( methodLogging )
                 {
                     if( request instanceof MethodRequest )
                     {
-                        m_clientMonitor.methodCalled(
+                        clientMonitor.methodCalled(
                                 this.getClass(), ( (MethodRequest)request ).getMethodSignature(),
                             System.currentTimeMillis() - start, "" );
                     }
@@ -248,6 +248,6 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
      */
     public long getLastRealRequest()
     {
-        return m_lastRealRequest;
+        return lastRealRequest;
     }
 }

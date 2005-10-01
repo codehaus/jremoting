@@ -27,17 +27,17 @@ import org.codehaus.jremoting.ThreadContext;
  */
 public class DefaultThreadContext implements ThreadContext {
 
-    private Thread m_thread;
+    private Thread thread;
 
     public DefaultThreadContext(Runnable runnable) {
-        m_thread = new Thread(runnable);
+        thread = new Thread(runnable);
     }
 
     public void start() {
-        m_thread.start();
+        thread.start();
     }
 
     public void interrupt() {
-        m_thread.interrupt();
+        thread.interrupt();
     }
 }

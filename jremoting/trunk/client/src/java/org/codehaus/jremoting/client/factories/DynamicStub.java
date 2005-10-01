@@ -29,24 +29,24 @@ public class DynamicStub implements Proxy {
     /**
      * Name of the published obj for which this is a stub
      */
-    private String m_publishedName;
+    private String publishedName;
     /**
      * ObjectName of the stub(facades have diff obj names)
      */
-    private String m_objectName;
+    private String objectName;
     /**
      * Proxy Helper
      */
-    private DefaultProxyHelper m_proxyHelper;
+    private DefaultProxyHelper proxyHelper;
 
     //-------Constructor--------------//
     /**
      * Constructor
      */
     public DynamicStub(String publishedName, String objectName, DefaultProxyHelper proxyHelper) {
-        m_publishedName = publishedName;
-        m_objectName = objectName;
-        m_proxyHelper = proxyHelper;
+        this.publishedName = publishedName;
+        this.objectName = objectName;
+        this.proxyHelper = proxyHelper;
     }
 
     //------Proxy override---------------------//
@@ -56,7 +56,7 @@ public class DynamicStub implements Proxy {
      */
 
     public Long codehausRemotingGetReferenceID(Object factoryThatIsAsking) {
-        return m_proxyHelper.getReferenceID(factoryThatIsAsking);
+        return proxyHelper.getReferenceID(factoryThatIsAsking);
     }
 
     //--------Methods----------------//
@@ -74,7 +74,7 @@ public class DynamicStub implements Proxy {
      */
     public Object invoke(String methodSignature, Object[] args, Class[] argClasses) {
         try {
-            Object retVal = m_proxyHelper.processObjectRequest(methodSignature, args, argClasses);
+            Object retVal = proxyHelper.processObjectRequest(methodSignature, args, argClasses);
             return retVal;
         } catch (Throwable t) {
             if (t instanceof RuntimeException) {

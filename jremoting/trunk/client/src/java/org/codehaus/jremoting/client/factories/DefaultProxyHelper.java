@@ -53,13 +53,13 @@ import java.util.ArrayList;
  */
 public final class DefaultProxyHelper implements ProxyHelper {
 
-    private final transient AbstractFactory m_factory;
-    private final transient ClientInvocationHandler m_clientInvocationHandler;
-    private final transient String m_publishedServiceName;
-    private final transient String m_objectName;
-    private final transient Long m_referenceID;
-    private final transient Long m_session;
-    private ClientContextFactory m_clientContextClientFactory;
+    private final transient AbstractFactory factory;
+    private final transient ClientInvocationHandler clientInvocationHandler;
+    private final transient String publishedServiceName;
+    private final transient String objectName;
+    private final transient Long referenceID;
+    private final transient Long session;
+    private ClientContextFactory clientContextClientFactory;
     private ArrayList queuedAsyncRequests = new ArrayList();
 
     /**
@@ -74,12 +74,12 @@ public final class DefaultProxyHelper implements ProxyHelper {
      */
     public DefaultProxyHelper(AbstractFactory abstractFactory, ClientInvocationHandler clientInvocationHandler, String pubishedServiceName, String objectName, Long referenceID, Long session) {
 
-        m_factory = abstractFactory;
-        m_clientInvocationHandler = clientInvocationHandler;
-        m_publishedServiceName = pubishedServiceName;
-        m_objectName = objectName;
-        m_referenceID = referenceID;
-        m_session = session;
+        factory = abstractFactory;
+        this.clientInvocationHandler = clientInvocationHandler;
+        publishedServiceName = pubishedServiceName;
+        this.objectName = objectName;
+        this.referenceID = referenceID;
+        this.session = session;
         if (abstractFactory == null) {
             throw new IllegalArgumentException("abstractFactory cannot be null");
         }
@@ -95,7 +95,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
      * @param implBean
      */
     public void registerImplObject(Object implBean) {
-        m_factory.registerReferenceObject(implBean, m_referenceID);
+        factory.registerReferenceObject(implBean, referenceID);
     }
 
     /**
@@ -113,7 +113,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
         try {
             return processObjectRequestGettingFacade2(returnClassType, methodSignature, args, objectName);
         } catch (InvocationException ie) {
-            m_clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
+            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
             throw ie;
         }
     }
@@ -125,13 +125,13 @@ public final class DefaultProxyHelper implements ProxyHelper {
         MethodFacadeRequest request;
 
         if (arrayRetVal) {
-            request = new MethodFacadeRequest(m_publishedServiceName, m_objectName, methodSignature, args, m_referenceID, objNameWithoutArray, m_session);
+            request = new MethodFacadeRequest(publishedServiceName, this.objectName, methodSignature, args, referenceID, objNameWithoutArray, session);
         } else {
-            request = new MethodFacadeRequest(m_publishedServiceName, m_objectName, methodSignature, args, m_referenceID, objectName, m_session);
+            request = new MethodFacadeRequest(publishedServiceName, this.objectName, methodSignature, args, referenceID, objectName, session);
         }
 
         setContext(request);
-        Response response = m_clientInvocationHandler.handleInvocation(request);
+        Response response = clientInvocationHandler.handleInvocation(request);
 
         if (response.getReplyCode() == ReplyConstants.METHODFACADEREPLY) {
             MethodFacadeResponse mfr = (MethodFacadeResponse) response;
@@ -142,11 +142,11 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 return null;
             }
 
-            Object implBean = m_factory.getImplObj(ref);
+            Object implBean = factory.getImplObj(ref);
 
             if (implBean == null) {
-                DefaultProxyHelper pHelper = new DefaultProxyHelper(m_factory, m_clientInvocationHandler, m_publishedServiceName, mfr.getObjectName(), ref, m_session);
-                Object retFacade = m_factory.getInstance(m_publishedServiceName, mfr.getObjectName(), pHelper);
+                DefaultProxyHelper pHelper = new DefaultProxyHelper(factory, clientInvocationHandler, publishedServiceName, mfr.getObjectName(), ref, session);
+                Object retFacade = factory.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
 
                 pHelper.registerImplObject(retFacade);
 
@@ -166,16 +166,16 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 if (ref == null) {
                     implBeans[i] = null;
                 } else {
-                    Object o = m_factory.getImplObj(ref);
+                    Object o = factory.getImplObj(ref);
 
                     implBeans[i] = o;
 
                     if (implBeans[i] == null) {
-                        DefaultProxyHelper bo2 = new DefaultProxyHelper(m_factory, m_clientInvocationHandler, m_publishedServiceName, objectNames[i], refs[i], m_session);
+                        DefaultProxyHelper bo2 = new DefaultProxyHelper(factory, clientInvocationHandler, publishedServiceName, objectNames[i], refs[i], session);
                         Object retFacade = null;
 
                         try {
-                            retFacade = m_factory.getInstance(m_publishedServiceName, objectNames[i], bo2);
+                            retFacade = factory.getInstance(publishedServiceName, objectNames[i], bo2);
                         } catch (Exception e) {
                             System.out.println("objNameWithoutArray=" + returnClassType.getName());
                             System.out.flush();
@@ -206,11 +206,11 @@ public final class DefaultProxyHelper implements ProxyHelper {
     public Object processObjectRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
 
         try {
-            m_factory.marshallCorrection(m_publishedServiceName, methodSignature, args, argClasses);
+            factory.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
-            MethodRequest request = new MethodRequest(m_publishedServiceName, m_objectName, methodSignature, args, m_referenceID, m_session);
+            MethodRequest request = new MethodRequest(publishedServiceName, objectName, methodSignature, args, referenceID, session);
             setContext(request);
-            Response response = m_clientInvocationHandler.handleInvocation(request);
+            Response response = clientInvocationHandler.handleInvocation(request);
 
             if (response.getReplyCode() == ReplyConstants.METHODREPLY) {
                 MethodResponse or = (MethodResponse) response;
@@ -220,7 +220,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 throw makeUnexpectedReplyThrowable(response);
             }
         } catch (InvocationException ie) {
-            m_clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
+            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
             throw ie;
         }
     }
@@ -236,13 +236,13 @@ public final class DefaultProxyHelper implements ProxyHelper {
     public void processVoidRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
 
         try {
-            m_factory.marshallCorrection(m_publishedServiceName, methodSignature, args, argClasses);
+            factory.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
-            MethodRequest request = new MethodRequest(m_publishedServiceName, m_objectName, methodSignature, args, m_referenceID, m_session);
+            MethodRequest request = new MethodRequest(publishedServiceName, objectName, methodSignature, args, referenceID, session);
 
             //debug(args);
             setContext(request);
-            Response response = m_clientInvocationHandler.handleInvocation(request);
+            Response response = clientInvocationHandler.handleInvocation(request);
 
             if (response.getReplyCode() == ReplyConstants.METHODREPLY) {
                 MethodResponse or = (MethodResponse) response;
@@ -252,7 +252,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 throw makeUnexpectedReplyThrowable(response);
             }
         } catch (InvocationException ie) {
-            m_clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
+            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
             throw ie;
         }
     }
@@ -274,11 +274,11 @@ public final class DefaultProxyHelper implements ProxyHelper {
             try {
                 GroupedMethodRequest[] rawRequests = new GroupedMethodRequest[queuedAsyncRequests.size()];
                 queuedAsyncRequests.toArray(rawRequests);
-                MethodAsyncRequest request = new MethodAsyncRequest(m_publishedServiceName, m_objectName, rawRequests, m_referenceID, m_session);
+                MethodAsyncRequest request = new MethodAsyncRequest(publishedServiceName, objectName, rawRequests, referenceID, session);
 
                 //debug(args);
                 setContext(request);
-                Response response = m_clientInvocationHandler.handleInvocation(request);
+                Response response = clientInvocationHandler.handleInvocation(request);
 
                 if (response.getReplyCode() == ReplyConstants.METHODREPLY) {
                     MethodResponse or = (MethodResponse) response;
@@ -287,7 +287,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                     throw makeUnexpectedReplyThrowable(response);
                 }
             } catch (InvocationException ie) {
-                m_clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
+                clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
                 throw ie;
             }
         }
@@ -359,8 +359,8 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
         // this checks the m_factory because reference IDs should not be
         // given out to any requester.  It should be privileged information.
-        if (factory == m_factory) {
-            return m_referenceID;
+        if (factory == this.factory) {
+            return referenceID;
         } else {
             return null;
         }
@@ -395,8 +395,8 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
     protected void finalize() throws Throwable {
 
-        synchronized (m_factory) {
-            Response response = m_clientInvocationHandler.handleInvocation(new GarbageCollectionRequest(m_publishedServiceName, m_objectName, m_session, m_referenceID));
+        synchronized (factory) {
+            Response response = clientInvocationHandler.handleInvocation(new GarbageCollectionRequest(publishedServiceName, objectName, session, referenceID));
             if (response instanceof ExceptionResponse) {
                 // This happens if the object can not be GCed on the remote server
                 //  for any reason.
@@ -418,15 +418,15 @@ public final class DefaultProxyHelper implements ProxyHelper {
     }
 
     public void setClientContextClientFactory(ClientContextFactory clientContextClientFactory) {
-        m_clientContextClientFactory = clientContextClientFactory;
+        this.clientContextClientFactory = clientContextClientFactory;
     }
 
     private synchronized void setContext(PublishedNameRequest request) {
 
-        if (m_clientContextClientFactory == null) {
-            m_clientContextClientFactory = new DefaultClientContextFactory();
+        if (clientContextClientFactory == null) {
+            clientContextClientFactory = new DefaultClientContextFactory();
         }
-        request.setContext(m_clientContextClientFactory.getClientContext());
+        request.setContext(clientContextClientFactory.getClientContext());
 
     }
 

@@ -34,9 +34,9 @@ import org.codehaus.jremoting.api.ThreadPool;
 public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactory {
 
     public static final String[] SUPPORTEDSTREAMS = new String[]{"SocketObjectStream", "SocketCustomStream", "RMI"};
-    private ThreadPool m_threadPool;
-    private ClientMonitor m_clientMonitor;
-    private ConnectionPinger m_connectionPinger;
+    private ThreadPool threadPool;
+    private ClientMonitor clientMonitor;
+    private ConnectionPinger connectionPinger;
 
     public DefaultInterfaceLookupFactory() {
         this(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger());
@@ -44,17 +44,18 @@ public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactor
 
 
     public DefaultInterfaceLookupFactory(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
-        m_threadPool = threadPool;
-        m_connectionPinger = connectionPinger;
-        m_clientMonitor = clientMonitor;
+        this.threadPool = threadPool;
+        this.connectionPinger = connectionPinger;
+        this.clientMonitor = clientMonitor;
 
         try {
             InterfaceLookupFactory factory = (InterfaceLookupFactory) this.getClass().getClassLoader().loadClass("org.codehaus.jremoting.client.impl.socket.SocketObjectStreamFactoryHelper").newInstance();
-            factory.setClientMonitor(m_clientMonitor);
-            factory.setConnectionPinger(m_connectionPinger);
-            factory.setThreadPool(m_threadPool);
+            factory.setClientMonitor(this.clientMonitor);
+            factory.setConnectionPinger(this.connectionPinger);
+            factory.setThreadPool(this.threadPool);
             addFactory("SocketObjectStream:", factory);
         } catch (ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
         } catch (InstantiationException ie) {
             ie.printStackTrace();
 
@@ -65,9 +66,9 @@ public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactor
 
         try {
             InterfaceLookupFactory factory = (InterfaceLookupFactory) this.getClass().getClassLoader().loadClass("org.codehaus.jremoting.client.impl.socket.SocketCustomStreamFactoryHelper").newInstance();
-            factory.setClientMonitor(m_clientMonitor);
-            factory.setConnectionPinger(m_connectionPinger);
-            factory.setThreadPool(m_threadPool);
+            factory.setClientMonitor(this.clientMonitor);
+            factory.setConnectionPinger(this.connectionPinger);
+            factory.setThreadPool(this.threadPool);
             addFactory("SocketCustomStream:", factory);
 
 
@@ -81,9 +82,9 @@ public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactor
 
         try {
             InterfaceLookupFactory factory = (InterfaceLookupFactory) Class.forName("org.codehaus.jremoting.client.impl.rmi.RmiFactoryHelper").newInstance();
-            factory.setClientMonitor(m_clientMonitor);
-            factory.setConnectionPinger(m_connectionPinger);
-            factory.setThreadPool(m_threadPool);
+            factory.setClientMonitor(this.clientMonitor);
+            factory.setConnectionPinger(this.connectionPinger);
+            factory.setThreadPool(this.threadPool);
             addFactory("RMI:", factory);
 
         } catch (ClassNotFoundException cnfe) {
@@ -95,14 +96,14 @@ public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactor
     }
 
     public void setThreadPool(ThreadPool threadPool) {
-        m_threadPool = threadPool;
+        this.threadPool = threadPool;
     }
 
     public void setClientMonitor(ClientMonitor clientMonitor) {
-        m_clientMonitor = clientMonitor;
+        this.clientMonitor = clientMonitor;
     }
 
     public void setConnectionPinger(ConnectionPinger connectionPinger) {
-        m_connectionPinger = connectionPinger;
+        this.connectionPinger = connectionPinger;
     }
 }

@@ -39,7 +39,7 @@ import java.util.HashMap;
  */
 public class ServerSideClassFactory extends AbstractFactory {
 
-    private HashMap m_publishedServiceClassLoaders = new HashMap();
+    private HashMap publishedServiceClassLoaders = new HashMap();
 
     public ServerSideClassFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
         super(hostContext, allowOptimize);
@@ -50,13 +50,13 @@ public class ServerSideClassFactory extends AbstractFactory {
         TransportedClassLoader tcl = null;
         String proxyClassName = "JRemotingGenerated" + publishedServiceName + "_" + objectName;
 
-        if (m_publishedServiceClassLoaders.containsKey(proxyClassName)) {
-            tcl = (TransportedClassLoader) m_publishedServiceClassLoaders.get(proxyClassName);
+        if (publishedServiceClassLoaders.containsKey(proxyClassName)) {
+            tcl = (TransportedClassLoader) publishedServiceClassLoaders.get(proxyClassName);
         } else {
             ClassResponse cr = null;
 
             try {
-                Response ar = m_hostContext.getInvocationHandler().handleInvocation(new ClassRequest(publishedServiceName, objectName));
+                Response ar = hostContext.getInvocationHandler().handleInvocation(new ClassRequest(publishedServiceName, objectName));
 
                 if (ar.getReplyCode() >= ReplyConstants.PROBLEMREPLY) {
                     if (ar instanceof RequestFailedResponse) {
@@ -73,11 +73,11 @@ public class ServerSideClassFactory extends AbstractFactory {
                 throw new ConnectionException("Service " + publishedServiceName + " not published on Server");
             }
 
-            tcl = new TransportedClassLoader(m_hostContext.getInvocationHandler().getInterfacesClassLoader());
+            tcl = new TransportedClassLoader(hostContext.getInvocationHandler().getInterfacesClassLoader());
 
             tcl.add(proxyClassName, cr.getProxyClassBytes());
 
-            m_publishedServiceClassLoaders.put(proxyClassName, tcl);
+            publishedServiceClassLoaders.put(proxyClassName, tcl);
         }
 
         return tcl.loadClass(proxyClassName);
@@ -106,6 +106,6 @@ public class ServerSideClassFactory extends AbstractFactory {
      * Method close
      */
     public void close() {
-        m_hostContext.getInvocationHandler().close();
+        hostContext.getInvocationHandler().close();
     }
 }

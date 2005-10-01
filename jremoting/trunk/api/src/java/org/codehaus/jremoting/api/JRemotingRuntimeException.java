@@ -22,7 +22,7 @@ package org.codehaus.jremoting.api;
  * Allows recording of nested exceptions.
  */
 public class JRemotingRuntimeException extends RuntimeException {
-    private final Throwable m_throwable;
+    private final Throwable throwable;
 
     /**
      * Construct a new <code>CascadingRuntimeException</code> instance.
@@ -32,7 +32,7 @@ public class JRemotingRuntimeException extends RuntimeException {
      */
     public JRemotingRuntimeException(final String message, final Throwable throwable) {
         super(message);
-        m_throwable = throwable;
+        this.throwable = throwable;
     }
 
     public JRemotingRuntimeException(final String message) {
@@ -45,6 +45,6 @@ public class JRemotingRuntimeException extends RuntimeException {
      * @return the root cause
      */
     public final Throwable getCause() {
-        return m_throwable;
+        return throwable;
     }
 }
