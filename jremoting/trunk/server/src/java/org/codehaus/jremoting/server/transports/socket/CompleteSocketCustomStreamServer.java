@@ -53,10 +53,8 @@ public class CompleteSocketCustomStreamServer extends AbstractCompleteSocketStre
         super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
     }
 
-    public static class WithSimpleDefaults extends CompleteSocketCustomStreamServer {
-        public WithSimpleDefaults(int port) {
-            super(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
-        }
+    public CompleteSocketCustomStreamServer(int port) {
+        this(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
     }
 
     /**

@@ -220,7 +220,8 @@ public class ProxyGenerationTask extends Task {
         ProxyGenerator proxyGenerator;
 
         try {
-            proxyGenerator = (ProxyGenerator) Class.forName(generatorClass).newInstance();
+            Class proxyGenClass = Class.forName(generatorClass);
+            proxyGenerator = (ProxyGenerator) proxyGenClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
 

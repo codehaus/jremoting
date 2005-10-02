@@ -48,13 +48,13 @@ public class ProConServerTest {
         if (args[1].equals("ObjectStream")) {
             System.out.println("(Object Stream)");
 
-            as = new CompleteSocketObjectStreamServer.WithSimpleDefaults(1234);
+            as = new CompleteSocketObjectStreamServer(1234);
         } else {
 
             // CustomStream
             System.out.println("(Custom Stream)");
 
-            as = new CompleteSocketCustomStreamServer.WithSimpleDefaults(1235);
+            as = new CompleteSocketCustomStreamServer(1235);
         }
 
         if (args[0].equals("S")) {

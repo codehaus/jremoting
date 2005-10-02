@@ -52,7 +52,7 @@ public class BasicClientServerTestCase extends TestCase {
     public void testMismatch1() throws Exception {
 
         // server side setup.
-        CompleteSocketCustomStreamServer server = new CompleteSocketCustomStreamServer.WithSimpleDefaults(12346);
+        CompleteSocketCustomStreamServer server = new CompleteSocketCustomStreamServer(12346);
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -77,7 +77,7 @@ public class BasicClientServerTestCase extends TestCase {
     public void donttestMismatch2() throws Exception {
 
         // server side setup.
-        CompleteSocketObjectStreamServer server = new CompleteSocketObjectStreamServer.WithSimpleDefaults(12347);
+        CompleteSocketObjectStreamServer server = new CompleteSocketObjectStreamServer(12347);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -101,7 +101,7 @@ public class BasicClientServerTestCase extends TestCase {
     public void donttestMismatch3() throws Exception {
 
         // server side setup.
-        CompleteSocketCustomStreamServer server = new CompleteSocketCustomStreamServer.WithSimpleDefaults(12348);
+        CompleteSocketCustomStreamServer server = new CompleteSocketCustomStreamServer(12348);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

@@ -51,7 +51,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new CompleteSocketObjectStreamServer.WithSimpleDefaults(10002);
+        server = new CompleteSocketObjectStreamServer(10002);
 
         testServer = new TestInterfaceImpl();
 
@@ -69,6 +69,10 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         // threads, JRemoting Remoting being a client/server thing
         Thread.yield();
 
+    }
+
+    public void testSpeed() throws Exception {
+        super.testSpeed();  
     }
 
     protected void tearDown() throws Exception {

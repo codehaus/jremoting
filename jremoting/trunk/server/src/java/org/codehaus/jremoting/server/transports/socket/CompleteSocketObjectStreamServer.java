@@ -40,19 +40,18 @@ import org.codehaus.jremoting.server.transports.ServerObjectStreamReadWriter;
  */
 public class CompleteSocketObjectStreamServer extends AbstractCompleteSocketStreamServer {
 
+
+    public CompleteSocketObjectStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+        super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
+    }
+    
     /**
      * Construct a CompleteSocketObjectStreamServer
      *
      * @param port The port to use.
      */
-    public CompleteSocketObjectStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
-        super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
-    }
-
-    public static class WithSimpleDefaults extends CompleteSocketObjectStreamServer {
-        public WithSimpleDefaults(int port) {
-            super(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
-        }
+    public CompleteSocketObjectStreamServer(int port) {
+        this(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
     }
 
     /**
