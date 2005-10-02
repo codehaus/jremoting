@@ -17,34 +17,27 @@
  */
 package org.codehaus.jremoting.test.async;
 
-/**
- * @jremoting:facade async-mode1
- */
+import org.codehaus.jremoting.AsynchronousMethod;
+import org.codehaus.jremoting.AsynchronousFacade;
+import org.codehaus.jremoting.AsynchronousCommitMethod;
+import org.codehaus.jremoting.AsynchronousRollbackMethod;
+
+@AsynchronousFacade
 public interface AsyncTest {
 
-    /**
-     * @jremoting:method:async
-     */
+    @AsynchronousMethod
     void setOne(String one);
 
-    /**
-     * @jremoting:method:async
-     */
+    @AsynchronousMethod
     void setTwo(String two);
 
-    /**
-     * @jremoting:method:async
-     */
+    @AsynchronousMethod
     void setThree(String three);
 
-    /**
-     * @jremoting:method:commit
-     */
+    @AsynchronousCommitMethod
     void fire();
 
-    /**
-     * @jremoting:method:rollback
-     */
+    @AsynchronousRollbackMethod
     void whoa();
 
 }

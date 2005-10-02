@@ -11,13 +11,4 @@
     JRemoting API.
     </shortDescription>
 
-    <dependencies>
-        <dependency>
-            <id>commons-attributes</id>
-            <artifactId>commons-attributes-api</artifactId>
-            <version>2.1</version>
-        </dependency>
-    </dependencies>
-
-
 </project>

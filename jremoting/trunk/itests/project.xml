@@ -37,20 +37,6 @@
             <version>3.8.1</version>
         </dependency>
         <dependency>
-            <id>commons-attributes</id>
-            <artifactId>commons-attributes-api</artifactId>
-            <version>2.1</version>
-        </dependency>
-        <dependency>
-            <id>commons-attributes</id>
-            <artifactId>commons-attributes-compiler</artifactId>
-            <version>2.1</version>
-        </dependency>
-        <dependency>
-            <id>qdox</id>
-            <version>1.5</version>
-        </dependency>
-        <dependency>
             <id>bcel</id>
             <version>5.1</version>
         </dependency>
@@ -59,16 +45,6 @@
             <id>tools</id>
             <jar>tools.jar</jar>
             <version>included in JDK/JRE</version>
-        </dependency>
-
-        <dependency>
-            <id>xdoclet+xjavadoc</id>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>javadoc</groupId>
-            <artifactId>javadoc</artifactId>
-            <version>1.4</version>
         </dependency>
         -->
 

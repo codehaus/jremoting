@@ -30,8 +30,9 @@
         <ant:taskdef resource="org/apache/commons/attributes/anttasks.properties"/>
 
         <!-- TODO: Remove hardcoded test src dir (vinay) -->
-        <ant:attribute-compiler destDir="${maven.build.dir}/test-classes">
-            <ant:fileset dir="${maven.src.dir}/test/" includes="*.java"/>
+        <ant:mkdir dir="${maven.build.dir}/test-classes2"/>
+        <ant:attribute-compiler destDir="${maven.build.dir}/test-classes2">
+            <ant:fileset dir="src/test/" includes="*.java"/>
         </ant:attribute-compiler>
 
 

@@ -77,7 +77,6 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
 
         cr.setClassGenDir(class_gen_dir);
         cr.setSrcGenDir(class_gen_dir);
-        //cr.setClasspath("..\\build\\classes;%JAVA_HOME%\\lib\\tools.jar"); // not need since these are set by parent classloader
 
         DefaultServerSideClientContextFactory ccf = new DefaultServerSideClientContextFactory();
         server = new CompleteSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 11003);

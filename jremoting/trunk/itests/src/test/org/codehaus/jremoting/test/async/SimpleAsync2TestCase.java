@@ -71,21 +71,8 @@ public class SimpleAsync2TestCase extends TestCase {
         String class_gen_dir = getClassGenDir();
         cr.setClassGenDir(class_gen_dir);
         cr.setSrcGenDir(class_gen_dir);
-        /*<reason>ClassLoader picks the stuff from the parent classloader which has everything it needs
-        String FS = File.separator;
-        String PS = File.pathSeparator;
 
-        String javaHomeString = System.getProperty("java.home");
-        File javaHome = new File(javaHomeString);
-        if (javaHomeString.endsWith(FS + "jre"))
-        {
-            javaHome = javaHome.getParentFile();
-        }
-        System.out.println("javaHome=" + javaHome.getAbsolutePath());
-        cr.setClasspath(".." + FS + "build" + FS + "classes" + PS + javaHome.getAbsolutePath() + FS + "lib" + FS + "tools.jar");
-        */
-
-        server = new CompleteSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 11004);
+        server = new CompleteSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 11009);
         asyncTestImpl = new AsyncTestImpl();
         // automatic determination of async elements.
         PublicationDescription pd = new PublicationDescription(AsyncTest.class);
@@ -94,7 +81,7 @@ public class SimpleAsync2TestCase extends TestCase {
         server.start();
 
         // Client side setup
-        factory = new ServerSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 11004), false);
+        factory = new ServerSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 11009), false);
         testClient = (AsyncTest) factory.lookup("AsyncTestB");
 
         // just a kludge for unit testing given we are intrinsically dealing with

@@ -19,15 +19,6 @@
             <version>${pom.currentVersion}</version>
         </dependency>
         <dependency>
-            <id>commons-logging</id>
-            <version>1.0.4</version>
-        </dependency>
-        <dependency>
-            <id>commons-attributes</id>
-            <artifactId>commons-attributes-api</artifactId>
-            <version>2.1</version>
-        </dependency>
-        <dependency>
             <id>log4j</id>
             <version>1.2.8</version>
         </dependency>
