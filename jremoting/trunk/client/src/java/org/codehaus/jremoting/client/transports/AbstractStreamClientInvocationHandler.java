@@ -31,7 +31,7 @@ import org.codehaus.jremoting.commands.NoSuchReferenceResponse;
 import org.codehaus.jremoting.commands.NoSuchSessionResponse;
 import org.codehaus.jremoting.commands.NotPublishedResponse;
 import org.codehaus.jremoting.commands.PublishedNameRequest;
-import org.codehaus.jremoting.commands.ReplyConstants;
+import org.codehaus.jremoting.commands.ResponseConstants;
 import org.codehaus.jremoting.commands.Request;
 import org.codehaus.jremoting.commands.RequestConstants;
 import org.codehaus.jremoting.commands.Response;
@@ -118,9 +118,9 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
 
                         long t2 = System.currentTimeMillis();
 
-                        if (response.getReplyCode() >= 100) {
+                        if (response.getResponseCode() >= 100) {
                             // special case for callabcks.
-                            if (response.getReplyCode() == ReplyConstants.CLIENTABEND) {
+                            if (response.getResponseCode() == ResponseConstants.CLIENTABEND) {
                                 ClientInvocationAbendResponse abendReply = (ClientInvocationAbendResponse) response;
                                 throw abendReply.getIOException();
                             }

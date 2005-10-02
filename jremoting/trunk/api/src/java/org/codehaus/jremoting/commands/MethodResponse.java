@@ -30,15 +30,15 @@ import java.io.ObjectOutput;
 public final class MethodResponse extends Response {
     static final long serialVersionUID = 5551617722014239119L;
 
-    private Object replyObj;
+    private Object responseObj;
 
     /**
      * Constructor MethodResponse
      *
-     * @param replyObj the object that is the return value
+     * @param responseObj the object that is the return value
      */
-    public MethodResponse(Object replyObj) {
-        this.replyObj = replyObj;
+    public MethodResponse(Object responseObj) {
+        this.responseObj = responseObj;
     }
 
     /**
@@ -48,12 +48,12 @@ public final class MethodResponse extends Response {
     }
 
     /**
-     * Get reply object
+     * Get response object
      *
-     * @return the reply object
+     * @return the response object
      */
-    public Object getReplyObject() {
-        return replyObj;
+    public Object getResponseObject() {
+        return responseObj;
     }
 
     /**
@@ -61,10 +61,10 @@ public final class MethodResponse extends Response {
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.commands.ReplyConstants
+     * @see org.codehaus.jremoting.commands.ResponseConstants
      */
-    public int getReplyCode() {
-        return ReplyConstants.METHODREPLY;
+    public int getResponseCode() {
+        return ResponseConstants.METHODRESPONSE;
     }
 
     /**
@@ -82,7 +82,7 @@ public final class MethodResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(replyObj);
+        out.writeObject(responseObj);
     }
 
     /**
@@ -98,6 +98,6 @@ public final class MethodResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        replyObj = in.readObject();
+        responseObj = in.readObject();
     }
 }

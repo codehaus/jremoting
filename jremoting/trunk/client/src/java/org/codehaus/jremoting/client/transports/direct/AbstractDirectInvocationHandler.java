@@ -84,7 +84,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
             }
 
             //if ((response instanceof ProblemReply))  // slower by 11%
-            if (response.getReplyCode() >= 100) {
+            if (response.getResponseCode() >= 100) {
                 if (response instanceof TryLaterResponse) {
                     int millis = ((TryLaterResponse) response).getSuggestedDelayMillis();
 

@@ -41,8 +41,8 @@ public class InvocationExceptionResponse extends Response {
         return message;
     }
 
-    public int getReplyCode() {
-        return ReplyConstants.INVOCATIONEXCEPTIONREPLY;
+    public int getResponseCode() {
+        return ResponseConstants.INVOCATIONEXCEPTIONRESPONSE;
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {

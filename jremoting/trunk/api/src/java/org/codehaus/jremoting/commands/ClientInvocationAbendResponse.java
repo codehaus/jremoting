@@ -29,24 +29,24 @@ import java.io.ObjectOutput;
  */
 public final class ClientInvocationAbendResponse extends Response {
 
-    private IOException replyExcpt;
+    private IOException responseExcpt;
 
     /**
      * Constructor ExceptionResponse
      *
-     * @param replyExcpt the exception received for the invocation
+     * @param responseExcpt the exception received for the invocation
      */
-    public ClientInvocationAbendResponse(IOException replyExcpt) {
-        this.replyExcpt = replyExcpt;
+    public ClientInvocationAbendResponse(IOException responseExcpt) {
+        this.responseExcpt = responseExcpt;
     }
 
     /**
-     * Get reply exception.
+     * Get response exception.
      *
      * @return the transported exception
      */
     public IOException getIOException() {
-        return replyExcpt;
+        return responseExcpt;
     }
 
     /**
@@ -54,10 +54,10 @@ public final class ClientInvocationAbendResponse extends Response {
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.commands.ReplyConstants
+     * @see org.codehaus.jremoting.commands.ResponseConstants
      */
-    public int getReplyCode() {
-        return ReplyConstants.CLIENTABEND;
+    public int getResponseCode() {
+        return ResponseConstants.CLIENTABEND;
     }
 
     /**

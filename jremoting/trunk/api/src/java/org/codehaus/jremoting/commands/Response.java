@@ -37,9 +37,9 @@ public abstract class Response implements Externalizable {
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.commands.ReplyConstants
+     * @see org.codehaus.jremoting.commands.ResponseConstants
      */
-    public abstract int getReplyCode();
+    public abstract int getResponseCode();
 
     /**
      * The object implements the writeExternal method to save its contents

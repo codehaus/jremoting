@@ -34,7 +34,7 @@ public final class ClassResponse extends Response {
     private byte[] proxyClassBytes;
 
     /**
-     * Contruct a class reply from byte arrays of classes.
+     * Contruct a class response from byte arrays of classes.
      *
      * @param proxyClassBytes a byte array of the class def for the class containing the methods.
      */
@@ -62,10 +62,10 @@ public final class ClassResponse extends Response {
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.commands.ReplyConstants
+     * @see org.codehaus.jremoting.commands.ResponseConstants
      */
-    public int getReplyCode() {
-        return ReplyConstants.CLASSREPLY;
+    public int getResponseCode() {
+        return ResponseConstants.CLASSRESPONSE;
     }
 
     /**

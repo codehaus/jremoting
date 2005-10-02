@@ -32,7 +32,7 @@ import org.codehaus.jremoting.commands.LookupResponse;
 import org.codehaus.jremoting.commands.NotPublishedResponse;
 import org.codehaus.jremoting.commands.OpenConnectionRequest;
 import org.codehaus.jremoting.commands.OpenConnectionResponse;
-import org.codehaus.jremoting.commands.ReplyConstants;
+import org.codehaus.jremoting.commands.ResponseConstants;
 import org.codehaus.jremoting.commands.Response;
 import org.codehaus.jremoting.commands.SameVMResponse;
 
@@ -111,19 +111,19 @@ public abstract class AbstractFactory implements Factory {
 
         Response ar = clientInvocationHandler.handleInvocation(new LookupRequest(publishedServiceName, authentication, session));
 
-        if (ar.getReplyCode() >= ReplyConstants.PROBLEMREPLY) {
+        if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
             if (ar instanceof NotPublishedResponse) {
                 throw new ConnectionException("Service " + publishedServiceName + " not published");
             } else if (ar instanceof ExceptionResponse) {
                 ExceptionResponse er = (ExceptionResponse) ar;
 
-                throw (ConnectionException) er.getReplyException();
+                throw (ConnectionException) er.getResponseException();
             } else {
                 throw new ConnectionException("Problem doing lookup on service");
             }
         } else if (ar instanceof ExceptionResponse) {
             ExceptionResponse er = (ExceptionResponse) ar;
-            Throwable t = er.getReplyException();
+            Throwable t = er.getResponseException();
 
             if (t instanceof ConnectionException) {
                 throw (ConnectionException) t;

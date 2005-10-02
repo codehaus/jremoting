@@ -38,7 +38,7 @@ import org.codehaus.jremoting.commands.MethodResponse;
 import org.codehaus.jremoting.commands.NoSuchReferenceResponse;
 import org.codehaus.jremoting.commands.NoSuchSessionResponse;
 import org.codehaus.jremoting.commands.PublishedNameRequest;
-import org.codehaus.jremoting.commands.ReplyConstants;
+import org.codehaus.jremoting.commands.ResponseConstants;
 import org.codehaus.jremoting.commands.Response;
 
 import java.lang.reflect.Array;
@@ -133,7 +133,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
         setContext(request);
         Response response = clientInvocationHandler.handleInvocation(request);
 
-        if (response.getReplyCode() == ReplyConstants.METHODFACADEREPLY) {
+        if (response.getResponseCode() == ResponseConstants.METHODFACADERESPONSE) {
             MethodFacadeResponse mfr = (MethodFacadeResponse) response;
             Long ref = mfr.getReferenceID();
 
@@ -154,7 +154,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
             } else {
                 return implBean;
             }
-        } else if (response.getReplyCode() == ReplyConstants.METHODFACADEARRAYREPLY) {
+        } else if (response.getResponseCode() == ResponseConstants.METHODFACADEARRAYRESPONSE) {
             MethodFacadeArrayResponse mfar = (MethodFacadeArrayResponse) response;
             Long[] refs = mfar.getReferenceIDs();
             String[] objectNames = mfar.getObjectNames();
@@ -212,10 +212,10 @@ public final class DefaultProxyHelper implements ProxyHelper {
             setContext(request);
             Response response = clientInvocationHandler.handleInvocation(request);
 
-            if (response.getReplyCode() == ReplyConstants.METHODREPLY) {
+            if (response.getResponseCode() == ResponseConstants.METHODRESPONSE) {
                 MethodResponse or = (MethodResponse) response;
 
-                return or.getReplyObject();
+                return or.getResponseObject();
             } else {
                 throw makeUnexpectedReplyThrowable(response);
             }
@@ -244,7 +244,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
             setContext(request);
             Response response = clientInvocationHandler.handleInvocation(request);
 
-            if (response.getReplyCode() == ReplyConstants.METHODREPLY) {
+            if (response.getResponseCode() == ResponseConstants.METHODRESPONSE) {
                 MethodResponse or = (MethodResponse) response;
 
                 return;
@@ -280,7 +280,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 setContext(request);
                 Response response = clientInvocationHandler.handleInvocation(request);
 
-                if (response.getReplyCode() == ReplyConstants.METHODREPLY) {
+                if (response.getResponseCode() == ResponseConstants.METHODRESPONSE) {
                     MethodResponse or = (MethodResponse) response;
                     return;
                 } else {
@@ -330,18 +330,18 @@ public final class DefaultProxyHelper implements ProxyHelper {
      */
     private Throwable makeUnexpectedReplyThrowable(Response response) {
 
-        if (response.getReplyCode() == ReplyConstants.EXCEPTIONREPLY) {
+        if (response.getResponseCode() == ResponseConstants.EXCEPTIONRESPONSE) {
             ExceptionResponse er = (ExceptionResponse) response;
-            return er.getReplyException();
-        } else if (response.getReplyCode() == ReplyConstants.NOSUCHSESSIONREPLY) {
+            return er.getResponseException();
+        } else if (response.getResponseCode() == ResponseConstants.NOSUCHSESSIONRESPONSE) {
             NoSuchSessionResponse nssr = (NoSuchSessionResponse) response;
             return new NoSuchSessionException(nssr.getSessionID());
         }
         //TODO remove some of these if clover indicates they are not used?
-        else if (response.getReplyCode() == ReplyConstants.NOSUCHREFERENCEREPLY) {
+        else if (response.getResponseCode() == ResponseConstants.NOSUCHREFERENCERESPONSE) {
             NoSuchReferenceResponse nsrr = (NoSuchReferenceResponse) response;
             return new NoSuchReferenceException(nsrr.getReferenceID());
-        } else if (response.getReplyCode() == ReplyConstants.INVOCATIONEXCEPTIONREPLY) {
+        } else if (response.getResponseCode() == ResponseConstants.INVOCATIONEXCEPTIONRESPONSE) {
             InvocationExceptionResponse ier = (InvocationExceptionResponse) response;
             return new InvocationException(ier.getMessage());
         } else {

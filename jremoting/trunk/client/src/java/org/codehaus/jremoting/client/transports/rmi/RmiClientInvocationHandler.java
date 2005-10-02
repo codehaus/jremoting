@@ -126,7 +126,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
             try {
                 response = rmiInvocationHandler.handleInvocation(request);
 
-                if (response.getReplyCode() >= 100) {
+                if (response.getResponseCode() >= 100) {
                     if (response instanceof TryLaterResponse) {
                         int millis = ((TryLaterResponse) response).getSuggestedDelayMillis();
 

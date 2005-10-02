@@ -47,7 +47,7 @@ import org.codehaus.jremoting.commands.NotPublishedResponse;
 import org.codehaus.jremoting.commands.OpenConnectionRequest;
 import org.codehaus.jremoting.commands.OpenConnectionResponse;
 import org.codehaus.jremoting.commands.PingResponse;
-import org.codehaus.jremoting.commands.ReplyConstants;
+import org.codehaus.jremoting.commands.ResponseConstants;
 import org.codehaus.jremoting.commands.Request;
 import org.codehaus.jremoting.commands.RequestConstants;
 import org.codehaus.jremoting.commands.RequestFailedResponse;
@@ -212,12 +212,12 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
         Response ar = methodInvocationHandler.handleMethodInvocation(facadeRequest, connectionDetails);
 
-        if (ar.getReplyCode() == ReplyConstants.EXCEPTIONREPLY) {
+        if (ar.getResponseCode() == ResponseConstants.EXCEPTIONRESPONSE) {
             return ar;
-        } else if (ar.getReplyCode() >= ReplyConstants.PROBLEMREPLY) {
+        } else if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
             return ar;
-        } else if (ar.getReplyCode() == ReplyConstants.METHODREPLY) {
-            Object methodReply = ((MethodResponse) ar).getReplyObject();
+        } else if (ar.getResponseCode() == ResponseConstants.METHODRESPONSE) {
+            Object methodReply = ((MethodResponse) ar).getResponseObject();
 
             if (methodReply == null) {
                 return new MethodFacadeResponse(null, null);    // null passing

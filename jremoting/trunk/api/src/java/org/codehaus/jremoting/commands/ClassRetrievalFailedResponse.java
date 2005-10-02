@@ -57,10 +57,10 @@ public final class ClassRetrievalFailedResponse extends Response {
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.commands.ReplyConstants
+     * @see org.codehaus.jremoting.commands.ResponseConstants
      */
-    public int getReplyCode() {
-        return ReplyConstants.CLASSRETRIEVALFAILEDREPLY;
+    public int getResponseCode() {
+        return ResponseConstants.CLASSRETRIEVALFAILEDRESPONSE;
     }
 
     /**

@@ -30,15 +30,15 @@ import java.io.ObjectOutput;
 public final class ExceptionResponse extends Response {
     static final long serialVersionUID = -8571671364852090554L;
 
-    private Throwable replyExcpt;
+    private Throwable responseExcpt;
 
     /**
      * Constructor ExceptionResponse
      *
-     * @param replyExcpt the exception received for the invocation
+     * @param responseExcpt the exception received for the invocation
      */
-    public ExceptionResponse(Throwable replyExcpt) {
-        this.replyExcpt = replyExcpt;
+    public ExceptionResponse(Throwable responseExcpt) {
+        this.responseExcpt = responseExcpt;
     }
 
     /**
@@ -48,12 +48,12 @@ public final class ExceptionResponse extends Response {
     }
 
     /**
-     * Get reply exception.
+     * Get response exception.
      *
      * @return the transported exception
      */
-    public Throwable getReplyException() {
-        return replyExcpt;
+    public Throwable getResponseException() {
+        return responseExcpt;
     }
 
     /**
@@ -61,10 +61,10 @@ public final class ExceptionResponse extends Response {
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.commands.ReplyConstants
+     * @see org.codehaus.jremoting.commands.ResponseConstants
      */
-    public int getReplyCode() {
-        return ReplyConstants.EXCEPTIONREPLY;
+    public int getResponseCode() {
+        return ResponseConstants.EXCEPTIONRESPONSE;
     }
 
     /**
@@ -82,7 +82,7 @@ public final class ExceptionResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(replyExcpt);
+        out.writeObject(responseExcpt);
     }
 
     /**
@@ -98,7 +98,7 @@ public final class ExceptionResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        replyExcpt = (Throwable) in.readObject();
+        responseExcpt = (Throwable) in.readObject();
 
         // When the exception is read in from the stream, its stack trace will
         //  no longer exist.  This is because the stack trace information is not
@@ -106,6 +106,6 @@ public final class ExceptionResponse extends Response {
         //  down the source of problems.
         // To make it at least clear that the exception was remote, fill in the
         //  stack trace at this point.
-        replyExcpt.fillInStackTrace();
+        responseExcpt.fillInStackTrace();
     }
 }

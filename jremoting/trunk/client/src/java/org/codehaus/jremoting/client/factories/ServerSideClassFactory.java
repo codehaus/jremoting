@@ -23,7 +23,7 @@ import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.commands.ClassRequest;
 import org.codehaus.jremoting.commands.ClassResponse;
 import org.codehaus.jremoting.commands.ClassRetrievalFailedResponse;
-import org.codehaus.jremoting.commands.ReplyConstants;
+import org.codehaus.jremoting.commands.ResponseConstants;
 import org.codehaus.jremoting.commands.RequestFailedResponse;
 import org.codehaus.jremoting.commands.Response;
 
@@ -58,7 +58,7 @@ public class ServerSideClassFactory extends AbstractFactory {
             try {
                 Response ar = hostContext.getInvocationHandler().handleInvocation(new ClassRequest(publishedServiceName, objectName));
 
-                if (ar.getReplyCode() >= ReplyConstants.PROBLEMREPLY) {
+                if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
                     if (ar instanceof RequestFailedResponse) {
                         throw new ConnectionException(((RequestFailedResponse) ar).getFailureReason());
                     } else if (ar instanceof ClassRetrievalFailedResponse) {

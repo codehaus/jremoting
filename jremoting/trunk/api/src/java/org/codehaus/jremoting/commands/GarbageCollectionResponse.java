@@ -41,10 +41,10 @@ public final class GarbageCollectionResponse extends Response {
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.commands.ReplyConstants
+     * @see org.codehaus.jremoting.commands.ResponseConstants
      */
-    public int getReplyCode() {
-        return ReplyConstants.GCREPLY;
+    public int getResponseCode() {
+        return ResponseConstants.GCRESPONSE;
     }
 
     /**
