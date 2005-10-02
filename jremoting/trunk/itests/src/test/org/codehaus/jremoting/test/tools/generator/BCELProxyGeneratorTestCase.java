@@ -72,7 +72,8 @@ public class BCELProxyGeneratorTestCase extends TestCase {
      * @see TestCase#setUp()
      */
     protected void setUp() throws Exception {
-        proxyGenerator = (ProxyGenerator) Class.forName("org.codehaus.jremoting.tools.generator.BCELProxyGeneratorImpl").newInstance();
+        Class proxyGenClass = Class.forName("org.codehaus.jremoting.tools.generator.BCELProxyGeneratorImpl");
+        proxyGenerator = (ProxyGenerator) proxyGenClass.newInstance();
         //create the Proxy Class using the BCEL Generator
         createNewClass();
         proxyGenerator.verbose(true);

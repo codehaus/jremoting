@@ -91,27 +91,27 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
      * Create Proxy Implementation with all interface methods
      * Generating JRemotingGeneratedGENNAME_Main class
      *
-     * @param mGeneratedClassName the name of the class to generate.
+     * @param generatedClassName the name of the class to generate.
      * @param interfacesToStubify the interfaces to stubify.
      */
-    protected void generateProxyClass(String mGeneratedClassName, PublicationDescriptionItem[] interfacesToStubify) {
+    protected void generateProxyClass(String generatedClassName, PublicationDescriptionItem[] interfacesToStubify) {
         //Start creating class
-        createNewClassDeclaration(mGeneratedClassName, interfacesToStubify);
+        createNewClassDeclaration(generatedClassName, interfacesToStubify);
         /******** CONSTRUCTOR **************/
         //create constructor that takes ProxyHelper
-        createConstructor(mGeneratedClassName);
+        createConstructor(generatedClassName);
         /******** FIELDS *************/
         //create fields
         createFields();
         /******** METHODS *************/
         //create fields
-        createGetReferenceIDMethod(mGeneratedClassName);
-        createHelperMethodForDotClassCalls(mGeneratedClassName);
-        createInterfaceMethods(mGeneratedClassName, interfacesToStubify);
+        createGetReferenceIDMethod(generatedClassName);
+        createHelperMethodForDotClassCalls(generatedClassName);
+        createInterfaceMethods(generatedClassName, interfacesToStubify);
 
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(getClassGenDir() + "/" + mGeneratedClassName + ".class");
+            fos = new FileOutputStream(getClassGenDir() + "/" + generatedClassName + ".class");
             classGen.getJavaClass().dump(fos);
             fos.close();
         } catch (FileNotFoundException fnfe) {
@@ -875,7 +875,7 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
         Class clazz = null;
 
         try {
-            URLClassLoader urlCL = new URLClassLoader(new URL[]{new URL("file:/" + new File(getClassGenDir()).getCanonicalPath() + "/")}, //
+            URLClassLoader urlCL = new URLClassLoader(new URL[]{new File(getClassGenDir()).toURL()}, 
                     this.getClass().getClassLoader());
             clazz = urlCL.loadClass(className);
         } catch (ClassNotFoundException e) {
