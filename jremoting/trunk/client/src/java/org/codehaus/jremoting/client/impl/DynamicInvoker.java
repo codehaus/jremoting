@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  * DynamicInvoker enables  complete dynamic
  * invocation of the remote methods ;Its a stubless execution working
- * directly with the JRemoting Remoting defined request and response messages.
+ * directly with the JRemoting defined request and response messages.
  * .
  * One creates a DynamicInvoker as follows:
  * <code>

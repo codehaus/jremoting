@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * Directly copied from Avalon-Excalibur for comparison testing in JRemoting Remoting
+ * Directly copied from Avalon-Excalibur for comparison testing in JRemoting
  *
  * @author Peter Donald
  * @author Paul Hammant

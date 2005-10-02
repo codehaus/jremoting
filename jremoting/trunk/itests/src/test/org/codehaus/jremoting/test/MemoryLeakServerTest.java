@@ -39,7 +39,7 @@ public class MemoryLeakServerTest {
 
         System.out.println("MemoryLeak Server");
 
-        AbstractServer as = new CompleteSocketCustomStreamServer.WithSimpleDefaults(1277);
+        AbstractServer as = new CompleteSocketCustomStreamServer(1277);
         MemoryLeakImpl ml = new MemoryLeakImpl();
 
         as.publish(ml, "MemLeak", new PublicationDescription(MemoryLeak.class, MemoryLeak.class));

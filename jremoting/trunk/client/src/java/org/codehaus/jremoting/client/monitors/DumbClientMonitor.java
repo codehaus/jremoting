@@ -74,7 +74,7 @@ public class DumbClientMonitor implements ClientMonitor {
      * @param attempt
      */
     public void serviceAbend(Class clazz, int attempt, IOException cause) {
-        throw new InvocationException("JRemoting Remoting Service has Abended.");
+        throw new InvocationException("JRemoting Service has Abended.");
     }
 
     public void invocationFailure(Class clazz, String name, InvocationException ie) {

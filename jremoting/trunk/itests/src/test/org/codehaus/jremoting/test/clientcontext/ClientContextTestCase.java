@@ -127,7 +127,7 @@ public class ClientContextTestCase extends TestCase {
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        Factory factory = new ClientSideClassFactory(new SocketCustomStreamHostContext.WithSimpleDefaults("127.0.0.1", 13333), false);
+        Factory factory = new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 13333), false);
         final AccountManager clientSideAccountManager = (AccountManager) factory.lookup("OurAccountManager");
 
         Thread threadOne = makeThread(clientSideAccountManager, 11);

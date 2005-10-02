@@ -47,10 +47,8 @@ public class RmiHostContext extends AbstractHostContext {
         super(new RmiClientInvocationHandler(threadPool, clientMonitor, connectionPinger, host, port));
     }
 
-    public static class WithSimpleDefaults extends RmiHostContext {
-        public WithSimpleDefaults(String host, int port) throws ConnectionException {
-            super(new DefaultThreadPool(), new DefaultClientMonitor(), new PerpetualConnectionPinger(), host, port);
-        }
+    public RmiHostContext(String host, int port) throws ConnectionException {
+        this(new DefaultThreadPool(), new DefaultClientMonitor(), new PerpetualConnectionPinger(), host, port);
 
     }
 }

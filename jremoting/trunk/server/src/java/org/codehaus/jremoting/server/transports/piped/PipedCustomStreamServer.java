@@ -51,10 +51,8 @@ public class PipedCustomStreamServer extends AbstractPipedServer {
         super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory);
     }
 
-    public static class WithSimpleDefaults extends PipedCustomStreamServer {
-        public WithSimpleDefaults() {
-            super(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory());
-        }
+    public PipedCustomStreamServer() {
+        this(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory());
     }
 
     protected AbstractServerStreamReadWriter createServerStreamReadWriter() {

@@ -88,7 +88,7 @@ public class DefaultClientMonitor implements ClientMonitor {
             throw new InvocationException("Too many retries on suspended service");
         }
 
-        printMessage("JRemoting Remoting service suspended, Trying to reconnect (attempt " + attempt + ", waiting for " + suggestedWaitMillis / 1000 + " seconds)");
+        printMessage("JRemoting service suspended, Trying to reconnect (attempt " + attempt + ", waiting for " + suggestedWaitMillis / 1000 + " seconds)");
 
         // We are quite happy with the recommended wait time.
         try {
@@ -126,7 +126,7 @@ public class DefaultClientMonitor implements ClientMonitor {
             throw new InvocationException(msg);
         }
 
-        printMessage("JRemoting Remoting service abnormally ended, Trying to reconnect (attempt " + attempt + ")");
+        printMessage("JRemoting service abnormally ended, Trying to reconnect (attempt " + attempt + ")");
 
         // Increasing wait time.
         try {

@@ -47,14 +47,14 @@ public class CustomStreamJNDITestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new CompleteSocketCustomStreamServer.WithSimpleDefaults(10006);
+        server = new CompleteSocketCustomStreamServer(10006);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        // JNDI lookup.  Note there are no imports of JRemoting Remoting classes in this test.
+        // JNDI lookup.  Note there are no imports of JRemoting classes in this test.
         Hashtable env = new Hashtable();
 
         env.put(Context.INITIAL_CONTEXT_FACTORY, "org.codehaus.jremoting.client.naming.DefaultInitialContextFactory");
@@ -68,7 +68,7 @@ public class CustomStreamJNDITestCase extends AbstractHelloTestCase {
         testClient = (TestInterface) jndiContext.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting Remoting being a client/server thing
+        // threads, JRemoting being a client/server thing
         Thread.yield();
     }
 

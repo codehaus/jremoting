@@ -33,6 +33,6 @@ public class NoClassRetriever extends AbstractClassRetriever {
      * @throws ClassRetrievalException if the retrieval failed.
      */
     protected byte[] getThingBytes(String thingName) throws ClassRetrievalException {
-        throw new ClassRetrievalException("This JRemoting Remoting server does not support class forwarding");
+        throw new ClassRetrievalException("This JRemoting server does not support class forwarding");
     }
 }

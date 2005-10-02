@@ -43,18 +43,18 @@ public class DirectTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new DirectServer.WithSimpleDefaults();
+        server = new DirectServer();
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        factory = new ClientSideClassFactory(new DirectHostContext.WithSimpleDefaults(server), false);
+        factory = new ClientSideClassFactory(new DirectHostContext(server), false);
         testClient = (TestInterface) factory.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting Remoting being a client/server thing
+        // threads, JRemoting being a client/server thing
         Thread.yield();
     }
 

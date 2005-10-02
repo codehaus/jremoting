@@ -102,7 +102,7 @@ public class BCELProxyGeneratorTestCase extends TestCase {
         }
         TestInvocationHandler invocationHandler = new TestInvocationHandler(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger());
         //create the factory;
-        factory = new ClientSideClassFactory(new DirectHostContext.WithSimpleDefaults(invocationHandler), false);
+        factory = new ClientSideClassFactory(new DirectHostContext(invocationHandler), false);
         DefaultProxyHelper defaultProxyHelper = new DefaultProxyHelper(factory, invocationHandler, "PublishedName", "ObjectName", new Long(1010), new Long(3030));
 
         Constructor[] _constructors = generatedProxyClass.getConstructors();

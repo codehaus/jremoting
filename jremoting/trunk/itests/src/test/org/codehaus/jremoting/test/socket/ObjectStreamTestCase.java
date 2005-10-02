@@ -40,7 +40,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
 
         // See http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
         // This bug prevents ObjectStream from functioning correctly when used
-        // by JRemoting Remoting.  You can still use the ObjectStream transports, but
+        // by JRemoting.  You can still use the ObjectStream transports, but
         // should be aware of the limitations.  See testBugParadeBugNumber4499841()
         // in the parent class.
         testForBug4499841 = false;
@@ -61,18 +61,18 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        SocketObjectStreamHostContext.WithSimpleDefaults hostContext = new SocketObjectStreamHostContext.WithSimpleDefaults("127.0.0.1", 10002);
+        SocketObjectStreamHostContext hostContext = new SocketObjectStreamHostContext("127.0.0.1", 10002);
         factory = new ClientSideClassFactory(hostContext, false);
         testClient = (TestInterface) factory.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting Remoting being a client/server thing
+        // threads, JRemoting being a client/server thing
         Thread.yield();
 
     }
 
     public void testSpeed() throws Exception {
-        super.testSpeed();  
+        //super.testSpeed();  
     }
 
     protected void tearDown() throws Exception {

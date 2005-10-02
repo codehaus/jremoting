@@ -99,13 +99,13 @@ public abstract class AbstractServerStreamReadWriter implements ThreadPoolAware 
         try {
             inputStream.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "AbstractServerStreamReadWriter.close(): Failed closing an JRemoting Remoting connection input stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractServerStreamReadWriter.close(): Failed closing an JRemoting connection input stream: ", e);
         }
 
         try {
             outputStream.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "AbstractServerStreamReadWriter.close(): Failed closing an JRemoting Remoting connection output stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractServerStreamReadWriter.close(): Failed closing an JRemoting connection output stream: ", e);
         }
     }
 

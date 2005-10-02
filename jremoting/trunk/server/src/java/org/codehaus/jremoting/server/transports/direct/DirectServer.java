@@ -54,10 +54,8 @@ public class DirectServer extends AbstractServer {
         super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory);
     }
 
-    public static class WithSimpleDefaults extends DirectServer {
-        public WithSimpleDefaults() {
-            super(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory());
-        }
+    public DirectServer() {
+        this(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory());
     }
 
     /**

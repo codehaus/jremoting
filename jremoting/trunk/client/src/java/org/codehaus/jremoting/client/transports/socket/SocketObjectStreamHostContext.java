@@ -66,29 +66,12 @@ public class SocketObjectStreamHostContext extends AbstractSameVmBindableHostCon
         this.port = port;
     }
 
-    public static class WithCurrentClassLoader extends SocketObjectStreamHostContext {
-        /**
-         * @param threadPool
-         * @param clientMonitor
-         * @param connectionPinger
-         * @param host
-         * @param port
-         * @throws ConnectionException
-         */
-        public WithCurrentClassLoader(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
-            super(threadPool, clientMonitor, connectionPinger, SocketObjectStreamHostContext.class.getClassLoader(), host, port);
-        }
+    public SocketObjectStreamHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
+        this(threadPool, clientMonitor, connectionPinger, SocketObjectStreamHostContext.class.getClassLoader(), host, port);
     }
 
-    public static class WithSimpleDefaults extends SocketObjectStreamHostContext {
-        /**
-         * @param host
-         * @param port
-         * @throws ConnectionException
-         */
-        public WithSimpleDefaults(String host, int port) throws ConnectionException {
-            super(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), SocketObjectStreamHostContext.class.getClassLoader(), host, port);
-        }
+    public SocketObjectStreamHostContext(String host, int port) throws ConnectionException {
+        this(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), SocketObjectStreamHostContext.class.getClassLoader(), host, port);
     }
 
 

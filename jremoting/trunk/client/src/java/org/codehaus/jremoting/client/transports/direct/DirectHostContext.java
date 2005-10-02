@@ -46,13 +46,8 @@ public class DirectHostContext extends AbstractHostContext {
         super(new DirectInvocationHandler(threadPool, clientMonitor, connectionPinger, invocationHandler));
     }
 
-    public static class WithSimpleDefaults extends DirectHostContext {
-        /**
-         * @param invocationHandler
-         */
-        public WithSimpleDefaults(ServerInvocationHandler invocationHandler) {
-            super(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), invocationHandler);
-        }
+    public DirectHostContext(ServerInvocationHandler invocationHandler) {
+        this(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), invocationHandler);
     }
 
 }

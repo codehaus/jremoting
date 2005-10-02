@@ -52,18 +52,18 @@ public class RmiTestCase extends TestCase {
         super.setUp();
 
         // server side setup.
-        server = new RmiServer.WithSimpleDefaults(10003);
+        server = new RmiServer(10003);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        Factory af = new ClientSideClassFactory(new RmiHostContext.WithSimpleDefaults("127.0.0.1", 10003), false);
+        Factory af = new ClientSideClassFactory(new RmiHostContext("127.0.0.1", 10003), false);
         testClient = (TestInterface) af.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting Remoting being a client/server thing
+        // threads, JRemoting being a client/server thing
         Thread.yield();
     }
 

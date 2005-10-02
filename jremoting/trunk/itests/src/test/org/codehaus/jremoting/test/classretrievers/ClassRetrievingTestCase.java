@@ -66,11 +66,11 @@ public class ClassRetrievingTestCase extends TestCase {
         ((PipedCustomStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        Factory af = new ServerSideClassFactory(new PipedCustomStreamHostContext.WithSimpleDefaults(in, out), false);
+        Factory af = new ServerSideClassFactory(new PipedCustomStreamHostContext(in, out), false);
         testClient = (TestInterface) af.lookup("Kewl");
 
         // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting Remoting being a client/server thing
+        // threads, JRemoting being a client/server thing
         Thread.yield();
     }
 
@@ -85,7 +85,7 @@ public class ClassRetrievingTestCase extends TestCase {
 
     /**
      * This is the only testXX() method in this class.  Other features of
-     * JRemoting Remoting are given a thorough test in the 'test' package.
+     * JRemoting are given a thorough test in the 'test' package.
      *
      * @throws Exception as per Junit contract
      */

@@ -47,7 +47,7 @@ import java.util.ArrayList;
 
 /**
  * Class BCElProxyGeneratorImpl
- * This class generates JRemoting Remoting stubs using Jakarta BCEL library.
+ * This class generates JRemoting stubs using Jakarta BCEL library.
  * <p/>
  * HOWTO: Use 'javap' to read the bytecodes of the stubs generated
  * by using the original stub-generator(which generates pure java code).

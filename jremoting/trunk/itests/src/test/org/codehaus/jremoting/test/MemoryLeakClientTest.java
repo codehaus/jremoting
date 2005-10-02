@@ -73,7 +73,7 @@ public class MemoryLeakClientTest {
 
         System.out.println("Memory Leak Client");
 
-        Factory af = new ClientSideClassFactory(new SocketCustomStreamHostContext.WithSimpleDefaults("127.0.0.1", 1277), false);
+        Factory af = new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 1277), false);
 
         MemoryLeak ml = (MemoryLeak) af.lookup("MemLeak");
 

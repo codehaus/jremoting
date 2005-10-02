@@ -46,11 +46,11 @@ public class ProConClientTest {
         if (args[1].equals("ObjectStream")) {
             System.out.println("(Object Stream)");
 
-            arhc = new SocketObjectStreamHostContext.WithSimpleDefaults("127.0.0.1", 1234);
+            arhc = new SocketObjectStreamHostContext("127.0.0.1", 1234);
         } else {
             System.out.println("(Custom Stream)");
 
-            arhc = new SocketCustomStreamHostContext.WithSimpleDefaults("127.0.0.1", 1235);
+            arhc = new SocketCustomStreamHostContext("127.0.0.1", 1235);
         }
 
         Factory af = null;

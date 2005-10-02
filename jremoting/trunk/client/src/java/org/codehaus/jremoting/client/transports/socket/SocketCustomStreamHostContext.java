@@ -57,26 +57,12 @@ public class SocketCustomStreamHostContext extends AbstractSameVmBindableHostCon
         this.port = port;
     }
 
-    public static class WithCurrentClassLoader extends SocketCustomStreamHostContext {
-        /**
-         * @param host
-         * @param port
-         * @throws ConnectionException
-         */
-        public WithCurrentClassLoader(String host, int port, ClassLoader classLoader) throws ConnectionException {
-            super(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), classLoader, host, port);
-        }
+    public SocketCustomStreamHostContext(String host, int port, ClassLoader classLoader) throws ConnectionException {
+        this(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), classLoader, host, port);
     }
 
-    public static class WithSimpleDefaults extends SocketCustomStreamHostContext {
-        /**
-         * @param host
-         * @param port
-         * @throws ConnectionException
-         */
-        public WithSimpleDefaults(String host, int port) throws ConnectionException {
-            super(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), SocketCustomStreamHostContext.class.getClassLoader(), host, port);
-        }
+    public SocketCustomStreamHostContext(String host, int port) throws ConnectionException {
+        this(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), SocketCustomStreamHostContext.class.getClassLoader(), host, port);
     }
 
 

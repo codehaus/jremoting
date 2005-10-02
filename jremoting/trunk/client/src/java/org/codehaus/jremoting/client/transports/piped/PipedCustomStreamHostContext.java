@@ -50,11 +50,8 @@ public class PipedCustomStreamHostContext extends AbstractHostContext {
         super(new PipedCustomStreamInvocationHandler(threadPool, clientMonitor, connectionPinger, inputStream, outputStream));
     }
 
-    public static class WithSimpleDefaults extends PipedCustomStreamHostContext {
-
-        public WithSimpleDefaults(PipedInputStream inputStream, PipedOutputStream outputStream) {
-            super(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream);
-        }
+    public PipedCustomStreamHostContext(PipedInputStream inputStream, PipedOutputStream outputStream) {
+        this(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream);
     }
 
     /**

@@ -48,12 +48,7 @@ public class DirectMarshalledHostContext extends AbstractHostContext {
         super(new DirectMarshalledInvocationHandler(threadPool, clientMonitor, connectionPinger, invocationHandler, interfacesClassLoader));
     }
 
-    public static class WithSimpleDefaults extends DirectMarshalledHostContext {
-        /**
-         * @param invocationHandler
-         */
-        public WithSimpleDefaults(ServerMarshalledInvocationHandler invocationHandler) {
-            super(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), DirectMarshalledHostContext.class.getClassLoader(), invocationHandler);
-        }
+    public DirectMarshalledHostContext(ServerMarshalledInvocationHandler invocationHandler) {
+        this(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), DirectMarshalledHostContext.class.getClassLoader(), invocationHandler);
     }
 }

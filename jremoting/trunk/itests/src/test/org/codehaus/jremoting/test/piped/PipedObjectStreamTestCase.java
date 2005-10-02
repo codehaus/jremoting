@@ -43,7 +43,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
 
         // See http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
         // This bug prevents ObjectStream from functioning correctly when used
-        // by JRemoting Remoting.  You can still use the ObjectStream transports, but
+        // by JRemoting.  You can still use the ObjectStream transports, but
         // should be aware of the limitations.  See testBugParadeBugNumber4499841()
         // in the parent class.
         testForBug4499841 = false;
@@ -54,7 +54,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new PipedObjectStreamServer.WithSimpleDefaults();
+        server = new PipedObjectStreamServer();
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -66,11 +66,11 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         ((PipedObjectStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        factory = new ClientSideClassFactory(new PipedObjectStreamHostContext.WithSimpleDefaults(in, out), false);
+        factory = new ClientSideClassFactory(new PipedObjectStreamHostContext(in, out), false);
         testClient = (TestInterface) factory.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting Remoting being a client/server thing
+        // threads, JRemoting being a client/server thing
         Thread.yield();
     }
 

@@ -94,11 +94,11 @@ public class SimpleAsync2TestCase extends TestCase {
         server.start();
 
         // Client side setup
-        factory = new ServerSideClassFactory(new SocketCustomStreamHostContext.WithSimpleDefaults("127.0.0.1", 11004), false);
+        factory = new ServerSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 11004), false);
         testClient = (AsyncTest) factory.lookup("AsyncTestB");
 
         // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting Remoting being a client/server thing
+        // threads, JRemoting being a client/server thing
         Thread.yield();
     }
 

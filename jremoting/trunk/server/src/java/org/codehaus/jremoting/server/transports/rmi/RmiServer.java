@@ -74,27 +74,12 @@ public class RmiServer extends AbstractServer {
         this.port = port;
     }
 
-    public static class WithNoInvocationHandler extends RmiServer {
-        /**
-         * @param classRetriever
-         * @param authenticator
-         * @param serverMonitor
-         * @param threadPool
-         * @param contextFactory
-         * @param port
-         */
-        public WithNoInvocationHandler(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
-            super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
-        }
+    public RmiServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+        this(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
     }
 
-    public static class WithSimpleDefaults extends WithNoInvocationHandler {
-        /**
-         * @param port
-         */
-        public WithSimpleDefaults(int port) {
-            super(new PlainClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
-        }
+    public RmiServer(int port) {
+        this(new PlainClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
     }
 
     /**

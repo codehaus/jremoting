@@ -46,7 +46,7 @@ public class PipedCustomStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new PipedCustomStreamServer.WithSimpleDefaults();
+        server = new PipedCustomStreamServer();
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -58,11 +58,11 @@ public class PipedCustomStreamTestCase extends AbstractHelloTestCase {
         ((PipedCustomStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        factory = new ClientSideClassFactory(new PipedCustomStreamHostContext.WithSimpleDefaults(in, out), false);
+        factory = new ClientSideClassFactory(new PipedCustomStreamHostContext(in, out), false);
         testClient = (TestInterface) factory.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting Remoting being a client/server thing
+        // threads, JRemoting being a client/server thing
         Thread.yield();
     }
 

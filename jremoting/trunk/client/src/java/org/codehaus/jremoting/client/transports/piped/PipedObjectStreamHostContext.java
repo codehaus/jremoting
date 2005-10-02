@@ -51,11 +51,8 @@ public class PipedObjectStreamHostContext extends AbstractHostContext {
         super(new PipedObjectStreamInvocationHandler(threadPool, clientMonitor, connectionPinger, inputStream, outputStream, classLoader));
     }
 
-    public static class WithSimpleDefaults extends PipedObjectStreamHostContext {
-
-        public WithSimpleDefaults(PipedInputStream inputStream, PipedOutputStream outputStream) {
-            super(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream, PipedObjectStreamHostContext.class.getClassLoader());
-        }
+    public PipedObjectStreamHostContext(PipedInputStream inputStream, PipedOutputStream outputStream) {
+        this(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream, PipedObjectStreamHostContext.class.getClassLoader());
     }
 
     /**

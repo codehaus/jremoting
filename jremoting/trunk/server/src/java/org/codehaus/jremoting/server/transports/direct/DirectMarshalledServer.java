@@ -58,41 +58,16 @@ public class DirectMarshalledServer extends AbstractServer implements ServerMars
         this.marshalledInvocationHandlerAdapter = marshalledInvocationHandlerAdapter;
     }
 
-    public static class WithMarshalledInvocationHandlerAdapter extends DirectMarshalledServer {
-        public WithMarshalledInvocationHandlerAdapter(InvocationHandlerAdapter invocationHandlerAdapter, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
-            super(invocationHandlerAdapter, new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), marshalledInvocationHandlerAdapter);
-        }
+    public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
+        this(invocationHandlerAdapter, new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), marshalledInvocationHandlerAdapter);
     }
 
-    public static class WithInvocationHandlerAdapter extends WithMarshalledInvocationHandlerAdapter {
-        public WithInvocationHandlerAdapter(InvocationHandlerAdapter invocationHandlerAdapter) {
-            super(invocationHandlerAdapter, new MarshalledInvocationHandlerAdapter(invocationHandlerAdapter));
-        }
+    public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter) {
+        this(invocationHandlerAdapter, new MarshalledInvocationHandlerAdapter(invocationHandlerAdapter));
     }
 
-//    public DirectMarshalledServer(
-//
-//            ClassRetriever classRetriever,
-//            Authenticator authenticator,
-//            ServerMonitor serverMonitor,
-//            ThreadPool threadPool,
-//            ServerSideClientContextFactory contextFactory,
-//            MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter)
-//    {
-//        super(
-//                new InvocationHandlerAdapter(
-//                        classRetriever,
-//                        authenticator,
-//                        serverMonitor,
-//                        contextFactory),
-//                serverMonitor, threadPool, contextFactory);
-//        marshalledInvocationHandlerAdapter = marshalledInvocationHandlerAdapter;
-//    }
-
-    public static class WithSimpleDefaults extends WithInvocationHandlerAdapter {
-        public WithSimpleDefaults() {
-            super(new InvocationHandlerAdapter(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultServerSideClientContextFactory()));
-        }
+    public DirectMarshalledServer() {
+        this(new InvocationHandlerAdapter(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultServerSideClientContextFactory()));
     }
 
     /**

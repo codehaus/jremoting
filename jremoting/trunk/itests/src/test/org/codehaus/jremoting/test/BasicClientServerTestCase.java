@@ -42,7 +42,7 @@ public class BasicClientServerTestCase extends TestCase {
 
     public void testNoServer() throws Exception {
         try {
-            new ClientSideClassFactory(new SocketCustomStreamHostContext.WithSimpleDefaults("127.0.0.1", 12345), false);
+            new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 12345), false);
             fail("Should have have failed.");
         } catch (ConnectionRefusedException e) {
             // what we expetcted
@@ -62,7 +62,7 @@ public class BasicClientServerTestCase extends TestCase {
         // Client side setup
         try {
 
-            new ClientSideClassFactory(new SocketObjectStreamHostContext.WithSimpleDefaults("127.0.0.1", 12346), false);
+            new ClientSideClassFactory(new SocketObjectStreamHostContext("127.0.0.1", 12346), false);
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {
@@ -86,7 +86,7 @@ public class BasicClientServerTestCase extends TestCase {
 
         // Client side setup
         try {
-            new ClientSideClassFactory(new SocketCustomStreamHostContext.WithSimpleDefaults("127.0.0.1", 12347), false);
+            new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 12347), false);
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {
@@ -109,7 +109,7 @@ public class BasicClientServerTestCase extends TestCase {
 
         // Client side setup
         try {
-            new ClientSideClassFactory(new RmiHostContext.WithSimpleDefaults("127.0.0.1", 12348), false);
+            new ClientSideClassFactory(new RmiHostContext("127.0.0.1", 12348), false);
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {

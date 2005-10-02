@@ -239,7 +239,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
                 if ((t instanceof NoClassDefFoundError) && t.getMessage().equals("sun/tools/javac/Main")) {
                     System.err.println("********************************************");
                     System.err.println("*                                          *");
-                    System.err.println("* JRemoting Remoting problem......     *");
+                    System.err.println("* JRemoting problem......     *");
                     System.err.println("* Please copy JAVA_HOME/lib/tools.jar      *");
                     System.err.println("* to your applications classpath so      *");
                     System.err.println("* that proxys can be compiled.             *");

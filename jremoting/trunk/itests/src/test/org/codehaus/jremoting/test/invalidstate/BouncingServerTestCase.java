@@ -53,13 +53,13 @@ public class BouncingServerTestCase extends TestCase {
         try {
 
             // Client side setup
-            HostContext hostContext = new SocketCustomStreamHostContext.WithSimpleDefaults("127.0.0.1", 12201);
+            HostContext hostContext = new SocketCustomStreamHostContext("127.0.0.1", 12201);
             factory = new ClientSideClassFactory(hostContext, false);
             ClientInvocationHandler ih = hostContext.getInvocationHandler();
             TestInterface testClient = (TestInterface) factory.lookup("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
-            // threads, JRemoting Remoting being a client/server thing
+            // threads, JRemoting being a client/server thing
             Thread.yield();
 
             testClient.hello2(100);
@@ -87,7 +87,7 @@ public class BouncingServerTestCase extends TestCase {
     }
 
     private CompleteSocketCustomStreamServer startServer() throws ServerException, PublicationException {
-        CompleteSocketCustomStreamServer server = new CompleteSocketCustomStreamServer.WithSimpleDefaults(12201);
+        CompleteSocketCustomStreamServer server = new CompleteSocketCustomStreamServer(12201);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

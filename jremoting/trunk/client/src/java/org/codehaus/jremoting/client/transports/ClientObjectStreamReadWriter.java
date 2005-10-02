@@ -54,7 +54,7 @@ public class ClientObjectStreamReadWriter implements ClientStreamReadWriter {
             objectOutputStream = new ObjectOutputStream(outputStream);
             objectInputStream = new ObjectInputStream(inputStream);
         } catch (EOFException eofe) {
-            throw new BadConnectionException("Cannot connect to remote JRemoting Remoting server. Have we a mismatch on transports?");
+            throw new BadConnectionException("Cannot connect to remote JRemoting server. Have we a mismatch on transports?");
         } catch (IOException ioe) {
             throw new ConnectionException("Some problem instantiating ObjectStream classes: " + ioe.getMessage());
         }

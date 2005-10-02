@@ -63,18 +63,18 @@ public class DynamicInvokerTestCase extends TestCase {
         super.setUp();
 
         // server side setup.
-        server = new CompleteSocketCustomStreamServer.WithSimpleDefaults(10001);
+        server = new CompleteSocketCustomStreamServer(10001);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        hostContext = new SocketCustomStreamHostContext.WithSimpleDefaults("127.0.0.1", 10001);
+        hostContext = new SocketCustomStreamHostContext("127.0.0.1", 10001);
         dynamicInvoker = new DynamicInvoker(hostContext);
 
         // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting Remoting being a client/server thing
+        // threads, JRemoting being a client/server thing
         Thread.yield();
     }
 
@@ -146,7 +146,7 @@ public class DynamicInvokerTestCase extends TestCase {
      */
 
     public void testMultiArgumentMethodInvocation() throws Exception {
-        /* JRemoting Remoting right now expects method signature in a specific format.
+        /* JRemoting right now expects method signature in a specific format.
          * within the MethodRequest.namely with  arguments spaced out by
          * a comma+space.
          *         e.g. hello4(float, double) )

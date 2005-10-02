@@ -57,11 +57,11 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideClassFactory(new SocketObjectStreamHostContext.WithSimpleDefaults("127.0.0.1", 12001), false);
+            factory = new ClientSideClassFactory(new SocketObjectStreamHostContext("127.0.0.1", 12001), false);
             TestInterface testClient = (TestInterface) factory.lookup("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
-            // threads, JRemoting Remoting being a client/server thing
+            // threads, JRemoting being a client/server thing
             Thread.yield();
 
             testClient.hello("hello");
@@ -96,11 +96,11 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideClassFactory(new SocketCustomStreamHostContext.WithSimpleDefaults("127.0.0.1", 12002), false);
+            factory = new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 12002), false);
             TestInterface testClient = (TestInterface) factory.lookup("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
-            // threads, JRemoting Remoting being a client/server thing
+            // threads, JRemoting being a client/server thing
             Thread.yield();
 
             testClient.hello("hello");
@@ -136,11 +136,11 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideClassFactory(new RmiHostContext.WithSimpleDefaults("127.0.0.1", 12003), false);
+            factory = new ClientSideClassFactory(new RmiHostContext("127.0.0.1", 12003), false);
             TestInterface testClient = (TestInterface) factory.lookup("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
-            // threads, JRemoting Remoting being a client/server thing
+            // threads, JRemoting being a client/server thing
             Thread.yield();
 
             testClient.hello("hello");
@@ -165,7 +165,7 @@ public class SocketMismatchTestCase extends TestCase {
     public void dont_testRmiCustomStreamMismatch() throws Exception {
 
         // server side setup.
-        RmiServer server = new RmiServer.WithSimpleDefaults(12004);
+        RmiServer server = new RmiServer(12004);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -175,11 +175,11 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideClassFactory(new SocketCustomStreamHostContext.WithSimpleDefaults("127.0.0.1", 12004), false);
+            factory = new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 12004), false);
             TestInterface testClient = (TestInterface) factory.lookup("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
-            // threads, JRemoting Remoting being a client/server thing
+            // threads, JRemoting being a client/server thing
             Thread.yield();
 
             testClient.hello("hello");
