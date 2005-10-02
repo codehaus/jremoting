@@ -33,14 +33,14 @@ import java.lang.reflect.Method;
 
 public abstract class AbstractProxyGenerator implements ProxyGenerator {
 
-    private String m_classGenDir;
-    private String m_genName;
-    private String m_srcGenDir;
-    private String m_classpath;
-    private boolean m_verbose;
-    private PublicationDescriptionItem[] m_additionalFacades;
-    private PublicationDescriptionItem[] m_callbackFacades;
-    private PublicationDescriptionItem[] m_interfacesToExpose;
+    private String classGenDir;
+    private String genName;
+    private String srcGenDir;
+    private String classpath;
+    private boolean verbose;
+    private PublicationDescriptionItem[] additionalFacades;
+    private PublicationDescriptionItem[] callbackFacades;
+    private PublicationDescriptionItem[] interfacesToExpose;
 
     /**
      * Get the directory name of the class generation directory.
@@ -48,7 +48,7 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * @return the dir name.
      */
     public String getClassGenDir() {
-        return m_classGenDir;
+        return classGenDir;
     }
 
     /**
@@ -58,7 +58,7 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      */
 
     public String getGenName() {
-        return m_genName;
+        return genName;
     }
 
     /**
@@ -68,18 +68,18 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      */
 
     public String getSrcGenDir() {
-        return m_srcGenDir;
+        return srcGenDir;
     }
 
 
     /**
-     * Get the m_classpath used during creation
+     * Get the classpath used during creation
      *
-     * @return m_classpath
+     * @return classpath
      */
 
     public String getClasspath() {
-        return m_classpath;
+        return classpath;
     }
 
     /**
@@ -88,7 +88,7 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * @return verbose or not
      */
     public boolean isVerbose() {
-        return m_verbose;
+        return verbose;
     }
 
     /**
@@ -97,11 +97,11 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * @return the additional facades
      */
     public PublicationDescriptionItem[] getAdditionalFacades() {
-        return m_additionalFacades;
+        return additionalFacades;
     }
 
     public PublicationDescriptionItem[] getCallbackFacades() {
-        return m_callbackFacades;
+        return callbackFacades;
     }
 
     /**
@@ -110,7 +110,7 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * @return the interfaces
      */
     public PublicationDescriptionItem[] getInterfacesToExpose() {
-        return m_interfacesToExpose;
+        return interfacesToExpose;
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * @param trueFalse set the verbose level
      */
     public void verbose(boolean trueFalse) {
-        m_verbose = trueFalse;
+        verbose = trueFalse;
     }
 
 
@@ -129,7 +129,7 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * @param interfacesToExpose the interfaces.
      */
     public void setInterfacesToExpose(PublicationDescriptionItem[] interfacesToExpose) {
-        m_interfacesToExpose = interfacesToExpose;
+        this.interfacesToExpose = interfacesToExpose;
     }
 
 
@@ -139,11 +139,11 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * @param additionalFacades the facades.
      */
     public void setAdditionalFacades(PublicationDescriptionItem[] additionalFacades) {
-        m_additionalFacades = additionalFacades;
+        this.additionalFacades = additionalFacades;
     }
 
     public void setCallbackFacades(PublicationDescriptionItem[] callbackFacades) {
-        this.m_callbackFacades = callbackFacades;
+        this.callbackFacades = callbackFacades;
     }
 
     /**
@@ -152,7 +152,7 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * @param classGenDir the dir.
      */
     public void setClassGenDir(String classGenDir) {
-        m_classGenDir = classGenDir;
+        this.classGenDir = classGenDir;
     }
 
     /**
@@ -161,7 +161,7 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * @param genName the name
      */
     public void setGenName(String genName) {
-        this.m_genName = genName;
+        this.genName = genName;
     }
 
     /**
@@ -170,16 +170,16 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * @param srcGenDir the dir name.
      */
     public void setSrcGenDir(String srcGenDir) {
-        m_srcGenDir = srcGenDir;
+        this.srcGenDir = srcGenDir;
     }
 
     /**
-     * Set the m_classpath to generate with
+     * Set the classpath to generate with
      *
-     * @param classpath the m_classpath.
+     * @param classpath the classpath.
      */
     public void setClasspath(String classpath) {
-        m_classpath = classpath;
+        this.classpath = classpath;
     }
 
     /**
@@ -190,14 +190,14 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      */
     protected boolean isAdditionalFacade(Class clazz) {
 
-        if (m_additionalFacades == null) {
+        if (additionalFacades == null) {
             return false;
         }
 
-        for (int p = 0; p < m_additionalFacades.length; p++) {
-            if (clazz.getName().equals(m_additionalFacades[p].getFacadeClass().getName())) {
+        for (int p = 0; p < additionalFacades.length; p++) {
+            if (clazz.getName().equals(additionalFacades[p].getFacadeClass().getName())) {
                 return true;
-            } else if (clazz.getName().equals("[L" + m_additionalFacades[p].getFacadeClass().getName() + ";")) {
+            } else if (clazz.getName().equals("[L" + additionalFacades[p].getFacadeClass().getName() + ";")) {
                 return true;
             }
         }

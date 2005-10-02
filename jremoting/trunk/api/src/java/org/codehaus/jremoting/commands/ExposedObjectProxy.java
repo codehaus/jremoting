@@ -33,7 +33,7 @@ public final class ExposedObjectProxy implements Externalizable {
 
     static final long serialVersionUID = -6422055643767617956L;
 
-    private String m_publishedName;
+    private String publishedName;
 
     /**
      * Constructor ExposedObjectProxy
@@ -41,7 +41,7 @@ public final class ExposedObjectProxy implements Externalizable {
      * @param publishedName the name that a proxy is required for.
      */
     public ExposedObjectProxy(String publishedName) {
-        m_publishedName = publishedName;
+        this.publishedName = publishedName;
     }
 
     /**
@@ -56,7 +56,7 @@ public final class ExposedObjectProxy implements Externalizable {
      * @return the published name
      */
     public String getPublishedName() {
-        return m_publishedName;
+        return publishedName;
     }
 
     /**
@@ -74,7 +74,7 @@ public final class ExposedObjectProxy implements Externalizable {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_publishedName);
+        out.writeObject(publishedName);
     }
 
     /**
@@ -90,7 +90,7 @@ public final class ExposedObjectProxy implements Externalizable {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_publishedName = (String) in.readObject();
+        publishedName = (String) in.readObject();
     }
 
     /**
@@ -98,6 +98,6 @@ public final class ExposedObjectProxy implements Externalizable {
      * @see Object#toString()
      */
     public String toString() {
-        return "ExposedObjectProxy.PublishedName[" + m_publishedName + "]";
+        return "ExposedObjectProxy.PublishedName[" + publishedName + "]";
     }
 }

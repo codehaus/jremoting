@@ -59,10 +59,10 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
 
     //bcel
     private static final String STUB_PREFIX = "JRemotingGenerated";
-    private InstructionFactory m_factory;
-    private ConstantPoolGen m_constantsPool;
-    private ClassGen m_classGen;
-    private ArrayList m_internalFieldRepresentingClasses;
+    private InstructionFactory factory;
+    private ConstantPoolGen constantsPool;
+    private ClassGen classGen;
+    private ArrayList internalFieldRepresentingClasses;
 
     /**
      * Generate the class.
@@ -112,7 +112,7 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(getClassGenDir() + "/" + mGeneratedClassName + ".class");
-            m_classGen.getJavaClass().dump(fos);
+            classGen.getJavaClass().dump(fos);
             fos.close();
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
@@ -139,10 +139,10 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
         interfaces[interfacesToStubify.length] = "org.codehaus.jremoting.client.Proxy";
 
 
-        m_classGen = new ClassGen(generatedClassName, "java.lang.Object", generatedClassName + ".java", Constants.ACC_PUBLIC | Constants.ACC_SUPER | Constants.ACC_FINAL, interfaces);
-        m_constantsPool = m_classGen.getConstantPool();
-        m_factory = new InstructionFactory(m_classGen, m_constantsPool);
-        m_internalFieldRepresentingClasses = new ArrayList();
+        classGen = new ClassGen(generatedClassName, "java.lang.Object", generatedClassName + ".java", Constants.ACC_PUBLIC | Constants.ACC_SUPER | Constants.ACC_FINAL, interfaces);
+        constantsPool = classGen.getConstantPool();
+        factory = new InstructionFactory(classGen, constantsPool);
+        internalFieldRepresentingClasses = new ArrayList();
 
     }
 
@@ -154,37 +154,37 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
      */
     protected void createConstructor(String generatedClassName) {
         InstructionList il = new InstructionList();
-        MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.VOID, new Type[]{new ObjectType("org.codehaus.jremoting.client.ProxyHelper")}, new String[]{"arg0"}, "<init>", generatedClassName, il, m_constantsPool);
-        il.append(m_factory.createLoad(Type.OBJECT, 0));
-        il.append(m_factory.createInvoke("java.lang.Object", "<init>", Type.VOID, Type.NO_ARGS, Constants.INVOKESPECIAL));
-        il.append(m_factory.createLoad(Type.OBJECT, 0));
-        il.append(m_factory.createLoad(Type.OBJECT, 1));
-        il.append(m_factory.createFieldAccess(generatedClassName, "m_proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.PUTFIELD));
-        il.append(m_factory.createReturn(Type.VOID));
+        MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.VOID, new Type[]{new ObjectType("org.codehaus.jremoting.client.ProxyHelper")}, new String[]{"arg0"}, "<init>", generatedClassName, il, constantsPool);
+        il.append(factory.createLoad(Type.OBJECT, 0));
+        il.append(factory.createInvoke("java.lang.Object", "<init>", Type.VOID, Type.NO_ARGS, Constants.INVOKESPECIAL));
+        il.append(factory.createLoad(Type.OBJECT, 0));
+        il.append(factory.createLoad(Type.OBJECT, 1));
+        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.PUTFIELD));
+        il.append(factory.createReturn(Type.VOID));
         method.setMaxStack();
         method.setMaxLocals();
-        m_classGen.addMethod(method.getMethod());
+        classGen.addMethod(method.getMethod());
         il.dispose();
     }
 
     /**
      * Method createFields.
      * =================adding===============
-     * private transient org.codehaus.jremoting.client.ProxyHelper m_proxyHelper;
+     * private transient org.codehaus.jremoting.client.ProxyHelper proxyHelper;
      * =================adding===============
      * Add
      */
     protected void createFields() {
         FieldGen field;
-        field = new FieldGen(Constants.ACC_PRIVATE | Constants.ACC_TRANSIENT, new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), "m_proxyHelper", m_constantsPool);
-        m_classGen.addField(field.getField());
+        field = new FieldGen(Constants.ACC_PRIVATE | Constants.ACC_TRANSIENT, new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), "proxyHelper", constantsPool);
+        classGen.addField(field.getField());
     }
 
     /**
      * Method createGetReferenceIDMethod.
      * =================adding=====================================
      * public Long codehausRemotingGetReferenceID(Object factoryThatIsAsking) {
-     * return m_proxyHelper.getReferenceID(factoryThatIsAsking);
+     * return proxyHelper.getReferenceID(factoryThatIsAsking);
      * }
      * =================adding=====================================
      *
@@ -192,15 +192,15 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
      */
     protected void createGetReferenceIDMethod(String generatedClassName) {
         InstructionList il = new InstructionList();
-        MethodGen method = new MethodGen(Constants.ACC_PUBLIC, new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, new String[]{"arg0"}, "codehausRemotingGetReferenceID", generatedClassName, il, m_constantsPool);
-        il.append(m_factory.createLoad(Type.OBJECT, 0));
-        il.append(m_factory.createFieldAccess(generatedClassName, "m_proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
-        il.append(m_factory.createLoad(Type.OBJECT, 1));
-        il.append(m_factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "getReferenceID", new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, Constants.INVOKEINTERFACE));
-        il.append(m_factory.createReturn(Type.OBJECT));
+        MethodGen method = new MethodGen(Constants.ACC_PUBLIC, new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, new String[]{"arg0"}, "codehausRemotingGetReferenceID", generatedClassName, il, constantsPool);
+        il.append(factory.createLoad(Type.OBJECT, 0));
+        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
+        il.append(factory.createLoad(Type.OBJECT, 1));
+        il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "getReferenceID", new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, Constants.INVOKEINTERFACE));
+        il.append(factory.createReturn(Type.OBJECT));
         method.setMaxStack();
         method.setMaxLocals();
-        m_classGen.addMethod(method.getMethod());
+        classGen.addMethod(method.getMethod());
         il.dispose();
     }
 
@@ -213,21 +213,21 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
      */
     protected void createHelperMethodForDotClassCalls(String generatedClassName) {
         InstructionList il = new InstructionList();
-        MethodGen method = new MethodGen(Constants.ACC_STATIC, new ObjectType("java.lang.Class"), new Type[]{Type.STRING}, new String[]{"arg0"}, "class$", generatedClassName, il, m_constantsPool);
-        InstructionHandle ih0 = il.append(m_factory.createLoad(Type.OBJECT, 0));
-        il.append(m_factory.createInvoke("java.lang.Class", "forName", new ObjectType("java.lang.Class"), new Type[]{Type.STRING}, Constants.INVOKESTATIC));
-        InstructionHandle ih4 = il.append(m_factory.createReturn(Type.OBJECT));
-        InstructionHandle ih5 = il.append(m_factory.createStore(Type.OBJECT, 1));
-        il.append(m_factory.createNew("java.lang.NoClassDefFoundError"));
+        MethodGen method = new MethodGen(Constants.ACC_STATIC, new ObjectType("java.lang.Class"), new Type[]{Type.STRING}, new String[]{"arg0"}, "class$", generatedClassName, il, constantsPool);
+        InstructionHandle ih0 = il.append(factory.createLoad(Type.OBJECT, 0));
+        il.append(factory.createInvoke("java.lang.Class", "forName", new ObjectType("java.lang.Class"), new Type[]{Type.STRING}, Constants.INVOKESTATIC));
+        InstructionHandle ih4 = il.append(factory.createReturn(Type.OBJECT));
+        InstructionHandle ih5 = il.append(factory.createStore(Type.OBJECT, 1));
+        il.append(factory.createNew("java.lang.NoClassDefFoundError"));
         il.append(InstructionConstants.DUP);
-        il.append(m_factory.createLoad(Type.OBJECT, 1));
-        il.append(m_factory.createInvoke("java.lang.Throwable", "getMessage", Type.STRING, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
-        il.append(m_factory.createInvoke("java.lang.NoClassDefFoundError", "<init>", Type.VOID, new Type[]{Type.STRING}, Constants.INVOKESPECIAL));
+        il.append(factory.createLoad(Type.OBJECT, 1));
+        il.append(factory.createInvoke("java.lang.Throwable", "getMessage", Type.STRING, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+        il.append(factory.createInvoke("java.lang.NoClassDefFoundError", "<init>", Type.VOID, new Type[]{Type.STRING}, Constants.INVOKESPECIAL));
         il.append(InstructionConstants.ATHROW);
         method.addExceptionHandler(ih0, ih4, ih5, new ObjectType("java.lang.ClassNotFoundException"));
         method.setMaxStack();
         method.setMaxLocals();
-        m_classGen.addMethod(method.getMethod());
+        classGen.addMethod(method.getMethod());
         il.dispose();
     }
 
@@ -266,13 +266,13 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
      */
     protected void createInterfaceMethod(String generatedClassName, Method mth, PublicationDescriptionItem interfaceToStubify) {
         InstructionList il = new InstructionList();
-        MethodGen method = new MethodGen(Constants.ACC_PUBLIC, getReturnType(mth), getArguments(mth), getArgumentNames(mth), mth.getName(), generatedClassName, il, m_constantsPool);
+        MethodGen method = new MethodGen(Constants.ACC_PUBLIC, getReturnType(mth), getArguments(mth), getArgumentNames(mth), mth.getName(), generatedClassName, il, constantsPool);
 
 
         //debug(getArguments(m));
 
         // **** TO Insert TEST Bytecode Inside the stub ,uncomment the subsequent lines
-        //if (m_verbose)
+        //if (verbose)
         //    createTestMethod(il, "calling " + mth.getName());
 
         /*
@@ -286,12 +286,12 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
         Class[] paramTypes = mth.getParameterTypes();
         numberOfArguments = paramTypes.length;
         variableIndex = getFreeIndexToStart(paramTypes);
-        il.append(new PUSH(m_constantsPool, numberOfArguments));
-        il.append(m_factory.createNewArray(Type.OBJECT, (short) 1));
-        il.append(m_factory.createStore(Type.OBJECT, ++variableIndex));
-        il.append(new PUSH(m_constantsPool, numberOfArguments));
-        il.append(m_factory.createNewArray(new ObjectType("java.lang.Class"), (short) 1));
-        il.append(m_factory.createStore(Type.OBJECT, ++variableIndex));
+        il.append(new PUSH(constantsPool, numberOfArguments));
+        il.append(factory.createNewArray(Type.OBJECT, (short) 1));
+        il.append(factory.createStore(Type.OBJECT, ++variableIndex));
+        il.append(new PUSH(constantsPool, numberOfArguments));
+        il.append(factory.createNewArray(new ObjectType("java.lang.Class"), (short) 1));
+        il.append(factory.createStore(Type.OBJECT, ++variableIndex));
 
         /*
          *  Assigning parameter into Object[] and Class[] Array
@@ -308,14 +308,14 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
         BranchInstruction gotoCall = null;
         InstructionHandle ih_tryEnd = null;
         if (interfaceToStubify.isRollback(mth)) {
-            ih_rollback = il.append(m_factory.createLoad(Type.OBJECT, 0));
-            il.append(m_factory.createFieldAccess(generatedClassName, "m_proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
-            il.append(m_factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "rollbackAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
-            gotoCall = m_factory.createBranchInstruction(Constants.GOTO, null);
+            ih_rollback = il.append(factory.createLoad(Type.OBJECT, 0));
+            il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
+            il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "rollbackAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
+            gotoCall = factory.createBranchInstruction(Constants.GOTO, null);
             ih_tryEnd = il.append(gotoCall);
 
-            catchHandler = il.append(m_factory.createStore(Type.OBJECT, ++variableIndex));
-            il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
+            catchHandler = il.append(factory.createStore(Type.OBJECT, ++variableIndex));
+            il.append(factory.createLoad(Type.OBJECT, variableIndex));
             injectCommonExceptionCatchBlock(il, method, variableIndex);
             --variableIndex;
             //createTestMethod(il,"after rollback");
@@ -329,7 +329,7 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
          * ================================================
          * try
          * {
-         *      Object retVal = m_proxyHelper.processObjectRequest("foo1(int,
+         *      Object retVal = proxyHelper.processObjectRequest("foo1(int,
          *        float, java.lang.String, java.lang.Integer)",args,argClasses);
          *      return (java.lang.String) retVal;
          * }
@@ -352,14 +352,14 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
          *  }
          * ================================================
          */
-        InstructionHandle ihe1 = il.append(m_factory.createLoad(Type.OBJECT, 0));
+        InstructionHandle ihe1 = il.append(factory.createLoad(Type.OBJECT, 0));
 
         if (interfaceToStubify.isRollback(mth)) {
             gotoCall.setTarget(ihe1);
             method.addExceptionHandler(ih_rollback, ih_tryEnd, catchHandler, new ObjectType("java.lang.Throwable"));
         }
 
-        il.append(m_factory.createFieldAccess(generatedClassName, "m_proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
+        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
         // **** Check if the return type is facade ***
         Class returnClass = mth.getReturnType();
         if (returnClass.isArray()) {
@@ -369,41 +369,41 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
         if (isAdditionalFacade(mth.getReturnType())) {
             String encodedReturnClassName = "class$" + MethodNameHelper.encodeClassName(returnClass);
             addField(encodedReturnClassName);
-            il.append(m_factory.createFieldAccess(generatedClassName, encodedReturnClassName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
-            BranchInstruction ifnullReturnClass = m_factory.createBranchInstruction(Constants.IFNULL, null);
+            il.append(factory.createFieldAccess(generatedClassName, encodedReturnClassName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
+            BranchInstruction ifnullReturnClass = factory.createBranchInstruction(Constants.IFNULL, null);
             il.append(ifnullReturnClass);
-            il.append(m_factory.createFieldAccess(generatedClassName, encodedReturnClassName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
-            BranchInstruction gotoReturnClass = m_factory.createBranchInstruction(Constants.GOTO, null);
+            il.append(factory.createFieldAccess(generatedClassName, encodedReturnClassName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
+            BranchInstruction gotoReturnClass = factory.createBranchInstruction(Constants.GOTO, null);
             il.append(gotoReturnClass);
 
-            InstructionHandle ihPushMethodName = il.append(new PUSH(m_constantsPool, returnClass.getName()));
+            InstructionHandle ihPushMethodName = il.append(new PUSH(constantsPool, returnClass.getName()));
             ifnullReturnClass.setTarget(ihPushMethodName);
-            il.append(m_factory.createInvoke(generatedClassName, "class$", new ObjectType("java.lang.Class"), new Type[]{Type.STRING}, Constants.INVOKESTATIC));
+            il.append(factory.createInvoke(generatedClassName, "class$", new ObjectType("java.lang.Class"), new Type[]{Type.STRING}, Constants.INVOKESTATIC));
             il.append(InstructionConstants.DUP);
-            il.append(m_factory.createFieldAccess(generatedClassName, encodedReturnClassName, new ObjectType("java.lang.Class"), Constants.PUTSTATIC));
-            InstructionHandle ihPushSignature = il.append(new PUSH(m_constantsPool, MethodNameHelper.getMethodSignature(mth)));
+            il.append(factory.createFieldAccess(generatedClassName, encodedReturnClassName, new ObjectType("java.lang.Class"), Constants.PUTSTATIC));
+            InstructionHandle ihPushSignature = il.append(new PUSH(constantsPool, MethodNameHelper.getMethodSignature(mth)));
             gotoReturnClass.setTarget(ihPushSignature);
-            il.append(m_factory.createLoad(Type.OBJECT, variableIndex - 1));
-            il.append(new PUSH(m_constantsPool, MethodNameHelper.encodeClassName(getClassType(returnClass))));
-            il.append(m_factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "processObjectRequestGettingFacade", Type.OBJECT, new Type[]{new ObjectType("java.lang.Class"), Type.STRING, new ArrayType(Type.OBJECT, 1), Type.STRING}, Constants.INVOKEINTERFACE));
+            il.append(factory.createLoad(Type.OBJECT, variableIndex - 1));
+            il.append(new PUSH(constantsPool, MethodNameHelper.encodeClassName(getClassType(returnClass))));
+            il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "processObjectRequestGettingFacade", Type.OBJECT, new Type[]{new ObjectType("java.lang.Class"), Type.STRING, new ArrayType(Type.OBJECT, 1), Type.STRING}, Constants.INVOKEINTERFACE));
         } else {
             //method signature = METHODNAME(arguments....)
-            il.append(new PUSH(m_constantsPool, MethodNameHelper.getMethodSignature(mth)));
+            il.append(new PUSH(constantsPool, MethodNameHelper.getMethodSignature(mth)));
             variableIndex -= 2;
-            il.append(m_factory.createLoad(Type.OBJECT, ++variableIndex));
-            il.append(m_factory.createLoad(Type.OBJECT, ++variableIndex));
+            il.append(factory.createLoad(Type.OBJECT, ++variableIndex));
+            il.append(factory.createLoad(Type.OBJECT, ++variableIndex));
             //Check for async methods
             if (interfaceToStubify.isAsync(mth)) {
-                il.append(m_factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "queueAsyncRequest", Type.VOID, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
+                il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "queueAsyncRequest", Type.VOID, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
 
 
             } else {
                 if (getBCELPrimitiveType(mth.getReturnType().getName()) == Type.VOID) {
-                    il.append(m_factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "processVoidRequest", Type.VOID, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
+                    il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "processVoidRequest", Type.VOID, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
                 } else {
-                    il.append(m_factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "processObjectRequest", Type.OBJECT, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
-                    il.append(m_factory.createStore(Type.OBJECT, ++variableIndex));
-                    il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
+                    il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "processObjectRequest", Type.OBJECT, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
+                    il.append(factory.createStore(Type.OBJECT, ++variableIndex));
+                    il.append(factory.createLoad(Type.OBJECT, variableIndex));
 
 
                 }
@@ -415,26 +415,26 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
         InstructionHandle ihe2;
         if (interfaceToStubify.isCommit(mth)) {
 
-            gotoCall = m_factory.createBranchInstruction(Constants.GOTO, null);
+            gotoCall = factory.createBranchInstruction(Constants.GOTO, null);
             ihe2 = il.append(gotoCall);
             variableIndex++;
 
         } else {
             if (mth.getReturnType().isPrimitive()) {
                 if (getBCELPrimitiveType(mth.getReturnType().getName()) == Type.VOID) {
-                    ihe2 = il.append(m_factory.createReturn(Type.VOID));
+                    ihe2 = il.append(factory.createReturn(Type.VOID));
                 } else {
-                    il.append(m_factory.createCheckCast(new ObjectType(getJavaWrapperClass(mth.getReturnType().getName()))));
-                    il.append(m_factory.createInvoke(getJavaWrapperClass(mth.getReturnType().getName()), mth.getReturnType().getName() + "Value", getBCELPrimitiveType(mth.getReturnType().getName()), Type.NO_ARGS, Constants.INVOKEVIRTUAL));
-                    ihe2 = il.append(m_factory.createReturn(getBCELPrimitiveType(mth.getReturnType().getName())));
+                    il.append(factory.createCheckCast(new ObjectType(getJavaWrapperClass(mth.getReturnType().getName()))));
+                    il.append(factory.createInvoke(getJavaWrapperClass(mth.getReturnType().getName()), mth.getReturnType().getName() + "Value", getBCELPrimitiveType(mth.getReturnType().getName()), Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+                    ihe2 = il.append(factory.createReturn(getBCELPrimitiveType(mth.getReturnType().getName())));
                 }
             } else {
-                il.append(m_factory.createCheckCast(new ObjectType(mth.getReturnType().getName())));
-                ihe2 = il.append(m_factory.createReturn(Type.OBJECT));
+                il.append(factory.createCheckCast(new ObjectType(mth.getReturnType().getName())));
+                ihe2 = il.append(factory.createReturn(Type.OBJECT));
             }
         }
 
-        InstructionHandle ihe3 = il.append(m_factory.createStore(Type.OBJECT, variableIndex));
+        InstructionHandle ihe3 = il.append(factory.createStore(Type.OBJECT, variableIndex));
 
         //add custom exceptionHandling here
         Class[] exceptionClasses = mth.getExceptionTypes();
@@ -442,20 +442,20 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
         BranchInstruction ifCustomExceptionBranch = null;
         for (int i = 0; i < exceptionClasses.length; i++) {
 
-            customHandler = il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
+            customHandler = il.append(factory.createLoad(Type.OBJECT, variableIndex));
             //create the series of custom exception handlers for the classes
             if (ifCustomExceptionBranch != null) {
                 ifCustomExceptionBranch.setTarget(customHandler);
             }
-            il.append(new INSTANCEOF(m_constantsPool.addClass(new ObjectType(exceptionClasses[i].getName()))));
-            ifCustomExceptionBranch = m_factory.createBranchInstruction(Constants.IFEQ, null);
+            il.append(new INSTANCEOF(constantsPool.addClass(new ObjectType(exceptionClasses[i].getName()))));
+            ifCustomExceptionBranch = factory.createBranchInstruction(Constants.IFEQ, null);
             il.append(ifCustomExceptionBranch);
-            il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
-            il.append(m_factory.createCheckCast(new ObjectType(exceptionClasses[i].getName())));
+            il.append(factory.createLoad(Type.OBJECT, variableIndex));
+            il.append(factory.createCheckCast(new ObjectType(exceptionClasses[i].getName())));
             il.append(InstructionConstants.ATHROW);
         }
 
-        InstructionHandle defaultExceptionHandler = il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
+        InstructionHandle defaultExceptionHandler = il.append(factory.createLoad(Type.OBJECT, variableIndex));
         if (customHandler != null) {
             ifCustomExceptionBranch.setTarget(defaultExceptionHandler);
         }
@@ -468,14 +468,14 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
 
         //check if its a commit method
         if (interfaceToStubify.isCommit(mth)) {
-            InstructionHandle ih_commit = il.append(m_factory.createLoad(Type.OBJECT, 0));
+            InstructionHandle ih_commit = il.append(factory.createLoad(Type.OBJECT, 0));
             gotoCall.setTarget(ih_commit);
-            il.append(m_factory.createFieldAccess(generatedClassName, "m_proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
+            il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
 
-            il.append(m_factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "commitAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
-            InstructionHandle ih_return = il.append(m_factory.createReturn(Type.VOID));
-            catchHandler = il.append(m_factory.createStore(Type.OBJECT, variableIndex));
-            il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
+            il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "commitAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
+            InstructionHandle ih_return = il.append(factory.createReturn(Type.VOID));
+            catchHandler = il.append(factory.createStore(Type.OBJECT, variableIndex));
+            il.append(factory.createLoad(Type.OBJECT, variableIndex));
             injectCommonExceptionCatchBlock(il, method, variableIndex);
             method.addExceptionHandler(ih_commit, ih_return, catchHandler, new ObjectType("java.lang.Throwable"));
         }
@@ -483,31 +483,31 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
 
         method.setMaxStack();
         method.setMaxLocals();
-        m_classGen.addMethod(method.getMethod());
+        classGen.addMethod(method.getMethod());
         il.dispose();
     }
 
     private void generateEqualsMethod(String generatedClassName) {
 
         /* public boolean equals(Object o) {
-         *   return m_proxyHelper.isEquals(this,o);
+         *   return proxyHelper.isEquals(this,o);
          * }
          */
 
         InstructionList il = new InstructionList();
-        MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.BOOLEAN, new Type[]{Type.OBJECT}, new String[]{"arg0"}, "equals", generatedClassName, il, m_constantsPool);
+        MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.BOOLEAN, new Type[]{Type.OBJECT}, new String[]{"arg0"}, "equals", generatedClassName, il, constantsPool);
 
-        il.append(m_factory.createLoad(Type.OBJECT, 0));
+        il.append(factory.createLoad(Type.OBJECT, 0));
 
-        il.append(m_factory.createFieldAccess(generatedClassName, "m_proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
-        il.append(m_factory.createLoad(Type.OBJECT, 0));
-        il.append(m_factory.createLoad(Type.OBJECT, 1));
+        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
+        il.append(factory.createLoad(Type.OBJECT, 0));
+        il.append(factory.createLoad(Type.OBJECT, 1));
 
-        il.append(m_factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "isEquals", Type.BOOLEAN, new Type[]{Type.OBJECT, Type.OBJECT}, Constants.INVOKEINTERFACE));
-        il.append(m_factory.createReturn(Type.INT));
+        il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "isEquals", Type.BOOLEAN, new Type[]{Type.OBJECT, Type.OBJECT}, Constants.INVOKEINTERFACE));
+        il.append(factory.createReturn(Type.INT));
         method.setMaxStack();
         method.setMaxLocals();
-        m_classGen.addMethod(method.getMethod());
+        classGen.addMethod(method.getMethod());
         il.dispose();
     }
 
@@ -525,18 +525,18 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
         int loadIndex = 0;
         for (int i = 0; i < numberOfArguments; i++) {
             // assigning the obj ref's
-            il.append(m_factory.createLoad(Type.OBJECT, variableIndex - 1));
-            il.append(new PUSH(m_constantsPool, i));
+            il.append(factory.createLoad(Type.OBJECT, variableIndex - 1));
+            il.append(new PUSH(constantsPool, i));
             String className = paramTypes[i].getName();
             //adjust for any previous wider datatype (double/long)
             if (previousType != null && (previousType == Type.DOUBLE || previousType == Type.LONG)) {
                 ++loadIndex;
             }
             if (paramTypes[i].isPrimitive()) {
-                il.append(m_factory.createNew(getJavaWrapperClass(className)));
+                il.append(factory.createNew(getJavaWrapperClass(className)));
                 il.append(InstructionConstants.DUP);
-                il.append(m_factory.createLoad(getBCELPrimitiveType(className), ++loadIndex));
-                il.append(m_factory.createInvoke(getJavaWrapperClass(className), "<init>", Type.VOID, new Type[]{getBCELPrimitiveType(className)}, Constants.INVOKESPECIAL));
+                il.append(factory.createLoad(getBCELPrimitiveType(className), ++loadIndex));
+                il.append(factory.createInvoke(getJavaWrapperClass(className), "<init>", Type.VOID, new Type[]{getBCELPrimitiveType(className)}, Constants.INVOKESPECIAL));
                 il.append(InstructionConstants.AASTORE);
             } else {
 
@@ -555,27 +555,27 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
 
                 addField(encodedFieldName);
                 // ******** TODO assign the obj reference
-                il.append(m_factory.createLoad(Type.OBJECT, variableIndex - 1));
-                il.append(new PUSH(m_constantsPool, i));
-                il.append(m_factory.createLoad(Type.OBJECT, ++loadIndex));
+                il.append(factory.createLoad(Type.OBJECT, variableIndex - 1));
+                il.append(new PUSH(constantsPool, i));
+                il.append(factory.createLoad(Type.OBJECT, ++loadIndex));
                 il.append(InstructionConstants.AASTORE);
 
                 // *********TODO assign the class ref's
-                il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
-                il.append(new PUSH(m_constantsPool, i));
-                il.append(m_factory.createFieldAccess(generatedClassName, encodedFieldName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
-                BranchInstruction ifnull = m_factory.createBranchInstruction(Constants.IFNULL, null);
+                il.append(factory.createLoad(Type.OBJECT, variableIndex));
+                il.append(new PUSH(constantsPool, i));
+                il.append(factory.createFieldAccess(generatedClassName, encodedFieldName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
+                BranchInstruction ifnull = factory.createBranchInstruction(Constants.IFNULL, null);
                 il.append(ifnull);
-                il.append(m_factory.createFieldAccess(generatedClassName, encodedFieldName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
-                BranchInstruction goHeadToStoreRef = m_factory.createBranchInstruction(Constants.GOTO, null);
+                il.append(factory.createFieldAccess(generatedClassName, encodedFieldName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
+                BranchInstruction goHeadToStoreRef = factory.createBranchInstruction(Constants.GOTO, null);
                 il.append(goHeadToStoreRef);
-                InstructionHandle ifnullStartHere = il.append(new PUSH(m_constantsPool, className));
+                InstructionHandle ifnullStartHere = il.append(new PUSH(constantsPool, className));
 
                 ifnull.setTarget(ifnullStartHere);
 
-                il.append(m_factory.createInvoke(generatedClassName, "class$", new ObjectType("java.lang.Class"), new Type[]{Type.STRING}, Constants.INVOKESTATIC));
+                il.append(factory.createInvoke(generatedClassName, "class$", new ObjectType("java.lang.Class"), new Type[]{Type.STRING}, Constants.INVOKESTATIC));
                 il.append(InstructionConstants.DUP);
-                il.append(m_factory.createFieldAccess(generatedClassName, encodedFieldName, new ObjectType("java.lang.Class"), Constants.PUTSTATIC));
+                il.append(factory.createFieldAccess(generatedClassName, encodedFieldName, new ObjectType("java.lang.Class"), Constants.PUTSTATIC));
                 InstructionHandle storeClassRef = il.append(InstructionConstants.AASTORE);
                 goHeadToStoreRef.setTarget(storeClassRef);
 
@@ -588,32 +588,32 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
      * Inject common exception catch blocks
      */
     public void injectCommonExceptionCatchBlock(InstructionList il, MethodGen method, int variableIndex) {
-        il.append(new INSTANCEOF(m_constantsPool.addClass(new ObjectType("java.lang.RuntimeException"))));
-        BranchInstruction b1 = m_factory.createBranchInstruction(Constants.IFEQ, null);
+        il.append(new INSTANCEOF(constantsPool.addClass(new ObjectType("java.lang.RuntimeException"))));
+        BranchInstruction b1 = factory.createBranchInstruction(Constants.IFEQ, null);
         il.append(b1);
-        il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
-        il.append(m_factory.createCheckCast(new ObjectType("java.lang.RuntimeException")));
+        il.append(factory.createLoad(Type.OBJECT, variableIndex));
+        il.append(factory.createCheckCast(new ObjectType("java.lang.RuntimeException")));
         il.append(InstructionConstants.ATHROW);
-        InstructionHandle ih1 = il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
-        il.append(new INSTANCEOF(m_constantsPool.addClass(new ObjectType("java.lang.Error"))));
-        BranchInstruction b2 = m_factory.createBranchInstruction(Constants.IFEQ, null);
+        InstructionHandle ih1 = il.append(factory.createLoad(Type.OBJECT, variableIndex));
+        il.append(new INSTANCEOF(constantsPool.addClass(new ObjectType("java.lang.Error"))));
+        BranchInstruction b2 = factory.createBranchInstruction(Constants.IFEQ, null);
         il.append(b2);
-        il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
-        il.append(m_factory.createCheckCast(new ObjectType("java.lang.Error")));
+        il.append(factory.createLoad(Type.OBJECT, variableIndex));
+        il.append(factory.createCheckCast(new ObjectType("java.lang.Error")));
         il.append(InstructionConstants.ATHROW);
-        InstructionHandle ih2 = il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
-        il.append(m_factory.createInvoke("java.lang.Throwable", "printStackTrace", Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
-        il.append(m_factory.createNew("org.codehaus.jremoting.client.InvocationException"));
+        InstructionHandle ih2 = il.append(factory.createLoad(Type.OBJECT, variableIndex));
+        il.append(factory.createInvoke("java.lang.Throwable", "printStackTrace", Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+        il.append(factory.createNew("org.codehaus.jremoting.client.InvocationException"));
         il.append(InstructionConstants.DUP);
-        il.append(m_factory.createNew("java.lang.StringBuffer"));
+        il.append(factory.createNew("java.lang.StringBuffer"));
         il.append(InstructionConstants.DUP);
-        il.append(new PUSH(m_constantsPool, "Should never get here: "));
-        il.append(m_factory.createInvoke("java.lang.StringBuffer", "<init>", Type.VOID, new Type[]{Type.STRING}, Constants.INVOKESPECIAL));
-        il.append(m_factory.createLoad(Type.OBJECT, variableIndex));
-        il.append(m_factory.createInvoke("java.lang.Throwable", "getMessage", Type.STRING, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
-        il.append(m_factory.createInvoke("java.lang.StringBuffer", "append", Type.STRINGBUFFER, new Type[]{Type.STRING}, Constants.INVOKEVIRTUAL));
-        il.append(m_factory.createInvoke("java.lang.StringBuffer", "toString", Type.STRING, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
-        il.append(m_factory.createInvoke("org.codehaus.jremoting.client.InvocationException", "<init>", Type.VOID, new Type[]{Type.STRING}, Constants.INVOKESPECIAL));
+        il.append(new PUSH(constantsPool, "Should never get here: "));
+        il.append(factory.createInvoke("java.lang.StringBuffer", "<init>", Type.VOID, new Type[]{Type.STRING}, Constants.INVOKESPECIAL));
+        il.append(factory.createLoad(Type.OBJECT, variableIndex));
+        il.append(factory.createInvoke("java.lang.Throwable", "getMessage", Type.STRING, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+        il.append(factory.createInvoke("java.lang.StringBuffer", "append", Type.STRINGBUFFER, new Type[]{Type.STRING}, Constants.INVOKEVIRTUAL));
+        il.append(factory.createInvoke("java.lang.StringBuffer", "toString", Type.STRING, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
+        il.append(factory.createInvoke("org.codehaus.jremoting.client.InvocationException", "<init>", Type.VOID, new Type[]{Type.STRING}, Constants.INVOKESPECIAL));
         il.append(InstructionConstants.ATHROW);
 
         b1.setTarget(ih1);
@@ -813,12 +813,12 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
      * @param encodedFieldName the encoded field name
      */
     protected void addField(String encodedFieldName) {
-        if (!m_internalFieldRepresentingClasses.contains(encodedFieldName)) {
+        if (!internalFieldRepresentingClasses.contains(encodedFieldName)) {
             //System.out.println("method."+method.getName()+".addingfield["
             //  + _encodedFieldName + "]");
-            FieldGen field = new FieldGen(Constants.ACC_STATIC, new ObjectType("java.lang.Class"), encodedFieldName, m_constantsPool);
-            m_classGen.addField(field.getField());
-            m_internalFieldRepresentingClasses.add(encodedFieldName);
+            FieldGen field = new FieldGen(Constants.ACC_STATIC, new ObjectType("java.lang.Class"), encodedFieldName, constantsPool);
+            classGen.addField(field.getField());
+            internalFieldRepresentingClasses.add(encodedFieldName);
         }
 
     }
@@ -828,9 +828,9 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
      * @param msg the message
      */
     protected void createTestMethod(InstructionList il, String msg) {
-        il.append(m_factory.createFieldAccess("java.lang.System", "out", new ObjectType("java.io.PrintStream"), Constants.GETSTATIC));
-        il.append(new PUSH(m_constantsPool, msg));
-        il.append(m_factory.createInvoke("java.io.PrintStream", "println", Type.VOID, new Type[]{Type.STRING}, Constants.INVOKEVIRTUAL));
+        il.append(factory.createFieldAccess("java.lang.System", "out", new ObjectType("java.io.PrintStream"), Constants.GETSTATIC));
+        il.append(new PUSH(constantsPool, msg));
+        il.append(factory.createInvoke("java.io.PrintStream", "println", Type.VOID, new Type[]{Type.STRING}, Constants.INVOKEVIRTUAL));
     }
 
     /**
@@ -870,7 +870,7 @@ public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
         FromJavaClassClassLoader fromJavaClassClassLoader =
             new FromJavaClassClassLoader();
         Class clazz =
-            fromJavaClassClassLoader.getClassFromJavaClass(m_classGen.getJavaClass());
+            fromJavaClassClassLoader.getClassFromJavaClass(classGen.getJavaClass());
         */
         Class clazz = null;
 

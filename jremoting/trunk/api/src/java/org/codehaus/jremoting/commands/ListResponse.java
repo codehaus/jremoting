@@ -30,7 +30,7 @@ import java.io.ObjectOutput;
 public final class ListResponse extends Response {
     static final long serialVersionUID = -2491265577999411874L;
 
-    private String[] m_listOfPublishedObjects;
+    private String[] listOfPublishedObjects;
 
     /**
      * Constructor LookupResponse
@@ -38,7 +38,7 @@ public final class ListResponse extends Response {
      * @param listOfPublishedObjects : list of Published Objects
      */
     public ListResponse(String[] listOfPublishedObjects) {
-        m_listOfPublishedObjects = listOfPublishedObjects;
+        this.listOfPublishedObjects = listOfPublishedObjects;
     }
 
     /**
@@ -53,7 +53,7 @@ public final class ListResponse extends Response {
      * @return the list of published Objects
      */
     public String[] getListOfPublishedObjects() {
-        return m_listOfPublishedObjects;
+        return listOfPublishedObjects;
     }
 
     /**
@@ -82,7 +82,7 @@ public final class ListResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_listOfPublishedObjects);
+        out.writeObject(listOfPublishedObjects);
     }
 
     /**
@@ -98,6 +98,6 @@ public final class ListResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_listOfPublishedObjects = (String[]) in.readObject();
+        listOfPublishedObjects = (String[]) in.readObject();
     }
 }

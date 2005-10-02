@@ -31,14 +31,14 @@ public class InvocationExceptionResponse extends Response {
 
 //    static final long serialVersionUID = TODO;
 
-    private String m_message;
+    private String message;
 
     public InvocationExceptionResponse(String message) {
-        m_message = message;
+        this.message = message;
     }
 
     public String getMessage() {
-        return m_message;
+        return message;
     }
 
     public int getReplyCode() {
@@ -46,11 +46,11 @@ public class InvocationExceptionResponse extends Response {
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_message);
+        out.writeObject(message);
     }
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_message = (String) in.readObject();
+        message = (String) in.readObject();
     }
 
 }

@@ -37,12 +37,12 @@ public class PipedStreamServerConnection extends AbstractStreamServerConnection 
     /**
      * The piped input stream.
      */
-    private PipedInputStream m_pipedIn;
+    private PipedInputStream pipedIn;
 
     /**
      * The piped output stream.
      */
-    private PipedOutputStream m_pipedOut;
+    private PipedOutputStream pipedOut;
 
     /**
      * Construct a PipedStreamServerConnection
@@ -56,8 +56,8 @@ public class PipedStreamServerConnection extends AbstractStreamServerConnection 
 
         super(abstractServer, readWriter, serverMonitor);
 
-        m_pipedIn = pipedIn;
-        m_pipedOut = pipedOut;
+        this.pipedIn = pipedIn;
+        this.pipedOut = pipedOut;
     }
 
     /**
@@ -66,15 +66,15 @@ public class PipedStreamServerConnection extends AbstractStreamServerConnection 
     protected void killConnection() {
 
         try {
-            m_pipedIn.close();
+            pipedIn.close();
         } catch (IOException e) {
-            m_serverMonitor.closeError(this.getClass(), "PipedStreamServerConnection.killConnection(): Some problem during closing of Input Stream", e);
+            serverMonitor.closeError(this.getClass(), "PipedStreamServerConnection.killConnection(): Some problem during closing of Input Stream", e);
         }
 
         try {
-            m_pipedOut.close();
+            pipedOut.close();
         } catch (IOException e) {
-            m_serverMonitor.closeError(this.getClass(), "PipedStreamServerConnection.killConnection(): Some problem during closing of Output Stream", e);
+            serverMonitor.closeError(this.getClass(), "PipedStreamServerConnection.killConnection(): Some problem during closing of Output Stream", e);
         }
     }
 }

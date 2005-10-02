@@ -27,34 +27,34 @@ import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 
 public class AccountImpl implements Account {
 
-    private ServerSideClientContextFactory m_clientContextFactory;
-    String m_symbolicKey;
-    private int m_balance = 123;
-    private AccountListener m_accountListener;
+    private ServerSideClientContextFactory clientContextFactory;
+    String symbolicKey;
+    private int balance = 123;
+    private AccountListener accountListener;
 
     public AccountImpl(ServerSideClientContextFactory clientContextFactory, String symbolicKey, AccountListener accountListener) {
-        m_clientContextFactory = clientContextFactory;
-        m_symbolicKey = symbolicKey;
-        m_accountListener = accountListener;
+        this.clientContextFactory = clientContextFactory;
+        this.symbolicKey = symbolicKey;
+        this.accountListener = accountListener;
     }
 
     public String getSymbolicKey() {
-        return m_symbolicKey;
+        return symbolicKey;
     }
 
     public int getBalance() {
-        return m_balance;
+        return balance;
     }
 
     public void debit(int amt) throws DebitBarfed {
-        ClientContext cc = m_clientContextFactory.get();
-        m_balance = m_balance - amt;
-        m_accountListener.record(getSymbolicKey() + ":debit:" + amt, cc);
+        ClientContext cc = clientContextFactory.get();
+        balance = balance - amt;
+        accountListener.record(getSymbolicKey() + ":debit:" + amt, cc);
     }
 
     public void credit(int amt) throws CreditBarfed {
-        ClientContext cc = m_clientContextFactory.get();
-        m_balance = m_balance + amt;
-        m_accountListener.record(getSymbolicKey() + ":credit:" + amt, cc);
+        ClientContext cc = clientContextFactory.get();
+        balance = balance + amt;
+        accountListener.record(getSymbolicKey() + ":credit:" + amt, cc);
     }
 }

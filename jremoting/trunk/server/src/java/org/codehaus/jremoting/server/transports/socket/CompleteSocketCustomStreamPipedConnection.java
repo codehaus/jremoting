@@ -34,8 +34,8 @@ import java.io.PipedOutputStream;
  */
 public class CompleteSocketCustomStreamPipedConnection {
 
-    private CompleteCustomStreamPipedServer m_pipedCustomStreamServer;
-    private CompleteSocketCustomStreamPipedBinder m_completeSocketCustomStreamPipedBinder;
+    private CompleteCustomStreamPipedServer pipedCustomStreamServer;
+    private CompleteSocketCustomStreamPipedBinder completeSocketCustomStreamPipedBinder;
 
     /**
      * Create a Complete Socket CustomStream Piped Connection
@@ -48,10 +48,10 @@ public class CompleteSocketCustomStreamPipedConnection {
      * @throws ConnectionException if a problem
      */
     public CompleteSocketCustomStreamPipedConnection(InvocationHandlerAdapter invocationHandlerAdapter, CompleteSocketCustomStreamPipedBinder completeSocketCustomStreamPipedBinder, PipedInputStream inputStream, PipedOutputStream outputStream, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, ServerMonitor serverMonitor) throws ConnectionException {
-        m_pipedCustomStreamServer = new CompleteCustomStreamPipedServer(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
-        m_pipedCustomStreamServer.start();
-        m_completeSocketCustomStreamPipedBinder = completeSocketCustomStreamPipedBinder;
-        m_pipedCustomStreamServer.makeNewConnection(inputStream, outputStream);
+        pipedCustomStreamServer = new CompleteCustomStreamPipedServer(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
+        pipedCustomStreamServer.start();
+        this.completeSocketCustomStreamPipedBinder = completeSocketCustomStreamPipedBinder;
+        pipedCustomStreamServer.makeNewConnection(inputStream, outputStream);
 
     }
 
@@ -59,13 +59,13 @@ public class CompleteSocketCustomStreamPipedConnection {
      * Close the connection
      */
     public void close() {
-        m_completeSocketCustomStreamPipedBinder.endConnection(this);
+        completeSocketCustomStreamPipedBinder.endConnection(this);
     }
 
     /**
      * Stop the server.
      */
     protected void stop() {
-        m_pipedCustomStreamServer.stop();
+        pipedCustomStreamServer.stop();
     }
 }

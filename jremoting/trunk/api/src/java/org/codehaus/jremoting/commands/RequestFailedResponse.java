@@ -30,7 +30,7 @@ import java.io.ObjectOutput;
 public final class RequestFailedResponse extends Response {
     static final long serialVersionUID = 8411019523629669181L;
 
-    private String m_failureReason;
+    private String failureReason;
 
     /**
      * Constructor RequestFailedResponse
@@ -38,7 +38,7 @@ public final class RequestFailedResponse extends Response {
      * @param failureReason the reason for the failure
      */
     public RequestFailedResponse(String failureReason) {
-        this.m_failureReason = failureReason;
+        this.failureReason = failureReason;
     }
 
     /**
@@ -53,7 +53,7 @@ public final class RequestFailedResponse extends Response {
      * @return the failure reason
      */
     public String getFailureReason() {
-        return m_failureReason;
+        return failureReason;
     }
 
     /**
@@ -82,7 +82,7 @@ public final class RequestFailedResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_failureReason);
+        out.writeObject(failureReason);
     }
 
     /**
@@ -98,6 +98,6 @@ public final class RequestFailedResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_failureReason = (String) in.readObject();
+        failureReason = (String) in.readObject();
     }
 }

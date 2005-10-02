@@ -42,19 +42,19 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
     /**
      * The Abstract Server
      */
-    private AbstractServer m_abstractServer;
+    private AbstractServer abstractServer;
 
     /**
      * End connections
      */
-    private boolean m_endConnection = false;
+    private boolean endConnection = false;
 
     /**
      * The Sever Stream Read Writer.
      */
-    private AbstractServerStreamReadWriter m_readWriter;
+    private AbstractServerStreamReadWriter readWriter;
 
-    protected final ServerMonitor m_serverMonitor;
+    protected final ServerMonitor serverMonitor;
 
     /**
      * Construct a AbstractStreamServerConnection
@@ -63,9 +63,9 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
      * @param readWriter     The Read Writer.
      */
     public AbstractStreamServerConnection(AbstractServer abstractServer, AbstractServerStreamReadWriter readWriter, ServerMonitor serverMonitor) {
-        m_abstractServer = abstractServer;
-        m_readWriter = readWriter;
-        m_serverMonitor = serverMonitor;
+        this.abstractServer = abstractServer;
+        this.readWriter = readWriter;
+        this.serverMonitor = serverMonitor;
     }
 
 
@@ -74,11 +74,11 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
      */
     public void run() {
 
-        m_abstractServer.connectionStart(this);
+        abstractServer.connectionStart(this);
 
         try {
 
-            m_readWriter.initialize();
+            readWriter.initialize();
 
             boolean more = true;
             Request request = null;
@@ -86,51 +86,51 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
             while (more) {
                 try {
                     if (request != null) {
-                        response = m_abstractServer.handleInvocation(request, m_readWriter.getConnectionDetails());
+                        response = abstractServer.handleInvocation(request, readWriter.getConnectionDetails());
                     }
 
-                    request = m_readWriter.writeReplyAndGetRequest(response);
+                    request = readWriter.writeReplyAndGetRequest(response);
 
                     // http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
                     // halves the performance though.
                     //oOS.reset();
-                    if (m_endConnection) {
+                    if (endConnection) {
                         response = new EndConnectionResponse();
                         more = false;
                     }
                 } catch (BadConnectionException bce) {
                     more = false;
-                    m_serverMonitor.badConnection(this.getClass(), "AbstractStreamServerConnection.run(): Bad connection #0", bce);
-                    m_readWriter.close();
+                    serverMonitor.badConnection(this.getClass(), "AbstractStreamServerConnection.run(): Bad connection #0", bce);
+                    readWriter.close();
                 } catch (ConnectionException ace) {
                     more = false;
-                    m_serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected ConnectionException #0", ace);
-                    m_readWriter.close();
+                    serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected ConnectionException #0", ace);
+                    readWriter.close();
                 } catch (IOException ioe) {
                     more = false;
 
                     if (ioe instanceof EOFException) {
-                        m_readWriter.close();
+                        readWriter.close();
                     } else if (isSafeEnd(ioe)) {
 
                         // TODO implement implementation indepandant logger
-                        m_readWriter.close();
+                        readWriter.close();
                     } else {
-                        m_serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected IOE #1", ioe);
-                        m_readWriter.close();
+                        serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected IOE #1", ioe);
+                        readWriter.close();
                     }
                 } catch (NullPointerException npe) {
-                    m_serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected NPE", npe);
+                    serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected NPE", npe);
                     response = new InvocationExceptionResponse("NullPointerException on server: " + npe.getMessage());
                 }
             }
         } catch (IOException e) {
-            m_serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected IOE #2", e);
+            serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected IOE #2", e);
         } catch (ClassNotFoundException e) {
-            m_serverMonitor.classNotFound(this.getClass(), e);
+            serverMonitor.classNotFound(this.getClass(), e);
         }
 
-        m_abstractServer.connectionCompleted(this);
+        abstractServer.connectionCompleted(this);
     }
 
     private boolean isSafeEnd(IOException ioe) {
@@ -152,8 +152,8 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
      * Method endConnection
      */
     public void endConnection() {
-        m_endConnection = true;
-        m_readWriter.close();
+        endConnection = true;
+        readWriter.close();
     }
 
     /**

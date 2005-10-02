@@ -30,7 +30,7 @@ import java.io.ObjectOutput;
 public final class MethodFacadeRequest extends MethodRequest {
     static final long serialVersionUID = -8622531707298373091L;
 
-    private String m_baseReturnClassNameEncoded;
+    private String baseReturnClassNameEncoded;
 
     /**
      * Constructor MethodFacadeRequest
@@ -47,7 +47,7 @@ public final class MethodFacadeRequest extends MethodRequest {
 
         super(publishedServiceName, objectName, methodSignature, args, referenceID, session);
 
-        m_baseReturnClassNameEncoded = baseReturnClassNameEncoded;
+        this.baseReturnClassNameEncoded = baseReturnClassNameEncoded;
     }
 
     /**
@@ -73,7 +73,7 @@ public final class MethodFacadeRequest extends MethodRequest {
      * @return the encoded name of the base class
      */
     public String getBaseReturnClassNameEncoded() {
-        return m_baseReturnClassNameEncoded;
+        return baseReturnClassNameEncoded;
     }
 
     /**
@@ -92,7 +92,7 @@ public final class MethodFacadeRequest extends MethodRequest {
      */
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        out.writeObject(m_baseReturnClassNameEncoded);
+        out.writeObject(baseReturnClassNameEncoded);
     }
 
     /**
@@ -111,6 +111,6 @@ public final class MethodFacadeRequest extends MethodRequest {
 
         super.readExternal(in);
 
-        m_baseReturnClassNameEncoded = (String) in.readObject();
+        baseReturnClassNameEncoded = (String) in.readObject();
     }
 }

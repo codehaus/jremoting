@@ -39,9 +39,9 @@ import org.codehaus.jremoting.client.factories.AbstractFactoryHelper;
  */
 public class RmiFactoryHelper extends AbstractFactoryHelper
 {
-    private ThreadPool m_threadPool;
-    private ClientMonitor m_clientMonitor;
-    private ConnectionPinger m_connectionPinger;
+    private ThreadPool threadPool;
+    private ClientMonitor clientMonitor;
+    private ConnectionPinger connectionPinger;
 
     /**
      * Method getInterfaceLookup
@@ -60,7 +60,7 @@ public class RmiFactoryHelper extends AbstractFactoryHelper
 
         // TODO maybe we should cache these.  Or the abstract parent class should.
         String[] terms = processFactoryString(factoryString);
-        HostContext hc = new RmiHostContext(m_threadPool,  m_clientMonitor, m_connectionPinger, terms[1], Integer.parseInt(terms[2]));
+        HostContext hc = new RmiHostContext(threadPool,  clientMonitor, connectionPinger, terms[1], Integer.parseInt(terms[2]));
         Factory af = createFactory(terms[3], hc, optimize);
 
         return af;
@@ -68,16 +68,16 @@ public class RmiFactoryHelper extends AbstractFactoryHelper
 
     public void setThreadPool(ThreadPool threadPool)
     {
-        m_threadPool = threadPool;
+        this.threadPool = threadPool;
     }
 
     public void setClientMonitor(ClientMonitor clientMonitor)
     {
-        m_clientMonitor = clientMonitor;
+        this.clientMonitor = clientMonitor;
     }
 
     public void setConnectionPinger(ConnectionPinger connectionPinger)
     {
-        m_connectionPinger = connectionPinger;
+        this.connectionPinger = connectionPinger;
     }
 }

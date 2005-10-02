@@ -21,7 +21,7 @@ package org.codehaus.jremoting.server;
 /**
  * A ClassRetriever is a thing that allows the serverside JRemoting Remoting deployer to choose
  * how class defs for proxies are retrieved. They may not want them in the normal
- * m_classpath.
+ * classpath.
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $

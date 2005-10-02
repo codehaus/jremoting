@@ -53,9 +53,9 @@ import org.codehaus.jremoting.commands.*;
 public final class RmiClientInvocationHandler extends AbstractClientInvocationHandler
 {
 
-    private RmiInvocationHandler m_rmiInvocationHandler;
-    private String m_URL;
-    private long m_lastRealRequest = System.currentTimeMillis();
+    private RmiInvocationHandler rmiInvocationHandler;
+    private String url;
+    private long lastRealRequest = System.currentTimeMillis();
 
     /**
      * Constructor RmiClientInvocationHandler
@@ -74,11 +74,11 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
 
         super(threadPool, clientMonitor, connectionPinger);
 
-        m_URL = "rmi://" + host + ":" + port + "/" + RmiInvocationHandler.class.getName();
+        url = "rmi://" + host + ":" + port + "/" + RmiInvocationHandler.class.getName();
 
         try
         {
-            m_rmiInvocationHandler = (RmiInvocationHandler)Naming.lookup( m_URL );
+            rmiInvocationHandler = (RmiInvocationHandler)Naming.lookup( url );
         }
         catch( NotBoundException nbe )
         {
@@ -112,7 +112,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
 
         try
         {
-            m_rmiInvocationHandler = (RmiInvocationHandler)Naming.lookup( m_URL );
+            rmiInvocationHandler = (RmiInvocationHandler)Naming.lookup( url );
 
             return true;
         }
@@ -136,7 +136,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
 
         if( request.getRequestCode() != RequestConstants.PINGREQUEST )
         {
-            m_lastRealRequest = System.currentTimeMillis();
+            lastRealRequest = System.currentTimeMillis();
         }
 
         boolean again = true;
@@ -157,7 +157,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
 
             try
             {
-                response = m_rmiInvocationHandler.handleInvocation( request );
+                response = rmiInvocationHandler.handleInvocation( request );
 
                 if( response.getReplyCode() >= 100 )
                 {
@@ -189,7 +189,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
                 {
                     int retryConnectTries = 0;
 
-                    m_rmiInvocationHandler = null;
+                    rmiInvocationHandler = null;
 
                     while( !tryReconnect() )
                     {
@@ -228,6 +228,6 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
      */
     public long getLastRealRequest()
     {
-        return m_lastRealRequest;
+        return lastRealRequest;
     }
 }

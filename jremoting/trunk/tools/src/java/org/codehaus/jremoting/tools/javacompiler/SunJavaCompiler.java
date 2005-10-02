@@ -37,9 +37,9 @@ public class SunJavaCompiler extends JavaCompiler {
      * @return
      */
     public boolean doCompile(String source) {
-        Main compiler = new Main(m_out, "jsp->javac");
+        Main compiler = new Main(out, "jsp->javac");
         String[] args;
-        args = new String[]{"-classpath", m_classpath, "-d", m_outdir, source};
+        args = new String[]{"-classpath", classpath, "-d", outdir, source};
         return compiler.compile(args);
     }
 }

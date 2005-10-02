@@ -32,10 +32,10 @@ import java.io.ObjectOutput;
 public class MethodRequest extends PublishedNameRequest implements Contextualizable {
     static final long serialVersionUID = -4850912985882914299L;
 
-    private String m_methodSignature;
-    private Object[] m_args;
-    private Long m_referenceID;
-    private Long m_session;
+    private String methodSignature;
+    private Object[] args;
+    private Long referenceID;
+    private Long session;
 
     /**
      * Constructor MethodRequest
@@ -51,10 +51,10 @@ public class MethodRequest extends PublishedNameRequest implements Contextualiza
 
         super(publishedServiceName, objectName);
 
-        m_methodSignature = methodSignature;
-        m_args = args;
-        m_referenceID = referenceID;
-        m_session = session;
+        this.methodSignature = methodSignature;
+        this.args = args;
+        this.referenceID = referenceID;
+        this.session = session;
     }
 
     /**
@@ -69,7 +69,7 @@ public class MethodRequest extends PublishedNameRequest implements Contextualiza
      * @return the method signature
      */
     public String getMethodSignature() {
-        return m_methodSignature;
+        return methodSignature;
     }
 
     /**
@@ -78,7 +78,7 @@ public class MethodRequest extends PublishedNameRequest implements Contextualiza
      * @return the invocation arguments
      */
     public Object[] getArgs() {
-        return m_args;
+        return args;
     }
 
     /**
@@ -87,7 +87,7 @@ public class MethodRequest extends PublishedNameRequest implements Contextualiza
      * @return the reference ID
      */
     public Long getReferenceID() {
-        return m_referenceID;
+        return referenceID;
     }
 
     /**
@@ -107,7 +107,7 @@ public class MethodRequest extends PublishedNameRequest implements Contextualiza
      * @return the session ID
      */
     public Long getSession() {
-        return m_session;
+        return session;
     }
 
     /**
@@ -127,10 +127,10 @@ public class MethodRequest extends PublishedNameRequest implements Contextualiza
     public void writeExternal(ObjectOutput out) throws IOException {
 
         super.writeExternal(out);
-        out.writeObject(m_methodSignature);
-        out.writeObject(m_args);
-        out.writeObject(m_referenceID);
-        out.writeObject(m_session);
+        out.writeObject(methodSignature);
+        out.writeObject(args);
+        out.writeObject(referenceID);
+        out.writeObject(session);
     }
 
     /**
@@ -149,9 +149,9 @@ public class MethodRequest extends PublishedNameRequest implements Contextualiza
 
         super.readExternal(in);
 
-        m_methodSignature = (String) in.readObject();
-        m_args = (Object[]) in.readObject();
-        m_referenceID = (Long) in.readObject();
-        m_session = (Long) in.readObject();
+        methodSignature = (String) in.readObject();
+        args = (Object[]) in.readObject();
+        referenceID = (Long) in.readObject();
+        session = (Long) in.readObject();
     }
 }

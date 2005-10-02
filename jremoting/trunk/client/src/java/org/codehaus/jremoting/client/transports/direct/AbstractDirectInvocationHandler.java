@@ -45,7 +45,7 @@ import org.codehaus.jremoting.commands.*;
 public abstract class AbstractDirectInvocationHandler extends AbstractClientInvocationHandler
 {
 
-    protected boolean m_methodLogging = false;
+    protected boolean methodLogging = false;
     protected long lastRealRequest = System.currentTimeMillis();
 
 
@@ -76,7 +76,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
         int tries = 0;
         long start = 0;
 
-        if( m_methodLogging )
+        if( methodLogging )
         {
             start = System.currentTimeMillis();
         }
@@ -122,7 +122,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
             }
         }
 
-        if( m_methodLogging )
+        if( methodLogging )
         {
             if( request instanceof MethodRequest )
             {

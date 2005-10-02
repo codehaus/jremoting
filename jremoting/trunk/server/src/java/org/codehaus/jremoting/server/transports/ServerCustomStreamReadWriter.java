@@ -38,8 +38,8 @@ import java.io.IOException;
  */
 public class ServerCustomStreamReadWriter extends AbstractServerStreamReadWriter {
 
-    private DataInputStream m_dataInputStream;
-    private DataOutputStream m_dataOutputStream;
+    private DataInputStream dataInputStream;
+    private DataOutputStream dataOutputStream;
 
     public ServerCustomStreamReadWriter(ServerMonitor serverMonitor, ThreadPool threadPool) {
         super(serverMonitor, threadPool);
@@ -51,8 +51,8 @@ public class ServerCustomStreamReadWriter extends AbstractServerStreamReadWriter
      * @throws IOException if an IO Excpetion
      */
     protected void initialize() throws IOException {
-        m_dataInputStream = new DataInputStream(getInputStream());
-        m_dataOutputStream = new DataOutputStream(new BufferedOutputStream(getOutputStream()));
+        dataInputStream = new DataInputStream(getInputStream());
+        dataOutputStream = new DataOutputStream(new BufferedOutputStream(getOutputStream()));
     }
 
     /**
@@ -77,25 +77,25 @@ public class ServerCustomStreamReadWriter extends AbstractServerStreamReadWriter
 
         byte[] aBytes = SerializationHelper.getBytesFromInstance(response);
 
-        m_dataOutputStream.writeInt(aBytes.length);
-        m_dataOutputStream.write(aBytes);
-        m_dataOutputStream.flush();
+        dataOutputStream.writeInt(aBytes.length);
+        dataOutputStream.write(aBytes);
+        dataOutputStream.flush();
     }
 
     protected void close() {
         try {
-            m_dataInputStream.close();
+            dataInputStream.close();
         } catch (IOException e) {
         }
         try {
-            m_dataOutputStream.close();
+            dataOutputStream.close();
         } catch (IOException e) {
         }
         super.close();
     }
 
     private Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
-        int byteArraySize = m_dataInputStream.readInt();
+        int byteArraySize = dataInputStream.readInt();
         if (byteArraySize < 0) {
             throw new BadConnectionException("Transport mismatch, Unable to " + "read packet of data from CustomStream.");
         }
@@ -106,7 +106,7 @@ public class ServerCustomStreamReadWriter extends AbstractServerStreamReadWriter
         // Loop here until the entire array has been read in.
         while (pos < byteArraySize) {
             //TODO cater for DOS attack here.
-            int read = m_dataInputStream.read(byteArray, pos, byteArraySize - pos);
+            int read = dataInputStream.read(byteArray, pos, byteArraySize - pos);
 
             pos += read;
 

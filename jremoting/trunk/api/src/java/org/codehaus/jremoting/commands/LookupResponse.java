@@ -30,7 +30,7 @@ import java.io.ObjectOutput;
 public final class LookupResponse extends Response {
     static final long serialVersionUID = -3292232924211406705L;
 
-    private Long m_referenceID;
+    private Long referenceID;
 
     /**
      * Constructor LookupResponse
@@ -38,7 +38,7 @@ public final class LookupResponse extends Response {
      * @param referenceID the reference ID
      */
     public LookupResponse(Long referenceID) {
-        m_referenceID = referenceID;
+        this.referenceID = referenceID;
     }
 
     /**
@@ -53,7 +53,7 @@ public final class LookupResponse extends Response {
      * @return the reference ID
      */
     public Long getReferenceID() {
-        return m_referenceID;
+        return referenceID;
     }
 
     /**
@@ -82,7 +82,7 @@ public final class LookupResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_referenceID);
+        out.writeObject(referenceID);
     }
 
     /**
@@ -98,6 +98,6 @@ public final class LookupResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_referenceID = (Long) in.readObject();
+        referenceID = (Long) in.readObject();
     }
 }

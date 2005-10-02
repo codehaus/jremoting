@@ -37,11 +37,11 @@ import java.util.Vector;
  */
 public class CompleteSocketObjectStreamPipedBinder implements Binder {
 
-    private InvocationHandlerAdapter m_invocationHandlerAdapter;
-    private final ServerMonitor m_serverMonitor;
-    private final ThreadPool m_threadPool;
-    private final ServerSideClientContextFactory m_contextFactory;
-    private Vector m_connections = new Vector();
+    private InvocationHandlerAdapter invocationHandlerAdapter;
+    private final ServerMonitor serverMonitor;
+    private final ThreadPool threadPool;
+    private final ServerSideClientContextFactory contextFactory;
+    private Vector connections = new Vector();
 
     /**
      * Construuct a Piped Binder
@@ -49,10 +49,10 @@ public class CompleteSocketObjectStreamPipedBinder implements Binder {
      * @param invocationHandlerAdapter An invocation handler adapter to handle requests
      */
     public CompleteSocketObjectStreamPipedBinder(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
-        m_invocationHandlerAdapter = invocationHandlerAdapter;
-        this.m_serverMonitor = serverMonitor;
-        m_threadPool = threadPool;
-        m_contextFactory = contextFactory;
+        this.invocationHandlerAdapter = invocationHandlerAdapter;
+        this.serverMonitor = serverMonitor;
+        this.threadPool = threadPool;
+        this.contextFactory = contextFactory;
     }
 
     /**
@@ -67,8 +67,8 @@ public class CompleteSocketObjectStreamPipedBinder implements Binder {
         PipedInputStream inputStream = (PipedInputStream) bindParms[0];
         PipedOutputStream outputStream = (PipedOutputStream) bindParms[1];
         try {
-            Object connection = new CompleteSocketObjectStreamPipedConnection(m_invocationHandlerAdapter, this, m_serverMonitor, m_threadPool, m_contextFactory, inputStream, outputStream);
-            m_connections.add(connection);
+            Object connection = new CompleteSocketObjectStreamPipedConnection(invocationHandlerAdapter, this, serverMonitor, threadPool, contextFactory, inputStream, outputStream);
+            connections.add(connection);
             return connection;
         } catch (ConnectionException e) {
             throw new BindException("Problem binding: " + e.getMessage());
@@ -79,8 +79,8 @@ public class CompleteSocketObjectStreamPipedBinder implements Binder {
      * Stop the server
      */
     public void stop() {
-        for (int i = 0; i < m_connections.size(); i++) {
-            CompleteSocketObjectStreamPipedConnection completeSocketObjectStreamPipedConnection = (CompleteSocketObjectStreamPipedConnection) m_connections.elementAt(i);
+        for (int i = 0; i < connections.size(); i++) {
+            CompleteSocketObjectStreamPipedConnection completeSocketObjectStreamPipedConnection = (CompleteSocketObjectStreamPipedConnection) connections.elementAt(i);
             completeSocketObjectStreamPipedConnection.stop();
         }
     }
@@ -91,8 +91,8 @@ public class CompleteSocketObjectStreamPipedBinder implements Binder {
      * @param connection the connection
      */
     void endConnection(CompleteSocketObjectStreamPipedConnection connection) {
-        for (int i = 0; i < m_connections.size(); i++) {
-            CompleteSocketObjectStreamPipedConnection completeSocketObjectStreamPipedConnection = (CompleteSocketObjectStreamPipedConnection) m_connections.elementAt(i);
+        for (int i = 0; i < connections.size(); i++) {
+            CompleteSocketObjectStreamPipedConnection completeSocketObjectStreamPipedConnection = (CompleteSocketObjectStreamPipedConnection) connections.elementAt(i);
             if (connection == completeSocketObjectStreamPipedConnection) {
                 connection.stop();
             }

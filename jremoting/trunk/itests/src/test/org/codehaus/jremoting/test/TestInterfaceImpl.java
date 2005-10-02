@@ -33,7 +33,7 @@ import java.util.Vector;
 public class TestInterfaceImpl implements TestInterface {
 
     Vector ti2Holder = new Vector();
-    TestObject[] m_testObjects;
+    TestObject[] testObjects;
 
     Vector listeners = new Vector();
 
@@ -157,14 +157,14 @@ public class TestInterfaceImpl implements TestInterface {
      */
     public TestObject[] getTestObjects() {
 
-        if (m_testObjects == null) {
-            m_testObjects = new TestObject[3];
-            m_testObjects[0] = new TestObject("AAA");
-            m_testObjects[1] = new TestObject("BBB");
-            m_testObjects[2] = new TestObject("CCC");
+        if (testObjects == null) {
+            testObjects = new TestObject[3];
+            testObjects[0] = new TestObject("AAA");
+            testObjects[1] = new TestObject("BBB");
+            testObjects[2] = new TestObject("CCC");
         }
 
-        return m_testObjects;
+        return testObjects;
     }
 
     /**
@@ -173,9 +173,9 @@ public class TestInterfaceImpl implements TestInterface {
      */
     public void changeTestObjectNames() {
 
-        m_testObjects[0].setName("aaa");
-        m_testObjects[1].setName("bbb");
-        m_testObjects[2].setName("ccc");
+        testObjects[0].setName("aaa");
+        testObjects[1].setName("bbb");
+        testObjects[2].setName("ccc");
     }
 
     /**
@@ -184,9 +184,9 @@ public class TestInterfaceImpl implements TestInterface {
      */
     public void makeNewTestObjectNames() {
 
-        m_testObjects[0] = new TestObject("aAa");
-        m_testObjects[1] = new TestObject("bBb");
-        m_testObjects[2] = new TestObject("cCc");
+        testObjects[0] = new TestObject("aAa");
+        testObjects[1] = new TestObject("bBb");
+        testObjects[2] = new TestObject("cCc");
     }
 
     protected void finalize() throws Throwable {

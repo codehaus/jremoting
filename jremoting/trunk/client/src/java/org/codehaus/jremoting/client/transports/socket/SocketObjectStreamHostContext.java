@@ -43,11 +43,11 @@ import java.lang.reflect.Method;
 public class SocketObjectStreamHostContext extends AbstractSameVmBindableHostContext
 {
 
-    private final ThreadPool m_threadPool;
-    private final ClientMonitor m_clientMonitor;
-    private final ConnectionPinger m_connectionPinger;
-    private int m_port;
-    private ClassLoader m_classLoader;
+    private final ThreadPool threadPool;
+    private final ClientMonitor clientMonitor;
+    private final ConnectionPinger connectionPinger;
+    private int port;
+    private ClassLoader classLoader;
 
     /**
      * Constructor SocketObjectStreamHostContext
@@ -67,11 +67,11 @@ public class SocketObjectStreamHostContext extends AbstractSameVmBindableHostCon
                 threadPool, clientMonitor, connectionPinger,
                 new SocketObjectStreamInvocationHandler( threadPool, clientMonitor, connectionPinger, host, port, interfacesClassLoader )
         );
-        m_threadPool = threadPool;
-        m_clientMonitor = clientMonitor;
-        m_connectionPinger = connectionPinger;
-        m_classLoader = interfacesClassLoader;
-        m_port = port;
+        this.threadPool = threadPool;
+        this.clientMonitor = clientMonitor;
+        this.connectionPinger = connectionPinger;
+        classLoader = interfacesClassLoader;
+        this.port = port;
     }
 
     public static class WithCurrentClassLoader extends SocketObjectStreamHostContext
@@ -125,7 +125,7 @@ public class SocketObjectStreamHostContext extends AbstractSameVmBindableHostCon
         PipedOutputStream out = new PipedOutputStream();
         try
         {
-            Object binder = getOptmization("port=" + m_port);
+            Object binder = getOptmization("port=" + port);
             if (binder == null)
             {
                 return null;
@@ -136,7 +136,7 @@ public class SocketObjectStreamHostContext extends AbstractSameVmBindableHostCon
                 return null;
             }
             PipedObjectStreamHostContext pipedCustomStreamHostContext
-                    = new PipedObjectStreamHostContext(m_threadPool, m_clientMonitor, m_connectionPinger, in, out, m_classLoader);
+                    = new PipedObjectStreamHostContext(threadPool, clientMonitor, connectionPinger, in, out, classLoader);
             pipedCustomStreamHostContext.initialize();
             return pipedCustomStreamHostContext;
         }

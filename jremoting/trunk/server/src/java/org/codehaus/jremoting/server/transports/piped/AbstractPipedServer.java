@@ -74,7 +74,7 @@ public abstract class AbstractPipedServer extends AbstractServer {
 
             ssrw.setStreams(pIS, pOS, "piped");
 
-            PipedStreamServerConnection pssc = new PipedStreamServerConnection(this, pIS, pOS, ssrw, m_serverMonitor);
+            PipedStreamServerConnection pssc = new PipedStreamServerConnection(this, pIS, pOS, ssrw, serverMonitor);
 
             ThreadContext thread = getThreadPool().getThreadContext(pssc);
 

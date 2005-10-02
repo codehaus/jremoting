@@ -26,7 +26,7 @@ package org.codehaus.jremoting.server;
  */
 public class ServerException extends Exception {
 
-    Throwable m_throwable;
+    Throwable throwable;
 
     /**
      * Construct an ServerException with a message
@@ -45,7 +45,7 @@ public class ServerException extends Exception {
      */
     public ServerException(String message, Throwable throwable) {
         super(message);
-        m_throwable = throwable;
+        this.throwable = throwable;
     }
 
     /**
@@ -54,7 +54,7 @@ public class ServerException extends Exception {
      * @return the root cause
      */
     public final Throwable getCause() {
-        return m_throwable;
+        return throwable;
     }
 
 }

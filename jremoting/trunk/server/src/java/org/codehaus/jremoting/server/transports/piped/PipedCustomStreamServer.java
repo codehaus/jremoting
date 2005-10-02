@@ -58,6 +58,6 @@ public class PipedCustomStreamServer extends AbstractPipedServer {
     }
 
     protected AbstractServerStreamReadWriter createServerStreamReadWriter() {
-        return new ServerCustomStreamReadWriter(m_serverMonitor, m_threadPool);
+        return new ServerCustomStreamReadWriter(serverMonitor, threadPool);
     }
 }

@@ -39,9 +39,9 @@ import org.codehaus.jremoting.client.factories.AbstractFactoryHelper;
  */
 public class SocketObjectStreamFactoryHelper extends AbstractFactoryHelper
 {
-    private ThreadPool m_threadPool;
-    private ClientMonitor m_clientMonitor;
-    private ConnectionPinger m_connectionPinger;
+    private ThreadPool threadPool;
+    private ClientMonitor clientMonitor;
+    private ConnectionPinger connectionPinger;
 
     public SocketObjectStreamFactoryHelper()
     {
@@ -50,17 +50,17 @@ public class SocketObjectStreamFactoryHelper extends AbstractFactoryHelper
 
     public void setThreadPool(ThreadPool threadPool)
     {
-        m_threadPool = threadPool;
+        this.threadPool = threadPool;
     }
 
     public void setClientMonitor(ClientMonitor clientMonitor)
     {
-        m_clientMonitor = clientMonitor;
+        this.clientMonitor = clientMonitor;
     }
 
     public void setConnectionPinger(ConnectionPinger connectionPinger)
     {
-        m_connectionPinger = connectionPinger;
+        this.connectionPinger = connectionPinger;
     }
 
     /**
@@ -79,7 +79,7 @@ public class SocketObjectStreamFactoryHelper extends AbstractFactoryHelper
     {
         // TODO maybe we should cache these.  Or the abstract parent class should.
         String[] terms = processFactoryString(factoryString);
-        HostContext hc = new SocketObjectStreamHostContext(m_threadPool, m_clientMonitor, m_connectionPinger,
+        HostContext hc = new SocketObjectStreamHostContext(threadPool, clientMonitor, connectionPinger,
                 interfacesClassLoader, terms[1],
                 Integer.parseInt(terms[2]));
         Factory af = createFactory(terms[3], hc , optimize);

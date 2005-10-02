@@ -29,7 +29,7 @@ import java.io.ObjectOutput;
  */
 public final class ClientInvocationAbendResponse extends Response {
 
-    private IOException m_replyExcpt;
+    private IOException replyExcpt;
 
     /**
      * Constructor ExceptionResponse
@@ -37,7 +37,7 @@ public final class ClientInvocationAbendResponse extends Response {
      * @param replyExcpt the exception received for the invocation
      */
     public ClientInvocationAbendResponse(IOException replyExcpt) {
-        this.m_replyExcpt = replyExcpt;
+        this.replyExcpt = replyExcpt;
     }
 
     /**
@@ -46,7 +46,7 @@ public final class ClientInvocationAbendResponse extends Response {
      * @return the transported exception
      */
     public IOException getIOException() {
-        return m_replyExcpt;
+        return replyExcpt;
     }
 
     /**

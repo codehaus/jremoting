@@ -82,21 +82,21 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
     private static long c_session = 0;
     private static final UID U_ID = new UID((short) 20729);
-    private Long m_lastSession = new Long(0);
-    private HashMap m_sessions = new HashMap();
-    private boolean m_suspend = false;
-    private ClassRetriever m_classRetriever = new NoClassRetriever();
-    private Authenticator m_authenticator = new DefaultAuthenticator();
-    private ServerMonitor m_serverMonitor;
+    private Long lastSession = new Long(0);
+    private HashMap sessions = new HashMap();
+    private boolean suspend = false;
+    private ClassRetriever classRetriever = new NoClassRetriever();
+    private Authenticator authenticator = new DefaultAuthenticator();
+    private ServerMonitor serverMonitor;
 
-    private ServerSideClientContextFactory m_clientContextFactory;
+    private ServerSideClientContextFactory clientContextFactory;
 
 
     public InvocationHandlerAdapter(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ServerSideClientContextFactory clientContextFactory) {
-        this.m_classRetriever = classRetriever;
-        this.m_authenticator = authenticator;
-        this.m_serverMonitor = serverMonitor;
-        this.m_clientContextFactory = clientContextFactory;
+        this.classRetriever = classRetriever;
+        this.authenticator = authenticator;
+        this.serverMonitor = serverMonitor;
+        this.clientContextFactory = clientContextFactory;
     }
 
     /**
@@ -108,7 +108,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     public Response handleInvocation(Request request, Object connectionDetails) {
 
         try {
-            if (m_suspend == true) {
+            if (suspend == true) {
                 return new SuspendedResponse();
             }
 
@@ -169,10 +169,10 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     }
 
     protected synchronized ServerSideClientContextFactory getClientContextFactory() {
-        if (m_clientContextFactory == null) {
-            m_clientContextFactory = new DefaultServerSideClientContextFactory();
+        if (clientContextFactory == null) {
+            clientContextFactory = new DefaultServerSideClientContextFactory();
         }
-        return m_clientContextFactory;
+        return clientContextFactory;
     }
 
     private void setClientContext(Contextualizable request) {
@@ -267,7 +267,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             } else {
                 refs[i] = methodInvocationHandler2.getOrMakeReferenceIDForBean(beanImpls[i]);
 
-                Session sess = (Session) m_sessions.get(methodFacadeRequest.getSession());
+                Session sess = (Session) sessions.get(methodFacadeRequest.getSession());
 
                 sess.addBeanInUse(refs[i], beanImpls[i]);
             }
@@ -309,7 +309,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         Long newRef = methodInvocationHandler.getOrMakeReferenceIDForBean(beanImpl);
 
         // make sure the bean is not garbage collected.
-        Session sess = (Session) m_sessions.get(methodFacadeRequest.getSession());
+        Session sess = (Session) sessions.get(methodFacadeRequest.getSession());
 
         sess.addBeanInUse(newRef, beanImpl);
 
@@ -375,7 +375,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         LookupRequest lr = (LookupRequest) request;
 
         try {
-            m_authenticator.checkAuthority(lr.getAuthentication(), lr.getPublishedServiceName());
+            authenticator.checkAuthority(lr.getAuthentication(), lr.getPublishedServiceName());
         } catch (AuthenticationException aae) {
             return new ExceptionResponse(aae);
         }
@@ -395,7 +395,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         String publishedThing = cr.getPublishedServiceName() + "_" + cr.getObjectName();
 
         try {
-            return new ClassResponse(m_classRetriever.getProxyClassBytes(publishedThing));
+            return new ClassResponse(classRetriever.getProxyClassBytes(publishedThing));
         } catch (ClassRetrievalException e) {
             return new ClassRetrievalFailedResponse(e.getMessage());
         }
@@ -411,8 +411,8 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             return new SameVMResponse();
         } else {
             Long session = getNewSession();
-            m_sessions.put(session, new Session(session));
-            return new OpenConnectionResponse(m_authenticator.getTextToSign(), session);
+            sessions.put(session, new Session(session));
+            return new OpenConnectionResponse(authenticator.getTextToSign(), session);
         }
     }
 
@@ -460,7 +460,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             return new InvocationExceptionResponse("TODO - you dirty rat/hacker");
         }
 
-        Session sess = (Session) m_sessions.get(session);
+        Session sess = (Session) sessions.get(session);
         if (sess == null) {
             System.err.println("DEBUG- GC on missing session - " + session);
         } else {
@@ -504,13 +504,13 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      */
     private boolean sessionExists(Long session) {
 
-        if (m_lastSession.equals(session)) {
+        if (lastSession.equals(session)) {
 
             // buffer last session for performance.
             return true;
         } else {
-            if (m_sessions.containsKey(session)) {
-                m_lastSession = session;
+            if (sessions.containsKey(session)) {
+                lastSession = session;
 
                 return true;
             }
@@ -534,25 +534,25 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * Suspend an service
      */
     public void suspend() {
-        m_suspend = true;
+        suspend = true;
     }
 
     /**
      * Resume an service
      */
     public void resume() {
-        m_suspend = false;
+        suspend = false;
     }
 
     public void setServerMonitor(ServerMonitor serverMonitor) {
-        m_serverMonitor = serverMonitor;
+        this.serverMonitor = serverMonitor;
     }
 
     public synchronized ServerMonitor getServerMonitor() {
-        if (m_serverMonitor == null) {
-            m_serverMonitor = new ConsoleServerMonitor();
+        if (serverMonitor == null) {
+            serverMonitor = new ConsoleServerMonitor();
         }
-        return m_serverMonitor;
+        return serverMonitor;
     }
 
 }

@@ -65,7 +65,7 @@ public class CompleteSocketCustomStreamServer extends AbstractCompleteSocketStre
      * @return The Server Stream Read Writer.
      */
     protected AbstractServerStreamReadWriter createServerStreamReadWriter() {
-        ServerCustomStreamReadWriter rw = new ServerCustomStreamReadWriter(m_serverMonitor, m_threadPool);
+        ServerCustomStreamReadWriter rw = new ServerCustomStreamReadWriter(serverMonitor, threadPool);
         return rw;
     }
 }

@@ -80,7 +80,7 @@ public class ProxyGeneratorImpl extends AbstractProxyGenerator {
 
         jc.setOutputDir(getClassGenDir());
 
-        //jc.setM_compilerPath();
+        //jc.setCompilerPath();
         jc.addClassPath(getClassGenDir());
         jc.addClassPath(getClasspath());
         jc.addDefaultClassPath();
@@ -147,18 +147,18 @@ public class ProxyGeneratorImpl extends AbstractProxyGenerator {
         classSource.println(" implements org.codehaus.jremoting.client.Proxy, ");
         generateInterfaceList(classSource, interfacesToExpose);
         classSource.println(" { ");
-        classSource.println("  private transient org.codehaus.jremoting.client.ProxyHelper m_proxyHelper;");
+        classSource.println("  private transient org.codehaus.jremoting.client.ProxyHelper proxyHelper;");
 
 
         // Generate Constructor
         classSource.println("  public JRemotingGenerated" + getGenName() + "_" + name + " (org.codehaus.jremoting.client.ProxyHelper proxyHelper) {");
-        classSource.println("      m_proxyHelper = proxyHelper;");
+        classSource.println("      this.proxyHelper = proxyHelper;");
         classSource.println("  }");
 
-        // helper method for the m_factory.
+        // helper method for the factory.
         // from Proxy interface
         classSource.println("    public Long codehausRemotingGetReferenceID(Object factoryThatIsAsking) {");
-        classSource.println("        return m_proxyHelper.getReferenceID(factoryThatIsAsking);");
+        classSource.println("        return proxyHelper.getReferenceID(factoryThatIsAsking);");
         classSource.println("    }");
 
         makeSourceInterfaces(classSource, interfacesToExpose, methodsDone);
@@ -200,7 +200,7 @@ public class ProxyGeneratorImpl extends AbstractProxyGenerator {
 
     private void generateEqualsMethod(PrintWriter classSource) {
         classSource.println("  public boolean equals(Object o) {");
-        classSource.println("    return m_proxyHelper.isEquals(this,o);");
+        classSource.println("    return proxyHelper.isEquals(this,o);");
         classSource.println("  }");
     }
 
@@ -271,7 +271,7 @@ public class ProxyGeneratorImpl extends AbstractProxyGenerator {
         classSource.println("    try {");
 
         if (rClass.toString().equals("void")) {
-            classSource.println("      m_proxyHelper." + proxyMethodName + "(\"" + methodSignature + "\",args,argClasses);");
+            classSource.println("      proxyHelper." + proxyMethodName + "(\"" + methodSignature + "\",args,argClasses);");
         } else {
             makeSourceInterfacesMethodsNotDoneNotVoid(classSource, method, rClass, methodSignature);
 
@@ -309,7 +309,7 @@ public class ProxyGeneratorImpl extends AbstractProxyGenerator {
     private void generateAsyncCommitMethodBody(PrintWriter classSource) {
         classSource.println("    try {");
 
-        classSource.println("      m_proxyHelper.commitAsyncRequests();");
+        classSource.println("      proxyHelper.commitAsyncRequests();");
         classSource.println("    } catch (Throwable t) {");
         classSource.println("      if (t instanceof RuntimeException) { ");
         classSource.println("        throw (RuntimeException) t;");
@@ -328,7 +328,7 @@ public class ProxyGeneratorImpl extends AbstractProxyGenerator {
         v.removeAllElements();
 
         classSource.println("    try {");
-        classSource.println("      m_proxyHelper.rollbackAsyncRequests();");
+        classSource.println("      proxyHelper.rollbackAsyncRequests();");
         classSource.println("    } catch (Throwable t) {");
         classSource.println("      if (t instanceof RuntimeException) { ");
         classSource.println("        throw (RuntimeException) t;");
@@ -352,10 +352,10 @@ public class ProxyGeneratorImpl extends AbstractProxyGenerator {
                 retClassType = rClass.getComponentType();
             }
 
-            classSource.println("  Object retVal = m_proxyHelper.processObjectRequestGettingFacade(" + retClassType.getName() + ".class , \"" + methodSignature + "\",args,\"" + MethodNameHelper.encodeClassName(getClassType(rClass)) + "\");");
+            classSource.println("  Object retVal = proxyHelper.processObjectRequestGettingFacade(" + retClassType.getName() + ".class , \"" + methodSignature + "\",args,\"" + MethodNameHelper.encodeClassName(getClassType(rClass)) + "\");");
             classSource.println("      return (" + getClassType(rClass) + ") retVal;");
         } else {
-            classSource.println("      Object retVal = m_proxyHelper.processObjectRequest(\"" + methodSignature + "\",args,argClasses);");
+            classSource.println("      Object retVal = proxyHelper.processObjectRequest(\"" + methodSignature + "\",args,argClasses);");
             generateReturnLine(classSource, rClass);
         }
     }

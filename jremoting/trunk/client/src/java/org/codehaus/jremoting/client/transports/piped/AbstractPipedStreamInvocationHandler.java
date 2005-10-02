@@ -41,8 +41,8 @@ import org.codehaus.jremoting.client.*;
 public abstract class AbstractPipedStreamInvocationHandler extends AbstractStreamClientInvocationHandler
 {
 
-    private PipedInputStream m_inputStream;
-    private PipedOutputStream m_outputStream;
+    private PipedInputStream inputStream;
+    private PipedOutputStream outputStream;
 
     /**
      * Constructor AbstractPipedStreamInvocationHandler
@@ -60,8 +60,8 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
 
         super( threadPool, clientMonitor, connectionPinger, interfacesClassLoader );
 
-        m_inputStream = is;
-        m_outputStream = os;
+        inputStream = is;
+        outputStream = os;
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
      */
     public void initialize() throws ConnectionException
     {
-        setObjectReadWriter( createClientStreamReadWriter( m_inputStream, m_outputStream ) );
+        setObjectReadWriter( createClientStreamReadWriter( inputStream, outputStream ) );
         super.initialize();
     }
 

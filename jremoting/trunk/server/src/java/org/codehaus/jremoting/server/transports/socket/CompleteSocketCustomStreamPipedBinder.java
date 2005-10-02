@@ -37,11 +37,11 @@ import java.util.Vector;
  */
 public class CompleteSocketCustomStreamPipedBinder implements Binder {
 
-    private InvocationHandlerAdapter m_invocationHandlerAdapter;
-    private final ServerMonitor m_serverMonitor;
-    private final ThreadPool m_threadPool;
-    private final ServerSideClientContextFactory m_contextFactory;
-    private Vector m_connections = new Vector();
+    private InvocationHandlerAdapter invocationHandlerAdapter;
+    private final ServerMonitor serverMonitor;
+    private final ThreadPool threadPool;
+    private final ServerSideClientContextFactory contextFactory;
+    private Vector connections = new Vector();
 
     /**
      * Construuct a Piped Binder
@@ -49,10 +49,10 @@ public class CompleteSocketCustomStreamPipedBinder implements Binder {
      * @param invocationHandlerAdapter An invocation handler adapter to handle requests
      */
     public CompleteSocketCustomStreamPipedBinder(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
-        m_invocationHandlerAdapter = invocationHandlerAdapter;
-        m_serverMonitor = serverMonitor;
-        m_threadPool = threadPool;
-        m_contextFactory = contextFactory;
+        this.invocationHandlerAdapter = invocationHandlerAdapter;
+        this.serverMonitor = serverMonitor;
+        this.threadPool = threadPool;
+        this.contextFactory = contextFactory;
     }
 
     /**
@@ -67,8 +67,8 @@ public class CompleteSocketCustomStreamPipedBinder implements Binder {
         PipedInputStream inputStream = (PipedInputStream) bindParms[0];
         PipedOutputStream outputStream = (PipedOutputStream) bindParms[1];
         try {
-            Object connection = new CompleteSocketCustomStreamPipedConnection(m_invocationHandlerAdapter, this, inputStream, outputStream, m_threadPool, m_contextFactory, m_serverMonitor);
-            m_connections.add(connection);
+            Object connection = new CompleteSocketCustomStreamPipedConnection(invocationHandlerAdapter, this, inputStream, outputStream, threadPool, contextFactory, serverMonitor);
+            connections.add(connection);
             return connection;
         } catch (ConnectionException e) {
             throw new BindException("Problem binding: " + e.getMessage());
@@ -79,8 +79,8 @@ public class CompleteSocketCustomStreamPipedBinder implements Binder {
      * Stop the server
      */
     public void stop() {
-        for (int i = 0; i < m_connections.size(); i++) {
-            CompleteSocketCustomStreamPipedConnection completeSocketCustomStreamPipedConnection = (CompleteSocketCustomStreamPipedConnection) m_connections.elementAt(i);
+        for (int i = 0; i < connections.size(); i++) {
+            CompleteSocketCustomStreamPipedConnection completeSocketCustomStreamPipedConnection = (CompleteSocketCustomStreamPipedConnection) connections.elementAt(i);
             completeSocketCustomStreamPipedConnection.stop();
 
         }
@@ -92,8 +92,8 @@ public class CompleteSocketCustomStreamPipedBinder implements Binder {
      * @param connection the connection
      */
     void endConnection(CompleteSocketCustomStreamPipedConnection connection) {
-        for (int i = 0; i < m_connections.size(); i++) {
-            CompleteSocketCustomStreamPipedConnection completeSocketCustomStreamPipedConnection = (CompleteSocketCustomStreamPipedConnection) m_connections.elementAt(i);
+        for (int i = 0; i < connections.size(); i++) {
+            CompleteSocketCustomStreamPipedConnection completeSocketCustomStreamPipedConnection = (CompleteSocketCustomStreamPipedConnection) connections.elementAt(i);
             if (connection == completeSocketCustomStreamPipedConnection) {
                 connection.stop();
             }

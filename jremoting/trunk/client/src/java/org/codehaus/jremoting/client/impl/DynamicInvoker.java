@@ -67,7 +67,7 @@ public class DynamicInvoker {
     /**
      * Cache of  stubs lookeup by the client
      */
-    private Map m_stubs = new HashMap();
+    private Map stubs = new HashMap();
 
     //-------Constructor---------//
     /**
@@ -129,10 +129,10 @@ public class DynamicInvoker {
      */
     public Object invoke(String publishedName, String methodName, Object[] args, Class[] argClasses) throws ConnectionException {
         //check the stub cache
-        DynamicStub stub = (DynamicStub) m_stubs.get(publishedName);
+        DynamicStub stub = (DynamicStub) stubs.get(publishedName);
         if (stub == null) {
             stub = (DynamicStub) factory.lookup(publishedName);
-            m_stubs.put(publishedName, stub);
+            stubs.put(publishedName, stub);
         }
         if (args == null) {
             args = new Object[0];

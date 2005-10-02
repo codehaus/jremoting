@@ -40,8 +40,8 @@ import org.codehaus.jremoting.api.ThreadPool;
 public abstract class AbstractSocketStreamInvocationHandler extends AbstractStreamClientInvocationHandler
 {
 
-    private final String m_host;
-    private final int m_port;
+    private final String host;
+    private final int port;
 
 
     /**
@@ -60,8 +60,8 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
                                                  String host, int port) throws ConnectionRefusedException, BadConnectionException
     {
         super(threadPool, clientMonitor, connectionPinger, interfacesClassLoader);
-        m_host = host;
-        m_port = port;
+        this.host = host;
+        this.port = port;
 
         try
         {
@@ -115,7 +115,7 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
     private Socket makeSocket() throws IOException
     {
 
-        Socket socket = new Socket( m_host, m_port );
+        Socket socket = new Socket( host, port );
 
         // The 1 second value was causing unwanted timeouts when the remote
         //  method took more than a second to run or if either system was heavily

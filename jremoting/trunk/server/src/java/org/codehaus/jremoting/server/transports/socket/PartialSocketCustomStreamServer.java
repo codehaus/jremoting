@@ -34,7 +34,7 @@ import org.codehaus.jremoting.server.transports.ServerCustomStreamReadWriter;
  */
 public class PartialSocketCustomStreamServer extends AbstractPartialSocketStreamServer {
 
-    private CompleteSocketCustomStreamPipedBinder m_completeSocketCustomStreamPipedBinder;
+    private CompleteSocketCustomStreamPipedBinder completeSocketCustomStreamPipedBinder;
 
     /**
      * Construct a PartialSocketCustomStreamServer
@@ -46,9 +46,9 @@ public class PartialSocketCustomStreamServer extends AbstractPartialSocketStream
     public PartialSocketCustomStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
 
-        m_completeSocketCustomStreamPipedBinder = new CompleteSocketCustomStreamPipedBinder(super.getInovcationHandlerAdapter(), serverMonitor, threadPool, contextFactory);
+        completeSocketCustomStreamPipedBinder = new CompleteSocketCustomStreamPipedBinder(super.getInovcationHandlerAdapter(), serverMonitor, threadPool, contextFactory);
         //TODO  should this reference RegHlpr directly ?
-        new RegistryHelper().put("/.codehausRemoting/optimizations/port=" + port, m_completeSocketCustomStreamPipedBinder);
+        new RegistryHelper().put("/.codehausRemoting/optimizations/port=" + port, completeSocketCustomStreamPipedBinder);
     }
 
 
@@ -57,7 +57,7 @@ public class PartialSocketCustomStreamServer extends AbstractPartialSocketStream
      */
     public void stop() {
         super.stop();
-        m_completeSocketCustomStreamPipedBinder.stop();
+        completeSocketCustomStreamPipedBinder.stop();
     }
 
     /**
@@ -66,7 +66,7 @@ public class PartialSocketCustomStreamServer extends AbstractPartialSocketStream
      * @return The Server Stream Read Writer.
      */
     protected AbstractServerStreamReadWriter createServerStreamReadWriter() {
-        return new ServerCustomStreamReadWriter(m_serverMonitor, m_threadPool);
+        return new ServerCustomStreamReadWriter(serverMonitor, threadPool);
     }
 
 }

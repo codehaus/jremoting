@@ -30,26 +30,26 @@ import java.util.Vector;
  */
 public class PublicationDescriptionItem {
 
-    private final Class m_facadeClass;
-    private final Vector m_asyncMethods = new Vector();
-    private final Vector m_commitMethods = new Vector();
-    private final Vector m_rollbackMethods = new Vector();
+    private final Class facadeClass;
+    private final Vector asyncMethods = new Vector();
+    private final Vector commitMethods = new Vector();
+    private final Vector rollbackMethods = new Vector();
 
     public PublicationDescriptionItem(Class facadeClass) {
-        m_facadeClass = facadeClass;
+        this.facadeClass = facadeClass;
         Method[] methods = facadeClass.getDeclaredMethods();
         try {
             AttributeHelper attributeHelper = new AttributeHelper();
             for (int i = 0; i < methods.length; i++) {
                 Method method = methods[i];
                 if (attributeHelper.isMethodAsync(method)) {
-                    m_asyncMethods.add(MethodNameHelper.getMethodSignature(method));
+                    asyncMethods.add(MethodNameHelper.getMethodSignature(method));
                 }
                 if (attributeHelper.isMethodAsyncCommit(method)) {
-                    m_commitMethods.add(MethodNameHelper.getMethodSignature(method));
+                    commitMethods.add(MethodNameHelper.getMethodSignature(method));
                 }
                 if (attributeHelper.isMethodAsyncRollback(method)) {
-                    m_rollbackMethods.add(MethodNameHelper.getMethodSignature(method));
+                    rollbackMethods.add(MethodNameHelper.getMethodSignature(method));
                 }
             }
         } catch (NoClassDefFoundError ncdfe) {
@@ -66,7 +66,7 @@ public class PublicationDescriptionItem {
     }
 
     public PublicationDescriptionItem(Class facadeClass, String[] asyncMethods, String[] commitMethods, String[] rollbackMethods) throws PublicationException {
-        m_facadeClass = facadeClass;
+        this.facadeClass = facadeClass;
         if (facadeClass == null) {
             throw new RuntimeException("Facade class nust not be null");
         }
@@ -74,19 +74,19 @@ public class PublicationDescriptionItem {
         for (int i = 0; i < asyncMethods.length; i++) {
             String asyncMethod = asyncMethods[i];
             testAsyncMethodType(facadeClass.getMethods(), asyncMethod);
-            m_asyncMethods.add(asyncMethod);
+            this.asyncMethods.add(asyncMethod);
         }
 
         for (int i = 0; i < commitMethods.length; i++) {
             String commitMethod = commitMethods[i];
             testAsyncMethodType(facadeClass.getMethods(), commitMethod);
-            m_commitMethods.add(commitMethod);
+            this.commitMethods.add(commitMethod);
         }
 
         for (int i = 0; i < rollbackMethods.length; i++) {
             String rollbackMethod = rollbackMethods[i];
             testAsyncMethodType(facadeClass.getMethods(), rollbackMethod);
-            m_rollbackMethods.add(rollbackMethod);
+            this.rollbackMethods.add(rollbackMethod);
         }
     }
 
@@ -109,13 +109,13 @@ public class PublicationDescriptionItem {
 
 
     public Class getFacadeClass() {
-        return m_facadeClass;
+        return facadeClass;
     }
 
     public boolean isCommit(Method method) {
         String mthSig = MethodNameHelper.getMethodSignature(method);
-        for (int i = 0; i < m_commitMethods.size(); i++) {
-            String asyncMethod = (String) m_commitMethods.elementAt(i);
+        for (int i = 0; i < commitMethods.size(); i++) {
+            String asyncMethod = (String) commitMethods.elementAt(i);
             if (asyncMethod.equals(mthSig)) {
                 return true;
             }
@@ -125,8 +125,8 @@ public class PublicationDescriptionItem {
 
     public boolean isRollback(Method method) {
         String mthSig = MethodNameHelper.getMethodSignature(method);
-        for (int i = 0; i < m_rollbackMethods.size(); i++) {
-            String asyncMethod = (String) m_rollbackMethods.elementAt(i);
+        for (int i = 0; i < rollbackMethods.size(); i++) {
+            String asyncMethod = (String) rollbackMethods.elementAt(i);
             if (asyncMethod.equals(mthSig)) {
                 return true;
             }
@@ -136,8 +136,8 @@ public class PublicationDescriptionItem {
 
     public boolean isAsync(Method method) {
         String mthSig = MethodNameHelper.getMethodSignature(method);
-        for (int i = 0; i < m_asyncMethods.size(); i++) {
-            String asyncMethod = (String) m_asyncMethods.elementAt(i);
+        for (int i = 0; i < asyncMethods.size(); i++) {
+            String asyncMethod = (String) asyncMethods.elementAt(i);
             if (asyncMethod.equals(mthSig)) {
                 return true;
             }
@@ -146,7 +146,7 @@ public class PublicationDescriptionItem {
     }
 
     public boolean hasAsyncBehavior() {
-        return (m_asyncMethods.size() != 0 | m_commitMethods.size() != 0 | m_rollbackMethods.size() != 0);
+        return (asyncMethods.size() != 0 | commitMethods.size() != 0 | rollbackMethods.size() != 0);
     }
 
 }

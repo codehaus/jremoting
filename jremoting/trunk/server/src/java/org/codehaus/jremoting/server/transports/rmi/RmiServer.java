@@ -49,16 +49,16 @@ public class RmiServer extends AbstractServer {
     /**
      * The invocation adapter
      */
-    private RmiInvocationAdapter m_rmiInvocationAdapter;
+    private RmiInvocationAdapter rmiInvocationAdapter;
 
     /**
      * The port
      */
-    private int m_port;
+    private int port;
     /**
      * The registry
      */
-    private Registry m_registry;
+    private Registry registry;
 
     /**
      * Constructor a RmiServer with a preexiting invocation handler.
@@ -71,7 +71,7 @@ public class RmiServer extends AbstractServer {
      */
     public RmiServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
-        m_port = port;
+        this.port = port;
     }
 
     public static class WithNoInvocationHandler extends RmiServer {
@@ -105,13 +105,13 @@ public class RmiServer extends AbstractServer {
     public void start() throws ServerException {
         setState(STARTING);
         try {
-            m_rmiInvocationAdapter = new RmiInvocationAdapter(this);
+            rmiInvocationAdapter = new RmiInvocationAdapter(this);
 
-            UnicastRemoteObject.exportObject(m_rmiInvocationAdapter);
+            UnicastRemoteObject.exportObject(rmiInvocationAdapter);
 
-            m_registry = LocateRegistry.createRegistry(m_port);
+            registry = LocateRegistry.createRegistry(port);
 
-            m_registry.rebind(RmiInvocationHandler.class.getName(), m_rmiInvocationAdapter);
+            registry.rebind(RmiInvocationHandler.class.getName(), rmiInvocationAdapter);
             setState(STARTED);
         } catch (RemoteException re) {
             throw new ServerException("Some problem setting up RMI server", re);
@@ -128,11 +128,11 @@ public class RmiServer extends AbstractServer {
         killAllConnections();
 
         try {
-            m_registry.unbind(RmiInvocationHandler.class.getName());
+            registry.unbind(RmiInvocationHandler.class.getName());
         } catch (RemoteException re) {
-            m_serverMonitor.stopServerError(this.getClass(), "RmiServer.stop(): Error stopping RMI server - RemoteException", re);
+            serverMonitor.stopServerError(this.getClass(), "RmiServer.stop(): Error stopping RMI server - RemoteException", re);
         } catch (NotBoundException nbe) {
-            m_serverMonitor.stopServerError(this.getClass(), "RmiServer.stop(): Error stopping RMI server - NotBoundException", nbe);
+            serverMonitor.stopServerError(this.getClass(), "RmiServer.stop(): Error stopping RMI server - NotBoundException", nbe);
         }
 
         setState(STOPPED);

@@ -35,7 +35,7 @@ import java.io.IOException;
  */
 public class CodedProxyTestInterfaceProxy implements TestInterface {
 
-    private TestInterface m_actualImpl;
+    private TestInterface actualImpl;
 
     /**
      * Constructor CodedProxyTestInterfaceProxy
@@ -43,7 +43,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * @param actualImpl
      */
     public CodedProxyTestInterfaceProxy(TestInterface actualImpl) {
-        m_actualImpl = actualImpl;
+        this.actualImpl = actualImpl;
     }
 
     /**
@@ -52,7 +52,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * @param greeting
      */
     public void hello(String greeting) {
-        m_actualImpl.hello(greeting);
+        actualImpl.hello(greeting);
     }
 
     /**
@@ -61,7 +61,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * @param greeting
      */
     public int hello2(int greeting) {
-        return m_actualImpl.hello2(greeting);
+        return actualImpl.hello2(greeting);
     }
 
     /**
@@ -73,7 +73,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * @throws PropertyVetoException
      */
     public boolean hello3(short greeting) throws PropertyVetoException, IOException {
-        return m_actualImpl.hello3(greeting);
+        return actualImpl.hello3(greeting);
     }
 
     /**
@@ -84,14 +84,14 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * @return
      */
     public StringBuffer hello4(float greeting1, double greeting2) {
-        return m_actualImpl.hello4(greeting1, greeting2);
+        return actualImpl.hello4(greeting1, greeting2);
     }
 
     /**
      * Method testSpeed
      */
     public void testSpeed() {
-        m_actualImpl.testSpeed();
+        actualImpl.testSpeed();
     }
 
     /**
@@ -101,7 +101,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * @return
      */
     public TestInterface2 makeTestInterface2(String thingName) {
-        return m_actualImpl.makeTestInterface2(thingName);
+        return actualImpl.makeTestInterface2(thingName);
     }
 
     /**
@@ -110,7 +110,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * @param forThisImpl
      */
     public void morphName(TestInterface2 forThisImpl) {
-        m_actualImpl.morphName(forThisImpl);
+        actualImpl.morphName(forThisImpl);
     }
 
     /**
@@ -120,7 +120,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * @return
      */
     public TestInterface2 findTestInterface2ByName(String nameToFind) {
-        return m_actualImpl.findTestInterface2ByName(nameToFind);
+        return actualImpl.findTestInterface2ByName(nameToFind);
     }
 
     /**
@@ -129,7 +129,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * @return
      */
     public TestInterface2[] getTestInterface2s() {
-        return m_actualImpl.getTestInterface2s();
+        return actualImpl.getTestInterface2s();
     }
 
     /**
@@ -139,7 +139,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * @return
      */
     public TestObject[] getTestObjects() {
-        return m_actualImpl.getTestObjects();
+        return actualImpl.getTestObjects();
     }
 
     /**
@@ -147,7 +147,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * Helps ilustrate the bug http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
      */
     public void changeTestObjectNames() {
-        m_actualImpl.changeTestObjectNames();
+        actualImpl.changeTestObjectNames();
     }
 
     /**
@@ -155,38 +155,38 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * Helps ilustrate the bug http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
      */
     public void makeNewTestObjectNames() {
-        m_actualImpl.makeNewTestObjectNames();
+        actualImpl.makeNewTestObjectNames();
     }
 
     public boolean addCallBackListener(TestCallBackListener testCallbackListener) {
-        return m_actualImpl.addCallBackListener(testCallbackListener);
+        return actualImpl.addCallBackListener(testCallbackListener);
     }
 
     public void ping() {
-        m_actualImpl.ping();
+        actualImpl.ping();
     }
 
     public byte bytes(byte b, byte[] array) {
-        return m_actualImpl.bytes(b, array);
+        return actualImpl.bytes(b, array);
     }
 
     public void throwSpecialException(int i) {
-        m_actualImpl.throwSpecialException(i);
+        actualImpl.throwSpecialException(i);
     }
 
     public void testLong(long l) {
     }
 
     public String toString() {
-        return m_actualImpl.toString();
+        return actualImpl.toString();
     }
 
     public int hashCode() {
-        return m_actualImpl.hashCode();
+        return actualImpl.hashCode();
     }
 
     public CustomSerializableParam testCustomSerializableParameter(CustomSerializableParam param) {
-        return m_actualImpl.testCustomSerializableParameter(param);
+        return actualImpl.testCustomSerializableParameter(param);
     }
 
 }

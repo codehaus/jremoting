@@ -35,7 +35,7 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 public final class DirectInvocationHandler extends AbstractDirectInvocationHandler
 {
 
-    private ServerInvocationHandler m_invocationHandler;
+    private ServerInvocationHandler invocationHandler;
 
 
     /**
@@ -50,12 +50,12 @@ public final class DirectInvocationHandler extends AbstractDirectInvocationHandl
     public DirectInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler)
     {
         super(threadPool, clientMonitor, connectionPinger);
-        m_invocationHandler = invocationHandler;
+        this.invocationHandler = invocationHandler;
     }
 
     protected Response performInvocation( Request request ) throws IOException
     {
-        return m_invocationHandler.handleInvocation( request, "" );
+        return invocationHandler.handleInvocation( request, "" );
     }
 
 }

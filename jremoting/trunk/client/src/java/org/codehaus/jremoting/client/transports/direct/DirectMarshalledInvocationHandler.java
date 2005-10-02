@@ -40,8 +40,8 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 public final class DirectMarshalledInvocationHandler extends AbstractDirectInvocationHandler
 {
 
-    private ServerMarshalledInvocationHandler m_invocationHandler;
-    private ClassLoader m_interfacesClassLoader;
+    private ServerMarshalledInvocationHandler invocationHandler;
+    private ClassLoader interfacesClassLoader;
 
 
     /**
@@ -58,8 +58,8 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
                                              ClassLoader classLoader)
     {
         super(threadPool, clientMonitor, connectionPinger);
-        m_invocationHandler = invocationHandler;
-        m_interfacesClassLoader = classLoader;
+        this.invocationHandler = invocationHandler;
+        interfacesClassLoader = classLoader;
     }
 
     protected Response performInvocation( Request request ) throws IOException
@@ -68,10 +68,10 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
         try
         {
             byte[] serRequest = SerializationHelper.getBytesFromInstance( request );
-            byte[] serReply = m_invocationHandler.handleInvocation( serRequest, null );
+            byte[] serReply = invocationHandler.handleInvocation( serRequest, null );
 
             Object instanceFromBytes = SerializationHelper.getInstanceFromBytes( serReply,
-                                                                                      m_interfacesClassLoader );
+                                                                                      interfacesClassLoader );
             return (Response)instanceFromBytes;
         }
         catch( ClassNotFoundException e )
@@ -92,7 +92,7 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
      */
     public ClassLoader getInterfacesClassLoader()
     {
-        return m_interfacesClassLoader;
+        return interfacesClassLoader;
     }
 
 }

@@ -48,9 +48,9 @@ public interface ProxyGenerator {
     void setSrcGenDir(String srcGenDir);
 
     /**
-     * Set the m_classpath
+     * Set the classpath
      *
-     * @param classpath the m_classpath for compilation (if appl).
+     * @param classpath the classpath for compilation (if appl).
      */
     void setClasspath(String classpath);
 

@@ -44,7 +44,7 @@ import java.lang.reflect.Method;
 public class SocketCustomStreamHostContext extends AbstractSameVmBindableHostContext
 {
 
-    private int m_port;
+    private int port;
 
     /**
      * Constructor SocketCustomStreamHostContext
@@ -63,7 +63,7 @@ public class SocketCustomStreamHostContext extends AbstractSameVmBindableHostCon
                 new SocketCustomStreamInvocationHandler(threadPool, clientMonitor, connectionPinger,
                         interfacesClassLoader, host, port)
         );
-        m_port = port;
+        this.port = port;
     }
 
     public static class WithCurrentClassLoader extends SocketCustomStreamHostContext
@@ -113,7 +113,7 @@ public class SocketCustomStreamHostContext extends AbstractSameVmBindableHostCon
         PipedOutputStream out = new PipedOutputStream();
         try
         {
-            Object binder = getOptmization("port=" + m_port);
+            Object binder = getOptmization("port=" + port);
             if (binder == null)
             {
                 return null;

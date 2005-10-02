@@ -30,11 +30,11 @@ public final class PublicationDescription {
     /**
      * An array of interfaces to expose.
      */
-    private ArrayList m_interfacesToExpose = new ArrayList();
+    private ArrayList interfacesToExpose = new ArrayList();
     /**
      * An array of additional facades.
      */
-    private ArrayList m_additionalFacades = new ArrayList();
+    private ArrayList additionalFacades = new ArrayList();
 
     /**
      * Construct a publication description.
@@ -192,7 +192,7 @@ public final class PublicationDescription {
             if (publicationDescriptionItem.getFacadeClass() == null) {
                 throw new RuntimeException("'Class' cannot be null");
             }
-            m_interfacesToExpose.add(publicationDescriptionItem);
+            interfacesToExpose.add(publicationDescriptionItem);
         }
     }
 
@@ -216,7 +216,7 @@ public final class PublicationDescription {
             if (publicationDescriptionItem.getFacadeClass() == null) {
                 throw new RuntimeException("'Class' cannot be null");
             }
-            m_additionalFacades.add(publicationDescriptionItem);
+            additionalFacades.add(publicationDescriptionItem);
         }
     }
 
@@ -227,8 +227,8 @@ public final class PublicationDescription {
      * @return an array of those interfaces.
      */
     public PublicationDescriptionItem[] getInterfacesToExpose() {
-        PublicationDescriptionItem[] items = new PublicationDescriptionItem[m_interfacesToExpose.size()];
-        m_interfacesToExpose.toArray(items);
+        PublicationDescriptionItem[] items = new PublicationDescriptionItem[interfacesToExpose.size()];
+        interfacesToExpose.toArray(items);
         return items;
     }
 
@@ -238,8 +238,8 @@ public final class PublicationDescription {
      * @return an array of those facades.
      */
     public PublicationDescriptionItem[] getAdditionalFacades() {
-        PublicationDescriptionItem[] items = new PublicationDescriptionItem[m_additionalFacades.size()];
-        m_additionalFacades.toArray(items);
+        PublicationDescriptionItem[] items = new PublicationDescriptionItem[additionalFacades.size()];
+        additionalFacades.toArray(items);
         return items;
 
     }
@@ -257,8 +257,8 @@ public final class PublicationDescription {
 
         Class facadeRetVal = null;
 
-        for (int i = 0; i < m_additionalFacades.size(); i++) {
-            Class facadeClass = ((PublicationDescriptionItem) m_additionalFacades.get(i)).getFacadeClass();
+        for (int i = 0; i < additionalFacades.size(); i++) {
+            Class facadeClass = ((PublicationDescriptionItem) additionalFacades.get(i)).getFacadeClass();
 
             if (facadeClass.isAssignableFrom(beanImpl.getClass())) {
                 if (facadeRetVal == null) {

@@ -30,11 +30,11 @@ import java.io.ByteArrayOutputStream;
 public abstract class JavaCompiler {
 
     static String CPSEP = System.getProperty("path.separator");
-    protected String m_classpath;
-    protected String m_compilerPath = "jikes";
-    protected String m_outdir;
-    protected ByteArrayOutputStream m_out;
-    protected boolean m_classDebugInfo = false;
+    protected String classpath;
+    protected String compilerPath = "jikes";
+    protected String outdir;
+    protected ByteArrayOutputStream out;
+    protected boolean classDebugInfo = false;
 
     protected JavaCompiler() {
         reset();
@@ -43,10 +43,10 @@ public abstract class JavaCompiler {
     /**
      * Specify where the compiler can be found
      */
-    public void setCompilerPath(String m_compilerPath) {
+    public void setCompilerPath(String compilerPath) {
 
-        if (m_compilerPath != null) {
-            this.m_compilerPath = m_compilerPath;
+        if (compilerPath != null) {
+            this.compilerPath = compilerPath;
         }
     }
 
@@ -58,7 +58,7 @@ public abstract class JavaCompiler {
     public void addClassPath(String path) {
 
         // XXX use StringBuffer
-        m_classpath = m_classpath + CPSEP + path;
+        classpath = classpath + CPSEP + path;
     }
 
     /**
@@ -72,7 +72,7 @@ public abstract class JavaCompiler {
      * Set the output directory
      */
     public void setOutputDir(String outdir) {
-        this.m_outdir = outdir;
+        this.outdir = outdir;
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class JavaCompiler {
      * @return
      */
     public String getCompilerMessage() {
-        return m_out.toString();
+        return out.toString();
     }
 
     /**
@@ -89,7 +89,7 @@ public abstract class JavaCompiler {
      * The compiler can be used again.
      */
     public void reset() {
-        m_out = new ByteArrayOutputStream(256);
+        out = new ByteArrayOutputStream(256);
     }
 
 

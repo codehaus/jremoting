@@ -58,6 +58,6 @@ public class PipedObjectStreamServer extends AbstractPipedServer {
     }
 
     protected AbstractServerStreamReadWriter createServerStreamReadWriter() {
-        return new ServerObjectStreamReadWriter(m_serverMonitor, m_threadPool);
+        return new ServerObjectStreamReadWriter(serverMonitor, threadPool);
     }
 }

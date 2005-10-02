@@ -32,7 +32,7 @@ import java.lang.reflect.Proxy;
  */
 public final class DynamicProxy implements InvocationHandler {
 
-    private transient Object m_object;
+    private transient Object object;
 
     /**
      * Private constructor that blockpublishing instantiation outside this class.
@@ -40,7 +40,7 @@ public final class DynamicProxy implements InvocationHandler {
      * @param object the underlying object
      */
     private DynamicProxy(final Object object) {
-        m_object = object;
+        this.object = object;
     }
 
     /**
@@ -82,7 +82,7 @@ public final class DynamicProxy implements InvocationHandler {
     public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
 
         try {
-            return method.invoke(m_object, args);
+            return method.invoke(object, args);
         } catch (final InvocationTargetException ite) {
             throw ite.getTargetException();
         }

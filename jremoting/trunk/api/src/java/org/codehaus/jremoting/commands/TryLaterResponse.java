@@ -30,13 +30,13 @@ import java.io.ObjectOutput;
 public abstract class TryLaterResponse extends Response {
     static final long serialVersionUID = -3748772312349051164L;
 
-    private int m_suggestedDelayMillis;
+    private int suggestedDelayMillis;
 
     /**
      * Constructor TryLaterResponse
      */
     public TryLaterResponse() {
-        m_suggestedDelayMillis = 5 * 1000;    // ten seconds.
+        suggestedDelayMillis = 5 * 1000;    // ten seconds.
     }
 
     /**
@@ -45,7 +45,7 @@ public abstract class TryLaterResponse extends Response {
      * @param suggestedDelayMillis the amount of milliseconds sugested to the client
      */
     public TryLaterResponse(int suggestedDelayMillis) {
-        m_suggestedDelayMillis = suggestedDelayMillis;
+        this.suggestedDelayMillis = suggestedDelayMillis;
     }
 
     /**
@@ -54,7 +54,7 @@ public abstract class TryLaterResponse extends Response {
      * @return get delay in milliseconds
      */
     public int getSuggestedDelayMillis() {
-        return m_suggestedDelayMillis;
+        return suggestedDelayMillis;
     }
 
     /**
@@ -72,7 +72,7 @@ public abstract class TryLaterResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeInt(m_suggestedDelayMillis);
+        out.writeInt(suggestedDelayMillis);
     }
 
     /**
@@ -88,6 +88,6 @@ public abstract class TryLaterResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_suggestedDelayMillis = in.readInt();
+        suggestedDelayMillis = in.readInt();
     }
 }

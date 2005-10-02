@@ -163,7 +163,7 @@ public abstract class AbstractFactory implements Factory {
             refObjs.put(referenceID, new WeakReference(obj));
         }
 
-        //Object o = m_refObjs.get(referenceID);
+        //Object o = refObjs.get(referenceID);
     }
 
     /**

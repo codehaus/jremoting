@@ -32,7 +32,7 @@ import org.codehaus.jremoting.client.InvocationException;
 public abstract class AbstractConnectionPinger implements ConnectionPinger {
 
     private ClientInvocationHandler clientInvocationHandler;
-    private boolean m_continue = true;
+    private boolean keepGoing = true;
     private Runnable runnable;
     private ThreadContext threadContext;
     private final long pingInterval;
@@ -94,9 +94,9 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
             public void run() {
 
                 try {
-                    while (m_continue) {
+                    while (keepGoing) {
                         Thread.sleep(pingInterval);
-                        if (m_continue) {
+                        if (keepGoing) {
                             ping();
                         }
                     }
@@ -107,7 +107,7 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
                     clientInvocationHandler.getClientMonitor().unexpectedClosedConnection(this.getClass(), this.getClass().getName(), cce);
                     // no need to ping anymore.
                 } catch (InterruptedException e) {
-                    if (m_continue) {
+                    if (keepGoing) {
                         clientInvocationHandler.getClientMonitor().unexpectedInterruption(this.getClass(), this.getClass().getName(), e);
                     }
                 }
@@ -122,7 +122,7 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
      * Stop the pinger
      */
     public void stop() {
-        m_continue = false;
+        keepGoing = false;
         threadContext.interrupt();
         threadContext = null;
     }

@@ -30,8 +30,8 @@ import java.io.ObjectOutput;
 public final class MethodFacadeArrayResponse extends Response {
 
     static final long serialVersionUID = 2546825714005396324L;
-    private Long[] m_referenceIDs;
-    private String[] m_objectNames;
+    private Long[] referenceIDs;
+    private String[] objectNames;
 
     /**
      * Constructor MethodFacadeResponse
@@ -40,8 +40,8 @@ public final class MethodFacadeArrayResponse extends Response {
      * @param objectNames  an array of object names
      */
     public MethodFacadeArrayResponse(Long[] referenceIDs, String[] objectNames) {
-        m_referenceIDs = referenceIDs;
-        m_objectNames = objectNames;
+        this.referenceIDs = referenceIDs;
+        this.objectNames = objectNames;
     }
 
     /**
@@ -56,7 +56,7 @@ public final class MethodFacadeArrayResponse extends Response {
      * @return the array of reference IDs
      */
     public Long[] getReferenceIDs() {
-        return m_referenceIDs;
+        return referenceIDs;
     }
 
     /**
@@ -65,7 +65,7 @@ public final class MethodFacadeArrayResponse extends Response {
      * @return the array of object names
      */
     public String[] getObjectNames() {
-        return m_objectNames;
+        return objectNames;
     }
 
     /**
@@ -94,8 +94,8 @@ public final class MethodFacadeArrayResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_referenceIDs);
-        out.writeObject(m_objectNames);
+        out.writeObject(referenceIDs);
+        out.writeObject(objectNames);
     }
 
     /**
@@ -111,7 +111,7 @@ public final class MethodFacadeArrayResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_referenceIDs = (Long[]) in.readObject();
-        m_objectNames = (String[]) in.readObject();
+        referenceIDs = (Long[]) in.readObject();
+        objectNames = (String[]) in.readObject();
     }
 }

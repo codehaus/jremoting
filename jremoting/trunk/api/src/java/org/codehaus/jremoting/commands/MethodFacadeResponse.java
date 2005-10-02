@@ -30,8 +30,8 @@ import java.io.ObjectOutput;
 public final class MethodFacadeResponse extends Response {
 
     static final long serialVersionUID = -4708610846345954459L;
-    private Long m_referenceID;
-    private String m_objectName;
+    private Long referenceID;
+    private String objectName;
 
     /**
      * Constructor MethodFacadeResponse
@@ -40,8 +40,8 @@ public final class MethodFacadeResponse extends Response {
      * @param objectName  the object Name
      */
     public MethodFacadeResponse(Long referenceID, String objectName) {
-        m_referenceID = referenceID;
-        m_objectName = objectName;
+        this.referenceID = referenceID;
+        this.objectName = objectName;
     }
 
     /**
@@ -56,7 +56,7 @@ public final class MethodFacadeResponse extends Response {
      * @return the reference ID
      */
     public Long getReferenceID() {
-        return m_referenceID;
+        return referenceID;
     }
 
     /**
@@ -65,7 +65,7 @@ public final class MethodFacadeResponse extends Response {
      * @return the object Name
      */
     public String getObjectName() {
-        return m_objectName;
+        return objectName;
     }
 
     /**
@@ -94,8 +94,8 @@ public final class MethodFacadeResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_referenceID);
-        out.writeObject(m_objectName);
+        out.writeObject(referenceID);
+        out.writeObject(objectName);
     }
 
     /**
@@ -111,7 +111,7 @@ public final class MethodFacadeResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_referenceID = (Long) in.readObject();
-        m_objectName = (String) in.readObject();
+        referenceID = (Long) in.readObject();
+        objectName = (String) in.readObject();
     }
 }

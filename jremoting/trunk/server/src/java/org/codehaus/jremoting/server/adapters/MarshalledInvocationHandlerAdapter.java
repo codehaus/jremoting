@@ -34,11 +34,11 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
     /**
      * The invocation hamdeler
      */
-    private ServerInvocationHandler m_invocationHandler;
+    private ServerInvocationHandler invocationHandler;
     /**
      * The class loader.
      */
-    private ClassLoader m_classLoader;
+    private ClassLoader classLoader;
 
     /**
      * Constructor MarshalledInvocationHandlerAdapter
@@ -46,8 +46,8 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
      * @param invocationHandler The invocation handler
      */
     public MarshalledInvocationHandlerAdapter(ServerInvocationHandler invocationHandler) {
-        m_invocationHandler = invocationHandler;
-        m_classLoader = getClass().getClassLoader();
+        this.invocationHandler = invocationHandler;
+        classLoader = getClass().getClassLoader();
     }
 
     /**
@@ -57,8 +57,8 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
      * @param classLoader       The classloader
      */
     public MarshalledInvocationHandlerAdapter(ServerInvocationHandler invocationHandler, ClassLoader classLoader) {
-        m_invocationHandler = invocationHandler;
-        m_classLoader = classLoader;
+        this.invocationHandler = invocationHandler;
+        this.classLoader = classLoader;
     }
 
     /**
@@ -70,8 +70,8 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
     public byte[] handleInvocation(byte[] request, Object connectionDetails) {
 
         try {
-            Request ar = (Request) SerializationHelper.getInstanceFromBytes(request, m_classLoader);
-            Response response = m_invocationHandler.handleInvocation(ar, connectionDetails);
+            Request ar = (Request) SerializationHelper.getInstanceFromBytes(request, classLoader);
+            Response response = invocationHandler.handleInvocation(ar, connectionDetails);
 
             return SerializationHelper.getBytesFromInstance(response);
         } catch (ClassNotFoundException e) {

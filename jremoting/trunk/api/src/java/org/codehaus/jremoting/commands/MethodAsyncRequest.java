@@ -32,9 +32,9 @@ import java.io.ObjectOutput;
 public class MethodAsyncRequest extends PublishedNameRequest implements Contextualizable {
     static final long serialVersionUID = -5928783250529633953L;
 
-    private GroupedMethodRequest[] m_groupedRequests;
-    private Long m_referenceID;
-    private Long m_session;
+    private GroupedMethodRequest[] groupedRequests;
+    private Long referenceID;
+    private Long session;
 
     /**
      * Constructor MethodRequest
@@ -49,9 +49,9 @@ public class MethodAsyncRequest extends PublishedNameRequest implements Contextu
 
         super(publishedServiceName, objectName);
 
-        m_groupedRequests = rawRequests;
-        m_referenceID = referenceID;
-        m_session = session;
+        groupedRequests = rawRequests;
+        this.referenceID = referenceID;
+        this.session = session;
     }
 
     /**
@@ -62,7 +62,7 @@ public class MethodAsyncRequest extends PublishedNameRequest implements Contextu
 
 
     public GroupedMethodRequest[] getGroupedRequests() {
-        return m_groupedRequests;
+        return groupedRequests;
     }
 
     /**
@@ -71,7 +71,7 @@ public class MethodAsyncRequest extends PublishedNameRequest implements Contextu
      * @return the reference ID
      */
     public Long getReferenceID() {
-        return m_referenceID;
+        return referenceID;
     }
 
     /**
@@ -91,7 +91,7 @@ public class MethodAsyncRequest extends PublishedNameRequest implements Contextu
      * @return the session ID
      */
     public Long getSession() {
-        return m_session;
+        return session;
     }
 
     /**
@@ -111,9 +111,9 @@ public class MethodAsyncRequest extends PublishedNameRequest implements Contextu
     public void writeExternal(ObjectOutput out) throws IOException {
 
         super.writeExternal(out);
-        out.writeObject(m_groupedRequests);
-        out.writeObject(m_referenceID);
-        out.writeObject(m_session);
+        out.writeObject(groupedRequests);
+        out.writeObject(referenceID);
+        out.writeObject(session);
     }
 
     /**
@@ -132,8 +132,8 @@ public class MethodAsyncRequest extends PublishedNameRequest implements Contextu
 
         super.readExternal(in);
 
-        m_groupedRequests = (GroupedMethodRequest[]) in.readObject();
-        m_referenceID = (Long) in.readObject();
-        m_session = (Long) in.readObject();
+        groupedRequests = (GroupedMethodRequest[]) in.readObject();
+        referenceID = (Long) in.readObject();
+        session = (Long) in.readObject();
     }
 }

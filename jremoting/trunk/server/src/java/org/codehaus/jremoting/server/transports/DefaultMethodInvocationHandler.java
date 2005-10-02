@@ -52,17 +52,17 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
     /**
      * Beans for references
      */
-    private WeakHashMap m_refBeans = new WeakHashMap();
+    private WeakHashMap refBeans = new WeakHashMap();
 
     /**
      * References for beans.
      */
-    private WeakHashMap m_beanRefs = new WeakHashMap();
+    private WeakHashMap beanRefs = new WeakHashMap();
 
     /**
      * Method map
      */
-    private HashMap m_methodMap;
+    private HashMap methodMap;
 
     /**
      * Next reference
@@ -72,23 +72,23 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
     /**
      * The publisher
      */
-    private Publisher m_publisher;
+    private Publisher publisher;
 
     /**
      * published thing
      */
-    private String m_publishedThing;
+    private String publishedThing;
 
     /**
      * The bean implementation
      */
-    private Object m_beanImpl;
+    private Object beanImpl;
 
     /**
      * The publication description.
      */
-    private final PublicationDescription m_publicationDescription;
-    private MethodInvocationMonitor m_methodInvocationMonitor = new NullMethodInvocationMonitor();
+    private final PublicationDescription publicationDescription;
+    private MethodInvocationMonitor methodInvocationMonitor = new NullMethodInvocationMonitor();
 
     /**
      * Constructor DefaultMethodInvocationHandler
@@ -100,10 +100,10 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
      */
     public DefaultMethodInvocationHandler(Publisher publisher, String publishedThing, HashMap methodMap, PublicationDescription publicationDescription) {
 
-        m_publisher = publisher;
-        m_publishedThing = publishedThing;
-        m_methodMap = methodMap;
-        m_publicationDescription = publicationDescription;
+        this.publisher = publisher;
+        this.publishedThing = publishedThing;
+        this.methodMap = methodMap;
+        this.publicationDescription = publicationDescription;
     }
 
     /**
@@ -112,7 +112,7 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
      * @return a string.
      */
     public String toString() {
-        return "DMIH:" + m_publishedThing;
+        return "DMIH:" + publishedThing;
     }
 
     /**
@@ -124,11 +124,11 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
     public void addImplementationBean(Long referenceID, Object beanImpl) {
 
         if (referenceID.equals(new Long(0))) {
-            m_beanImpl = beanImpl;
+            this.beanImpl = beanImpl;
         }
 
-        m_refBeans.put(referenceID, new WeakReference(beanImpl));
-        m_beanRefs.put(beanImpl, referenceID);
+        refBeans.put(referenceID, new WeakReference(beanImpl));
+        beanRefs.put(beanImpl, referenceID);
     }
 
     /**
@@ -139,14 +139,14 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
      */
     public void replaceImplementationBean(Object implBean, Object withImplBean) {
 
-        Long ref = (Long) m_beanRefs.get(implBean);
+        Long ref = (Long) beanRefs.get(implBean);
 
-        m_refBeans.put(ref, new WeakReference(withImplBean));
-        m_beanRefs.remove(implBean);
-        m_beanRefs.put(withImplBean, ref);
+        refBeans.put(ref, new WeakReference(withImplBean));
+        beanRefs.remove(implBean);
+        beanRefs.put(withImplBean, ref);
 
-        if (m_beanImpl == implBean) {
-            m_beanImpl = withImplBean;
+        if (beanImpl == implBean) {
+            beanImpl = withImplBean;
         }
     }
 
@@ -158,7 +158,7 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
      */
     public Long getOrMakeReferenceIDForBean(Object implBean) {
 
-        Long ref = (Long) m_beanRefs.get(implBean);
+        Long ref = (Long) beanRefs.get(implBean);
 
         if (ref == null) {
             ref = getNewReference();
@@ -178,40 +178,40 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
 
         String methodSignature = request.getMethodSignature();
 
-        if (!m_methodMap.containsKey(methodSignature)) {
+        if (!methodMap.containsKey(methodSignature)) {
 
-            m_methodInvocationMonitor.missingMethod(methodSignature, connectionDetails);
+            methodInvocationMonitor.missingMethod(methodSignature, connectionDetails);
             return new InvocationExceptionResponse("Method '" + methodSignature + "' not present in impl");
         }
 
-        Method method = (Method) m_methodMap.get(methodSignature);
+        Method method = (Method) methodMap.get(methodSignature);
 
         Object beanImpl = null;
 
         try {
-            WeakReference wr = (WeakReference) m_refBeans.get(request.getReferenceID());
+            WeakReference wr = (WeakReference) refBeans.get(request.getReferenceID());
 
             if (wr == null) {
-                m_methodInvocationMonitor.invalidReference(methodSignature, connectionDetails);
+                methodInvocationMonitor.invalidReference(methodSignature, connectionDetails);
                 return new NoSuchReferenceResponse(request.getReferenceID());
             }
 
             beanImpl = wr.get();
 
             if (beanImpl == null) {
-                m_methodInvocationMonitor.invalidReference(methodSignature, connectionDetails);
+                methodInvocationMonitor.invalidReference(methodSignature, connectionDetails);
                 return new NoSuchReferenceResponse(request.getReferenceID());
             }
 
             Object[] args = request.getArgs();
 
             correctArgs(request, args);
-            m_methodInvocationMonitor.methodInvoked(beanImpl.getClass(), methodSignature, connectionDetails);
+            methodInvocationMonitor.methodInvoked(beanImpl.getClass(), methodSignature, connectionDetails);
             return new MethodResponse(method.invoke(beanImpl, request.getArgs()));
         } catch (InvocationTargetException ite) {
             Throwable t = ite.getTargetException();
 
-            m_methodInvocationMonitor.invocationTargetException(beanImpl.getClass(), methodSignature, ite, connectionDetails);
+            methodInvocationMonitor.invocationTargetException(beanImpl.getClass(), methodSignature, ite, connectionDetails);
             if (t instanceof Serializable) {
 
                 // NOTE Sever side stack traces will appear on the client side
@@ -220,7 +220,7 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
                 return new InvocationExceptionResponse("Exception was not serializable :" + t.getClass().getName());
             }
         } catch (Throwable t) {
-            m_methodInvocationMonitor.invocationException(beanImpl == null ? null : beanImpl.getClass(), methodSignature, t, connectionDetails);
+            methodInvocationMonitor.invocationException(beanImpl == null ? null : beanImpl.getClass(), methodSignature, t, connectionDetails);
             return new InvocationExceptionResponse("Some ServerSide exception problem :" + t.getMessage());
         }
     }
@@ -238,8 +238,8 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
             // TODO find a faster way to do this....
             if (args[i] instanceof FacadeRefHolder) {
                 FacadeRefHolder frh = (FacadeRefHolder) args[i];
-                DefaultMethodInvocationHandler methodInvocationHandler = (DefaultMethodInvocationHandler) m_publisher.getMethodInvocationHandler(frh.getObjectName());
-                WeakReference wr = (WeakReference) methodInvocationHandler.m_refBeans.get(frh.getReferenceID());
+                DefaultMethodInvocationHandler methodInvocationHandler = (DefaultMethodInvocationHandler) publisher.getMethodInvocationHandler(frh.getObjectName());
+                WeakReference wr = (WeakReference) methodInvocationHandler.refBeans.get(frh.getReferenceID());
 
                 args[i] = wr.get();
             }
@@ -253,7 +253,7 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
      * @return The class
      */
     public Class getMostDerivedType(Object beanImpl) {
-        return m_publicationDescription.getMostDerivedType(beanImpl);
+        return publicationDescription.getMostDerivedType(beanImpl);
     }
 
     /**
@@ -270,7 +270,7 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
      * Get the list of remote method names
      */
     public String[] getListOfMethods() {
-        String[] methodNames = (String[]) m_methodMap.keySet().toArray(new String[0]);
+        String[] methodNames = (String[]) methodMap.keySet().toArray(new String[0]);
         return methodNames;
     }
 
@@ -285,7 +285,7 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
     }
 
     public void setMethodInvocationMonitor(MethodInvocationMonitor monitor) {
-        m_methodInvocationMonitor = monitor;
+        methodInvocationMonitor = monitor;
     }
 
 }

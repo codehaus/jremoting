@@ -41,20 +41,20 @@ public abstract class AbstractServerStreamReadWriter implements ThreadPoolAware 
     /**
      * The input stream
      */
-    private InputStream m_inputStream;
+    private InputStream inputStream;
 
     /**
      * The output stream
      */
-    private OutputStream m_outputStream;
+    private OutputStream outputStream;
 
-    protected final ServerMonitor m_serverMonitor;
-    protected final ThreadPool m_threadPool;
-    private Object m_connectionDetails;
+    protected final ServerMonitor serverMonitor;
+    protected final ThreadPool threadPool;
+    private Object connectionDetails;
 
     public AbstractServerStreamReadWriter(ServerMonitor serverMonitor, ThreadPool threadPool) {
-        m_serverMonitor = serverMonitor;
-        m_threadPool = threadPool;
+        this.serverMonitor = serverMonitor;
+        this.threadPool = threadPool;
     }
 
     /**
@@ -64,13 +64,13 @@ public abstract class AbstractServerStreamReadWriter implements ThreadPoolAware 
      * @param outputStream the outpur stream
      */
     public final void setStreams(InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
-        m_inputStream = inputStream;
-        m_outputStream = outputStream;
-        m_connectionDetails = connectionDetails;
+        this.inputStream = inputStream;
+        this.outputStream = outputStream;
+        this.connectionDetails = connectionDetails;
     }
 
     public Object getConnectionDetails() {
-        return m_connectionDetails;
+        return connectionDetails;
     }
 
 
@@ -97,15 +97,15 @@ public abstract class AbstractServerStreamReadWriter implements ThreadPoolAware 
      */
     protected void close() {
         try {
-            m_inputStream.close();
+            inputStream.close();
         } catch (IOException e) {
-            m_serverMonitor.closeError(this.getClass(), "AbstractServerStreamReadWriter.close(): Failed closing an JRemoting Remoting connection input stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractServerStreamReadWriter.close(): Failed closing an JRemoting Remoting connection input stream: ", e);
         }
 
         try {
-            m_outputStream.close();
+            outputStream.close();
         } catch (IOException e) {
-            m_serverMonitor.closeError(this.getClass(), "AbstractServerStreamReadWriter.close(): Failed closing an JRemoting Remoting connection output stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractServerStreamReadWriter.close(): Failed closing an JRemoting Remoting connection output stream: ", e);
         }
     }
 
@@ -115,7 +115,7 @@ public abstract class AbstractServerStreamReadWriter implements ThreadPoolAware 
      * @return The input stream
      */
     protected InputStream getInputStream() {
-        return m_inputStream;
+        return inputStream;
     }
 
     /**
@@ -124,6 +124,6 @@ public abstract class AbstractServerStreamReadWriter implements ThreadPoolAware 
      * @return The Output stream
      */
     protected OutputStream getOutputStream() {
-        return m_outputStream;
+        return outputStream;
     }
 }

@@ -39,10 +39,10 @@ import java.io.IOException;
  */
 public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGenerator, ClassRetriever {
 
-    private String m_classpath;
-    private String m_classGenDir = ".";
-    private String m_srcGenDir;
-    private Class m_generatorClass;
+    private String classpath;
+    private String classGenDir = ".";
+    private String srcGenDir;
+    private Class generatorClass;
 
     /**
      * @param classLoader        the classloader in which the proxy generater will be found.
@@ -50,7 +50,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
      */
     public AbstractDynamicGeneratorClassRetriever(ClassLoader classLoader, String generatorClassName) {
         try {
-            m_generatorClass = classLoader.loadClass(generatorClassName);
+            generatorClass = classLoader.loadClass(generatorClassName);
         } catch (ClassNotFoundException e) {
             throw new NoClassDefFoundError(generatorClassName);
         }
@@ -93,21 +93,21 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
     }
 
     /**
-     * Use this m_classpath during retrieval.
+     * Use this classpath during retrieval.
      *
-     * @param classpath the m_classpath
+     * @param classpath the classpath
      */
     public void setClasspath(String classpath) {
-        m_classpath = classpath;
+        this.classpath = classpath;
     }
 
     /**
      * Method addToClasspath
      *
-     * @param classpathElement an element for the m_classpath
+     * @param classpathElement an element for the classpath
      */
     public void addToClasspath(String classpathElement) {
-        m_classpath = m_classpath + File.pathSeparator + classpathElement;
+        classpath = classpath + File.pathSeparator + classpathElement;
     }
 
     /**
@@ -116,7 +116,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
      * @param classGenDir the class generation directory
      */
     public void setClassGenDir(String classGenDir) {
-        m_classGenDir = classGenDir;
+        this.classGenDir = classGenDir;
     }
 
     /**
@@ -143,7 +143,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
         FileInputStream fis;
 
         try {
-            fis = new FileInputStream(new File(m_classGenDir, thingName));
+            fis = new FileInputStream(new File(classGenDir, thingName));
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -180,7 +180,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
      * @param srcGenDir the source generaton directory.
      */
     public void setSrcGenDir(String srcGenDir) {
-        m_srcGenDir = srcGenDir;
+        this.srcGenDir = srcGenDir;
     }
 
     private void generateProxy(String asName, PublicationDescription publicationDescription, ClassLoader classLoader, boolean deferred) throws PublicationException {
@@ -198,17 +198,17 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
         org.codehaus.jremoting.server.ProxyGenerator proxyGenerator;
 
         try {
-            proxyGenerator = (org.codehaus.jremoting.server.ProxyGenerator) m_generatorClass.newInstance();
+            proxyGenerator = (org.codehaus.jremoting.server.ProxyGenerator) generatorClass.newInstance();
         } catch (InstantiationException e) {
             throw new RuntimeException("ProxyGenerator cannot be instantiated.");
         } catch (IllegalAccessException e) {
             throw new RuntimeException("ProxyGenerator was illegally accessed");
         }
 
-        proxyGenerator.setSrcGenDir(m_srcGenDir);
-        proxyGenerator.setClassGenDir(m_classGenDir);
+        proxyGenerator.setSrcGenDir(srcGenDir);
+        proxyGenerator.setClassGenDir(classGenDir);
         proxyGenerator.setGenName(asName);
-        proxyGenerator.setClasspath(m_classpath);
+        proxyGenerator.setClasspath(classpath);
         proxyGenerator.setInterfacesToExpose(interfacesToExpose);
         proxyGenerator.setAdditionalFacades(addInfs);
 
@@ -241,22 +241,22 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
                     System.err.println("*                                          *");
                     System.err.println("* JRemoting Remoting problem......     *");
                     System.err.println("* Please copy JAVA_HOME/lib/tools.jar      *");
-                    System.err.println("* to your applications m_classpath so      *");
+                    System.err.println("* to your applications classpath so      *");
                     System.err.println("* that proxys can be compiled.             *");
                     System.err.println("*                                          *");
                     System.err.println("********************************************");
 
-                    throw new ProxyGenerationEnvironmentException("tools.jar not found in m_classpath.");
+                    throw new ProxyGenerationEnvironmentException("tools.jar not found in classpath.");
                 }
 
                 System.err.println("******");
                 System.err.println("** Exception while making String : ");
                 System.err.flush();
                 t.printStackTrace();
-                System.err.println("** SrcDir=" + m_srcGenDir);
-                System.err.println("** ClassDir=" + m_classGenDir);
+                System.err.println("** SrcDir=" + srcGenDir);
+                System.err.println("** ClassDir=" + classGenDir);
                 System.err.println("** Name=" + asName);
-                System.err.println("** CLasspath=" + m_classpath);
+                System.err.println("** CLasspath=" + classpath);
                 System.err.println("** Classes/Interfaces to Expose..");
 
                 for (int i = 0; i < interfacesToExpose.length; i++) {
@@ -281,7 +281,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
         org.codehaus.jremoting.server.ProxyGenerator proxyGenerator;
 
         try {
-            proxyGenerator = (org.codehaus.jremoting.server.ProxyGenerator) m_generatorClass.newInstance();
+            proxyGenerator = (org.codehaus.jremoting.server.ProxyGenerator) generatorClass.newInstance();
         } catch (InstantiationException e) {
             throw new RuntimeException("ProxyGenerator cannot be instantiated.");
         } catch (IllegalAccessException e) {

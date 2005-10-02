@@ -62,7 +62,7 @@ public class CompleteSocketObjectStreamServer extends AbstractCompleteSocketStre
      */
     protected AbstractServerStreamReadWriter createServerStreamReadWriter() {
 
-        ServerObjectStreamReadWriter rw = new ServerObjectStreamReadWriter(m_serverMonitor, m_threadPool);
+        ServerObjectStreamReadWriter rw = new ServerObjectStreamReadWriter(serverMonitor, threadPool);
         return rw;
     }
 }

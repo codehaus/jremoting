@@ -42,13 +42,13 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
     /**
      * The server socket.
      */
-    private ServerSocket m_serverSocket;
+    private ServerSocket serverSocket;
 
     /**
      * The thread handling the listening
      */
-    private ThreadContext m_threadContext;
-    private int m_port;
+    private ThreadContext threadContext;
+    private int port;
 
     /**
      * Construct a AbstractCompleteSocketStreamServer
@@ -60,7 +60,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
     public AbstractCompleteSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
 
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
-        m_port = port;
+        this.port = port;
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
             while (getState() == STARTED) {
 
                 accepting = true;
-                Socket sock = m_serverSocket.accept();
+                Socket sock = serverSocket.accept();
                 accepting = false;
 
                 // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
@@ -83,7 +83,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
 
                 ssrw.setStreams(sock.getInputStream(), sock.getOutputStream(), sock);
 
-                SocketStreamServerConnection sssc = new SocketStreamServerConnection(this, sock, ssrw, m_serverMonitor);
+                SocketStreamServerConnection sssc = new SocketStreamServerConnection(this, sock, ssrw, serverMonitor);
 
                 //TODO ? Two of these getThreadContexts? PH
                 ThreadContext threadContext = getThreadPool().getThreadContext(sssc);
@@ -96,7 +96,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
                 // do nothing, server shut down during accept();
             } else {
 
-                m_serverMonitor.unexpectedException(this.getClass(), "AbstractCompleteSocketStreamServer.run(): Some problem connecting client " + "via sockets: ", ioe);
+                serverMonitor.unexpectedException(this.getClass(), "AbstractCompleteSocketStreamServer.run(): Some problem connecting client " + "via sockets: ", ioe);
             }
         }
     }
@@ -108,7 +108,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
 
         setState(STARTING);
         try {
-            m_serverSocket = new ServerSocket(m_port);
+            serverSocket = new ServerSocket(port);
         } catch (IOException ioe) {
             throw new ServerException("Could not bind to a socket when setting up the server", ioe);
         }
@@ -127,7 +127,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
 
         setState(SHUTTINGDOWN);
         try {
-            m_serverSocket.close();
+            serverSocket.close();
         } catch (IOException ioe) {
             throw new org.codehaus.jremoting.api.JRemotingRuntimeException("Error stopping Complete Socket server", ioe);
         }
@@ -144,12 +144,12 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
      */
     private ThreadContext getThreadContext() {
 
-        if (m_threadContext == null) {
-            m_threadContext = getThreadPool().getThreadContext(this);
+        if (threadContext == null) {
+            threadContext = getThreadPool().getThreadContext(this);
 
         }
 
-        return m_threadContext;
+        return threadContext;
     }
 
     /**

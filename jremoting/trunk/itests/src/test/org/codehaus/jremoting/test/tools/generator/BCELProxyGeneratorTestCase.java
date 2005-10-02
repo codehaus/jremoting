@@ -39,32 +39,32 @@ import java.lang.reflect.Method;
  * @version 1.0
  */
 public class BCELProxyGeneratorTestCase extends TestCase {
-    private ProxyGenerator m_proxyGenerator;
-    private Class m_generatedProxyClass;
-    private Object m_generatedProxyObject;
-    private ClientSideClassFactory m_factory;
+    private ProxyGenerator proxyGenerator;
+    private Class generatedProxyClass;
+    private Object generatedProxyObject;
+    private ClientSideClassFactory factory;
     /**
      * ********************* TestInterface ******************
      */
-    public static final Class m_testInterfaceClass = TestRemoteInterface.class;
+    public static final Class testInterfaceClass = TestRemoteInterface.class;
 
     public BCELProxyGeneratorTestCase(String testName) {
         super(testName);
     }
 
     private Class createNewClass() {
-        if (m_generatedProxyClass != null) {
-            return m_generatedProxyClass;
+        if (generatedProxyClass != null) {
+            return generatedProxyClass;
         }
-        m_proxyGenerator.setGenName("Something");
-        m_proxyGenerator.setInterfacesToExpose(new PublicationDescriptionItem[]{new PublicationDescriptionItem(m_testInterfaceClass)});
-        m_proxyGenerator.setClassGenDir(".");
-        m_proxyGenerator.verbose(true);
-        m_proxyGenerator.generateClass(null);
+        proxyGenerator.setGenName("Something");
+        proxyGenerator.setInterfacesToExpose(new PublicationDescriptionItem[]{new PublicationDescriptionItem(testInterfaceClass)});
+        proxyGenerator.setClassGenDir(".");
+        proxyGenerator.verbose(true);
+        proxyGenerator.generateClass(null);
 
 
-        m_generatedProxyClass = ((BCELProxyGeneratorImpl) m_proxyGenerator).getGeneratedClass("JRemotingGeneratedSomething_Main");
-        return m_generatedProxyClass;
+        generatedProxyClass = ((BCELProxyGeneratorImpl) proxyGenerator).getGeneratedClass("JRemotingGeneratedSomething_Main");
+        return generatedProxyClass;
     }
 
 
@@ -72,10 +72,10 @@ public class BCELProxyGeneratorTestCase extends TestCase {
      * @see TestCase#setUp()
      */
     protected void setUp() throws Exception {
-        m_proxyGenerator = (ProxyGenerator) Class.forName("org.codehaus.jremoting.tools.generator.BCELProxyGeneratorImpl").newInstance();
+        proxyGenerator = (ProxyGenerator) Class.forName("org.codehaus.jremoting.tools.generator.BCELProxyGeneratorImpl").newInstance();
         //create the Proxy Class using the BCEL Generator
         createNewClass();
-        m_proxyGenerator.verbose(true);
+        proxyGenerator.verbose(true);
     }
 
 
@@ -84,9 +84,9 @@ public class BCELProxyGeneratorTestCase extends TestCase {
      * Checks whether 'Class' is created properly
      */
     public void testGeneratedClassNameOfProxy() {
-        assertNotNull(m_proxyGenerator);
-        assertNotNull(m_generatedProxyClass);
-        assertEquals(m_generatedProxyClass.getName().equals("JRemotingGeneratedSomething_Main"), true);
+        assertNotNull(proxyGenerator);
+        assertNotNull(generatedProxyClass);
+        assertEquals(generatedProxyClass.getName().equals("JRemotingGeneratedSomething_Main"), true);
     }
 
     /**
@@ -97,21 +97,21 @@ public class BCELProxyGeneratorTestCase extends TestCase {
      * @throws Exception
      */
     public void testConstructorOfProxy() throws Exception {
-        if (m_generatedProxyClass == null) {
+        if (generatedProxyClass == null) {
             testGeneratedClassNameOfProxy();
         }
         TestInvocationHandler invocationHandler = new TestInvocationHandler(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger());
-        //create the m_factory;
-        m_factory = new ClientSideClassFactory(new DirectHostContext.WithSimpleDefaults(invocationHandler), false);
-        DefaultProxyHelper defaultProxyHelper = new DefaultProxyHelper(m_factory, invocationHandler, "PublishedName", "ObjectName", new Long(1010), new Long(3030));
+        //create the factory;
+        factory = new ClientSideClassFactory(new DirectHostContext.WithSimpleDefaults(invocationHandler), false);
+        DefaultProxyHelper defaultProxyHelper = new DefaultProxyHelper(factory, invocationHandler, "PublishedName", "ObjectName", new Long(1010), new Long(3030));
 
-        Constructor[] _constructors = m_generatedProxyClass.getConstructors();
+        Constructor[] _constructors = generatedProxyClass.getConstructors();
         //there shld be only 1 constructor for the generated proxy
         // one that takes BaseServedObject as the argument
         assertEquals(_constructors.length, 1);
 
-        m_generatedProxyObject = _constructors[0].newInstance(new Object[]{defaultProxyHelper});
-        assertNotNull(m_generatedProxyObject);
+        generatedProxyObject = _constructors[0].newInstance(new Object[]{defaultProxyHelper});
+        assertNotNull(generatedProxyObject);
 
     }
 
@@ -128,13 +128,13 @@ public class BCELProxyGeneratorTestCase extends TestCase {
      * @throws Exception
      */
     public void testGetReferenceIDMethodOfProxy() throws Exception {
-        if (m_generatedProxyObject == null) {
+        if (generatedProxyObject == null) {
             testConstructorOfProxy();
         }
 
-        Method _getReferenceIDMethod = m_generatedProxyClass.getMethod("codehausRemotingGetReferenceID", new Class[]{Object.class});
+        Method _getReferenceIDMethod = generatedProxyClass.getMethod("codehausRemotingGetReferenceID", new Class[]{Object.class});
         assertNotNull(_getReferenceIDMethod);
-        Object _ret = _getReferenceIDMethod.invoke(m_generatedProxyObject, new Object[]{m_factory});
+        Object _ret = _getReferenceIDMethod.invoke(generatedProxyObject, new Object[]{factory});
         assertEquals(new Long(1010), _ret);
     }
 
@@ -149,12 +149,12 @@ public class BCELProxyGeneratorTestCase extends TestCase {
      * @throws Exception
      */
     public void testGeneratedMethodsPassOne() throws Exception {
-        if (m_generatedProxyObject == null) {
+        if (generatedProxyObject == null) {
             testConstructorOfProxy();
         }
 
 
-        Method[] methods = m_generatedProxyClass.getMethods();
+        Method[] methods = generatedProxyClass.getMethods();
         for (int i = 0; i < methods.length; i++) {
             if (methods[i].getName().indexOf("test") == -1) {
                 continue;
@@ -163,16 +163,16 @@ public class BCELProxyGeneratorTestCase extends TestCase {
             Object[] _arguments = new Object[methods[i].getParameterTypes().length];
             for (int j = 0; j < _arguments.length; j++) {
 
-                _arguments[j] = m_testInterfaceClass.getField(methods[i].getName() + "_arg" + j).get(null);
+                _arguments[j] = testInterfaceClass.getField(methods[i].getName() + "_arg" + j).get(null);
                 //System.out.println("argType["+methods[i].getParameterTypes()[j]+"]arg["+j+"]"+_arguments[j]);
             }
             if (methods[i].getParameterTypes().length == 0) {
                 _arguments = null;
             }
-            Object _ret = methods[i].invoke(m_generatedProxyObject, _arguments);
+            Object _ret = methods[i].invoke(generatedProxyObject, _arguments);
 
             if (methods[i].getReturnType() != Void.TYPE) {
-                assertEquals(m_testInterfaceClass.getField(methods[i].getName() + "_retValue").get(null), _ret);
+                assertEquals(testInterfaceClass.getField(methods[i].getName() + "_retValue").get(null), _ret);
             }
         }
     }

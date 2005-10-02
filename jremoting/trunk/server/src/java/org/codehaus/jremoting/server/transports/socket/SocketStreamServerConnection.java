@@ -36,7 +36,7 @@ public class SocketStreamServerConnection extends AbstractStreamServerConnection
     /**
      * The socket for the connection
      */
-    private Socket m_socket;
+    private Socket socket;
 
     /**
      * Construct a Socket Stream Server Connection
@@ -48,7 +48,7 @@ public class SocketStreamServerConnection extends AbstractStreamServerConnection
     public SocketStreamServerConnection(final AbstractServer abstractServer, final Socket socket, AbstractServerStreamReadWriter readWriter, ServerMonitor serverMonitor) {
 
         super(abstractServer, readWriter, serverMonitor);
-        m_socket = socket;
+        this.socket = socket;
     }
 
     /**
@@ -57,9 +57,9 @@ public class SocketStreamServerConnection extends AbstractStreamServerConnection
     protected void killConnection() {
 
         try {
-            m_socket.close();
+            socket.close();
         } catch (IOException e) {
-            m_serverMonitor.closeError(this.getClass(), "SocketStreamServerConnection.killConnection(): Error closing Connection", e);
+            serverMonitor.closeError(this.getClass(), "SocketStreamServerConnection.killConnection(): Error closing Connection", e);
         }
     }
 }

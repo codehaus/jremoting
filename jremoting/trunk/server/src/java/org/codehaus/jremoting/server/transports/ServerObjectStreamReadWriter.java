@@ -37,12 +37,12 @@ public class ServerObjectStreamReadWriter extends AbstractServerStreamReadWriter
     /**
      * The Object Input Stream
      */
-    private ObjectInputStream m_objectInputStream;
+    private ObjectInputStream objectInputStream;
 
     /**
      * The Object Output Stream
      */
-    private ObjectOutputStream m_objectOutputStream;
+    private ObjectOutputStream objectOutputStream;
 
     /**
      * Constructor ServerObjectStreamReadWriter
@@ -57,8 +57,8 @@ public class ServerObjectStreamReadWriter extends AbstractServerStreamReadWriter
      * @throws IOException if an IO Excpetion
      */
     protected void initialize() throws IOException {
-        m_objectInputStream = new ObjectInputStream(getInputStream());
-        m_objectOutputStream = new ObjectOutputStream(getOutputStream());
+        objectInputStream = new ObjectInputStream(getInputStream());
+        objectOutputStream = new ObjectOutputStream(getOutputStream());
     }
 
     /**
@@ -86,19 +86,19 @@ public class ServerObjectStreamReadWriter extends AbstractServerStreamReadWriter
      */
     private void writeReply(Response response) throws IOException {
 
-        m_objectOutputStream.writeObject(response);
-        m_objectOutputStream.flush();
+        objectOutputStream.writeObject(response);
+        objectOutputStream.flush();
 
-        //m_objectOutputStream.reset();
+        //objectOutputStream.reset();
     }
 
     protected void close() {
         try {
-            m_objectInputStream.close();
+            objectInputStream.close();
         } catch (IOException e) {
         }
         try {
-            m_objectOutputStream.close();
+            objectOutputStream.close();
         } catch (IOException e) {
         }
         super.close();
@@ -112,6 +112,6 @@ public class ServerObjectStreamReadWriter extends AbstractServerStreamReadWriter
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
     private Request readRequest() throws IOException, ClassNotFoundException {
-        return (Request) m_objectInputStream.readObject();
+        return (Request) objectInputStream.readObject();
     }
 }

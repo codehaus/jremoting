@@ -34,7 +34,7 @@ public final class ListMethodsResponse extends Response {
     /**
      * String array of the methods list of the request publishedObject
      */
-    private String[] m_listOfMethods;
+    private String[] listOfMethods;
 
 
     /**
@@ -43,7 +43,7 @@ public final class ListMethodsResponse extends Response {
      * @param listOfMethods : list of remote methods exposed by the published Obj
      */
     public ListMethodsResponse(String[] listOfMethods) {
-        m_listOfMethods = listOfMethods;
+        this.listOfMethods = listOfMethods;
     }
 
     /**
@@ -59,7 +59,7 @@ public final class ListMethodsResponse extends Response {
      * @return the list of methods
      */
     public String[] getListOfMethods() {
-        return m_listOfMethods;
+        return listOfMethods;
     }
 
     //-----Response override---//
@@ -79,13 +79,13 @@ public final class ListMethodsResponse extends Response {
      * @see java.io.Externalizable#writeExternal(ObjectOutput)
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_listOfMethods);
+        out.writeObject(listOfMethods);
     }
 
     /**
      * @see java.io.Externalizable#readExternal(ObjectInput)
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_listOfMethods = (String[]) in.readObject();
+        listOfMethods = (String[]) in.readObject();
     }
 }

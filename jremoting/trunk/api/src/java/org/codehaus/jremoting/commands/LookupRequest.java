@@ -33,8 +33,8 @@ import java.io.ObjectOutput;
 public final class LookupRequest extends PublishedNameRequest implements Sessionable {
     static final long serialVersionUID = 7509584735319760230L;
 
-    private Authentication m_authentication;
-    private Long m_session;
+    private Authentication authentication;
+    private Long session;
 
     /**
      * Constructor LookupRequest
@@ -47,8 +47,8 @@ public final class LookupRequest extends PublishedNameRequest implements Session
 
         super(publishedServiceName, "Main");
 
-        m_authentication = authentication;
-        m_session = session;
+        this.authentication = authentication;
+        this.session = session;
     }
 
     /**
@@ -74,7 +74,7 @@ public final class LookupRequest extends PublishedNameRequest implements Session
      * @return the authenticator
      */
     public Authentication getAuthentication() {
-        return m_authentication;
+        return authentication;
     }
 
     /**
@@ -83,7 +83,7 @@ public final class LookupRequest extends PublishedNameRequest implements Session
      * @return the session ID
      */
     public Long getSession() {
-        return m_session;
+        return session;
     }
 
     /**
@@ -103,8 +103,8 @@ public final class LookupRequest extends PublishedNameRequest implements Session
     public void writeExternal(ObjectOutput out) throws IOException {
 
         super.writeExternal(out);
-        out.writeObject(m_authentication);
-        out.writeObject(m_session);
+        out.writeObject(authentication);
+        out.writeObject(session);
     }
 
     /**
@@ -123,7 +123,7 @@ public final class LookupRequest extends PublishedNameRequest implements Session
 
         super.readExternal(in);
 
-        m_authentication = (Authentication) in.readObject();
-        m_session = (Long) in.readObject();
+        authentication = (Authentication) in.readObject();
+        session = (Long) in.readObject();
     }
 }

@@ -22,7 +22,7 @@ import org.codehaus.jremoting.api.ConnectionException;
 
 /**
  * DynamicClassFactory creates stubs(@see DynamicStub) for the given
- * publishedName at the time of invocation.Using this m_factory removes the need
+ * publishedName at the time of invocation.Using this factory removes the need
  * for any compiled stubs corresponding to the remote interface
  * to be present on the client side to invoke any remote method on the server.
  *

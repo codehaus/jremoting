@@ -31,7 +31,7 @@ public final class ClassResponse extends Response {
 
     static final long serialVersionUID = -3849144476006325180L;
 
-    private byte[] m_proxyClassBytes;
+    private byte[] proxyClassBytes;
 
     /**
      * Contruct a class reply from byte arrays of classes.
@@ -39,7 +39,7 @@ public final class ClassResponse extends Response {
      * @param proxyClassBytes a byte array of the class def for the class containing the methods.
      */
     public ClassResponse(byte[] proxyClassBytes) {
-        this.m_proxyClassBytes = proxyClassBytes;
+        this.proxyClassBytes = proxyClassBytes;
     }
 
     /**
@@ -54,7 +54,7 @@ public final class ClassResponse extends Response {
      * @return a byte array of the serialized bean class
      */
     public byte[] getProxyClassBytes() {
-        return m_proxyClassBytes;
+        return proxyClassBytes;
     }
 
     /**
@@ -83,7 +83,7 @@ public final class ClassResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_proxyClassBytes);
+        out.writeObject(proxyClassBytes);
     }
 
     /**
@@ -99,6 +99,6 @@ public final class ClassResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_proxyClassBytes = (byte[]) in.readObject();
+        proxyClassBytes = (byte[]) in.readObject();
     }
 }

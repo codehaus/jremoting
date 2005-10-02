@@ -34,7 +34,7 @@ public class RmiInvocationAdapter implements RmiInvocationHandler {
     /**
      * The abstract server
      */
-    private AbstractServer m_abstractServer;
+    private AbstractServer abstractServer;
 
     /**
      * Constructor a RmiInvocationAdapter with an abstract server.
@@ -42,7 +42,7 @@ public class RmiInvocationAdapter implements RmiInvocationHandler {
      * @param abstractServer The abstract server
      */
     public RmiInvocationAdapter(AbstractServer abstractServer) {
-        m_abstractServer = abstractServer;
+        this.abstractServer = abstractServer;
     }
 
     /**
@@ -53,6 +53,6 @@ public class RmiInvocationAdapter implements RmiInvocationHandler {
      * @throws RemoteException if a problem during processing
      */
     public Response handleInvocation(Request request) throws RemoteException {
-        return m_abstractServer.handleInvocation(request, "RMI-TODO");
+        return abstractServer.handleInvocation(request, "RMI-TODO");
     }
 }

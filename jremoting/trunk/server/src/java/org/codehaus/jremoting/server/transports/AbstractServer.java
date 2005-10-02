@@ -45,21 +45,21 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
     /**
      * A vector of connections
      */
-    private Vector m_connections = new Vector();
+    private Vector connections = new Vector();
 
     /**
      * The invocation handler
      */
-    private InvocationHandlerAdapter m_invocationHandlerAdapter;
+    private InvocationHandlerAdapter invocationHandlerAdapter;
 
     /**
      * The state of the system.
      */
-    private int m_state = UNSTARTED;
+    private int state = UNSTARTED;
 
-    protected final ServerMonitor m_serverMonitor;
-    protected final ThreadPool m_threadPool;
-    protected final ServerSideClientContextFactory m_contextFactory;
+    protected final ServerMonitor serverMonitor;
+    protected final ThreadPool threadPool;
+    protected final ServerSideClientContextFactory contextFactory;
 
     /**
      * Construct a AbstractServer
@@ -68,15 +68,15 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @param serverMonitor            The Server monitor
      */
     public AbstractServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
-        m_invocationHandlerAdapter = invocationHandlerAdapter;
-        m_serverMonitor = serverMonitor;
-        m_threadPool = threadPool;
-        m_contextFactory = contextFactory;
+        this.invocationHandlerAdapter = invocationHandlerAdapter;
+        this.serverMonitor = serverMonitor;
+        this.threadPool = threadPool;
+        this.contextFactory = contextFactory;
     }
 
 
     public synchronized ThreadPool getThreadPool() {
-        return m_threadPool;
+        return threadPool;
     }
 
 
@@ -87,21 +87,21 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @return An suitable reply.
      */
     public Response handleInvocation(Request request, Object connectionDetails) {
-        return m_invocationHandlerAdapter.handleInvocation(request, connectionDetails);
+        return invocationHandlerAdapter.handleInvocation(request, connectionDetails);
     }
 
     /**
      * Suspend the server with open connections.
      */
     public void suspend() {
-        m_invocationHandlerAdapter.suspend();
+        invocationHandlerAdapter.suspend();
     }
 
     /**
      * Resume a server with open connections.
      */
     public void resume() {
-        m_invocationHandlerAdapter.resume();
+        invocationHandlerAdapter.resume();
     }
 
     /**
@@ -110,7 +110,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @param connection The connection
      */
     protected void connectionStart(ServerConnection connection) {
-        m_connections.add(connection);
+        connections.add(connection);
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @param connection The connection
      */
     protected void connectionCompleted(ServerConnection connection) {
-        m_connections.remove(connection);
+        connections.remove(connection);
     }
 
     /**
@@ -128,7 +128,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
     protected void killAllConnections() {
         // Copy the connections into an array to avoid ConcurrentModificationExceptions
         //  as the connections are closed.
-        ServerConnection[] connections = (ServerConnection[]) m_connections.toArray(new ServerConnection[0]);
+        ServerConnection[] connections = (ServerConnection[]) this.connections.toArray(new ServerConnection[0]);
         for (int i = 0; i < connections.length; i++) {
             connections[i].endConnection();
         }
@@ -144,7 +144,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      *          if an error during publication.
      */
     public void publish(Object impl, String asName, Class interfaceToExpose) throws PublicationException {
-        m_invocationHandlerAdapter.publish(impl, asName, interfaceToExpose);
+        invocationHandlerAdapter.publish(impl, asName, interfaceToExpose);
     }
 
     /**
@@ -156,7 +156,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @throws PublicationException if an error during publication.
      */
     public void publish(Object impl, String asName, PublicationDescription publicationDescription) throws PublicationException {
-        m_invocationHandlerAdapter.publish(impl, asName, publicationDescription);
+        invocationHandlerAdapter.publish(impl, asName, publicationDescription);
     }
 
     /**
@@ -167,7 +167,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @throws PublicationException if an error during publication.
      */
     public void unPublish(Object impl, String asName) throws PublicationException {
-        m_invocationHandlerAdapter.unPublish(impl, asName);
+        invocationHandlerAdapter.unPublish(impl, asName);
     }
 
     /**
@@ -179,7 +179,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @throws PublicationException if an error during publication.
      */
     public void replacePublished(Object oldImpl, String publishedName, Object withImpl) throws PublicationException {
-        m_invocationHandlerAdapter.replacePublished(oldImpl, publishedName, withImpl);
+        invocationHandlerAdapter.replacePublished(oldImpl, publishedName, withImpl);
     }
 
     /**
@@ -190,7 +190,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @return The Method invocation handler
      */
     public MethodInvocationHandler getMethodInvocationHandler(MethodRequest methodRequest, String objectName) {
-        return m_invocationHandlerAdapter.getMethodInvocationHandler(methodRequest, objectName);
+        return invocationHandlerAdapter.getMethodInvocationHandler(methodRequest, objectName);
     }
 
     /**
@@ -200,7 +200,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @return The Method invocation handler
      */
     public MethodInvocationHandler getMethodInvocationHandler(String publishedName) {
-        return m_invocationHandlerAdapter.getMethodInvocationHandler(publishedName);
+        return invocationHandlerAdapter.getMethodInvocationHandler(publishedName);
     }
 
     /**
@@ -209,7 +209,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @return the invocation handler adapter.
      */
     public InvocationHandlerAdapter getInovcationHandlerAdapter() {
-        return m_invocationHandlerAdapter;
+        return invocationHandlerAdapter;
     }
 
 
@@ -219,7 +219,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @param state The state
      */
     protected void setState(int state) {
-        m_state = state;
+        this.state = state;
     }
 
     /**
@@ -228,11 +228,11 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @return the state.
      */
     protected int getState() {
-        return m_state;
+        return state;
     }
 
     protected ServerSideClientContextFactory getClientContextFactory() {
-        return m_contextFactory;
+        return contextFactory;
     }
 
 

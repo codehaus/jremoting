@@ -33,13 +33,13 @@ import java.io.InputStream;
  */
 public class PlainClassRetriever extends AbstractClassRetriever {
 
-    private ClassLoader m_classLoader;
+    private ClassLoader classLoader;
 
     /**
      * Constructor PlainClassRetriever
      */
     public PlainClassRetriever() {
-        m_classLoader = this.getClass().getClassLoader();
+        classLoader = this.getClass().getClassLoader();
     }
 
     /**
@@ -48,7 +48,7 @@ public class PlainClassRetriever extends AbstractClassRetriever {
      * @param classLoader the classloader.
      */
     public PlainClassRetriever(ClassLoader classLoader) {
-        m_classLoader = classLoader;
+        this.classLoader = classLoader;
     }
 
     /**
@@ -62,7 +62,7 @@ public class PlainClassRetriever extends AbstractClassRetriever {
 
         InputStream is = null;
 
-        is = m_classLoader.getResourceAsStream(thingName + ".class");
+        is = classLoader.getResourceAsStream(thingName + ".class");
 
         if (is == null) {
             throw new ClassRetrievalException("Generated class for " + thingName + " not found in specified classloader ");

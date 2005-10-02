@@ -38,15 +38,15 @@ import java.util.Vector;
  */
 public class ProxyGenerationTask extends Task {
 
-    protected String[] m_interfacesToExpose;
-    protected String[] m_additionalFacades;
-    protected String[] m_callbackFacades;
-    protected File m_srcGenDir;
-    protected File m_classGenDir;
-    protected String m_genName;
-    protected Path m_classpath;
-    protected String m_verbose = "false";
-    private String m_generatorClass = "org.codehaus.jremoting.tools.generator.ProxyGeneratorImpl";
+    protected String[] interfacesToExpose;
+    protected String[] additionalFacades;
+    protected String[] callbackFacades;
+    protected File srcGenDir;
+    protected File classGenDir;
+    protected String genName;
+    protected Path classpath;
+    protected String verbose = "false";
+    private String generatorClass = "org.codehaus.jremoting.tools.generator.ProxyGeneratorImpl";
 
     /**
      * Constructor ProxyGenerationTask
@@ -68,9 +68,9 @@ public class ProxyGenerationTask extends Task {
             strings.add(st.nextToken().trim());
         }
 
-        m_interfacesToExpose = new String[strings.size()];
+        this.interfacesToExpose = new String[strings.size()];
 
-        strings.copyInto(m_interfacesToExpose);
+        strings.copyInto(this.interfacesToExpose);
     }
 
     /**
@@ -87,9 +87,9 @@ public class ProxyGenerationTask extends Task {
             strings.add(st.nextToken().trim());
         }
 
-        m_additionalFacades = new String[strings.size()];
+        additionalFacades = new String[strings.size()];
 
-        strings.copyInto(m_additionalFacades);
+        strings.copyInto(additionalFacades);
     }
 
     /**
@@ -106,9 +106,9 @@ public class ProxyGenerationTask extends Task {
             strings.add(st.nextToken().trim());
         }
 
-        m_callbackFacades = new String[strings.size()];
+        callbackFacades = new String[strings.size()];
 
-        strings.copyInto(m_callbackFacades);
+        strings.copyInto(callbackFacades);
     }
 
 
@@ -118,7 +118,7 @@ public class ProxyGenerationTask extends Task {
      * @param srcGenDir
      */
     public void setSrcgendir(File srcGenDir) {
-        m_srcGenDir = srcGenDir;
+        this.srcGenDir = srcGenDir;
     }
 
     /**
@@ -127,7 +127,7 @@ public class ProxyGenerationTask extends Task {
      * @param classGenDir
      */
     public void setClassgendir(File classGenDir) {
-        m_classGenDir = classGenDir;
+        this.classGenDir = classGenDir;
     }
 
     /**
@@ -136,20 +136,20 @@ public class ProxyGenerationTask extends Task {
      * @param genName
      */
     public void setGenname(String genName) {
-        this.m_genName = genName;
+        this.genName = genName;
     }
 
     /**
-     * Method setM_classpath
+     * Method setClasspath
      *
      * @param classpath
      */
     public void setClasspath(Path classpath) {
 
-        if (m_classpath == null) {
-            m_classpath = classpath;
+        if (this.classpath == null) {
+            this.classpath = classpath;
         } else {
-            m_classpath.append(classpath);
+            this.classpath.append(classpath);
         }
     }
 
@@ -160,11 +160,11 @@ public class ProxyGenerationTask extends Task {
      */
     public Path createClasspath() {
 
-        if (m_classpath == null) {
-            m_classpath = new Path(project);
+        if (classpath == null) {
+            classpath = new Path(project);
         }
 
-        return m_classpath.createPath();
+        return classpath.createPath();
     }
 
     /**
@@ -182,7 +182,7 @@ public class ProxyGenerationTask extends Task {
      * @param verbose
      */
     public void setVerbose(String verbose) {
-        m_verbose = verbose;
+        this.verbose = verbose;
     }
 
     /**
@@ -191,7 +191,7 @@ public class ProxyGenerationTask extends Task {
      * @param generatorClass The Generator Class to set.
      */
     public void setGeneratorClass(String generatorClass) {
-        this.m_generatorClass = generatorClass;
+        this.generatorClass = generatorClass;
     }
 
     /**
@@ -201,54 +201,54 @@ public class ProxyGenerationTask extends Task {
      */
     public void execute() throws BuildException {
 
-        if (m_interfacesToExpose == null) {
+        if (interfacesToExpose == null) {
             throw new BuildException("Specify at least one interface to expose");
         }
 
-        if (m_srcGenDir == null) {
+        if (srcGenDir == null) {
             throw new BuildException("Specify the directory to generate Java source in");
         }
 
-        if (m_classGenDir == null) {
+        if (classGenDir == null) {
             throw new BuildException("Specify the directory to generate Java classes in");
         }
 
-        if (m_genName == null) {
+        if (genName == null) {
             throw new BuildException("Specify the name to use for lookup");
         }
 
         ProxyGenerator proxyGenerator;
 
         try {
-            proxyGenerator = (ProxyGenerator) Class.forName(m_generatorClass).newInstance();
+            proxyGenerator = (ProxyGenerator) Class.forName(generatorClass).newInstance();
         } catch (Exception e) {
             e.printStackTrace();
 
-            throw new RuntimeException("PrimaryGenerator Impl jar not in m_classpath");
+            throw new RuntimeException("PrimaryGenerator Impl jar not in classpath");
         }
 
         try {
-            proxyGenerator.setSrcGenDir(m_srcGenDir.getAbsolutePath());
-            proxyGenerator.setClassGenDir(m_classGenDir.getAbsolutePath());
-            proxyGenerator.setGenName(m_genName);
-            proxyGenerator.verbose(Boolean.valueOf(m_verbose).booleanValue());
-            proxyGenerator.setClasspath(m_classpath.concatSystemClasspath("ignore").toString());
+            proxyGenerator.setSrcGenDir(srcGenDir.getAbsolutePath());
+            proxyGenerator.setClassGenDir(classGenDir.getAbsolutePath());
+            proxyGenerator.setGenName(genName);
+            proxyGenerator.verbose(Boolean.valueOf(verbose).booleanValue());
+            proxyGenerator.setClasspath(classpath.concatSystemClasspath("ignore").toString());
 
-            PublicationDescriptionItem[] interfacesToExpose = new PublicationDescriptionItem[m_interfacesToExpose.length];
-            ClassLoader classLoader = new AntClassLoader(getProject(), m_classpath);
+            PublicationDescriptionItem[] interfacesToExpose = new PublicationDescriptionItem[this.interfacesToExpose.length];
+            ClassLoader classLoader = new AntClassLoader(getProject(), classpath);
 
-            for (int i = 0; i < m_interfacesToExpose.length; i++) {
-                String cn = m_interfacesToExpose[i];
+            for (int i = 0; i < this.interfacesToExpose.length; i++) {
+                String cn = this.interfacesToExpose[i];
                 interfacesToExpose[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
             }
 
             proxyGenerator.setInterfacesToExpose(interfacesToExpose);
 
-            if (m_additionalFacades != null) {
-                PublicationDescriptionItem[] additionalFacades = new PublicationDescriptionItem[m_additionalFacades.length];
+            if (additionalFacades != null) {
+                PublicationDescriptionItem[] additionalFacades = new PublicationDescriptionItem[this.additionalFacades.length];
 
-                for (int i = 0; i < m_additionalFacades.length; i++) {
-                    String cn = m_additionalFacades[i];
+                for (int i = 0; i < this.additionalFacades.length; i++) {
+                    String cn = this.additionalFacades[i];
 
                     additionalFacades[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
                 }
@@ -256,11 +256,11 @@ public class ProxyGenerationTask extends Task {
                 proxyGenerator.setAdditionalFacades(additionalFacades);
             }
 
-            if (m_callbackFacades != null) {
-                PublicationDescriptionItem[] callbackFacades = new PublicationDescriptionItem[m_callbackFacades.length];
+            if (callbackFacades != null) {
+                PublicationDescriptionItem[] callbackFacades = new PublicationDescriptionItem[this.callbackFacades.length];
 
-                for (int i = 0; i < m_callbackFacades.length; i++) {
-                    String cn = m_callbackFacades[i];
+                for (int i = 0; i < this.callbackFacades.length; i++) {
+                    String cn = this.callbackFacades[i];
 
                     callbackFacades[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
                 }
@@ -271,8 +271,8 @@ public class ProxyGenerationTask extends Task {
 
             ClassLoader classLoader2 = null;
 
-            if (m_classpath != null) {
-                classLoader2 = new AntClassLoader(project, m_classpath);
+            if (classpath != null) {
+                classLoader2 = new AntClassLoader(project, classpath);
             } else {
                 classLoader2 = this.getClass().getClassLoader();
             }

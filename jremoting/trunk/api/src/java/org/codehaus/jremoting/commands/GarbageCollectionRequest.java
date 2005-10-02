@@ -32,8 +32,8 @@ import java.io.ObjectOutput;
 public final class GarbageCollectionRequest extends PublishedNameRequest implements Sessionable {
     static final long serialVersionUID = -1588019075455361758L;
 
-    private Long m_session;
-    private Long m_referenceID;
+    private Long session;
+    private Long referenceID;
 
     /**
      * Constructor GarbageCollectionRequest
@@ -47,8 +47,8 @@ public final class GarbageCollectionRequest extends PublishedNameRequest impleme
 
         super(publishedServiceName, objectName);
 
-        m_session = session;
-        m_referenceID = referenceID;
+        this.session = session;
+        this.referenceID = referenceID;
     }
 
     /**
@@ -74,7 +74,7 @@ public final class GarbageCollectionRequest extends PublishedNameRequest impleme
      * @return the session ID
      */
     public Long getSession() {
-        return m_session;
+        return session;
     }
 
     /**
@@ -83,7 +83,7 @@ public final class GarbageCollectionRequest extends PublishedNameRequest impleme
      * @return the reference ID
      */
     public Long getReferenceID() {
-        return m_referenceID;
+        return referenceID;
     }
 
     /**
@@ -103,8 +103,8 @@ public final class GarbageCollectionRequest extends PublishedNameRequest impleme
     public void writeExternal(ObjectOutput out) throws IOException {
 
         super.writeExternal(out);
-        out.writeObject(m_session);
-        out.writeObject(m_referenceID);
+        out.writeObject(session);
+        out.writeObject(referenceID);
     }
 
     /**
@@ -123,7 +123,7 @@ public final class GarbageCollectionRequest extends PublishedNameRequest impleme
 
         super.readExternal(in);
 
-        m_session = (Long) in.readObject();
-        m_referenceID = (Long) in.readObject();
+        session = (Long) in.readObject();
+        referenceID = (Long) in.readObject();
     }
 }

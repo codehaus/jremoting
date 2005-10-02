@@ -357,7 +357,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
      */
     public Long getReferenceID(Object factory) {
 
-        // this checks the m_factory because reference IDs should not be
+        // this checks the factory because reference IDs should not be
         // given out to any requester.  It should be privileged information.
         if (factory == this.factory) {
             return referenceID;
@@ -411,7 +411,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 er.getReplyException().printStackTrace();
                 */
             } else if (!(response instanceof GarbageCollectionResponse)) {
-                System.err.println("----> Some problem during DGC! Make sure m_factory is closed. ");
+                System.err.println("----> Some problem during DGC! Make sure factory is closed. ");
             }
         }
         super.finalize();

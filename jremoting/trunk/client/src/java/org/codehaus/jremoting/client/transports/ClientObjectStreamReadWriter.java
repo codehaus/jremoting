@@ -88,7 +88,7 @@ public class ClientObjectStreamReadWriter implements ClientStreamReadWriter
         objectOutputStream.writeObject( request );
         objectOutputStream.flush();
 
-        //m_objectOutputStream.reset();
+        //objectOutputStream.reset();
     }
 
     private Response readReply() throws IOException, ClassNotFoundException

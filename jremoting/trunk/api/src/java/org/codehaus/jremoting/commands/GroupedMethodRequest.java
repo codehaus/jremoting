@@ -31,23 +31,23 @@ public class GroupedMethodRequest extends Request {
 
     static final long serialVersionUID = 2433454402872395509L;
 
-    private String m_methodSignature;
-    private Object[] m_args;
+    private String methodSignature;
+    private Object[] args;
 
     public GroupedMethodRequest() {
     }
 
     public GroupedMethodRequest(String methodSignature, Object[] args) {
-        m_methodSignature = methodSignature;
-        m_args = args;
+        this.methodSignature = methodSignature;
+        this.args = args;
     }
 
     public String getMethodSignature() {
-        return m_methodSignature;
+        return methodSignature;
     }
 
     public Object[] getArgs() {
-        return m_args;
+        return args;
     }
 
     public int getRequestCode() {
@@ -56,14 +56,14 @@ public class GroupedMethodRequest extends Request {
 
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        out.writeObject(m_methodSignature);
-        out.writeObject(m_args);
+        out.writeObject(methodSignature);
+        out.writeObject(args);
     }
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
-        m_methodSignature = (String) in.readObject();
-        m_args = (Object[]) in.readObject();
+        methodSignature = (String) in.readObject();
+        args = (Object[]) in.readObject();
     }
 
 }

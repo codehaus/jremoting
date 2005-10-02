@@ -32,7 +32,7 @@ import java.io.InputStream;
  */
 public abstract class AbstractClassRetriever implements ClassRetriever {
 
-    private ClassLoader m_classLoader;
+    private ClassLoader classLoader;
 
     /**
      * Set the classloader to use.
@@ -40,7 +40,7 @@ public abstract class AbstractClassRetriever implements ClassRetriever {
      * @param classLoader the classloader to use.
      */
     protected void setClassLoader(ClassLoader classLoader) {
-        m_classLoader = classLoader;
+        this.classLoader = classLoader;
     }
 
     /**
@@ -68,7 +68,7 @@ public abstract class AbstractClassRetriever implements ClassRetriever {
         thingName = thingName.replace('.', '\\') + ".class";
 
         try {
-            is = m_classLoader.getResourceAsStream(thingName);
+            is = classLoader.getResourceAsStream(thingName);
         } catch (Exception e) {
             throw new ClassRetrievalException("Generated class not found in classloader specified : " + e.getMessage());
         }

@@ -32,9 +32,9 @@ import java.io.ObjectOutput;
 public abstract class PublishedNameRequest extends Request {
     static final long serialVersionUID = 5995735372269955205L;
 
-    private String m_publishedServiceName;
-    private String m_objectName;
-    private ClientContext m_context;
+    private String publishedServiceName;
+    private String objectName;
+    private ClientContext context;
 
     /**
      * Constructor PublishedNameRequest
@@ -43,16 +43,16 @@ public abstract class PublishedNameRequest extends Request {
      * @param objectName           the object name within that
      */
     public PublishedNameRequest(String publishedServiceName, String objectName) {
-        m_publishedServiceName = publishedServiceName;
-        m_objectName = objectName;
+        this.publishedServiceName = publishedServiceName;
+        this.objectName = objectName;
     }
 
     public void setContext(ClientContext context) {
-        m_context = context;
+        this.context = context;
     }
 
     public ClientContext getContext() {
-        return m_context;
+        return context;
     }
 
     /**
@@ -67,7 +67,7 @@ public abstract class PublishedNameRequest extends Request {
      * @return the published service name
      */
     public String getPublishedServiceName() {
-        return m_publishedServiceName;
+        return publishedServiceName;
     }
 
     /**
@@ -76,7 +76,7 @@ public abstract class PublishedNameRequest extends Request {
      * @return the object name
      */
     public String getObjectName() {
-        return m_objectName;
+        return objectName;
     }
 
     /**
@@ -94,9 +94,9 @@ public abstract class PublishedNameRequest extends Request {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_publishedServiceName);
-        out.writeObject(m_objectName);
-        out.writeObject(m_context);
+        out.writeObject(publishedServiceName);
+        out.writeObject(objectName);
+        out.writeObject(context);
     }
 
     /**
@@ -112,8 +112,8 @@ public abstract class PublishedNameRequest extends Request {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_publishedServiceName = (String) in.readObject();
-        m_objectName = (String) in.readObject();
-        m_context = (ClientContext) in.readObject();
+        publishedServiceName = (String) in.readObject();
+        objectName = (String) in.readObject();
+        context = (ClientContext) in.readObject();
     }
 }

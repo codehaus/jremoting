@@ -30,7 +30,7 @@ import java.io.ObjectOutput;
 public final class MethodResponse extends Response {
     static final long serialVersionUID = 5551617722014239119L;
 
-    private Object m_replyObj;
+    private Object replyObj;
 
     /**
      * Constructor MethodResponse
@@ -38,7 +38,7 @@ public final class MethodResponse extends Response {
      * @param replyObj the object that is the return value
      */
     public MethodResponse(Object replyObj) {
-        this.m_replyObj = replyObj;
+        this.replyObj = replyObj;
     }
 
     /**
@@ -53,7 +53,7 @@ public final class MethodResponse extends Response {
      * @return the reply object
      */
     public Object getReplyObject() {
-        return m_replyObj;
+        return replyObj;
     }
 
     /**
@@ -82,7 +82,7 @@ public final class MethodResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_replyObj);
+        out.writeObject(replyObj);
     }
 
     /**
@@ -98,6 +98,6 @@ public final class MethodResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_replyObj = in.readObject();
+        replyObj = in.readObject();
     }
 }

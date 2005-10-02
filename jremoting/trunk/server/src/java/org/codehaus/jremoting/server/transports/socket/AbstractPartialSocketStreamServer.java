@@ -56,7 +56,7 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
         try {
             socket.setSoTimeout(36000);
         } catch (SocketException se) {
-            m_serverMonitor.unexpectedException(this.getClass(), "AbstractPartialSocketStreamServer.handleConnection(): Some error during " + "socket handling", se);
+            serverMonitor.unexpectedException(this.getClass(), "AbstractPartialSocketStreamServer.handleConnection(): Some error during " + "socket handling", se);
         }
 
         try {
@@ -65,13 +65,13 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
 
                 ssrw.setStreams(socket.getInputStream(), socket.getOutputStream(), socket);
 
-                SocketStreamServerConnection sssc = new SocketStreamServerConnection(this, socket, ssrw, m_serverMonitor);
+                SocketStreamServerConnection sssc = new SocketStreamServerConnection(this, socket, ssrw, serverMonitor);
 
                 sssc.run();
             }
         } catch (IOException ioe) {
 
-            m_serverMonitor.unexpectedException(this.getClass(), "AbstractPartialSocketStreamServer.handleConnection(): Some problem connecting " + "client via sockets: ", ioe);
+            serverMonitor.unexpectedException(this.getClass(), "AbstractPartialSocketStreamServer.handleConnection(): Some problem connecting " + "client via sockets: ", ioe);
         }
     }
 

@@ -32,7 +32,7 @@ public final class ListMethodsRequest extends Request {
     /**
      * Name of the published object whose remote methods is sought
      */
-    private String m_publishedName;
+    private String publishedName;
 
 
     /**
@@ -41,7 +41,7 @@ public final class ListMethodsRequest extends Request {
      * @param publishedName
      */
     public ListMethodsRequest(String publishedName) {
-        m_publishedName = publishedName;
+        this.publishedName = publishedName;
     }
 
     /**
@@ -55,7 +55,7 @@ public final class ListMethodsRequest extends Request {
      * Get the published objects name
      */
     public String getPublishedName() {
-        return m_publishedName;
+        return publishedName;
     }
 
     //----Request Override--//
@@ -75,13 +75,13 @@ public final class ListMethodsRequest extends Request {
      * @see java.io.Externalizable#writeExternal(ObjectOutput)
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_publishedName);
+        out.writeObject(publishedName);
     }
 
     /**
      * @see java.io.Externalizable#readExternal(ObjectInput)
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_publishedName = (String) in.readObject();
+        publishedName = (String) in.readObject();
     }
 }

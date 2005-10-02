@@ -35,7 +35,7 @@ import org.codehaus.jremoting.server.transports.ServerObjectStreamReadWriter;
  */
 public class PartialSocketObjectStreamServer extends AbstractPartialSocketStreamServer {
 
-    private CompleteSocketObjectStreamPipedBinder m_completeSocketObjectStreamPipedBinder;
+    private CompleteSocketObjectStreamPipedBinder completeSocketObjectStreamPipedBinder;
 
 
     /*
@@ -48,8 +48,8 @@ public class PartialSocketObjectStreamServer extends AbstractPartialSocketStream
     public PartialSocketObjectStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
 
-        m_completeSocketObjectStreamPipedBinder = new CompleteSocketObjectStreamPipedBinder(super.getInovcationHandlerAdapter(), serverMonitor, threadPool, contextFactory);
-        new RegistryHelper().put("/.codehausRemoting/optimizations/port=" + port, m_completeSocketObjectStreamPipedBinder);
+        completeSocketObjectStreamPipedBinder = new CompleteSocketObjectStreamPipedBinder(super.getInovcationHandlerAdapter(), serverMonitor, threadPool, contextFactory);
+        new RegistryHelper().put("/.codehausRemoting/optimizations/port=" + port, completeSocketObjectStreamPipedBinder);
     }
 
     /**
@@ -57,7 +57,7 @@ public class PartialSocketObjectStreamServer extends AbstractPartialSocketStream
      */
     public void stop() {
         super.stop();
-        m_completeSocketObjectStreamPipedBinder.stop();
+        completeSocketObjectStreamPipedBinder.stop();
     }
 
     /**
@@ -66,7 +66,7 @@ public class PartialSocketObjectStreamServer extends AbstractPartialSocketStream
      * @return The Server Stream Read Writer.
      */
     protected AbstractServerStreamReadWriter createServerStreamReadWriter() {
-        return new ServerObjectStreamReadWriter(m_serverMonitor, m_threadPool);
+        return new ServerObjectStreamReadWriter(serverMonitor, threadPool);
     }
 
 }

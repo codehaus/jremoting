@@ -32,8 +32,8 @@ import java.io.ObjectOutput;
 public final class OpenConnectionResponse extends Response implements Sessionable {
     static final long serialVersionUID = -1011412213595049271L;
 
-    private String m_textToSign;
-    private Long m_session;
+    private String textToSign;
+    private Long session;
 
     /**
      * Constructor OpenConnectionResponse
@@ -42,8 +42,8 @@ public final class OpenConnectionResponse extends Response implements Sessionabl
      * @param session    the session allocated by the server
      */
     public OpenConnectionResponse(String textToSign, Long session) {
-        m_textToSign = textToSign;
-        m_session = session;
+        this.textToSign = textToSign;
+        this.session = session;
     }
 
     /**
@@ -69,7 +69,7 @@ public final class OpenConnectionResponse extends Response implements Sessionabl
      * @return the text to sign
      */
     public String getTextToSign() {
-        return m_textToSign;
+        return textToSign;
     }
 
     /**
@@ -78,7 +78,7 @@ public final class OpenConnectionResponse extends Response implements Sessionabl
      * @return the session identifier.
      */
     public Long getSession() {
-        return m_session;
+        return session;
     }
 
     /**
@@ -96,8 +96,8 @@ public final class OpenConnectionResponse extends Response implements Sessionabl
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(m_textToSign);
-        out.writeObject(m_session);
+        out.writeObject(textToSign);
+        out.writeObject(session);
     }
 
     /**
@@ -113,7 +113,7 @@ public final class OpenConnectionResponse extends Response implements Sessionabl
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        m_textToSign = (String) in.readObject();
-        m_session = (Long) in.readObject();
+        textToSign = (String) in.readObject();
+        session = (Long) in.readObject();
     }
 }
