@@ -17,26 +17,23 @@
  */
 package org.codehaus.jremoting.client.transports.socket;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import org.codehaus.jremoting.client.transports.ClientObjectStreamReadWriter;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.ClientStreamReadWriter;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.*;
+import org.codehaus.jremoting.client.transports.ClientObjectStreamReadWriter;
+
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Class SocketObjectStreamInvocationHandler
  *
- *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class SocketObjectStreamInvocationHandler
-    extends AbstractSocketStreamInvocationHandler
-{
+public final class SocketObjectStreamInvocationHandler extends AbstractSocketStreamInvocationHandler {
 
     /**
      * Const a SocketObjectStreamInvocationHandler.
@@ -49,13 +46,9 @@ public final class SocketObjectStreamInvocationHandler
      * @param interfacesClassLoader
      * @throws ConnectionException
      */
-    public SocketObjectStreamInvocationHandler(
-            ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger,
-        String host, int port, ClassLoader interfacesClassLoader )
-        throws ConnectionException
-    {
+    public SocketObjectStreamInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port, ClassLoader interfacesClassLoader) throws ConnectionException {
 
-        super( threadPool, clientMonitor, connectionPinger, interfacesClassLoader, host, port );
+        super(threadPool, clientMonitor, connectionPinger, interfacesClassLoader, host, port);
 
         //TODO - is this a pending problem?  The superclass invokes createClientStreamReadWriter
         // perhaps an init() is needed.
@@ -63,14 +56,13 @@ public final class SocketObjectStreamInvocationHandler
 
     /**
      * Create a client stream read/writer
-     * @param in the input stream
+     *
+     * @param in  the input stream
      * @param out the output stream
      * @return the read/writer
      * @throws ConnectionException if a problem
      */
-    protected ClientStreamReadWriter createClientStreamReadWriter(
-        InputStream in, OutputStream out ) throws ConnectionException
-    {
-        return new ClientObjectStreamReadWriter( in, out );
+    protected ClientStreamReadWriter createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException {
+        return new ClientObjectStreamReadWriter(in, out);
     }
 }

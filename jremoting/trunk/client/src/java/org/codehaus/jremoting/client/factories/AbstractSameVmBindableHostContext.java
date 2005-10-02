@@ -17,12 +17,12 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import org.codehaus.jremoting.client.ClientInvocationHandler;
-import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.RegistryHelper;
 import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.ConnectionPinger;
 
 public abstract class AbstractSameVmBindableHostContext extends AbstractHostContext {
 

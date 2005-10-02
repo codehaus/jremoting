@@ -17,25 +17,22 @@
  */
 package org.codehaus.jremoting.client.transports.direct;
 
-import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
-import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
-import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.api.DefaultThreadPool;
+import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.factories.AbstractHostContext;
+import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
+import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 
 /**
  * Class DirectHostContext
  *
- *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class DirectHostContext extends AbstractHostContext
-{
+public class DirectHostContext extends AbstractHostContext {
 
     /**
      * Constructor DirectHostContext
@@ -45,24 +42,16 @@ public class DirectHostContext extends AbstractHostContext
      * @param connectionPinger
      * @param invocationHandler
      */
-    public DirectHostContext( ThreadPool threadPool, ClientMonitor clientMonitor,
-                              ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler )
-    {
-        super( new DirectInvocationHandler( threadPool, clientMonitor, connectionPinger, invocationHandler ) );
+    public DirectHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler) {
+        super(new DirectInvocationHandler(threadPool, clientMonitor, connectionPinger, invocationHandler));
     }
 
-    public static class WithSimpleDefaults extends DirectHostContext
-    {
+    public static class WithSimpleDefaults extends DirectHostContext {
         /**
-         *
          * @param invocationHandler
          */
-        public WithSimpleDefaults(ServerInvocationHandler invocationHandler)
-        {
-            super(new DefaultThreadPool(),
-                    new DumbClientMonitor(),
-                    new NeverConnectionPinger(),
-                    invocationHandler);
+        public WithSimpleDefaults(ServerInvocationHandler invocationHandler) {
+            super(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), invocationHandler);
         }
     }
 

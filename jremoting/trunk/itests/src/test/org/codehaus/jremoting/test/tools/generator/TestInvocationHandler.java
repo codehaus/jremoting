@@ -17,17 +17,17 @@
  */
 package org.codehaus.jremoting.test.tools.generator;
 
+import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
 import org.codehaus.jremoting.commands.ExceptionResponse;
-import org.codehaus.jremoting.commands.MethodResponse;
 import org.codehaus.jremoting.commands.MethodRequest;
-import org.codehaus.jremoting.commands.OpenConnectionResponse;
+import org.codehaus.jremoting.commands.MethodResponse;
 import org.codehaus.jremoting.commands.OpenConnectionRequest;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.commands.OpenConnectionResponse;
 import org.codehaus.jremoting.commands.Request;
-import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.commands.Response;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 
 import java.lang.reflect.Method;

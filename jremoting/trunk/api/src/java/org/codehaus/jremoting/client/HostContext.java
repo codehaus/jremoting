@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.client;
 
 
-
 /**
  * HostContext, as the name suggests, describes the
  * context of the calls made to the server which could be

@@ -17,11 +17,11 @@
  */
 package org.codehaus.jremoting.server.transports.direct;
 
-import org.codehaus.jremoting.commands.InvocationExceptionResponse;
-import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.commands.Request;
 import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.commands.InvocationExceptionResponse;
+import org.codehaus.jremoting.commands.Request;
+import org.codehaus.jremoting.commands.Response;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ClassRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;

@@ -19,11 +19,11 @@ package org.codehaus.jremoting.test.clientcontext;
 
 import junit.framework.TestCase;
 import org.codehaus.jremoting.ClientContext;
+import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
-import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Server;

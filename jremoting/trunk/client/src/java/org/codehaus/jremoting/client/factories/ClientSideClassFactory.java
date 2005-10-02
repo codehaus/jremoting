@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.client.HostContext;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

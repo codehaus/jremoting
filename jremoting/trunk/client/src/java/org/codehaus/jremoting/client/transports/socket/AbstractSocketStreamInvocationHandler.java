@@ -17,28 +17,27 @@
  */
 package org.codehaus.jremoting.client.transports.socket;
 
+import org.codehaus.jremoting.api.BadConnectionException;
+import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.ConnectionRefusedException;
+import org.codehaus.jremoting.client.transports.AbstractStreamClientInvocationHandler;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
-import org.codehaus.jremoting.client.transports.AbstractStreamClientInvocationHandler;
-import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.ConnectionRefusedException;
-import org.codehaus.jremoting.client.*;
-import org.codehaus.jremoting.api.BadConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
 
 /**
  * Class SocketCustomStreamInvocationHandler
  *
- *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractSocketStreamInvocationHandler extends AbstractStreamClientInvocationHandler
-{
+public abstract class AbstractSocketStreamInvocationHandler extends AbstractStreamClientInvocationHandler {
 
     private final String host;
     private final int port;
@@ -47,85 +46,65 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
     /**
      * AbstractSocketStreamInvocationHandler
      *
-     *
      * @param threadPool
      * @param clientMonitor
      * @param connectionPinger
      * @param interfacesClassLoader The class loader
-     * @param host The host to connect to
-     * @param port The port to conenct to
+     * @param host                  The host to connect to
+     * @param port                  The port to conenct to
      */
-    public AbstractSocketStreamInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor,
-                                                 ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader,
-                                                 String host, int port) throws ConnectionRefusedException, BadConnectionException
-    {
+    public AbstractSocketStreamInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionRefusedException, BadConnectionException {
         super(threadPool, clientMonitor, connectionPinger, interfacesClassLoader);
         this.host = host;
         this.port = port;
 
-        try
-        {
+        try {
             Socket socket = makeSocket();
 
-            setObjectReadWriter( createClientStreamReadWriter( socket.getInputStream(),
-                                                               socket.getOutputStream() ) );
-        }
-        catch( IOException ioe )
-        {
-            if (ioe.getMessage().startsWith("Connection refused"))
-            {
-                throw new ConnectionRefusedException("Connection to port "+port+" on host "+host+" refused.");
+            setObjectReadWriter(createClientStreamReadWriter(socket.getInputStream(), socket.getOutputStream()));
+        } catch (IOException ioe) {
+            if (ioe.getMessage().startsWith("Connection refused")) {
+                throw new ConnectionRefusedException("Connection to port " + port + " on host " + host + " refused.");
             }
-            throw new BadConnectionException( "Cannot open Stream(s) for socket: "
-                                                 + ioe.getMessage() );
+            throw new BadConnectionException("Cannot open Stream(s) for socket: " + ioe.getMessage());
         }
     }
 
     /**
      * Method tryReconnect
      *
-     *
      * @return connected or not.
      */
-    protected boolean tryReconnect()
-    {
+    protected boolean tryReconnect() {
 
-        try
-        {
+        try {
             Socket socket = makeSocket();
 
-            setObjectReadWriter( createClientStreamReadWriter( socket.getInputStream(),
-                                                               socket.getOutputStream() ) );
+            setObjectReadWriter(createClientStreamReadWriter(socket.getInputStream(), socket.getOutputStream()));
 
             return true;
-        }
-        catch( ConnectionException ce )
-        {
+        } catch (ConnectionException ce) {
             // TODO log ?
             return false;
-        }
-        catch( IOException ce )
-        {
+        } catch (IOException ce) {
 
             // TODO log ?
             return false;
         }
     }
 
-    private Socket makeSocket() throws IOException
-    {
+    private Socket makeSocket() throws IOException {
 
-        Socket socket = new Socket( host, port );
+        Socket socket = new Socket(host, port);
 
         // The 1 second value was causing unwanted timeouts when the remote
         //  method took more than a second to run or if either system was heavily
         //  loaded.
         //socket.setSoTimeout(1000);
-        socket.setSoTimeout( 60 * 1000 );
+        socket.setSoTimeout(60 * 1000);
 
         return socket;
     }
 
-    protected abstract ClientStreamReadWriter createClientStreamReadWriter(
-        InputStream in, OutputStream out ) throws ConnectionException;
+    protected abstract ClientStreamReadWriter createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException;
 }

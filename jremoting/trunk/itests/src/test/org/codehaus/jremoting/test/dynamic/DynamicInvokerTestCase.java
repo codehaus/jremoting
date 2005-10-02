@@ -18,11 +18,11 @@
 package org.codehaus.jremoting.test.dynamic;
 
 import junit.framework.TestCase;
+import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.impl.DynamicInvoker;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
-import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.transports.AbstractServer;
 import org.codehaus.jremoting.server.transports.socket.CompleteSocketCustomStreamServer;

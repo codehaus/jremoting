@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.client;
 
 
-
 /**
  * Interface ConnectionPinger
  *

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 
-	<pomVersion>3</pomVersion>
-	<groupId>jremoting</groupId>
-	<id>jremoting</id>
-	<name>JRemoting</name>
-	<currentVersion>${jremoting.version}</currentVersion>
+    <pomVersion>3</pomVersion>
+    <groupId>jremoting</groupId>
+    <id>jremoting</id>
+    <name>JRemoting</name>
+    <currentVersion>${jremoting.version}</currentVersion>
     <organization>
         <name>Codehaus</name>
         <url>http://codehaus.org/</url>
@@ -13,7 +13,7 @@
     </organization>
     <inceptionYear>2005</inceptionYear>
 
-	<package>org.codehaus.jremoting</package>
+    <package>org.codehaus.jremoting</package>
     <logo>/images/jremoting-logo.png</logo>
     <description>
         Please refer to the &lt;a href="http://jremoting.codehaus.org/"&gt;main website&lt;/a&gt; for documentation.    
@@ -34,34 +34,34 @@
     </repository>
 
 
-	<developers>
-		<developer>
-			<name>Paul Hammant</name>
-			<id>paul</id>
-			<organization>ThoughtWorks</organization>
-		</developer>
-		<developer>
-			<name>Vinay Chandran</name>
-			<id>vinayc</id>
-			<email>vinayc@apache.org</email>
-		</developer>
-		<developer>
-			<name>Mauro Talevi</name>
-			<id>mauro</id>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <name>Paul Hammant</name>
+            <id>paul</id>
+            <organization>ThoughtWorks</organization>
+        </developer>
+        <developer>
+            <name>Vinay Chandran</name>
+            <id>vinayc</id>
+            <email>vinayc@apache.org</email>
+        </developer>
+        <developer>
+            <name>Mauro Talevi</name>
+            <id>mauro</id>
+        </developer>
+    </developers>
 
-	<!-- TODO add people who have contributed to AltRMI and after -->
-	<contributors/>
+    <!-- TODO add people who have contributed to AltRMI and after -->
+    <contributors/>
 
-	<dependencies>
-       		
+    <dependencies>
+
         <!-- required for JDK 1.3 -->
         <dependency>
             <id>xml-apis</id>
             <version>1.0.b2</version>
         </dependency>
-    
+
         <!-- test time only -->
         <dependency>
             <id>junit</id>
@@ -86,26 +86,26 @@
             <artifactId>maven-scm-plugin</artifactId>
             <version>1.5</version>
             <type>plugin</type>
-        </dependency>	
+        </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>maven</groupId>
             <artifactId>maven-multiproject-plugin</artifactId>
             <version>1.4.1</version>
             <type>plugin</type>
-        </dependency>		
-           
+        </dependency>
+
         <!-- required for JDK 1.5 -->
-		<dependency>
+        <dependency>
             <groupId>maven</groupId>
             <artifactId>maven-clover-plugin</artifactId>
             <version>1.10</version>
             <type>plugin</type>
-        </dependency>		
- 	
+        </dependency>
+
     </dependencies>
 
-	<build>
+    <build>
         <sourceDirectory>${basedir}/src/java</sourceDirectory>
         <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
         <unitTest>

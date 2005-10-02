@@ -17,14 +17,14 @@
  */
 package org.codehaus.jremoting.client.impl;
 
+import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.factories.DynamicClassFactory;
 import org.codehaus.jremoting.client.factories.DynamicStub;
-import org.codehaus.jremoting.commands.ListMethodsResponse;
 import org.codehaus.jremoting.commands.ListMethodsRequest;
+import org.codehaus.jremoting.commands.ListMethodsResponse;
 import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.api.ConnectionException;
 
 import java.util.HashMap;
 import java.util.Map;

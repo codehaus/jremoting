@@ -18,23 +18,23 @@
 package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.Authentication;
+import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.api.FacadeRefHolder;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.Proxy;
 import org.codehaus.jremoting.commands.ExceptionResponse;
-import org.codehaus.jremoting.commands.ListResponse;
 import org.codehaus.jremoting.commands.ListRequest;
-import org.codehaus.jremoting.commands.LookupResponse;
+import org.codehaus.jremoting.commands.ListResponse;
 import org.codehaus.jremoting.commands.LookupRequest;
+import org.codehaus.jremoting.commands.LookupResponse;
 import org.codehaus.jremoting.commands.NotPublishedResponse;
-import org.codehaus.jremoting.commands.OpenConnectionResponse;
 import org.codehaus.jremoting.commands.OpenConnectionRequest;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.commands.OpenConnectionResponse;
 import org.codehaus.jremoting.commands.ReplyConstants;
+import org.codehaus.jremoting.commands.Response;
 import org.codehaus.jremoting.commands.SameVMResponse;
-import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.FacadeRefHolder;
 
 import java.lang.ref.WeakReference;
 import java.rmi.server.UID;

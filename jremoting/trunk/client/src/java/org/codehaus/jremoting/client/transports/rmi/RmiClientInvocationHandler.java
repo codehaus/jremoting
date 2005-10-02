@@ -17,6 +17,25 @@
  */
 package org.codehaus.jremoting.client.transports.rmi;
 
+import org.codehaus.jremoting.api.BadConnectionException;
+import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.api.RmiInvocationHandler;
+import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.InvocationException;
+import org.codehaus.jremoting.client.NoSuchReferenceException;
+import org.codehaus.jremoting.client.NotPublishedException;
+import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
+import org.codehaus.jremoting.commands.MethodRequest;
+import org.codehaus.jremoting.commands.NoSuchReferenceResponse;
+import org.codehaus.jremoting.commands.NotPublishedResponse;
+import org.codehaus.jremoting.commands.PublishedNameRequest;
+import org.codehaus.jremoting.commands.Request;
+import org.codehaus.jremoting.commands.RequestConstants;
+import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.commands.TryLaterResponse;
+
 import java.net.MalformedURLException;
 import java.rmi.ConnectException;
 import java.rmi.ConnectIOException;
@@ -24,34 +43,13 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
-import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.commands.Request;
-import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.commands.PublishedNameRequest;
-import org.codehaus.jremoting.commands.TryLaterResponse;
-import org.codehaus.jremoting.commands.RequestConstants;
-import org.codehaus.jremoting.api.BadConnectionException;
-import org.codehaus.jremoting.api.RmiInvocationHandler;
-import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.*;
-import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
-import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
-import org.codehaus.jremoting.commands.MethodRequest;
-import org.codehaus.jremoting.commands.NotPublishedResponse;
-import org.codehaus.jremoting.commands.*;
-
 /**
  * Class RmiClientInvocationHandler
- *
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class RmiClientInvocationHandler extends AbstractClientInvocationHandler
-{
+public final class RmiClientInvocationHandler extends AbstractClientInvocationHandler {
 
     private RmiInvocationHandler rmiInvocationHandler;
     private String url;
@@ -60,44 +58,26 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
     /**
      * Constructor RmiClientInvocationHandler
      *
-     *
      * @param host
      * @param port
-     *
      * @throws ConnectionException
-     *
      */
-    public RmiClientInvocationHandler( ThreadPool threadPool, ClientMonitor clientMonitor,
-                                       ConnectionPinger connectionPinger,
-                                       String host, int port ) throws ConnectionException
-    {
+    public RmiClientInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
 
         super(threadPool, clientMonitor, connectionPinger);
 
         url = "rmi://" + host + ":" + port + "/" + RmiInvocationHandler.class.getName();
 
-        try
-        {
-            rmiInvocationHandler = (RmiInvocationHandler)Naming.lookup( url );
-        }
-        catch( NotBoundException nbe )
-        {
-            throw new ConnectionException(
-                "Cannot bind to the remote RMI service.  Either an IP or RMI issue." );
-        }
-        catch( MalformedURLException mfue )
-        {
-            throw new ConnectionException( "Malformed URL, host/port (" + host + "/" + port
-                                                 + ") must be wrong: " + mfue.getMessage() );
-        }
-        catch( ConnectIOException cioe )
-        {
-            throw new BadConnectionException( "Cannot connect to remote RMI server. "
-                    + "It is possible that transport mismatch");
-        }
-        catch( RemoteException re )
-        {
-            throw new ConnectionException( "Unknown Remote Exception : " + re.getMessage() );
+        try {
+            rmiInvocationHandler = (RmiInvocationHandler) Naming.lookup(url);
+        } catch (NotBoundException nbe) {
+            throw new ConnectionException("Cannot bind to the remote RMI service.  Either an IP or RMI issue.");
+        } catch (MalformedURLException mfue) {
+            throw new ConnectionException("Malformed URL, host/port (" + host + "/" + port + ") must be wrong: " + mfue.getMessage());
+        } catch (ConnectIOException cioe) {
+            throw new BadConnectionException("Cannot connect to remote RMI server. " + "It is possible that transport mismatch");
+        } catch (RemoteException re) {
+            throw new ConnectionException("Unknown Remote Exception : " + re.getMessage());
         }
     }
 
@@ -105,19 +85,14 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
      * Method tryReconnect
      *
      * @return
-     *
      */
-    protected boolean tryReconnect()
-    {
+    protected boolean tryReconnect() {
 
-        try
-        {
-            rmiInvocationHandler = (RmiInvocationHandler)Naming.lookup( url );
+        try {
+            rmiInvocationHandler = (RmiInvocationHandler) Naming.lookup(url);
 
             return true;
-        }
-        catch( Exception e )
-        {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -125,17 +100,12 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
     /**
      * Method handleInvocation
      *
-     *
      * @param request
-     *
      * @return
-     *
      */
-    public synchronized Response handleInvocation( Request request )
-    {
+    public synchronized Response handleInvocation(Request request) {
 
-        if( request.getRequestCode() != RequestConstants.PINGREQUEST )
-        {
+        if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
         }
 
@@ -144,75 +114,53 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
         int tries = 0;
         long start = 0;
 
-        if( methodLogging )
-        {
+        if (methodLogging) {
             start = System.currentTimeMillis();
         }
 
-        while( again )
-        {
+        while (again) {
             tries++;
 
             again = false;
 
-            try
-            {
-                response = rmiInvocationHandler.handleInvocation( request );
+            try {
+                response = rmiInvocationHandler.handleInvocation(request);
 
-                if( response.getReplyCode() >= 100 )
-                {
-                    if( response instanceof TryLaterResponse )
-                    {
-                        int millis = ( (TryLaterResponse)response ).getSuggestedDelayMillis();
+                if (response.getReplyCode() >= 100) {
+                    if (response instanceof TryLaterResponse) {
+                        int millis = ((TryLaterResponse) response).getSuggestedDelayMillis();
 
-                        clientMonitor.serviceSuspended(this.getClass(), request, tries, millis );
+                        clientMonitor.serviceSuspended(this.getClass(), request, tries, millis);
 
                         again = true;
-                    }
-                    else if( response instanceof NoSuchReferenceResponse )
-                    {
-                        throw new NoSuchReferenceException( ( (NoSuchReferenceResponse)response )
-                                                            .getReferenceID() );
-                    }
-                    else if( response instanceof NotPublishedResponse )
-                    {
-                        PublishedNameRequest pnr = (PublishedNameRequest)request;
+                    } else if (response instanceof NoSuchReferenceResponse) {
+                        throw new NoSuchReferenceException(((NoSuchReferenceResponse) response).getReferenceID());
+                    } else if (response instanceof NotPublishedResponse) {
+                        PublishedNameRequest pnr = (PublishedNameRequest) request;
 
-                        throw new NotPublishedException( pnr.getPublishedServiceName(),
-                                                         pnr.getObjectName() );
+                        throw new NotPublishedException(pnr.getPublishedServiceName(), pnr.getObjectName());
                     }
                 }
-            }
-            catch( RemoteException re )
-            {
-                if( re instanceof ConnectException | re instanceof ConnectIOException )
-                {
+            } catch (RemoteException re) {
+                if (re instanceof ConnectException | re instanceof ConnectIOException) {
                     int retryConnectTries = 0;
 
                     rmiInvocationHandler = null;
 
-                    while( !tryReconnect() )
-                    {
+                    while (!tryReconnect()) {
                         clientMonitor.serviceAbend(this.getClass(), retryConnectTries, re);
 
                         retryConnectTries++;
                     }
-                }
-                else
-                {
-                    throw new InvocationException( "Unknown RMI problem : "
-                                                         + re.getMessage() );
+                } else {
+                    throw new InvocationException("Unknown RMI problem : " + re.getMessage());
                 }
             }
         }
 
-        if( methodLogging )
-        {
-            if( request instanceof MethodRequest )
-            {
-                clientMonitor.methodCalled(
-                        this.getClass(), ( (MethodRequest)request ).getMethodSignature(),
-                    System.currentTimeMillis() - start, "" );
+        if (methodLogging) {
+            if (request instanceof MethodRequest) {
+                clientMonitor.methodCalled(this.getClass(), ((MethodRequest) request).getMethodSignature(), System.currentTimeMillis() - start, "");
             }
         }
 
@@ -222,12 +170,9 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
     /**
      * Method getLastRealRequest
      *
-     *
      * @return
-     *
      */
-    public long getLastRealRequest()
-    {
+    public long getLastRealRequest() {
         return lastRealRequest;
     }
 }

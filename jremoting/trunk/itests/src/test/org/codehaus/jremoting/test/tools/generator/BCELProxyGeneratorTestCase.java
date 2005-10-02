@@ -18,12 +18,12 @@
 package org.codehaus.jremoting.test.tools.generator;
 
 import junit.framework.TestCase;
+import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
 import org.codehaus.jremoting.client.factories.DefaultProxyHelper;
 import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
 import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
 import org.codehaus.jremoting.client.transports.direct.DirectHostContext;
-import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.server.ProxyGenerator;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.tools.generator.BCELProxyGeneratorImpl;

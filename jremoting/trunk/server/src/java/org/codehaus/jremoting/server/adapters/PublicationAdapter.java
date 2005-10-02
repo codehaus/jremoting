@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.server.adapters;
 
-import org.codehaus.jremoting.commands.MethodRequest;
 import org.codehaus.jremoting.api.MethodNameHelper;
+import org.codehaus.jremoting.commands.MethodRequest;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;

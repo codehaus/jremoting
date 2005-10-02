@@ -17,13 +17,13 @@
  */
 package org.codehaus.jremoting.client.factories;
 
+import org.codehaus.jremoting.api.DefaultThreadPool;
+import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InterfaceLookupFactory;
 import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
 import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
-import org.codehaus.jremoting.api.DefaultThreadPool;
-import org.codehaus.jremoting.api.ThreadPool;
 
 /**
  * Class DefaultInterfaceLookupFactory

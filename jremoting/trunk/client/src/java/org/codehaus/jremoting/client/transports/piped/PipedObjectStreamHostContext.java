@@ -17,14 +17,14 @@
  */
 package org.codehaus.jremoting.client.transports.piped;
 
+import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.api.DefaultThreadPool;
+import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
-import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.api.DefaultThreadPool;
+import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
+import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -32,12 +32,10 @@ import java.io.PipedOutputStream;
 /**
  * Class PipedObjectStreamHostContext
  *
- *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class PipedObjectStreamHostContext extends AbstractHostContext
-{
+public class PipedObjectStreamHostContext extends AbstractHostContext {
 
     /**
      * Constructor PipedObjectStreamHostContext
@@ -49,29 +47,23 @@ public class PipedObjectStreamHostContext extends AbstractHostContext
      * @param outputStream
      * @param classLoader
      */
-    public PipedObjectStreamHostContext( ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger,
-                                         PipedInputStream inputStream,
-                                         PipedOutputStream outputStream, ClassLoader classLoader )
-    {
-        super( new PipedObjectStreamInvocationHandler( threadPool, clientMonitor, connectionPinger, inputStream, outputStream, classLoader ) );
+    public PipedObjectStreamHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream, ClassLoader classLoader) {
+        super(new PipedObjectStreamInvocationHandler(threadPool, clientMonitor, connectionPinger, inputStream, outputStream, classLoader));
     }
 
     public static class WithSimpleDefaults extends PipedObjectStreamHostContext {
 
-        public WithSimpleDefaults(PipedInputStream inputStream, PipedOutputStream outputStream)
-        {
-            super(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream, PipedObjectStreamHostContext.class.getClassLoader() );
+        public WithSimpleDefaults(PipedInputStream inputStream, PipedOutputStream outputStream) {
+            super(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream, PipedObjectStreamHostContext.class.getClassLoader());
         }
     }
+
     /**
      * Method initialize
      *
-     *
      * @throws ConnectionException If a problem
-     *
      */
-    public void initialize() throws ConnectionException
-    {
-        ( invocationHandler ).initialize();
+    public void initialize() throws ConnectionException {
+        (invocationHandler).initialize();
     }
 }

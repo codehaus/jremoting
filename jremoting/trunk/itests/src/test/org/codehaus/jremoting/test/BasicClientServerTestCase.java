@@ -18,12 +18,12 @@
 package org.codehaus.jremoting.test;
 
 import junit.framework.TestCase;
+import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
 import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
-import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.transports.socket.CompleteSocketCustomStreamServer;
 import org.codehaus.jremoting.server.transports.socket.CompleteSocketObjectStreamServer;

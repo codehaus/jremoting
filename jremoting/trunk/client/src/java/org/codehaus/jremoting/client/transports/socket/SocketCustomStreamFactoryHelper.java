@@ -17,71 +17,57 @@
  */
 package org.codehaus.jremoting.client.transports.socket;
 
+import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.InterfaceLookup;
 import org.codehaus.jremoting.client.factories.AbstractFactoryHelper;
-import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
 
 /**
  * Class SocketCustomStreamFactoryHelper
- *
- *   "SocketCustomStream:abcde.com:1234"
- *            0         :  1      : 2
- *
+ * <p/>
+ * "SocketCustomStream:abcde.com:1234"
+ * 0         :  1      : 2
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class SocketCustomStreamFactoryHelper extends AbstractFactoryHelper
-{
+public class SocketCustomStreamFactoryHelper extends AbstractFactoryHelper {
     private ThreadPool threadPool;
     private ClientMonitor clientMonitor;
     private ConnectionPinger connectionPinger;
 
-    public SocketCustomStreamFactoryHelper()
-    {
+    public SocketCustomStreamFactoryHelper() {
 
     }
 
-    public void setThreadPool(ThreadPool threadPool)
-    {
+    public void setThreadPool(ThreadPool threadPool) {
         this.threadPool = threadPool;
     }
 
-    public void setClientMonitor(ClientMonitor clientMonitor)
-    {
+    public void setClientMonitor(ClientMonitor clientMonitor) {
         this.clientMonitor = clientMonitor;
     }
 
-    public void setConnectionPinger(ConnectionPinger connectionPinger)
-    {
+    public void setConnectionPinger(ConnectionPinger connectionPinger) {
         this.connectionPinger = connectionPinger;
     }
 
     /**
      * Method getInterfaceLookup
      *
-     *
      * @param factoryString
      * @param interfacesClassLoader
-     *
      * @return
-     *
      */
-    public InterfaceLookup getInterfaceLookup(
-            String factoryString, ClassLoader interfacesClassLoader, boolean optimize)
-            throws ConnectionException
-    {
+    public InterfaceLookup getInterfaceLookup(String factoryString, ClassLoader interfacesClassLoader, boolean optimize) throws ConnectionException {
 
         // TODO maybe we should cache these.  Or the abstract parent class should.
         String[] terms = processFactoryString(factoryString);
-        HostContext hc = new SocketCustomStreamHostContext(threadPool, clientMonitor, connectionPinger,
-                interfacesClassLoader, terms[1],
-                Integer.parseInt(terms[2]));
+        HostContext hc = new SocketCustomStreamHostContext(threadPool, clientMonitor, connectionPinger, interfacesClassLoader, terms[1], Integer.parseInt(terms[2]));
         Factory af = createFactory(terms[3], hc, optimize);
 
         return af;

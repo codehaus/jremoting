@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.client.HostContext;
 
 /**
  * DynamicClassFactory creates stubs(@see DynamicStub) for the given

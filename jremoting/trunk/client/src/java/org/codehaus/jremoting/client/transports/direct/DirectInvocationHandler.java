@@ -17,23 +17,22 @@
  */
 package org.codehaus.jremoting.client.transports.direct;
 
-import java.io.IOException;
-import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.commands.Request;
 import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.server.ServerInvocationHandler;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.commands.Request;
+import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.server.ServerInvocationHandler;
+
+import java.io.IOException;
 
 /**
  * Class DirectInvocationHandler
  *
- *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class DirectInvocationHandler extends AbstractDirectInvocationHandler
-{
+public final class DirectInvocationHandler extends AbstractDirectInvocationHandler {
 
     private ServerInvocationHandler invocationHandler;
 
@@ -41,21 +40,18 @@ public final class DirectInvocationHandler extends AbstractDirectInvocationHandl
     /**
      * Constructor DirectInvocationHandler
      *
-     *
      * @param threadPool
      * @param clientMonitor
      * @param connectionPinger
      * @param invocationHandler
      */
-    public DirectInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler)
-    {
+    public DirectInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler) {
         super(threadPool, clientMonitor, connectionPinger);
         this.invocationHandler = invocationHandler;
     }
 
-    protected Response performInvocation( Request request ) throws IOException
-    {
-        return invocationHandler.handleInvocation( request, "" );
+    protected Response performInvocation(Request request) throws IOException {
+        return invocationHandler.handleInvocation(request, "");
     }
 
 }

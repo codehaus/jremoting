@@ -17,93 +17,78 @@
  */
 package org.codehaus.jremoting.client.transports;
 
+import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.api.SerializationHelper;
+import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.commands.Request;
+import org.codehaus.jremoting.commands.Response;
+
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.commands.Request;
-import org.codehaus.jremoting.api.SerializationHelper;
-import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
 
 /**
  * Class ClientCustomStreamReadWriter
  *
- *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public class ClientCustomStreamReadWriter implements ClientStreamReadWriter
-{
+public class ClientCustomStreamReadWriter implements ClientStreamReadWriter {
 
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
     private ClassLoader interfacesClassLoader;
 
 
-
     /**
      * Constructor ClientCustomStreamReadWriter
-     *
      *
      * @param inputStream
      * @param outputStream
      * @param interfacesClassLoader
-     *
      * @throws ConnectionException
-     *
      */
-    public ClientCustomStreamReadWriter(
-        InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader )
-        throws ConnectionException
-    {
+    public ClientCustomStreamReadWriter(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
 
-        dataOutputStream = new DataOutputStream( new BufferedOutputStream( outputStream ) );
-        dataInputStream = new DataInputStream( inputStream );
+        dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream));
+        dataInputStream = new DataInputStream(inputStream);
         this.interfacesClassLoader = interfacesClassLoader;
     }
 
-    public synchronized Response postRequest( Request request )
-        throws IOException, ClassNotFoundException
-    {
+    public synchronized Response postRequest(Request request) throws IOException, ClassNotFoundException {
 
-        writeRequest( request );
+        writeRequest(request);
 
         Response r = readReply();
 
         return r;
     }
 
-    private void writeRequest( Request request ) throws IOException
-    {
+    private void writeRequest(Request request) throws IOException {
 
-        byte[] aBytes = SerializationHelper.getBytesFromInstance( request );
+        byte[] aBytes = SerializationHelper.getBytesFromInstance(request);
 
-        dataOutputStream.writeInt( aBytes.length );
-        dataOutputStream.write( aBytes );
+        dataOutputStream.writeInt(aBytes.length);
+        dataOutputStream.write(aBytes);
         dataOutputStream.flush();
     }
 
-    private Response readReply() throws IOException, ClassNotFoundException
-    {
+    private Response readReply() throws IOException, ClassNotFoundException {
 
         int byteArraySize = dataInputStream.readInt();
-        byte[] byteArray = new byte[ byteArraySize ];
+        byte[] byteArray = new byte[byteArraySize];
         int pos = 0;
         int cnt = 0;
         // Loop here until the entire array has been read in.
-        while( pos < byteArraySize )
-        {
-            int read = dataInputStream.read( byteArray, pos, byteArraySize - pos );
+        while (pos < byteArraySize) {
+            int read = dataInputStream.read(byteArray, pos, byteArraySize - pos);
             pos += read;
             cnt++;
         }
-        Object reply = SerializationHelper.getInstanceFromBytes( byteArray,
-                                                                      interfacesClassLoader );
+        Object reply = SerializationHelper.getInstanceFromBytes(byteArray, interfacesClassLoader);
         return (Response) reply;
     }
 }

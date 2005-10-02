@@ -1,47 +1,40 @@
 <project default="test:test" xmlns:maven="jelly:maven" xmlns:j="jelly:core" xmlns:util="jelly:util" xmlns:ant="jelly:ant">
 
-	<property file="..\project.properties"/>
+    <property file="..\project.properties"/>
 
-	<postGoal name="test:compile">
-		
-		 
-		 <!-- /**Generate proxies for test cases */ -->
-		 <ant:taskdef name="jremoting-proxies" classname="org.codehaus.jremoting.tools.generator.ant.ProxyGenerationTask">
-			<ant:classpath>
-				<ant:path refid="maven.dependency.classpath"/>
-			</ant:classpath>
-		</ant:taskdef>
+    <postGoal name="test:compile">
 
-		<ant:mkdir dir="${maven.build.dir}/genjava"/>
-		<ant:jremoting-proxies genname="Hello" srcgendir="${maven.build.dir}/genjava"
-							classgendir="${maven.build.dir}/test-classes" verbose="true"
-							interfaces="org.codehaus.jremoting.test.TestInterface"
-							additionalfacades="org.codehaus.jremoting.test.TestInterface3,org.codehaus.jremoting.test.TestInterface2"
-							callbackfacades="org.codehaus.jremoting.test.TestCallBackListener">
-			<ant:classpath>
-				<ant:path refid="maven.dependency.classpath"/>
-				<ant:pathelement location="${maven.build.dir}/test-classes"/>
-			</ant:classpath>
-		</ant:jremoting-proxies>
 
-		<ant:jremoting-proxies genname="OurAccountManager" srcgendir="${maven.build.dir}/genjava"
-			classgendir="${maven.build.dir}/test-classes" verbose="true" 
-			interfaces="org.codehaus.jremoting.test.clientcontext.AccountManager">
-		  <ant:classpath>
-				<ant:path refid="maven.dependency.classpath"/>
+        <!-- /**Generate proxies for test cases */ -->
+        <ant:taskdef name="jremoting-proxies" classname="org.codehaus.jremoting.tools.generator.ant.ProxyGenerationTask">
+            <ant:classpath>
+                <ant:path refid="maven.dependency.classpath"/>
+            </ant:classpath>
+        </ant:taskdef>
+
+        <ant:mkdir dir="${maven.build.dir}/genjava"/>
+        <ant:jremoting-proxies genname="Hello" srcgendir="${maven.build.dir}/genjava" classgendir="${maven.build.dir}/test-classes" verbose="true" interfaces="org.codehaus.jremoting.test.TestInterface" additionalfacades="org.codehaus.jremoting.test.TestInterface3,org.codehaus.jremoting.test.TestInterface2" callbackfacades="org.codehaus.jremoting.test.TestCallBackListener">
+            <ant:classpath>
+                <ant:path refid="maven.dependency.classpath"/>
                 <ant:pathelement location="${maven.build.dir}/test-classes"/>
-		  </ant:classpath>
-		</ant:jremoting-proxies>
+            </ant:classpath>
+        </ant:jremoting-proxies>
+
+        <ant:jremoting-proxies genname="OurAccountManager" srcgendir="${maven.build.dir}/genjava" classgendir="${maven.build.dir}/test-classes" verbose="true" interfaces="org.codehaus.jremoting.test.clientcontext.AccountManager">
+            <ant:classpath>
+                <ant:path refid="maven.dependency.classpath"/>
+                <ant:pathelement location="${maven.build.dir}/test-classes"/>
+            </ant:classpath>
+        </ant:jremoting-proxies>
 
         <ant:taskdef resource="org/apache/commons/attributes/anttasks.properties"/>
 
-		<!-- TODO: Remove hardcoded test src dir (vinay) -->
-		<ant:attribute-compiler destDir="${maven.build.dir}/test-classes">
-			<ant:fileset dir="${maven.src.dir}/test/" includes="*.java"/>
-		</ant:attribute-compiler>
+        <!-- TODO: Remove hardcoded test src dir (vinay) -->
+        <ant:attribute-compiler destDir="${maven.build.dir}/test-classes">
+            <ant:fileset dir="${maven.src.dir}/test/" includes="*.java"/>
+        </ant:attribute-compiler>
 
 
-
-	</postGoal>
+    </postGoal>
 
 </project>

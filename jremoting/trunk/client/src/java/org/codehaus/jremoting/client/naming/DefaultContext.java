@@ -17,10 +17,10 @@
  */
 package org.codehaus.jremoting.client.naming;
 
+import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.InterfaceLookup;
 import org.codehaus.jremoting.client.InterfaceLookupFactory;
 import org.codehaus.jremoting.client.factories.DefaultInterfaceLookupFactory;
-import org.codehaus.jremoting.api.ConnectionException;
 
 import javax.naming.Context;
 import javax.naming.Name;

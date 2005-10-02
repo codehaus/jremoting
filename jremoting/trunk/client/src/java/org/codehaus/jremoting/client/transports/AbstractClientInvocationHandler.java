@@ -17,29 +17,23 @@
  */
 package org.codehaus.jremoting.client.transports;
 
-import org.codehaus.jremoting.client.ClientInvocationHandler;
-import org.codehaus.jremoting.client.ConnectionClosedException;
-import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.api.CallbackException;
 import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.ConnectionClosedException;
+import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.commands.PingRequest;
 import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.api.DefaultThreadPool;
 
 /**
  * Class AbstractClientInvocationHandler
  *
- *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public abstract class AbstractClientInvocationHandler
-    implements ClientInvocationHandler
-{
+public abstract class AbstractClientInvocationHandler implements ClientInvocationHandler {
 
     protected final ConnectionPinger connectionPinger;
     protected final ClientMonitor clientMonitor;
@@ -48,45 +42,35 @@ public abstract class AbstractClientInvocationHandler
     protected final boolean methodLogging;
 
 
-    public AbstractClientInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor,
-                                           ConnectionPinger connectionPinger)
-    {
+    public AbstractClientInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
         this.threadPool = threadPool;
         this.clientMonitor = clientMonitor;
         methodLogging = clientMonitor.methodLogging();
         this.connectionPinger = connectionPinger;
     }
 
-    public ThreadPool getThreadPool()
-    {
+    public ThreadPool getThreadPool() {
         return threadPool;
     }
 
-    public ClientMonitor getClientMonitor()
-    {
+    public ClientMonitor getClientMonitor() {
         return clientMonitor;
     }
 
     /**
      * Method initialize
      *
-     *
      * @throws ConnectionException
-     *
      */
-    public void initialize() throws ConnectionException
-    {
-        connectionPinger.setInvocationHandler( this );
+    public void initialize() throws ConnectionException {
+        connectionPinger.setInvocationHandler(this);
         connectionPinger.start();
     }
 
     /**
      * Method close
-     *
-     *
      */
-    public void close()
-    {
+    public void close() {
 
         connectionPinger.stop();
 
@@ -95,18 +79,14 @@ public abstract class AbstractClientInvocationHandler
 
     /**
      * Method ping
-     *
-     *
      */
-    public void ping()
-    {
+    public void ping() {
 
-        if( stopped )
-        {
-            throw new ConnectionClosedException( "Connection closed" );
+        if (stopped) {
+            throw new ConnectionClosedException("Connection closed");
         }
 
-        Response ar = handleInvocation( new PingRequest() );
+        Response ar = handleInvocation(new PingRequest());
     }
 
     protected abstract boolean tryReconnect();
@@ -114,12 +94,9 @@ public abstract class AbstractClientInvocationHandler
     /**
      * Method getInterfacesClassLoader
      *
-     *
      * @return
-     *
      */
-    public ClassLoader getInterfacesClassLoader()
-    {
+    public ClassLoader getInterfacesClassLoader() {
         return AbstractClientInvocationHandler.class.getClassLoader();
     }
 
@@ -128,29 +105,26 @@ public abstract class AbstractClientInvocationHandler
      * resolveArgument can handle any changes that one has to  do to the arguments being
      * marshalled to the server.
      * Noop Default behaviour.
+     *
      * @param remoteObjName
      * @param objClass
      * @param obj
      * @return Object
      */
 
-    public Object resolveArgument(String remoteObjName, String methodSignature ,Class objClass , Object obj)
-    {
+    public Object resolveArgument(String remoteObjName, String methodSignature, Class objClass, Object obj) {
         return obj;
     }
 
-    public boolean isCallBackEnabled()
-    {
+    public boolean isCallBackEnabled() {
         return false;
     }
 
-    public boolean exposeObject(Object exposedObject, Class exposedInterface) throws CallbackException
-    {
+    public boolean exposeObject(Object exposedObject, Class exposedInterface) throws CallbackException {
         throw new UnsupportedOperationException();
     }
 
-    public String getPublishedName(Object exposedObject)
-    {
+    public String getPublishedName(Object exposedObject) {
         throw new UnsupportedOperationException();
     }
 

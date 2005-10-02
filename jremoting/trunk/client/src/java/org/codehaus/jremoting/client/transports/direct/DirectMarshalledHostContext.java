@@ -17,26 +17,23 @@
  */
 package org.codehaus.jremoting.client.transports.direct;
 
+import org.codehaus.jremoting.api.DefaultThreadPool;
+import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
-import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.api.DefaultThreadPool;
-import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
 
 
 /**
  * Class DirectMarshalledHostContext
  *
- *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class DirectMarshalledHostContext extends AbstractHostContext
-{
+public class DirectMarshalledHostContext extends AbstractHostContext {
 
     /**
      * Constructor DirectMarshalledHostContext
@@ -47,37 +44,16 @@ public class DirectMarshalledHostContext extends AbstractHostContext
      * @param interfacesClassLoader
      * @param invocationHandler
      */
-    public DirectMarshalledHostContext(ThreadPool threadPool,
-                                       ClientMonitor clientMonitor,
-                                       ConnectionPinger connectionPinger,
-                                       ClassLoader interfacesClassLoader,
-                                       ServerMarshalledInvocationHandler invocationHandler)
-    {
-        super(
-                new DirectMarshalledInvocationHandler(
-                        threadPool,
-                        clientMonitor,
-                        connectionPinger,
-                        invocationHandler,
-                        interfacesClassLoader)
-        );
+    public DirectMarshalledHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, ServerMarshalledInvocationHandler invocationHandler) {
+        super(new DirectMarshalledInvocationHandler(threadPool, clientMonitor, connectionPinger, invocationHandler, interfacesClassLoader));
     }
 
-    public static class WithSimpleDefaults extends DirectMarshalledHostContext
-    {
+    public static class WithSimpleDefaults extends DirectMarshalledHostContext {
         /**
-         *
          * @param invocationHandler
          */
-        public WithSimpleDefaults(ServerMarshalledInvocationHandler invocationHandler)
-        {
-            super(
-                    new DefaultThreadPool(),
-                    new DumbClientMonitor(),
-                    new NeverConnectionPinger(),
-                    DirectMarshalledHostContext.class.getClassLoader(),
-                    invocationHandler
-            );
+        public WithSimpleDefaults(ServerMarshalledInvocationHandler invocationHandler) {
+            super(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), DirectMarshalledHostContext.class.getClassLoader(), invocationHandler);
         }
     }
 }

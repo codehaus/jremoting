@@ -17,15 +17,12 @@
  */
 package org.codehaus.jremoting.client.transports;
 
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
 import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.client.ClientStreamReadWriter;
 import org.codehaus.jremoting.commands.Request;
 import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.commands.Request;
 
-import javax.swing.*;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,12 +33,10 @@ import java.io.OutputStream;
 /**
  * Class ClientObjectStreamReadWriter
  *
- *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ClientObjectStreamReadWriter implements ClientStreamReadWriter
-{
+public class ClientObjectStreamReadWriter implements ClientStreamReadWriter {
 
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
@@ -49,50 +44,36 @@ public class ClientObjectStreamReadWriter implements ClientStreamReadWriter
     /**
      * Constructor ClientObjectStreamReadWriter
      *
-     *
      * @param inputStream
      * @param outputStream
      * @throws ConnectionException
-     *
      */
-    public ClientObjectStreamReadWriter(
-        InputStream inputStream, OutputStream outputStream)
-        throws ConnectionException
-    {
+    public ClientObjectStreamReadWriter(InputStream inputStream, OutputStream outputStream) throws ConnectionException {
 
-        try
-        {
+        try {
             objectOutputStream = new ObjectOutputStream(outputStream);
             objectInputStream = new ObjectInputStream(inputStream);
-        }
-        catch(EOFException eofe)
-        {
-            throw new BadConnectionException( "Cannot connect to remote JRemoting Remoting server. Have we a mismatch on transports?");
-        }
-        catch(IOException ioe)
-        {
-            throw new ConnectionException( "Some problem instantiating ObjectStream classes: " + ioe.getMessage() );
+        } catch (EOFException eofe) {
+            throw new BadConnectionException("Cannot connect to remote JRemoting Remoting server. Have we a mismatch on transports?");
+        } catch (IOException ioe) {
+            throw new ConnectionException("Some problem instantiating ObjectStream classes: " + ioe.getMessage());
         }
     }
 
-    public synchronized Response postRequest( Request request )
-        throws IOException, ClassNotFoundException
-    {
-        writeRequest( request );
+    public synchronized Response postRequest(Request request) throws IOException, ClassNotFoundException {
+        writeRequest(request);
         return readReply();
     }
 
-    private void writeRequest( Request request ) throws IOException
-    {
+    private void writeRequest(Request request) throws IOException {
 
-        objectOutputStream.writeObject( request );
+        objectOutputStream.writeObject(request);
         objectOutputStream.flush();
 
         //objectOutputStream.reset();
     }
 
-    private Response readReply() throws IOException, ClassNotFoundException
-    {
-        return (Response)objectInputStream.readObject();
+    private Response readReply() throws IOException, ClassNotFoundException {
+        return (Response) objectInputStream.readObject();
     }
 }

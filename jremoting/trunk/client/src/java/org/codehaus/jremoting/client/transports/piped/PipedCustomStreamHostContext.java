@@ -17,15 +17,14 @@
  */
 package org.codehaus.jremoting.client.transports.piped;
 
-import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
-import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
+import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
+import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
+import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -33,12 +32,10 @@ import java.io.PipedOutputStream;
 /**
  * Class PipedCustomStreamHostContext
  *
- *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class PipedCustomStreamHostContext extends AbstractHostContext
-{
+public class PipedCustomStreamHostContext extends AbstractHostContext {
 
     /**
      * Constructor PipedCustomStreamHostContext
@@ -49,17 +46,13 @@ public class PipedCustomStreamHostContext extends AbstractHostContext
      * @param inputStream
      * @param outputStream
      */
-    public PipedCustomStreamHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger,
-                                        PipedInputStream inputStream,
-                                        PipedOutputStream outputStream)
-    {
+    public PipedCustomStreamHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream) {
         super(new PipedCustomStreamInvocationHandler(threadPool, clientMonitor, connectionPinger, inputStream, outputStream));
     }
 
     public static class WithSimpleDefaults extends PipedCustomStreamHostContext {
 
-        public WithSimpleDefaults(PipedInputStream inputStream, PipedOutputStream outputStream)
-        {
+        public WithSimpleDefaults(PipedInputStream inputStream, PipedOutputStream outputStream) {
             super(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream);
         }
     }
@@ -67,12 +60,9 @@ public class PipedCustomStreamHostContext extends AbstractHostContext
     /**
      * Method initialize
      *
-     *
      * @throws ConnectionException If a problem
-     *
      */
-    public void initialize() throws ConnectionException
-    {
-         invocationHandler.initialize();
+    public void initialize() throws ConnectionException {
+        invocationHandler.initialize();
     }
 }

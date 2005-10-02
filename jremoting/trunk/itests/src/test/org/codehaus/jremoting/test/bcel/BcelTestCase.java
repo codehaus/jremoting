@@ -17,9 +17,9 @@
  */
 package org.codehaus.jremoting.test.bcel;
 
+import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.factories.ServerSideClassFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
-import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorClassRetriever;

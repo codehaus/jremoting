@@ -17,43 +17,38 @@
  */
 package org.codehaus.jremoting.client.transports;
 
+import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.InvocationException;
+import org.codehaus.jremoting.client.NoSuchReferenceException;
+import org.codehaus.jremoting.client.NoSuchSessionException;
+import org.codehaus.jremoting.client.NotPublishedException;
+import org.codehaus.jremoting.commands.ClientInvocationAbendResponse;
+import org.codehaus.jremoting.commands.MethodRequest;
+import org.codehaus.jremoting.commands.NoSuchReferenceResponse;
+import org.codehaus.jremoting.commands.NoSuchSessionResponse;
+import org.codehaus.jremoting.commands.NotPublishedResponse;
+import org.codehaus.jremoting.commands.PublishedNameRequest;
+import org.codehaus.jremoting.commands.ReplyConstants;
+import org.codehaus.jremoting.commands.Request;
+import org.codehaus.jremoting.commands.RequestConstants;
+import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.commands.TryLaterResponse;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.SocketException;
 
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
-import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.commands.Request;
-import org.codehaus.jremoting.client.NoSuchReferenceException;
-import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.commands.NotPublishedResponse;
-import org.codehaus.jremoting.commands.PublishedNameRequest;
-import org.codehaus.jremoting.commands.TryLaterResponse;
-import org.codehaus.jremoting.commands.RequestConstants;
-import org.codehaus.jremoting.commands.ReplyConstants;
-import org.codehaus.jremoting.commands.NoSuchSessionResponse;
-import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.client.NoSuchSessionException;
-import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.*;
-import org.codehaus.jremoting.commands.ClientInvocationAbendResponse;
-import org.codehaus.jremoting.commands.NoSuchReferenceResponse;
-import org.codehaus.jremoting.commands.*;
-
-import javax.swing.*;
-
 /**
  * Class AbstractStreamClientInvocationHandler
- *
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractStreamClientInvocationHandler extends AbstractClientInvocationHandler
-{
+public abstract class AbstractStreamClientInvocationHandler extends AbstractClientInvocationHandler {
 
     private ClientStreamReadWriter objectReadWriter;
     private boolean methodLogging = false;
@@ -68,8 +63,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
      * @param connectionPinger
      * @param interfacesClassLoader
      */
-    public AbstractStreamClientInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader)
-    {
+    public AbstractStreamClientInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader) {
         super(threadPool, clientMonitor, connectionPinger);
         this.interfacesClassLoader = interfacesClassLoader;
     }
@@ -77,154 +71,111 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
     /**
      * Method getInterfacesClassLoader
      *
-     *
      * @return
-     *
      */
-    public ClassLoader getInterfacesClassLoader()
-    {
+    public ClassLoader getInterfacesClassLoader() {
         return interfacesClassLoader;
     }
 
-    protected void setObjectReadWriter( ClientStreamReadWriter objectReadWriter )
-    {
+    protected void setObjectReadWriter(ClientStreamReadWriter objectReadWriter) {
         this.objectReadWriter = objectReadWriter;
     }
 
-    protected void requestWritten()
-    {
+    protected void requestWritten() {
     }
 
     /**
      * Method handleInvocation
      *
-     *
      * @param request
-     *
      * @return
-     *
      */
-    public synchronized Response handleInvocation( Request request )
-    {
-        if( request.getRequestCode() != RequestConstants.PINGREQUEST )
-        {
+    public synchronized Response handleInvocation(Request request) {
+        if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
         }
 
-        try
-        {
-            while( true )
-            {
+        try {
+            while (true) {
                 boolean again = true;
                 Response response = null;
                 int tries = 0;
                 long start = 0;
 
-                if( methodLogging )
-                {
+                if (methodLogging) {
                     start = System.currentTimeMillis();
                 }
 
-                while( again )
-                {
+                while (again) {
                     tries++;
 
                     again = false;
 
-                    try
-                    {
+                    try {
                         long t1 = System.currentTimeMillis();
 
-                        response = (Response)objectReadWriter.postRequest( request );
+                        response = (Response) objectReadWriter.postRequest(request);
 
                         long t2 = System.currentTimeMillis();
 
-                        if( response.getReplyCode() >= 100 )
-                        {
+                        if (response.getReplyCode() >= 100) {
                             // special case for callabcks.
-                            if (response.getReplyCode() == ReplyConstants.CLIENTABEND)
-                            {
+                            if (response.getReplyCode() == ReplyConstants.CLIENTABEND) {
                                 ClientInvocationAbendResponse abendReply = (ClientInvocationAbendResponse) response;
                                 throw abendReply.getIOException();
                             }
 
-                            if( response instanceof TryLaterResponse )
-                            {
-                                int millis = ( (TryLaterResponse)response ).getSuggestedDelayMillis();
+                            if (response instanceof TryLaterResponse) {
+                                int millis = ((TryLaterResponse) response).getSuggestedDelayMillis();
 
-                                clientMonitor.serviceSuspended(this.getClass(), request, tries,
-                                                                            millis );
+                                clientMonitor.serviceSuspended(this.getClass(), request, tries, millis);
 
                                 again = true;
-                            }
-                            else if( response instanceof NoSuchReferenceResponse )
-                            {
-                                throw new NoSuchReferenceException( ( (NoSuchReferenceResponse)response )
-                                                                    .getReferenceID() );
-                            }
-                            else if( response instanceof NoSuchSessionResponse )
-                            {
-                                throw new NoSuchSessionException( ( (NoSuchSessionResponse)response )
-                                                                    .getSessionID() );
-                            }
-                            else if( response instanceof NotPublishedResponse )
-                            {
-                                PublishedNameRequest pnr = (PublishedNameRequest)request;
+                            } else if (response instanceof NoSuchReferenceResponse) {
+                                throw new NoSuchReferenceException(((NoSuchReferenceResponse) response).getReferenceID());
+                            } else if (response instanceof NoSuchSessionResponse) {
+                                throw new NoSuchSessionException(((NoSuchSessionResponse) response).getSessionID());
+                            } else if (response instanceof NotPublishedResponse) {
+                                PublishedNameRequest pnr = (PublishedNameRequest) request;
 
-                                throw new NotPublishedException( pnr.getPublishedServiceName(),
-                                                                 pnr.getObjectName() );
+                                throw new NotPublishedException(pnr.getPublishedServiceName(), pnr.getObjectName());
                             }
                         }
-                    }
-                    catch( IOException ioe )
-                    {
-                        if(isSafeEnd(ioe))
-                        {
+                    } catch (IOException ioe) {
+                        if (isSafeEnd(ioe)) {
                             int retryConnectTries = 0;
 
                             again = true;
 
-                            while( !tryReconnect() )
-                            {
+                            while (!tryReconnect()) {
                                 clientMonitor.serviceAbend(this.getClass(), retryConnectTries, ioe);
 
                                 retryConnectTries++;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             ioe.printStackTrace();
 
-                            throw new InvocationException(
-                                "IO Exception during invocation to server :" + ioe.getMessage() );
+                            throw new InvocationException("IO Exception during invocation to server :" + ioe.getMessage());
                         }
                     }
                 }
-                if( methodLogging )
-                {
-                    if( request instanceof MethodRequest )
-                    {
-                        clientMonitor.methodCalled(
-                                this.getClass(), ( (MethodRequest)request ).getMethodSignature(),
-                            System.currentTimeMillis() - start, "" );
+                if (methodLogging) {
+                    if (request instanceof MethodRequest) {
+                        clientMonitor.methodCalled(this.getClass(), ((MethodRequest) request).getMethodSignature(), System.currentTimeMillis() - start, "");
                     }
                 }
 
                 return response;
             }
-        }
-        catch( ClassNotFoundException e )
-        {
-            throw new InvocationException( "Class definition missing on Deserialization: "
-                                                 + e.getMessage() );
+        } catch (ClassNotFoundException e) {
+            throw new InvocationException("Class definition missing on Deserialization: " + e.getMessage());
         }
     }
 
     private boolean isSafeEnd(IOException ioe) {
-        if (ioe instanceof SocketException | ioe instanceof EOFException
-                            | ioe instanceof InterruptedIOException) {
-                                return true;
-                            }
+        if (ioe instanceof SocketException | ioe instanceof EOFException | ioe instanceof InterruptedIOException) {
+            return true;
+        }
         if (ioe.getMessage() != null) {
             String msg = ioe.getMessage();
             if (msg.equals("Read end dead") | msg.equals("Pipe closed")) {
@@ -237,12 +188,9 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
     /**
      * Method getLastRealRequest
      *
-     *
      * @return
-     *
      */
-    public long getLastRealRequest()
-    {
+    public long getLastRealRequest() {
         return lastRealRequest;
     }
 }

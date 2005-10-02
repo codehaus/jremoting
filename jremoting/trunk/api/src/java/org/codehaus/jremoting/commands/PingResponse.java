@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.commands;
 
 
-
 /**
  * Class PingResponse
  *

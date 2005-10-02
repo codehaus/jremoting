@@ -18,7 +18,6 @@
 package org.codehaus.jremoting;
 
 
-
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
  * @version $Revision: 1.2 $

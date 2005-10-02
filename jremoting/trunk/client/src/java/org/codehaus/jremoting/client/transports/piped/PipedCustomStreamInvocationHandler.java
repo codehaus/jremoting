@@ -17,14 +17,12 @@
  */
 package org.codehaus.jremoting.client.transports.piped;
 
-import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
-import org.codehaus.jremoting.client.transports.ClientCustomStreamReadWriter;
-import org.codehaus.jremoting.client.transports.ClientCustomStreamReadWriter;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamReadWriter;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,40 +32,29 @@ import java.io.PipedOutputStream;
 /**
  * Class PipedCustomStreamInvocationHandler
  *
- *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class PipedCustomStreamInvocationHandler extends AbstractPipedStreamInvocationHandler
-{
+public final class PipedCustomStreamInvocationHandler extends AbstractPipedStreamInvocationHandler {
 
     /**
      * Constructor PipedCustomStreamInvocationHandler
-     *
      *
      * @param threadPool
      * @param clientMonitor
      * @param connectionPinger
      * @param outputStream
      */
-    public PipedCustomStreamInvocationHandler( ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger,
-            PipedInputStream inputStream, PipedOutputStream outputStream )
-    {
-        super( threadPool, clientMonitor, connectionPinger, inputStream, outputStream, PipedCustomStreamInvocationHandler.class.getClassLoader() );
+    public PipedCustomStreamInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream) {
+        super(threadPool, clientMonitor, connectionPinger, inputStream, outputStream, PipedCustomStreamInvocationHandler.class.getClassLoader());
     }
 
-    protected ClientStreamReadWriter createClientStreamReadWriter(
-        InputStream inputStream, OutputStream outputStream ) throws ConnectionException
-    {
+    protected ClientStreamReadWriter createClientStreamReadWriter(InputStream inputStream, OutputStream outputStream) throws ConnectionException {
 
-        return new ClientCustomStreamReadWriter( inputStream, outputStream,
-                                                 PipedCustomStreamInvocationHandler.class
-                                                 .getClassLoader() );
+        return new ClientCustomStreamReadWriter(inputStream, outputStream, PipedCustomStreamInvocationHandler.class.getClassLoader());
     }
 
-    protected ClientStreamReadWriter createClientStreamReadWriter(
-        InputStream inputStream, OutputStream outputStream, ClassLoader classLoader ) throws ConnectionException
-    {
-        return new ClientCustomStreamReadWriter( inputStream, outputStream, classLoader );
+    protected ClientStreamReadWriter createClientStreamReadWriter(InputStream inputStream, OutputStream outputStream, ClassLoader classLoader) throws ConnectionException {
+        return new ClientCustomStreamReadWriter(inputStream, outputStream, classLoader);
     }
 }

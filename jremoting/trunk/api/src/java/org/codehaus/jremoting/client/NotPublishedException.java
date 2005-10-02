@@ -18,8 +18,6 @@
 package org.codehaus.jremoting.client;
 
 
-
-
 /**
  * Class NotPublishedException
  *

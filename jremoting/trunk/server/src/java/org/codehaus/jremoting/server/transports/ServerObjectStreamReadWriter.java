@@ -17,9 +17,9 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.commands.Request;
 import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.commands.Request;
+import org.codehaus.jremoting.commands.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import java.io.IOException;
