@@ -49,7 +49,8 @@ public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactor
         this.clientMonitor = clientMonitor;
 
         try {
-            InterfaceLookupFactory factory = (InterfaceLookupFactory) this.getClass().getClassLoader().loadClass("org.codehaus.jremoting.client.impl.socket.SocketObjectStreamFactoryHelper").newInstance();
+            Class ilf = this.getClass().getClassLoader().loadClass("org.codehaus.jremoting.client.impl.socket.SocketObjectStreamFactoryHelper");
+            InterfaceLookupFactory factory = (InterfaceLookupFactory) ilf.newInstance();
             factory.setClientMonitor(this.clientMonitor);
             factory.setConnectionPinger(this.connectionPinger);
             factory.setThreadPool(this.threadPool);
@@ -65,7 +66,8 @@ public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactor
         }
 
         try {
-            InterfaceLookupFactory factory = (InterfaceLookupFactory) this.getClass().getClassLoader().loadClass("org.codehaus.jremoting.client.impl.socket.SocketCustomStreamFactoryHelper").newInstance();
+            Class ilf = this.getClass().getClassLoader().loadClass("org.codehaus.jremoting.client.impl.socket.SocketCustomStreamFactoryHelper");
+            InterfaceLookupFactory factory = (InterfaceLookupFactory) ilf.newInstance();
             factory.setClientMonitor(this.clientMonitor);
             factory.setConnectionPinger(this.connectionPinger);
             factory.setThreadPool(this.threadPool);
@@ -81,7 +83,8 @@ public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactor
         }
 
         try {
-            InterfaceLookupFactory factory = (InterfaceLookupFactory) Class.forName("org.codehaus.jremoting.client.impl.rmi.RmiFactoryHelper").newInstance();
+            Class ilf = Class.forName("org.codehaus.jremoting.client.impl.rmi.RmiFactoryHelper");
+            InterfaceLookupFactory factory = (InterfaceLookupFactory) ilf.newInstance();
             factory.setClientMonitor(this.clientMonitor);
             factory.setConnectionPinger(this.connectionPinger);
             factory.setThreadPool(this.threadPool);
