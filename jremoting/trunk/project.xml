@@ -110,7 +110,6 @@
         <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
         <unitTest>
             <includes>
-                <include>**/*Test.java</include>
                 <include>**/*TestCase.java</include>
             </includes>
             <excludes>

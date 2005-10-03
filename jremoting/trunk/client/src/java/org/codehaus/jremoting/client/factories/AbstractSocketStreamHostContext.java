@@ -24,30 +24,17 @@ import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 
-public abstract class AbstractSameVmBindableHostContext extends AbstractHostContext {
+public abstract class AbstractSocketStreamHostContext extends AbstractHostContext {
 
     protected final ThreadPool threadPool;
     protected final ClientMonitor clientMonitor;
     protected final ConnectionPinger connectionPinger;
 
-    public AbstractSameVmBindableHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClientInvocationHandler clientInvocationHandler) {
+    public AbstractSocketStreamHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClientInvocationHandler clientInvocationHandler) {
         super(clientInvocationHandler);
         this.threadPool = threadPool;
         this.clientMonitor = clientMonitor;
         this.connectionPinger = connectionPinger;
-    }
-
-
-    /**
-     * Make a HostContext for this using SameVM connections nstead of socket based ones.
-     *
-     * @return the HostContext
-     * @throws ConnectionException if a problem
-     */
-    public abstract AbstractHostContext makeSameVmHostContext() throws ConnectionException;
-
-    protected Object getOptmization(String uniqueID) {
-        return new RegistryHelper().get("/.codehausRemoting/optimizations/" + uniqueID);
     }
 
 }

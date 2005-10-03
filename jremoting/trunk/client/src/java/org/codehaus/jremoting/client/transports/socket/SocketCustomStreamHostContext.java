@@ -22,11 +22,9 @@ import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.client.factories.AbstractSameVmBindableHostContext;
+import org.codehaus.jremoting.client.factories.AbstractSocketStreamHostContext;
 import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
-import org.codehaus.jremoting.client.transports.piped.PipedCustomStreamHostContext;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -38,7 +36,7 @@ import java.lang.reflect.Method;
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public class SocketCustomStreamHostContext extends AbstractSameVmBindableHostContext {
+public class SocketCustomStreamHostContext extends AbstractSocketStreamHostContext {
 
     private int port;
 
@@ -65,32 +63,6 @@ public class SocketCustomStreamHostContext extends AbstractSameVmBindableHostCon
         this(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), SocketCustomStreamHostContext.class.getClassLoader(), host, port);
     }
 
-
-    /**
-     * Make a HostContext for this using SameVM connections nstead of socket based ones.
-     *
-     * @return the HostContext
-     * @throws ConnectionException if a problem
-     */
-    public AbstractHostContext makeSameVmHostContext() throws ConnectionException {
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out = new PipedOutputStream();
-        try {
-            Object binder = getOptmization("port=" + port);
-            if (binder == null) {
-                return null;
-            }
-            Object bound = bind(binder, in, out);
-            if (bound == null) {
-                return null;
-            }
-            PipedCustomStreamHostContext pipedCustomStreamHostContext = new PipedCustomStreamHostContext(threadPool, clientMonitor, connectionPinger, in, out);
-            pipedCustomStreamHostContext.initialize();
-            return pipedCustomStreamHostContext;
-        } catch (Exception e) {
-            throw new ConnectionException("Naming exception during bind :" + e.getMessage());
-        }
-    }
 
     private Object bind(Object object, PipedInputStream inputStream, PipedOutputStream outputStream) {
 

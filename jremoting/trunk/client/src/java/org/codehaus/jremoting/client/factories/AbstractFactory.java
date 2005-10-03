@@ -34,7 +34,6 @@ import org.codehaus.jremoting.commands.OpenConnectionRequest;
 import org.codehaus.jremoting.commands.OpenConnectionResponse;
 import org.codehaus.jremoting.commands.ResponseConstants;
 import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.commands.SameVMResponse;
 
 import java.lang.ref.WeakReference;
 import java.rmi.server.UID;
@@ -66,28 +65,11 @@ public abstract class AbstractFactory implements Factory {
 
         UID machineID = allowOptimize ? U_ID : null;
 
-        if (!(this.hostContext instanceof AbstractSameVmBindableHostContext)) {
+        if (!(this.hostContext instanceof AbstractSocketStreamHostContext)) {
             machineID = null;
         }
-        Response response = clientInvocationHandler.handleInvocation(new OpenConnectionRequest(machineID));
 
-        if (response instanceof SameVMResponse) {
-            if (this.hostContext instanceof AbstractSameVmBindableHostContext) {
-                AbstractSameVmBindableHostContext sameVmBindableHostContext = (AbstractSameVmBindableHostContext) this.hostContext;
-                HostContext hContext = sameVmBindableHostContext.makeSameVmHostContext();
-                if (hContext == null) {
-                    // Registry not found, or a different instance to the one
-                    // the server placed its piped instance in.
-                    // revert to non optimized.
-                    response = clientInvocationHandler.handleInvocation(new OpenConnectionRequest(null));
-                } else {
-                    clientInvocationHandler = this.hostContext.getInvocationHandler();
-                    response = clientInvocationHandler.handleInvocation(new OpenConnectionRequest());
-                }
-            } else {
-                throw new ConnectionException("SameVM instruction for non rebindable host context.");
-            }
-        }
+        Response response = clientInvocationHandler.handleInvocation(new OpenConnectionRequest(machineID));
 
         if (response instanceof OpenConnectionResponse) {
             textToSign = ((OpenConnectionResponse) response).getTextToSign();
