@@ -4,7 +4,6 @@
 
     <postGoal name="test:compile">
 
-
         <!-- /**Generate proxies for test cases */ -->
         <ant:taskdef name="jremoting-proxies" classname="org.codehaus.jremoting.tools.generator.ant.ProxyGenerationTask">
             <ant:classpath>
@@ -26,15 +25,6 @@
                 <ant:pathelement location="${maven.build.dir}/test-classes"/>
             </ant:classpath>
         </ant:jremoting-proxies>
-
-        <ant:taskdef resource="org/apache/commons/attributes/anttasks.properties"/>
-
-        <!-- TODO: Remove hardcoded test src dir (vinay) -->
-        <ant:mkdir dir="${maven.build.dir}/test-classes2"/>
-        <ant:attribute-compiler destDir="${maven.build.dir}/test-classes2">
-            <ant:fileset dir="src/test/" includes="*.java"/>
-        </ant:attribute-compiler>
-
 
     </postGoal>
 

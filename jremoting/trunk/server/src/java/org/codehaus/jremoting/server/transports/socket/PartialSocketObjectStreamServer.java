@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.server.transports.socket;
 
-import org.codehaus.jremoting.api.RegistryHelper;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
@@ -35,8 +34,6 @@ import org.codehaus.jremoting.server.transports.ServerObjectStreamReadWriter;
  */
 public class PartialSocketObjectStreamServer extends AbstractPartialSocketStreamServer {
 
-    private CompleteSocketObjectStreamPipedBinder completeSocketObjectStreamPipedBinder;
-
 
     /*
      * Construct a PartialSocketObjectStreamServer
@@ -45,11 +42,8 @@ public class PartialSocketObjectStreamServer extends AbstractPartialSocketStream
      * @param serverMonitor the monitor
      * @param port ther port
      */
-    public PartialSocketObjectStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+    public PartialSocketObjectStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
-
-        completeSocketObjectStreamPipedBinder = new CompleteSocketObjectStreamPipedBinder(super.getInovcationHandlerAdapter(), serverMonitor, threadPool, contextFactory);
-        new RegistryHelper().put("/.codehausRemoting/optimizations/port=" + port, completeSocketObjectStreamPipedBinder);
     }
 
     /**
@@ -57,7 +51,6 @@ public class PartialSocketObjectStreamServer extends AbstractPartialSocketStream
      */
     public void stop() {
         super.stop();
-        completeSocketObjectStreamPipedBinder.stop();
     }
 
     /**

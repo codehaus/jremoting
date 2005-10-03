@@ -35,21 +35,17 @@ import java.io.PipedOutputStream;
 public class CompleteSocketObjectStreamPipedConnection {
 
     private CompleteCustomStreamPipedServer completeCustomStreamPipedServer;
-    private CompleteSocketObjectStreamPipedBinder completeSocketObjectStreamPipedBinder;
 
     /**
      * Create a Complete Socket ObjectStream Piped Connection
      *
      * @param invocationHandlerAdapter the invocation adapter from the SocketObjectStream
-     * @param completeSocketObjectStreamPipedBinder
-     *                                 The binder that controls this connection
      * @param inputStream              the piped input stream
      * @param outputStream             the piped output stream
      * @throws ConnectionException if a problem
      */
-    public CompleteSocketObjectStreamPipedConnection(InvocationHandlerAdapter invocationHandlerAdapter, CompleteSocketObjectStreamPipedBinder completeSocketObjectStreamPipedBinder, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, PipedInputStream inputStream, PipedOutputStream outputStream) throws ConnectionException {
+    public CompleteSocketObjectStreamPipedConnection(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, PipedInputStream inputStream, PipedOutputStream outputStream) throws ConnectionException {
         completeCustomStreamPipedServer = new CompleteCustomStreamPipedServer(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
-        this.completeSocketObjectStreamPipedBinder = completeSocketObjectStreamPipedBinder;
         completeCustomStreamPipedServer.makeNewConnection(inputStream, outputStream);
         completeCustomStreamPipedServer.start();
     }
@@ -58,7 +54,6 @@ public class CompleteSocketObjectStreamPipedConnection {
      * Close the connection
      */
     public void close() {
-        completeSocketObjectStreamPipedBinder.endConnection(this);
     }
 
     /**

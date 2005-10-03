@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.server.transports.socket;
 
-import org.codehaus.jremoting.api.RegistryHelper;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
@@ -34,21 +33,14 @@ import org.codehaus.jremoting.server.transports.ServerCustomStreamReadWriter;
  */
 public class PartialSocketCustomStreamServer extends AbstractPartialSocketStreamServer {
 
-    private CompleteSocketCustomStreamPipedBinder completeSocketCustomStreamPipedBinder;
-
     /**
      * Construct a PartialSocketCustomStreamServer
      *
      * @param invocationHandlerAdapter the handler
      * @param serverMonitor            the monitor
-     * @param port                     ther port
      */
-    public PartialSocketCustomStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+    public PartialSocketCustomStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
-
-        completeSocketCustomStreamPipedBinder = new CompleteSocketCustomStreamPipedBinder(super.getInovcationHandlerAdapter(), serverMonitor, threadPool, contextFactory);
-        //TODO  should this reference RegHlpr directly ?
-        new RegistryHelper().put("/.codehausRemoting/optimizations/port=" + port, completeSocketCustomStreamPipedBinder);
     }
 
 
@@ -57,7 +49,6 @@ public class PartialSocketCustomStreamServer extends AbstractPartialSocketStream
      */
     public void stop() {
         super.stop();
-        completeSocketCustomStreamPipedBinder.stop();
     }
 
     /**

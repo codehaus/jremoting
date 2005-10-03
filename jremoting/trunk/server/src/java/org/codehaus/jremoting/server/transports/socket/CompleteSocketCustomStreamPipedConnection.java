@@ -35,22 +35,18 @@ import java.io.PipedOutputStream;
 public class CompleteSocketCustomStreamPipedConnection {
 
     private CompleteCustomStreamPipedServer pipedCustomStreamServer;
-    private CompleteSocketCustomStreamPipedBinder completeSocketCustomStreamPipedBinder;
 
     /**
      * Create a Complete Socket CustomStream Piped Connection
      *
      * @param invocationHandlerAdapter the invocation adapter from the SocketCustomStream
-     * @param completeSocketCustomStreamPipedBinder
-     *                                 The binder that controls this connection
      * @param inputStream              the piped input stream
      * @param outputStream             the piped output stream
      * @throws ConnectionException if a problem
      */
-    public CompleteSocketCustomStreamPipedConnection(InvocationHandlerAdapter invocationHandlerAdapter, CompleteSocketCustomStreamPipedBinder completeSocketCustomStreamPipedBinder, PipedInputStream inputStream, PipedOutputStream outputStream, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, ServerMonitor serverMonitor) throws ConnectionException {
+    public CompleteSocketCustomStreamPipedConnection(InvocationHandlerAdapter invocationHandlerAdapter, PipedInputStream inputStream, PipedOutputStream outputStream, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, ServerMonitor serverMonitor) throws ConnectionException {
         pipedCustomStreamServer = new CompleteCustomStreamPipedServer(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
         pipedCustomStreamServer.start();
-        this.completeSocketCustomStreamPipedBinder = completeSocketCustomStreamPipedBinder;
         pipedCustomStreamServer.makeNewConnection(inputStream, outputStream);
 
     }
@@ -59,7 +55,6 @@ public class CompleteSocketCustomStreamPipedConnection {
      * Close the connection
      */
     public void close() {
-        completeSocketCustomStreamPipedBinder.endConnection(this);
     }
 
     /**
