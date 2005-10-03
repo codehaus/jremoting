@@ -50,11 +50,8 @@ public class PipedObjectStreamInvocationHandler extends AbstractPipedStreamInvoc
         super(threadPool, clientMonitor, connectionPinger, is, os, classLoader);
     }
 
-    public static class WithCurrentClassLoader extends PipedObjectStreamInvocationHandler {
-
-        public WithCurrentClassLoader(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os) {
-            super(threadPool, clientMonitor, connectionPinger, is, os, PipedObjectStreamInvocationHandler.class.getClassLoader());
-        }
+    public PipedObjectStreamInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os) {
+        this(threadPool, clientMonitor, connectionPinger, is, os, PipedObjectStreamInvocationHandler.class.getClassLoader());
 
     }
 
