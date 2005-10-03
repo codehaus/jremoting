@@ -22,6 +22,10 @@
             <id>log4j</id>
             <version>1.2.8</version>
         </dependency>
+        <dependency>
+            <id>commons-logging</id>
+            <version>1.0.4</version>
+        </dependency>        
     </dependencies>
 
 </project>
