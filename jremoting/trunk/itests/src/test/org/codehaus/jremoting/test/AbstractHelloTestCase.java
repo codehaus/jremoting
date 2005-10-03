@@ -215,7 +215,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingRemotingTes
 
     public void testSpeed() throws Exception {
 
-        int iterations = 10000; // default
+        int iterations = 1000; // default
         String iterationsStr = "@SPEEDTEST-ITERATIONS@";
         try {
             iterations = Integer.parseInt(iterationsStr);
@@ -228,6 +228,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingRemotingTes
         long start = System.currentTimeMillis();
         for (int i = 0; i < iterations; i++) {
             testClient.testSpeed();
+            System.out.println("--> " + i);
         }
         long end = System.currentTimeMillis();
         //System.out.println("--> ST " + this.getClass().getName() + " " + iterations + " " + ((end - start)/1000) );

@@ -29,6 +29,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedInputStream;
 
 /**
  * Class ClientObjectStreamReadWriter
@@ -52,7 +54,7 @@ public class ClientObjectStreamReadWriter implements ClientStreamReadWriter {
 
         try {
             objectOutputStream = new ObjectOutputStream(outputStream);
-            objectInputStream = new ObjectInputStream(inputStream);
+            objectInputStream = new ObjectInputStream(new BufferedInputStream(inputStream));
         } catch (EOFException eofe) {
             throw new BadConnectionException("Cannot connect to remote JRemoting server. Have we a mismatch on transports?");
         } catch (IOException ioe) {
@@ -70,7 +72,7 @@ public class ClientObjectStreamReadWriter implements ClientStreamReadWriter {
         objectOutputStream.writeObject(request);
         objectOutputStream.flush();
 
-        //objectOutputStream.reset();
+        objectOutputStream.reset();
     }
 
     private Response readReply() throws IOException, ClassNotFoundException {

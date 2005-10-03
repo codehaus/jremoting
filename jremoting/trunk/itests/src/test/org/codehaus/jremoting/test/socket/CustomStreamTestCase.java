@@ -59,6 +59,9 @@ public class CustomStreamTestCase extends AbstractHelloTestCase {
         Thread.yield();
     }
 
+    public void testSpeed() throws Exception {
+        super.testSpeed();    
+    }
 
     protected void tearDown() throws Exception {
         testClient = null;

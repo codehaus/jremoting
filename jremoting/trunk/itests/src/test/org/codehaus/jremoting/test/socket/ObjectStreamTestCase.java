@@ -72,7 +72,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
     }
 
     public void testSpeed() throws Exception {
-        //super.testSpeed();  
+        super.testSpeed();  
     }
 
     protected void tearDown() throws Exception {

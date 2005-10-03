@@ -25,6 +25,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.BufferedInputStream;
 
 /**
  * Class ServerObjectStreamReadWriter
@@ -57,7 +58,7 @@ public class ServerObjectStreamReadWriter extends AbstractServerStreamReadWriter
      * @throws IOException if an IO Excpetion
      */
     protected void initialize() throws IOException {
-        objectInputStream = new ObjectInputStream(getInputStream());
+        objectInputStream = new ObjectInputStream(new BufferedInputStream(getInputStream()));
         objectOutputStream = new ObjectOutputStream(getOutputStream());
     }
 
@@ -89,7 +90,7 @@ public class ServerObjectStreamReadWriter extends AbstractServerStreamReadWriter
         objectOutputStream.writeObject(response);
         objectOutputStream.flush();
 
-        //objectOutputStream.reset();
+        objectOutputStream.reset();
     }
 
     protected void close() {
@@ -112,6 +113,7 @@ public class ServerObjectStreamReadWriter extends AbstractServerStreamReadWriter
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
     private Request readRequest() throws IOException, ClassNotFoundException {
-        return (Request) objectInputStream.readObject();
+        Request request = (Request) objectInputStream.readObject();
+        return request;
     }
 }
