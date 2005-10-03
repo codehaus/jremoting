@@ -36,9 +36,17 @@ import org.codehaus.jremoting.client.factories.AbstractFactoryHelper;
  * @version $Revision: 1.2 $
  */
 public class RmiFactoryHelper extends AbstractFactoryHelper {
+
     private ThreadPool threadPool;
     private ClientMonitor clientMonitor;
     private ConnectionPinger connectionPinger;
+
+
+    public RmiFactoryHelper(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+        this.threadPool = threadPool;
+        this.clientMonitor = clientMonitor;
+        this.connectionPinger = connectionPinger;
+    }
 
     /**
      * Method getInterfaceLookup
@@ -55,17 +63,5 @@ public class RmiFactoryHelper extends AbstractFactoryHelper {
         Factory af = createFactory(terms[3], hc, optimize);
 
         return af;
-    }
-
-    public void setThreadPool(ThreadPool threadPool) {
-        this.threadPool = threadPool;
-    }
-
-    public void setClientMonitor(ClientMonitor clientMonitor) {
-        this.clientMonitor = clientMonitor;
-    }
-
-    public void setConnectionPinger(ConnectionPinger connectionPinger) {
-        this.connectionPinger = connectionPinger;
     }
 }

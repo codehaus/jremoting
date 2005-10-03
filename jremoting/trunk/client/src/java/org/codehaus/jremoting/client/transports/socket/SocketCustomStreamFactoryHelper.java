@@ -40,19 +40,9 @@ public class SocketCustomStreamFactoryHelper extends AbstractFactoryHelper {
     private ClientMonitor clientMonitor;
     private ConnectionPinger connectionPinger;
 
-    public SocketCustomStreamFactoryHelper() {
-
-    }
-
-    public void setThreadPool(ThreadPool threadPool) {
+    public SocketCustomStreamFactoryHelper(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
         this.threadPool = threadPool;
-    }
-
-    public void setClientMonitor(ClientMonitor clientMonitor) {
         this.clientMonitor = clientMonitor;
-    }
-
-    public void setConnectionPinger(ConnectionPinger connectionPinger) {
         this.connectionPinger = connectionPinger;
     }
 

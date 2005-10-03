@@ -57,11 +57,4 @@ public interface InterfaceLookupFactory {
      * @throws ConnectionException
      */
     InterfaceLookup getInterfaceLookup(String factoryString, ClassLoader interfacesClassLoader, boolean optimize) throws ConnectionException;
-
-    void setThreadPool(ThreadPool threadPool);
-
-    void setClientMonitor(ClientMonitor clientMonitor);
-
-    void setConnectionPinger(ConnectionPinger connectionPinger);
-
 }

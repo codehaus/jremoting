@@ -21,7 +21,9 @@ import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.InterfaceLookupFactory;
+import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamFactoryHelper;
+import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamFactoryHelper;
+import org.codehaus.jremoting.client.transports.rmi.RmiFactoryHelper;
 import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
 import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
 
@@ -34,79 +36,20 @@ import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
 public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactory {
 
     public static final String[] SUPPORTEDSTREAMS = new String[]{"SocketObjectStream", "SocketCustomStream", "RMI"};
-    private ThreadPool threadPool;
-    private ClientMonitor clientMonitor;
-    private ConnectionPinger connectionPinger;
 
     public DefaultInterfaceLookupFactory() {
         this(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger());
     }
 
-
     public DefaultInterfaceLookupFactory(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
-        this.threadPool = threadPool;
-        this.connectionPinger = connectionPinger;
-        this.clientMonitor = clientMonitor;
 
-        try {
-            Class ilf = this.getClass().getClassLoader().loadClass("org.codehaus.jremoting.client.impl.socket.SocketObjectStreamFactoryHelper");
-            InterfaceLookupFactory factory = (InterfaceLookupFactory) ilf.newInstance();
-            factory.setClientMonitor(this.clientMonitor);
-            factory.setConnectionPinger(this.connectionPinger);
-            factory.setThreadPool(this.threadPool);
-            addFactory("SocketObjectStream:", factory);
-        } catch (ClassNotFoundException cnfe) {
-            cnfe.printStackTrace();
-        } catch (InstantiationException ie) {
-            ie.printStackTrace();
+        addFactory("SocketObjectStream:", new SocketObjectStreamFactoryHelper(threadPool, clientMonitor, connectionPinger));
 
+        addFactory("SocketCustomStream:", new SocketCustomStreamFactoryHelper(threadPool, clientMonitor, connectionPinger));
 
-        } catch (IllegalAccessException iae) {
-
-        }
-
-        try {
-            Class ilf = this.getClass().getClassLoader().loadClass("org.codehaus.jremoting.client.impl.socket.SocketCustomStreamFactoryHelper");
-            InterfaceLookupFactory factory = (InterfaceLookupFactory) ilf.newInstance();
-            factory.setClientMonitor(this.clientMonitor);
-            factory.setConnectionPinger(this.connectionPinger);
-            factory.setThreadPool(this.threadPool);
-            addFactory("SocketCustomStream:", factory);
-
-
-        } catch (ClassNotFoundException cnfe) {
-
-        } catch (InstantiationException ie) {
-
-        } catch (IllegalAccessException iae) {
-
-        }
-
-        try {
-            Class ilf = Class.forName("org.codehaus.jremoting.client.impl.rmi.RmiFactoryHelper");
-            InterfaceLookupFactory factory = (InterfaceLookupFactory) ilf.newInstance();
-            factory.setClientMonitor(this.clientMonitor);
-            factory.setConnectionPinger(this.connectionPinger);
-            factory.setThreadPool(this.threadPool);
-            addFactory("RMI:", factory);
-
-        } catch (ClassNotFoundException cnfe) {
-        } catch (InstantiationException ie) {
-        } catch (IllegalAccessException iae) {
-        }
+        addFactory("RMI:", new RmiFactoryHelper(threadPool, clientMonitor, connectionPinger));
 
         // TODO - add the rest.
     }
 
-    public void setThreadPool(ThreadPool threadPool) {
-        this.threadPool = threadPool;
-    }
-
-    public void setClientMonitor(ClientMonitor clientMonitor) {
-        this.clientMonitor = clientMonitor;
-    }
-
-    public void setConnectionPinger(ConnectionPinger connectionPinger) {
-        this.connectionPinger = connectionPinger;
-    }
 }
