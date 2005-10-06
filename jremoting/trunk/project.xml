@@ -83,6 +83,13 @@
         <!-- Maven plugins -->
         <dependency>
             <groupId>maven</groupId>
+            <artifactId>maven-artifact-plugin</artifactId>
+            <version>1.6</version>
+            <type>plugin</type>
+        </dependency>
+
+        <dependency>
+            <groupId>maven</groupId>
             <artifactId>maven-scm-plugin</artifactId>
             <version>1.5</version>
             <type>plugin</type>
