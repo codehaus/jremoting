@@ -46,7 +46,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
 
     /**
      * @param classLoader        the classloader in which the proxy generater will be found.
-     * @param generatorClassName the name of teh proxy gen class
+     * @param generatorClassName the name of the proxy gen class
      */
     public AbstractDynamicGeneratorClassRetriever(ClassLoader classLoader, String generatorClassName) {
         try {
