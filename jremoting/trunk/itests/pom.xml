@@ -35,4 +35,61 @@
 			<artifactId>bcel</artifactId>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<taskdef name="jremoting-proxies"
+									classname="org.codehaus.jremoting.tools.generator.ant.ProxyGenerationTask">
+									<classpath>
+										<path
+											refid="maven.test.classpath" />
+									</classpath>
+								</taskdef>
+
+								<mkdir dir="target/genjava" />
+								<jremoting-proxies genname="Hello"
+									srcgendir="target/genjava"
+									classgendir="${project.build.testOutputDirectory}"
+									verbose="true"
+									interfaces="org.codehaus.jremoting.test.TestInterface"
+									additionalfacades="org.codehaus.jremoting.test.TestInterface3,org.codehaus.jremoting.test.TestInterface2"
+									callbackfacades="org.codehaus.jremoting.test.TestCallBackListener">
+									<classpath>
+										<path
+											refid="maven.test.classpath" />
+										<pathelement
+											location="${project.build.testOutputDirectory}" />
+									</classpath>
+								</jremoting-proxies>
+
+								<jremoting-proxies
+									genname="OurAccountManager" srcgendir="target/genjava"
+									classgendir="${project.build.testOutputDirectory}"
+									verbose="true"
+									interfaces="org.codehaus.jremoting.test.clientcontext.AccountManager">
+									<classpath>
+										<path
+											refid="maven.test.classpath" />
+										<pathelement
+											location="${project.build.testOutputDirectory}" />
+									</classpath>
+								</jremoting-proxies>
+
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>	
 </project>

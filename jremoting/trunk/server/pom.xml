@@ -24,4 +24,32 @@
 			<artifactId>commons-logging</artifactId>
 		</dependency>		
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<rmic base="${project.build.outputDirectory}"
+									classname="org.codehaus.jremoting.server.transports.rmi.RmiInvocationAdapter"
+									stubVersion="1.2">
+									<classpath>
+										<path refid="maven.compile.classpath" />
+									</classpath>
+								</rmic>
+
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
