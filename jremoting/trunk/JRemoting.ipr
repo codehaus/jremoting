@@ -194,6 +194,8 @@
     <option name="INSTRUMENT_CLASSES" value="true" />
     <option name="COPY_FORMS_RUNTIME_TO_OUTPUT" value="true" />
   </component>
-  <UsedPathMacros />
+  <UsedPathMacros>
+    <macro name="M2_REPOSITORY" />
+  </UsedPathMacros>
 </project>
 
