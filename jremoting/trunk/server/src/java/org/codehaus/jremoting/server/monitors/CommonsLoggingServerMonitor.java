@@ -32,11 +32,25 @@ import java.io.IOException;
  */
 public class CommonsLoggingServerMonitor implements ServerMonitor {
 
+    private ServerMonitor delegate;
+
+    public CommonsLoggingServerMonitor(ServerMonitor delegate) {
+        this.delegate = delegate;
+    }
+
+    public CommonsLoggingServerMonitor() {
+        delegate = new NullServerMonitor();
+    }
+
+
+
     public void closeError(Class clazz, String s, IOException e) {
         Log log = LogFactory.getLog(clazz);
         if (log.isDebugEnabled()) {
             log.debug("<closeError>" + s, e);
         }
+        delegate.closeError(clazz, s, e);
+
     }
 
     public void badConnection(Class clazz, String s, BadConnectionException bce) {
@@ -44,6 +58,8 @@ public class CommonsLoggingServerMonitor implements ServerMonitor {
         if (log.isDebugEnabled()) {
             log.debug("<badConnection>" + s, bce);
         }
+        delegate.badConnection(clazz, s, bce);
+
     }
 
     public void classNotFound(Class clazz, ClassNotFoundException e) {
@@ -51,6 +67,8 @@ public class CommonsLoggingServerMonitor implements ServerMonitor {
         if (log.isDebugEnabled()) {
             log.debug("<classNotFound>", e);
         }
+        delegate.classNotFound(clazz, e);
+
     }
 
     public void unexpectedException(Class clazz, String s, Exception e) {
@@ -58,6 +76,7 @@ public class CommonsLoggingServerMonitor implements ServerMonitor {
         if (log.isDebugEnabled()) {
             log.debug("<unexpectedException>" + s, e);
         }
+        delegate.unexpectedException(clazz, s, e);
     }
 
     public void stopServerError(Class clazz, String s, Exception e) {
@@ -65,6 +84,7 @@ public class CommonsLoggingServerMonitor implements ServerMonitor {
         if (log.isErrorEnabled()) {
             log.error("<stopServerError>" + s, e);
         }
+        delegate.stopServerError(clazz, s, e);
     }
 
 }

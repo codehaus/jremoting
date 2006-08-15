@@ -32,29 +32,43 @@ import java.util.logging.Logger;
  */
 public class JavaLoggingServerMonitor implements ServerMonitor {
 
+    private ServerMonitor delegate;
+
+    public JavaLoggingServerMonitor(ServerMonitor delegate) {
+        this.delegate = delegate;
+    }
+
+    public JavaLoggingServerMonitor() {
+        delegate = new NullServerMonitor();
+    }
+
     public void closeError(Class clazz, String s, IOException e) {
         Logger logger = Logger.getLogger(clazz.getName());
         logger.log(Level.INFO, "<closeError>" + s, e);
+        delegate.closeError(clazz, s, e);
     }
 
     public void badConnection(Class clazz, String s, BadConnectionException bce) {
         Logger logger = Logger.getLogger(clazz.getName());
         logger.log(Level.INFO, "<badConnection>" + s, bce);
+        delegate.badConnection(clazz, s, bce);
     }
 
     public void classNotFound(Class clazz, ClassNotFoundException e) {
         Logger logger = Logger.getLogger(clazz.getName());
         logger.log(Level.INFO, "<classNotFound>", e);
+        delegate.classNotFound(clazz, e);
     }
 
     public void unexpectedException(Class clazz, String s, Exception e) {
         Logger logger = Logger.getLogger(clazz.getName());
         logger.log(Level.INFO, "<unexpectedException>" + s, e);
+        delegate.unexpectedException(clazz, s, e);
     }
 
     public void stopServerError(Class clazz, String s, Exception e) {
         Logger logger = Logger.getLogger(clazz.getName());
         logger.log(Level.INFO, "<stopServerError>" + s, e);
-
+        delegate.stopServerError(clazz, s, e);        
     }
 }
