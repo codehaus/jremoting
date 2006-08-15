@@ -411,7 +411,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 er.getReplyException().printStackTrace();
                 */
             } else if (!(response instanceof GarbageCollectionResponse)) {
-                System.err.println("----> Some problem during DGC! Make sure factory is closed. ");
+                System.err.println("----> Some problem during Distributed Garbage Collection! Make sure factory is closed. ");
             }
         }
         super.finalize();

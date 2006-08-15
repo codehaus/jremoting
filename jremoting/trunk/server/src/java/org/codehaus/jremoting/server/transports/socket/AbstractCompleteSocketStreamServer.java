@@ -92,11 +92,11 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
 
             }
         } catch (IOException ioe) {
-            if (accepting & ioe.getMessage().equals("socket closed")) {
+            // some JVM revisions report 'socket closed' , some 'Soclet closed'
+            if (accepting & ioe.getMessage().equalsIgnoreCase("socket closed")) {
                 // do nothing, server shut down during accept();
             } else {
-
-                serverMonitor.unexpectedException(this.getClass(), "AbstractCompleteSocketStreamServer.run(): Some problem connecting client " + "via sockets: ", ioe);
+                serverMonitor.unexpectedException(this.getClass(), "AbstractCompleteSocketStreamServer.run(): Some problem connecting client via sockets: " + ioe.getMessage(), ioe);
             }
         }
     }

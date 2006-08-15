@@ -147,7 +147,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
         } catch (Exception e) {
             e.printStackTrace();
 
-            throw new ClassRetrievalException("Generated class not found in classloader specified : " + e.getMessage());
+            throw new ClassRetrievalException("Generated class not found in classloader specified : '" + e.getMessage() + "', current directory is '" + new File(".").getAbsolutePath() + "'");
         }
 
         if (fis == null) {
@@ -161,7 +161,6 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
             while (-1 != (i = fis.read())) {
                 baos.write(i);
             }
-
             fis.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -169,9 +168,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
             throw new ClassRetrievalException("Error retrieving generated class bytes : " + e.getMessage());
         }
 
-        byte[] bytes = baos.toByteArray();
-
-        return bytes;
+        return baos.toByteArray();
     }
 
     /**
