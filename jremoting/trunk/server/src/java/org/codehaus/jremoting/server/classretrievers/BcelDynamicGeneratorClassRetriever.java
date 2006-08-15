@@ -31,7 +31,7 @@ public class BcelDynamicGeneratorClassRetriever extends AbstractDynamicGenerator
      */
 
     public BcelDynamicGeneratorClassRetriever(ClassLoader classLoader) {
-        super(classLoader, "org.codehaus.jremoting.tools.generator.BCELProxyGeneratorImpl");
+        super(classLoader, "org.codehaus.jremoting.tools.generator.BcelProxyGenerator");
     }
 
     /**
@@ -39,6 +39,6 @@ public class BcelDynamicGeneratorClassRetriever extends AbstractDynamicGenerator
      */
 
     public BcelDynamicGeneratorClassRetriever() {
-        super(BcelDynamicGeneratorClassRetriever.class.getClassLoader(), "org.codehaus.jremoting.tools.generator.BCELProxyGeneratorImpl");
+        super(BcelDynamicGeneratorClassRetriever.class.getClassLoader(), "org.codehaus.jremoting.tools.generator.BcelProxyGenerator");
     }
 }

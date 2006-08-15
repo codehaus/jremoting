@@ -24,7 +24,7 @@ public class ProxyGenerationMojo
     extends AbstractMojo
 {
 
-    private String generatorClass = "org.codehaus.jremoting.tools.generator.ProxyGeneratorImpl";
+    private String generatorClass = "org.codehaus.jremoting.tools.generator.JavacProxyGenerator";
 
     /**
      * Whether to give verbose output

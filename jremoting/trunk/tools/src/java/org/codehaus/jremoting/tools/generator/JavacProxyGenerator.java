@@ -32,14 +32,14 @@ import java.util.Vector;
 
 
 /**
- * Class ProxyGeneratorImpl
+ * Class JavacProxyGenerator
  *
  * @author Paul Hammant
  * @author Mike Miller of www.gac.com
  * @author <a href="mailto:proyal@apache.org">Peter Royal</a>
  * @version $Revision: 1.3 $
  */
-public class ProxyGeneratorImpl extends AbstractProxyGenerator {
+public class JavacProxyGenerator extends AbstractProxyGenerator {
 
     /**
      * Method generate

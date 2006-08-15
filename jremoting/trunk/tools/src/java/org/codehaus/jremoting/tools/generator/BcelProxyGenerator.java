@@ -55,7 +55,7 @@ import java.util.ArrayList;
  * @author <a href="mailto:vinayc77@yahoo.com">Vinay Chandran</a>
  * @version $Revision: 1.2 $
  */
-public class BCELProxyGeneratorImpl extends AbstractProxyGenerator {
+public class BcelProxyGenerator extends AbstractProxyGenerator {
 
     //bcel
     private static final String STUB_PREFIX = "JRemotingGenerated";

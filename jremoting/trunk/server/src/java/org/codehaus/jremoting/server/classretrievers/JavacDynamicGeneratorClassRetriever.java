@@ -30,13 +30,13 @@ public class JavacDynamicGeneratorClassRetriever extends AbstractDynamicGenerato
      * @param classLoader the classloader in which the proxy generater will be found.
      */
     public JavacDynamicGeneratorClassRetriever(ClassLoader classLoader) {
-        super(classLoader, "org.codehaus.jremoting.tools.generator.ProxyGeneratorImpl");
+        super(classLoader, "org.codehaus.jremoting.tools.generator.JavacProxyGenerator");
     }
 
     /**
      * Contruct a Dynamic Class Generator using the classes own classloader.
      */
     public JavacDynamicGeneratorClassRetriever() {
-        super(JavacDynamicGeneratorClassRetriever.class.getClassLoader(), "org.codehaus.jremoting.tools.generator.ProxyGeneratorImpl");
+        super(JavacDynamicGeneratorClassRetriever.class.getClassLoader(), "org.codehaus.jremoting.tools.generator.JavacProxyGenerator");
     }
 }

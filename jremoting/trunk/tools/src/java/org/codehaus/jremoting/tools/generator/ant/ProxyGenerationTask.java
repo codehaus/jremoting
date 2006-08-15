@@ -46,7 +46,7 @@ public class ProxyGenerationTask extends Task {
     protected String genName;
     protected Path classpath;
     protected String verbose = "false";
-    private String generatorClass = "org.codehaus.jremoting.tools.generator.ProxyGeneratorImpl";
+    private String generatorClass = "org.codehaus.jremoting.tools.generator.JavacProxyGenerator";
 
     /**
      * Constructor ProxyGenerationTask
