@@ -17,55 +17,46 @@
  */
 package org.codehaus.jremoting.test;
 
+import java.util.Date;
+
 /**
- * Class TestInterface2Impl
+ * Class TstInterface3Impl
  *
- * @author Paul Hammant
+ * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  * @version * $Revision: 1.2 $
  */
-public class TestInterface2Impl implements TestInterface2 {
+public class TstInterface3Impl extends TstInterface2Impl implements TestInterface3 {
 
-    private String mName;
+    private Date mDob;
 
     /**
-     * Constructor TestInterface2Impl
+     * Constructor TstInterface3Impl
      *
      * @param name
      */
-    public TestInterface2Impl(String name) {
-        mName = name;
+    public TstInterface3Impl(Date dob, String name) {
+        super(name);
+
+        mDob = dob;
     }
 
     /**
-     * Method setName
+     * Method setDOB
      *
-     * @param newThingName
+     * @param dob
      */
-    public void setName(String newThingName) {
-        mName = newThingName;
+    public void setDOB(Date dob) {
+
+        mDob = dob;
+
     }
 
     /**
-     * Method getName
+     * Method getDob
      *
      * @return
      */
-    public String getName() {
-        return mName;
+    public Date getDOB() {
+        return mDob;
     }
-
-    public boolean equals(Object obj) {
-
-        // This is a bit unusual, but it is for the AbstractHelloTestCase testEquals method
-
-        TestInterface2 other = (TestInterface2) obj;
-
-        if (mName.equals("equals-test-one") && other.getName().equals("equals-test-two")) {
-            return true;
-        }
-
-        return false;
-
-    }
-
 }

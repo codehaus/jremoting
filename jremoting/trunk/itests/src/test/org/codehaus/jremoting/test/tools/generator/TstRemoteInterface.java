@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.test.tools.generator;
 
 /**
- * Interface TestRemoteInterface
+ * Interface TstRemoteInterface
  * Test Interface for which the stub would be generated
  * The test is automated in the sense given the input args and expected
  * return of the function and the testcase will test for the same .
@@ -29,7 +29,7 @@ package org.codehaus.jremoting.test.tools.generator;
  * @author <a href="mailto:vinayc@apache.org">Vinay Chandrasekharan</a>
  * @version 1.0
  */
-public interface TestRemoteInterface {
+public interface TstRemoteInterface {
 
     String test0(String name);
 

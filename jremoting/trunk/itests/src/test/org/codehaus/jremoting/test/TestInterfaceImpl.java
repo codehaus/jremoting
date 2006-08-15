@@ -33,7 +33,7 @@ import java.util.Vector;
 public class TestInterfaceImpl implements TestInterface {
 
     Vector ti2Holder = new Vector();
-    TestObject[] testObjects;
+    TstObject[] testObjects;
 
     Vector listeners = new Vector();
 
@@ -84,9 +84,9 @@ public class TestInterfaceImpl implements TestInterface {
         TestInterface2 ti2;
         if (thingName.equals("abc")) {
             // even calls only
-            ti2 = new TestInterface3Impl(new Date(), thingName);
+            ti2 = new TstInterface3Impl(new Date(), thingName);
         } else {
-            ti2 = new TestInterface2Impl(thingName);
+            ti2 = new TstInterface2Impl(thingName);
         }
 
         ti2Holder.add(ti2);
@@ -128,7 +128,7 @@ public class TestInterfaceImpl implements TestInterface {
             }
         }
 
-        return new TestInterface2Impl("Not Found");
+        return new TstInterface2Impl("Not Found");
     }
 
     /**
@@ -155,13 +155,13 @@ public class TestInterfaceImpl implements TestInterface {
      *
      * @return
      */
-    public TestObject[] getTestObjects() {
+    public TstObject[] getTestObjects() {
 
         if (testObjects == null) {
-            testObjects = new TestObject[3];
-            testObjects[0] = new TestObject("AAA");
-            testObjects[1] = new TestObject("BBB");
-            testObjects[2] = new TestObject("CCC");
+            testObjects = new TstObject[3];
+            testObjects[0] = new TstObject("AAA");
+            testObjects[1] = new TstObject("BBB");
+            testObjects[2] = new TstObject("CCC");
         }
 
         return testObjects;
@@ -184,9 +184,9 @@ public class TestInterfaceImpl implements TestInterface {
      */
     public void makeNewTestObjectNames() {
 
-        testObjects[0] = new TestObject("aAa");
-        testObjects[1] = new TestObject("bBb");
-        testObjects[2] = new TestObject("cCc");
+        testObjects[0] = new TstObject("aAa");
+        testObjects[1] = new TstObject("bBb");
+        testObjects[2] = new TstObject("cCc");
     }
 
     protected void finalize() throws Throwable {

@@ -22,20 +22,20 @@ import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 
 /**
- * Class MemoryLeakClientTest
+ * Class MemoryLeakClientTst
  *
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  * @version $Revision: 1.2 $
  * @todo - turn into a TestCase
  */
-public class MemoryLeakClientTest {
+public class MemoryLeakClientTst {
 
     /**
-     * Constructor MemoryLeakClientTest
+     * Constructor MemoryLeakClientTst
      *
      * @param ml
      */
-    public MemoryLeakClientTest(MemoryLeak ml) {
+    public MemoryLeakClientTst(MemoryLeak ml) {
 
         // if you enable the vector, then serverside
         // memory usage ramps as MemoryLeak instances
@@ -77,7 +77,7 @@ public class MemoryLeakClientTest {
 
         MemoryLeak ml = (MemoryLeak) af.lookup("MemLeak");
 
-        new MemoryLeakClientTest(ml);
+        new MemoryLeakClientTst(ml);
         af.close();
     }
 }

@@ -104,7 +104,7 @@ public interface TestInterface {
      *
      * @return
      */
-    TestObject[] getTestObjects();
+    TstObject[] getTestObjects();
 
     /**
      * Method changeTestObjectNames

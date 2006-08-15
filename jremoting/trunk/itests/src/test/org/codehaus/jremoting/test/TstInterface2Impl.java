@@ -17,25 +17,32 @@
  */
 package org.codehaus.jremoting.test;
 
-import java.io.Serializable;
-
 /**
- * Class TestObject
+ * Class TstInterface2Impl
  *
- * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
- * @version $Revision: 1.2 $
+ * @author Paul Hammant
+ * @version * $Revision: 1.2 $
  */
-public class TestObject implements Serializable {
+public class TstInterface2Impl implements TestInterface2 {
 
     private String mName;
 
     /**
-     * Constructor TestObject
+     * Constructor TstInterface2Impl
      *
      * @param name
      */
-    public TestObject(String name) {
+    public TstInterface2Impl(String name) {
         mName = name;
+    }
+
+    /**
+     * Method setName
+     *
+     * @param newThingName
+     */
+    public void setName(String newThingName) {
+        mName = newThingName;
     }
 
     /**
@@ -47,12 +54,18 @@ public class TestObject implements Serializable {
         return mName;
     }
 
-    /**
-     * Method setName
-     *
-     * @param name
-     */
-    public void setName(String name) {
-        mName = name;
+    public boolean equals(Object obj) {
+
+        // This is a bit unusual, but it is for the AbstractHelloTestCase testEquals method
+
+        TestInterface2 other = (TestInterface2) obj;
+
+        if (mName.equals("equals-test-one") && other.getName().equals("equals-test-two")) {
+            return true;
+        }
+
+        return false;
+
     }
+
 }

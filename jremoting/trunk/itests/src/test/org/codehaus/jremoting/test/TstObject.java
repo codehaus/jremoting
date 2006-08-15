@@ -17,46 +17,42 @@
  */
 package org.codehaus.jremoting.test;
 
-import java.util.Date;
+import java.io.Serializable;
 
 /**
- * Class TestInterface3Impl
+ * Class TstObject
  *
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
- * @version * $Revision: 1.2 $
+ * @version $Revision: 1.2 $
  */
-public class TestInterface3Impl extends TestInterface2Impl implements TestInterface3 {
+public class TstObject implements Serializable {
 
-    private Date mDob;
+    private String mName;
 
     /**
-     * Constructor TestInterface3Impl
+     * Constructor TstObject
      *
      * @param name
      */
-    public TestInterface3Impl(Date dob, String name) {
-        super(name);
-
-        mDob = dob;
+    public TstObject(String name) {
+        mName = name;
     }
 
     /**
-     * Method setDOB
-     *
-     * @param dob
-     */
-    public void setDOB(Date dob) {
-
-        mDob = dob;
-
-    }
-
-    /**
-     * Method getDob
+     * Method getName
      *
      * @return
      */
-    public Date getDOB() {
-        return mDob;
+    public String getName() {
+        return mName;
+    }
+
+    /**
+     * Method setName
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        mName = name;
     }
 }

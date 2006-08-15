@@ -46,7 +46,7 @@ public class BCELProxyGeneratorTestCase extends TestCase {
     /**
      * ********************* TestInterface ******************
      */
-    public static final Class testInterfaceClass = TestRemoteInterface.class;
+    public static final Class testInterfaceClass = TstRemoteInterface.class;
 
     public BCELProxyGeneratorTestCase(String testName) {
         super(testName);
@@ -101,7 +101,7 @@ public class BCELProxyGeneratorTestCase extends TestCase {
         if (generatedProxyClass == null) {
             testGeneratedClassNameOfProxy();
         }
-        TestInvocationHandler invocationHandler = new TestInvocationHandler(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger());
+        TstInvocationHandler invocationHandler = new TstInvocationHandler(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger());
         //create the factory;
         factory = new ClientSideClassFactory(new DirectHostContext(invocationHandler), false);
         DefaultProxyHelper defaultProxyHelper = new DefaultProxyHelper(factory, invocationHandler, "PublishedName", "ObjectName", new Long(1010), new Long(3030));

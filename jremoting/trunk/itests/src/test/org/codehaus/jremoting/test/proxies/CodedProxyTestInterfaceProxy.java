@@ -21,7 +21,7 @@ import org.codehaus.jremoting.test.CustomSerializableParam;
 import org.codehaus.jremoting.test.TestCallBackListener;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
-import org.codehaus.jremoting.test.TestObject;
+import org.codehaus.jremoting.test.TstObject;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
@@ -138,7 +138,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      *
      * @return
      */
-    public TestObject[] getTestObjects() {
+    public TstObject[] getTestObjects() {
         return actualImpl.getTestObjects();
     }
 

@@ -201,12 +201,12 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingRemotingTes
     }
 
     public void testBugParadeBugNumber4499841() throws Exception {
-        TestObject[] tos = testClient.getTestObjects();
+        TstObject[] tos = testClient.getTestObjects();
         testClient.changeTestObjectNames();
-        TestObject[] tos2 = testClient.getTestObjects();
+        TstObject[] tos2 = testClient.getTestObjects();
         for (int i = 0; i < tos.length; i++) {
-            TestObject to = tos[i];
-            TestObject to2 = tos2[i];
+            TstObject to = tos[i];
+            TstObject to2 = tos2[i];
             if (testForBug4499841) {
                 assertEquals(to.getName().toLowerCase(), to2.getName());
             }

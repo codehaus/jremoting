@@ -33,15 +33,15 @@ import org.codehaus.jremoting.server.ServerInvocationHandler;
 import java.lang.reflect.Method;
 
 /**
- * TestInvocationHandler
+ * TstInvocationHandler
  *
  * @author <a href="mailto:vinayc@apache">Vinay Chandrasekharan</a>
  * @version 1.0
  */
-public class TestInvocationHandler extends AbstractClientInvocationHandler implements ServerInvocationHandler {
+public class TstInvocationHandler extends AbstractClientInvocationHandler implements ServerInvocationHandler {
 
 
-    public TestInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+    public TstInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
         super(threadPool, clientMonitor, connectionPinger);
     }
 
@@ -55,20 +55,20 @@ public class TestInvocationHandler extends AbstractClientInvocationHandler imple
         } else if (request instanceof MethodRequest) {
             MethodRequest methodRequest = (MethodRequest) request;
             //System.out.println("methodRequest[" + methodRequest.getMethodSignature() + "]");
-            Method[] methods = TestRemoteInterface.class.getMethods();
+            Method[] methods = TstRemoteInterface.class.getMethods();
             for (int i = 0; i < methods.length; i++) {
                 try {
                     if (methodRequest.getMethodSignature().indexOf(methods[i].getName()) != -1) {
                         Object[] _arguments = methodRequest.getArgs();
                         for (int j = 0; j < _arguments.length; j++) {
 
-                            if (!TestRemoteInterface.class.getField(methods[i].getName() + "_arg" + j).get(null).equals(_arguments[j])) {
-                                return new ExceptionResponse(new Exception(methodRequest.getMethodSignature() + ": arguments not marshalled correctly \n expected[" + TestRemoteInterface.class.getField(methods[i].getName() + "_arg" + j).get(null) + "] received[" + _arguments[j] + "]"));
+                            if (!TstRemoteInterface.class.getField(methods[i].getName() + "_arg" + j).get(null).equals(_arguments[j])) {
+                                return new ExceptionResponse(new Exception(methodRequest.getMethodSignature() + ": arguments not marshalled correctly \n expected[" + TstRemoteInterface.class.getField(methods[i].getName() + "_arg" + j).get(null) + "] received[" + _arguments[j] + "]"));
                             }
                         }
                         MethodResponse methodReply = null;
                         if (methods[i].getReturnType() != Void.TYPE) {
-                            methodReply = new MethodResponse(TestRemoteInterface.class.getField(methods[i].getName() + "_retValue").get(null));
+                            methodReply = new MethodResponse(TstRemoteInterface.class.getField(methods[i].getName() + "_retValue").get(null));
                         } else {
                             methodReply = new MethodResponse();
                         }
