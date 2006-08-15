@@ -31,11 +31,23 @@ import java.io.IOException;
  */
 public class Log4JServerMonitor implements ServerMonitor {
 
+
+    private ServerMonitor delegate;
+
+    public Log4JServerMonitor(ServerMonitor delegate) {
+        this.delegate = delegate;
+    }
+
+    public Log4JServerMonitor() {
+        delegate = new NullServerMonitor();
+    }
+
     public void closeError(Class clazz, String s, IOException e) {
         Logger logger = Logger.getLogger(clazz);
         if (logger.isDebugEnabled()) {
             logger.debug("<closeError>" + s, e);
         }
+        delegate.closeError(clazz, s, e);
     }
 
     public void badConnection(Class clazz, String s, BadConnectionException bce) {
@@ -43,6 +55,7 @@ public class Log4JServerMonitor implements ServerMonitor {
         if (logger.isDebugEnabled()) {
             logger.debug("<badConnection>" + s, bce);
         }
+        delegate.badConnection(clazz, s, bce);
     }
 
     public void classNotFound(Class clazz, ClassNotFoundException e) {
@@ -50,6 +63,7 @@ public class Log4JServerMonitor implements ServerMonitor {
         if (logger.isDebugEnabled()) {
             logger.debug("<classNotFound>", e);
         }
+        delegate.classNotFound(clazz, e);
     }
 
     public void unexpectedException(Class clazz, String s, Exception e) {
@@ -57,10 +71,12 @@ public class Log4JServerMonitor implements ServerMonitor {
         if (logger.isDebugEnabled()) {
             logger.debug("<unexpectedException>" + s, e);
         }
+        delegate.unexpectedException(clazz, s, e);
     }
 
     public void stopServerError(Class clazz, String s, Exception e) {
         Logger logger = Logger.getLogger(clazz);
         logger.error("<stopServerError>" + s, e);
+        delegate.stopServerError(clazz, s, e);
     }
 }
