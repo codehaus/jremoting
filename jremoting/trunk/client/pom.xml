@@ -15,5 +15,9 @@
 			<artifactId>jremoting-api</artifactId>
 			<version>${pom.version}</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>xstream</groupId>
+            <artifactId>xstream</artifactId>
+        </dependency>
+    </dependencies>
 </project>

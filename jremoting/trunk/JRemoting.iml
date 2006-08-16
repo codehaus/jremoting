@@ -42,7 +42,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../Desktop/asm-3.0_RC1/lib/asm-util-3.0_RC1.jar!/" />
+          <root url="jar://$M2_REPOSITORY$/xstream/xstream/1.1.2/xstream-1.1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -51,7 +51,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../Desktop/asm-3.0_RC1/lib/asm-3.0_RC1.jar!/" />
+          <root url="jar://$M2_REPOSITORY$/xpp3/xpp3/1.1.3.4-RC8/xpp3-1.1.3.4-RC8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -60,7 +60,34 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../Desktop/asm-3.0_RC1/lib/asm-commons-3.0_RC1.jar!/" />
+          <root url="jar://$M2_REPOSITORY$/log4j/log4j/1.2.8/log4j-1.2.8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$M2_REPOSITORY$/commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$M2_REPOSITORY$/bcel/bcel/5.1/bcel-5.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$M2_REPOSITORY$/ant/ant/1.6.5/ant-1.6.5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
