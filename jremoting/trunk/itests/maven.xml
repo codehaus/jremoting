@@ -5,7 +5,7 @@
     <postGoal name="test:compile">
 
         <!-- /**Generate proxies for test cases */ -->
-        <ant:taskdef name="jremoting-proxies" classname="org.codehaus.jremoting.tools.generator.ant.ProxyGenerationTask">
+        <ant:taskdef name="jremoting-proxies" classname="org.codehaus.jremoting.tools.generator.ant.ProxyGeneratorTask">
             <ant:classpath>
                 <ant:path refid="maven.dependency.classpath"/>
             </ant:classpath>

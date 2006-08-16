@@ -31,12 +31,12 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 /**
- * Class ProxyGenerationTask
- *
+ * Ant task to generate proxies
+ * 
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ProxyGenerationTask extends Task {
+public class ProxyGeneratorTask extends Task {
 
     protected String[] interfacesToExpose;
     protected String[] additionalFacades;
@@ -49,9 +49,9 @@ public class ProxyGenerationTask extends Task {
     private String generatorClass = "org.codehaus.jremoting.tools.generator.JavacProxyGenerator";
 
     /**
-     * Constructor ProxyGenerationTask
+     * Constructor ProxyGeneratorTask
      */
-    public ProxyGenerationTask() {
+    public ProxyGeneratorTask() {
     }
 
     /**

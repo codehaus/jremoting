@@ -49,7 +49,7 @@
 						<configuration>
 							<tasks>
 								<taskdef name="jremoting-proxies"
-									classname="org.codehaus.jremoting.tools.generator.ant.ProxyGenerationTask">
+									classname="org.codehaus.jremoting.tools.generator.ant.ProxyGeneratorTask">
 									<classpath>
 										<path
 											refid="maven.test.classpath" />
