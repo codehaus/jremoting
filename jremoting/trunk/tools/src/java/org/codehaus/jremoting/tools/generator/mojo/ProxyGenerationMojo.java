@@ -1,4 +1,4 @@
-package org.codehaus.jremoting.tools.generator.m2;
+package org.codehaus.jremoting.tools.generator.mojo;
 
 import java.io.File;
 import java.util.StringTokenizer;
