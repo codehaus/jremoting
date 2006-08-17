@@ -50,11 +50,11 @@
 						<configuration>
 							<genName>Hello</genName>
 							<interfaces>org.codehaus.jremoting.test.TestInterface</interfaces>
-							<srcGenDir>target/genjava</srcGenDir>
+							<srcGenDir>${project.build.testOutputDirectory}</srcGenDir>
 							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
-							<verbose>true</verbose>
 							<additionalfacades>org.codehaus.jremoting.test.TestInterface3,org.codehaus.jremoting.test.TestInterface2</additionalfacades>
 							<callbackfacades>org.codehaus.jremoting.test.TestCallBackListener</callbackfacades>
+							<verbose>true</verbose>
 						</configuration>
 					</execution>
 					<execution>
@@ -66,7 +66,7 @@
 						<configuration>
 							<genName>OurAccountManager</genName>
 							<interfaces>org.codehaus.jremoting.test.clientcontext.AccountManager</interfaces>
-							<srcGenDir>target/genjava</srcGenDir>
+							<srcGenDir>${project.build.testOutputDirectory}</srcGenDir>
 							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
 							<verbose>true</verbose>
 						</configuration>

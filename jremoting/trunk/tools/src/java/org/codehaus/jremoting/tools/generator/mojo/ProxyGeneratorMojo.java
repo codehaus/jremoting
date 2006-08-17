@@ -24,8 +24,6 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
-import java.util.Vector;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -42,7 +40,7 @@ import org.codehaus.jremoting.server.PublicationDescriptionItem;
  * @author Mauro Talevi
  * @goal generate
  * @phase compile
- * @requiresDependencyResolution test-compile
+ * @requiresDependencyResolution test
  */
 public class ProxyGeneratorMojo
     extends AbstractMojo
@@ -53,19 +51,13 @@ public class ProxyGeneratorMojo
     private String generatorClass = "org.codehaus.jremoting.tools.generator.JavacProxyGenerator";
 
     /**
-     * Compile classpath.
+     * Test classpath.
      *
-     * @parameter expression="${project.compileClasspathElements}"
+     * @parameter expression="${project.testClasspathElements}"
      * @required
      * @readonly
      */
     protected List classpathElements;
-
-    /**
-     * Whether to give verbose output
-     * @parameter
-     */
-    protected boolean verbose;
 
     /**
      * The name of the service used to generate stub class names
@@ -101,6 +93,18 @@ public class ProxyGeneratorMojo
      */
     protected String additionalFacades;
 
+    /**
+     * Callback Facades. When encounted in an object tree, they are passed by ref not value to the client
+     * @parameter
+     */
+    protected String callbackFacades;
+    
+    /**
+     * Whether to give verbose output
+     * @parameter
+     */
+    protected boolean verbose;
+
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -132,8 +136,7 @@ public class ProxyGeneratorMojo
         try {
             proxyGenerator = (ProxyGenerator)Class.forName(generatorClass).newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(
+            throw new MojoExecutionException(
                     "Failed to create ProxyGenerator "+generatorClass, e);
         }
 
@@ -146,37 +149,20 @@ public class ProxyGeneratorMojo
             proxyGenerator.setClasspath(classpath);
             getLog().debug("ProxyGenerator classpath: " + classpath);
 
-            String[] interfacesToExposeArray = fromCSV(interfaces);
-            String[] additionalFacadesArray = fromCSV(additionalFacades);
-
-            PublicationDescriptionItem[] interfacesToExpose = new PublicationDescriptionItem[interfacesToExposeArray.length];
             ClassLoader classLoader = createClassLoader(classpathElements);
-            
-            for (int i = 0; i < interfacesToExposeArray.length; i++) {
-                String cn = interfacesToExposeArray[i];
-                interfacesToExpose[i] = new PublicationDescriptionItem(
-                        classLoader.loadClass(cn));
-            }
 
-            proxyGenerator.setInterfacesToExpose(interfacesToExpose);
+            proxyGenerator.setInterfacesToExpose(createPublicationDescriptionItems(fromCSV(interfaces), classLoader));
 
             if (additionalFacades != null) {
-                PublicationDescriptionItem[] additionalFacades = new PublicationDescriptionItem[additionalFacadesArray.length];
-
-                for (int i = 0; i < additionalFacadesArray.length; i++) {
-                    String cn = additionalFacadesArray[i];
-
-                    additionalFacades[i] = new PublicationDescriptionItem(
-                            classLoader.loadClass(cn));
-                }
-
-                proxyGenerator.setAdditionalFacades(additionalFacades);
+                proxyGenerator.setAdditionalFacades(createPublicationDescriptionItems(fromCSV(additionalFacades), classLoader));
+            }
+            
+            if (callbackFacades != null) {
+                proxyGenerator.setCallbackFacades(createPublicationDescriptionItems(fromCSV(callbackFacades), classLoader));
             }
 
-            ClassLoader classLoader2 = this.getClass().getClassLoader();
-
-            proxyGenerator.generateSrc(classLoader2);
-            proxyGenerator.generateClass(classLoader2);
+            proxyGenerator.generateSrc(classLoader);
+            proxyGenerator.generateClass(classLoader);
         } catch (ClassNotFoundException e) {
             throw new MojoExecutionException("Class not found: "
                     + e.getMessage(), e);
@@ -187,13 +173,22 @@ public class ProxyGeneratorMojo
             throw new MojoExecutionException("Proxy generation error: "
                     + e.getMessage(), e);
         }
+    }
+
+    private PublicationDescriptionItem[] createPublicationDescriptionItems(String[] classNames, ClassLoader classLoader) throws ClassNotFoundException {
+        PublicationDescriptionItem[] items = new PublicationDescriptionItem[classNames.length];
+        for (int i = 0; i < classNames.length; i++) {
+            items[i] = new PublicationDescriptionItem(
+                    classLoader.loadClass(classNames[i]));
+        }
+        return items;
     }    
     
     private ClassLoader createClassLoader(List classpathElements) throws MalformedURLException {
         return new URLClassLoader(toClasspathURLs(classpathElements));
     }
 
-    protected static URL[] toClasspathURLs(List classpathElements)
+    private URL[] toClasspathURLs(List classpathElements)
             throws MalformedURLException {
         List urls = new ArrayList();
         if (classpathElements != null) {
