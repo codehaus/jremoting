@@ -38,54 +38,37 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
+				<groupId>${pom.groupId}</groupId>
+				<artifactId>jremoting-tools</artifactId>
 				<executions>
 					<execution>
+						<id>hello</id>
 						<phase>test-compile</phase>
 						<goals>
-							<goal>run</goal>
+							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<tasks>
-								<taskdef name="jremoting-proxies"
-									classname="org.codehaus.jremoting.tools.generator.ant.ProxyGeneratorTask">
-									<classpath>
-										<path
-											refid="maven.test.classpath" />
-									</classpath>
-								</taskdef>
-
-								<mkdir dir="target/genjava" />
-								<jremoting-proxies genname="Hello"
-									srcgendir="target/genjava"
-									classgendir="${project.build.testOutputDirectory}"
-									verbose="true"
-									interfaces="org.codehaus.jremoting.test.TestInterface"
-									additionalfacades="org.codehaus.jremoting.test.TestInterface3,org.codehaus.jremoting.test.TestInterface2"
-									callbackfacades="org.codehaus.jremoting.test.TestCallBackListener">
-									<classpath>
-										<path
-											refid="maven.test.classpath" />
-										<pathelement
-											location="${project.build.testOutputDirectory}" />
-									</classpath>
-								</jremoting-proxies>
-
-								<jremoting-proxies
-									genname="OurAccountManager" srcgendir="target/genjava"
-									classgendir="${project.build.testOutputDirectory}"
-									verbose="true"
-									interfaces="org.codehaus.jremoting.test.clientcontext.AccountManager">
-									<classpath>
-										<path
-											refid="maven.test.classpath" />
-										<pathelement
-											location="${project.build.testOutputDirectory}" />
-									</classpath>
-								</jremoting-proxies>
-
-							</tasks>
+							<genName>Hello</genName>
+							<interfaces>org.codehaus.jremoting.test.TestInterface</interfaces>
+							<srcGenDir>target/genjava</srcGenDir>
+							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
+							<verbose>true</verbose>
+							<additionalfacades>org.codehaus.jremoting.test.TestInterface3,org.codehaus.jremoting.test.TestInterface2</additionalfacades>
+							<callbackfacades>org.codehaus.jremoting.test.TestCallBackListener</callbackfacades>
+						</configuration>
+					</execution>
+					<execution>
+						<id>AccountManager</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<genName>OurAccountManager</genName>
+							<interfaces>org.codehaus.jremoting.test.clientcontext.AccountManager</interfaces>
+							<srcGenDir>target/genjava</srcGenDir>
+							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
+							<verbose>true</verbose>
 						</configuration>
 					</execution>
 				</executions>

@@ -18,15 +18,21 @@
 package org.codehaus.jremoting.tools.generator.mojo;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.jremoting.server.ProxyGenerationException;
 import org.codehaus.jremoting.server.ProxyGenerator;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
-import org.codehaus.jremoting.server.ProxyGenerationException;
 
 
 /**
@@ -36,27 +42,44 @@ import org.codehaus.jremoting.server.ProxyGenerationException;
  * @author Mauro Talevi
  * @goal generate
  * @phase compile
- * @requiresDependencyResolution compile
+ * @requiresDependencyResolution test-compile
  */
 public class ProxyGeneratorMojo
     extends AbstractMojo
 {
 
+    private static final String COMMA = ",";
+
     private String generatorClass = "org.codehaus.jremoting.tools.generator.JavacProxyGenerator";
+
+    /**
+     * Compile classpath.
+     *
+     * @parameter expression="${project.compileClasspathElements}"
+     * @required
+     * @readonly
+     */
+    protected List classpathElements;
 
     /**
      * Whether to give verbose output
      * @parameter
-     * @required
      */
     protected boolean verbose;
 
     /**
-     * The comma separated classpath to use while making stubs
+     * The name of the service used to generate stub class names
      * @parameter
      * @required
      */
-    protected String classpath;
+    protected String genName;
+
+    /**
+     * The principal facade that is being published
+     * @parameter
+     * @required
+     */
+    protected String interfaces;
 
     /**
      * The directory to use for temporary source
@@ -73,24 +96,8 @@ public class ProxyGeneratorMojo
     protected File classGenDir;
 
     /**
-     * The name of the service used to generate stub class names
-     * @parameter
-     * @required
-     */
-    protected String genName;
-
-
-    /**
-     * The principal facade that is being published
-     * @parameter
-     * @required
-     */
-    protected String interfacesToExpose;
-
-    /**
      * Additional Facades. When encounted in an object tree, they are passed by ref not value to the client
      * @parameter
-     * @required
      */
     protected String additionalFacades;
 
@@ -99,94 +106,122 @@ public class ProxyGeneratorMojo
     {
         getLog().debug( "Generating JRemoting Stubs.");
 
-        String[] interfacesToExposeArray;
-        String[] additionalFacadesArray;
-        String[] callbackFacades;
 
-        StringTokenizer st = new StringTokenizer(interfacesToExpose, ",");
-        Vector strings = new Vector();
-        while (st.hasMoreTokens()) {
-            strings.add(st.nextToken().trim());
+        if (genName == null) {
+            throw new MojoExecutionException(
+                    "Specify the name to use for lookup");
         }
-        interfacesToExposeArray = new String[strings.size()];
-        strings.copyInto(interfacesToExposeArray);
 
-        st = new StringTokenizer(additionalFacades, ",");
-        strings = new Vector();
-        while (st.hasMoreTokens()) {
-            strings.add(st.nextToken().trim());
+        if (interfaces == null) {
+            throw new MojoExecutionException(
+                    "Specify at least one interface to expose");
         }
-        additionalFacadesArray = new String[strings.size()];
-        strings.copyInto(additionalFacadesArray);
 
+        if (srcGenDir == null) {
+            throw new MojoExecutionException(
+                    "Specify the directory to generate Java source in");
+        }
 
-            if (interfacesToExpose == null) {
-                throw new MojoExecutionException("Specify at least one interface to expose");
+        if (classGenDir == null) {
+            throw new MojoExecutionException(
+                    "Specify the directory to generate Java classes in");
+        }
+
+        ProxyGenerator proxyGenerator;
+
+        try {
+            proxyGenerator = (ProxyGenerator)Class.forName(generatorClass).newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(
+                    "Failed to create ProxyGenerator "+generatorClass, e);
+        }
+
+        try {
+            proxyGenerator.setGenName(genName);
+            proxyGenerator.setSrcGenDir(srcGenDir.getAbsolutePath());
+            proxyGenerator.setClassGenDir(classGenDir.getAbsolutePath());
+            proxyGenerator.verbose(Boolean.valueOf(verbose).booleanValue());
+            String classpath = toCSV(classpathElements);
+            proxyGenerator.setClasspath(classpath);
+            getLog().debug("ProxyGenerator classpath: " + classpath);
+
+            String[] interfacesToExposeArray = fromCSV(interfaces);
+            String[] additionalFacadesArray = fromCSV(additionalFacades);
+
+            PublicationDescriptionItem[] interfacesToExpose = new PublicationDescriptionItem[interfacesToExposeArray.length];
+            ClassLoader classLoader = createClassLoader(classpathElements);
+            
+            for (int i = 0; i < interfacesToExposeArray.length; i++) {
+                String cn = interfacesToExposeArray[i];
+                interfacesToExpose[i] = new PublicationDescriptionItem(
+                        classLoader.loadClass(cn));
             }
 
-            if (srcGenDir == null) {
-                throw new MojoExecutionException("Specify the directory to generate Java source in");
-            }
+            proxyGenerator.setInterfacesToExpose(interfacesToExpose);
 
-            if (classGenDir == null) {
-                throw new MojoExecutionException("Specify the directory to generate Java classes in");
-            }
+            if (additionalFacades != null) {
+                PublicationDescriptionItem[] additionalFacades = new PublicationDescriptionItem[additionalFacadesArray.length];
 
-            if (genName == null) {
-                throw new MojoExecutionException("Specify the name to use for lookup");
-            }
+                for (int i = 0; i < additionalFacadesArray.length; i++) {
+                    String cn = additionalFacadesArray[i];
 
-            ProxyGenerator proxyGenerator;
-
-            try {
-                Class proxyGenClass = Class.forName(generatorClass);
-                proxyGenerator = (ProxyGenerator) proxyGenClass.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                throw new RuntimeException("PrimaryGenerator Impl jar not in classpath");
-            }
-
-            try {
-                proxyGenerator.setSrcGenDir(srcGenDir.getAbsolutePath());
-                proxyGenerator.setClassGenDir(classGenDir.getAbsolutePath());
-                proxyGenerator.setGenName(genName);
-                proxyGenerator.verbose(Boolean.valueOf(verbose).booleanValue());
-                proxyGenerator.setClasspath(classpath);
-
-                PublicationDescriptionItem[] interfacesToExpose = new PublicationDescriptionItem[interfacesToExposeArray.length];
-                ClassLoader classLoader = null; // TODO new AntClassLoader(getProject(), classpath);
-
-                for (int i = 0; i < interfacesToExposeArray.length; i++) {
-                    String cn = interfacesToExposeArray[i];
-                    interfacesToExpose[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
+                    additionalFacades[i] = new PublicationDescriptionItem(
+                            classLoader.loadClass(cn));
                 }
 
-                proxyGenerator.setInterfacesToExpose(interfacesToExpose);
-
-                if (additionalFacades != null) {
-                    PublicationDescriptionItem[] additionalFacades = new PublicationDescriptionItem[additionalFacadesArray.length];
-
-                    for (int i = 0; i < additionalFacadesArray.length; i++) {
-                        String cn = additionalFacadesArray[i];
-
-                        additionalFacades[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
-                    }
-
-                    proxyGenerator.setAdditionalFacades(additionalFacades);
-                }
-
-                ClassLoader classLoader2 = this.getClass().getClassLoader();
-
-                proxyGenerator.generateSrc(classLoader2);
-                proxyGenerator.generateClass(classLoader2);
-            } catch (ClassNotFoundException cnfe) {
-                cnfe.printStackTrace();
-
-                throw new MojoExecutionException("Class not found : " + cnfe.getMessage());
-            } catch (ProxyGenerationException sge) {
-                throw new MojoExecutionException("Proxy Gerneation error : " + sge.getMessage());
+                proxyGenerator.setAdditionalFacades(additionalFacades);
             }
+
+            ClassLoader classLoader2 = this.getClass().getClassLoader();
+
+            proxyGenerator.generateSrc(classLoader2);
+            proxyGenerator.generateClass(classLoader2);
+        } catch (ClassNotFoundException e) {
+            throw new MojoExecutionException("Class not found: "
+                    + e.getMessage(), e);
+        } catch (MalformedURLException e) {
+            throw new MojoExecutionException("Malformed classpath URLs: "
+                    + e.getMessage(), e);
+        } catch (ProxyGenerationException e) {
+            throw new MojoExecutionException("Proxy generation error: "
+                    + e.getMessage(), e);
+        }
+    }    
+    
+    private ClassLoader createClassLoader(List classpathElements) throws MalformedURLException {
+        return new URLClassLoader(toClasspathURLs(classpathElements));
+    }
+
+    protected static URL[] toClasspathURLs(List classpathElements)
+            throws MalformedURLException {
+        List urls = new ArrayList();
+        if (classpathElements != null) {
+            for (Iterator i = classpathElements.iterator(); i.hasNext();) {
+                String classpathElement = (String) i.next();
+                urls.add(new File(classpathElement).toURL());
+            }
+        }
+        return (URL[]) urls.toArray(new URL[urls.size()]);
+    }
+
+    private String[] fromCSV(String csv) {
+        if ( csv == null ) {
+            return new String[0];
+        }
+        return csv.split(COMMA);
+    }
+
+    private String toCSV(List classpathElements) {
+        StringBuffer sb = new StringBuffer();
+        for (Iterator i = classpathElements.iterator(); i.hasNext(); ){
+            String path = (String)i.next();
+            sb.append(path);
+            if ( i.hasNext() ){
+                sb.append(COMMA);
+            }
+        }        
+        return sb.toString();
     }
 
 }
