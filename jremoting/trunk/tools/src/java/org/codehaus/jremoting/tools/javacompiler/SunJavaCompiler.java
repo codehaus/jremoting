@@ -40,6 +40,9 @@ public class SunJavaCompiler extends JavaCompiler {
         Main compiler = new Main(out, "jsp->javac");
         String[] args;
         args = new String[]{"-classpath", classpath, "-d", outdir, source};
+        System.err.println("-cp " + classpath);
+        System.err.println("-d " + outdir);
+        System.err.println("-src " + source);
         return compiler.compile(args);
     }
 }
