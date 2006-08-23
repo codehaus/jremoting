@@ -30,17 +30,29 @@ import java.lang.reflect.InvocationTargetException;
  * @version $Revision: 1.2 $
  */
 public class ClientSideClassFactory extends AbstractFactory {
+    private ClassLoader classLoader;
 
     public ClientSideClassFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
         super(hostContext, allowOptimize);
     }
+
+    public ClientSideClassFactory(HostContext hostContext, boolean allowOptimize, ClassLoader classLoader) throws ConnectionException {
+        super(hostContext, allowOptimize);
+        this.classLoader = classLoader;
+    }
+
 
     protected Class getFacadeClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
 
         String className = "JRemotingGenerated" + publishedServiceName + "_" + objectName;
 
         try {
-            return Thread.currentThread().getContextClassLoader().loadClass(className);
+            if (classLoader == null) {
+                return Thread.currentThread().getContextClassLoader().loadClass(className);
+            } else {
+                return classLoader.loadClass(className);
+
+            }
         } catch (ClassNotFoundException e) {
             return this.getClass().getClassLoader().loadClass(className);
         }

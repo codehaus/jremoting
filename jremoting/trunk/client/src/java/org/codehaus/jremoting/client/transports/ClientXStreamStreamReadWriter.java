@@ -55,6 +55,8 @@ public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
 
         String xml = xStream.toXML(request);
 
+        //System.out.println("--> req " + xml);
+
         printWriter.write(xml + "\n");
         printWriter.flush();
     }
@@ -76,6 +78,7 @@ public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
 
         // todo ClassLoader magic ?  or use Reader with XStream direct ?
         String expected = res.toString() + "\n";
+        //System.out.println("--> reply " + expected);
         try {
             return (Response) xStream.fromXML(expected);
         } catch (ConversionException e) {
