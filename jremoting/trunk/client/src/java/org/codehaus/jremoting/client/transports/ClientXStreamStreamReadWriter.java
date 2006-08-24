@@ -1,3 +1,19 @@
+/* ====================================================================
+ * Copyright 2005-2006 JRemoting Committers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.client.ClientStreamReadWriter;
@@ -12,7 +28,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
- * Class ClientCustomStreamReadWriter
+ * Class ClientXStreamStreamReadWriter
  *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
@@ -26,14 +42,6 @@ public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
 
 
 
-    /**
-     * Constructor ClientCustomStreamReadWriter
-     *
-     * @param inputStream
-     * @param outputStream
-     * @param interfacesClassLoader
-     * @throws org.codehaus.jremoting.api.ConnectionException
-     */
     public ClientXStreamStreamReadWriter(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
 
         printWriter = new PrintWriter(new BufferedOutputStream(outputStream));
@@ -51,17 +59,15 @@ public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
         return r;
     }
 
-    private void writeRequest(Request request) throws IOException {
+    private void writeRequest(Request request) {
 
         String xml = xStream.toXML(request);
-
-        //System.out.println("--> req " + xml);
 
         printWriter.write(xml + "\n");
         printWriter.flush();
     }
 
-    private Response readReply() throws IOException, ClassNotFoundException {
+    private Response readReply() throws IOException {
 
         StringBuffer res = new StringBuffer();
         String line = lineNumberReader.readLine();
@@ -78,7 +84,6 @@ public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
 
         // todo ClassLoader magic ?  or use Reader with XStream direct ?
         String expected = res.toString() + "\n";
-        //System.out.println("--> reply " + expected);
         try {
             return (Response) xStream.fromXML(expected);
         } catch (ConversionException e) {
@@ -90,6 +95,7 @@ public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
             }
         }
 
+        //TODO use interfacesClassLoader
         //Object reply = SerializationHelper.getInstanceFromBytes(byteArray, interfacesClassLoader);
     }
 }

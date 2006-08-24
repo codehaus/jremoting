@@ -1,5 +1,5 @@
 /* ====================================================================
- * Copyright 2005 JRemoting Committers
+ * Copyright 2005-2006 JRemoting Committers
  * Portions copyright 2001 - 2004 Apache Software Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,9 +90,6 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
                     }
 
                     request = readWriter.writeReplyAndGetRequest(response);
-
-                    // http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
-                    // halves the performance though.
                     //oOS.reset();
                     if (endConnection) {
                         response = new EndConnectionResponse();
@@ -112,8 +109,7 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
                     if (ioe instanceof EOFException) {
                         readWriter.close();
                     } else if (isSafeEnd(ioe)) {
-
-                        // TODO implement implementation indepandant logger
+                        // TODO implement implementation independant logger
                         readWriter.close();
                     } else {
                         serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected IOE #1", ioe);

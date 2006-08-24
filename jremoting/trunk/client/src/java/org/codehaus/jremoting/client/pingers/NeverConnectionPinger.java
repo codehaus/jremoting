@@ -1,5 +1,5 @@
 /* ====================================================================
- * Copyright 2005 JRemoting Committers
+ * Copyright 2005-2006 JRemoting Committers
  * Portions copyright 2001 - 2004 Apache Software Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

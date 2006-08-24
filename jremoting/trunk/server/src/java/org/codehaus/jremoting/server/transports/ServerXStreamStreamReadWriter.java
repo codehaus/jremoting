@@ -1,3 +1,19 @@
+/* ====================================================================
+ * Copyright 2005-2006 JRemoting Committers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -5,6 +21,7 @@ import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.commands.Request;
 import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.commands.GarbageCollectionRequest;
 
 import java.io.*;
 
@@ -13,7 +30,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
- * Class ServerCustomStreamReadWriter
+ * Class ServerXStreamStreamReadWriter
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
@@ -30,25 +47,12 @@ public class ServerXStreamStreamReadWriter extends AbstractServerStreamReadWrite
         xStream = new XStream(new DomDriver());
     }
 
-    /**
-     * Initialize
-     *
-     * @throws java.io.IOException if an IO Excpetion
-     */
+
     protected void initialize() throws IOException {
         lineNumberReader = new LineNumberReader(new InputStreamReader(getInputStream()));
         printWriter = new PrintWriter(new BufferedOutputStream(getOutputStream()));
     }
 
-    /**
-     * Write a response, and wait for a request
-     *
-     * @param response The response to send
-     * @return The new request
-     * @throws java.io.IOException            In an IO Exception
-     * @throws org.codehaus.jremoting.api.ConnectionException    In an IO Exception
-     * @throws ClassNotFoundException If a class not found during deserialization.
-     */
     protected synchronized Request writeReplyAndGetRequest(Response response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {
@@ -68,6 +72,10 @@ public class ServerXStreamStreamReadWriter extends AbstractServerStreamReadWrite
 
     protected void close() {
         try {
+            getInputStream().close();
+        } catch (IOException e) {
+        }
+        try {
             lineNumberReader.close();
         } catch (IOException e) {
         }
@@ -76,6 +84,7 @@ public class ServerXStreamStreamReadWriter extends AbstractServerStreamReadWrite
     }
 
     private Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
+        long start = System.currentTimeMillis();
         StringBuffer req = new StringBuffer();
 
         String line = lineNumberReader.readLine();
@@ -94,7 +103,8 @@ public class ServerXStreamStreamReadWriter extends AbstractServerStreamReadWrite
         String r = req.toString() + "\n";
 
         try {
-            return (Request) xStream.fromXML(r);
+            Object o = xStream.fromXML(r);
+            return (Request) o;
         } catch (ConversionException e) {
             Throwable cause = e.getCause();
             if (cause != null && cause instanceof ClassCastException) {

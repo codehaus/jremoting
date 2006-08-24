@@ -3,10 +3,11 @@ package org.codehaus.jremoting.test.socket;
 import org.codehaus.jremoting.test.*;
 import org.codehaus.jremoting.server.transports.socket.CompleteSocketCustomStreamServer;
 import org.codehaus.jremoting.server.transports.socket.CompleteSocketXStreamServer;
-import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketXStreamHostContext;
+import org.codehaus.jremoting.api.ThreadPool;
 
 /**
  * Test Custom Stream over sockets.
@@ -19,11 +20,13 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         super(name);
     }
 
+
+
     protected void setUp() throws Exception {
         super.setUp();
 
         // server side setup.
-        server = new CompleteSocketXStreamServer(10099);
+        server = new MyCompleteSocketXStreamServer(10099);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -42,6 +45,12 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         super.testSpeed();
     }
 
+    public void testLongParamMethod() {
+        super.testLongParamMethod();
+    }
+
+    int myState;
+
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
@@ -49,10 +58,40 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         factory.close();
         Thread.yield();
         server.stop();
+        if (myState != Server.STOPPED) {
+            Thread.sleep(100);
+        }
+        if (myState != Server.STOPPED) {
+            Thread.sleep(100);
+        }
+        if (myState != Server.STOPPED) {
+            Thread.sleep(100);
+        }
+        if (myState != Server.STOPPED) {
+            Thread.sleep(100);
+        }
+        if (myState != Server.STOPPED) {
+            Thread.sleep(100);
+        }
         Thread.yield();
         server = null;
         testServer = null;
         super.tearDown();
+    }
+
+    public class MyCompleteSocketXStreamServer extends CompleteSocketXStreamServer {
+        public MyCompleteSocketXStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+            super(classRetriever, authenticator, serverMonitor, threadPool, contextFactory, port);
+        }
+
+        protected void setState(int state) {
+            super.setState(state);
+            myState = state;
+        }
+
+        public MyCompleteSocketXStreamServer(int port) {
+            super(port);
+        }
     }
 
 
