@@ -22,9 +22,9 @@ import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.factories.DynamicClassFactory;
 import org.codehaus.jremoting.client.factories.DynamicStub;
-import org.codehaus.jremoting.commands.ListMethodsRequest;
-import org.codehaus.jremoting.commands.ListMethodsResponse;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.requests.ListMethodsRequest;
+import org.codehaus.jremoting.responses.ListMethodsResponse;
+import org.codehaus.jremoting.responses.Response;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -20,8 +20,8 @@ package org.codehaus.jremoting.client;
 import org.codehaus.jremoting.api.CallbackException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.commands.Request;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 
 /**
  * Interface ClientInvocationHandler

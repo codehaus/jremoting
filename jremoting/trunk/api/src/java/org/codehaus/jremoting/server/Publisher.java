@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.commands.MethodRequest;
+import org.codehaus.jremoting.requests.MethodRequest;
 
 /**
  * Interface Server

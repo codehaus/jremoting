@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client;
 
-import org.codehaus.jremoting.commands.Request;
+import org.codehaus.jremoting.requests.Request;
 
 import java.io.IOException;
 

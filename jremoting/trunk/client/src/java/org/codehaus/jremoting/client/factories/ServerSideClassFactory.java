@@ -20,12 +20,10 @@ package org.codehaus.jremoting.client.factories;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.commands.ClassRequest;
-import org.codehaus.jremoting.commands.ClassResponse;
-import org.codehaus.jremoting.commands.ClassRetrievalFailedResponse;
-import org.codehaus.jremoting.commands.ResponseConstants;
-import org.codehaus.jremoting.commands.RequestFailedResponse;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.requests.ClassRequest;
+import org.codehaus.jremoting.responses.ClassRetrievalFailedResponse;
+import org.codehaus.jremoting.responses.ClassResponse;
+import org.codehaus.jremoting.responses.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

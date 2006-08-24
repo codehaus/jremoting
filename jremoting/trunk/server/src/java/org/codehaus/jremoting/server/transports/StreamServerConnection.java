@@ -19,10 +19,10 @@ package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.commands.EndConnectionResponse;
-import org.codehaus.jremoting.commands.InvocationExceptionResponse;
-import org.codehaus.jremoting.commands.Request;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.responses.EndConnectionResponse;
+import org.codehaus.jremoting.responses.InvocationExceptionResponse;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerConnection;
 import org.codehaus.jremoting.server.ServerMonitor;
 

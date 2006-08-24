@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.commands.MethodRequest;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.requests.MethodRequest;
+import org.codehaus.jremoting.responses.Response;
 
 /**
  * Class MethodInvocationHandler

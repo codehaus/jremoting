@@ -24,8 +24,8 @@ import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.commands.PingRequest;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.requests.PingRequest;
+import org.codehaus.jremoting.responses.Response;
 
 /**
  * Class AbstractClientInvocationHandler

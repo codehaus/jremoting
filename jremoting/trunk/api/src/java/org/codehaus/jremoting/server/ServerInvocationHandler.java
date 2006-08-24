@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.commands.Request;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 
 /**
  * Interface InvocationHandler

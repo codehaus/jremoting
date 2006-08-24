@@ -21,8 +21,8 @@ import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.SerializationHelper;
 import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.commands.Request;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import java.io.BufferedOutputStream;

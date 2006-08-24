@@ -18,8 +18,8 @@
 package org.codehaus.jremoting.server.adapters;
 
 import org.codehaus.jremoting.api.SerializationHelper;
-import org.codehaus.jremoting.commands.Request;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
 

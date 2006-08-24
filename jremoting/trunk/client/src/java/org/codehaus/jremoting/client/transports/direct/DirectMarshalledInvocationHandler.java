@@ -21,9 +21,9 @@ import org.codehaus.jremoting.api.SerializationHelper;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.commands.Request;
-import org.codehaus.jremoting.commands.RequestFailedResponse;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.RequestFailedResponse;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
 
 import java.io.IOException;

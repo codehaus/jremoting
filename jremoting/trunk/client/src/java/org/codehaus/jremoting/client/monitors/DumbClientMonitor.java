@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.monitors;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.commands.Request;
+import org.codehaus.jremoting.requests.Request;
 
 import java.io.IOException;
 

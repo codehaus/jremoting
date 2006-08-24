@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.pingers;
 
-import org.codehaus.jremoting.commands.PingRequest;
+import org.codehaus.jremoting.requests.PingRequest;
 
 /**
  * Interface PerpetualConnectionPinger

@@ -18,8 +18,8 @@
 package org.codehaus.jremoting.server.transports.rmi;
 
 import org.codehaus.jremoting.api.RmiInvocationHandler;
-import org.codehaus.jremoting.commands.Request;
-import org.codehaus.jremoting.commands.Response;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.transports.AbstractServer;
 
 import java.rmi.RemoteException;

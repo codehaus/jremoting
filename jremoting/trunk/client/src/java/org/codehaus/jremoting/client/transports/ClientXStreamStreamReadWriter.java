@@ -18,8 +18,8 @@ package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.client.ClientStreamReadWriter;
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.commands.Response;
-import org.codehaus.jremoting.commands.Request;
+import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.requests.Request;
 
 import java.io.*;
 
