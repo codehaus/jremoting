@@ -59,14 +59,6 @@ public class JavacProxyGenerator extends AbstractProxyGenerator {
                 makeSource(classLoader, MethodNameHelper.encodeClassName(facade.getFacadeClass()), new PublicationDescriptionItem[]{facade});
             }
         }
-        if (getCallbackFacades() != null) {
-            for (int i = 0; i < getCallbackFacades().length; i++) {
-                PublicationDescriptionItem facade = getCallbackFacades()[i];
-
-                makeSource(classLoader, MethodNameHelper.encodeClassName(facade.getFacadeClass()), new PublicationDescriptionItem[]{facade});
-            }
-        }
-
     }
 
     /**
@@ -90,14 +82,6 @@ public class JavacProxyGenerator extends AbstractProxyGenerator {
         if (getAdditionalFacades() != null) {
             for (int i = 0; i < getAdditionalFacades().length; i++) {
                 String classname = MethodNameHelper.encodeClassName(getAdditionalFacades()[i].getFacadeClass());
-
-                jc.doCompile(getSrcGenDir() + File.separator + "JRemotingGenerated" + getGenName() + "_" + classname + ".java");
-                System.out.println(jc.getCompilerMessage());
-            }
-        }
-        if (getCallbackFacades() != null) {
-            for (int i = 0; i < getCallbackFacades().length; i++) {
-                String classname = MethodNameHelper.encodeClassName(getCallbackFacades()[i].getFacadeClass());
 
                 jc.doCompile(getSrcGenDir() + File.separator + "JRemotingGenerated" + getGenName() + "_" + classname + ".java");
                 System.out.println(jc.getCompilerMessage());

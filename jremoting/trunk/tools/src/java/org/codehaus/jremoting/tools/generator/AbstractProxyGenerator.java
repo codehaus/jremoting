@@ -22,6 +22,7 @@ import org.codehaus.jremoting.server.ProxyGenerator;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 
 import java.lang.reflect.Method;
+import java.io.File;
 
 
 /**
@@ -39,7 +40,6 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
     private String classpath;
     private boolean verbose;
     private PublicationDescriptionItem[] additionalFacades;
-    private PublicationDescriptionItem[] callbackFacades;
     private PublicationDescriptionItem[] interfacesToExpose;
 
     /**
@@ -100,10 +100,6 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
         return additionalFacades;
     }
 
-    public PublicationDescriptionItem[] getCallbackFacades() {
-        return callbackFacades;
-    }
-
     /**
      * Get the interfaces to expose.
      *
@@ -142,10 +138,6 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
         this.additionalFacades = additionalFacades;
     }
 
-    public void setCallbackFacades(PublicationDescriptionItem[] callbackFacades) {
-        this.callbackFacades = callbackFacades;
-    }
-
     /**
      * Set the clas generation dorectory
      *
@@ -179,7 +171,11 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * @param classpath the classpath.
      */
     public void setClasspath(String classpath) {
-        this.classpath = classpath;
+        if (classpath != null) {
+            this.classpath = classpath.replace(',', File.pathSeparatorChar);
+        } else {
+            this.classpath = classpath;
+        }
     }
 
     /**

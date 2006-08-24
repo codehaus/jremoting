@@ -122,7 +122,7 @@ public class ClientContextTestCase extends TestCase {
 
         final AccountManager accountManager = new AccountManagerImpl(ccf, one, two);
 
-        Server server = new CompleteSocketCustomStreamServer(new PlainClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 13333);
+        CompleteSocketCustomStreamServer server = new CompleteSocketCustomStreamServer(new PlainClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 13333);
         PublicationDescription pd = new PublicationDescription(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();

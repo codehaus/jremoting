@@ -94,12 +94,6 @@ public class ProxyGeneratorMojo
     protected String additionalFacades;
 
     /**
-     * Callback Facades. When encounted in an object tree, they are passed by ref not value to the client
-     * @parameter
-     */
-    protected String callbackFacades;
-    
-    /**
      * Whether to give verbose output
      * @parameter
      */
@@ -142,6 +136,7 @@ public class ProxyGeneratorMojo
 
         try {
             proxyGenerator.setGenName(genName);
+            srcGenDir.mkdirs();
             proxyGenerator.setSrcGenDir(srcGenDir.getAbsolutePath());
             proxyGenerator.setClassGenDir(classGenDir.getAbsolutePath());
             proxyGenerator.verbose(Boolean.valueOf(verbose).booleanValue());
@@ -155,10 +150,6 @@ public class ProxyGeneratorMojo
 
             if (additionalFacades != null) {
                 proxyGenerator.setAdditionalFacades(createPublicationDescriptionItems(fromCSV(additionalFacades), classLoader));
-            }
-            
-            if (callbackFacades != null) {
-                proxyGenerator.setCallbackFacades(createPublicationDescriptionItems(fromCSV(callbackFacades), classLoader));
             }
 
             proxyGenerator.generateSrc(classLoader);

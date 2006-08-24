@@ -44,12 +44,6 @@
 				<configuration>
 					<forkMode>pertest</forkMode>
 					<printSummary>true</printSummary>
-					<systemProperties>
-						<property>
-							<name>CLASS_GEN_DIR</name>
-							<value>target/test-classes</value>
-						</property>
-					</systemProperties>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -65,10 +59,9 @@
 						<configuration>
 							<genName>Hello</genName>
 							<interfaces>org.codehaus.jremoting.test.TestInterface</interfaces>
-							<srcGenDir>${project.build.testOutputDirectory}</srcGenDir>
+							<srcGenDir>target/generated_java</srcGenDir>
 							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
-							<additionalfacades>org.codehaus.jremoting.test.TestInterface3,org.codehaus.jremoting.test.TestInterface2</additionalfacades>
-							<callbackfacades>org.codehaus.jremoting.test.TestCallBackListener</callbackfacades>
+							<additionalFacades>org.codehaus.jremoting.test.TestInterface3,org.codehaus.jremoting.test.TestInterface2</additionalFacades>
 							<verbose>true</verbose>
 						</configuration>
 					</execution>
@@ -81,7 +74,7 @@
 						<configuration>
 							<genName>OurAccountManager</genName>
 							<interfaces>org.codehaus.jremoting.test.clientcontext.AccountManager</interfaces>
-							<srcGenDir>${project.build.testOutputDirectory}</srcGenDir>
+							<srcGenDir>target/generated_java</srcGenDir>
 							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
 							<verbose>true</verbose>
 						</configuration>

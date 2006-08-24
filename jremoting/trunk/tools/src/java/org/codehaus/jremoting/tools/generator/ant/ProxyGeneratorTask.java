@@ -40,7 +40,6 @@ public class ProxyGeneratorTask extends Task {
 
     protected String[] interfacesToExpose;
     protected String[] additionalFacades;
-    protected String[] callbackFacades;
     protected File srcGenDir;
     protected File classGenDir;
     protected String genName;
@@ -92,25 +91,6 @@ public class ProxyGeneratorTask extends Task {
         strings.copyInto(additionalFacades);
     }
 
-    /**
-     * Method setAdditionalfacades
-     *
-     * @param callbackfacades
-     */
-    public void setCallbackfacades(String callbackfacades) {
-
-        StringTokenizer st = new StringTokenizer(callbackfacades, ",");
-        Vector strings = new Vector();
-
-        while (st.hasMoreTokens()) {
-            strings.add(st.nextToken().trim());
-        }
-
-        callbackFacades = new String[strings.size()];
-
-        strings.copyInto(callbackFacades);
-    }
-
 
     /**
      * Method setSrcgendir
@@ -156,7 +136,7 @@ public class ProxyGeneratorTask extends Task {
     /**
      * Method createClasspath
      *
-     * @return
+     * @return path
      */
     public Path createClasspath() {
 
@@ -256,19 +236,6 @@ public class ProxyGeneratorTask extends Task {
 
                 proxyGenerator.setAdditionalFacades(additionalFacades);
             }
-
-            if (callbackFacades != null) {
-                PublicationDescriptionItem[] callbackFacades = new PublicationDescriptionItem[this.callbackFacades.length];
-
-                for (int i = 0; i < this.callbackFacades.length; i++) {
-                    String cn = this.callbackFacades[i];
-
-                    callbackFacades[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
-                }
-
-                proxyGenerator.setCallbackFacades(callbackFacades);
-            }
-
 
             ClassLoader classLoader2 = null;
 

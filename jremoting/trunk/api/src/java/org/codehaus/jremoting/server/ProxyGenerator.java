@@ -96,10 +96,4 @@ public interface ProxyGenerator {
      */
     void verbose(boolean trueFalse);
 
-    /**
-     * Set the callback facades
-     *
-     * @param callbackFacades callback facades/interfaces to handle
-     */
-    void setCallbackFacades(PublicationDescriptionItem[] callbackFacades);
 }
