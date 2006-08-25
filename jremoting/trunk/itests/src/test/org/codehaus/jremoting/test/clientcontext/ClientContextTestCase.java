@@ -26,7 +26,6 @@ import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.Server;
 import org.codehaus.jremoting.server.ServerException;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
@@ -34,7 +33,7 @@ import org.codehaus.jremoting.server.classretrievers.PlainClassRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContext;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.socket.CompleteSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
 
 import java.util.HashMap;
 
@@ -122,7 +121,7 @@ public class ClientContextTestCase extends TestCase {
 
         final AccountManager accountManager = new AccountManagerImpl(ccf, one, two);
 
-        CompleteSocketCustomStreamServer server = new CompleteSocketCustomStreamServer(new PlainClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 13333);
+        SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(new PlainClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 13333);
         PublicationDescription pd = new PublicationDescription(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();

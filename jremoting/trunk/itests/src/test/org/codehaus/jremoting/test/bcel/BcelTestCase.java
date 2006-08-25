@@ -25,14 +25,12 @@ import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorClassRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.socket.CompleteSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
 import org.codehaus.jremoting.test.AbstractHelloTestCase;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
-
-import java.io.File;
 
 /**
  * Test case which tests the proxies generated using BCEL generator
@@ -64,7 +62,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         cr.setClassGenDir(class_gen_dir);
         //cr.setClasspath("..\\build\\classes;%JAVA_HOME%\\lib\\tools.jar");
         cr.setSrcGenDir(class_gen_dir);
-        server = new CompleteSocketCustomStreamServer(cr, new DefaultAuthenticator(), new ConsoleServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 10001);
+        server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new ConsoleServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 10001);
 
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});

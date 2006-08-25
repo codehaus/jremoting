@@ -32,7 +32,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Class CompleteSocketObjectStreamServer
+ * Class SelfContainedSocketObjectStreamServer
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $

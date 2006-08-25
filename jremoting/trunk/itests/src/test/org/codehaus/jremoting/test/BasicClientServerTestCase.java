@@ -25,8 +25,8 @@ import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.transports.socket.CompleteSocketCustomStreamServer;
-import org.codehaus.jremoting.server.transports.socket.CompleteSocketObjectStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketObjectStreamServer;
 
 
 /**
@@ -52,7 +52,7 @@ public class BasicClientServerTestCase extends TestCase {
     public void testMismatch1() throws Exception {
 
         // server side setup.
-        CompleteSocketCustomStreamServer server = new CompleteSocketCustomStreamServer(12346);
+        SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(12346);
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -77,7 +77,7 @@ public class BasicClientServerTestCase extends TestCase {
     public void donttestMismatch2() throws Exception {
 
         // server side setup.
-        CompleteSocketObjectStreamServer server = new CompleteSocketObjectStreamServer(12347);
+        SelfContainedSocketObjectStreamServer server = new SelfContainedSocketObjectStreamServer(12347);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -101,7 +101,7 @@ public class BasicClientServerTestCase extends TestCase {
     public void donttestMismatch3() throws Exception {
 
         // server side setup.
-        CompleteSocketCustomStreamServer server = new CompleteSocketCustomStreamServer(12348);
+        SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(12348);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

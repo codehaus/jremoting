@@ -1,11 +1,9 @@
 package org.codehaus.jremoting.test.socket;
 
 import org.codehaus.jremoting.test.*;
-import org.codehaus.jremoting.server.transports.socket.CompleteSocketCustomStreamServer;
-import org.codehaus.jremoting.server.transports.socket.CompleteSocketXStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketXStreamServer;
 import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketXStreamHostContext;
 import org.codehaus.jremoting.api.ThreadPool;
 
@@ -26,7 +24,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new MyCompleteSocketXStreamServer(10099);
+        server = new MySelfContainedSocketXStreamServer(10099);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -86,8 +84,8 @@ public class XStreamTestCase extends AbstractHelloTestCase {
 
 
 
-    public class MyCompleteSocketXStreamServer extends CompleteSocketXStreamServer {
-        public MyCompleteSocketXStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+    public class MySelfContainedSocketXStreamServer extends SelfContainedSocketXStreamServer {
+        public MySelfContainedSocketXStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
             super(classRetriever, authenticator, serverMonitor, threadPool, contextFactory, port);
         }
 
@@ -96,7 +94,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
             myState = state;
         }
 
-        public MyCompleteSocketXStreamServer(int port) {
+        public MySelfContainedSocketXStreamServer(int port) {
             super(port);
         }
     }

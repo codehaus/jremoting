@@ -28,7 +28,7 @@ import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.AbstractDynamicGeneratorClassRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.socket.CompleteSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
 
 import java.io.File;
 
@@ -37,7 +37,7 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
     AsyncTestImpl asyncTestImpl;
     AsyncTest testClient;
     Factory factory;
-    CompleteSocketCustomStreamServer server;
+    SelfContainedSocketCustomStreamServer server;
 
     public AbstractSimpleAsyncTestCase(String name) {
         super(name);
@@ -66,7 +66,7 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
         cr.setSrcGenDir(new File(class_gen_dir).getParent() + File.separator + "generated_java");
 
         DefaultServerSideClientContextFactory ccf = new DefaultServerSideClientContextFactory();
-        server = new CompleteSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 11003);
+        server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 11003);
         asyncTestImpl = new AsyncTestImpl();
         PublicationDescription pd = new PublicationDescription();
         pd.addInterfaceToExpose(new PublicationDescriptionItem(AsyncTest.class, new String[]{"setOne(java.lang.String)", "setTwo(java.lang.String)", "setThree(java.lang.String)", }, new String[]{"fire()"}, new String[]{"whoa()"}));

@@ -28,27 +28,26 @@ import java.io.PipedOutputStream;
 
 
 /**
- * A Complete Sockect Custom Stream Piped Instance.
+ * A Complete Sockect Object Stream Piped Connection.
  *
  * @author Paul Hammant
  */
-public class CompleteSocketCustomStreamPipedConnection {
+public class SelfContainedSocketObjectStreamPipedConnection {
 
-    private CompleteCustomStreamPipedServer pipedCustomStreamServer;
+    private SelfContainedCustomStreamPipedServer selfContainedCustomStreamPipedServer;
 
     /**
-     * Create a Complete Socket CustomStream Piped Connection
+     * Create a Complete Socket ObjectStream Piped Connection
      *
-     * @param invocationHandlerAdapter the invocation adapter from the SocketCustomStream
+     * @param invocationHandlerAdapter the invocation adapter from the SocketObjectStream
      * @param inputStream              the piped input stream
      * @param outputStream             the piped output stream
      * @throws ConnectionException if a problem
      */
-    public CompleteSocketCustomStreamPipedConnection(InvocationHandlerAdapter invocationHandlerAdapter, PipedInputStream inputStream, PipedOutputStream outputStream, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, ServerMonitor serverMonitor) throws ConnectionException {
-        pipedCustomStreamServer = new CompleteCustomStreamPipedServer(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
-        pipedCustomStreamServer.start();
-        pipedCustomStreamServer.makeNewConnection(inputStream, outputStream);
-
+    public SelfContainedSocketObjectStreamPipedConnection(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, PipedInputStream inputStream, PipedOutputStream outputStream) throws ConnectionException {
+        selfContainedCustomStreamPipedServer = new SelfContainedCustomStreamPipedServer(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
+        selfContainedCustomStreamPipedServer.makeNewConnection(inputStream, outputStream);
+        selfContainedCustomStreamPipedServer.start();
     }
 
     /**
@@ -61,6 +60,7 @@ public class CompleteSocketCustomStreamPipedConnection {
      * Stop the server.
      */
     protected void stop() {
-        pipedCustomStreamServer.stop();
+        selfContainedCustomStreamPipedServer.stop();
     }
 }
+

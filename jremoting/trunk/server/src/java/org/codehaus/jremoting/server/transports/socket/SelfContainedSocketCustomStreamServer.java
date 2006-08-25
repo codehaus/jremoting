@@ -32,15 +32,15 @@ import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFa
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
 
 /**
- * Class CompleteSocketObjectStreamServer
+ * Class SelfContainedSocketObjectStreamServer
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
 
-public class CompleteSocketCustomStreamServer extends AbstractCompleteSocketStreamServer {
+public class SelfContainedSocketCustomStreamServer extends AbstractCompleteSocketStreamServer {
     /**
-     * Construct a CompleteSocketCustomStreamServer
+     * Construct a SelfContainedSocketCustomStreamServer
      *
      * @param classRetriever
      * @param authenticator
@@ -49,11 +49,11 @@ public class CompleteSocketCustomStreamServer extends AbstractCompleteSocketStre
      * @param contextFactory
      * @param port
      */
-    public CompleteSocketCustomStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+    public SelfContainedSocketCustomStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
         super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
     }
 
-    public CompleteSocketCustomStreamServer(int port) {
+    public SelfContainedSocketCustomStreamServer(int port) {
         this(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
     }
 

@@ -25,7 +25,7 @@ import org.codehaus.jremoting.client.impl.DynamicInvoker;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.transports.AbstractServer;
-import org.codehaus.jremoting.server.transports.socket.CompleteSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
@@ -63,7 +63,7 @@ public class DynamicInvokerTestCase extends TestCase {
         super.setUp();
 
         // server side setup.
-        server = new CompleteSocketCustomStreamServer(10001);
+        server = new SelfContainedSocketCustomStreamServer(10001);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

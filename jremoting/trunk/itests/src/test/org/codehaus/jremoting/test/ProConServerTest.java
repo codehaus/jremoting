@@ -23,8 +23,8 @@ import org.codehaus.jremoting.server.classretrievers.JarFileClassRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.AbstractServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.socket.CompleteSocketCustomStreamServer;
-import org.codehaus.jremoting.server.transports.socket.CompleteSocketObjectStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketObjectStreamServer;
 
 /**
  * Class ProConServerTest
@@ -48,17 +48,17 @@ public class ProConServerTest {
         if (args[1].equals("ObjectStream")) {
             System.out.println("(Object Stream)");
 
-            as = new CompleteSocketObjectStreamServer(1234);
+            as = new SelfContainedSocketObjectStreamServer(1234);
         } else {
 
             // CustomStream
             System.out.println("(Custom Stream)");
 
-            as = new CompleteSocketCustomStreamServer(1235);
+            as = new SelfContainedSocketCustomStreamServer(1235);
         }
 
         if (args[0].equals("S")) {
-            as = new CompleteSocketCustomStreamServer(new JarFileClassRetriever("build/classes2"), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 1235);
+            as = new SelfContainedSocketCustomStreamServer(new JarFileClassRetriever("build/classes2"), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 1235);
         }
 
         //provider

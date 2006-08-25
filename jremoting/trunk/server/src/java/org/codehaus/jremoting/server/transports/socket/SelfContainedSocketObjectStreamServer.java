@@ -17,43 +17,40 @@
  */
 package org.codehaus.jremoting.server.transports.socket;
 
-import org.codehaus.jremoting.server.ClassRetriever;
+import org.codehaus.jremoting.api.DefaultThreadPool;
+import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.server.Authenticator;
+import org.codehaus.jremoting.server.ClassRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
-import org.codehaus.jremoting.server.transports.ServerXStreamStreamDriver;
-import org.codehaus.jremoting.server.monitors.NullServerMonitor;
+import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoClassRetriever;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
-import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.api.DefaultThreadPool;
+import org.codehaus.jremoting.server.monitors.NullServerMonitor;
+import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
+import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.ServerObjectStreamDriver;
+
 
 /**
- * Class CompleteSocketObjectStreamServer
+ * Class SelfContainedSocketObjectStreamServer
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
+public class SelfContainedSocketObjectStreamServer extends AbstractCompleteSocketStreamServer {
 
-public class CompleteSocketXStreamServer extends AbstractCompleteSocketStreamServer {
-    /**
-     * Construct a CompleteSocketCustomStreamServer
-     *
-     * @param classRetriever
-     * @param authenticator
-     * @param serverMonitor
-     * @param threadPool
-     * @param contextFactory
-     * @param port
-     */
-    public CompleteSocketXStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+
+    public SelfContainedSocketObjectStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
         super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
     }
-
-    public CompleteSocketXStreamServer(int port) {
+    
+    /**
+     * Construct a SelfContainedSocketObjectStreamServer
+     *
+     * @param port The port to use.
+     */
+    public SelfContainedSocketObjectStreamServer(int port) {
         this(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
     }
 
@@ -63,7 +60,8 @@ public class CompleteSocketXStreamServer extends AbstractCompleteSocketStreamSer
      * @return The Server Stream Read Writer.
      */
     protected AbstractServerStreamDriver createServerStreamReadWriter() {
-        ServerXStreamStreamDriver rw = new ServerXStreamStreamDriver(serverMonitor, threadPool);
+
+        ServerObjectStreamDriver rw = new ServerObjectStreamDriver(serverMonitor, threadPool);
         return rw;
     }
 }

@@ -28,12 +28,12 @@ import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
- * Class ClientXStreamStreamDriver
+ * Class ClientXStreamDriver
  *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public class ClientXStreamStreamDriver implements ClientStreamDriver {
+public class ClientXStreamDriver implements ClientStreamDriver {
 
     private LineNumberReader lineNumberReader;
     private PrintWriter printWriter;
@@ -42,7 +42,7 @@ public class ClientXStreamStreamDriver implements ClientStreamDriver {
 
 
 
-    public ClientXStreamStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
+    public ClientXStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
 
         printWriter = new PrintWriter(new BufferedOutputStream(outputStream));
         lineNumberReader = new LineNumberReader(new InputStreamReader(inputStream));

@@ -27,7 +27,7 @@ import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.JavacDynamicGeneratorClassRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.socket.CompleteSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
 
 import java.io.File;
 
@@ -36,7 +36,7 @@ public class SimpleAsync2TestCase extends TestCase {
     AsyncTestImpl asyncTestImpl;
     AsyncTest testClient;
     Factory factory;
-    CompleteSocketCustomStreamServer server;
+    SelfContainedSocketCustomStreamServer server;
 
     public SimpleAsync2TestCase(String name) {
         super(name);
@@ -58,7 +58,7 @@ public class SimpleAsync2TestCase extends TestCase {
         cr.setClassGenDir(class_gen_dir);
         cr.setSrcGenDir(new File(class_gen_dir).getParentFile().getAbsolutePath() + File.separator + "generated_java");
 
-        server = new CompleteSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 11009);
+        server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 11009);
         asyncTestImpl = new AsyncTestImpl();
         // automatic determination of async elements.
         PublicationDescription pd = new PublicationDescription(AsyncTest.class);
