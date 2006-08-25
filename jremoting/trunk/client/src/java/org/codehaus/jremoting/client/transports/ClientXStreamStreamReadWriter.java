@@ -63,6 +63,8 @@ public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
 
         String xml = xStream.toXML(request);
 
+        //System.out.println("--> client write>\n" + xml.replace(' ', '_'));
+
         printWriter.write(xml + "\n");
         printWriter.flush();
     }
@@ -84,6 +86,12 @@ public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
 
         // todo ClassLoader magic ?  or use Reader with XStream direct ?
         String expected = res.toString() + "\n";
+
+        if (expected.equals("null\n")) {
+            // TODO weird bug - chase it down?
+            return null;
+        }
+
         try {
             return (Response) xStream.fromXML(expected);
         } catch (ConversionException e) {
