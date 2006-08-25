@@ -27,9 +27,9 @@ import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoClassRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamReadWriter;
+import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.ServerCustomStreamReadWriter;
+import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
 
 /**
  * Class CompleteSocketObjectStreamServer
@@ -62,8 +62,8 @@ public class CompleteSocketCustomStreamServer extends AbstractCompleteSocketStre
      *
      * @return The Server Stream Read Writer.
      */
-    protected AbstractServerStreamReadWriter createServerStreamReadWriter() {
-        ServerCustomStreamReadWriter rw = new ServerCustomStreamReadWriter(serverMonitor, threadPool);
+    protected AbstractServerStreamDriver createServerStreamReadWriter() {
+        ServerCustomStreamDriver rw = new ServerCustomStreamDriver(serverMonitor, threadPool);
         return rw;
     }
 }

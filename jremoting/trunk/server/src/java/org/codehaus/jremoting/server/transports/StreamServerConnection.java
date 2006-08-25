@@ -52,7 +52,7 @@ public abstract class StreamServerConnection implements Runnable, ServerConnecti
     /**
      * The Sever Stream Read Writer.
      */
-    private AbstractServerStreamReadWriter readWriter;
+    private AbstractServerStreamDriver driver;
 
     private ServerMonitor serverMonitor;
 
@@ -60,11 +60,11 @@ public abstract class StreamServerConnection implements Runnable, ServerConnecti
      * Construct a StreamServerConnection
      *
      * @param abstractServer The Abstract Server handling requests
-     * @param readWriter     The Read Writer.
+     * @param driver     The Read Writer.
      */
-    public StreamServerConnection(AbstractServer abstractServer, AbstractServerStreamReadWriter readWriter) {
+    public StreamServerConnection(AbstractServer abstractServer, AbstractServerStreamDriver driver) {
         this.abstractServer = abstractServer;
-        this.readWriter = readWriter;
+        this.driver = driver;
     }
 
 
@@ -84,7 +84,7 @@ public abstract class StreamServerConnection implements Runnable, ServerConnecti
         abstractServer.connectionStart(this);
 
         try {
-            readWriter.initialize();
+            driver.initialize();
 
             boolean more = true;
             AbstractRequest request = null;
@@ -93,10 +93,10 @@ public abstract class StreamServerConnection implements Runnable, ServerConnecti
             while (more) {
                 try {
                     if (request != null) {
-                        response = abstractServer.handleInvocation(request, readWriter.getConnectionDetails());
+                        response = abstractServer.handleInvocation(request, driver.getConnectionDetails());
                     }
 
-                    request = readWriter.writeReplyAndGetRequest(response);
+                    request = driver.writeReplyAndGetRequest(response);
 
                     // http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
                     // halves the performance though.
@@ -108,23 +108,23 @@ public abstract class StreamServerConnection implements Runnable, ServerConnecti
                 } catch (BadConnectionException bce) {
                     more = false;
                     serverMonitor.badConnection(this.getClass(), "StreamServerConnection.run(): Bad connection #0", bce);
-                    readWriter.close();
+                    driver.close();
                 } catch (ConnectionException ace) {
                     more = false;
                     serverMonitor.unexpectedException(this.getClass(), "StreamServerConnection.run(): Unexpected ConnectionException #0", ace);
-                    readWriter.close();
+                    driver.close();
                 } catch (IOException ioe) {
                     more = false;
 
                     if (ioe instanceof EOFException) {
-                        readWriter.close();
+                        driver.close();
                     } else if (isSafeEnd(ioe)) {
 
                         // TODO implement implementation indepandant logger
-                        readWriter.close();
+                        driver.close();
                     } else {
                         serverMonitor.unexpectedException(this.getClass(), "StreamServerConnection.run(): Unexpected IOE #1", ioe);
-                        readWriter.close();
+                        driver.close();
                     }
                 } catch (NullPointerException npe) {
                     serverMonitor.unexpectedException(this.getClass(), "StreamServerConnection.run(): Unexpected NPE", npe);
@@ -160,7 +160,7 @@ public abstract class StreamServerConnection implements Runnable, ServerConnecti
      */
     public void endConnection() {
         endConnection = true;
-        readWriter.close();
+        driver.close();
     }
 
     /**

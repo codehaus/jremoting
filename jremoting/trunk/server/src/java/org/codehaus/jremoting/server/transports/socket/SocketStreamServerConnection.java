@@ -19,7 +19,7 @@ package org.codehaus.jremoting.server.transports.socket;
 
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.AbstractServer;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamReadWriter;
+import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 import org.codehaus.jremoting.server.transports.AbstractStreamServerConnection;
 
 import java.io.IOException;
@@ -43,11 +43,11 @@ public class SocketStreamServerConnection extends AbstractStreamServerConnection
      *
      * @param abstractServer The Abstract Server that will process invocations and requests
      * @param socket         The Socket
-     * @param readWriter     The readWriter for the transport type
+     * @param driver     The driver for the transport type
      */
-    public SocketStreamServerConnection(final AbstractServer abstractServer, final Socket socket, AbstractServerStreamReadWriter readWriter, ServerMonitor serverMonitor) {
+    public SocketStreamServerConnection(final AbstractServer abstractServer, final Socket socket, AbstractServerStreamDriver driver, ServerMonitor serverMonitor) {
 
-        super(abstractServer, readWriter, serverMonitor);
+        super(abstractServer, driver, serverMonitor);
         this.socket = socket;
     }
 

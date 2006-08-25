@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.transports.piped;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.transports.AbstractStreamClientInvocationHandler;
@@ -75,6 +75,6 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
         throw new InvocationException("Piped connection broken, unable to reconnect.");
     }
 
-    protected abstract ClientStreamReadWriter createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException;
+    protected abstract ClientStreamDriver createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException;
 
 }

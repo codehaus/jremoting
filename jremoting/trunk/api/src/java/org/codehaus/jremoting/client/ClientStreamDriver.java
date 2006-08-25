@@ -23,11 +23,11 @@ import org.codehaus.jremoting.responses.Response;
 import java.io.IOException;
 
 /**
- * Class ClientStreamReadWriter
+ * Class ClientStreamDriver
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public interface ClientStreamReadWriter {
+public interface ClientStreamDriver {
     Response postRequest(AbstractRequest request) throws IOException, ClassNotFoundException;
 }

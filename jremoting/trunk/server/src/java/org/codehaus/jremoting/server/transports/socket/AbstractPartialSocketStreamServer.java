@@ -23,7 +23,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.transports.AbstractServer;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamReadWriter;
+import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -61,7 +61,7 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
 
         try {
             if (getState() == STARTED) {
-                AbstractServerStreamReadWriter ssrw = createServerStreamReadWriter();
+                AbstractServerStreamDriver ssrw = createServerStreamReadWriter();
 
                 ssrw.setStreams(socket.getInputStream(), socket.getOutputStream(), socket);
 
@@ -80,7 +80,7 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
      *
      * @return The Server Stream Read Writer.
      */
-    protected abstract AbstractServerStreamReadWriter createServerStreamReadWriter();
+    protected abstract AbstractServerStreamDriver createServerStreamReadWriter();
 
     /**
      * Method start

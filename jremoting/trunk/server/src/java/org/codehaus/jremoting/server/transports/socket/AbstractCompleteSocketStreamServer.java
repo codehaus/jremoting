@@ -25,7 +25,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.transports.AbstractServer;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamReadWriter;
+import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -79,7 +79,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
                 // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
                 sock.setSoTimeout(36000);
 
-                AbstractServerStreamReadWriter ssrw = createServerStreamReadWriter();
+                AbstractServerStreamDriver ssrw = createServerStreamReadWriter();
 
                 ssrw.setStreams(sock.getInputStream(), sock.getOutputStream(), sock);
 
@@ -157,5 +157,5 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
      *
      * @return The Server Stream Read Writer.
      */
-    protected abstract AbstractServerStreamReadWriter createServerStreamReadWriter();
+    protected abstract AbstractServerStreamDriver createServerStreamReadWriter();
 }

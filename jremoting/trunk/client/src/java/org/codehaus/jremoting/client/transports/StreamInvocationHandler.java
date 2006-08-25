@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
@@ -46,7 +46,7 @@ import java.net.SocketException;
  */
 public abstract class StreamInvocationHandler extends AbstractClientInvocationHandler {
 
-    private ClientStreamReadWriter objectReadWriter;
+    private ClientStreamDriver objectDriver;
     private boolean methodLogging = false;
     private long lastRealRequest = System.currentTimeMillis();
     protected final ClassLoader interfacesClassLoader;
@@ -75,8 +75,8 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
         return interfacesClassLoader;
     }
 
-    protected void setObjectReadWriter(ClientStreamReadWriter objectReadWriter) {
-        this.objectReadWriter = objectReadWriter;
+    protected void setObjectReadWriter(ClientStreamDriver objectDriver) {
+        this.objectDriver = objectDriver;
     }
 
     protected void requestWritten() {
@@ -113,7 +113,7 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
                     try {
                         long t1 = System.currentTimeMillis();
 
-                        response = (Response) objectReadWriter.postRequest(request);
+                        response = (Response) objectDriver.postRequest(request);
 
                         long t2 = System.currentTimeMillis();
 

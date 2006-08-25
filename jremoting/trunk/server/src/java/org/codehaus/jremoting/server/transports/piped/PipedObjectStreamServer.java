@@ -27,9 +27,9 @@ import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoClassRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamReadWriter;
+import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.ServerObjectStreamReadWriter;
+import org.codehaus.jremoting.server.transports.ServerObjectStreamDriver;
 
 /**
  * Class PipedObjectStreamServer
@@ -55,7 +55,7 @@ public class PipedObjectStreamServer extends AbstractPipedServer {
         this(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory());
     }
 
-    protected AbstractServerStreamReadWriter createServerStreamReadWriter() {
-        return new ServerObjectStreamReadWriter(serverMonitor, threadPool);
+    protected AbstractServerStreamDriver createServerStreamReadWriter() {
+        return new ServerObjectStreamDriver(serverMonitor, threadPool);
     }
 }

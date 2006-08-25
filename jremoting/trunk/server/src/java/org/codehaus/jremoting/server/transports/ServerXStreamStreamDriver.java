@@ -29,19 +29,19 @@ import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
- * Class ServerXStreamStreamReadWriter
+ * Class ServerXStreamStreamDriver
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ServerXStreamStreamReadWriter extends AbstractServerStreamReadWriter {
+public class ServerXStreamStreamDriver extends AbstractServerStreamDriver {
 
     private LineNumberReader lineNumberReader;
     private PrintWriter printWriter;
     private XStream xStream;
 
 
-    public ServerXStreamStreamReadWriter(ServerMonitor serverMonitor, ThreadPool threadPool) {
+    public ServerXStreamStreamDriver(ServerMonitor serverMonitor, ThreadPool threadPool) {
         super(serverMonitor, threadPool);
         xStream = new XStream(new DomDriver());
     }

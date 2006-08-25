@@ -19,7 +19,7 @@ package org.codehaus.jremoting.server.transports.piped;
 
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.AbstractServer;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamReadWriter;
+import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 import org.codehaus.jremoting.server.transports.AbstractStreamServerConnection;
 
 import java.io.IOException;
@@ -50,11 +50,11 @@ public class PipedStreamServerConnection extends AbstractStreamServerConnection 
      * @param abstractServer The asbtract server than handles requests
      * @param pipedIn        The piped Input Stream
      * @param pipedOut       The piped Output Stream
-     * @param readWriter     The read writer.
+     * @param driver     The read writer.
      */
-    public PipedStreamServerConnection(AbstractServer abstractServer, PipedInputStream pipedIn, PipedOutputStream pipedOut, AbstractServerStreamReadWriter readWriter, ServerMonitor serverMonitor) {
+    public PipedStreamServerConnection(AbstractServer abstractServer, PipedInputStream pipedIn, PipedOutputStream pipedOut, AbstractServerStreamDriver driver, ServerMonitor serverMonitor) {
 
-        super(abstractServer, readWriter, serverMonitor);
+        super(abstractServer, driver, serverMonitor);
 
         this.pipedIn = pipedIn;
         this.pipedOut = pipedOut;

@@ -16,7 +16,7 @@
  */
 package org.codehaus.jremoting.client.transports;
 
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.requests.AbstractRequest;
@@ -28,12 +28,12 @@ import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
- * Class ClientXStreamStreamReadWriter
+ * Class ClientXStreamStreamDriver
  *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
+public class ClientXStreamStreamDriver implements ClientStreamDriver {
 
     private LineNumberReader lineNumberReader;
     private PrintWriter printWriter;
@@ -42,7 +42,7 @@ public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
 
 
 
-    public ClientXStreamStreamReadWriter(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
+    public ClientXStreamStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
 
         printWriter = new PrintWriter(new BufferedOutputStream(outputStream));
         lineNumberReader = new LineNumberReader(new InputStreamReader(inputStream));

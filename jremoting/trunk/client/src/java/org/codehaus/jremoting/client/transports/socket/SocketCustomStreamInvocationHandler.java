@@ -20,9 +20,9 @@ package org.codehaus.jremoting.client.transports.socket;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.transports.ClientCustomStreamReadWriter;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriver;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -55,7 +55,7 @@ public final class SocketCustomStreamInvocationHandler extends AbstractSocketStr
      * @return the read/writer
      * @throws ConnectionException if a problem
      */
-    protected ClientStreamReadWriter createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException {
-        return new ClientCustomStreamReadWriter(in, out, interfacesClassLoader);
+    protected ClientStreamDriver createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException {
+        return new ClientCustomStreamDriver(in, out, interfacesClassLoader);
     }
 }

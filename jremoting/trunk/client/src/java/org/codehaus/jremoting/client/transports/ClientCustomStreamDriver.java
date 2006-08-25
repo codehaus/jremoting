@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.SerializationHelper;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 
@@ -31,12 +31,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Class ClientCustomStreamReadWriter
+ * Class ClientCustomStreamDriver
  *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public class ClientCustomStreamReadWriter implements ClientStreamReadWriter {
+public class ClientCustomStreamDriver implements ClientStreamDriver {
 
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
@@ -44,14 +44,14 @@ public class ClientCustomStreamReadWriter implements ClientStreamReadWriter {
 
 
     /**
-     * Constructor ClientCustomStreamReadWriter
+     * Constructor ClientCustomStreamDriver
      *
      * @param inputStream
      * @param outputStream
      * @param interfacesClassLoader
      * @throws ConnectionException
      */
-    public ClientCustomStreamReadWriter(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
+    public ClientCustomStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
 
         dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream));
         dataInputStream = new DataInputStream(inputStream);

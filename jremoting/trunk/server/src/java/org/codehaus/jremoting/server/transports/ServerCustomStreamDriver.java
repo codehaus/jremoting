@@ -31,17 +31,17 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * Class ServerCustomStreamReadWriter
+ * Class ServerCustomStreamDriver
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ServerCustomStreamReadWriter extends AbstractServerStreamReadWriter {
+public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
 
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
 
-    public ServerCustomStreamReadWriter(ServerMonitor serverMonitor, ThreadPool threadPool) {
+    public ServerCustomStreamDriver(ServerMonitor serverMonitor, ThreadPool threadPool) {
         super(serverMonitor, threadPool);
     }
 
@@ -116,7 +116,7 @@ public class ServerCustomStreamReadWriter extends AbstractServerStreamReadWriter
         /*
         if (cnt > 1)
         {
-            System.out.println( "ServerCustomStreamReadWriter.readReply took " + cnt +
+            System.out.println( "ServerCustomStreamDriver.readReply took " + cnt +
                 " reads to read all, " + byteArraySize + ", required bytes." );
         }
         */

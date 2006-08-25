@@ -28,12 +28,12 @@ import java.io.ObjectOutputStream;
 import java.io.BufferedInputStream;
 
 /**
- * Class ServerObjectStreamReadWriter
+ * Class ServerObjectStreamDriver
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ServerObjectStreamReadWriter extends AbstractServerStreamReadWriter {
+public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
 
     /**
      * The Object Input Stream
@@ -46,9 +46,9 @@ public class ServerObjectStreamReadWriter extends AbstractServerStreamReadWriter
     private ObjectOutputStream objectOutputStream;
 
     /**
-     * Constructor ServerObjectStreamReadWriter
+     * Constructor ServerObjectStreamDriver
      */
-    public ServerObjectStreamReadWriter(ServerMonitor serverMonitor, ThreadPool threadPool) {
+    public ServerObjectStreamDriver(ServerMonitor serverMonitor, ThreadPool threadPool) {
         super(serverMonitor, threadPool);
     }
 

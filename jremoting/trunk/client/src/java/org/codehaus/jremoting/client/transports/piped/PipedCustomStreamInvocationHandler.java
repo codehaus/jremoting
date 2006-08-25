@@ -20,9 +20,9 @@ package org.codehaus.jremoting.client.transports.piped;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.transports.ClientCustomStreamReadWriter;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriver;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -49,12 +49,12 @@ public final class PipedCustomStreamInvocationHandler extends AbstractPipedStrea
         super(threadPool, clientMonitor, connectionPinger, inputStream, outputStream, PipedCustomStreamInvocationHandler.class.getClassLoader());
     }
 
-    protected ClientStreamReadWriter createClientStreamReadWriter(InputStream inputStream, OutputStream outputStream) throws ConnectionException {
+    protected ClientStreamDriver createClientStreamReadWriter(InputStream inputStream, OutputStream outputStream) throws ConnectionException {
 
-        return new ClientCustomStreamReadWriter(inputStream, outputStream, PipedCustomStreamInvocationHandler.class.getClassLoader());
+        return new ClientCustomStreamDriver(inputStream, outputStream, PipedCustomStreamInvocationHandler.class.getClassLoader());
     }
 
-    protected ClientStreamReadWriter createClientStreamReadWriter(InputStream inputStream, OutputStream outputStream, ClassLoader classLoader) throws ConnectionException {
-        return new ClientCustomStreamReadWriter(inputStream, outputStream, classLoader);
+    protected ClientStreamDriver createClientStreamReadWriter(InputStream inputStream, OutputStream outputStream, ClassLoader classLoader) throws ConnectionException {
+        return new ClientCustomStreamDriver(inputStream, outputStream, classLoader);
     }
 }

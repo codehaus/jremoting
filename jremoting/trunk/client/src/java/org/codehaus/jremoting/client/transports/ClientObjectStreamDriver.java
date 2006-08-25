@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 
@@ -32,24 +32,24 @@ import java.io.OutputStream;
 import java.io.BufferedInputStream;
 
 /**
- * Class ClientObjectStreamReadWriter
+ * Class ClientObjectStreamDriver
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ClientObjectStreamReadWriter implements ClientStreamReadWriter {
+public class ClientObjectStreamDriver implements ClientStreamDriver {
 
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
 
     /**
-     * Constructor ClientObjectStreamReadWriter
+     * Constructor ClientObjectStreamDriver
      *
      * @param inputStream
      * @param outputStream
      * @throws ConnectionException
      */
-    public ClientObjectStreamReadWriter(InputStream inputStream, OutputStream outputStream) throws ConnectionException {
+    public ClientObjectStreamDriver(InputStream inputStream, OutputStream outputStream) throws ConnectionException {
 
         try {
             objectOutputStream = new ObjectOutputStream(outputStream);

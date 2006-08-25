@@ -20,8 +20,8 @@ import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamReadWriter;
-import org.codehaus.jremoting.server.transports.ServerCustomStreamReadWriter;
+import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
+import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
 import org.codehaus.jremoting.server.transports.piped.AbstractPipedServer;
 
 
@@ -30,7 +30,7 @@ public class CompleteCustomStreamPipedServer extends AbstractPipedServer {
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
     }
 
-    protected AbstractServerStreamReadWriter createServerStreamReadWriter() {
-        return new ServerCustomStreamReadWriter(serverMonitor, threadPool);
+    protected AbstractServerStreamDriver createServerStreamReadWriter() {
+        return new ServerCustomStreamDriver(serverMonitor, threadPool);
     }
 }

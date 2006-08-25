@@ -21,8 +21,8 @@ import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamReadWriter;
-import org.codehaus.jremoting.server.transports.ServerObjectStreamReadWriter;
+import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
+import org.codehaus.jremoting.server.transports.ServerObjectStreamDriver;
 
 
 /**
@@ -58,8 +58,8 @@ public class PartialSocketObjectStreamServer extends AbstractPartialSocketStream
      *
      * @return The Server Stream Read Writer.
      */
-    protected AbstractServerStreamReadWriter createServerStreamReadWriter() {
-        return new ServerObjectStreamReadWriter(serverMonitor, threadPool);
+    protected AbstractServerStreamDriver createServerStreamReadWriter() {
+        return new ServerObjectStreamDriver(serverMonitor, threadPool);
     }
 
 }

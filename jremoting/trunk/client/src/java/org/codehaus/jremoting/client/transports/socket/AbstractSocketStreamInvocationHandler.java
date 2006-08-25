@@ -21,7 +21,7 @@ import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ClientStreamReadWriter;
+import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.transports.AbstractStreamClientInvocationHandler;
@@ -106,5 +106,5 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
         return socket;
     }
 
-    protected abstract ClientStreamReadWriter createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException;
+    protected abstract ClientStreamDriver createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException;
 }

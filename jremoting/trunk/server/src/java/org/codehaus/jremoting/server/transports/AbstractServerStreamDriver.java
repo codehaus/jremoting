@@ -30,12 +30,12 @@ import java.io.OutputStream;
 
 
 /**
- * Class AbstractServerStreamReadWriter
+ * Class AbstractServerStreamDriver
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractServerStreamReadWriter implements ThreadPoolAware {
+public abstract class AbstractServerStreamDriver implements ThreadPoolAware {
 
 
     /**
@@ -52,7 +52,7 @@ public abstract class AbstractServerStreamReadWriter implements ThreadPoolAware 
     protected final ThreadPool threadPool;
     private Object connectionDetails;
 
-    public AbstractServerStreamReadWriter(ServerMonitor serverMonitor, ThreadPool threadPool) {
+    public AbstractServerStreamDriver(ServerMonitor serverMonitor, ThreadPool threadPool) {
         this.serverMonitor = serverMonitor;
         this.threadPool = threadPool;
     }
@@ -99,13 +99,13 @@ public abstract class AbstractServerStreamReadWriter implements ThreadPoolAware 
         try {
             inputStream.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "AbstractServerStreamReadWriter.close(): Failed closing an JRemoting connection input stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractServerStreamDriver.close(): Failed closing an JRemoting connection input stream: ", e);
         }
 
         try {
             outputStream.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "AbstractServerStreamReadWriter.close(): Failed closing an JRemoting connection output stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractServerStreamDriver.close(): Failed closing an JRemoting connection output stream: ", e);
         }
     }
 

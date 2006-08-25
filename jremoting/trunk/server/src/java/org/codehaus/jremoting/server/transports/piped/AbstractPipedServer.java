@@ -26,7 +26,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.transports.AbstractServer;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamReadWriter;
+import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 
 import java.io.IOException;
 import java.io.PipedInputStream;
@@ -70,7 +70,7 @@ public abstract class AbstractPipedServer extends AbstractServer {
             pIS.connect(out);
             in.connect(pOS);
 
-            AbstractServerStreamReadWriter ssrw = createServerStreamReadWriter();
+            AbstractServerStreamDriver ssrw = createServerStreamReadWriter();
 
             ssrw.setStreams(pIS, pOS, "piped");
 
@@ -103,5 +103,5 @@ public abstract class AbstractPipedServer extends AbstractServer {
         setState(STOPPED);
     }
 
-    protected abstract AbstractServerStreamReadWriter createServerStreamReadWriter();
+    protected abstract AbstractServerStreamDriver createServerStreamReadWriter();
 }
