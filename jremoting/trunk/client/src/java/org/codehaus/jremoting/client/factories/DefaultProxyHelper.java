@@ -25,16 +25,16 @@ import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.Proxy;
 import org.codehaus.jremoting.client.ProxyHelper;
 import org.codehaus.jremoting.responses.ExceptionResponse;
-import org.codehaus.jremoting.requests.GarbageCollectionRequest;
-import org.codehaus.jremoting.responses.GarbageCollectionResponse;
+import org.codehaus.jremoting.requests.CollectGarbage;
+import org.codehaus.jremoting.responses.GarbageCollected;
 import org.codehaus.jremoting.requests.GroupedMethodRequest;
 import org.codehaus.jremoting.responses.InvocationExceptionResponse;
-import org.codehaus.jremoting.requests.MethodAsyncRequest;
+import org.codehaus.jremoting.requests.InvokeAsyncMethod;
 import org.codehaus.jremoting.responses.MethodFacadeArrayResponse;
 import org.codehaus.jremoting.responses.MethodFacadeResponse;
-import org.codehaus.jremoting.responses.NoSuchSessionResponse;
-import org.codehaus.jremoting.requests.MethodRequest;
-import org.codehaus.jremoting.requests.MethodFacadeRequest;
+import org.codehaus.jremoting.responses.NoSuchSession;
+import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.requests.InvokeFacadeMethod;
 import org.codehaus.jremoting.requests.*;
 import org.codehaus.jremoting.responses.MethodResponse;
 import org.codehaus.jremoting.responses.*;
@@ -120,12 +120,12 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
         boolean arrayRetVal = objectName.endsWith("[]");
         String objNameWithoutArray = objectName.substring(0, objectName.length() - 2);
-        MethodFacadeRequest request;
+        InvokeFacadeMethod request;
 
         if (arrayRetVal) {
-            request = new MethodFacadeRequest(publishedServiceName, this.objectName, methodSignature, args, referenceID, objNameWithoutArray, session);
+            request = new InvokeFacadeMethod(publishedServiceName, this.objectName, methodSignature, args, referenceID, objNameWithoutArray, session);
         } else {
-            request = new MethodFacadeRequest(publishedServiceName, this.objectName, methodSignature, args, referenceID, objectName, session);
+            request = new InvokeFacadeMethod(publishedServiceName, this.objectName, methodSignature, args, referenceID, objectName, session);
         }
 
         setContext(request);
@@ -206,7 +206,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
         try {
             factory.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
-            MethodRequest request = new MethodRequest(publishedServiceName, objectName, methodSignature, args, referenceID, session);
+            InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
             setContext(request);
             Response response = clientInvocationHandler.handleInvocation(request);
 
@@ -236,7 +236,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
         try {
             factory.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
-            MethodRequest request = new MethodRequest(publishedServiceName, objectName, methodSignature, args, referenceID, session);
+            InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
 
             //debug(args);
             setContext(request);
@@ -272,7 +272,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
             try {
                 GroupedMethodRequest[] rawRequests = new GroupedMethodRequest[queuedAsyncRequests.size()];
                 queuedAsyncRequests.toArray(rawRequests);
-                MethodAsyncRequest request = new MethodAsyncRequest(publishedServiceName, objectName, rawRequests, referenceID, session);
+                InvokeAsyncMethod request = new InvokeAsyncMethod(publishedServiceName, objectName, rawRequests, referenceID, session);
 
                 //debug(args);
                 setContext(request);
@@ -332,12 +332,12 @@ public final class DefaultProxyHelper implements ProxyHelper {
             ExceptionResponse er = (ExceptionResponse) response;
             return er.getResponseException();
         } else if (response.getResponseCode() == ResponseConstants.NOSUCHSESSIONRESPONSE) {
-            NoSuchSessionResponse nssr = (NoSuchSessionResponse) response;
+            NoSuchSession nssr = (NoSuchSession) response;
             return new NoSuchSessionException(nssr.getSessionID());
         }
         //TODO remove some of these if clover indicates they are not used?
         else if (response.getResponseCode() == ResponseConstants.NOSUCHREFERENCERESPONSE) {
-            NoSuchReferenceResponse nsrr = (NoSuchReferenceResponse) response;
+            NoSuchReference nsrr = (NoSuchReference) response;
             return new NoSuchReferenceException(nsrr.getReferenceID());
         } else if (response.getResponseCode() == ResponseConstants.INVOCATIONEXCEPTIONRESPONSE) {
             InvocationExceptionResponse ier = (InvocationExceptionResponse) response;
@@ -394,7 +394,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
     protected void finalize() throws Throwable {
 
         synchronized (factory) {
-            Response response = clientInvocationHandler.handleInvocation(new GarbageCollectionRequest(publishedServiceName, objectName, session, referenceID));
+            Response response = clientInvocationHandler.handleInvocation(new CollectGarbage(publishedServiceName, objectName, session, referenceID));
             if (response instanceof ExceptionResponse) {
                 // This happens if the object can not be GCed on the remote server
                 //  for any reason.
@@ -404,11 +404,11 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 //  An object created in one ivocation will try to be gced in the second
                 //  invocation.  As the object does not exist, an error is thrown.
                 /*
-                System.out.println("----> Got an ExceptionResponsensense in response to a GarbageCollectionRequest" );
+                System.out.println("----> Got an ExceptionResponsensense in response to a CollectGarbage" );
                 ExceptionResponsensense er = (ExceptionResponsensense)response;
                 er.getReplyException().printStackTrace();
                 */
-            } else if (!(response instanceof GarbageCollectionResponse)) {
+            } else if (!(response instanceof GarbageCollected)) {
                 System.err.println("----> Some problem during Distributed Garbage Collection! Make sure factory is closed. Response = '" + response + "'");
             }
         }

@@ -17,20 +17,47 @@
  */
 package org.codehaus.jremoting.requests;
 
-import java.io.Externalizable;
+import org.codehaus.jremoting.Sessionable;
+import org.codehaus.jremoting.requests.PublishedNameRequest;
+import org.codehaus.jremoting.requests.RequestConstants;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class Request
+ * Class CollectGarbage
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class Request implements Externalizable {
+public final class CollectGarbage extends PublishedNameRequest implements Sessionable {
+    static final long serialVersionUID = -1588019075455361758L;
 
-    static final long serialVersionUID = 3003722657216604838L;
+    private Long session;
+    private Long referenceID;
+
+    /**
+     * Constructor CollectGarbage
+     *
+     * @param publishedServiceName the published service name
+     * @param objectName           the object name within that
+     * @param session              the session ID
+     * @param referenceID          the reference ID
+     */
+    public CollectGarbage(String publishedServiceName, String objectName, Long session, Long referenceID) {
+
+        super(publishedServiceName, objectName);
+
+        this.session = session;
+        this.referenceID = referenceID;
+    }
+
+    /**
+     * Constructor CollectGarbage
+     */
+    public CollectGarbage() {
+    }
 
     /**
      * Gets number that represents type for this class.
@@ -39,7 +66,27 @@ public abstract class Request implements Externalizable {
      * @return the representative code
      * @see org.codehaus.jremoting.requests.RequestConstants
      */
-    public abstract int getRequestCode();
+    public int getRequestCode() {
+        return RequestConstants.GCREQUEST;
+    }
+
+    /**
+     * Get the session ID
+     *
+     * @return the session ID
+     */
+    public Long getSession() {
+        return session;
+    }
+
+    /**
+     * Get the reference ID
+     *
+     * @return the reference ID
+     */
+    public Long getReferenceID() {
+        return referenceID;
+    }
 
     /**
      * The object implements the writeExternal method to save its contents
@@ -56,6 +103,10 @@ public abstract class Request implements Externalizable {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
+
+        super.writeExternal(out);
+        out.writeObject(session);
+        out.writeObject(referenceID);
     }
 
     /**
@@ -71,5 +122,10 @@ public abstract class Request implements Externalizable {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
+        super.readExternal(in);
+
+        session = (Long) in.readObject();
+        referenceID = (Long) in.readObject();
     }
 }

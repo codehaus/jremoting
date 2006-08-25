@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.server.adapters;
 
 import org.codehaus.jremoting.api.SerializationHelper;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
@@ -70,7 +70,7 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
     public byte[] handleInvocation(byte[] request, Object connectionDetails) {
 
         try {
-            Request ar = (Request) SerializationHelper.getInstanceFromBytes(request, classLoader);
+            AbstractRequest ar = (AbstractRequest) SerializationHelper.getInstanceFromBytes(request, classLoader);
             Response response = invocationHandler.handleInvocation(ar, connectionDetails);
 
             return SerializationHelper.getBytesFromInstance(response);

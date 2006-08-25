@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.Sessionable;
 import org.codehaus.jremoting.responses.ResponseConstants;
 import org.codehaus.jremoting.responses.Response;
 
@@ -26,32 +25,18 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class OpenConnectionResponse
+ * Class GarbageCollected
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class OpenConnectionResponse extends Response implements Sessionable {
-    static final long serialVersionUID = -1011412213595049271L;
-
-    private String textToSign;
-    private Long session;
+public final class GarbageCollected extends Response {
+    static final long serialVersionUID = -6876914024095000894L;
 
     /**
-     * Constructor OpenConnectionResponse
-     *
-     * @param textToSign text to sign for authenicating connections
-     * @param session    the session allocated by the server
+     * Constructor GarbageCollected
      */
-    public OpenConnectionResponse(String textToSign, Long session) {
-        this.textToSign = textToSign;
-        this.session = session;
-    }
-
-    /**
-     * Constructor OpenConnectionResponse for Externalization
-     */
-    public OpenConnectionResponse() {
+    public GarbageCollected() {
     }
 
     /**
@@ -62,25 +47,7 @@ public final class OpenConnectionResponse extends Response implements Sessionabl
      * @see org.codehaus.jremoting.responses.ResponseConstants
      */
     public int getResponseCode() {
-        return ResponseConstants.OPENCONNECTIONRESPONSE;
-    }
-
-    /**
-     * Get text to sign.
-     *
-     * @return the text to sign
-     */
-    public String getTextToSign() {
-        return textToSign;
-    }
-
-    /**
-     * Get the session ID.
-     *
-     * @return the session identifier.
-     */
-    public Long getSession() {
-        return session;
+        return ResponseConstants.GCRESPONSE;
     }
 
     /**
@@ -98,8 +65,6 @@ public final class OpenConnectionResponse extends Response implements Sessionabl
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(textToSign);
-        out.writeObject(session);
     }
 
     /**
@@ -115,7 +80,5 @@ public final class OpenConnectionResponse extends Response implements Sessionabl
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        textToSign = (String) in.readObject();
-        session = (Long) in.readObject();
     }
 }

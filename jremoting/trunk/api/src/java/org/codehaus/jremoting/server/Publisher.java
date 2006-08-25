@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.requests.MethodRequest;
+import org.codehaus.jremoting.requests.InvokeMethod;
 
 /**
  * Interface Server
@@ -71,11 +71,11 @@ public interface Publisher {
     /**
      * Get the MethodInvocationHandler for this transport.  Used in special adapters.
      *
-     * @param methodRequest used as a hint for getting the right handler.
+     * @param invokeMethod used as a hint for getting the right handler.
      * @param objectName    the object name relating to the method request.
      * @return a suitable MethodInvocationHandler
      */
-    MethodInvocationHandler getMethodInvocationHandler(MethodRequest methodRequest, String objectName);
+    MethodInvocationHandler getMethodInvocationHandler(InvokeMethod invokeMethod, String objectName);
 
     /**
      * Get the MethodInvocationHandler for a published lookup name. Used in special adapters.

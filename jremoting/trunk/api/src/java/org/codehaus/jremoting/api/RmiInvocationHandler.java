@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.api;
 
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 
 import java.rmi.Remote;
@@ -38,5 +38,5 @@ public interface RmiInvocationHandler extends Remote {
      * @return the reply got back from the server
      * @throws RemoteException in case there is outage.
      */
-    Response handleInvocation(Request request) throws RemoteException;
+    Response handleInvocation(AbstractRequest request) throws RemoteException;
 }

@@ -15,65 +15,45 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.requests;
-
-import org.codehaus.jremoting.Contextualizable;
-import org.codehaus.jremoting.requests.PublishedNameRequest;
-import org.codehaus.jremoting.requests.RequestConstants;
+package org.codehaus.jremoting.responses;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class MethodAsyncRequest
+ * Class RequestFailed
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class MethodAsyncRequest extends PublishedNameRequest implements Contextualizable {
-    static final long serialVersionUID = -5928783250529633953L;
+public final class RequestFailed extends Response {
+    static final long serialVersionUID = 8411019523629669181L;
 
-    private GroupedMethodRequest[] groupedRequests;
-    private Long referenceID;
-    private Long session;
+    private String failureReason;
 
     /**
-     * Constructor MethodRequest
+     * Constructor RequestFailed
      *
-     * @param publishedServiceName the published service name
-     * @param objectName           the object Name
-     * @param rawRequests          The raw requests
-     * @param referenceID          the reference ID
-     * @param session              the session ID
+     * @param failureReason the reason for the failure
      */
-    public MethodAsyncRequest(String publishedServiceName, String objectName, GroupedMethodRequest[] rawRequests, Long referenceID, Long session) {
-
-        super(publishedServiceName, objectName);
-
-        groupedRequests = rawRequests;
-        this.referenceID = referenceID;
-        this.session = session;
+    public RequestFailed(String failureReason) {
+        this.failureReason = failureReason;
     }
 
     /**
-     * Constructor MethodRequest for Externalization
+     * Constructor RequestFailed for Externalization
      */
-    public MethodAsyncRequest() {
-    }
-
-
-    public GroupedMethodRequest[] getGroupedRequests() {
-        return groupedRequests;
+    public RequestFailed() {
     }
 
     /**
-     * Get the reference ID.
+     * Get failure reason.
      *
-     * @return the reference ID
+     * @return the failure reason
      */
-    public Long getReferenceID() {
-        return referenceID;
+    public String getFailureReason() {
+        return failureReason;
     }
 
     /**
@@ -81,19 +61,10 @@ public class MethodAsyncRequest extends PublishedNameRequest implements Contextu
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.requests.RequestConstants
+     * @see org.codehaus.jremoting.responses.ResponseConstants
      */
-    public int getRequestCode() {
-        return RequestConstants.METHODASYNCREQUEST;
-    }
-
-    /**
-     * Get the session ID.
-     *
-     * @return the session ID
-     */
-    public Long getSession() {
-        return session;
+    public int getResponseCode() {
+        return ResponseConstants.REQUESTFAILEDRESPONSE;
     }
 
     /**
@@ -111,11 +82,7 @@ public class MethodAsyncRequest extends PublishedNameRequest implements Contextu
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-
-        super.writeExternal(out);
-        out.writeObject(groupedRequests);
-        out.writeObject(referenceID);
-        out.writeObject(session);
+        out.writeObject(failureReason);
     }
 
     /**
@@ -131,11 +98,6 @@ public class MethodAsyncRequest extends PublishedNameRequest implements Contextu
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-
-        super.readExternal(in);
-
-        groupedRequests = (GroupedMethodRequest[]) in.readObject();
-        referenceID = (Long) in.readObject();
-        session = (Long) in.readObject();
+        failureReason = (String) in.readObject();
     }
 }

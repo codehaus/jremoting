@@ -25,11 +25,11 @@ import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.Proxy;
 import org.codehaus.jremoting.responses.ExceptionResponse;
-import org.codehaus.jremoting.requests.ListRequest;
-import org.codehaus.jremoting.responses.ListResponse;
-import org.codehaus.jremoting.requests.LookupRequest;
+import org.codehaus.jremoting.requests.ListPublishedObjects;
+import org.codehaus.jremoting.responses.PublishedObjectList;
+import org.codehaus.jremoting.requests.LookupPublishedObject;
 import org.codehaus.jremoting.responses.LookupResponse;
-import org.codehaus.jremoting.requests.OpenConnectionRequest;
+import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.responses.*;
 
 import java.lang.ref.WeakReference;
@@ -66,11 +66,11 @@ public abstract class AbstractFactory implements Factory {
             machineID = null;
         }
 
-        Response response = clientInvocationHandler.handleInvocation(new OpenConnectionRequest(machineID));
+        Response response = clientInvocationHandler.handleInvocation(new OpenConnection(machineID));
 
-        if (response instanceof OpenConnectionResponse) {
-            textToSign = ((OpenConnectionResponse) response).getTextToSign();
-            session = ((OpenConnectionResponse) response).getSession();
+        if (response instanceof ConnectionOpened) {
+            textToSign = ((ConnectionOpened) response).getTextToSign();
+            session = ((ConnectionOpened) response).getSession();
         } else {
 
             throw new ConnectionException("Setting of host context blocked for reasons of unknown, server-side response: (" + response.getClass().getName() + ")");
@@ -88,10 +88,10 @@ public abstract class AbstractFactory implements Factory {
      */
     public Object lookup(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
-        Response ar = clientInvocationHandler.handleInvocation(new LookupRequest(publishedServiceName, authentication, session));
+        Response ar = clientInvocationHandler.handleInvocation(new LookupPublishedObject(publishedServiceName, authentication, session));
 
         if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
-            if (ar instanceof NotPublishedResponse) {
+            if (ar instanceof NotPublished) {
                 throw new ConnectionException("Service " + publishedServiceName + " not published");
             } else if (ar instanceof ExceptionResponse) {
                 ExceptionResponse er = (ExceptionResponse) ar;
@@ -207,10 +207,10 @@ public abstract class AbstractFactory implements Factory {
      */
     public String[] list() {
 
-        Response ar = clientInvocationHandler.handleInvocation(new ListRequest());
+        Response ar = clientInvocationHandler.handleInvocation(new ListPublishedObjects());
 
-        if (ar instanceof ListResponse) {
-            return ((ListResponse) ar).getListOfPublishedObjects();
+        if (ar instanceof PublishedObjectList) {
+            return ((PublishedObjectList) ar).getListOfPublishedObjects();
         } else {
             return new String[]{};
         }

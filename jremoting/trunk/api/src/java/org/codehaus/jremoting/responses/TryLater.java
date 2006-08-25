@@ -15,77 +15,46 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.requests;
-
-import org.codehaus.jremoting.Sessionable;
-import org.codehaus.jremoting.requests.PublishedNameRequest;
-import org.codehaus.jremoting.requests.RequestConstants;
+package org.codehaus.jremoting.responses;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class GarbageCollectionRequest
+ * Class TryLater
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class GarbageCollectionRequest extends PublishedNameRequest implements Sessionable {
-    static final long serialVersionUID = -1588019075455361758L;
+public abstract class TryLater extends Response {
+    static final long serialVersionUID = -3748772312349051164L;
 
-    private Long session;
-    private Long referenceID;
+    private int suggestedDelayMillis;
 
     /**
-     * Constructor GarbageCollectionRequest
-     *
-     * @param publishedServiceName the published service name
-     * @param objectName           the object name within that
-     * @param session              the session ID
-     * @param referenceID          the reference ID
+     * Constructor TryLater
      */
-    public GarbageCollectionRequest(String publishedServiceName, String objectName, Long session, Long referenceID) {
-
-        super(publishedServiceName, objectName);
-
-        this.session = session;
-        this.referenceID = referenceID;
+    public TryLater() {
+        suggestedDelayMillis = 5 * 1000;    // ten seconds.
     }
 
     /**
-     * Constructor GarbageCollectionRequest
+     * Constructor TryLater
+     *
+     * @param suggestedDelayMillis the amount of milliseconds sugested to the client
      */
-    public GarbageCollectionRequest() {
+    public TryLater(int suggestedDelayMillis) {
+        this.suggestedDelayMillis = suggestedDelayMillis;
     }
 
     /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
+     * Get delay in milliseconds.
      *
-     * @return the representative code
-     * @see org.codehaus.jremoting.requests.RequestConstants
+     * @return get delay in milliseconds
      */
-    public int getRequestCode() {
-        return RequestConstants.GCREQUEST;
-    }
-
-    /**
-     * Get the session ID
-     *
-     * @return the session ID
-     */
-    public Long getSession() {
-        return session;
-    }
-
-    /**
-     * Get the reference ID
-     *
-     * @return the reference ID
-     */
-    public Long getReferenceID() {
-        return referenceID;
+    public int getSuggestedDelayMillis() {
+        return suggestedDelayMillis;
     }
 
     /**
@@ -103,10 +72,7 @@ public final class GarbageCollectionRequest extends PublishedNameRequest impleme
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-
-        super.writeExternal(out);
-        out.writeObject(session);
-        out.writeObject(referenceID);
+        out.writeInt(suggestedDelayMillis);
     }
 
     /**
@@ -122,10 +88,6 @@ public final class GarbageCollectionRequest extends PublishedNameRequest impleme
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-
-        super.readExternal(in);
-
-        session = (Long) in.readObject();
-        referenceID = (Long) in.readObject();
+        suggestedDelayMillis = in.readInt();
     }
 }

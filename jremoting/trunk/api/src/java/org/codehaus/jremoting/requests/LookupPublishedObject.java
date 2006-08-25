@@ -27,25 +27,25 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class LookupRequest
+ * Class LookupPublishedObject
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class LookupRequest extends PublishedNameRequest implements Sessionable {
+public final class LookupPublishedObject extends PublishedNameRequest implements Sessionable {
     static final long serialVersionUID = 7509584735319760230L;
 
     private Authentication authentication;
     private Long session;
 
     /**
-     * Constructor LookupRequest
+     * Constructor LookupPublishedObject
      *
      * @param publishedServiceName the published service name
      * @param authentication       a plugable authenticator
      * @param session              the session ID
      */
-    public LookupRequest(String publishedServiceName, Authentication authentication, Long session) {
+    public LookupPublishedObject(String publishedServiceName, Authentication authentication, Long session) {
 
         super(publishedServiceName, "Main");
 
@@ -54,9 +54,9 @@ public final class LookupRequest extends PublishedNameRequest implements Session
     }
 
     /**
-     * Constructor LookupRequest for Externalization
+     * Constructor LookupPublishedObject for Externalization
      */
-    public LookupRequest() {
+    public LookupPublishedObject() {
     }
 
     /**

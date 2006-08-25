@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.pingers;
 
-import org.codehaus.jremoting.requests.PingRequest;
+import org.codehaus.jremoting.requests.Ping;
 
 /**
  * Interface PerpetualConnectionPinger
@@ -46,6 +46,6 @@ public class PerpetualConnectionPinger extends AbstractConnectionPinger {
     }
 
     protected void ping() {
-        getInvocationHandler().handleInvocation(new PingRequest());
+        getInvocationHandler().handleInvocation(new Ping());
     }
 }

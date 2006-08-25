@@ -15,38 +15,48 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.responses;
+package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.responses.ResponseConstants;
+import org.codehaus.jremoting.requests.RequestConstants;
+import org.codehaus.jremoting.requests.InvokeMethod;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class NoSuchReferenceResponse
+ * Class InvokeFacadeMethod
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class NoSuchReferenceResponse extends NotPublishedResponse {
-    static final long serialVersionUID = 4027710660600938555L;
+public final class InvokeFacadeMethod extends InvokeMethod {
+    static final long serialVersionUID = -8622531707298373091L;
 
-    private Long referenceID;
+    private String baseReturnClassNameEncoded;
 
     /**
-     * Constructor NoSuchReferenceResponse
+     * Constructor InvokeFacadeMethod
+     *
+     * @param publishedServiceName       the published service name
+     * @param objectName                 the object Name
+     * @param methodSignature            the method signature
+     * @param args                       an array of args for the method invocation
+     * @param referenceID                the reference ID
+     * @param baseReturnClassNameEncoded the encoded name of the base class
+     * @param session                    the session ID
      */
-    public NoSuchReferenceResponse() {
+    public InvokeFacadeMethod(String publishedServiceName, String objectName, String methodSignature, Object[] args, Long referenceID, String baseReturnClassNameEncoded, Long session) {
+
+        super(publishedServiceName, objectName, methodSignature, args, referenceID, session);
+
+        this.baseReturnClassNameEncoded = baseReturnClassNameEncoded;
     }
 
     /**
-     * Constructor NoSuchReferenceResponse
-     *
-     * @param referenceID the reference identifier
+     * Constructor InvokeFacadeMethod
      */
-    public NoSuchReferenceResponse(Long referenceID) {
-        this.referenceID = referenceID;
+    public InvokeFacadeMethod() {
     }
 
     /**
@@ -54,19 +64,19 @@ public final class NoSuchReferenceResponse extends NotPublishedResponse {
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
+     * @see org.codehaus.jremoting.requests.RequestConstants
      */
-    public int getResponseCode() {
-        return ResponseConstants.NOSUCHREFERENCERESPONSE;
+    public int getRequestCode() {
+        return RequestConstants.METHODFACADEREQUEST;
     }
 
     /**
-     * Get the reference ID.
+     * Get return class name in encoded form.
      *
-     * @return the reference id
+     * @return the encoded name of the base class
      */
-    public Long getReferenceID() {
-        return referenceID;
+    public String getBaseReturnClassNameEncoded() {
+        return baseReturnClassNameEncoded;
     }
 
     /**
@@ -85,7 +95,7 @@ public final class NoSuchReferenceResponse extends NotPublishedResponse {
      */
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        out.writeObject(referenceID);
+        out.writeObject(baseReturnClassNameEncoded);
     }
 
     /**
@@ -104,6 +114,6 @@ public final class NoSuchReferenceResponse extends NotPublishedResponse {
 
         super.readExternal(in);
 
-        referenceID = (Long) in.readObject();
+        baseReturnClassNameEncoded = (String) in.readObject();
     }
 }

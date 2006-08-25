@@ -19,6 +19,8 @@ package org.codehaus.jremoting.tools.javacompiler;
 
 import sun.tools.javac.Main;
 
+import java.io.File;
+
 /**
  * The default compiler. This is the javac present in JDK 1.1.x and
  * JDK 1.2.
@@ -37,7 +39,8 @@ public class SunJavaCompiler extends JavaCompiler {
      * @return
      */
     public boolean doCompile(String source) {
-        Main compiler = new Main(out, "jsp->javac");
+        new File(outdir).mkdirs();
+        Main compiler = new Main(out, "JRemoting->javac");
         String[] args;
         args = new String[]{"-classpath", classpath, "-d", outdir, source};
         return compiler.compile(args);

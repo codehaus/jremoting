@@ -24,6 +24,7 @@ import org.codehaus.jremoting.server.ProxyGenerationEnvironmentException;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.PublicationException;
+import org.codehaus.jremoting.requests.AbstractRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -231,6 +232,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
 
         if (!deferred) {
             try {
+                //proxyGenerator.setClasspath(AbstractRequest.class.getProtectionDomain().getCodeSource().getLocation().getFile());
                 proxyGenerator.generateClass(classLoader);
             } catch (Throwable t) {
                 if ((t instanceof NoClassDefFoundError) && t.getMessage().equals("sun/tools/javac/Main")) {

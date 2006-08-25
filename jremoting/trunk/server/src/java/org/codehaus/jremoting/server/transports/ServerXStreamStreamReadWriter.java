@@ -19,7 +19,7 @@ package org.codehaus.jremoting.server.transports;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 
 import java.io.*;
@@ -52,7 +52,7 @@ public class ServerXStreamStreamReadWriter extends AbstractServerStreamReadWrite
         printWriter = new PrintWriter(new BufferedOutputStream(getOutputStream()));
     }
 
-    protected synchronized Request writeReplyAndGetRequest(Response response) throws IOException, ClassNotFoundException, ConnectionException {
+    protected synchronized AbstractRequest writeReplyAndGetRequest(Response response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {
             writeReply(response);
@@ -62,6 +62,7 @@ public class ServerXStreamStreamReadWriter extends AbstractServerStreamReadWrite
     }
 
     private void writeReply(Response response) throws IOException {
+
 
         String xml = xStream.toXML(response);
 
@@ -82,7 +83,7 @@ public class ServerXStreamStreamReadWriter extends AbstractServerStreamReadWrite
         super.close();
     }
 
-    private Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
+    private AbstractRequest readRequest() throws IOException, ClassNotFoundException, ConnectionException {
         long start = System.currentTimeMillis();
         StringBuffer req = new StringBuffer();
 
@@ -103,7 +104,7 @@ public class ServerXStreamStreamReadWriter extends AbstractServerStreamReadWrite
 
         try {
             Object o = xStream.fromXML(r);
-            return (Request) o;
+            return (AbstractRequest) o;
         } catch (ConversionException e) {
             Throwable cause = e.getCause();
             if (cause != null && cause instanceof ClassCastException) {

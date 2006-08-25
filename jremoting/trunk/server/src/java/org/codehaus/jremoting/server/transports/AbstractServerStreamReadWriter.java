@@ -20,7 +20,7 @@ package org.codehaus.jremoting.server.transports;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.api.ThreadPoolAware;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
 
@@ -82,15 +82,15 @@ public abstract class AbstractServerStreamReadWriter implements ThreadPoolAware 
     protected abstract void initialize() throws IOException;
 
     /**
-     * Write a Response, then Get a new Request over the stream.
+     * Write a Response, then Get a new AbstractRequest over the stream.
      *
      * @param response The response to pass back to the client
-     * @return The Request that is new and incoming
+     * @return The AbstractRequest that is new and incoming
      * @throws IOException            if a problem during write & read.
      * @throws ConnectionException    if a problem during write & read.
      * @throws ClassNotFoundException If a Class is not found during serialization.
      */
-    protected abstract Request writeReplyAndGetRequest(Response response) throws IOException, ConnectionException, ClassNotFoundException;
+    protected abstract AbstractRequest writeReplyAndGetRequest(Response response) throws IOException, ConnectionException, ClassNotFoundException;
 
     /**
      * Close the stream.

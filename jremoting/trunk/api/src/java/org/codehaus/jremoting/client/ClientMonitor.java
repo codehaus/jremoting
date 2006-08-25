@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client;
 
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 
 import java.io.IOException;
 
@@ -51,7 +51,7 @@ public interface ClientMonitor {
      * @param attempt
      * @param suggestedWaitMillis
      */
-    void serviceSuspended(Class clazz, Request request, int attempt, int suggestedWaitMillis);
+    void serviceSuspended(Class clazz, AbstractRequest request, int attempt, int suggestedWaitMillis);
 
     /**
      * Method serviceAbend

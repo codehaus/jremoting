@@ -18,6 +18,7 @@
 package org.codehaus.jremoting.tools.javacompiler;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 /**
  * If you want to plugin your own Java compiler, you probably want to
@@ -29,8 +30,7 @@ import java.io.ByteArrayOutputStream;
  */
 public abstract class JavaCompiler {
 
-    static String CPSEP = System.getProperty("path.separator");
-    protected String classpath;
+    protected String classpath = "";
     protected String compilerPath = "jikes";
     protected String outdir;
     protected ByteArrayOutputStream out;
@@ -57,8 +57,13 @@ public abstract class JavaCompiler {
      */
     public void addClassPath(String path) {
 
-        // XXX use StringBuffer
-        classpath = classpath + CPSEP + path;
+        if (path != null) {
+            if (classpath.equals("")) {
+                classpath = path;
+            } else {
+                classpath = classpath + File.pathSeparator +  path;
+            }
+        }
     }
 
     /**
@@ -78,7 +83,7 @@ public abstract class JavaCompiler {
     /**
      * Method getCompilerMessage
      *
-     * @return
+     * @return compiler message
      */
     public String getCompilerMessage() {
         return out.toString();
@@ -103,7 +108,7 @@ public abstract class JavaCompiler {
     /**
      * Method getDefaultCompiler
      *
-     * @return
+     * @return the default compiler
      */
     public static JavaCompiler getDefaultCompiler() {
         return new SunJavaCompiler();

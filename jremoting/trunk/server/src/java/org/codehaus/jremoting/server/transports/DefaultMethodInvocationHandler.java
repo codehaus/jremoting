@@ -19,7 +19,7 @@ package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.api.FacadeRefHolder;
 import org.codehaus.jremoting.responses.ExceptionResponse;
-import org.codehaus.jremoting.requests.MethodRequest;
+import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.InvocationExceptionResponse;
 import org.codehaus.jremoting.responses.*;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
@@ -172,7 +172,7 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
      * @param request The emthod request
      * @return The reply.
      */
-    public Response handleMethodInvocation(MethodRequest request, Object connectionDetails) {
+    public Response handleMethodInvocation(InvokeMethod request, Object connectionDetails) {
 
         String methodSignature = request.getMethodSignature();
 
@@ -191,14 +191,14 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
 
             if (wr == null) {
                 methodInvocationMonitor.invalidReference(methodSignature, connectionDetails);
-                return new NoSuchReferenceResponse(request.getReferenceID());
+                return new NoSuchReference(request.getReferenceID());
             }
 
             beanImpl = wr.get();
 
             if (beanImpl == null) {
                 methodInvocationMonitor.invalidReference(methodSignature, connectionDetails);
-                return new NoSuchReferenceResponse(request.getReferenceID());
+                return new NoSuchReference(request.getReferenceID());
             }
 
             Object[] args = request.getArgs();
@@ -226,10 +226,10 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
     /**
      * Correct the arguments for a request (seme are 'additional facades' and can;t be serialized).
      *
-     * @param methodRequest The method request
+     * @param invokeMethod The method request
      * @param args          The arguments to correct
      */
-    private void correctArgs(MethodRequest methodRequest, Object[] args) {
+    private void correctArgs(InvokeMethod invokeMethod, Object[] args) {
 
         for (int i = 0; i < args.length; i++) {
 

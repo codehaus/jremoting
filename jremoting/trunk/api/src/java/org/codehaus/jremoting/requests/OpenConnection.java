@@ -17,79 +17,44 @@
  */
 package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.Contextualizable;
-import org.codehaus.jremoting.requests.PublishedNameRequest;
-import org.codehaus.jremoting.requests.RequestConstants;
-
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.rmi.server.UID;
 
 /**
- * Class MethodRequest
+ * Class OpenConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class MethodRequest extends PublishedNameRequest implements Contextualizable {
-    static final long serialVersionUID = -4850912985882914299L;
+public final class OpenConnection extends AbstractRequest {
+    static final long serialVersionUID = -2904286124933186290L;
 
-    private String methodSignature;
-    private Object[] args;
-    private Long referenceID;
-    private Long session;
+    private UID uid;
 
     /**
-     * Constructor MethodRequest
-     *
-     * @param publishedServiceName the published service name
-     * @param objectName           the object Name
-     * @param methodSignature      the method signature
-     * @param args                 an array of args for the method invocation
-     * @param referenceID          the reference ID
-     * @param session              the session ID
+     * Default constructor for externalization
      */
-    public MethodRequest(String publishedServiceName, String objectName, String methodSignature, Object[] args, Long referenceID, Long session) {
-
-        super(publishedServiceName, objectName);
-
-        this.methodSignature = methodSignature;
-        this.args = args;
-        this.referenceID = referenceID;
-        this.session = session;
+    public OpenConnection() {
     }
 
     /**
-     * Constructor MethodRequest for Externalization
+     * Construct a request with a UID for the client machine
+     *
+     * @param uid the machine ID
      */
-    public MethodRequest() {
+    public OpenConnection(UID uid) {
+        this.uid = uid;
     }
 
     /**
-     * Get method signature in string form.
+     * Get the machine ID
      *
-     * @return the method signature
+     * @return the machine ID
      */
-    public String getMethodSignature() {
-        return methodSignature;
-    }
-
-    /**
-     * Get arguments.
-     *
-     * @return the invocation arguments
-     */
-    public Object[] getArgs() {
-        return args;
-    }
-
-    /**
-     * Get the reference ID.
-     *
-     * @return the reference ID
-     */
-    public Long getReferenceID() {
-        return referenceID;
+    public UID getMachineID() {
+        return uid;
     }
 
     /**
@@ -100,16 +65,7 @@ public class MethodRequest extends PublishedNameRequest implements Contextualiza
      * @see org.codehaus.jremoting.requests.RequestConstants
      */
     public int getRequestCode() {
-        return RequestConstants.METHODREQUEST;
-    }
-
-    /**
-     * Get the session ID.
-     *
-     * @return the session ID
-     */
-    public Long getSession() {
-        return session;
+        return RequestConstants.OPENCONNECTIONREQUEST;
     }
 
     /**
@@ -127,12 +83,7 @@ public class MethodRequest extends PublishedNameRequest implements Contextualiza
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-
-        super.writeExternal(out);
-        out.writeObject(methodSignature);
-        out.writeObject(args);
-        out.writeObject(referenceID);
-        out.writeObject(session);
+        out.writeObject(uid);
     }
 
     /**
@@ -148,12 +99,7 @@ public class MethodRequest extends PublishedNameRequest implements Contextualiza
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-
-        super.readExternal(in);
-
-        methodSignature = (String) in.readObject();
-        args = (Object[]) in.readObject();
-        referenceID = (Long) in.readObject();
-        session = (Long) in.readObject();
+        uid = (UID) in.readObject();
     }
+
 }

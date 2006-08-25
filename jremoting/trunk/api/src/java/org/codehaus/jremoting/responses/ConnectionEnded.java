@@ -15,29 +15,35 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.requests;
+package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.RequestConstants;
+import org.codehaus.jremoting.responses.ResponseConstants;
+import org.codehaus.jremoting.responses.Response;
 
 
 /**
- * Class ListRequest
+ * Class ConnectionEnded
  *
- * @author Vinay Chandrasekharan
+ * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class ListRequest extends Request {
-    static final long serialVersionUID = -6048997904689623626L;
+public final class ConnectionEnded extends Response {
+    static final long serialVersionUID = 1736963237954338757L;
+
+    /**
+     * Constructor ConnectionEnded
+     */
+    public ConnectionEnded() {
+    }
 
     /**
      * Gets number that represents type for this class.
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.requests.RequestConstants
+     * @see org.codehaus.jremoting.responses.ResponseConstants
      */
-    public int getRequestCode() {
-        return RequestConstants.LISTREQUEST;
+    public int getResponseCode() {
+        return ResponseConstants.ENDCONNECTIONRESPONSE;
     }
 }

@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
 
@@ -70,7 +70,7 @@ public class ServerObjectStreamReadWriter extends AbstractServerStreamReadWriter
      * @throws IOException            In an IO Exception
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
-    protected synchronized Request writeReplyAndGetRequest(Response response) throws IOException, ClassNotFoundException {
+    protected synchronized AbstractRequest writeReplyAndGetRequest(Response response) throws IOException, ClassNotFoundException {
 
         if (response != null) {
             writeReply(response);
@@ -112,8 +112,8 @@ public class ServerObjectStreamReadWriter extends AbstractServerStreamReadWriter
      * @throws IOException            If an IO Exception
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
-    private Request readRequest() throws IOException, ClassNotFoundException {
-        Request request = (Request) objectInputStream.readObject();
+    private AbstractRequest readRequest() throws IOException, ClassNotFoundException {
+        AbstractRequest request = (AbstractRequest) objectInputStream.readObject();
         return request;
     }
 }

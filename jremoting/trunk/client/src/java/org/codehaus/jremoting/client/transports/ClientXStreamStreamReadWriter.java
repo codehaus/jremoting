@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.transports;
 import org.codehaus.jremoting.client.ClientStreamReadWriter;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 
 import java.io.*;
 
@@ -50,7 +50,7 @@ public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
         xStream = new XStream(new DomDriver());
     }
 
-    public synchronized Response postRequest(Request request) throws IOException, ClassNotFoundException {
+    public synchronized Response postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
 
         writeRequest(request);
 
@@ -59,7 +59,7 @@ public class ClientXStreamStreamReadWriter implements ClientStreamReadWriter {
         return r;
     }
 
-    private void writeRequest(Request request) {
+    private void writeRequest(AbstractRequest request) {
 
         String xml = xStream.toXML(request);
 

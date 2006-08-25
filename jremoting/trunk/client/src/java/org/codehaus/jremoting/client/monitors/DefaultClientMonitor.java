@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.monitors;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 
 import java.io.IOException;
 
@@ -81,7 +81,7 @@ public class DefaultClientMonitor implements ClientMonitor {
      * @param attempt
      * @param suggestedWaitMillis
      */
-    public void serviceSuspended(Class clazz, final Request request, final int attempt, final int suggestedWaitMillis) {
+    public void serviceSuspended(Class clazz, final AbstractRequest request, final int attempt, final int suggestedWaitMillis) {
 
         // Lets say that ten retries is too many.
         if (attempt == 10) {

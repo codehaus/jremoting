@@ -17,46 +17,79 @@
  */
 package org.codehaus.jremoting.requests;
 
+import org.codehaus.jremoting.Contextualizable;
+import org.codehaus.jremoting.requests.PublishedNameRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.requests.MethodRequest;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class MethodFacadeRequest
+ * Class InvokeMethod
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class MethodFacadeRequest extends MethodRequest {
-    static final long serialVersionUID = -8622531707298373091L;
+public class InvokeMethod extends PublishedNameRequest implements Contextualizable {
+    static final long serialVersionUID = -4850912985882914299L;
 
-    private String baseReturnClassNameEncoded;
+    private String methodSignature;
+    private Object[] args;
+    private Long referenceID;
+    private Long session;
 
     /**
-     * Constructor MethodFacadeRequest
+     * Constructor InvokeMethod
      *
-     * @param publishedServiceName       the published service name
-     * @param objectName                 the object Name
-     * @param methodSignature            the method signature
-     * @param args                       an array of args for the method invocation
-     * @param referenceID                the reference ID
-     * @param baseReturnClassNameEncoded the encoded name of the base class
-     * @param session                    the session ID
+     * @param publishedServiceName the published service name
+     * @param objectName           the object Name
+     * @param methodSignature      the method signature
+     * @param args                 an array of args for the method invocation
+     * @param referenceID          the reference ID
+     * @param session              the session ID
      */
-    public MethodFacadeRequest(String publishedServiceName, String objectName, String methodSignature, Object[] args, Long referenceID, String baseReturnClassNameEncoded, Long session) {
+    public InvokeMethod(String publishedServiceName, String objectName, String methodSignature, Object[] args, Long referenceID, Long session) {
 
-        super(publishedServiceName, objectName, methodSignature, args, referenceID, session);
+        super(publishedServiceName, objectName);
 
-        this.baseReturnClassNameEncoded = baseReturnClassNameEncoded;
+        this.methodSignature = methodSignature;
+        this.args = args;
+        this.referenceID = referenceID;
+        this.session = session;
     }
 
     /**
-     * Constructor MethodFacadeRequest
+     * Constructor InvokeMethod for Externalization
      */
-    public MethodFacadeRequest() {
+    public InvokeMethod() {
+    }
+
+    /**
+     * Get method signature in string form.
+     *
+     * @return the method signature
+     */
+    public String getMethodSignature() {
+        return methodSignature;
+    }
+
+    /**
+     * Get arguments.
+     *
+     * @return the invocation arguments
+     */
+    public Object[] getArgs() {
+        return args;
+    }
+
+    /**
+     * Get the reference ID.
+     *
+     * @return the reference ID
+     */
+    public Long getReferenceID() {
+        return referenceID;
     }
 
     /**
@@ -67,16 +100,16 @@ public final class MethodFacadeRequest extends MethodRequest {
      * @see org.codehaus.jremoting.requests.RequestConstants
      */
     public int getRequestCode() {
-        return RequestConstants.METHODFACADEREQUEST;
+        return RequestConstants.METHODREQUEST;
     }
 
     /**
-     * Get return class name in encoded form.
+     * Get the session ID.
      *
-     * @return the encoded name of the base class
+     * @return the session ID
      */
-    public String getBaseReturnClassNameEncoded() {
-        return baseReturnClassNameEncoded;
+    public Long getSession() {
+        return session;
     }
 
     /**
@@ -94,8 +127,12 @@ public final class MethodFacadeRequest extends MethodRequest {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
+
         super.writeExternal(out);
-        out.writeObject(baseReturnClassNameEncoded);
+        out.writeObject(methodSignature);
+        out.writeObject(args);
+        out.writeObject(referenceID);
+        out.writeObject(session);
     }
 
     /**
@@ -114,6 +151,9 @@ public final class MethodFacadeRequest extends MethodRequest {
 
         super.readExternal(in);
 
-        baseReturnClassNameEncoded = (String) in.readObject();
+        methodSignature = (String) in.readObject();
+        args = (Object[]) in.readObject();
+        referenceID = (Long) in.readObject();
+        session = (Long) in.readObject();
     }
 }

@@ -147,7 +147,7 @@ public class DynamicInvokerTestCase extends TestCase {
 
     public void testMultiArgumentMethodInvocation() throws Exception {
         /* JRemoting right now expects method signature in a specific format.
-         * within the MethodRequest.namely with  arguments spaced out by
+         * within the InvokeMethod.namely with  arguments spaced out by
          * a comma+space.
          *         e.g. hello4(float, double) )
          */

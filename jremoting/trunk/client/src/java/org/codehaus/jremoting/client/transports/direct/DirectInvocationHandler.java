@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.transports.direct;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 
@@ -50,7 +50,7 @@ public final class DirectInvocationHandler extends AbstractDirectInvocationHandl
         this.invocationHandler = invocationHandler;
     }
 
-    protected Response performInvocation(Request request) throws IOException {
+    protected Response performInvocation(AbstractRequest request) throws IOException {
         return invocationHandler.handleInvocation(request, "");
     }
 

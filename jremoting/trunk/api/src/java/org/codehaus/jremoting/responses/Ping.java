@@ -21,12 +21,12 @@ import org.codehaus.jremoting.responses.ResponseConstants;
 
 
 /**
- * Class PingResponse
+ * Class Ping
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class PingResponse extends NotPublishedResponse {
+public final class Ping extends NotPublished {
     static final long serialVersionUID = 2290360065017766788L;
 
     /**

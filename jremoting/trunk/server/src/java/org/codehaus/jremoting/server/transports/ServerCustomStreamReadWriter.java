@@ -21,7 +21,7 @@ import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.SerializationHelper;
 import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
 
@@ -64,7 +64,7 @@ public class ServerCustomStreamReadWriter extends AbstractServerStreamReadWriter
      * @throws ConnectionException    In an IO Exception
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
-    protected synchronized Request writeReplyAndGetRequest(Response response) throws IOException, ClassNotFoundException, ConnectionException {
+    protected synchronized AbstractRequest writeReplyAndGetRequest(Response response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {
             writeReply(response);
@@ -94,7 +94,7 @@ public class ServerCustomStreamReadWriter extends AbstractServerStreamReadWriter
         super.close();
     }
 
-    private Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
+    private AbstractRequest readRequest() throws IOException, ClassNotFoundException, ConnectionException {
         int byteArraySize = dataInputStream.readInt();
         if (byteArraySize < 0) {
             throw new BadConnectionException("Transport mismatch, Unable to " + "read packet of data from CustomStream.");
@@ -120,6 +120,6 @@ public class ServerCustomStreamReadWriter extends AbstractServerStreamReadWriter
                 " reads to read all, " + byteArraySize + ", required bytes." );
         }
         */
-        return (Request) SerializationHelper.getInstanceFromBytes(byteArray);
+        return (AbstractRequest) SerializationHelper.getInstanceFromBytes(byteArray);
     }
 }

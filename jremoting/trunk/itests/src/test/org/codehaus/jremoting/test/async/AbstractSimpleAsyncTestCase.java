@@ -63,7 +63,7 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
         String class_gen_dir = getClassGenDir();
 
         cr.setClassGenDir(class_gen_dir);
-        cr.setSrcGenDir(class_gen_dir);
+        cr.setSrcGenDir(new File(class_gen_dir).getParent() + File.separator + "generated_java");
 
         DefaultServerSideClientContextFactory ccf = new DefaultServerSideClientContextFactory();
         server = new CompleteSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 11003);

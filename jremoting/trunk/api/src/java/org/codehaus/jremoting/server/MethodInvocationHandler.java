@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.requests.MethodRequest;
+import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.Response;
 
 /**
@@ -34,7 +34,7 @@ public interface MethodInvocationHandler {
      * @param request the method request.
      * @return the reply for the request.
      */
-    Response handleMethodInvocation(MethodRequest request, Object connectionDetails);
+    Response handleMethodInvocation(InvokeMethod request, Object connectionDetails);
 
     /**
      * Add an implementation bean

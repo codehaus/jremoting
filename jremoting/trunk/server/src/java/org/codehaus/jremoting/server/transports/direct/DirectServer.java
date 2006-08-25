@@ -20,7 +20,7 @@ package org.codehaus.jremoting.server.transports.direct;
 import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.responses.InvocationExceptionResponse;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ClassRetriever;
@@ -83,7 +83,7 @@ public class DirectServer extends AbstractServer {
      * @param request
      * @return
      */
-    public Response handleInvocation(Request request) {
+    public Response handleInvocation(AbstractRequest request) {
 
         if (getState() == STARTED) {
             return super.handleInvocation(request, "");

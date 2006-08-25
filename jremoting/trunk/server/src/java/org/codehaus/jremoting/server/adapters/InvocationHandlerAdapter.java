@@ -25,26 +25,26 @@ import org.codehaus.jremoting.api.MethodNameHelper;
 import org.codehaus.jremoting.api.Session;
 import org.codehaus.jremoting.requests.ClassRequest;
 import org.codehaus.jremoting.responses.ClassResponse;
-import org.codehaus.jremoting.responses.ClassRetrievalFailedResponse;
+import org.codehaus.jremoting.responses.ClassRetrievalFailed;
 import org.codehaus.jremoting.responses.ExceptionResponse;
-import org.codehaus.jremoting.requests.GarbageCollectionRequest;
-import org.codehaus.jremoting.responses.GarbageCollectionResponse;
+import org.codehaus.jremoting.requests.CollectGarbage;
+import org.codehaus.jremoting.responses.GarbageCollected;
 import org.codehaus.jremoting.requests.GroupedMethodRequest;
 import org.codehaus.jremoting.responses.InvocationExceptionResponse;
-import org.codehaus.jremoting.requests.ListMethodsRequest;
-import org.codehaus.jremoting.responses.ListMethodsResponse;
-import org.codehaus.jremoting.responses.ListResponse;
-import org.codehaus.jremoting.requests.LookupRequest;
+import org.codehaus.jremoting.requests.ListInvokableMethods;
+import org.codehaus.jremoting.responses.InvokableMethods;
+import org.codehaus.jremoting.responses.PublishedObjectList;
+import org.codehaus.jremoting.requests.LookupPublishedObject;
 import org.codehaus.jremoting.responses.LookupResponse;
-import org.codehaus.jremoting.requests.MethodAsyncRequest;
+import org.codehaus.jremoting.requests.InvokeAsyncMethod;
 import org.codehaus.jremoting.responses.MethodFacadeArrayResponse;
-import org.codehaus.jremoting.requests.MethodFacadeRequest;
+import org.codehaus.jremoting.requests.InvokeFacadeMethod;
 import org.codehaus.jremoting.responses.MethodFacadeResponse;
 import org.codehaus.jremoting.responses.MethodResponse;
-import org.codehaus.jremoting.responses.NoSuchSessionResponse;
-import org.codehaus.jremoting.responses.NotPublishedResponse;
-import org.codehaus.jremoting.responses.OpenConnectionResponse;
-import org.codehaus.jremoting.responses.PingResponse;
+import org.codehaus.jremoting.responses.NoSuchSession;
+import org.codehaus.jremoting.responses.NotPublished;
+import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.responses.Ping;
 import org.codehaus.jremoting.requests.*;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.ResponseConstants;
@@ -100,30 +100,30 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * @param request The request
      * @return The reply.
      */
-    public Response handleInvocation(Request request, Object connectionDetails) {
+    public Response handleInvocation(AbstractRequest request, Object connectionDetails) {
 
         try {
             if (suspend == true) {
-                return new SuspendedResponse();
+                return new ServiceSuspended();
             }
 
             // Method request is positioned first as
             // it is the one we want to be most speedy.
             if (request.getRequestCode() == RequestConstants.METHODREQUEST) {
 
-                MethodRequest methodRequest = (MethodRequest) request;
-                setClientContext(methodRequest);
-                return doMethodRequest(methodRequest, connectionDetails);
+                InvokeMethod invokeMethod = (InvokeMethod) request;
+                setClientContext(invokeMethod);
+                return doMethodRequest(invokeMethod, connectionDetails);
 
             } else if (request.getRequestCode() == RequestConstants.METHODFACADEREQUEST) {
-                MethodFacadeRequest methodFacadeRequest = (MethodFacadeRequest) request;
-                setClientContext(methodFacadeRequest);
-                return doMethodFacadeRequest(methodFacadeRequest, connectionDetails);
+                InvokeFacadeMethod invokeFacadeMethod = (InvokeFacadeMethod) request;
+                setClientContext(invokeFacadeMethod);
+                return doMethodFacadeRequest(invokeFacadeMethod, connectionDetails);
 
             } else if (request.getRequestCode() == RequestConstants.METHODASYNCREQUEST) {
-                MethodAsyncRequest methodAsyncRequest = (MethodAsyncRequest) request;
-                setClientContext(methodAsyncRequest);
-                return doMethodAsyncRequest(methodAsyncRequest, connectionDetails);
+                InvokeAsyncMethod invokeAsyncMethod = (InvokeAsyncMethod) request;
+                setClientContext(invokeAsyncMethod);
+                return doMethodAsyncRequest(invokeAsyncMethod, connectionDetails);
 
             } else if (request.getRequestCode() == RequestConstants.GCREQUEST) {
 
@@ -136,24 +136,24 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
                 return doClassRequest(request);
 
             } else if (request.getRequestCode() == RequestConstants.OPENCONNECTIONREQUEST) {
-                OpenConnectionRequest openConnectionRequest = (OpenConnectionRequest) request;
-                return doOpenConnectionRequest(openConnectionRequest.getMachineID());
+                OpenConnection openConnection = (OpenConnection) request;
+                return doOpenConnectionRequest(openConnection.getMachineID());
 
             } else if (request.getRequestCode() == RequestConstants.PINGREQUEST) {
 
                 // we could communicate back useful state info in this transaction.
-                return new PingResponse();
+                return new Ping();
             } else if (request.getRequestCode() == RequestConstants.LISTREQUEST) {
                 return doListRequest();
             } else if (request.getRequestCode() == RequestConstants.LISTMETHODSREQUEST) {
                 return doListMethodsRequest(request);
             } else {
-                return new RequestFailedResponse("Unknown request :" + request.getClass().getName());
+                return new RequestFailed("Unknown request :" + request.getClass().getName());
             }
         } catch (NullPointerException npe) {
             npe.printStackTrace();
-            if (request instanceof MethodRequest) {
-                String methd = ((MethodRequest) request).getMethodSignature();
+            if (request instanceof InvokeMethod) {
+                String methd = ((InvokeMethod) request).getMethodSignature();
                 getServerMonitor().unexpectedException(InvocationHandlerAdapter.class, "InvocationHandlerAdapter.handleInvocation() NPE processing method " + methd, npe);
                 throw new NullPointerException("Null pointer exception, processing method " + methd);
             } else {
@@ -181,21 +181,21 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
 
     /**
-     * Do a Method Facade Request
+     * Do a Method Facade AbstractRequest
      *
      * @param facadeRequest the request
      * @return The reply
      */
-    private Response doMethodFacadeRequest(MethodFacadeRequest facadeRequest, Object connectionDetails) {
+    private Response doMethodFacadeRequest(InvokeFacadeMethod facadeRequest, Object connectionDetails) {
 
         if (!sessionExists(facadeRequest.getSession()) && (connectionDetails == null || !connectionDetails.equals("callback"))) {
-            return new NoSuchSessionResponse(facadeRequest.getSession());
+            return new NoSuchSession(facadeRequest.getSession());
         }
 
         String publishedThing = facadeRequest.getPublishedServiceName() + "_" + facadeRequest.getObjectName();
 
         if (!isPublished(publishedThing)) {
-            return new NotPublishedResponse();
+            return new NotPublished();
         }
 
         //if( !sessionExists( facadeRequest.getSession() ) )
@@ -224,7 +224,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             }
         } else {
             // unknown reply type from
-            return new RequestFailedResponse("TODO");
+            return new RequestFailed("TODO");
         }
     }
 
@@ -232,28 +232,28 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * Do a method facade request, returning an array
      *
      * @param methodReply         The array to process.
-     * @param methodFacadeRequest The request
+     * @param invokeFacadeMethod The request
      * @return The reply
      */
-    private Response doMethodFacadeRequestArray(Object methodReply, MethodFacadeRequest methodFacadeRequest) {
+    private Response doMethodFacadeRequestArray(Object methodReply, InvokeFacadeMethod invokeFacadeMethod) {
         Object[] beanImpls = (Object[]) methodReply;
         Long[] refs = new Long[beanImpls.length];
         String[] objectNames = new String[beanImpls.length];
 
-        if (!sessionExists(methodFacadeRequest.getSession())) {
-            return new NoSuchSessionResponse(methodFacadeRequest.getSession());
+        if (!sessionExists(invokeFacadeMethod.getSession())) {
+            return new NoSuchSession(invokeFacadeMethod.getSession());
         }
 
         for (int i = 0; i < beanImpls.length; i++) {
             Object impl = beanImpls[i];
-            MethodInvocationHandler mainMethodInvocationHandler = getMethodInvocationHandler(methodFacadeRequest.getPublishedServiceName() + "_Main");
+            MethodInvocationHandler mainMethodInvocationHandler = getMethodInvocationHandler(invokeFacadeMethod.getPublishedServiceName() + "_Main");
 
             objectNames[i] = MethodNameHelper.encodeClassName(mainMethodInvocationHandler.getMostDerivedType(beanImpls[i]).getName());
 
-            MethodInvocationHandler methodInvocationHandler2 = getMethodInvocationHandler(methodFacadeRequest.getPublishedServiceName() + "_" + objectNames[i]);
+            MethodInvocationHandler methodInvocationHandler2 = getMethodInvocationHandler(invokeFacadeMethod.getPublishedServiceName() + "_" + objectNames[i]);
 
             if (methodInvocationHandler2 == null) {
-                return new NotPublishedResponse();
+                return new NotPublished();
             }
 
             //TODO a decent ref number for main?
@@ -262,7 +262,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             } else {
                 refs[i] = methodInvocationHandler2.getOrMakeReferenceIDForBean(beanImpls[i]);
 
-                Session sess = (Session) sessions.get(methodFacadeRequest.getSession());
+                Session sess = (Session) sessions.get(invokeFacadeMethod.getSession());
 
                 sess.addBeanInUse(refs[i], beanImpls[i]);
             }
@@ -275,26 +275,26 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * Do a method facade request, returning things other that an array
      *
      * @param beanImpl            The returned object to process.
-     * @param methodFacadeRequest The request
+     * @param invokeFacadeMethod The request
      * @return The reply
      */
-    private Response doMethodFacadeRequestNonArray(Object beanImpl, MethodFacadeRequest methodFacadeRequest) {
+    private Response doMethodFacadeRequestNonArray(Object beanImpl, InvokeFacadeMethod invokeFacadeMethod) {
 
-        if (!sessionExists(methodFacadeRequest.getSession())) {
-            return new NoSuchSessionResponse(methodFacadeRequest.getSession());
+        if (!sessionExists(invokeFacadeMethod.getSession())) {
+            return new NoSuchSession(invokeFacadeMethod.getSession());
         }
 
-        MethodInvocationHandler mainMethodInvocationHandler = getMethodInvocationHandler(methodFacadeRequest.getPublishedServiceName() + "_Main");
+        MethodInvocationHandler mainMethodInvocationHandler = getMethodInvocationHandler(invokeFacadeMethod.getPublishedServiceName() + "_Main");
 
         String objectName = MethodNameHelper.encodeClassName(mainMethodInvocationHandler.getMostDerivedType(beanImpl).getName());
 
-        MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(methodFacadeRequest.getPublishedServiceName() + "_" + objectName);
+        MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(invokeFacadeMethod.getPublishedServiceName() + "_" + objectName);
 
         if (methodInvocationHandler == null) {
-            return new NotPublishedResponse();
+            return new NotPublished();
         }
 
-        //if( !sessionExists( methodFacadeRequest.getSession() ) )
+        //if( !sessionExists( invokeFacadeMethod.getSession() ) )
         //{
         //    return new ExceptionResponse(
         //        new InvocationException( "TODO - you dirty rat/hacker" ) );
@@ -304,7 +304,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         Long newRef = methodInvocationHandler.getOrMakeReferenceIDForBean(beanImpl);
 
         // make sure the bean is not garbage collected.
-        Session sess = (Session) sessions.get(methodFacadeRequest.getSession());
+        Session sess = (Session) sessions.get(invokeFacadeMethod.getSession());
 
         sess.addBeanInUse(newRef, beanImpl);
 
@@ -315,36 +315,36 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     /**
      * Do a method request
      *
-     * @param methodRequest The request
+     * @param invokeMethod The request
      * @return The reply
      */
-    private Response doMethodRequest(MethodRequest methodRequest, Object connectionDetails) {
+    private Response doMethodRequest(InvokeMethod invokeMethod, Object connectionDetails) {
 
-        if (!sessionExists(methodRequest.getSession()) && (connectionDetails == null || !connectionDetails.equals("callback"))) {
-            return new NoSuchSessionResponse(methodRequest.getSession());
+        if (!sessionExists(invokeMethod.getSession()) && (connectionDetails == null || !connectionDetails.equals("callback"))) {
+            return new NoSuchSession(invokeMethod.getSession());
         }
 
-        String publishedThing = methodRequest.getPublishedServiceName() + "_" + methodRequest.getObjectName();
+        String publishedThing = invokeMethod.getPublishedServiceName() + "_" + invokeMethod.getObjectName();
 
         if (!isPublished(publishedThing)) {
-            return new NotPublishedResponse();
+            return new NotPublished();
         }
 
         MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
 
-        return methodInvocationHandler.handleMethodInvocation(methodRequest, connectionDetails);
+        return methodInvocationHandler.handleMethodInvocation(invokeMethod, connectionDetails);
     }
 
-    private Response doMethodAsyncRequest(MethodAsyncRequest methodRequest, Object connectionDetails) {
+    private Response doMethodAsyncRequest(InvokeAsyncMethod methodRequest, Object connectionDetails) {
 
         if (!sessionExists(methodRequest.getSession())) {
-            return new NoSuchSessionResponse(methodRequest.getSession());
+            return new NoSuchSession(methodRequest.getSession());
         }
 
         String publishedThing = methodRequest.getPublishedServiceName() + "_" + methodRequest.getObjectName();
 
         if (!isPublished(publishedThing)) {
-            return new NotPublishedResponse();
+            return new NotPublished();
         }
 
         MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
@@ -352,7 +352,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         GroupedMethodRequest[] requests = methodRequest.getGroupedRequests();
         for (int i = 0; i < requests.length; i++) {
             GroupedMethodRequest rawRequest = requests[i];
-            methodInvocationHandler.handleMethodInvocation(new MethodRequest(methodRequest.getPublishedServiceName(), methodRequest.getObjectName(), rawRequest.getMethodSignature(), rawRequest.getArgs(), methodRequest.getReferenceID(), methodRequest.getSession()), connectionDetails);
+            methodInvocationHandler.handleMethodInvocation(new InvokeMethod(methodRequest.getPublishedServiceName(), methodRequest.getObjectName(), rawRequest.getMethodSignature(), rawRequest.getArgs(), methodRequest.getReferenceID(), methodRequest.getSession()), connectionDetails);
         }
 
         return new MethodResponse();
@@ -366,8 +366,8 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * @param request The request
      * @return The reply
      */
-    private Response doLookupRequest(Request request) {
-        LookupRequest lr = (LookupRequest) request;
+    private Response doLookupRequest(AbstractRequest request) {
+        LookupPublishedObject lr = (LookupPublishedObject) request;
 
         try {
             authenticator.checkAuthority(lr.getAuthentication(), lr.getPublishedServiceName());
@@ -385,14 +385,14 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * @param request The request
      * @return The reply
      */
-    private Response doClassRequest(Request request) {
+    private Response doClassRequest(AbstractRequest request) {
         ClassRequest cr = (ClassRequest) request;
         String publishedThing = cr.getPublishedServiceName() + "_" + cr.getObjectName();
 
         try {
             return new ClassResponse(classRetriever.getProxyClassBytes(publishedThing));
         } catch (ClassRetrievalException e) {
-            return new ClassRetrievalFailedResponse(e.getMessage());
+            return new ClassRetrievalFailed(e.getMessage());
         }
     }
 
@@ -407,12 +407,12 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         } else {
             Long session = getNewSession();
             sessions.put(session, new Session(session));
-            return new OpenConnectionResponse(authenticator.getTextToSign(), session);
+            return new ConnectionOpened(authenticator.getTextToSign(), session);
         }
     }
 
     /**
-     * Do a ListRequest
+     * Do a ListPublishedObjects
      *
      * @return The reply
      */
@@ -433,21 +433,21 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
         System.arraycopy(vecOfPublishedObjectNames.toArray(), 0, listOfPublishedObjectNames, 0, vecOfPublishedObjectNames.size());
 
-        return new ListResponse(listOfPublishedObjectNames);
+        return new PublishedObjectList(listOfPublishedObjectNames);
     }
 
     /**
-     * Do a GarbageCollection Request
+     * Do a GarbageCollection AbstractRequest
      *
      * @param request The request
      * @return The reply
      */
-    private Response doGarbageCollectionRequest(Request request) {
-        GarbageCollectionRequest gcr = (GarbageCollectionRequest) request;
+    private Response doGarbageCollectionRequest(AbstractRequest request) {
+        CollectGarbage gcr = (CollectGarbage) request;
         String publishedThing = gcr.getPublishedServiceName() + "_" + gcr.getObjectName();
 
         if (!isPublished(publishedThing)) {
-            return new NotPublishedResponse();
+            return new NotPublished();
         }
 
         Long session = gcr.getSession();
@@ -468,27 +468,27 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
         MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
 
-        return new GarbageCollectionResponse();
+        return new GarbageCollected();
     }
 
     /**
-     * Do a ListMethods Request
+     * Do a ListMethods AbstractRequest
      *
      * @param request The request
      * @return The reply
      */
-    private Response doListMethodsRequest(Request request) {
-        ListMethodsRequest lReq = (ListMethodsRequest) request;
+    private Response doListMethodsRequest(AbstractRequest request) {
+        ListInvokableMethods lReq = (ListInvokableMethods) request;
         String publishedThing = lReq.getPublishedName() + "_Main";
 
         if (!isPublished(publishedThing)) {
             //Should it throw an exception back?
-            return new ListMethodsResponse(new String[0]);
+            return new InvokableMethods(new String[0]);
         }
 
         DefaultMethodInvocationHandler methodInvocationHandler = (DefaultMethodInvocationHandler) getMethodInvocationHandler(publishedThing);
 
-        return new ListMethodsResponse(methodInvocationHandler.getListOfMethods());
+        return new InvokableMethods(methodInvocationHandler.getListOfMethods());
     }
 
     /**

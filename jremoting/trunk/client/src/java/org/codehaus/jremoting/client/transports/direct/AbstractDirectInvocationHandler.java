@@ -24,14 +24,14 @@ import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
-import org.codehaus.jremoting.requests.MethodRequest;
-import org.codehaus.jremoting.responses.NoSuchReferenceResponse;
-import org.codehaus.jremoting.responses.NotPublishedResponse;
+import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.responses.NoSuchReference;
+import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.requests.PublishedNameRequest;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.responses.TryLaterResponse;
+import org.codehaus.jremoting.responses.TryLater;
 
 import java.io.IOException;
 
@@ -57,7 +57,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
      * @param request
      * @return
      */
-    public Response handleInvocation(Request request) {
+    public Response handleInvocation(AbstractRequest request) {
 
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
@@ -85,15 +85,15 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
 
             //if ((response instanceof ProblemReply))  // slower by 11%
             if (response.getResponseCode() >= 100) {
-                if (response instanceof TryLaterResponse) {
-                    int millis = ((TryLaterResponse) response).getSuggestedDelayMillis();
+                if (response instanceof TryLater) {
+                    int millis = ((TryLater) response).getSuggestedDelayMillis();
 
                     clientMonitor.serviceSuspended(this.getClass(), request, tries, millis);
 
                     again = true;
-                } else if (response instanceof NoSuchReferenceResponse) {
-                    throw new NoSuchReferenceException(((NoSuchReferenceResponse) response).getReferenceID());
-                } else if (response instanceof NotPublishedResponse) {
+                } else if (response instanceof NoSuchReference) {
+                    throw new NoSuchReferenceException(((NoSuchReference) response).getReferenceID());
+                } else if (response instanceof NotPublished) {
                     PublishedNameRequest pnr = (PublishedNameRequest) request;
 
                     throw new NotPublishedException(pnr.getPublishedServiceName(), pnr.getObjectName());
@@ -102,8 +102,8 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
         }
 
         if (methodLogging) {
-            if (request instanceof MethodRequest) {
-                clientMonitor.methodCalled(this.getClass(), ((MethodRequest) request).getMethodSignature(), System.currentTimeMillis() - start, "");
+            if (request instanceof InvokeMethod) {
+                clientMonitor.methodCalled(this.getClass(), ((InvokeMethod) request).getMethodSignature(), System.currentTimeMillis() - start, "");
             }
         }
 
@@ -125,5 +125,5 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
         return lastRealRequest;
     }
 
-    protected abstract Response performInvocation(Request request) throws IOException;
+    protected abstract Response performInvocation(AbstractRequest request) throws IOException;
 }

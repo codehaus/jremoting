@@ -19,9 +19,9 @@ package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.responses.EndConnectionResponse;
+import org.codehaus.jremoting.responses.ConnectionEnded;
 import org.codehaus.jremoting.responses.InvocationExceptionResponse;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerConnection;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -87,7 +87,7 @@ public abstract class StreamServerConnection implements Runnable, ServerConnecti
             readWriter.initialize();
 
             boolean more = true;
-            Request request = null;
+            AbstractRequest request = null;
             Response response = null;
 
             while (more) {
@@ -102,7 +102,7 @@ public abstract class StreamServerConnection implements Runnable, ServerConnecti
                     // halves the performance though.
                     //oOS.reset();
                     if (endConnection) {
-                        response = new EndConnectionResponse();
+                        response = new ConnectionEnded();
                         more = false;
                     }
                 } catch (BadConnectionException bce) {

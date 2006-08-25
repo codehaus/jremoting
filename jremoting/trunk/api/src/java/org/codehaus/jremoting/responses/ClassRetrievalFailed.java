@@ -17,44 +17,53 @@
  */
 package org.codehaus.jremoting.responses;
 
+import org.codehaus.jremoting.responses.ResponseConstants;
+import org.codehaus.jremoting.responses.Response;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class TryLaterResponse
+ * Class RequestFailed
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class TryLaterResponse extends Response {
-    static final long serialVersionUID = -3748772312349051164L;
+public final class ClassRetrievalFailed extends Response {
+    static final long serialVersionUID = -8931777755294495428L;
 
-    private int suggestedDelayMillis;
+    private String reason;
 
     /**
-     * Constructor TryLaterResponse
+     * Constructor RequestFailed for Externalizable
      */
-    public TryLaterResponse() {
-        suggestedDelayMillis = 5 * 1000;    // ten seconds.
+    public ClassRetrievalFailed() {
     }
 
     /**
-     * Constructor TryLaterResponse
-     *
-     * @param suggestedDelayMillis the amount of milliseconds sugested to the client
+     * @param reason underlying reason.
      */
-    public TryLaterResponse(int suggestedDelayMillis) {
-        this.suggestedDelayMillis = suggestedDelayMillis;
+    public ClassRetrievalFailed(String reason) {
+        this.reason = reason;
     }
 
     /**
-     * Get delay in milliseconds.
-     *
-     * @return get delay in milliseconds
+     * @return the reason for failure.
      */
-    public int getSuggestedDelayMillis() {
-        return suggestedDelayMillis;
+    public String getReason() {
+        return reason;
+    }
+
+    /**
+     * Gets number that represents type for this class.
+     * This is quicker than instanceof for type checking.
+     *
+     * @return the representative code
+     * @see org.codehaus.jremoting.responses.ResponseConstants
+     */
+    public int getResponseCode() {
+        return ResponseConstants.CLASSRETRIEVALFAILEDRESPONSE;
     }
 
     /**
@@ -72,7 +81,9 @@ public abstract class TryLaterResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeInt(suggestedDelayMillis);
+
+        super.writeExternal(out);
+        out.writeObject(reason);
     }
 
     /**
@@ -88,6 +99,9 @@ public abstract class TryLaterResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        suggestedDelayMillis = in.readInt();
+
+        super.readExternal(in);
+        reason = (String) in.readObject();
     }
+
 }

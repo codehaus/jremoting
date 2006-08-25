@@ -19,8 +19,8 @@ package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.api.ThreadPoolAware;
-import org.codehaus.jremoting.requests.MethodRequest;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -86,7 +86,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @param request The request of the invocation.
      * @return An suitable reply.
      */
-    public Response handleInvocation(Request request, Object connectionDetails) {
+    public Response handleInvocation(AbstractRequest request, Object connectionDetails) {
         return invocationHandlerAdapter.handleInvocation(request, connectionDetails);
     }
 
@@ -185,12 +185,12 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
     /**
      * Get the Method Invocation Handler for a particular request.
      *
-     * @param methodRequest The method request
+     * @param invokeMethod The method request
      * @param objectName    The object Name.
      * @return The Method invocation handler
      */
-    public MethodInvocationHandler getMethodInvocationHandler(MethodRequest methodRequest, String objectName) {
-        return invocationHandlerAdapter.getMethodInvocationHandler(methodRequest, objectName);
+    public MethodInvocationHandler getMethodInvocationHandler(InvokeMethod invokeMethod, String objectName) {
+        return invocationHandlerAdapter.getMethodInvocationHandler(invokeMethod, objectName);
     }
 
     /**

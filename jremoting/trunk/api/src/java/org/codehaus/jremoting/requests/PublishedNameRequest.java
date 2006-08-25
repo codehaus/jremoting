@@ -29,7 +29,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class PublishedNameRequest extends Request {
+public abstract class PublishedNameRequest extends AbstractRequest {
     static final long serialVersionUID = 5995735372269955205L;
 
     private String publishedServiceName;

@@ -18,22 +18,35 @@
 package org.codehaus.jremoting.responses;
 
 import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.Response;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
 /**
- * Class EndConnectionResponse
+ * Class NoSuchSession
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class EndConnectionResponse extends Response {
-    static final long serialVersionUID = 1736963237954338757L;
+public final class NoSuchSession extends NotPublished {
+//    static final long serialVersionUID = TODO;
+
+    private Long sessionID;
 
     /**
-     * Constructor EndConnectionResponse
+     * Constructor NoSuchSession
      */
-    public EndConnectionResponse() {
+    public NoSuchSession() {
+    }
+
+    /**
+     * Constructor NoSuchSession
+     *
+     * @param sessionID the reference identifier
+     */
+    public NoSuchSession(Long sessionID) {
+        this.sessionID = sessionID;
     }
 
     /**
@@ -44,6 +57,27 @@ public final class EndConnectionResponse extends Response {
      * @see org.codehaus.jremoting.responses.ResponseConstants
      */
     public int getResponseCode() {
-        return ResponseConstants.ENDCONNECTIONRESPONSE;
+        return ResponseConstants.NOSUCHSESSIONRESPONSE;
+    }
+
+    /**
+     * Get the session ID.
+     *
+     * @return the session id
+     */
+    public Long getSessionID() {
+        return sessionID;
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+        out.writeObject(sessionID);
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
+        super.readExternal(in);
+
+        sessionID = (Long) in.readObject();
     }
 }

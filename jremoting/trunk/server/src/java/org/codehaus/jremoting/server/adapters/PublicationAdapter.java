@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.server.adapters;
 
 import org.codehaus.jremoting.api.MethodNameHelper;
-import org.codehaus.jremoting.requests.MethodRequest;
+import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
@@ -209,12 +209,12 @@ public class PublicationAdapter implements Publisher {
     /**
      * Get a Server's  InvocationHandler
      *
-     * @param methodRequest The method Request.
+     * @param invokeMethod The method AbstractRequest.
      * @param objectName    The object name.
      * @return the method invoation handler
      */
-    public MethodInvocationHandler getMethodInvocationHandler(MethodRequest methodRequest, String objectName) {
-        return (MethodInvocationHandler) publishedObjects.get(methodRequest.getPublishedServiceName() + "_" + objectName);
+    public MethodInvocationHandler getMethodInvocationHandler(InvokeMethod invokeMethod, String objectName) {
+        return (MethodInvocationHandler) publishedObjects.get(invokeMethod.getPublishedServiceName() + "_" + objectName);
     }
 
     /**

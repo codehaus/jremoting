@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class GroupedMethodRequest extends Request {
+public class GroupedMethodRequest extends AbstractRequest {
 
     static final long serialVersionUID = 2433454402872395509L;
 

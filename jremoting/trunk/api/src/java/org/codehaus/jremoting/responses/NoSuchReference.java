@@ -18,41 +18,35 @@
 package org.codehaus.jremoting.responses;
 
 import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.Response;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class RequestFailedResponse
+ * Class NoSuchReference
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class ClassRetrievalFailedResponse extends Response {
-    static final long serialVersionUID = -8931777755294495428L;
+public final class NoSuchReference extends NotPublished {
+    static final long serialVersionUID = 4027710660600938555L;
 
-    private String reason;
+    private Long referenceID;
 
     /**
-     * Constructor RequestFailedResponse for Externalizable
+     * Constructor NoSuchReference
      */
-    public ClassRetrievalFailedResponse() {
+    public NoSuchReference() {
     }
 
     /**
-     * @param reason underlying reason.
+     * Constructor NoSuchReference
+     *
+     * @param referenceID the reference identifier
      */
-    public ClassRetrievalFailedResponse(String reason) {
-        this.reason = reason;
-    }
-
-    /**
-     * @return the reason for failure.
-     */
-    public String getReason() {
-        return reason;
+    public NoSuchReference(Long referenceID) {
+        this.referenceID = referenceID;
     }
 
     /**
@@ -63,7 +57,16 @@ public final class ClassRetrievalFailedResponse extends Response {
      * @see org.codehaus.jremoting.responses.ResponseConstants
      */
     public int getResponseCode() {
-        return ResponseConstants.CLASSRETRIEVALFAILEDRESPONSE;
+        return ResponseConstants.NOSUCHREFERENCERESPONSE;
+    }
+
+    /**
+     * Get the reference ID.
+     *
+     * @return the reference id
+     */
+    public Long getReferenceID() {
+        return referenceID;
     }
 
     /**
@@ -81,9 +84,8 @@ public final class ClassRetrievalFailedResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-
         super.writeExternal(out);
-        out.writeObject(reason);
+        out.writeObject(referenceID);
     }
 
     /**
@@ -101,7 +103,7 @@ public final class ClassRetrievalFailedResponse extends Response {
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
         super.readExternal(in);
-        reason = (String) in.readObject();
-    }
 
+        referenceID = (Long) in.readObject();
+    }
 }

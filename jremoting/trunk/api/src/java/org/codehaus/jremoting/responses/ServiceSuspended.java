@@ -17,24 +17,15 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.Response;
-
 
 /**
- * Class NotPublishedResponse
+ * Class ServiceSuspended
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class NotPublishedResponse extends Response {
-    static final long serialVersionUID = 2421625946997973156L;
-
-    /**
-     * Constructor NotPublishedResponse
-     */
-    public NotPublishedResponse() {
-    }
+public final class ServiceSuspended extends TryLater {
+    static final long serialVersionUID = -5602483138541792903L;
 
     /**
      * Gets number that represents type for this class.
@@ -44,6 +35,6 @@ public class NotPublishedResponse extends Response {
      * @see org.codehaus.jremoting.responses.ResponseConstants
      */
     public int getResponseCode() {
-        return ResponseConstants.NOTPUBLISHEDRESPONSE;
+        return ResponseConstants.SUSPENDEDRESPONSE;
     }
 }

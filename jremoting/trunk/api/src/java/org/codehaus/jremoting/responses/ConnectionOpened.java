@@ -17,6 +17,7 @@
  */
 package org.codehaus.jremoting.responses;
 
+import org.codehaus.jremoting.Sessionable;
 import org.codehaus.jremoting.responses.ResponseConstants;
 import org.codehaus.jremoting.responses.Response;
 
@@ -25,18 +26,32 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class GarbageCollectionResponse
+ * Class ConnectionOpened
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class GarbageCollectionResponse extends Response {
-    static final long serialVersionUID = -6876914024095000894L;
+public final class ConnectionOpened extends Response implements Sessionable {
+    static final long serialVersionUID = -1011412213595049271L;
+
+    private String textToSign;
+    private Long session;
 
     /**
-     * Constructor GarbageCollectionResponse
+     * Constructor ConnectionOpened
+     *
+     * @param textToSign text to sign for authenicating connections
+     * @param session    the session allocated by the server
      */
-    public GarbageCollectionResponse() {
+    public ConnectionOpened(String textToSign, Long session) {
+        this.textToSign = textToSign;
+        this.session = session;
+    }
+
+    /**
+     * Constructor ConnectionOpened for Externalization
+     */
+    public ConnectionOpened() {
     }
 
     /**
@@ -47,7 +62,25 @@ public final class GarbageCollectionResponse extends Response {
      * @see org.codehaus.jremoting.responses.ResponseConstants
      */
     public int getResponseCode() {
-        return ResponseConstants.GCRESPONSE;
+        return ResponseConstants.OPENCONNECTIONRESPONSE;
+    }
+
+    /**
+     * Get text to sign.
+     *
+     * @return the text to sign
+     */
+    public String getTextToSign() {
+        return textToSign;
+    }
+
+    /**
+     * Get the session ID.
+     *
+     * @return the session identifier.
+     */
+    public Long getSession() {
+        return session;
     }
 
     /**
@@ -65,6 +98,8 @@ public final class GarbageCollectionResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(textToSign);
+        out.writeObject(session);
     }
 
     /**
@@ -80,5 +115,7 @@ public final class GarbageCollectionResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        textToSign = (String) in.readObject();
+        session = (Long) in.readObject();
     }
 }

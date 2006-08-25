@@ -15,25 +15,29 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server;
+package org.codehaus.jremoting.requests;
 
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.requests.RequestConstants;
+
 
 /**
- * Interface InvocationHandler
+ * Class ListPublishedObjects
  *
- * @author Paul Hammant
- * @version * $Revision: 1.2 $
+ * @author Vinay Chandrasekharan
+ * @version $Revision: 1.2 $
  */
-public interface ServerInvocationHandler {
+public final class ListPublishedObjects extends AbstractRequest {
+    static final long serialVersionUID = -6048997904689623626L;
 
     /**
-     * Handle a method invocation
+     * Gets number that represents type for this class.
+     * This is quicker than instanceof for type checking.
      *
-     * @param request           The request to handle
-     * @param connectionDetails Some details of the connection.
-     * @return the reply that is a consequence of the request
+     * @return the representative code
+     * @see org.codehaus.jremoting.requests.RequestConstants
      */
-    Response handleInvocation(AbstractRequest request, Object connectionDetails);
+    public int getRequestCode() {
+        return RequestConstants.LISTREQUEST;
+    }
 }

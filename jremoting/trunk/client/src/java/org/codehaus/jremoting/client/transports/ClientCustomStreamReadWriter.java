@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.transports;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.SerializationHelper;
 import org.codehaus.jremoting.client.ClientStreamReadWriter;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 
 import java.io.BufferedOutputStream;
@@ -58,7 +58,7 @@ public class ClientCustomStreamReadWriter implements ClientStreamReadWriter {
         this.interfacesClassLoader = interfacesClassLoader;
     }
 
-    public synchronized Response postRequest(Request request) throws IOException, ClassNotFoundException {
+    public synchronized Response postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
 
         writeRequest(request);
 
@@ -67,7 +67,7 @@ public class ClientCustomStreamReadWriter implements ClientStreamReadWriter {
         return r;
     }
 
-    private void writeRequest(Request request) throws IOException {
+    private void writeRequest(AbstractRequest request) throws IOException {
 
         byte[] aBytes = SerializationHelper.getBytesFromInstance(request);
 

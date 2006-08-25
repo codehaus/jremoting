@@ -39,4 +39,9 @@ public class JavacSimpleAsyncTestCase extends AbstractSimpleAsyncTestCase {
         simp.tearDown();
     }
 
+    public void testSimpleAsync() throws Exception {
+        super.testSimpleAsync();
+    }
+
+
 }

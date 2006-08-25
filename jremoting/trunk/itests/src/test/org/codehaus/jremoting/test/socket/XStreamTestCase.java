@@ -79,6 +79,13 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         super.tearDown();
     }
 
+    public void testCustomSerializableParameter() {
+        super.testCustomSerializableParameter();
+    }
+
+
+
+
     public class MyCompleteSocketXStreamServer extends CompleteSocketXStreamServer {
         public MyCompleteSocketXStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
             super(classRetriever, authenticator, serverMonitor, threadPool, contextFactory, port);

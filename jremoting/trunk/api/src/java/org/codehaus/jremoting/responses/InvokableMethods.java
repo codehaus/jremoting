@@ -15,76 +15,80 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.RequestConstants;
+package org.codehaus.jremoting.responses;
+
+import org.codehaus.jremoting.responses.ResponseConstants;
+import org.codehaus.jremoting.responses.Response;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Request the list of remote methods within the published Object.
+ * Class PublishedObjectList
  *
- * @author <a href="mailto:vinayc@apache.org">Vinay Chandrasekharan</a>
+ * @author Vinay Chandrasekharan
+ * @version $Revision: 1.2 $
  */
-public final class ListMethodsRequest extends Request {
+public final class InvokableMethods extends Response {
 
-    static final long serialVersionUID = 466389099971742704L;
+    static final long serialVersionUID = 420067307396614451L;
     /**
-     * Name of the published object whose remote methods is sought
+     * String array of the methods list of the request publishedObject
      */
-    private String publishedName;
+    private String[] listOfMethods;
 
 
     /**
-     * Constructor .
+     * Constructor initialized with remote method list of the publishedObject
      *
-     * @param publishedName
+     * @param listOfMethods : list of remote methods exposed by the published Obj
      */
-    public ListMethodsRequest(String publishedName) {
-        this.publishedName = publishedName;
+    public InvokableMethods(String[] listOfMethods) {
+        this.listOfMethods = listOfMethods;
     }
 
     /**
-     * default constructor needed for externalization
+     * Default Constructor needed for Externalization
      */
-    public ListMethodsRequest() {
+    public InvokableMethods() {
     }
 
-    //--------Methods---------------//
+    //------Methods--------------//
     /**
-     * Get the published objects name
+     * Get the list of methods of the publishedObject.
+     *
+     * @return the list of methods
      */
-    public String getPublishedName() {
-        return publishedName;
+    public String[] getListOfMethods() {
+        return listOfMethods;
     }
 
-    //----Request Override--//
+    //-----Response override---//
     /**
      * Gets number that represents type for this class.
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.requests.RequestConstants
+     * @see org.codehaus.jremoting.responses.ResponseConstants
      */
-    public int getRequestCode() {
-        return RequestConstants.LISTMETHODSREQUEST;
+    public int getResponseCode() {
+        return ResponseConstants.LISTRESPONSE;
     }
 
-    //----Externalizable Overrides---//
+    //----Externalizable Overrides--//
     /**
      * @see java.io.Externalizable#writeExternal(ObjectOutput)
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(publishedName);
+        out.writeObject(listOfMethods);
     }
 
     /**
      * @see java.io.Externalizable#readExternal(ObjectInput)
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        publishedName = (String) in.readObject();
+        listOfMethods = (String[]) in.readObject();
     }
 }

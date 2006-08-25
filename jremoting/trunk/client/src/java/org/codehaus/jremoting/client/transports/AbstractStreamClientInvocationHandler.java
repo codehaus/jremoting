@@ -26,10 +26,10 @@ import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.responses.ClientInvocationAbendResponse;
-import org.codehaus.jremoting.requests.MethodRequest;
-import org.codehaus.jremoting.responses.NotPublishedResponse;
+import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.requests.PublishedNameRequest;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 import org.codehaus.jremoting.responses.*;
 
@@ -86,7 +86,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
      * @param request
      * @return
      */
-    public synchronized Response handleInvocation(Request request) {
+    public synchronized Response handleInvocation(AbstractRequest request) {
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
         }
@@ -121,17 +121,17 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
                                 throw abendReply.getIOException();
                             }
 
-                            if (response instanceof TryLaterResponse) {
-                                int millis = ((TryLaterResponse) response).getSuggestedDelayMillis();
+                            if (response instanceof TryLater) {
+                                int millis = ((TryLater) response).getSuggestedDelayMillis();
 
                                 clientMonitor.serviceSuspended(this.getClass(), request, tries, millis);
 
                                 again = true;
-                            } else if (response instanceof NoSuchReferenceResponse) {
-                                throw new NoSuchReferenceException(((NoSuchReferenceResponse) response).getReferenceID());
-                            } else if (response instanceof NoSuchSessionResponse) {
-                                throw new NoSuchSessionException(((NoSuchSessionResponse) response).getSessionID());
-                            } else if (response instanceof NotPublishedResponse) {
+                            } else if (response instanceof NoSuchReference) {
+                                throw new NoSuchReferenceException(((NoSuchReference) response).getReferenceID());
+                            } else if (response instanceof NoSuchSession) {
+                                throw new NoSuchSessionException(((NoSuchSession) response).getSessionID());
+                            } else if (response instanceof NotPublished) {
                                 PublishedNameRequest pnr = (PublishedNameRequest) request;
 
                                 throw new NotPublishedException(pnr.getPublishedServiceName(), pnr.getObjectName());
@@ -156,8 +156,8 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
                     }
                 }
                 if (methodLogging) {
-                    if (request instanceof MethodRequest) {
-                        clientMonitor.methodCalled(this.getClass(), ((MethodRequest) request).getMethodSignature(), System.currentTimeMillis() - start, "");
+                    if (request instanceof InvokeMethod) {
+                        clientMonitor.methodCalled(this.getClass(), ((InvokeMethod) request).getMethodSignature(), System.currentTimeMillis() - start, "");
                     }
                 }
 

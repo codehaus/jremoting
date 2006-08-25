@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client;
 import org.codehaus.jremoting.api.CallbackException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.Response;
 
 /**
@@ -37,7 +37,7 @@ public interface ClientInvocationHandler {
      * @param request The request to handle
      * @return the reply that is a consequence of the request
      */
-    Response handleInvocation(Request request);
+    Response handleInvocation(AbstractRequest request);
 
     /**
      * Method initialize

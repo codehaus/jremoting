@@ -25,12 +25,12 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class ListResponse
+ * Class PublishedObjectList
  *
  * @author Vinay Chandrasekharan
  * @version $Revision: 1.2 $
  */
-public final class ListResponse extends Response {
+public final class PublishedObjectList extends Response {
     static final long serialVersionUID = -2491265577999411874L;
 
     private String[] listOfPublishedObjects;
@@ -40,14 +40,14 @@ public final class ListResponse extends Response {
      *
      * @param listOfPublishedObjects : list of Published Objects
      */
-    public ListResponse(String[] listOfPublishedObjects) {
+    public PublishedObjectList(String[] listOfPublishedObjects) {
         this.listOfPublishedObjects = listOfPublishedObjects;
     }
 
     /**
-     * Constructor ListResponse for Externalization
+     * Constructor PublishedObjectList for Externalization
      */
-    public ListResponse() {
+    public PublishedObjectList() {
     }
 
     /**

@@ -17,44 +17,63 @@
  */
 package org.codehaus.jremoting.requests;
 
+import org.codehaus.jremoting.Contextualizable;
+import org.codehaus.jremoting.requests.PublishedNameRequest;
+import org.codehaus.jremoting.requests.RequestConstants;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.rmi.server.UID;
 
 /**
- * Class OpenConnectionRequest
+ * Class InvokeAsyncMethod
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class OpenConnectionRequest extends Request {
-    static final long serialVersionUID = -2904286124933186290L;
+public class InvokeAsyncMethod extends PublishedNameRequest implements Contextualizable {
+    static final long serialVersionUID = -5928783250529633953L;
 
-    private UID uid;
+    private GroupedMethodRequest[] groupedRequests;
+    private Long referenceID;
+    private Long session;
 
     /**
-     * Default constructor for externalization
+     * Constructor InvokeMethod
+     *
+     * @param publishedServiceName the published service name
+     * @param objectName           the object Name
+     * @param rawRequests          The raw requests
+     * @param referenceID          the reference ID
+     * @param session              the session ID
      */
-    public OpenConnectionRequest() {
+    public InvokeAsyncMethod(String publishedServiceName, String objectName, GroupedMethodRequest[] rawRequests, Long referenceID, Long session) {
+
+        super(publishedServiceName, objectName);
+
+        groupedRequests = rawRequests;
+        this.referenceID = referenceID;
+        this.session = session;
     }
 
     /**
-     * Construct a request with a UID for the client machine
-     *
-     * @param uid the machine ID
+     * Constructor InvokeMethod for Externalization
      */
-    public OpenConnectionRequest(UID uid) {
-        this.uid = uid;
+    public InvokeAsyncMethod() {
+    }
+
+
+    public GroupedMethodRequest[] getGroupedRequests() {
+        return groupedRequests;
     }
 
     /**
-     * Get the machine ID
+     * Get the reference ID.
      *
-     * @return the machine ID
+     * @return the reference ID
      */
-    public UID getMachineID() {
-        return uid;
+    public Long getReferenceID() {
+        return referenceID;
     }
 
     /**
@@ -65,7 +84,16 @@ public final class OpenConnectionRequest extends Request {
      * @see org.codehaus.jremoting.requests.RequestConstants
      */
     public int getRequestCode() {
-        return RequestConstants.OPENCONNECTIONREQUEST;
+        return RequestConstants.METHODASYNCREQUEST;
+    }
+
+    /**
+     * Get the session ID.
+     *
+     * @return the session ID
+     */
+    public Long getSession() {
+        return session;
     }
 
     /**
@@ -83,7 +111,11 @@ public final class OpenConnectionRequest extends Request {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(uid);
+
+        super.writeExternal(out);
+        out.writeObject(groupedRequests);
+        out.writeObject(referenceID);
+        out.writeObject(session);
     }
 
     /**
@@ -99,7 +131,11 @@ public final class OpenConnectionRequest extends Request {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        uid = (UID) in.readObject();
-    }
 
+        super.readExternal(in);
+
+        groupedRequests = (GroupedMethodRequest[]) in.readObject();
+        referenceID = (Long) in.readObject();
+        session = (Long) in.readObject();
+    }
 }

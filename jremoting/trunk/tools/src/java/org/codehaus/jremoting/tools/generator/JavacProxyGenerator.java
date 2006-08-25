@@ -116,6 +116,8 @@ public class JavacProxyGenerator extends AbstractProxyGenerator {
      */
     public void makeSource(ClassLoader classloader, String name, PublicationDescriptionItem[] interfacesToExpose) throws ProxyGenerationException {
 
+        new File(getSrcGenDir()).mkdirs();
+
         // methdos could be in more than one interface.
         Vector methodsDone = new Vector();
         String filename = getSrcGenDir() + File.separator + "JRemotingGenerated" + getGenName() + "_" + name + ".java";

@@ -15,57 +15,31 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.responses;
+package org.codehaus.jremoting.requests;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class RequestFailedResponse
+ * Class AbstractRequest
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class RequestFailedResponse extends Response {
-    static final long serialVersionUID = 8411019523629669181L;
+public abstract class AbstractRequest implements Externalizable {
 
-    private String failureReason;
-
-    /**
-     * Constructor RequestFailedResponse
-     *
-     * @param failureReason the reason for the failure
-     */
-    public RequestFailedResponse(String failureReason) {
-        this.failureReason = failureReason;
-    }
-
-    /**
-     * Constructor RequestFailedResponse for Externalization
-     */
-    public RequestFailedResponse() {
-    }
-
-    /**
-     * Get failure reason.
-     *
-     * @return the failure reason
-     */
-    public String getFailureReason() {
-        return failureReason;
-    }
+    static final long serialVersionUID = 3003722657216604838L;
 
     /**
      * Gets number that represents type for this class.
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
+     * @see org.codehaus.jremoting.requests.RequestConstants
      */
-    public int getResponseCode() {
-        return ResponseConstants.REQUESTFAILEDRESPONSE;
-    }
+    public abstract int getRequestCode();
 
     /**
      * The object implements the writeExternal method to save its contents
@@ -82,7 +56,6 @@ public final class RequestFailedResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(failureReason);
     }
 
     /**
@@ -98,6 +71,5 @@ public final class RequestFailedResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        failureReason = (String) in.readObject();
     }
 }
