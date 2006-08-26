@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.requests;
 
 import org.codehaus.jremoting.Contextualizable;
-import org.codehaus.jremoting.requests.PublishedNameRequest;
+import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class InvokeMethod extends PublishedNameRequest implements Contextualizable {
+public class InvokeMethod extends AbstractPublishedNameRequest implements Contextualizable {
     static final long serialVersionUID = -4850912985882914299L;
 
     private String methodSignature;

@@ -21,13 +21,13 @@ import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
-import org.codehaus.jremoting.responses.ExceptionResponse;
+import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.MethodResponse;
+import org.codehaus.jremoting.responses.SimpleMethodInvoked;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 
 import java.lang.reflect.Method;
@@ -45,11 +45,11 @@ public class TstInvocationHandler extends AbstractClientInvocationHandler implem
         super(threadPool, clientMonitor, connectionPinger);
     }
 
-    public Response handleInvocation(AbstractRequest request) {
+    public AbstractResponse handleInvocation(AbstractRequest request) {
         return handleInvocation(request, "test");
     }
 
-    public Response handleInvocation(AbstractRequest request, Object connectionDetails) {
+    public AbstractResponse handleInvocation(AbstractRequest request, Object connectionDetails) {
         if (request instanceof OpenConnection) {
             return new ConnectionOpened();
         } else if (request instanceof InvokeMethod) {
@@ -63,20 +63,20 @@ public class TstInvocationHandler extends AbstractClientInvocationHandler implem
                         for (int j = 0; j < _arguments.length; j++) {
 
                             if (!TstRemoteInterface.class.getField(methods[i].getName() + "_arg" + j).get(null).equals(_arguments[j])) {
-                                return new ExceptionResponse(new Exception(invokeMethod.getMethodSignature() + ": arguments not marshalled correctly \n expected[" + TstRemoteInterface.class.getField(methods[i].getName() + "_arg" + j).get(null) + "] received[" + _arguments[j] + "]"));
+                                return new ExceptionThrown(new Exception(invokeMethod.getMethodSignature() + ": arguments not marshalled correctly \n expected[" + TstRemoteInterface.class.getField(methods[i].getName() + "_arg" + j).get(null) + "] received[" + _arguments[j] + "]"));
                             }
                         }
-                        MethodResponse methodReply = null;
+                        SimpleMethodInvoked methodReply = null;
                         if (methods[i].getReturnType() != Void.TYPE) {
-                            methodReply = new MethodResponse(TstRemoteInterface.class.getField(methods[i].getName() + "_retValue").get(null));
+                            methodReply = new SimpleMethodInvoked(TstRemoteInterface.class.getField(methods[i].getName() + "_retValue").get(null));
                         } else {
-                            methodReply = new MethodResponse();
+                            methodReply = new SimpleMethodInvoked();
                         }
                         return methodReply;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return new ExceptionResponse(e);
+                    return new ExceptionThrown(e);
                 }
 
             }

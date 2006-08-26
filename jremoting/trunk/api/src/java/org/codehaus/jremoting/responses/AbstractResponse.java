@@ -17,59 +17,20 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.Response;
-
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class MethodFacadeResponse
+ * Class AbstractResponse
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class MethodFacadeArrayResponse extends Response {
+public abstract class AbstractResponse implements Externalizable {
 
-    static final long serialVersionUID = 2546825714005396324L;
-    private Long[] referenceIDs;
-    private String[] objectNames;
-
-    /**
-     * Constructor MethodFacadeResponse
-     *
-     * @param referenceIDs an array of reference IDs
-     * @param objectNames  an array of object names
-     */
-    public MethodFacadeArrayResponse(Long[] referenceIDs, String[] objectNames) {
-        this.referenceIDs = referenceIDs;
-        this.objectNames = objectNames;
-    }
-
-    /**
-     * Constructor MethodFacadeResponse for Externalization
-     */
-    public MethodFacadeArrayResponse() {
-    }
-
-    /**
-     * Get the reference IDs.
-     *
-     * @return the array of reference IDs
-     */
-    public Long[] getReferenceIDs() {
-        return referenceIDs;
-    }
-
-    /**
-     * Get object names.
-     *
-     * @return the array of object names
-     */
-    public String[] getObjectNames() {
-        return objectNames;
-    }
+    static final long serialVersionUID = -1604781598397036131L;
 
     /**
      * Gets number that represents type for this class.
@@ -78,9 +39,7 @@ public final class MethodFacadeArrayResponse extends Response {
      * @return the representative code
      * @see org.codehaus.jremoting.responses.ResponseConstants
      */
-    public int getResponseCode() {
-        return ResponseConstants.METHODFACADEARRAYRESPONSE;
-    }
+    public abstract int getResponseCode();
 
     /**
      * The object implements the writeExternal method to save its contents
@@ -97,8 +56,6 @@ public final class MethodFacadeArrayResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(referenceIDs);
-        out.writeObject(objectNames);
     }
 
     /**
@@ -114,21 +71,5 @@ public final class MethodFacadeArrayResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        Object longz = in.readObject();
-        objectNames = (String[]) in.readObject();
-        if (longz instanceof long[]) {
-            // XStream deserializes differently
-            long[] longs = (long[]) longz;
-            referenceIDs = new Long[longs.length];
-            for (int i = 0; i < longs.length; i++) {
-                referenceIDs[i] = new Long(longs[i]);
-            }
-        } else {
-            referenceIDs = (Long[]) longz;
-        }
-        try {
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
     }
 }

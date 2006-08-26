@@ -27,7 +27,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class RequestFailed extends Response {
+public final class RequestFailed extends AbstractResponse {
     static final long serialVersionUID = 8411019523629669181L;
 
     private String failureReason;

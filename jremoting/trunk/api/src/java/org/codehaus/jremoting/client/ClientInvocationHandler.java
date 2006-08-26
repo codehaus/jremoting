@@ -21,7 +21,7 @@ import org.codehaus.jremoting.api.CallbackException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 /**
  * Interface ClientInvocationHandler
@@ -37,7 +37,7 @@ public interface ClientInvocationHandler {
      * @param request The request to handle
      * @return the reply that is a consequence of the request
      */
-    Response handleInvocation(AbstractRequest request);
+    AbstractResponse handleInvocation(AbstractRequest request);
 
     /**
      * Method initialize

@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.responses;
 
 import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -30,7 +30,7 @@ import java.io.ObjectOutput;
  * @author Vinay Chandrasekharan
  * @version $Revision: 1.2 $
  */
-public final class PublishedObjectList extends Response {
+public final class PublishedObjectList extends AbstractResponse {
     static final long serialVersionUID = -2491265577999411874L;
 
     private String[] listOfPublishedObjects;

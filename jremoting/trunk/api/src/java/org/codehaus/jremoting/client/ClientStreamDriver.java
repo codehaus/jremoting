@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client;
 
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
 
@@ -29,5 +29,5 @@ import java.io.IOException;
  * @version $Revision: 1.2 $
  */
 public interface ClientStreamDriver {
-    Response postRequest(AbstractRequest request) throws IOException, ClassNotFoundException;
+    AbstractResponse postRequest(AbstractRequest request) throws IOException, ClassNotFoundException;
 }

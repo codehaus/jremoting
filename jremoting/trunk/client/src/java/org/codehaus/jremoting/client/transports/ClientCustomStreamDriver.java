@@ -21,7 +21,7 @@ import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.SerializationHelper;
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -58,11 +58,11 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
         this.interfacesClassLoader = interfacesClassLoader;
     }
 
-    public synchronized Response postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
+    public synchronized AbstractResponse postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
 
         writeRequest(request);
 
-        Response r = readReply();
+        AbstractResponse r = readReply();
 
         return r;
     }
@@ -76,7 +76,7 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
         dataOutputStream.flush();
     }
 
-    private Response readReply() throws IOException, ClassNotFoundException {
+    private AbstractResponse readReply() throws IOException, ClassNotFoundException {
 
         int byteArraySize = dataInputStream.readInt();
         byte[] byteArray = new byte[byteArraySize];
@@ -89,6 +89,6 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
             cnt++;
         }
         Object reply = SerializationHelper.getInstanceFromBytes(byteArray, interfacesClassLoader);
-        return (Response) reply;
+        return (AbstractResponse) reply;
     }
 }

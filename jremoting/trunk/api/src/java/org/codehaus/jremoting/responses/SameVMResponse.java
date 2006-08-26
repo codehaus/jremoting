@@ -24,7 +24,7 @@ package org.codehaus.jremoting.responses;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class SameVMResponse extends Response {
+public final class SameVMResponse extends AbstractResponse {
     static final long serialVersionUID = -764673713874147364L;
 
     /**

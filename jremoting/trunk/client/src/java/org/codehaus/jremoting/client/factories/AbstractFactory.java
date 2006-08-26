@@ -24,7 +24,7 @@ import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.Proxy;
-import org.codehaus.jremoting.responses.ExceptionResponse;
+import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.requests.ListPublishedObjects;
 import org.codehaus.jremoting.responses.PublishedObjectList;
 import org.codehaus.jremoting.requests.LookupPublishedObject;
@@ -66,7 +66,7 @@ public abstract class AbstractFactory implements Factory {
             machineID = null;
         }
 
-        Response response = clientInvocationHandler.handleInvocation(new OpenConnection(machineID));
+        AbstractResponse response = clientInvocationHandler.handleInvocation(new OpenConnection(machineID));
 
         if (response instanceof ConnectionOpened) {
             textToSign = ((ConnectionOpened) response).getTextToSign();
@@ -88,20 +88,20 @@ public abstract class AbstractFactory implements Factory {
      */
     public Object lookup(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
-        Response ar = clientInvocationHandler.handleInvocation(new LookupPublishedObject(publishedServiceName, authentication, session));
+        AbstractResponse ar = clientInvocationHandler.handleInvocation(new LookupPublishedObject(publishedServiceName, authentication, session));
 
         if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
             if (ar instanceof NotPublished) {
                 throw new ConnectionException("Service " + publishedServiceName + " not published");
-            } else if (ar instanceof ExceptionResponse) {
-                ExceptionResponse er = (ExceptionResponse) ar;
+            } else if (ar instanceof ExceptionThrown) {
+                ExceptionThrown er = (ExceptionThrown) ar;
 
                 throw (ConnectionException) er.getResponseException();
             } else {
                 throw new ConnectionException("Problem doing lookup on service");
             }
-        } else if (ar instanceof ExceptionResponse) {
-            ExceptionResponse er = (ExceptionResponse) ar;
+        } else if (ar instanceof ExceptionThrown) {
+            ExceptionThrown er = (ExceptionThrown) ar;
             Throwable t = er.getResponseException();
 
             if (t instanceof ConnectionException) {
@@ -207,7 +207,7 @@ public abstract class AbstractFactory implements Factory {
      */
     public String[] list() {
 
-        Response ar = clientInvocationHandler.handleInvocation(new ListPublishedObjects());
+        AbstractResponse ar = clientInvocationHandler.handleInvocation(new ListPublishedObjects());
 
         if (ar instanceof PublishedObjectList) {
             return ((PublishedObjectList) ar).getListOfPublishedObjects();

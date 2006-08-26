@@ -22,7 +22,7 @@ import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.SerializationHelper;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import java.io.BufferedOutputStream;
@@ -64,7 +64,7 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
      * @throws ConnectionException    In an IO Exception
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
-    protected synchronized AbstractRequest writeReplyAndGetRequest(Response response) throws IOException, ClassNotFoundException, ConnectionException {
+    protected synchronized AbstractRequest writeReplyAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {
             writeReply(response);
@@ -73,7 +73,7 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
         return readRequest();
     }
 
-    private void writeReply(Response response) throws IOException {
+    private void writeReply(AbstractResponse response) throws IOException {
 
         byte[] aBytes = SerializationHelper.getBytesFromInstance(response);
 

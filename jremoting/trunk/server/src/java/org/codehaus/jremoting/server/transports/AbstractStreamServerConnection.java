@@ -20,9 +20,9 @@ package org.codehaus.jremoting.server.transports;
 import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.responses.ConnectionEnded;
-import org.codehaus.jremoting.responses.InvocationExceptionResponse;
+import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerConnection;
 import org.codehaus.jremoting.server.ServerMonitor;
 
@@ -82,7 +82,7 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
 
             boolean more = true;
             AbstractRequest request = null;
-            Response response = null;
+            AbstractResponse response = null;
             while (more) {
                 try {
                     if (request != null) {
@@ -117,7 +117,7 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
                     }
                 } catch (NullPointerException npe) {
                     serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected NPE", npe);
-                    response = new InvocationExceptionResponse("NullPointerException on server: " + npe.getMessage());
+                    response = new InvocationExceptionThrown("NullPointerException on server: " + npe.getMessage());
                 }
             }
         } catch (IOException e) {

@@ -24,7 +24,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new MySelfContainedSocketXStreamServer(10099);
+        server = new SelfContainedSocketXStreamServer(10099);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -75,28 +75,6 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         server = null;
         testServer = null;
         super.tearDown();
-    }
-
-    public void testCustomSerializableParameter() {
-        super.testCustomSerializableParameter();
-    }
-
-
-
-
-    public class MySelfContainedSocketXStreamServer extends SelfContainedSocketXStreamServer {
-        public MySelfContainedSocketXStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
-            super(classRetriever, authenticator, serverMonitor, threadPool, contextFactory, port);
-        }
-
-        protected void setState(int state) {
-            super.setState(state);
-            myState = state;
-        }
-
-        public MySelfContainedSocketXStreamServer(int port) {
-            super(port);
-        }
     }
 
 

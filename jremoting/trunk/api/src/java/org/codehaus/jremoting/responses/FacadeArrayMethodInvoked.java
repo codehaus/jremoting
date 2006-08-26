@@ -18,57 +18,57 @@
 package org.codehaus.jremoting.responses;
 
 import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class MethodFacadeResponse
+ * Class FacadeMethodInvoked
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class MethodFacadeResponse extends Response {
+public final class FacadeArrayMethodInvoked extends AbstractResponse {
 
-    static final long serialVersionUID = -4708610846345954459L;
-    private Long referenceID;
-    private String objectName;
+    static final long serialVersionUID = 2546825714005396324L;
+    private Long[] referenceIDs;
+    private String[] objectNames;
 
     /**
-     * Constructor MethodFacadeResponse
+     * Constructor FacadeMethodInvoked
      *
-     * @param referenceID the reference ID
-     * @param objectName  the object Name
+     * @param referenceIDs an array of reference IDs
+     * @param objectNames  an array of object names
      */
-    public MethodFacadeResponse(Long referenceID, String objectName) {
-        this.referenceID = referenceID;
-        this.objectName = objectName;
+    public FacadeArrayMethodInvoked(Long[] referenceIDs, String[] objectNames) {
+        this.referenceIDs = referenceIDs;
+        this.objectNames = objectNames;
     }
 
     /**
-     * Constructor MethodFacadeResponse for Externalization
+     * Constructor FacadeMethodInvoked for Externalization
      */
-    public MethodFacadeResponse() {
+    public FacadeArrayMethodInvoked() {
     }
 
     /**
-     * Get the reference ID.
+     * Get the reference IDs.
      *
-     * @return the reference ID
+     * @return the array of reference IDs
      */
-    public Long getReferenceID() {
-        return referenceID;
+    public Long[] getReferenceIDs() {
+        return referenceIDs;
     }
 
     /**
      * Get object names.
      *
-     * @return the object Name
+     * @return the array of object names
      */
-    public String getObjectName() {
-        return objectName;
+    public String[] getObjectNames() {
+        return objectNames;
     }
 
     /**
@@ -79,7 +79,7 @@ public final class MethodFacadeResponse extends Response {
      * @see org.codehaus.jremoting.responses.ResponseConstants
      */
     public int getResponseCode() {
-        return ResponseConstants.METHODFACADERESPONSE;
+        return ResponseConstants.METHODFACADEARRAYRESPONSE;
     }
 
     /**
@@ -97,8 +97,8 @@ public final class MethodFacadeResponse extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(referenceID);
-        out.writeObject(objectName);
+        out.writeObject(referenceIDs);
+        out.writeObject(objectNames);
     }
 
     /**
@@ -114,7 +114,21 @@ public final class MethodFacadeResponse extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        referenceID = (Long) in.readObject();
-        objectName = (String) in.readObject();
+        Object longz = in.readObject();
+        objectNames = (String[]) in.readObject();
+        if (longz instanceof long[]) {
+            // XStream deserializes differently
+            long[] longs = (long[]) longz;
+            referenceIDs = new Long[longs.length];
+            for (int i = 0; i < longs.length; i++) {
+                referenceIDs[i] = new Long(longs[i]);
+            }
+        } else {
+            referenceIDs = (Long[]) longz;
+        }
+        try {
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
     }
 }

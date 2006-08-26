@@ -31,9 +31,9 @@ import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.responses.TryLater;
-import org.codehaus.jremoting.requests.PublishedNameRequest;
+import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
 import org.codehaus.jremoting.requests.AbstractRequest;
 
 import java.net.MalformedURLException;
@@ -103,14 +103,14 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
      * @param request
      * @return
      */
-    public synchronized Response handleInvocation(AbstractRequest request) {
+    public synchronized AbstractResponse handleInvocation(AbstractRequest request) {
 
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
         }
 
         boolean again = true;
-        Response response = null;
+        AbstractResponse response = null;
         int tries = 0;
         long start = 0;
 
@@ -136,7 +136,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
                     } else if (response instanceof NoSuchReference) {
                         throw new NoSuchReferenceException(((NoSuchReference) response).getReferenceID());
                     } else if (response instanceof NotPublished) {
-                        PublishedNameRequest pnr = (PublishedNameRequest) request;
+                        AbstractPublishedNameRequest pnr = (AbstractPublishedNameRequest) request;
 
                         throw new NotPublishedException(pnr.getPublishedServiceName(), pnr.getObjectName());
                     }

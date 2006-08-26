@@ -19,7 +19,7 @@
 package org.codehaus.jremoting.responses;
 
 import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -31,7 +31,7 @@ import java.io.ObjectOutput;
  * @author Vinay Chandrasekharan
  * @version $Revision: 1.2 $
  */
-public final class InvokableMethods extends Response {
+public final class InvokableMethods extends AbstractResponse {
 
     static final long serialVersionUID = 420067307396614451L;
     /**
@@ -65,7 +65,7 @@ public final class InvokableMethods extends Response {
         return listOfMethods;
     }
 
-    //-----Response override---//
+    //-----AbstractResponse override---//
     /**
      * Gets number that represents type for this class.
      * This is quicker than instanceof for type checking.

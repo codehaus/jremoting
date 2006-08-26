@@ -23,7 +23,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.RequestFailed;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
 
 import java.io.IOException;
@@ -54,14 +54,14 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
         interfacesClassLoader = classLoader;
     }
 
-    protected Response performInvocation(AbstractRequest request) throws IOException {
+    protected AbstractResponse performInvocation(AbstractRequest request) throws IOException {
 
         try {
             byte[] serRequest = SerializationHelper.getBytesFromInstance(request);
             byte[] serReply = invocationHandler.handleInvocation(serRequest, null);
 
             Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serReply, interfacesClassLoader);
-            return (Response) instanceFromBytes;
+            return (AbstractResponse) instanceFromBytes;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
 

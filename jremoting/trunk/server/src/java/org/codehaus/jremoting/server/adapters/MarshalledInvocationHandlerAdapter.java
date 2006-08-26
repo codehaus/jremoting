@@ -19,7 +19,7 @@ package org.codehaus.jremoting.server.adapters;
 
 import org.codehaus.jremoting.api.SerializationHelper;
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
 
@@ -71,7 +71,7 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
 
         try {
             AbstractRequest ar = (AbstractRequest) SerializationHelper.getInstanceFromBytes(request, classLoader);
-            Response response = invocationHandler.handleInvocation(ar, connectionDetails);
+            AbstractResponse response = invocationHandler.handleInvocation(ar, connectionDetails);
 
             return SerializationHelper.getBytesFromInstance(response);
         } catch (ClassNotFoundException e) {

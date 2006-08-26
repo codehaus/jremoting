@@ -20,7 +20,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.*;
 
@@ -52,7 +52,7 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
         printWriter = new PrintWriter(new BufferedOutputStream(getOutputStream()));
     }
 
-    protected synchronized AbstractRequest writeReplyAndGetRequest(Response response) throws IOException, ClassNotFoundException, ConnectionException {
+    protected synchronized AbstractRequest writeReplyAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {
             writeReply(response);
@@ -61,7 +61,7 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
         return readRequest();
     }
 
-    private void writeReply(Response response) throws IOException {
+    private void writeReply(AbstractResponse response) throws IOException {
 
 
         String xml = xStream.toXML(response);

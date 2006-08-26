@@ -18,28 +18,28 @@
 package org.codehaus.jremoting.responses;
 
 import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class ClientInvocationAbendResponse - a special case for Callback transports.
+ * Class ClientInvocationAbended - a special case for Callback transports.
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class ClientInvocationAbendResponse extends Response {
+public final class ClientInvocationAbended extends AbstractResponse {
 
     private IOException responseExcpt;
 
     /**
-     * Constructor ExceptionResponse
+     * Constructor ExceptionThrown
      *
      * @param responseExcpt the exception received for the invocation
      */
-    public ClientInvocationAbendResponse(IOException responseExcpt) {
+    public ClientInvocationAbended(IOException responseExcpt) {
         this.responseExcpt = responseExcpt;
     }
 

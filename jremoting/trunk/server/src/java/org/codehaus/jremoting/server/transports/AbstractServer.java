@@ -21,7 +21,7 @@ import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.api.ThreadPoolAware;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
@@ -86,7 +86,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @param request The request of the invocation.
      * @return An suitable reply.
      */
-    public Response handleInvocation(AbstractRequest request, Object connectionDetails) {
+    public AbstractResponse handleInvocation(AbstractRequest request, Object connectionDetails) {
         return invocationHandlerAdapter.handleInvocation(request, connectionDetails);
     }
 

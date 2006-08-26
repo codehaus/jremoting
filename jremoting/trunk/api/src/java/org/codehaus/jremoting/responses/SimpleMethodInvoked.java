@@ -18,36 +18,36 @@
 package org.codehaus.jremoting.responses;
 
 import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class MethodResponse
+ * Class SimpleMethodInvoked
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class MethodResponse extends Response {
+public final class SimpleMethodInvoked extends AbstractResponse {
     static final long serialVersionUID = 5551617722014239119L;
 
     private Object responseObj;
 
     /**
-     * Constructor MethodResponse
+     * Constructor SimpleMethodInvoked
      *
      * @param responseObj the object that is the return value
      */
-    public MethodResponse(Object responseObj) {
+    public SimpleMethodInvoked(Object responseObj) {
         this.responseObj = responseObj;
     }
 
     /**
-     * Constructor MethodResponse for Externalization
+     * Constructor SimpleMethodInvoked for Externalization
      */
-    public MethodResponse() {
+    public SimpleMethodInvoked() {
     }
 
     /**

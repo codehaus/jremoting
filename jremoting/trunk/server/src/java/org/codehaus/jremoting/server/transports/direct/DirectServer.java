@@ -19,9 +19,9 @@ package org.codehaus.jremoting.server.transports.direct;
 
 import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.responses.InvocationExceptionResponse;
+import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ClassRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -83,12 +83,12 @@ public class DirectServer extends AbstractServer {
      * @param request
      * @return
      */
-    public Response handleInvocation(AbstractRequest request) {
+    public AbstractResponse handleInvocation(AbstractRequest request) {
 
         if (getState() == STARTED) {
             return super.handleInvocation(request, "");
         } else {
-            return new InvocationExceptionResponse("Service is not started");
+            return new InvocationExceptionThrown("Service is not started");
         }
     }
 }

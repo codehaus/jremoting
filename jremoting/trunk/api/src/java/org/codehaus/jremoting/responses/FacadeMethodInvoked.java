@@ -15,68 +15,71 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.requests;
+package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.ClientContext;
+import org.codehaus.jremoting.responses.ResponseConstants;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class PublishedNameRequest
+ * Class FacadeMethodInvoked
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class PublishedNameRequest extends AbstractRequest {
-    static final long serialVersionUID = 5995735372269955205L;
+public final class FacadeMethodInvoked extends AbstractResponse {
 
-    private String publishedServiceName;
+    static final long serialVersionUID = -4708610846345954459L;
+    private Long referenceID;
     private String objectName;
-    private ClientContext context;
 
     /**
-     * Constructor PublishedNameRequest
+     * Constructor FacadeMethodInvoked
      *
-     * @param publishedServiceName the published service name
-     * @param objectName           the object name within that
+     * @param referenceID the reference ID
+     * @param objectName  the object Name
      */
-    public PublishedNameRequest(String publishedServiceName, String objectName) {
-        this.publishedServiceName = publishedServiceName;
+    public FacadeMethodInvoked(Long referenceID, String objectName) {
+        this.referenceID = referenceID;
         this.objectName = objectName;
     }
 
-    public void setContext(ClientContext context) {
-        this.context = context;
-    }
-
-    public ClientContext getContext() {
-        return context;
-    }
-
     /**
-     * Constructor PublishedNameRequest for Externalization
+     * Constructor FacadeMethodInvoked for Externalization
      */
-    public PublishedNameRequest() {
+    public FacadeMethodInvoked() {
     }
 
     /**
-     * Get published service name
+     * Get the reference ID.
      *
-     * @return the published service name
+     * @return the reference ID
      */
-    public String getPublishedServiceName() {
-        return publishedServiceName;
+    public Long getReferenceID() {
+        return referenceID;
     }
 
     /**
-     * Get object name
+     * Get object names.
      *
-     * @return the object name
+     * @return the object Name
      */
     public String getObjectName() {
         return objectName;
+    }
+
+    /**
+     * Gets number that represents type for this class.
+     * This is quicker than instanceof for type checking.
+     *
+     * @return the representative code
+     * @see org.codehaus.jremoting.responses.ResponseConstants
+     */
+    public int getResponseCode() {
+        return ResponseConstants.METHODFACADERESPONSE;
     }
 
     /**
@@ -94,9 +97,8 @@ public abstract class PublishedNameRequest extends AbstractRequest {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(publishedServiceName);
+        out.writeObject(referenceID);
         out.writeObject(objectName);
-        out.writeObject(context);
     }
 
     /**
@@ -112,8 +114,7 @@ public abstract class PublishedNameRequest extends AbstractRequest {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        publishedServiceName = (String) in.readObject();
+        referenceID = (Long) in.readObject();
         objectName = (String) in.readObject();
-        context = (ClientContext) in.readObject();
     }
 }

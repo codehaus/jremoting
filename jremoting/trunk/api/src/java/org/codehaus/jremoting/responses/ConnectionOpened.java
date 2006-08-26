@@ -19,7 +19,7 @@ package org.codehaus.jremoting.responses;
 
 import org.codehaus.jremoting.Sessionable;
 import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -31,7 +31,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class ConnectionOpened extends Response implements Sessionable {
+public final class ConnectionOpened extends AbstractResponse implements Sessionable {
     static final long serialVersionUID = -1011412213595049271L;
 
     private String textToSign;

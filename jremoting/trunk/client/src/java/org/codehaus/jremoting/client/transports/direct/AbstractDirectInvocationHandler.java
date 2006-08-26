@@ -27,10 +27,10 @@ import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NotPublished;
-import org.codehaus.jremoting.requests.PublishedNameRequest;
+import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.responses.TryLater;
 
 import java.io.IOException;
@@ -57,14 +57,14 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
      * @param request
      * @return
      */
-    public Response handleInvocation(AbstractRequest request) {
+    public AbstractResponse handleInvocation(AbstractRequest request) {
 
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
         }
 
         boolean again = true;
-        Response response = null;
+        AbstractResponse response = null;
         int tries = 0;
         long start = 0;
 
@@ -94,7 +94,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
                 } else if (response instanceof NoSuchReference) {
                     throw new NoSuchReferenceException(((NoSuchReference) response).getReferenceID());
                 } else if (response instanceof NotPublished) {
-                    PublishedNameRequest pnr = (PublishedNameRequest) request;
+                    AbstractPublishedNameRequest pnr = (AbstractPublishedNameRequest) request;
 
                     throw new NotPublishedException(pnr.getPublishedServiceName(), pnr.getObjectName());
                 }
@@ -125,5 +125,5 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
         return lastRealRequest;
     }
 
-    protected abstract Response performInvocation(AbstractRequest request) throws IOException;
+    protected abstract AbstractResponse performInvocation(AbstractRequest request) throws IOException;
 }

@@ -18,7 +18,7 @@ package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.requests.AbstractRequest;
 
 import java.io.*;
@@ -50,11 +50,11 @@ public class ClientXStreamDriver implements ClientStreamDriver {
         xStream = new XStream(new DomDriver());
     }
 
-    public synchronized Response postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
+    public synchronized AbstractResponse postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
 
         writeRequest(request);
 
-        Response r = readReply();
+        AbstractResponse r = readReply();
 
         return r;
     }
@@ -69,7 +69,7 @@ public class ClientXStreamDriver implements ClientStreamDriver {
         printWriter.flush();
     }
 
-    private Response readReply() throws IOException {
+    private AbstractResponse readReply() throws IOException {
 
         StringBuffer res = new StringBuffer();
         String line = lineNumberReader.readLine();
@@ -93,7 +93,7 @@ public class ClientXStreamDriver implements ClientStreamDriver {
         }
 
         try {
-            return (Response) xStream.fromXML(expected);
+            return (AbstractResponse) xStream.fromXML(expected);
         } catch (ConversionException e) {
             Throwable cause = e.getCause();
             if (cause != null && cause instanceof ClassCastException) {

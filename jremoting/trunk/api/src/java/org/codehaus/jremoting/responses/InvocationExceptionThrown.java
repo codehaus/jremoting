@@ -18,25 +18,25 @@
 package org.codehaus.jremoting.responses;
 
 import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class InvocationExceptionResponse
+ * Class InvocationExceptionThrown
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class InvocationExceptionResponse extends Response {
+public class InvocationExceptionThrown extends AbstractResponse {
 
 //    static final long serialVersionUID = TODO;
 
     private String message;
 
-    public InvocationExceptionResponse(String message) {
+    public InvocationExceptionThrown(String message) {
         this.message = message;
     }
 

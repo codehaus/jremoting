@@ -25,10 +25,10 @@ import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.responses.ClientInvocationAbendResponse;
+import org.codehaus.jremoting.responses.ClientInvocationAbended;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.NotPublished;
-import org.codehaus.jremoting.requests.PublishedNameRequest;
+import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 import org.codehaus.jremoting.responses.*;
@@ -88,7 +88,7 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
      * @param request
      * @return
      */
-    public synchronized Response handleInvocation(AbstractRequest request) {
+    public synchronized AbstractResponse handleInvocation(AbstractRequest request) {
 
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
@@ -97,7 +97,7 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
         try {
             while (true) {
                 boolean again = true;
-                Response response = null;
+                AbstractResponse response = null;
                 int tries = 0;
                 long start = 0;
 
@@ -113,14 +113,14 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
                     try {
                         long t1 = System.currentTimeMillis();
 
-                        response = (Response) objectDriver.postRequest(request);
+                        response = (AbstractResponse) objectDriver.postRequest(request);
 
                         long t2 = System.currentTimeMillis();
 
                         if (response.getResponseCode() >= 100) {
                             // special case for callabcks.
                             if (response.getResponseCode() == ResponseConstants.CLIENTABEND) {
-                                ClientInvocationAbendResponse abendReply = (ClientInvocationAbendResponse) response;
+                                ClientInvocationAbended abendReply = (ClientInvocationAbended) response;
                                 throw abendReply.getIOException();
                             }
 
@@ -135,7 +135,7 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
                             } else if (response instanceof NoSuchSession) {
                                 throw new NoSuchSessionException(((NoSuchSession) response).getSessionID());
                             } else if (response instanceof NotPublished) {
-                                PublishedNameRequest pnr = (PublishedNameRequest) request;
+                                AbstractPublishedNameRequest pnr = (AbstractPublishedNameRequest) request;
 
                                 throw new NotPublishedException(pnr.getPublishedServiceName(), pnr.getObjectName());
                             }

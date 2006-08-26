@@ -18,9 +18,9 @@
 package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.api.FacadeRefHolder;
-import org.codehaus.jremoting.responses.ExceptionResponse;
+import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.InvocationExceptionResponse;
+import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.responses.*;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
 import org.codehaus.jremoting.server.MethodInvocationMonitor;
@@ -172,14 +172,14 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
      * @param request The emthod request
      * @return The reply.
      */
-    public Response handleMethodInvocation(InvokeMethod request, Object connectionDetails) {
+    public AbstractResponse handleMethodInvocation(InvokeMethod request, Object connectionDetails) {
 
         String methodSignature = request.getMethodSignature();
 
         if (!methodMap.containsKey(methodSignature)) {
 
             methodInvocationMonitor.missingMethod(methodSignature, connectionDetails);
-            return new InvocationExceptionResponse("Method '" + methodSignature + "' not present in impl");
+            return new InvocationExceptionThrown("Method '" + methodSignature + "' not present in impl");
         }
 
         Method method = (Method) methodMap.get(methodSignature);
@@ -205,7 +205,7 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
 
             correctArgs(request, args);
             methodInvocationMonitor.methodInvoked(beanImpl.getClass(), methodSignature, connectionDetails);
-            return new MethodResponse(method.invoke(beanImpl, request.getArgs()));
+            return new SimpleMethodInvoked(method.invoke(beanImpl, request.getArgs()));
         } catch (InvocationTargetException ite) {
             Throwable t = ite.getTargetException();
 
@@ -213,13 +213,13 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
             if (t instanceof Serializable) {
 
                 // NOTE Sever side stack traces will appear on the client side
-                return new ExceptionResponse(t);
+                return new ExceptionThrown(t);
             } else {
-                return new InvocationExceptionResponse("Exception was not serializable :" + t.getClass().getName());
+                return new InvocationExceptionThrown("Exception was not serializable :" + t.getClass().getName());
             }
         } catch (Throwable t) {
             methodInvocationMonitor.invocationException(beanImpl == null ? null : beanImpl.getClass(), methodSignature, t, connectionDetails);
-            return new InvocationExceptionResponse("Some ServerSide exception problem :" + t.getMessage());
+            return new InvocationExceptionThrown("Some ServerSide exception problem :" + t.getMessage());
         }
     }
 

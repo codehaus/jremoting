@@ -44,14 +44,14 @@ public class CustomStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new SelfContainedSocketCustomStreamServer(10003);
+        server = new SelfContainedSocketCustomStreamServer(10333);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        factory = new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 10003), false);
+        factory = new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 10333), false);
         testClient = (TestInterface) factory.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
@@ -59,9 +59,6 @@ public class CustomStreamTestCase extends AbstractHelloTestCase {
         Thread.yield();
     }
 
-    public void testSpeed() throws Exception {
-        super.testSpeed();    
-    }
 
     protected void tearDown() throws Exception {
         testClient = null;

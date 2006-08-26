@@ -21,7 +21,7 @@ import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -61,7 +61,7 @@ public class ClientObjectStreamDriver implements ClientStreamDriver {
         }
     }
 
-    public synchronized Response postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
+    public synchronized AbstractResponse postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
         writeRequest(request);
         return readReply();
     }
@@ -74,7 +74,7 @@ public class ClientObjectStreamDriver implements ClientStreamDriver {
         objectOutputStream.reset();
     }
 
-    private Response readReply() throws IOException, ClassNotFoundException {
-        return (Response) objectInputStream.readObject();
+    private AbstractResponse readReply() throws IOException, ClassNotFoundException {
+        return (AbstractResponse) objectInputStream.readObject();
     }
 }

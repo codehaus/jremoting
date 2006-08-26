@@ -24,7 +24,7 @@ import org.codehaus.jremoting.client.factories.DynamicClassFactory;
 import org.codehaus.jremoting.client.factories.DynamicStub;
 import org.codehaus.jremoting.requests.ListInvokableMethods;
 import org.codehaus.jremoting.responses.InvokableMethods;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -108,7 +108,7 @@ public class DynamicInvoker {
      */
 
     public String[] listOfMethods(String publishedName) {
-        Response ar = clientInvocationHandler.handleInvocation(new ListInvokableMethods(publishedName));
+        AbstractResponse ar = clientInvocationHandler.handleInvocation(new ListInvokableMethods(publishedName));
         return ((InvokableMethods) ar).getListOfMethods();
     }
 

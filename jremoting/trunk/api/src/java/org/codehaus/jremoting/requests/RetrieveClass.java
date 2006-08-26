@@ -17,33 +17,33 @@
  */
 package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.requests.PublishedNameRequest;
+import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 
 
 /**
- * Class ClassRequest
+ * Class RetrieveClass
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class ClassRequest extends PublishedNameRequest {
+public final class RetrieveClass extends AbstractPublishedNameRequest {
     static final long serialVersionUID = -6035363236398357203L;
 
     /**
-     * Constructor ClassRequest
+     * Constructor RetrieveClass
      *
      * @param publishedServiceName The service name that was originally looked up.
      * @param objectName           the object name of the node within that.
      */
-    public ClassRequest(String publishedServiceName, String objectName) {
+    public RetrieveClass(String publishedServiceName, String objectName) {
         super(publishedServiceName, objectName);
     }
 
     /**
      * Constructor for Externalization.
      */
-    public ClassRequest() {
+    public RetrieveClass() {
     }
 
     /**

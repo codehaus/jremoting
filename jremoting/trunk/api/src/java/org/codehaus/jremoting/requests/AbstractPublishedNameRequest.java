@@ -15,31 +15,69 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.responses;
+package org.codehaus.jremoting.requests;
 
-import java.io.Externalizable;
+import org.codehaus.jremoting.ClientContext;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class Response
+ * Class AbstractPublishedNameRequest
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class Response implements Externalizable {
+public abstract class AbstractPublishedNameRequest extends AbstractRequest {
+    static final long serialVersionUID = 5995735372269955205L;
 
-    static final long serialVersionUID = -1604781598397036131L;
+    private String publishedServiceName;
+    private String objectName;
+    private ClientContext context;
 
     /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
+     * Constructor AbstractPublishedNameRequest
      *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
+     * @param publishedServiceName the published service name
+     * @param objectName           the object name within that
      */
-    public abstract int getResponseCode();
+    public AbstractPublishedNameRequest(String publishedServiceName, String objectName) {
+        this.publishedServiceName = publishedServiceName;
+        this.objectName = objectName;
+    }
+
+    public void setContext(ClientContext context) {
+        this.context = context;
+    }
+
+    public ClientContext getContext() {
+        return context;
+    }
+
+    /**
+     * Constructor AbstractPublishedNameRequest for Externalization
+     */
+    public AbstractPublishedNameRequest() {
+    }
+
+    /**
+     * Get published service name
+     *
+     * @return the published service name
+     */
+    public String getPublishedServiceName() {
+        return publishedServiceName;
+    }
+
+    /**
+     * Get object name
+     *
+     * @return the object name
+     */
+    public String getObjectName() {
+        return objectName;
+    }
 
     /**
      * The object implements the writeExternal method to save its contents
@@ -56,6 +94,9 @@ public abstract class Response implements Externalizable {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(publishedServiceName);
+        out.writeObject(objectName);
+        out.writeObject(context);
     }
 
     /**
@@ -71,5 +112,8 @@ public abstract class Response implements Externalizable {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        publishedServiceName = (String) in.readObject();
+        objectName = (String) in.readObject();
+        context = (ClientContext) in.readObject();
     }
 }
