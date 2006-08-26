@@ -31,6 +31,9 @@ import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
+import org.codehaus.jremoting.tools.generator.JavacProxyGenerator;
+
+import java.io.File;
 
 
 /**
@@ -40,8 +43,17 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
  */
 public class BouncingServerTestCase extends TestCase {
 
-    public BouncingServerTestCase(String name) {
-        super(name);
+    PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
+
+    protected void setUp() throws Exception {
+        JavacProxyGenerator generator = new JavacProxyGenerator();
+        String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
+        generator.setClassGenDir(testClassesDir);
+        generator.setSrcGenDir(new File(testClassesDir).getParent() + File.separator + "generated_java");
+        generator.setInterfacesToExpose(pd.getInterfacesToExpose());
+        generator.setGenName("Hello55");
+        generator.generateSrc(this.getClass().getClassLoader());
+        generator.generateClass(this.getClass().getClassLoader());
     }
 
     public void testBouncingOfServerCausesClientProblems() throws Exception {
@@ -56,7 +68,7 @@ public class BouncingServerTestCase extends TestCase {
             HostContext hostContext = new SocketCustomStreamHostContext("127.0.0.1", 12201);
             factory = new ClientSideClassFactory(hostContext, false);
             ClientInvocationHandler ih = hostContext.getInvocationHandler();
-            TestInterface testClient = (TestInterface) factory.lookup("Hello");
+            TestInterface testClient = (TestInterface) factory.lookup("Hello55");
 
             // just a kludge for unit testing given we are intrinsically dealing with
             // threads, JRemoting being a client/server thing
@@ -89,8 +101,7 @@ public class BouncingServerTestCase extends TestCase {
     private SelfContainedSocketCustomStreamServer startServer() throws ServerException, PublicationException {
         SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(12201);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
-        PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
-        server.publish(testServer, "Hello", pd);
+        server.publish(testServer, "Hello55", pd);
         server.start();
         return server;
     }

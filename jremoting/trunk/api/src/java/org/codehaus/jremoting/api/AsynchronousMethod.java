@@ -15,20 +15,16 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting;
+package org.codehaus.jremoting.api;
 
-/**
- * Interface Sessionable
- *
- * @author Paul Hammant
- * @version * $Revision: 1.2 $
- */
-public interface Sessionable {
 
-    /**
-     * Get the session ID.
-     *
-     * @return the session identifier
-     */
-    Long getSession();
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Retention;
+
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface AsynchronousMethod {
 }

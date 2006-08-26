@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client;
 
-import org.codehaus.jremoting.Authentication;
+import org.codehaus.jremoting.api.Authentication;
 import org.codehaus.jremoting.api.ConnectionException;
 
 /**

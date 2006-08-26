@@ -15,18 +15,20 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting;
-
+package org.codehaus.jremoting.api;
 
 /**
- * @author Paul Hammant and Rune Johanessen (pairing for part)
- * @version $Revision: 1.2 $
+ * Interface Sessionable
+ *
+ * @author Paul Hammant
+ * @version * $Revision: 1.2 $
  */
+public interface Sessionable {
 
-public interface Contextualizable extends Sessionable {
-
-    ClientContext getContext();
-
-    void setContext(ClientContext serializable);
-
+    /**
+     * Get the session ID.
+     *
+     * @return the session identifier
+     */
+    Long getSession();
 }

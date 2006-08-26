@@ -26,9 +26,11 @@ import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
+import org.codehaus.jremoting.tools.generator.JavacProxyGenerator;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.io.File;
 
 /**
  * Test Piped Trasnport (Object Stream)
@@ -57,7 +59,20 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         server = new PipedObjectStreamServer();
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
-        server.publish(testServer, "Hello", pd);
+
+
+        JavacProxyGenerator generator = new JavacProxyGenerator();
+        String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
+        generator.setClassGenDir(testClassesDir);
+        generator.setSrcGenDir(new File(testClassesDir).getParent() + File.separator + "generated_java");
+        generator.setInterfacesToExpose(pd.getInterfacesToExpose());
+        generator.setAdditionalFacades(pd.getAdditionalFacades());
+        generator.setGenName("Hello33");
+        generator.generateSrc(this.getClass().getClassLoader());
+        generator.generateClass(this.getClass().getClassLoader());
+
+
+        server.publish(testServer, "Hello33", pd);
         server.start();
 
         // For piped, server and client can see each other
@@ -67,7 +82,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         factory = new ClientSideClassFactory(new PipedObjectStreamHostContext(in, out), false);
-        testClient = (TestInterface) factory.lookup("Hello");
+        testClient = (TestInterface) factory.lookup("Hello33");
 
         // just a kludge for unit testing given we are intrinsically dealing with
         // threads, JRemoting being a client/server thing

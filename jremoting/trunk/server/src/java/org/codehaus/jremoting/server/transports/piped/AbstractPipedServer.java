@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server.transports.piped;
 
-import org.codehaus.jremoting.ThreadContext;
+import org.codehaus.jremoting.api.ThreadContext;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.server.Authenticator;

@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.test.clientcontext;
 
 import junit.framework.TestCase;
-import org.codehaus.jremoting.ClientContext;
+import org.codehaus.jremoting.api.ClientContext;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.Factory;

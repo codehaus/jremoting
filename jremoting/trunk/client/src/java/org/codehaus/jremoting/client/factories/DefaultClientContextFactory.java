@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import org.codehaus.jremoting.ClientContext;
+import org.codehaus.jremoting.api.ClientContext;
 import org.codehaus.jremoting.api.DefaultClientContext;
 import org.codehaus.jremoting.client.ClientContextFactory;
 

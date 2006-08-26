@@ -17,8 +17,6 @@
  */
 package org.codehaus.jremoting.api;
 
-import org.codehaus.jremoting.ClientContext;
-
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;

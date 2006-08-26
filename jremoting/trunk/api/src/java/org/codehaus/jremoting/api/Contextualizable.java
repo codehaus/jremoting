@@ -15,15 +15,17 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting;
-
-import java.io.Serializable;
+package org.codehaus.jremoting.api;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
  * @version $Revision: 1.2 $
  */
 
-public interface ClientContext extends Serializable {
+public interface Contextualizable extends Sessionable {
+
+    ClientContext getContext();
+
+    void setContext(ClientContext serializable);
 
 }

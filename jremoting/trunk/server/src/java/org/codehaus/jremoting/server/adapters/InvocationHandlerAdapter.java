@@ -18,11 +18,8 @@
 package org.codehaus.jremoting.server.adapters;
 
 
-import org.codehaus.jremoting.ClientContext;
-import org.codehaus.jremoting.Contextualizable;
-import org.codehaus.jremoting.api.AuthenticationException;
-import org.codehaus.jremoting.api.MethodNameHelper;
-import org.codehaus.jremoting.api.Session;
+import org.codehaus.jremoting.api.Contextualizable;
+import org.codehaus.jremoting.api.*;
 import org.codehaus.jremoting.requests.RetrieveClass;
 import org.codehaus.jremoting.responses.ClassResponse;
 import org.codehaus.jremoting.responses.ClassRetrievalFailed;

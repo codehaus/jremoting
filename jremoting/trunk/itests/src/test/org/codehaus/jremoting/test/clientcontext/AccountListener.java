@@ -18,7 +18,7 @@
 
 package org.codehaus.jremoting.test.clientcontext;
 
-import org.codehaus.jremoting.ClientContext;
+import org.codehaus.jremoting.api.ClientContext;
 
 
 /**

@@ -17,8 +17,6 @@
  */
 package org.codehaus.jremoting.api;
 
-import org.codehaus.jremoting.Authentication;
-
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;

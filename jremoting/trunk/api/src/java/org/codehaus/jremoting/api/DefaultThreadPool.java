@@ -17,8 +17,6 @@
  */
 package org.codehaus.jremoting.api;
 
-import org.codehaus.jremoting.ThreadContext;
-
 /**
  * Class DefaultThreadPool
  *

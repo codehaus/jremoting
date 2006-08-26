@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client;
 
-import org.codehaus.jremoting.ClientContext;
+import org.codehaus.jremoting.api.ClientContext;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)

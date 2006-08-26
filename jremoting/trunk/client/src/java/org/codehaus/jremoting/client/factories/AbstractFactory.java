@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import org.codehaus.jremoting.Authentication;
+import org.codehaus.jremoting.api.Authentication;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.FacadeRefHolder;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
