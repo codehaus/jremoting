@@ -8,17 +8,11 @@ import org.codehaus.jremoting.client.transports.socket.SocketXStreamHostContext;
 import org.codehaus.jremoting.api.ThreadPool;
 
 /**
- * Test Custom Stream over sockets.
+ * Test XStream over sockets.
  *
  * @author Paul Hammant
  */
 public class XStreamTestCase extends AbstractHelloTestCase {
-
-    public XStreamTestCase(String name) {
-        super(name);
-    }
-
-
 
     protected void setUp() throws Exception {
         super.setUp();

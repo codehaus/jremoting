@@ -36,10 +36,6 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
  */
 public class CustomStreamTestCase extends AbstractHelloTestCase {
 
-    public CustomStreamTestCase(String name) {
-        super(name);
-    }
-
     protected void setUp() throws Exception {
         super.setUp();
 

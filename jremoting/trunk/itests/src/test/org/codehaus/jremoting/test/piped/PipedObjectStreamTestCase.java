@@ -40,8 +40,7 @@ import java.io.File;
 public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
 
 
-    public PipedObjectStreamTestCase(String name) {
-        super(name);
+    public PipedObjectStreamTestCase() {
 
         // See http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
         // This bug prevents ObjectStream from functioning correctly when used

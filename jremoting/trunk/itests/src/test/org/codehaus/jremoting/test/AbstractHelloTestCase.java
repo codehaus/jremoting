@@ -28,10 +28,6 @@ import java.io.IOException;
  */
 public abstract class AbstractHelloTestCase extends AbstractJRemotingRemotingTestCase {
 
-    public AbstractHelloTestCase(String name) {
-        super(name);
-    }
-
     public void testHello2Call() throws Exception {
         // lookup worked ?
         assertNotNull(testClient);

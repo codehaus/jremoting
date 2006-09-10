@@ -17,19 +17,15 @@
  */
 package org.codehaus.jremoting.test.proxies;
 
-import org.codehaus.jremoting.test.AbstractHelloCallBackTestCase;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
+import org.codehaus.jremoting.test.AbstractHelloTestCase;
 
 /**
  * Test Non Proxy for comparison sake
  *
  * @author Paul Hammant
  */
-public class NonProxyTestCase extends AbstractHelloCallBackTestCase {
-
-    public NonProxyTestCase(String name) {
-        super(name);
-    }
+public class NonProxyTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();

@@ -35,10 +35,6 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
  */
 public class DirectMarshalledTestCase extends AbstractHelloTestCase {
 
-    public DirectMarshalledTestCase(String name) {
-        super(name);
-    }
-
     protected void setUp() throws Exception {
         super.setUp();
 

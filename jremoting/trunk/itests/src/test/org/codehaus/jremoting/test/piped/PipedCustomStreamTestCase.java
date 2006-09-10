@@ -38,10 +38,6 @@ import java.io.PipedOutputStream;
 public class PipedCustomStreamTestCase extends AbstractHelloTestCase {
 
 
-    public PipedCustomStreamTestCase(String name) {
-        super(name);
-    }
-
     protected void setUp() throws Exception {
         super.setUp();
 

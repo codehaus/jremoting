@@ -17,20 +17,16 @@
  */
 package org.codehaus.jremoting.test.proxies;
 
-import org.codehaus.jremoting.test.AbstractHelloCallBackTestCase;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
+import org.codehaus.jremoting.test.AbstractHelloTestCase;
 
 /**
  * Test Dynamic Proxy (reflection) for comparison sake
  *
  * @author Paul Hammant
  */
-public class DynamicProxyTestCase extends AbstractHelloCallBackTestCase {
-
-    public DynamicProxyTestCase(String name) {
-        super(name);
-    }
+public class DynamicProxyTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();

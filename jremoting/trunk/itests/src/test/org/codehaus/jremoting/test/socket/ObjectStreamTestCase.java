@@ -35,8 +35,7 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
  */
 public class ObjectStreamTestCase extends AbstractHelloTestCase {
 
-    public ObjectStreamTestCase(String name) {
-        super(name);
+    public ObjectStreamTestCase() {
 
         // See http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
         // This bug prevents ObjectStream from functioning correctly when used

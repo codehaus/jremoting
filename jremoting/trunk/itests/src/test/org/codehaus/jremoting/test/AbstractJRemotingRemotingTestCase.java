@@ -34,10 +34,6 @@ public abstract class AbstractJRemotingRemotingTestCase extends TestCase {
     protected Factory factory;
     protected boolean testForBug4499841 = true;
 
-    public AbstractJRemotingRemotingTestCase(String name) {
-        super(name);
-    }
-
     public void testHelloCall() throws Exception {
         // lookup worked ?
         assertNotNull(testClient);
