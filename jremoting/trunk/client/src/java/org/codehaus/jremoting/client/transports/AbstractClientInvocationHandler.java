@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.client.transports;
 
-import org.codehaus.jremoting.api.CallbackException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
@@ -118,14 +117,6 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
 
     public boolean isCallBackEnabled() {
         return false;
-    }
-
-    public boolean exposeObject(Object exposedObject, Class exposedInterface) throws CallbackException {
-        throw new UnsupportedOperationException();
-    }
-
-    public String getPublishedName(Object exposedObject) {
-        throw new UnsupportedOperationException();
     }
 
 }

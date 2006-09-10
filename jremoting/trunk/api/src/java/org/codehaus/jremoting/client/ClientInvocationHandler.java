@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.client;
 
-import org.codehaus.jremoting.api.CallbackException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.requests.AbstractRequest;
@@ -83,24 +82,6 @@ public interface ClientInvocationHandler {
     Object resolveArgument(String remoteObjName, String methodSignature, Class inputArgumentClass, Object inputArgumentInstance);
 
     boolean isCallBackEnabled();
-
-    /**
-     * For CallBackEnabled only
-     *
-     * @param exposedObject
-     * @param exposedInterface
-     * @return
-     * @throws CallbackException
-     */
-    boolean exposeObject(Object exposedObject, Class exposedInterface) throws CallbackException;
-
-    /**
-     * For CallBackEnabled only
-     *
-     * @param exposedObject
-     * @return
-     */
-    String getPublishedName(Object exposedObject);
 
     ThreadPool getThreadPool();
 
