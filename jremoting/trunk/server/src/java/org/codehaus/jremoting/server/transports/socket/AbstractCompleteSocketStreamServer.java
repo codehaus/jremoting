@@ -153,9 +153,9 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
     }
 
     /**
-     * Create a Server Stream Read Writer.
+     * Create a Server Stream Driver.
      *
-     * @return The Server Stream Read Writer.
+     * @return The Server Stream Driver.
      */
     protected abstract AbstractServerStreamDriver createServerStreamReadWriter();
 }

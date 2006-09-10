@@ -50,7 +50,7 @@ public class PipedStreamServerConnection extends AbstractStreamServerConnection 
      * @param abstractServer The asbtract server than handles requests
      * @param pipedIn        The piped Input Stream
      * @param pipedOut       The piped Output Stream
-     * @param driver     The read writer.
+     * @param driver     The Driver.
      */
     public PipedStreamServerConnection(AbstractServer abstractServer, PipedInputStream pipedIn, PipedOutputStream pipedOut, AbstractServerStreamDriver driver, ServerMonitor serverMonitor) {
 

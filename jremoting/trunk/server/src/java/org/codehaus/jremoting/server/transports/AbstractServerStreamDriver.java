@@ -75,7 +75,7 @@ public abstract class AbstractServerStreamDriver implements ThreadPoolAware {
 
 
     /**
-     * Initialize the Read Writer.
+     * Initialize the Driver.
      *
      * @throws IOException if a problem during initialization.
      */

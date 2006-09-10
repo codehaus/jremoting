@@ -54,9 +54,9 @@ public class PartialSocketObjectStreamServer extends AbstractPartialSocketStream
     }
 
     /**
-     * Create a Server Stream Read Writer.
+     * Create a Server Stream Driver.
      *
-     * @return The Server Stream Read Writer.
+     * @return The Server Stream Driver.
      */
     protected AbstractServerStreamDriver createServerStreamReadWriter() {
         return new ServerObjectStreamDriver(serverMonitor, threadPool);

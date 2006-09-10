@@ -50,7 +50,7 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
     private boolean endConnection = false;
 
     /**
-     * The Sever Stream Read Writer.
+     * The Sever Stream Driver.
      */
     private AbstractServerStreamDriver driver;
 
@@ -60,7 +60,7 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
      * Construct a AbstractStreamServerConnection
      *
      * @param abstractServer The Abstract Server handling requests
-     * @param driver     The Read Writer.
+     * @param driver     The Driver.
      */
     public AbstractStreamServerConnection(AbstractServer abstractServer, AbstractServerStreamDriver driver, ServerMonitor serverMonitor) {
         this.abstractServer = abstractServer;
