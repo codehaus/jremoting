@@ -65,4 +65,6 @@ public interface ClientMonitor {
     void unexpectedClosedConnection(Class clazz, String name, ConnectionClosedException cce);
 
     void unexpectedInterruption(Class clazz, String name, InterruptedException ie);
+
+    void classNotFound(Class clazz, String msg, ClassNotFoundException cnfe);
 }

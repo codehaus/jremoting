@@ -23,7 +23,7 @@ import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.client.monitors.DefaultClientMonitor;
+import org.codehaus.jremoting.client.monitors.SimpleRetryingClientMonitor;
 import org.codehaus.jremoting.client.pingers.PerpetualConnectionPinger;
 
 /**
@@ -48,7 +48,7 @@ public class RmiHostContext extends AbstractHostContext {
     }
 
     public RmiHostContext(String host, int port) throws ConnectionException {
-        this(new DefaultThreadPool(), new DefaultClientMonitor(), new PerpetualConnectionPinger(), host, port);
+        this(new DefaultThreadPool(), new SimpleRetryingClientMonitor(), new PerpetualConnectionPinger(), host, port);
 
     }
 }

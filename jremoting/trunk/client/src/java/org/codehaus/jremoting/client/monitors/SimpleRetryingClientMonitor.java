@@ -25,24 +25,25 @@ import org.codehaus.jremoting.requests.AbstractRequest;
 import java.io.IOException;
 
 /**
- * Interface DefaultClientMonitor
+ * Interface SimpleRetryingClientMonitor
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public class DefaultClientMonitor implements ClientMonitor {
+public class SimpleRetryingClientMonitor implements ClientMonitor {
 
-    private int maxReconnectAttempts;
+    private final ClientMonitor delegate;
+    private final int maxReconnectAttempts;
 
     /**
-     * Creates a new DefaultClientMonitor.
+     * Creates a new SimpleRetryingClientMonitor.
      */
-    public DefaultClientMonitor() {
-        this(3);  // Default to 3 reconnect attempts.
+    public SimpleRetryingClientMonitor() {
+        this(3);  // default to 3 reconnect attempts.
     }
 
     /**
-     * Creates a new DefaultClientMonitor.
+     * Creates a new SimpleRetryingClientMonitor.
      *
      * @param maxReconnectAttempts Specifies the maximum number of times that
      *                             the client will attempt to reconnect to
@@ -50,9 +51,20 @@ public class DefaultClientMonitor implements ClientMonitor {
      *                             value of 0 implies that no reconnect
      *                             attempts should be made.
      */
-    public DefaultClientMonitor(int maxReconnectAttempts) {
+    public SimpleRetryingClientMonitor(int maxReconnectAttempts) {
+        this(new NullClientMonitor(), maxReconnectAttempts);
+    }
+
+    public SimpleRetryingClientMonitor(ClientMonitor clientMonitor) {
+        this(clientMonitor, 3);
+    }
+
+
+    public SimpleRetryingClientMonitor(ClientMonitor clientMonitor, int maxReconnectAttempts) {
+        this.delegate = clientMonitor;
         this.maxReconnectAttempts = maxReconnectAttempts;
     }
+
 
     /**
      * Method methodCalled
@@ -62,25 +74,13 @@ public class DefaultClientMonitor implements ClientMonitor {
      */
     public void methodCalled(Class clazz, final String methodSignature, final long duration, String annotation) {
 
-        // do mothing in default impl, could do logging.
+        delegate.methodCalled(clazz, methodSignature, duration, annotation);
     }
 
-    /**
-     * Method methodLogging tests if the implementing class intends to do method logging.
-     *
-     * @return
-     */
     public boolean methodLogging() {
         return false;
     }
 
-    /**
-     * Method serviceSuspended
-     *
-     * @param request
-     * @param attempt
-     * @param suggestedWaitMillis
-     */
     public void serviceSuspended(Class clazz, final AbstractRequest request, final int attempt, final int suggestedWaitMillis) {
 
         // Lets say that ten retries is too many.
@@ -98,11 +98,6 @@ public class DefaultClientMonitor implements ClientMonitor {
         }
     }
 
-    /**
-     * Method serviceAbend
-     *
-     * @param attempt
-     */
     public void serviceAbend(Class clazz, int attempt, IOException cause) {
 
         // Lets say that ten retries is too many.
@@ -123,6 +118,7 @@ public class DefaultClientMonitor implements ClientMonitor {
                     msg = msg + "Unknown cause of abend.";
                 }
             }
+            //TODO replace with call to delegate ?
             throw new InvocationException(msg);
         }
 
@@ -137,16 +133,22 @@ public class DefaultClientMonitor implements ClientMonitor {
     }
 
     public void invocationFailure(Class clazz, String name, InvocationException ie) {
+        delegate.invocationFailure(clazz, name, ie);
     }
 
     public void unexpectedClosedConnection(Class clazz, String name, ConnectionClosedException cce) {
+        delegate.unexpectedClosedConnection(clazz, name, cce);
     }
 
     public void unexpectedInterruption(Class clazz, String name, InterruptedException ie) {
+        delegate.unexpectedInterruption(clazz, name, ie);
+    }
+
+    public void classNotFound(Class clazz, String msg, ClassNotFoundException cnfe) {
+        delegate.classNotFound(clazz, msg, cnfe);
     }
 
     void printMessage(String message) {
-        System.out.println(message);
     }
 
 }

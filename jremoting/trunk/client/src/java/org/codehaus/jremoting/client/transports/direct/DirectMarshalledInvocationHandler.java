@@ -63,17 +63,12 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
             Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serReply, interfacesClassLoader);
             return (AbstractResponse) instanceFromBytes;
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-
-            return new RequestFailed("Some Class not found Exception on server side : " + e.getMessage());
+            String msg = "Some Class not found Exception on server side";
+            clientMonitor.classNotFound(DirectMarshalledInvocationHandler.class, msg, e);
+            return new RequestFailed(msg + " : " + e.getMessage());
         }
     }
 
-    /**
-     * Method getInterfacesClassLoader
-     *
-     * @return
-     */
     public ClassLoader getInterfacesClassLoader() {
         return interfacesClassLoader;
     }

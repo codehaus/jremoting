@@ -22,7 +22,7 @@ import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
+import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 
@@ -47,7 +47,7 @@ public class DirectHostContext extends AbstractHostContext {
     }
 
     public DirectHostContext(ServerInvocationHandler invocationHandler) {
-        this(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), invocationHandler);
+        this(new DefaultThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), invocationHandler);
     }
 
 }

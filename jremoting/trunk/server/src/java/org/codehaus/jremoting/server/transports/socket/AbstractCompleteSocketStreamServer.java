@@ -129,7 +129,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
         try {
             serverSocket.close();
         } catch (IOException ioe) {
-            throw new org.codehaus.jremoting.api.JRemotingRuntimeException("Error stopping Complete Socket server", ioe);
+            throw new JRemotingRuntimeException("Error stopping Complete Socket server", ioe);
         }
         killAllConnections();
         getThreadContext().interrupt();

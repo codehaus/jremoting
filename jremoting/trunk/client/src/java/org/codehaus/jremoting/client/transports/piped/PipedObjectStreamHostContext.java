@@ -23,7 +23,7 @@ import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
+import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
 
 import java.io.PipedInputStream;
@@ -52,7 +52,7 @@ public class PipedObjectStreamHostContext extends AbstractHostContext {
     }
 
     public PipedObjectStreamHostContext(PipedInputStream inputStream, PipedOutputStream outputStream) {
-        this(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream, PipedObjectStreamHostContext.class.getClassLoader());
+        this(new DefaultThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream, PipedObjectStreamHostContext.class.getClassLoader());
     }
 
     /**

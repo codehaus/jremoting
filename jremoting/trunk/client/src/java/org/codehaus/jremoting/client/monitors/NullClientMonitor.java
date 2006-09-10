@@ -25,54 +25,24 @@ import org.codehaus.jremoting.requests.AbstractRequest;
 import java.io.IOException;
 
 /**
- * Class DumbClientMonitor
+ * Class NullClientMonitor
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public class DumbClientMonitor implements ClientMonitor {
+public class NullClientMonitor implements ClientMonitor {
 
-    /**
-     * Creates a new DumbClientMonitor.
-     */
-    public DumbClientMonitor() {
-    }
-
-    /**
-     * Method methodCalled
-     *
-     * @param methodSignature
-     * @param duration
-     */
     public void methodCalled(Class clazz, final String methodSignature, final long duration, String annotation) {
-        // do mothing in default impl, could do logging.
     }
 
-    /**
-     * Method methodLogging tests if the implementing class intends to do method logging.
-     *
-     * @return
-     */
     public boolean methodLogging() {
         return false;
     }
 
-    /**
-     * Method serviceSuspended
-     *
-     * @param request
-     * @param attempt
-     * @param suggestedWaitMillis
-     */
     public void serviceSuspended(Class clazz, final AbstractRequest request, final int attempt, final int suggestedWaitMillis) {
         throw new InvocationException("Service suspended");
     }
 
-    /**
-     * Method serviceAbend
-     *
-     * @param attempt
-     */
     public void serviceAbend(Class clazz, int attempt, IOException cause) {
         throw new InvocationException("JRemoting Service has Abended.");
     }
@@ -84,6 +54,9 @@ public class DumbClientMonitor implements ClientMonitor {
     }
 
     public void unexpectedInterruption(Class clazz, String name, InterruptedException ie) {
+    }
+
+    public void classNotFound(Class clazz, String msg, ClassNotFoundException cnfe) {
     }
 
 }

@@ -24,7 +24,7 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamFactoryHelper;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamFactoryHelper;
 import org.codehaus.jremoting.client.transports.rmi.RmiFactoryHelper;
-import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
+import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
 
 /**
@@ -38,7 +38,7 @@ public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactor
     public static final String[] SUPPORTEDSTREAMS = new String[]{"SocketObjectStream", "SocketCustomStream", "RMI"};
 
     public DefaultInterfaceLookupFactory() {
-        this(new DefaultThreadPool(), new DumbClientMonitor(), new DefaultConnectionPinger());
+        this(new DefaultThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger());
     }
 
     public DefaultInterfaceLookupFactory(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {

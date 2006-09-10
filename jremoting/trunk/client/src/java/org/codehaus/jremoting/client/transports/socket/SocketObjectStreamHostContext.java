@@ -23,7 +23,7 @@ import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractSocketStreamHostContext;
-import org.codehaus.jremoting.client.monitors.DumbClientMonitor;
+import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 
 import java.io.PipedInputStream;
@@ -69,7 +69,7 @@ public class SocketObjectStreamHostContext extends AbstractSocketStreamHostConte
     }
 
     public SocketObjectStreamHostContext(String host, int port) throws ConnectionException {
-        this(new DefaultThreadPool(), new DumbClientMonitor(), new NeverConnectionPinger(), SocketObjectStreamHostContext.class.getClassLoader(), host, port);
+        this(new DefaultThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), SocketObjectStreamHostContext.class.getClassLoader(), host, port);
     }
 
     private Object bind(Object object, PipedInputStream inputStream, PipedOutputStream outputStream) {
