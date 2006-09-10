@@ -1,30 +1,64 @@
 package org.codehaus.jremoting.tools.generator;
 
-import org.codehaus.jremoting.api.MethodNameHelper;
-import org.codehaus.jremoting.server.PublicationDescriptionItem;
-
+//import org.codehaus.jremoting.api.MethodNameHelper;
+//import org.codehaus.jremoting.server.PublicationDescriptionItem;
 //import org.objectweb.asm.*;
 
-public class AsmProxyGenerator extends AbstractProxyGenerator { // implements Opcodes {
+public class AsmProxyGenerator { // extends AbstractProxyGenerator implements Opcodes {
 
-    public void generateClass(ClassLoader classLoader) {
-    }
-
-    public static byte[] dump() throws Exception {
-
+//    public void generateClass(ClassLoader classLoader) {
+//
+//        // The lookupable service class source.
+//        makeClass(classLoader, "Main", getInterfacesToExpose());
+//
+//        if (getAdditionalFacades() != null) {
+//            for (int i = 0; i < getAdditionalFacades().length; i++) {
+//                PublicationDescriptionItem facade = getAdditionalFacades()[i];
+//                makeClass(classLoader, MethodNameHelper.encodeClassName(facade.getFacadeClass()), new PublicationDescriptionItem[]{facade});
+//            }
+//        }
+//
+//
+//    }
+//
+//    private void makeClass(ClassLoader classLoader, String name, PublicationDescriptionItem[] publicationDescriptionItems) {
+//
 //        ClassWriter cw = new ClassWriter(0);
 //        FieldVisitor fv;
 //        MethodVisitor mv;
 //        AnnotationVisitor av0;
 //
-//        cw.visit(V1_1, ACC_PUBLIC + ACC_FINAL + ACC_SUPER, "JRemotingGeneratedHello_Main", null, "java/lang/Object", new String[]{"org/codehaus/jremoting/test/TestInterface", "org/codehaus/jremoting/client/Proxy"});
+//        String[] implementz = getImplements(publicationDescriptionItems);
 //
-//        cw.visitSource("JRemotingGeneratedHello_Main.java", null);
+//        cw.visit(V1_1, ACC_PUBLIC + ACC_FINAL + ACC_SUPER, "JRemotingGenerated" + getGenName() + "_" + name , null, "java/lang/Object", implementz);
+//
+//        cw.visitSource("JRemotingGenerated" + getGenName() + "_" + name + ".java", null);
 //
 //        {
 //            fv = cw.visitField(ACC_PRIVATE + ACC_TRANSIENT, "proxyHelper", "Lorg/codehaus/jremoting/client/ProxyHelper;", null, null);
 //            fv.visitEnd();
 //        }
+//
+//    }
+//
+//    private String[] getImplements(PublicationDescriptionItem[] publicationDescriptionItems) {
+//        String[] retval =  new String[publicationDescriptionItems.length+1];
+//        for (int i = 0; i < publicationDescriptionItems.length; i++) {
+//            PublicationDescriptionItem item = publicationDescriptionItems[i];
+//            retval[i] = item.getFacadeClass().getName().replace('.','/');
+//
+//        }
+//        retval[retval.length] = "org/codehaus/jremoting/client/Proxy";
+//        return retval;
+//    }
+
+
+    public static byte[] dump() throws Exception {
+
+//
+//
+//
+
 //        {
 //            fv = cw.visitField(ACC_STATIC, "class$org$codehaus$jremoting$test$CustomSerializableParam", "Ljava/lang/Class;", null, null);
 //            fv.visitEnd();
@@ -1488,7 +1522,7 @@ public class AsmProxyGenerator extends AbstractProxyGenerator { // implements Op
 //
 //        return cw.toByteArray();
 
-      return null;  
+      return null;
     }
 
 }

@@ -48,7 +48,7 @@ public class PipedCustomStreamServer extends AbstractPipedServer {
      * @param contextFactory
      */
     public PipedCustomStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
-        super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory);
+        super(classRetriever, authenticator, serverMonitor, threadPool, contextFactory);
     }
 
     public PipedCustomStreamServer() {
