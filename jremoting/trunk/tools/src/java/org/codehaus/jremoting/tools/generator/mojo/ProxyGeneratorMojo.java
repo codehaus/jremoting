@@ -48,7 +48,7 @@ public class ProxyGeneratorMojo
 
     private static final String COMMA = ",";
 
-    private String generatorClass = "org.codehaus.jremoting.tools.generator.JavacProxyGenerator";
+    private String generatorClass = "org.codehaus.jremoting.tools.generator.BcelProxyGenerator";
 
     /**
      * Test classpath.

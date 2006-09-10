@@ -23,8 +23,8 @@ import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.ServerSideClassFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorClassRetriever;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.JavacDynamicGeneratorClassRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
@@ -53,7 +53,7 @@ public class SimpleAsync2TestCase extends TestCase {
         super.setUp();
 
         // server side setup.
-        JavacDynamicGeneratorClassRetriever cr = new JavacDynamicGeneratorClassRetriever(this.getClass().getClassLoader());
+        BcelDynamicGeneratorClassRetriever cr = new BcelDynamicGeneratorClassRetriever(this.getClass().getClassLoader());
         String class_gen_dir = getClassGenDir();
         cr.setClassGenDir(class_gen_dir);
         cr.setSrcGenDir(new File(class_gen_dir).getParentFile().getAbsolutePath() + File.separator + "generated_java");

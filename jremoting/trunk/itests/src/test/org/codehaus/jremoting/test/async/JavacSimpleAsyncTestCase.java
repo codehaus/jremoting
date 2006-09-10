@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.test.async;
 
 import org.codehaus.jremoting.server.classretrievers.AbstractDynamicGeneratorClassRetriever;
-import org.codehaus.jremoting.server.classretrievers.JavacDynamicGeneratorClassRetriever;
+import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorClassRetriever;
 
 
 public class JavacSimpleAsyncTestCase extends AbstractSimpleAsyncTestCase {
@@ -28,7 +28,7 @@ public class JavacSimpleAsyncTestCase extends AbstractSimpleAsyncTestCase {
     }
 
     protected AbstractDynamicGeneratorClassRetriever getAbstractDynamicGeneratorClassRetriever(ClassLoader cl) {
-        return new JavacDynamicGeneratorClassRetriever(cl);
+        return new BcelDynamicGeneratorClassRetriever(cl);
 
     }
 
