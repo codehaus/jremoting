@@ -54,7 +54,7 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
         interfacesClassLoader = classLoader;
     }
 
-    protected AbstractResponse performInvocation(AbstractRequest request) throws IOException {
+    protected AbstractResponse performInvocation(AbstractRequest request) {
 
         try {
             byte[] serRequest = SerializationHelper.getBytesFromInstance(request);

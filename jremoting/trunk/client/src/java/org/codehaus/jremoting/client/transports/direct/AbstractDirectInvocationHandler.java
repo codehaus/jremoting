@@ -51,12 +51,6 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
         super(threadPool, clientMonitor, connectionPinger);
     }
 
-    /**
-     * Method handleInvocation
-     *
-     * @param request
-     * @return
-     */
     public AbstractResponse handleInvocation(AbstractRequest request) {
 
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
@@ -77,11 +71,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
 
             again = false;
 
-            try {
-                response = performInvocation(request);
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
+            response = performInvocation(request);
 
             //if ((response instanceof ProblemReply))  // slower by 11%
             if (response.getResponseCode() >= 100) {
@@ -116,14 +106,9 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
         throw new InvocationException("Direct connection broken, unable to reconnect.");
     }
 
-    /**
-     * Method getLastRealRequest
-     *
-     * @return
-     */
     public long getLastRealRequest() {
         return lastRealRequest;
     }
 
-    protected abstract AbstractResponse performInvocation(AbstractRequest request) throws IOException;
+    protected abstract AbstractResponse performInvocation(AbstractRequest request);
 }

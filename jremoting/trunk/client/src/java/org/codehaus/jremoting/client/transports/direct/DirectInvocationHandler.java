@@ -50,7 +50,7 @@ public final class DirectInvocationHandler extends AbstractDirectInvocationHandl
         this.invocationHandler = invocationHandler;
     }
 
-    protected AbstractResponse performInvocation(AbstractRequest request) throws IOException {
+    protected AbstractResponse performInvocation(AbstractRequest request) {
         return invocationHandler.handleInvocation(request, "");
     }
 
