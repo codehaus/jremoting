@@ -59,7 +59,6 @@
 						<configuration>
 							<genName>Hello</genName>
 							<interfaces>org.codehaus.jremoting.test.TestInterface</interfaces>
-							<srcGenDir>target/generated_java</srcGenDir>
 							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
 							<additionalFacades>org.codehaus.jremoting.test.TestInterface3,org.codehaus.jremoting.test.TestInterface2</additionalFacades>
 							<verbose>true</verbose>
@@ -74,7 +73,6 @@
 						<configuration>
 							<genName>OurAccountManager</genName>
 							<interfaces>org.codehaus.jremoting.test.clientcontext.AccountManager</interfaces>
-							<srcGenDir>target/generated_java</srcGenDir>
 							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
 							<verbose>true</verbose>
 						</configuration>

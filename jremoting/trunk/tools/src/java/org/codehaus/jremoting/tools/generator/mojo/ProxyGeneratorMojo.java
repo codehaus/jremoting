@@ -74,13 +74,6 @@ public class ProxyGeneratorMojo
     protected String interfaces;
 
     /**
-     * The directory to use for temporary source
-     * @parameter
-     * @required
-     */
-    protected File srcGenDir;
-
-    /**
      * The directory to put generated classes into
      * @parameter
      * @required
@@ -115,11 +108,6 @@ public class ProxyGeneratorMojo
                     "Specify at least one interface to expose");
         }
 
-        if (srcGenDir == null) {
-            throw new MojoExecutionException(
-                    "Specify the directory to generate Java source in");
-        }
-
         if (classGenDir == null) {
             throw new MojoExecutionException(
                     "Specify the directory to generate Java classes in");
@@ -136,8 +124,6 @@ public class ProxyGeneratorMojo
 
         try {
             proxyGenerator.setGenName(genName);
-            srcGenDir.mkdirs();
-            proxyGenerator.setSrcGenDir(srcGenDir.getAbsolutePath());
             proxyGenerator.setClassGenDir(classGenDir.getAbsolutePath());
             proxyGenerator.verbose(Boolean.valueOf(verbose).booleanValue());
             String classpath = toCSV(classpathElements);

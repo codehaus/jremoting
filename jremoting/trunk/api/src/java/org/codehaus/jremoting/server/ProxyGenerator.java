@@ -41,13 +41,6 @@ public interface ProxyGenerator {
     void setAdditionalFacades(PublicationDescriptionItem[] additionalFacades);
 
     /**
-     * Set the source generation directory
-     *
-     * @param srcGenDir the source generation directory (if appl).
-     */
-    void setSrcGenDir(String srcGenDir);
-
-    /**
      * Set the classpath
      *
      * @param classpath the classpath for compilation (if appl).

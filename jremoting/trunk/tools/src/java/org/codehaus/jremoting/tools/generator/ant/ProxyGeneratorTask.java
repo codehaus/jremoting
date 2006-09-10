@@ -40,7 +40,6 @@ public class ProxyGeneratorTask extends Task {
 
     protected String[] interfacesToExpose;
     protected String[] additionalFacades;
-    protected File srcGenDir;
     protected File classGenDir;
     protected String genName;
     protected Path classpath;
@@ -91,15 +90,6 @@ public class ProxyGeneratorTask extends Task {
         strings.copyInto(additionalFacades);
     }
 
-
-    /**
-     * Method setSrcgendir
-     *
-     * @param srcGenDir
-     */
-    public void setSrcgendir(File srcGenDir) {
-        this.srcGenDir = srcGenDir;
-    }
 
     /**
      * Method setClassgendir
@@ -185,10 +175,6 @@ public class ProxyGeneratorTask extends Task {
             throw new BuildException("Specify at least one interface to expose");
         }
 
-        if (srcGenDir == null) {
-            throw new BuildException("Specify the directory to generate Java source in");
-        }
-
         if (classGenDir == null) {
             throw new BuildException("Specify the directory to generate Java classes in");
         }
@@ -209,7 +195,6 @@ public class ProxyGeneratorTask extends Task {
         }
 
         try {
-            proxyGenerator.setSrcGenDir(srcGenDir.getAbsolutePath());
             proxyGenerator.setClassGenDir(classGenDir.getAbsolutePath());
             proxyGenerator.setGenName(genName);
             proxyGenerator.verbose(Boolean.valueOf(verbose).booleanValue());

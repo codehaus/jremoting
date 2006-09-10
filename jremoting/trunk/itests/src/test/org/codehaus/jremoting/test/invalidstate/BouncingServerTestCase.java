@@ -49,7 +49,6 @@ public class BouncingServerTestCase extends TestCase {
         BcelProxyGenerator generator = new BcelProxyGenerator();
         String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
         generator.setClassGenDir(testClassesDir);
-        generator.setSrcGenDir(new File(testClassesDir).getParent() + File.separator + "generated_java");
         generator.setInterfacesToExpose(pd.getInterfacesToExpose());
         generator.setGenName("Hello55");
         generator.generateSrc(this.getClass().getClassLoader());

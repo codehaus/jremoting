@@ -203,7 +203,6 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
             throw new RuntimeException("ProxyGenerator was illegally accessed");
         }
 
-        proxyGenerator.setSrcGenDir(srcGenDir);
         proxyGenerator.setClassGenDir(classGenDir);
         proxyGenerator.setGenName(asName);
         proxyGenerator.setClasspath(classpath);

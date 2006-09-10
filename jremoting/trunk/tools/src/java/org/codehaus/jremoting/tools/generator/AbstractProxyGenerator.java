@@ -36,7 +36,6 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
 
     private String classGenDir;
     private String genName;
-    private String srcGenDir;
     private String classpath;
     private boolean verbose;
     private PublicationDescriptionItem[] additionalFacades;
@@ -59,16 +58,6 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
 
     public String getGenName() {
         return genName;
-    }
-
-    /**
-     * Get the source directory name
-     *
-     * @return the dir name.
-     */
-
-    public String getSrcGenDir() {
-        return srcGenDir;
     }
 
 
@@ -154,15 +143,6 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      */
     public void setGenName(String genName) {
         this.genName = genName;
-    }
-
-    /**
-     * Set the source generation directory.
-     *
-     * @param srcGenDir the dir name.
-     */
-    public void setSrcGenDir(String srcGenDir) {
-        this.srcGenDir = srcGenDir;
     }
 
     /**
