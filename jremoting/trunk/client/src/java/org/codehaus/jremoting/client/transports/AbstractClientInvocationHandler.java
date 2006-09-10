@@ -56,19 +56,11 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
         return clientMonitor;
     }
 
-    /**
-     * Method initialize
-     *
-     * @throws ConnectionException
-     */
     public void initialize() throws ConnectionException {
         connectionPinger.setInvocationHandler(this);
         connectionPinger.start();
     }
 
-    /**
-     * Method close
-     */
     public void close() {
 
         connectionPinger.stop();
@@ -76,9 +68,6 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
         stopped = true;
     }
 
-    /**
-     * Method ping
-     */
     public void ping() {
 
         if (stopped) {
@@ -90,11 +79,6 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
 
     protected abstract boolean tryReconnect();
 
-    /**
-     * Method getInterfacesClassLoader
-     *
-     * @return
-     */
     public ClassLoader getInterfacesClassLoader() {
         return AbstractClientInvocationHandler.class.getClassLoader();
     }
@@ -113,10 +97,6 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
 
     public Object resolveArgument(String remoteObjName, String methodSignature, Class objClass, Object obj) {
         return obj;
-    }
-
-    public boolean isCallBackEnabled() {
-        return false;
     }
 
 }

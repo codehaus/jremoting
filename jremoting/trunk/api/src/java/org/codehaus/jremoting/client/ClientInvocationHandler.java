@@ -30,43 +30,16 @@ import org.codehaus.jremoting.responses.AbstractResponse;
  */
 public interface ClientInvocationHandler {
 
-    /**
-     * Handle a method invocation
-     *
-     * @param request The request to handle
-     * @return the reply that is a consequence of the request
-     */
     AbstractResponse handleInvocation(AbstractRequest request);
 
-    /**
-     * Method initialize
-     *
-     * @throws ConnectionException
-     */
     void initialize() throws ConnectionException;
 
-    /**
-     * Method close
-     */
     void close();
 
-    /**
-     * Method getLastRealRequest
-     *
-     * @return
-     */
     long getLastRealRequest();
 
-    /**
-     * Method ping
-     */
     void ping();
 
-    /**
-     * Method getInterfacesClassLoader
-     *
-     * @return
-     */
     ClassLoader getInterfacesClassLoader();
 
     /**
@@ -80,8 +53,6 @@ public interface ClientInvocationHandler {
      */
 
     Object resolveArgument(String remoteObjName, String methodSignature, Class inputArgumentClass, Object inputArgumentInstance);
-
-    boolean isCallBackEnabled();
 
     ThreadPool getThreadPool();
 
