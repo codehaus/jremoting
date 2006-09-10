@@ -26,6 +26,7 @@ import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
+import org.codehaus.jremoting.tools.generator.BcelProxyGenerator;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -59,15 +60,15 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
 
 
-//        JavacProxyGenerator generator = new JavacProxyGenerator();
-//        String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
-//        generator.setClassGenDir(testClassesDir);
-//        generator.setSrcGenDir(new File(testClassesDir).getParent() + File.separator + "generated_java");
-//        generator.setInterfacesToExpose(pd.getInterfacesToExpose());
-//        generator.setAdditionalFacades(pd.getAdditionalFacades());
-//        generator.setGenName("Hello33");
-//        generator.generateSrc(this.getClass().getClassLoader());
-//        generator.generateClass(this.getClass().getClassLoader());
+        BcelProxyGenerator generator = new BcelProxyGenerator();
+        String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
+        generator.setClassGenDir(testClassesDir);
+        generator.setSrcGenDir(new File(testClassesDir).getParent() + File.separator + "generated_java");
+        generator.setInterfacesToExpose(pd.getInterfacesToExpose());
+        generator.setAdditionalFacades(pd.getAdditionalFacades());
+        generator.setGenName("Hello33");
+        generator.generateSrc(this.getClass().getClassLoader());
+        generator.generateClass(this.getClass().getClassLoader());
 
 
         server.publish(testServer, "Hello33", pd);

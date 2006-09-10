@@ -31,6 +31,7 @@ import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
+import org.codehaus.jremoting.tools.generator.BcelProxyGenerator;
 
 import java.io.File;
 
@@ -45,14 +46,14 @@ public class BouncingServerTestCase extends TestCase {
     PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
 
     protected void setUp() throws Exception {
-//        JavacProxyGenerator generator = new JavacProxyGenerator();
-//        String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
-//        generator.setClassGenDir(testClassesDir);
-//        generator.setSrcGenDir(new File(testClassesDir).getParent() + File.separator + "generated_java");
-//        generator.setInterfacesToExpose(pd.getInterfacesToExpose());
-//        generator.setGenName("Hello55");
-//        generator.generateSrc(this.getClass().getClassLoader());
-//        generator.generateClass(this.getClass().getClassLoader());
+        BcelProxyGenerator generator = new BcelProxyGenerator();
+        String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
+        generator.setClassGenDir(testClassesDir);
+        generator.setSrcGenDir(new File(testClassesDir).getParent() + File.separator + "generated_java");
+        generator.setInterfacesToExpose(pd.getInterfacesToExpose());
+        generator.setGenName("Hello55");
+        generator.generateSrc(this.getClass().getClassLoader());
+        generator.generateClass(this.getClass().getClassLoader());
     }
 
     public void testBouncingOfServerCausesClientProblems() throws Exception {
