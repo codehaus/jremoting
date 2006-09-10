@@ -67,4 +67,6 @@ public interface ClientMonitor {
     void unexpectedInterruption(Class clazz, String name, InterruptedException ie);
 
     void classNotFound(Class clazz, String msg, ClassNotFoundException cnfe);
+
+    InvocationException unexpectedIOException(Class clazz, String msg, IOException ioe);
 }

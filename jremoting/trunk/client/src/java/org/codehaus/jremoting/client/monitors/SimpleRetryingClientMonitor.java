@@ -148,6 +148,10 @@ public class SimpleRetryingClientMonitor implements ClientMonitor {
         delegate.classNotFound(clazz, msg, cnfe);
     }
 
+    public InvocationException unexpectedIOException(Class clazz, String msg, IOException ioe) {
+        return delegate.unexpectedIOException(clazz, msg, ioe);
+    }
+
     void printMessage(String message) {
     }
 

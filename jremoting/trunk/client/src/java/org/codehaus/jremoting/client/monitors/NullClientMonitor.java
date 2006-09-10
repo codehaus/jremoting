@@ -59,4 +59,8 @@ public class NullClientMonitor implements ClientMonitor {
     public void classNotFound(Class clazz, String msg, ClassNotFoundException cnfe) {
     }
 
+    public InvocationException unexpectedIOException(Class clazz, String msg, IOException ioe) {
+        return new InvocationException("IO Exception during invocation to server :" + ioe.getMessage());
+    }
+
 }

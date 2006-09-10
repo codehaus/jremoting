@@ -149,9 +149,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
                                 retryConnectTries++;
                             }
                         } else {
-                            ioe.printStackTrace();
-
-                            throw new InvocationException("IO Exception during invocation to server :" + ioe.getMessage());
+                            throw clientMonitor.unexpectedIOException(AbstractClientInvocationHandler.class, "handleInvocation()", ioe);
                         }
                     }
                 }
