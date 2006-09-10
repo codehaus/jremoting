@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.test.proxies;
 
 import org.codehaus.jremoting.test.CustomSerializableParam;
-import org.codehaus.jremoting.test.TestCallBackListener;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TstObject;
@@ -156,10 +155,6 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      */
     public void makeNewTestObjectNames() {
         actualImpl.makeNewTestObjectNames();
-    }
-
-    public boolean addCallBackListener(TestCallBackListener testCallbackListener) {
-        return actualImpl.addCallBackListener(testCallbackListener);
     }
 
     public void ping() {

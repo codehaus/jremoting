@@ -35,7 +35,6 @@ public class TestInterfaceImpl implements TestInterface {
     Vector ti2Holder = new Vector();
     TstObject[] testObjects;
 
-    Vector listeners = new Vector();
 
     HashMap storedState = new HashMap();
 
@@ -194,18 +193,8 @@ public class TestInterfaceImpl implements TestInterface {
         //System.out.println( "impl finalized" );
     }
 
-    public boolean addCallBackListener(TestCallBackListener testCallbackListener) {
-
-        listeners.add(testCallbackListener);
-        return true;
-    }
 
     public void ping() {
-        for (int i = 0; i < listeners.size(); i++) {
-            TestCallBackListener testCallBackListener = (TestCallBackListener) listeners.elementAt(i);
-            testCallBackListener.serverCallingClient("Ping!");
-            //testCallBackListener.serverCallingClient2(this);
-        }
     }
 
     public byte bytes(byte b, byte[] array) {

@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.test;
 
-public abstract class AbstractHelloCallBackTestCase extends AbstractHelloTestCase implements TestCallBackListener {
+public abstract class AbstractHelloCallBackTestCase extends AbstractHelloTestCase {
 
     protected String cbMessage;
     protected TestInterface cbServer;
@@ -26,22 +26,4 @@ public abstract class AbstractHelloCallBackTestCase extends AbstractHelloTestCas
         super(name);
     }
 
-    public void notestCallBack() throws Exception {
-        testClient.addCallBackListener(this);
-        testClient.ping();
-
-        assertNotNull(cbMessage);
-        assertNotNull(cbServer);
-        assertEquals("Hello", cbMessage);
-        assertEquals(this, cbServer);
-
-    }
-
-    public void serverCallingClient(String message) {
-        cbMessage = message;
-    }
-
-    public void serverCallingClient2(TestInterface testInterface) {
-        cbServer = testInterface;
-    }
 }

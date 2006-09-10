@@ -118,11 +118,6 @@ public interface TestInterface {
      */
     void makeNewTestObjectNames();
 
-    /**
-     * Method adding a client-side exposed Object
-     */
-    boolean addCallBackListener(TestCallBackListener testCallbackListener);
-
     void ping();
 
     /**
