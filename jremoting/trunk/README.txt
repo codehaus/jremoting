@@ -23,36 +23,26 @@ Each module comes with its own unit tests as well as module specific documentati
 3. BUILD PROCEDURE :
 --------------------
 
- To build components
+ Requires maven 2.x
+ 
+ To build components and run integration tests
 
-  $ maven jremoting:install
+  $ mvn install
 
  To deploy components
 
-  $ maven jremoting:deploy
-
+  $ mvn deploy
+  
  To deploy components' reports
 
-  $ maven jremoting:site-deploy
-
- To run integrations tests
- 
-  $ maven jremoting:itests
-
+  $ mvn  site-deploy
+  
  To clean up all the build artifacts 
 
-  $ maven jremoting:clean
-
+  $ mvn clean
+  
 
 FURTHER  QUERIES :
 ------------------
 For additional information please check the documentation and also use the 
 JRemoting Mailing list (subscription details in the doc).
-
-Finally, please keep in mind that while Codehaus JRemoting is nearing completion and
-readiness for a first release, it should be considered as beta software as 
-APIs are changing, and documentation is evolving.
-
-vinayc 27 August 2003
-paul/mauro   30 Sept 2005
-
