@@ -55,7 +55,7 @@ public final class SocketCustomStreamInvocationHandler extends AbstractSocketStr
      * @return the read/writer
      * @throws ConnectionException if a problem
      */
-    protected ClientStreamDriver createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException {
+    protected ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException {
         return new ClientCustomStreamDriver(in, out, interfacesClassLoader);
     }
 }

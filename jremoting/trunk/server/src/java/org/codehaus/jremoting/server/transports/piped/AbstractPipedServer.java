@@ -70,11 +70,11 @@ public abstract class AbstractPipedServer extends AbstractServer {
             pIS.connect(out);
             in.connect(pOS);
 
-            AbstractServerStreamDriver ssrw = createServerStreamReadWriter();
+            AbstractServerStreamDriver ssd = createServerStreamDriver();
 
-            ssrw.setStreams(pIS, pOS, "piped");
+            ssd.setStreams(pIS, pOS, "piped");
 
-            PipedStreamServerConnection pssc = new PipedStreamServerConnection(this, pIS, pOS, ssrw, serverMonitor);
+            PipedStreamServerConnection pssc = new PipedStreamServerConnection(this, pIS, pOS, ssd, serverMonitor);
 
             ThreadContext thread = getThreadPool().getThreadContext(pssc);
 
@@ -103,5 +103,5 @@ public abstract class AbstractPipedServer extends AbstractServer {
         setState(STOPPED);
     }
 
-    protected abstract AbstractServerStreamDriver createServerStreamReadWriter();
+    protected abstract AbstractServerStreamDriver createServerStreamDriver();
 }

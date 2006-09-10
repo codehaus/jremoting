@@ -73,7 +73,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
         return interfacesClassLoader;
     }
 
-    protected void setObjectReadWriter(ClientStreamDriver objectDriver) {
+    protected void setObjectDriver(ClientStreamDriver objectDriver) {
         this.objectDriver = objectDriver;
     }
 

@@ -55,7 +55,7 @@ public class PipedObjectStreamInvocationHandler extends AbstractPipedStreamInvoc
 
     }
 
-    protected ClientStreamDriver createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException {
+    protected ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException {
         return new ClientObjectStreamDriver(in, out);
     }
 }

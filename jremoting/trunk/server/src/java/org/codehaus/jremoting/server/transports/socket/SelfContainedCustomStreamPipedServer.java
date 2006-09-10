@@ -31,7 +31,7 @@ public class SelfContainedCustomStreamPipedServer extends AbstractPipedServer {
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
     }
 
-    protected AbstractServerStreamDriver createServerStreamReadWriter() {
+    protected AbstractServerStreamDriver createServerStreamDriver() {
         return new ServerCustomStreamDriver(serverMonitor, threadPool);
     }
 }

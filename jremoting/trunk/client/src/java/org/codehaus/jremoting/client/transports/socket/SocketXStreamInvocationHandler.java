@@ -54,7 +54,7 @@ public final class SocketXStreamInvocationHandler extends AbstractSocketStreamIn
      * @return the read/writer
      * @throws org.codehaus.jremoting.api.ConnectionException if a problem
      */
-    protected ClientStreamDriver createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException {
+    protected ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException {
         return new ClientXStreamDriver(in, out, interfacesClassLoader);
     }
 }

@@ -49,12 +49,12 @@ public final class PipedCustomStreamInvocationHandler extends AbstractPipedStrea
         super(threadPool, clientMonitor, connectionPinger, inputStream, outputStream, PipedCustomStreamInvocationHandler.class.getClassLoader());
     }
 
-    protected ClientStreamDriver createClientStreamReadWriter(InputStream inputStream, OutputStream outputStream) throws ConnectionException {
+    protected ClientStreamDriver createClientStreamDriver(InputStream inputStream, OutputStream outputStream) throws ConnectionException {
 
         return new ClientCustomStreamDriver(inputStream, outputStream, PipedCustomStreamInvocationHandler.class.getClassLoader());
     }
 
-    protected ClientStreamDriver createClientStreamReadWriter(InputStream inputStream, OutputStream outputStream, ClassLoader classLoader) throws ConnectionException {
+    protected ClientStreamDriver createClientStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader classLoader) throws ConnectionException {
         return new ClientCustomStreamDriver(inputStream, outputStream, classLoader);
     }
 }

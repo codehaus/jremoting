@@ -23,7 +23,6 @@ import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ClassRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoClassRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
@@ -55,7 +54,7 @@ public class PipedCustomStreamServer extends AbstractPipedServer {
         this(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory());
     }
 
-    protected AbstractServerStreamDriver createServerStreamReadWriter() {
+    protected AbstractServerStreamDriver createServerStreamDriver() {
         return new ServerCustomStreamDriver(serverMonitor, threadPool);
     }
 }

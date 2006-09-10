@@ -62,8 +62,8 @@ public class SelfContainedSocketCustomStreamServer extends AbstractCompleteSocke
      *
      * @return The Server Stream Driver.
      */
-    protected AbstractServerStreamDriver createServerStreamReadWriter() {
-        ServerCustomStreamDriver rw = new ServerCustomStreamDriver(serverMonitor, threadPool);
-        return rw;
+    protected AbstractServerStreamDriver createServerStreamDriver() {
+        ServerCustomStreamDriver csd = new ServerCustomStreamDriver(serverMonitor, threadPool);
+        return csd;
     }
 }

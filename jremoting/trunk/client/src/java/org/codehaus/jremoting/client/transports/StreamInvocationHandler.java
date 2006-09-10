@@ -75,7 +75,7 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
         return interfacesClassLoader;
     }
 
-    protected void setObjectReadWriter(ClientStreamDriver objectDriver) {
+    protected void setObjectDriver(ClientStreamDriver objectDriver) {
         this.objectDriver = objectDriver;
     }
 

@@ -61,7 +61,7 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
         try {
             Socket socket = makeSocket();
 
-            setObjectReadWriter(createClientStreamReadWriter(socket.getInputStream(), socket.getOutputStream()));
+            setObjectDriver(createClientStreamDriver(socket.getInputStream(), socket.getOutputStream()));
         } catch (IOException ioe) {
             if (ioe.getMessage().startsWith("Connection refused")) {
                 throw new ConnectionRefusedException("Connection to port " + port + " on host " + host + " refused.");
@@ -80,7 +80,7 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
         try {
             Socket socket = makeSocket();
 
-            setObjectReadWriter(createClientStreamReadWriter(socket.getInputStream(), socket.getOutputStream()));
+            setObjectDriver(createClientStreamDriver(socket.getInputStream(), socket.getOutputStream()));
 
             return true;
         } catch (ConnectionException ce) {
@@ -106,5 +106,5 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
         return socket;
     }
 
-    protected abstract ClientStreamDriver createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException;
+    protected abstract ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException;
 }

@@ -50,7 +50,7 @@ public final class SocketObjectStreamInvocationHandler extends AbstractSocketStr
 
         super(threadPool, clientMonitor, connectionPinger, interfacesClassLoader, host, port);
 
-        //TODO - is this a pending problem?  The superclass invokes createClientStreamReadWriter
+        //TODO - is this a pending problem?  The superclass invokes createClientStreamDriver
         // perhaps an init() is needed.
     }
 
@@ -62,7 +62,7 @@ public final class SocketObjectStreamInvocationHandler extends AbstractSocketStr
      * @return the read/writer
      * @throws ConnectionException if a problem
      */
-    protected ClientStreamDriver createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException {
+    protected ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException {
         return new ClientObjectStreamDriver(in, out);
     }
 }

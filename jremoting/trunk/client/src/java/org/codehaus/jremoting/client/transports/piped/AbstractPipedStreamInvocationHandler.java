@@ -65,7 +65,7 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
      * @throws ConnectionException
      */
     public void initialize() throws ConnectionException {
-        setObjectReadWriter(createClientStreamReadWriter(inputStream, outputStream));
+        setObjectDriver(createClientStreamDriver(inputStream, outputStream));
         super.initialize();
     }
 
@@ -75,6 +75,6 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
         throw new InvocationException("Piped connection broken, unable to reconnect.");
     }
 
-    protected abstract ClientStreamDriver createClientStreamReadWriter(InputStream in, OutputStream out) throws ConnectionException;
+    protected abstract ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException;
 
 }

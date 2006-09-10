@@ -61,11 +61,11 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
 
         try {
             if (getState() == STARTED) {
-                AbstractServerStreamDriver ssrw = createServerStreamReadWriter();
+                AbstractServerStreamDriver ssd = createServerStreamDriver();
 
-                ssrw.setStreams(socket.getInputStream(), socket.getOutputStream(), socket);
+                ssd.setStreams(socket.getInputStream(), socket.getOutputStream(), socket);
 
-                SocketStreamServerConnection sssc = new SocketStreamServerConnection(this, socket, ssrw, serverMonitor);
+                SocketStreamServerConnection sssc = new SocketStreamServerConnection(this, socket, ssd, serverMonitor);
 
                 sssc.run();
             }
@@ -80,7 +80,7 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
      *
      * @return The Server Stream Driver.
      */
-    protected abstract AbstractServerStreamDriver createServerStreamReadWriter();
+    protected abstract AbstractServerStreamDriver createServerStreamDriver();
 
     /**
      * Method start

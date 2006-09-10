@@ -62,8 +62,8 @@ public class SelfContainedSocketXStreamServer extends AbstractCompleteSocketStre
      *
      * @return The Server Stream Driver.
      */
-    protected AbstractServerStreamDriver createServerStreamReadWriter() {
-        ServerXStreamDriver rw = new ServerXStreamDriver(serverMonitor, threadPool);
-        return rw;
+    protected AbstractServerStreamDriver createServerStreamDriver() {
+        ServerXStreamDriver xsd = new ServerXStreamDriver(serverMonitor, threadPool);
+        return xsd;
     }
 }

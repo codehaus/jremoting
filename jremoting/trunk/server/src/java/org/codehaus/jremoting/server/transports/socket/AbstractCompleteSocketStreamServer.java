@@ -79,11 +79,11 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
                 // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
                 sock.setSoTimeout(36000);
 
-                AbstractServerStreamDriver ssrw = createServerStreamReadWriter();
+                AbstractServerStreamDriver ssd = createServerStreamDriver();
 
-                ssrw.setStreams(sock.getInputStream(), sock.getOutputStream(), sock);
+                ssd.setStreams(sock.getInputStream(), sock.getOutputStream(), sock);
 
-                SocketStreamServerConnection sssc = new SocketStreamServerConnection(this, sock, ssrw, serverMonitor);
+                SocketStreamServerConnection sssc = new SocketStreamServerConnection(this, sock, ssd, serverMonitor);
 
                 //TODO ? Two of these getThreadContexts? PH
                 ThreadContext threadContext = getThreadPool().getThreadContext(sssc);
@@ -157,5 +157,5 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
      *
      * @return The Server Stream Driver.
      */
-    protected abstract AbstractServerStreamDriver createServerStreamReadWriter();
+    protected abstract AbstractServerStreamDriver createServerStreamDriver();
 }
