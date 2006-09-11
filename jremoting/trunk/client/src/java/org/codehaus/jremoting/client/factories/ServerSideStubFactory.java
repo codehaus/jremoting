@@ -25,8 +25,6 @@ import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.responses.StubResponse;
 import org.codehaus.jremoting.responses.*;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 /**
@@ -35,7 +33,7 @@ import java.util.HashMap;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ServerSideStubFactory extends AbstractFactory {
+public class ServerSideStubFactory extends AbstractStubFactory {
 
     private HashMap publishedServiceClassLoaders = new HashMap();
 

@@ -40,13 +40,13 @@ import java.util.HashMap;
 
 
 /**
- * Class AbstractFactory
+ * Class AbstractStubFactory
  *
  * @author Paul Hammant
  * @author Peter Royal <a href="mailto:proyal@managingpartners.com">proyal@managingpartners.com</a>
  * @version $Revision: 1.3 $
  */
-public abstract class AbstractFactory implements Factory {
+public abstract class AbstractStubFactory implements Factory {
 
     private static final UID U_ID = new UID((short) 20729);
     private static final int STEM_LEN = "JRemotingGenerated".length();
@@ -57,7 +57,7 @@ public abstract class AbstractFactory implements Factory {
     protected Long session;
 
 
-    public AbstractFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
+    public AbstractStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
         this.hostContext = hostContext;
         clientInvocationHandler = this.hostContext.getInvocationHandler();
         clientInvocationHandler.initialize();
@@ -305,7 +305,7 @@ public abstract class AbstractFactory implements Factory {
      */
     public void close() {
         hostContext.getInvocationHandler().close();
-    }    
+    }
 
 
 

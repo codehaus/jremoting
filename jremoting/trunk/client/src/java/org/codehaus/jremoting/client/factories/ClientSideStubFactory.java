@@ -20,16 +20,13 @@ package org.codehaus.jremoting.client.factories;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.HostContext;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Class ClientSideStubFactory
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ClientSideStubFactory extends AbstractFactory {
+public class ClientSideStubFactory extends AbstractStubFactory {
     private ClassLoader classLoader;
 
     public ClientSideStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {

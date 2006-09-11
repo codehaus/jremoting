@@ -28,7 +28,7 @@ import org.codehaus.jremoting.client.HostContext;
  *
  * @author <a href="mailto:vinayc@apache.org">Vinay Chandran</a>
  */
-public class DynamicStubFactory extends AbstractFactory {
+public class DynamicStubFactory extends AbstractStubFactory {
 
     public DynamicStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
         super(hostContext, allowOptimize);

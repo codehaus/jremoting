@@ -94,7 +94,7 @@ public class DynamicInvoker {
 
     /**
      * Retrieve the list of publishedObjects on the server.
-     * Re-uses the impl within AbstractFactory.
+     * Re-uses the impl within AbstractStubFactory.
      */
     public String[] list() {
         return factory.list();
