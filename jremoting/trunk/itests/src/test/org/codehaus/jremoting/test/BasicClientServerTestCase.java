@@ -21,6 +21,7 @@ import junit.framework.TestCase;
 import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.NotPublishedException;
+import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
@@ -28,6 +29,7 @@ import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostCon
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketObjectStreamServer;
+import org.codehaus.jremoting.requests.InvokeMethod;
 
 
 /**
@@ -89,6 +91,7 @@ public class BasicClientServerTestCase extends TestCase {
 
             fail("should have barfed");
         } catch (NotPublishedException e) {
+            //expected 
         } finally {
             server.stop();
         }
@@ -96,6 +99,39 @@ public class BasicClientServerTestCase extends TestCase {
 
 
     }
+
+
+    public void testNoReferenceExceptionThrownWhenNeeded() throws Exception {
+
+        // server side setup.
+        SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(12331);
+
+        TestInterfaceImpl testServer = new TestInterfaceImpl();
+        PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
+        server.publish(testServer, "Hello", pd);
+        server.start();
+
+        // Client side setup
+        try {
+
+            SocketCustomStreamHostContext hostContext = new SocketCustomStreamHostContext("127.0.0.1", 12331);
+            ClientSideStubFactory cssf = new ClientSideStubFactory(hostContext, false);
+            cssf.lookupService("Hello");
+            hostContext.getInvocationHandler().handleInvocation(new InvokeMethod("Hello", "Main", "ping()",new Object [0], new Long(44332), new Long(21)));
+
+            fail("should have barfed");
+        } catch (NoSuchSessionException e) {
+            //expected
+        } finally {
+            server.stop();
+        }
+
+
+
+    }
+
+
+
 
     public void donttestMismatch2() throws Exception {
 
