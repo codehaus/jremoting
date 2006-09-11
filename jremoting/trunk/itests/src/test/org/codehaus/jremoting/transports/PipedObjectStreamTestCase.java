@@ -78,7 +78,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         factory = new ClientSideStubFactory(new PipedObjectStreamHostContext(in, out), false);
-        testClient = (TestInterface) factory.lookupServices("Hello33");
+        testClient = (TestInterface) factory.lookupService("Hello33");
 
         // just a kludge for unit testing given we are intrinsically dealing with
         // threads, JRemoting being a client/server thing

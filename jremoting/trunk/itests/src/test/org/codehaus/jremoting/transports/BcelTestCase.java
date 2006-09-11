@@ -66,7 +66,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         factory = new ServerSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 10001), false);
-        testClient = (TestInterface) factory.lookupServices("Hello");
+        testClient = (TestInterface) factory.lookupService("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
         // threads, JRemoting being a client/server thing

@@ -42,7 +42,7 @@ public interface InterfaceLookup {
      * @return proxy to the Remote service.
      * @throws ConnectionException
      */
-    Object lookupServices(String publishedServiceName) throws ConnectionException;
+    Object lookupService(String publishedServiceName) throws ConnectionException;
 
     /**
      * Lookup a name by which the remote service is
@@ -54,34 +54,14 @@ public interface InterfaceLookup {
      * @return
      * @throws ConnectionException
      */
-    Object lookup(String publishedServiceName, Authentication authentication) throws ConnectionException;
+    Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException;
 
-    /**
-     * This method returns the list of names of the
-     * remote services.
-     *
-     * @return
-     */
     String[] listServices();
 
-    /**
-     * Method getTextToSignForAuthentication
-     *
-     * @return
-     */
     String getTextToSignForAuthentication();
 
-    /**
-     * Method close
-     */
     void close();
 
-    /**
-     * Has a service.
-     *
-     * @param publishedServiceName
-     * @return
-     */
     boolean hasService(String publishedServiceName);
 
 

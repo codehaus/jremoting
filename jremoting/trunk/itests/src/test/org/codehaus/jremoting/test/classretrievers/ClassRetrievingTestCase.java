@@ -64,7 +64,7 @@ public class ClassRetrievingTestCase extends TestCase {
 
         // Client side setup
         Factory af = new ServerSideStubFactory(new PipedCustomStreamHostContext(in, out), false);
-        testClient = (TestInterface) af.lookupServices("Kewl");
+        testClient = (TestInterface) af.lookupService("Kewl");
 
         // just a kludge for unit testing given we are intrinsically dealing with
         // threads, JRemoting being a client/server thing

@@ -88,7 +88,7 @@ public abstract class AbstractStubFactory implements Factory {
      * @return
      * @throws ConnectionException
      */
-    public Object lookup(String publishedServiceName, Authentication authentication) throws ConnectionException {
+    public Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
         AbstractResponse ar = clientInvocationHandler.handleInvocation(new LookupPublishedObject(publishedServiceName, authentication, session));
 
@@ -189,8 +189,8 @@ public abstract class AbstractStubFactory implements Factory {
      * @return
      * @throws ConnectionException
      */
-    public final Object lookupServices(String publishedServiceName) throws ConnectionException {
-        return lookup(publishedServiceName, null);
+    public final Object lookupService(String publishedServiceName) throws ConnectionException {
+        return lookupService(publishedServiceName, null);
     }
 
     public String getTextToSignForAuthentication() {

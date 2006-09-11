@@ -70,8 +70,8 @@ public class ProConClientTest {
             System.out.println("..[" + i + "]:" + listOfPublishedObjectsOnServer[i]);
         }
 
-        TestProvider tpi = (TestProvider) af.lookupServices("P");
-        TestConsumer tci = (TestConsumer) af.lookupServices("C");
+        TestProvider tpi = (TestProvider) af.lookupService("P");
+        TestConsumer tci = (TestConsumer) af.lookupService("C");
 
         System.out.println("Provider.getName(0)" + tpi.getName(0));
         System.out.println("Consumer.getProviderName(0)" + tci.getProviderName(tpi));

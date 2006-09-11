@@ -117,7 +117,7 @@ public class DynamicInvoker {
         //check the stub cache
         DynamicStub stub = (DynamicStub) stubs.get(publishedName);
         if (stub == null) {
-            stub = (DynamicStub) factory.lookupServices(publishedName);
+            stub = (DynamicStub) factory.lookupService(publishedName);
             stubs.put(publishedName, stub);
         }
         if (args == null) {
