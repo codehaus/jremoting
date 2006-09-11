@@ -337,12 +337,18 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      */
     private AbstractResponse doLookupRequest(AbstractRequest request) {
         LookupPublishedObject lr = (LookupPublishedObject) request;
+        String publishedServiceName = lr.getPublishedServiceName();
 
         try {
-            authenticator.checkAuthority(lr.getAuthentication(), lr.getPublishedServiceName());
+            authenticator.checkAuthority(lr.getAuthentication(), publishedServiceName);
         } catch (AuthenticationException aae) {
             return new ExceptionThrown(aae);
         }
+
+        if (!isPublished(publishedServiceName + "_Main")) {
+            return new NotPublished();
+        }
+
 
         //TODO a decent ref number for main?
         return new LookupResponse(new Long(0));

@@ -20,6 +20,7 @@ package org.codehaus.jremoting.test;
 import junit.framework.TestCase;
 import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
+import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
@@ -67,6 +68,32 @@ public class BasicClientServerTestCase extends TestCase {
         } finally {
             //server.stop();
         }
+
+    }
+
+    public void testNotPublishedExceptionThrownWhenNeeded() throws Exception {
+
+        // server side setup.
+        SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(12333);
+
+        TestInterfaceImpl testServer = new TestInterfaceImpl();
+        PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
+        server.publish(testServer, "Hello", pd);
+        server.start();
+
+        // Client side setup
+        try {
+
+            ClientSideStubFactory cssf = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 12333), false);
+            cssf.lookupService("foo");
+
+            fail("should have barfed");
+        } catch (NotPublishedException e) {
+        } finally {
+            server.stop();
+        }
+
+
 
     }
 
