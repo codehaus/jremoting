@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.transports;
 
 import org.codehaus.jremoting.test.TestInterfaceImpl;
-import org.codehaus.jremoting.test.AbstractHelloTestCase;
 
 /**
  * Test Non Proxy for comparison sake

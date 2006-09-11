@@ -5,7 +5,6 @@ import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketXStrea
 import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketXStreamHostContext;
-import org.codehaus.jremoting.api.ThreadPool;
 
 /**
  * Test XStream over sockets.

@@ -15,10 +15,14 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.test;
+package org.codehaus.jremoting.transports;
+
+import org.codehaus.jremoting.test.*;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+
+import junit.framework.Assert;
 
 /**
  * Extended by classes that name the transport.
@@ -26,7 +30,7 @@ import java.io.IOException;
  * @author Paul Hammant
  * @author Benjamin David Hall
  */
-public abstract class AbstractHelloTestCase extends AbstractJRemotingRemotingTestCase {
+public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
 
     public void testHello2Call() throws Exception {
         // lookup worked ?
@@ -39,7 +43,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingRemotingTes
         assertEquals(11, retVal);
 
         // test the server has logged the message.
-        assertEquals("11", ((TestInterfaceImpl) testServer).getStoredState("int:hello2(int)"));
+        Assert.assertEquals("11", ((TestInterfaceImpl) testServer).getStoredState("int:hello2(int)"));
     }
 
     /**
@@ -211,7 +215,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingRemotingTes
 
     public void testSpeed() throws Exception {
 
-        int iterations = 1000; // default
+        int iterations = 1; // default
         String iterationsStr = "@SPEEDTEST-ITERATIONS@";
         try {
             iterations = Integer.parseInt(iterationsStr);

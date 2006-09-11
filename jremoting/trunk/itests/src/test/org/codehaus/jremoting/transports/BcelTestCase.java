@@ -26,7 +26,6 @@ import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorClassRe
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
-import org.codehaus.jremoting.test.AbstractHelloTestCase;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;

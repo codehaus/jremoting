@@ -26,7 +26,7 @@ import org.codehaus.jremoting.server.transports.AbstractServer;
  *
  * @author Paul Hammant
  */
-public abstract class AbstractJRemotingRemotingTestCase extends TestCase {
+public abstract class AbstractJRemotingTestCase extends TestCase {
 
     protected AbstractServer server;
     protected TestInterfaceImpl testServer;
