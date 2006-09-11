@@ -46,7 +46,7 @@ public class DirectTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         factory = new ClientSideStubFactory(new DirectHostContext(server), false, this.getClass().getClassLoader());
-        testClient = (TestInterface) factory.lookup("Hello");
+        testClient = (TestInterface) factory.lookupServices("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
         // threads, JRemoting being a client/server thing

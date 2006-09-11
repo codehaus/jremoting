@@ -53,7 +53,7 @@ public class SocketMismatchTestCase extends TestCase {
 
             // Client side setup
             factory = new ClientSideStubFactory(new SocketObjectStreamHostContext("127.0.0.1", 12001), false);
-            TestInterface testClient = (TestInterface) factory.lookup("Hello");
+            TestInterface testClient = (TestInterface) factory.lookupServices("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
             // threads, JRemoting being a client/server thing
@@ -92,7 +92,7 @@ public class SocketMismatchTestCase extends TestCase {
 
             // Client side setup
             factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 12002), false);
-            TestInterface testClient = (TestInterface) factory.lookup("Hello");
+            TestInterface testClient = (TestInterface) factory.lookupServices("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
             // threads, JRemoting being a client/server thing
@@ -132,7 +132,7 @@ public class SocketMismatchTestCase extends TestCase {
 
             // Client side setup
             factory = new ClientSideStubFactory(new RmiHostContext("127.0.0.1", 12003), false);
-            TestInterface testClient = (TestInterface) factory.lookup("Hello");
+            TestInterface testClient = (TestInterface) factory.lookupServices("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
             // threads, JRemoting being a client/server thing
@@ -171,7 +171,7 @@ public class SocketMismatchTestCase extends TestCase {
 
             // Client side setup
             factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 12004), false);
-            TestInterface testClient = (TestInterface) factory.lookup("Hello");
+            TestInterface testClient = (TestInterface) factory.lookupServices("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
             // threads, JRemoting being a client/server thing

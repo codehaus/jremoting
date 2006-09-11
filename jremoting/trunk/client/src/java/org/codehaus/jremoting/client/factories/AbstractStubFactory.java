@@ -189,23 +189,15 @@ public abstract class AbstractStubFactory implements Factory {
      * @return
      * @throws ConnectionException
      */
-    public final Object lookup(String publishedServiceName) throws ConnectionException {
+    public final Object lookupServices(String publishedServiceName) throws ConnectionException {
         return lookup(publishedServiceName, null);
     }
 
-    /**
-     * Method getTextToSignForAuthentication
-     *
-     * @return
-     */
     public String getTextToSignForAuthentication() {
         return textToSign;
     }
 
-    /**
-     * Method list
-     */
-    public String[] list() {
+    public String[] listServices() {
 
         AbstractResponse ar = clientInvocationHandler.handleInvocation(new ListPublishedObjects());
 
@@ -224,7 +216,7 @@ public abstract class AbstractStubFactory implements Factory {
      * @return
      */
     public boolean hasService(String publishedServiceName) {
-        String[] services = list();
+        String[] services = listServices();
         for (int i = 0; i < services.length; i++) {
             String service = services[i];
             if (service.equals(publishedServiceName)) {

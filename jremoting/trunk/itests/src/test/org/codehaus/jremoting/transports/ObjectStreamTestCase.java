@@ -61,7 +61,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         // Client side setup
         SocketObjectStreamHostContext hostContext = new SocketObjectStreamHostContext("127.0.0.1", 10002);
         factory = new ClientSideStubFactory(hostContext, false);
-        testClient = (TestInterface) factory.lookup("Hello");
+        testClient = (TestInterface) factory.lookupServices("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
         // threads, JRemoting being a client/server thing

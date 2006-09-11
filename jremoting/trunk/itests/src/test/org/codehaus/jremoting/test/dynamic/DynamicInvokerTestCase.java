@@ -45,7 +45,7 @@ public class DynamicInvokerTestCase extends TestCase {
     protected HostContext hostContext;
     protected DynamicInvoker dynamicInvoker;
 
-    
+
     //-------TestCase overrides-----//
 
     /**
@@ -126,7 +126,7 @@ public class DynamicInvokerTestCase extends TestCase {
 
 
     public void testList() {
-        String[] publications = dynamicInvoker.list();
+        String[] publications = dynamicInvoker.listServices();
         assertNotNull(publications);
         assertTrue(publications.length > 0);
         assertEquals("Hello", publications[0]);

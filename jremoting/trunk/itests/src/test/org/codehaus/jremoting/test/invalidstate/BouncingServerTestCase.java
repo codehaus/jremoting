@@ -65,7 +65,7 @@ public class BouncingServerTestCase extends TestCase {
             HostContext hostContext = new SocketCustomStreamHostContext("127.0.0.1", 12201);
             factory = new ClientSideStubFactory(hostContext, false);
             ClientInvocationHandler ih = hostContext.getInvocationHandler();
-            TestInterface testClient = (TestInterface) factory.lookup("Hello55");
+            TestInterface testClient = (TestInterface) factory.lookupServices("Hello55");
 
             // just a kludge for unit testing given we are intrinsically dealing with
             // threads, JRemoting being a client/server thing

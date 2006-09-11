@@ -64,14 +64,14 @@ public class ProConClientTest {
         //list
         System.out.println("Listing Published Objects At Server...");
 
-        String[] listOfPublishedObjectsOnServer = af.list();
+        String[] listOfPublishedObjectsOnServer = af.listServices();
 
         for (int i = 0; i < listOfPublishedObjectsOnServer.length; i++) {
             System.out.println("..[" + i + "]:" + listOfPublishedObjectsOnServer[i]);
         }
 
-        TestProvider tpi = (TestProvider) af.lookup("P");
-        TestConsumer tci = (TestConsumer) af.lookup("C");
+        TestProvider tpi = (TestProvider) af.lookupServices("P");
+        TestConsumer tci = (TestConsumer) af.lookupServices("C");
 
         System.out.println("Provider.getName(0)" + tpi.getName(0));
         System.out.println("Consumer.getProviderName(0)" + tci.getProviderName(tpi));

@@ -56,7 +56,7 @@ public class RmiTestCase extends TestCase {
 
         // Client side setup
         Factory af = new ClientSideStubFactory(new RmiHostContext("127.0.0.1", 10003), false);
-        testClient = (TestInterface) af.lookup("Hello");
+        testClient = (TestInterface) af.lookupServices("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
         // threads, JRemoting being a client/server thing

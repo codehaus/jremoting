@@ -125,7 +125,7 @@ public class ClientContextTestCase extends TestCase {
         server.start();
 
         Factory factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 13333), false);
-        final AccountManager clientSideAccountManager = (AccountManager) factory.lookup("OurAccountManager");
+        final AccountManager clientSideAccountManager = (AccountManager) factory.lookupServices("OurAccountManager");
 
         Thread threadOne = makeThread(clientSideAccountManager, 11);
         Thread threadTwo = makeThread(clientSideAccountManager, 22);

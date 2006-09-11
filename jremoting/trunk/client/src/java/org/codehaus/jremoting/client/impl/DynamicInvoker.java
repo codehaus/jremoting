@@ -54,22 +54,13 @@ import java.util.Map;
  * @author <a href="mailto:vinayc@apache.org">Vinay Chandran</a>
  */
 public class DynamicInvoker {
-    //------Variables------------//
 
-    /**
-     * Factory
-     */
     private DynamicStubFactory factory;
-    /**
-     * ClientInvocationHandler
-     */
+
     private ClientInvocationHandler clientInvocationHandler;
-    /**
-     * Cache of  stubs lookeup by the client
-     */
+
     private Map stubs = new HashMap();
 
-    //-------Constructor---------//
     /**
      * Constructor
      *
@@ -83,11 +74,6 @@ public class DynamicInvoker {
         clientInvocationHandler = hostContext.getInvocationHandler();
     }
 
-    //--------Methods---------------//
-
-    /**
-     * Close the underlying transport
-     */
     public void close() {
         factory.close();
     }
@@ -96,8 +82,8 @@ public class DynamicInvoker {
      * Retrieve the list of publishedObjects on the server.
      * Re-uses the impl within AbstractStubFactory.
      */
-    public String[] list() {
-        return factory.list();
+    public String[] listServices() {
+        return factory.listServices();
     }
 
     /**
@@ -131,7 +117,7 @@ public class DynamicInvoker {
         //check the stub cache
         DynamicStub stub = (DynamicStub) stubs.get(publishedName);
         if (stub == null) {
-            stub = (DynamicStub) factory.lookup(publishedName);
+            stub = (DynamicStub) factory.lookupServices(publishedName);
             stubs.put(publishedName, stub);
         }
         if (args == null) {
