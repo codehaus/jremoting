@@ -19,7 +19,7 @@ package org.codehaus.jremoting.test.rmi;
 
 import junit.framework.TestCase;
 import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
+import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.transports.AbstractServer;
@@ -55,7 +55,7 @@ public class RmiTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        Factory af = new ClientSideClassFactory(new RmiHostContext("127.0.0.1", 10003), false);
+        Factory af = new ClientSideStubFactory(new RmiHostContext("127.0.0.1", 10003), false);
         testClient = (TestInterface) af.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with

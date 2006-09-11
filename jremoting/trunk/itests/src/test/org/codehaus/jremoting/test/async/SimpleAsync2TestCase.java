@@ -20,16 +20,14 @@ package org.codehaus.jremoting.test.async;
 import junit.framework.TestCase;
 import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.client.factories.ServerSideClassFactory;
+import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorClassRetriever;
+import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
-
-import java.io.File;
 
 public class SimpleAsync2TestCase extends TestCase {
 
@@ -50,7 +48,7 @@ public class SimpleAsync2TestCase extends TestCase {
         super.setUp();
 
         // server side setup.
-        BcelDynamicGeneratorClassRetriever cr = new BcelDynamicGeneratorClassRetriever(this.getClass().getClassLoader());
+        BcelDynamicGeneratorStubRetriever cr = new BcelDynamicGeneratorStubRetriever(this.getClass().getClassLoader());
         String class_gen_dir = getClassGenDir();
         cr.setClassGenDir(class_gen_dir);
 
@@ -63,7 +61,7 @@ public class SimpleAsync2TestCase extends TestCase {
         server.start();
 
         // Client side setup
-        factory = new ServerSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 11009), false);
+        factory = new ServerSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 11009), false);
         testClient = (AsyncTest) factory.lookup("AsyncTestB");
 
         // just a kludge for unit testing given we are intrinsically dealing with

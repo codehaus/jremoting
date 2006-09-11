@@ -26,12 +26,12 @@ import java.io.IOException;
 
 
 /**
- * Class JarFileClassRetriever
+ * Class JarFileStubRetriever
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGenerator, ClassRetriever {
+public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenerator, StubRetriever {
 
     private String classpath;
     private String classGenDir = ".";
@@ -41,7 +41,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
      * @param classLoader        the classloader in which the proxy generater will be found.
      * @param generatorClassName the name of the proxy gen class
      */
-    public AbstractDynamicGeneratorClassRetriever(ClassLoader classLoader, String generatorClassName) {
+    public AbstractDynamicGeneratorStubRetriever(ClassLoader classLoader, String generatorClassName) {
         try {
             generatorClass = classLoader.loadClass(generatorClassName);
         } catch (ClassNotFoundException e) {
@@ -117,19 +117,19 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
      *
      * @param publishedName the name to publish as
      * @return the byte array for the proxy class
-     * @throws ClassRetrievalException if the class cannot be retrieved.
+     * @throws StubRetrievalException if the class cannot be retrieved.
      */
-    public final byte[] getProxyClassBytes(String publishedName) throws ClassRetrievalException {
+    public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
         return getThingBytes("JRemotingGenerated" + publishedName);
     }
 
     /**
      * @param thingName the thing name
      * @return the byte array of the thing.
-     * @throws org.codehaus.jremoting.server.ClassRetrievalException
+     * @throws org.codehaus.jremoting.server.StubRetrievalException
      *          if getting the bytes was a problem.
      */
-    protected byte[] getThingBytes(String thingName) throws ClassRetrievalException {
+    protected byte[] getThingBytes(String thingName) throws StubRetrievalException {
 
         thingName = thingName.replace('.', '\\') + ".class";
 
@@ -140,11 +140,11 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
         } catch (Exception e) {
             e.printStackTrace();
 
-            throw new ClassRetrievalException("Generated class not found in classloader specified : '" + e.getMessage() + "', current directory is '" + new File(".").getAbsolutePath() + "'");
+            throw new StubRetrievalException("Generated class not found in classloader specified : '" + e.getMessage() + "', current directory is '" + new File(".").getAbsolutePath() + "'");
         }
 
         if (fis == null) {
-            throw new ClassRetrievalException("Generated class not found in classloader specified.");
+            throw new StubRetrievalException("Generated class not found in classloader specified.");
         }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -158,7 +158,7 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
         } catch (IOException e) {
             e.printStackTrace();
 
-            throw new ClassRetrievalException("Error retrieving generated class bytes : " + e.getMessage());
+            throw new StubRetrievalException("Error retrieving generated class bytes : " + e.getMessage());
         }
 
         return baos.toByteArray();

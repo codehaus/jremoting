@@ -15,27 +15,24 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server;
+package org.codehaus.jremoting.server.classretrievers;
 
+import org.codehaus.jremoting.server.StubRetrievalException;
 
 /**
- * A ClassRetriever is a thing that allows the serverside JRemoting deployer to choose
- * how class defs for proxies are retrieved. They may not want them in the normal
- * classpath.
+ * Class NoStubRetriever
  *
  * @author Paul Hammant
- * @version * $Revision: 1.2 $
+ * @version $Revision: 1.2 $
  */
-public interface ClassRetriever {
+public class NoStubRetriever extends AbstractStubRetriever {
 
     /**
-     * Get a Bean's bytes (from its classdefinition)
-     *
-     * @param publishedName the name the bean is published as.
-     * @return a byte array for the bean's class representation.
-     * @throws org.codehaus.jremoting.server.ClassRetrievalException
-     *          if the classdef cannot be found.
+     * @param thingName get a byte array for a thing.
+     * @return the byte array
+     * @throws StubRetrievalException if the retrieval failed.
      */
-    byte[] getProxyClassBytes(String publishedName) throws ClassRetrievalException;
-
+    protected byte[] getThingBytes(String thingName) throws StubRetrievalException {
+        throw new StubRetrievalException("This JRemoting server does not support class forwarding");
+    }
 }

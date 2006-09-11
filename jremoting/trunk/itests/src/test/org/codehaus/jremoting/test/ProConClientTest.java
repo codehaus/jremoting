@@ -19,8 +19,8 @@ package org.codehaus.jremoting.test;
 
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.HostContext;
-import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
-import org.codehaus.jremoting.client.factories.ServerSideClassFactory;
+import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
+import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
 
@@ -56,9 +56,9 @@ public class ProConClientTest {
         Factory af = null;
 
         if (args[0].equals("S")) {
-            af = new ServerSideClassFactory(arhc, false);
+            af = new ServerSideStubFactory(arhc, false);
         } else {
-            af = new ClientSideClassFactory(arhc, false);
+            af = new ClientSideStubFactory(arhc, false);
         }
 
         //list

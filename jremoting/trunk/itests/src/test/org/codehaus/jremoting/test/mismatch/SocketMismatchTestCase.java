@@ -19,7 +19,7 @@ package org.codehaus.jremoting.test.mismatch;
 
 import junit.framework.TestCase;
 import org.codehaus.jremoting.api.BadConnectionException;
-import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
+import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
@@ -48,11 +48,11 @@ public class SocketMismatchTestCase extends TestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ClientSideClassFactory factory = null;
+        ClientSideStubFactory factory = null;
         try {
 
             // Client side setup
-            factory = new ClientSideClassFactory(new SocketObjectStreamHostContext("127.0.0.1", 12001), false);
+            factory = new ClientSideStubFactory(new SocketObjectStreamHostContext("127.0.0.1", 12001), false);
             TestInterface testClient = (TestInterface) factory.lookup("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
@@ -87,11 +87,11 @@ public class SocketMismatchTestCase extends TestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ClientSideClassFactory factory = null;
+        ClientSideStubFactory factory = null;
         try {
 
             // Client side setup
-            factory = new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 12002), false);
+            factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 12002), false);
             TestInterface testClient = (TestInterface) factory.lookup("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
@@ -127,11 +127,11 @@ public class SocketMismatchTestCase extends TestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ClientSideClassFactory factory = null;
+        ClientSideStubFactory factory = null;
         try {
 
             // Client side setup
-            factory = new ClientSideClassFactory(new RmiHostContext("127.0.0.1", 12003), false);
+            factory = new ClientSideStubFactory(new RmiHostContext("127.0.0.1", 12003), false);
             TestInterface testClient = (TestInterface) factory.lookup("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
@@ -166,11 +166,11 @@ public class SocketMismatchTestCase extends TestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ClientSideClassFactory factory = null;
+        ClientSideStubFactory factory = null;
         try {
 
             // Client side setup
-            factory = new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 12004), false);
+            factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 12004), false);
             TestInterface testClient = (TestInterface) factory.lookup("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with

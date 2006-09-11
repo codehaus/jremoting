@@ -28,7 +28,7 @@ import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.adapters.MarshalledInvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.NoClassRetriever;
+import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.AbstractServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -67,7 +67,7 @@ public class DirectMarshalledServer extends AbstractServer implements ServerMars
     }
 
     public DirectMarshalledServer() {
-        this(new InvocationHandlerAdapter(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultServerSideClientContextFactory()));
+        this(new InvocationHandlerAdapter(new NoStubRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultServerSideClientContextFactory()));
     }
 
     /**

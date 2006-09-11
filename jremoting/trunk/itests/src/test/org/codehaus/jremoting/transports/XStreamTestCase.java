@@ -3,7 +3,7 @@ package org.codehaus.jremoting.transports;
 import org.codehaus.jremoting.test.*;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketXStreamServer;
 import org.codehaus.jremoting.server.*;
-import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
+import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketXStreamHostContext;
 
 /**
@@ -24,7 +24,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ClientSideClassFactory(new SocketXStreamHostContext("127.0.0.1", 10099), false);
+        factory = new ClientSideStubFactory(new SocketXStreamHostContext("127.0.0.1", 10099), false);
         testClient = (TestInterface) factory.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with

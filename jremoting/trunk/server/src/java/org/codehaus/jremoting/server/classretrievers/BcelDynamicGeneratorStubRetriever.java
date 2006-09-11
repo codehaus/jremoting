@@ -17,22 +17,28 @@
  */
 package org.codehaus.jremoting.server.classretrievers;
 
-import org.codehaus.jremoting.server.ClassRetrievalException;
-
 /**
- * Class NoClassRetriever
+ * Class BcelDynamicGeneratorStubRetriever
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class NoClassRetriever extends AbstractClassRetriever {
+public class BcelDynamicGeneratorStubRetriever extends AbstractDynamicGeneratorStubRetriever {
+    /**
+     * Contruct a Dynamic Class Generator with a classloader pointing to the generator classes.
+     *
+     * @param classLoader the classloader in which the proxy generater will be found.
+     */
+
+    public BcelDynamicGeneratorStubRetriever(ClassLoader classLoader) {
+        super(classLoader, "org.codehaus.jremoting.tools.generator.BcelProxyGenerator");
+    }
 
     /**
-     * @param thingName get a byte array for a thing.
-     * @return the byte array
-     * @throws ClassRetrievalException if the retrieval failed.
+     * Contruct a Dynamic Class Generator using the classes own classloader.
      */
-    protected byte[] getThingBytes(String thingName) throws ClassRetrievalException {
-        throw new ClassRetrievalException("This JRemoting server does not support class forwarding");
+
+    public BcelDynamicGeneratorStubRetriever() {
+        super(BcelDynamicGeneratorStubRetriever.class.getClassLoader(), "org.codehaus.jremoting.tools.generator.BcelProxyGenerator");
     }
 }

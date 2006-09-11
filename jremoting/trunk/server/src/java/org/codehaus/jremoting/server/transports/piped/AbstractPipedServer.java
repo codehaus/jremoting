@@ -21,7 +21,7 @@ import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.ThreadContext;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.server.Authenticator;
-import org.codehaus.jremoting.server.ClassRetriever;
+import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
@@ -40,8 +40,8 @@ import java.io.PipedOutputStream;
  */
 public abstract class AbstractPipedServer extends AbstractServer {
 
-    public AbstractPipedServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
-        super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory);
+    public AbstractPipedServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
+        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory);
     }
 
     public AbstractPipedServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {

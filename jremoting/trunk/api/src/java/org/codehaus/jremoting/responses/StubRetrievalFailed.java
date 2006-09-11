@@ -25,39 +25,34 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class ClassResponse
+ * Class RequestFailed
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class ClassResponse extends AbstractResponse {
+public final class StubRetrievalFailed extends AbstractResponse {
+    static final long serialVersionUID = -8931777755294495428L;
 
-    static final long serialVersionUID = -3849144476006325180L;
-
-    private byte[] proxyClassBytes;
+    private String reason;
 
     /**
-     * Contruct a class response from byte arrays of classes.
-     *
-     * @param proxyClassBytes a byte array of the class def for the class containing the methods.
+     * Constructor RequestFailed for Externalizable
      */
-    public ClassResponse(byte[] proxyClassBytes) {
-        this.proxyClassBytes = proxyClassBytes;
+    public StubRetrievalFailed() {
     }
 
     /**
-     * Constructor ClassResponse used by externalization.
+     * @param reason underlying reason.
      */
-    public ClassResponse() {
+    public StubRetrievalFailed(String reason) {
+        this.reason = reason;
     }
 
     /**
-     * Get bean implementation byte array
-     *
-     * @return a byte array of the serialized bean class
+     * @return the reason for failure.
      */
-    public byte[] getProxyClassBytes() {
-        return proxyClassBytes;
+    public String getReason() {
+        return reason;
     }
 
     /**
@@ -68,7 +63,7 @@ public final class ClassResponse extends AbstractResponse {
      * @see org.codehaus.jremoting.responses.ResponseConstants
      */
     public int getResponseCode() {
-        return ResponseConstants.CLASSRESPONSE;
+        return ResponseConstants.CLASSRETRIEVALFAILEDRESPONSE;
     }
 
     /**
@@ -86,7 +81,9 @@ public final class ClassResponse extends AbstractResponse {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(proxyClassBytes);
+
+        super.writeExternal(out);
+        out.writeObject(reason);
     }
 
     /**
@@ -102,6 +99,9 @@ public final class ClassResponse extends AbstractResponse {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        proxyClassBytes = (byte[]) in.readObject();
+
+        super.readExternal(in);
+        reason = (String) in.readObject();
     }
+
 }

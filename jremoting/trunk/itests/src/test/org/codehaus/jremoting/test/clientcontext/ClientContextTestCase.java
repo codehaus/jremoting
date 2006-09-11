@@ -22,15 +22,14 @@ import org.codehaus.jremoting.api.ClientContext;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
+import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerException;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.PlainClassRetriever;
-import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorClassRetriever;
+import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContext;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -118,14 +117,14 @@ public class ClientContextTestCase extends TestCase {
 
         final AccountManager accountManager = new AccountManagerImpl(ccf, one, two);
 
-        BcelDynamicGeneratorClassRetriever classRetriever = new BcelDynamicGeneratorClassRetriever(this.getClass().getClassLoader());
+        BcelDynamicGeneratorStubRetriever classRetriever = new BcelDynamicGeneratorStubRetriever(this.getClass().getClassLoader());
         SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(classRetriever,
                 new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 13333);
         PublicationDescription pd = new PublicationDescription(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        Factory factory = new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 13333), false);
+        Factory factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 13333), false);
         final AccountManager clientSideAccountManager = (AccountManager) factory.lookup("OurAccountManager");
 
         Thread threadOne = makeThread(clientSideAccountManager, 11);

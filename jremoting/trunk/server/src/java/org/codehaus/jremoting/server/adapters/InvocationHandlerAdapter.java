@@ -24,7 +24,7 @@ import org.codehaus.jremoting.responses.*;
 import org.codehaus.jremoting.responses.Ping;
 import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.NoClassRetriever;
+import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -47,15 +47,15 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     private Long lastSession = new Long(0);
     private HashMap sessions = new HashMap();
     private boolean suspend = false;
-    private ClassRetriever classRetriever = new NoClassRetriever();
+    private StubRetriever stubRetriever = new NoStubRetriever();
     private Authenticator authenticator = new DefaultAuthenticator();
     private ServerMonitor serverMonitor;
 
     private ServerSideClientContextFactory clientContextFactory;
 
 
-    public InvocationHandlerAdapter(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ServerSideClientContextFactory clientContextFactory) {
-        this.classRetriever = classRetriever;
+    public InvocationHandlerAdapter(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ServerSideClientContextFactory clientContextFactory) {
+        this.stubRetriever = stubRetriever;
         this.authenticator = authenticator;
         this.serverMonitor = serverMonitor;
         this.clientContextFactory = clientContextFactory;
@@ -359,9 +359,9 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         String publishedThing = cr.getPublishedServiceName() + "_" + cr.getObjectName();
 
         try {
-            return new ClassResponse(classRetriever.getProxyClassBytes(publishedThing));
-        } catch (ClassRetrievalException e) {
-            return new ClassRetrievalFailed(e.getMessage());
+            return new StubResponse(stubRetriever.getStubClassBytes(publishedThing));
+        } catch (StubRetrievalException e) {
+            return new StubRetrievalFailed(e.getMessage());
         }
     }
 

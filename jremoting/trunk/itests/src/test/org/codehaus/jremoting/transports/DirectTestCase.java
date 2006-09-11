@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.transports;
 
-import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
+import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.direct.DirectHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.transports.direct.DirectServer;
@@ -45,7 +45,7 @@ public class DirectTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ClientSideClassFactory(new DirectHostContext(server), false, this.getClass().getClassLoader());
+        factory = new ClientSideStubFactory(new DirectHostContext(server), false, this.getClass().getClassLoader());
         testClient = (TestInterface) factory.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with

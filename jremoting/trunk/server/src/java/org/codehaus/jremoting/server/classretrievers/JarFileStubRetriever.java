@@ -23,38 +23,38 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 /**
- * Class JarFileClassRetriever
+ * Class JarFileStubRetriever
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class JarFileClassRetriever extends AbstractClassRetriever {
+public class JarFileStubRetriever extends AbstractStubRetriever {
 
     /**
-     * Contruct a ClassRetriever from url of a JAR file.
+     * Contruct a StubRetriever from url of a JAR file.
      *
      * @param urlOfJarFile the jar file URL.
      */
-    public JarFileClassRetriever(URL urlOfJarFile) {
+    public JarFileStubRetriever(URL urlOfJarFile) {
         setClassLoader(new URLClassLoader(new URL[]{urlOfJarFile}));
     }
 
     /**
-     * Contruct a ClassRetriever from urls of JAR files.
+     * Contruct a StubRetriever from urls of JAR files.
      *
      * @param urlsOfJarFiles the jar file URLs.
      */
-    public JarFileClassRetriever(URL[] urlsOfJarFiles) {
+    public JarFileStubRetriever(URL[] urlsOfJarFiles) {
         setClassLoader(new URLClassLoader(urlsOfJarFiles));
     }
 
     /**
-     * Contruct a ClassRetriever from file paths.
+     * Contruct a StubRetriever from file paths.
      *
      * @param pathsOfJarFiles the paths that map to URLs
      * @throws MalformedURLException if the paths are not mappable to URLS.
      */
-    public JarFileClassRetriever(String[] pathsOfJarFiles) throws MalformedURLException {
+    public JarFileStubRetriever(String[] pathsOfJarFiles) throws MalformedURLException {
 
         URL[] urls = new URL[pathsOfJarFiles.length];
 
@@ -71,7 +71,7 @@ public class JarFileClassRetriever extends AbstractClassRetriever {
      * @param pathOfJarFile the path
      * @throws MalformedURLException if the path is not mappable to a URL.
      */
-    public JarFileClassRetriever(String pathOfJarFile) throws MalformedURLException {
+    public JarFileStubRetriever(String pathOfJarFile) throws MalformedURLException {
         setClassLoader(new URLClassLoader(new URL[]{new File(pathOfJarFile).toURL()}));
     }
 }

@@ -20,7 +20,7 @@ package org.codehaus.jremoting.test;
 import junit.framework.TestCase;
 import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
-import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
+import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
@@ -38,7 +38,7 @@ public class BasicClientServerTestCase extends TestCase {
 
     public void testNoServer() throws Exception {
         try {
-            new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 12345), false);
+            new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 12345), false);
             fail("Should have have failed.");
         } catch (ConnectionRefusedException e) {
             // what we expetcted
@@ -58,7 +58,7 @@ public class BasicClientServerTestCase extends TestCase {
         // Client side setup
         try {
 
-            new ClientSideClassFactory(new SocketObjectStreamHostContext("127.0.0.1", 12346), false);
+            new ClientSideStubFactory(new SocketObjectStreamHostContext("127.0.0.1", 12346), false);
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {
@@ -82,7 +82,7 @@ public class BasicClientServerTestCase extends TestCase {
 
         // Client side setup
         try {
-            new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 12347), false);
+            new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 12347), false);
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {
@@ -105,7 +105,7 @@ public class BasicClientServerTestCase extends TestCase {
 
         // Client side setup
         try {
-            new ClientSideClassFactory(new RmiHostContext("127.0.0.1", 12348), false);
+            new ClientSideStubFactory(new RmiHostContext("127.0.0.1", 12348), false);
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {

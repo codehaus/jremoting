@@ -19,7 +19,7 @@ package org.codehaus.jremoting.test;
 
 import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.JarFileClassRetriever;
+import org.codehaus.jremoting.server.classretrievers.JarFileStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.AbstractServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -58,7 +58,7 @@ public class ProConServerTest {
         }
 
         if (args[0].equals("S")) {
-            as = new SelfContainedSocketCustomStreamServer(new JarFileClassRetriever("build/classes2"), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 1235);
+            as = new SelfContainedSocketCustomStreamServer(new JarFileStubRetriever("build/classes2"), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 1235);
         }
 
         //provider

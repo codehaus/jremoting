@@ -20,11 +20,11 @@ package org.codehaus.jremoting.test.classretrievers;
 import junit.framework.TestCase;
 import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.client.factories.ServerSideClassFactory;
+import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.piped.PipedCustomStreamHostContext;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.AbstractDynamicGeneratorClassRetriever;
-import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorClassRetriever;
+import org.codehaus.jremoting.server.classretrievers.AbstractDynamicGeneratorStubRetriever;
+import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.AbstractServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -49,7 +49,7 @@ public class ClassRetrievingTestCase extends TestCase {
         super.setUp();
 
         // server side setup.
-        AbstractDynamicGeneratorClassRetriever dyncgen = new BcelDynamicGeneratorClassRetriever();
+        AbstractDynamicGeneratorStubRetriever dyncgen = new BcelDynamicGeneratorStubRetriever();
         server = new PipedCustomStreamServer(dyncgen, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory());
         testServer = new TestImpl();
         server.publish(testServer, "Kewl", TestInterface.class);
@@ -63,7 +63,7 @@ public class ClassRetrievingTestCase extends TestCase {
         ((PipedCustomStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        Factory af = new ServerSideClassFactory(new PipedCustomStreamHostContext(in, out), false);
+        Factory af = new ServerSideStubFactory(new PipedCustomStreamHostContext(in, out), false);
         testClient = (TestInterface) af.lookup("Kewl");
 
         // just a kludge for unit testing given we are intrinsically dealing with

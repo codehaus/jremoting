@@ -20,12 +20,12 @@ package org.codehaus.jremoting.server.transports.socket;
 import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.api.ThreadPool;
 import org.codehaus.jremoting.server.Authenticator;
-import org.codehaus.jremoting.server.ClassRetriever;
+import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.NoClassRetriever;
+import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -42,19 +42,19 @@ public class SelfContainedSocketCustomStreamServer extends AbstractCompleteSocke
     /**
      * Construct a SelfContainedSocketCustomStreamServer
      *
-     * @param classRetriever
+     * @param stubRetriever
      * @param authenticator
      * @param serverMonitor
      * @param threadPool
      * @param contextFactory
      * @param port
      */
-    public SelfContainedSocketCustomStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
-        super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
+    public SelfContainedSocketCustomStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
     }
 
     public SelfContainedSocketCustomStreamServer(int port) {
-        this(new NoClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
+        this(new NoStubRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
     }
 
     /**

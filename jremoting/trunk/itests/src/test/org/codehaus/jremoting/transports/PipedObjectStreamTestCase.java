@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.transports;
 
-import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
+import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.piped.PipedObjectStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.transports.piped.PipedObjectStreamServer;
@@ -77,7 +77,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         ((PipedObjectStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        factory = new ClientSideClassFactory(new PipedObjectStreamHostContext(in, out), false);
+        factory = new ClientSideStubFactory(new PipedObjectStreamHostContext(in, out), false);
         testClient = (TestInterface) factory.lookup("Hello33");
 
         // just a kludge for unit testing given we are intrinsically dealing with

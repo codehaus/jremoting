@@ -53,9 +53,9 @@ public abstract class AbstractFactoryHelper implements InterfaceLookupFactory {
     protected Factory createFactory(String type, HostContext hostContext, boolean optimize) throws ConnectionException {
 
         if (type.equalsIgnoreCase("s")) {
-            return new ServerSideClassFactory(hostContext, optimize);
+            return new ServerSideStubFactory(hostContext, optimize);
         } else if (type.equalsIgnoreCase("c")) {
-            return new ClientSideClassFactory(hostContext, optimize);
+            return new ClientSideStubFactory(hostContext, optimize);
         } else {
             return null;
         }

@@ -17,28 +17,28 @@
  */
 package org.codehaus.jremoting.server.classretrievers;
 
-import org.codehaus.jremoting.server.ClassRetrievalException;
+import org.codehaus.jremoting.server.StubRetrievalException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Class PlainClassRetriever
+ * Class PlainStubRetriever
  *
  * @author Paul Hammant
  * @author Vinay Chandrasekharan <a href="mailto:vinay_chandran@users.sourceforge.net">
  *         vinay_chandran@users.sourceforge.net</a>
  * @version $Revision: 1.2 $
  */
-public class PlainClassRetriever extends AbstractClassRetriever {
+public class PlainStubRetriever extends AbstractStubRetriever {
 
     private ClassLoader classLoader;
 
     /**
-     * Constructor PlainClassRetriever
+     * Constructor PlainStubRetriever
      */
-    public PlainClassRetriever() {
+    public PlainStubRetriever() {
         classLoader = this.getClass().getClassLoader();
     }
 
@@ -47,7 +47,7 @@ public class PlainClassRetriever extends AbstractClassRetriever {
      *
      * @param classLoader the classloader.
      */
-    public PlainClassRetriever(ClassLoader classLoader) {
+    public PlainStubRetriever(ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 
@@ -56,16 +56,16 @@ public class PlainClassRetriever extends AbstractClassRetriever {
      *
      * @param thingName the things name
      * @return the byte array of the thing.
-     * @throws ClassRetrievalException if the bytes are not available.
+     * @throws StubRetrievalException if the bytes are not available.
      */
-    protected byte[] getThingBytes(String thingName) throws ClassRetrievalException {
+    protected byte[] getThingBytes(String thingName) throws StubRetrievalException {
 
         InputStream is = null;
 
         is = classLoader.getResourceAsStream(thingName + ".class");
 
         if (is == null) {
-            throw new ClassRetrievalException("Generated class for " + thingName + " not found in specified classloader ");
+            throw new StubRetrievalException("Generated class for " + thingName + " not found in specified classloader ");
         }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -78,7 +78,7 @@ public class PlainClassRetriever extends AbstractClassRetriever {
 
             is.close();
         } catch (IOException e) {
-            throw new ClassRetrievalException("Error retrieving generated class bytes : " + e.getMessage());
+            throw new StubRetrievalException("Error retrieving generated class bytes : " + e.getMessage());
         }
 
         return baos.toByteArray();

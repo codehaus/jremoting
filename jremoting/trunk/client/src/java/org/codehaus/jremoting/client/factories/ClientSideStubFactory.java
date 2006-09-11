@@ -24,19 +24,19 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Class ClientSideClassFactory
+ * Class ClientSideStubFactory
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ClientSideClassFactory extends AbstractFactory {
+public class ClientSideStubFactory extends AbstractFactory {
     private ClassLoader classLoader;
 
-    public ClientSideClassFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
+    public ClientSideStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
         super(hostContext, allowOptimize);
     }
 
-    public ClientSideClassFactory(HostContext hostContext, boolean allowOptimize, ClassLoader classLoader) throws ConnectionException {
+    public ClientSideStubFactory(HostContext hostContext, boolean allowOptimize, ClassLoader classLoader) throws ConnectionException {
         super(hostContext, allowOptimize);
         this.classLoader = classLoader;
     }
@@ -44,17 +44,17 @@ public class ClientSideClassFactory extends AbstractFactory {
 
     protected Class getFacadeClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
 
-        String className = "JRemotingGenerated" + publishedServiceName + "_" + objectName;
+        String stubClassName = "JRemotingGenerated" + publishedServiceName + "_" + objectName;
 
         try {
             if (classLoader == null) {
-                return Thread.currentThread().getContextClassLoader().loadClass(className);
+                return Thread.currentThread().getContextClassLoader().loadClass(stubClassName);
             } else {
-                return classLoader.loadClass(className);
+                return classLoader.loadClass(stubClassName);
 
             }
         } catch (ClassNotFoundException e) {
-            return this.getClass().getClassLoader().loadClass(className);
+            return this.getClass().getClassLoader().loadClass(stubClassName);
         }
     }
 

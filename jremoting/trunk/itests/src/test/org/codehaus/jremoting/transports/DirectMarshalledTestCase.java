@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.transports;
 
-import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
+import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.direct.DirectMarshalledHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
@@ -45,7 +45,7 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ClientSideClassFactory(new DirectMarshalledHostContext((DirectMarshalledServer) server), false);
+        factory = new ClientSideStubFactory(new DirectMarshalledHostContext((DirectMarshalledServer) server), false);
 
         testClient = (TestInterface) factory.lookup("Hello");
 

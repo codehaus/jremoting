@@ -21,8 +21,8 @@ import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.requests.RetrieveClass;
-import org.codehaus.jremoting.responses.ClassRetrievalFailed;
-import org.codehaus.jremoting.responses.ClassResponse;
+import org.codehaus.jremoting.responses.StubRetrievalFailed;
+import org.codehaus.jremoting.responses.StubResponse;
 import org.codehaus.jremoting.responses.*;
 
 import java.lang.reflect.Constructor;
@@ -30,28 +30,28 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 /**
- * Class ServerSideClassFactory
+ * Class ServerSideStubFactory
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ServerSideClassFactory extends AbstractFactory {
+public class ServerSideStubFactory extends AbstractFactory {
 
     private HashMap publishedServiceClassLoaders = new HashMap();
 
-    public ServerSideClassFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
+    public ServerSideStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
         super(hostContext, allowOptimize);
     }
 
     protected Class getFacadeClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
 
-        TransportedClassLoader tcl = null;
-        String proxyClassName = "JRemotingGenerated" + publishedServiceName + "_" + objectName;
+        TransportedStubClassLoader tcl = null;
+        String stubClassName = "JRemotingGenerated" + publishedServiceName + "_" + objectName;
 
-        if (publishedServiceClassLoaders.containsKey(proxyClassName)) {
-            tcl = (TransportedClassLoader) publishedServiceClassLoaders.get(proxyClassName);
+        if (publishedServiceClassLoaders.containsKey(stubClassName)) {
+            tcl = (TransportedStubClassLoader) publishedServiceClassLoaders.get(stubClassName);
         } else {
-            ClassResponse cr = null;
+            StubResponse cr = null;
 
             try {
                 AbstractResponse ar = hostContext.getInvocationHandler().handleInvocation(new RetrieveClass(publishedServiceName, objectName));
@@ -59,26 +59,26 @@ public class ServerSideClassFactory extends AbstractFactory {
                 if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
                     if (ar instanceof RequestFailed) {
                         throw new ConnectionException(((RequestFailed) ar).getFailureReason());
-                    } else if (ar instanceof ClassRetrievalFailed) {
-                        ClassRetrievalFailed crfr = (ClassRetrievalFailed) ar;
+                    } else if (ar instanceof StubRetrievalFailed) {
+                        StubRetrievalFailed srf = (StubRetrievalFailed) ar;
 
-                        throw new ConnectionException("Class Retrieval Failed - " + crfr.getReason());
+                        throw new ConnectionException("Class Retrieval Failed - " + srf.getReason());
                     }    //TODO others.
                 }
 
-                cr = (ClassResponse) ar;
+                cr = (StubResponse) ar;
             } catch (NotPublishedException npe) {
                 throw new ConnectionException("Service " + publishedServiceName + " not published on Server");
             }
 
-            tcl = new TransportedClassLoader(hostContext.getInvocationHandler().getInterfacesClassLoader());
+            tcl = new TransportedStubClassLoader(hostContext.getInvocationHandler().getInterfacesClassLoader());
 
-            tcl.add(proxyClassName, cr.getProxyClassBytes());
+            tcl.add(stubClassName, cr.getStubClassBytes());
 
-            publishedServiceClassLoaders.put(proxyClassName, tcl);
+            publishedServiceClassLoaders.put(stubClassName, tcl);
         }
 
-        return tcl.loadClass(proxyClassName);
+        return tcl.loadClass(stubClassName);
     }
 
     protected Object getInstance(String publishedServiceName, String objectName, DefaultProxyHelper proxyHelper) throws ConnectionException {

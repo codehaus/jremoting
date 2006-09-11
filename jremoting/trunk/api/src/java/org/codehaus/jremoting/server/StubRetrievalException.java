@@ -17,17 +17,20 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.api.ThreadPool;
+/**
+ * Class StubRetrievalException
+ *
+ * @author Paul Hammant
+ * @version $Revision: 1.2 $
+ */
+public class StubRetrievalException extends Exception {
 
-public interface CallbackHelper {
-
-    ServerMonitor createServerMonitor();
-
-    ServerSideClientContextFactory createServerSideClientContextFactory();
-
-    Authenticator createAuthenticator();
-
-    StubRetriever createClassRetriever(ClassLoader classLoader);
-
-    Server createServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory serverSideClientContextFactory);
+    /**
+     * Construct a StubRetrievalException with a message
+     *
+     * @param message the message
+     */
+    public StubRetrievalException(String message) {
+        super(message);
+    }
 }
