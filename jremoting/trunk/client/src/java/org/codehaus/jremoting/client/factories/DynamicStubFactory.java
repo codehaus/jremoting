@@ -21,41 +21,26 @@ import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.HostContext;
 
 /**
- * DynamicClassFactory creates stubs(@see DynamicStub) for the given
+ * DynamicStubFactory creates stubs(@see DynamicStub) for the given
  * publishedName at the time of invocation.Using this factory removes the need
  * for any compiled stubs corresponding to the remote interface
  * to be present on the client side to invoke any remote method on the server.
  *
  * @author <a href="mailto:vinayc@apache.org">Vinay Chandran</a>
  */
-public class DynamicClassFactory extends AbstractFactory {
+public class DynamicStubFactory extends AbstractFactory {
 
-    public DynamicClassFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
+    public DynamicStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
         super(hostContext, allowOptimize);
     }
 
-    //-------AbstractFactory Overrides------//
-    /**
-     * @see org.codehaus.jremoting.client.factories.AbstractFactory#getFacadeClass(String, String)
-     */
-    protected Class getFacadeClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
+    protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
         //NOT USED
         return null;
     }
 
-    /**
-     * @see org.codehaus.jremoting.client.factories.AbstractFactory#getInstance(String, String, DefaultProxyHelper)
-     */
     protected Object getInstance(String publishedServiceName, String objectName, DefaultProxyHelper proxyHelper) throws ConnectionException {
         return new DynamicStub(publishedServiceName, objectName, proxyHelper);
     }
 
-
-    /**
-     * @see org.codehaus.jremoting.client.InterfaceLookup#close()
-     */
-
-    public void close() {
-        hostContext.getInvocationHandler().close();
-    }
 }

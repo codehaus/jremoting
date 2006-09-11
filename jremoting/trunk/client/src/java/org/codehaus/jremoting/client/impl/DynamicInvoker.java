@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.impl;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.HostContext;
-import org.codehaus.jremoting.client.factories.DynamicClassFactory;
+import org.codehaus.jremoting.client.factories.DynamicStubFactory;
 import org.codehaus.jremoting.client.factories.DynamicStub;
 import org.codehaus.jremoting.requests.ListInvokableMethods;
 import org.codehaus.jremoting.responses.InvokableMethods;
@@ -59,7 +59,7 @@ public class DynamicInvoker {
     /**
      * Factory
      */
-    private DynamicClassFactory factory;
+    private DynamicStubFactory factory;
     /**
      * ClientInvocationHandler
      */
@@ -78,7 +78,7 @@ public class DynamicInvoker {
      */
     public DynamicInvoker(HostContext hostContext) throws Exception {
 
-        factory = new DynamicClassFactory(hostContext, false);
+        factory = new DynamicStubFactory(hostContext, false);
         //cache the invocationhandler
         clientInvocationHandler = hostContext.getInvocationHandler();
     }

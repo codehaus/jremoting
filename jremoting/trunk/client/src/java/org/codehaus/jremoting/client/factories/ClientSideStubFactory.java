@@ -42,7 +42,7 @@ public class ClientSideStubFactory extends AbstractFactory {
     }
 
 
-    protected Class getFacadeClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
+    protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
 
         String stubClassName = "JRemotingGenerated" + publishedServiceName + "_" + objectName;
 
@@ -58,37 +58,4 @@ public class ClientSideStubFactory extends AbstractFactory {
         }
     }
 
-    /**
-     * Method getInstance
-     *
-     * @param publishedServiceName
-     * @param objectName
-     * @return
-     * @throws ConnectionException
-     */
-    protected Object getInstance(String publishedServiceName, String objectName, DefaultProxyHelper proxyHelper) throws ConnectionException {
-
-        try {
-            Class clazz = getFacadeClass(publishedServiceName, objectName);
-            Constructor[] constructors = clazz.getConstructors();
-            Object retVal = constructors[0].newInstance(new Object[]{proxyHelper});
-
-            return retVal;
-        } catch (InvocationTargetException ite) {
-            throw new ConnectionException("Generated class not instantiated : " + ite.getTargetException().getMessage());
-        } catch (ClassNotFoundException cnfe) {
-            throw new ConnectionException("Generated class not found during lookup : " + cnfe.getMessage());
-        } catch (InstantiationException ie) {
-            throw new ConnectionException("Generated class not instantiable during lookup : " + ie.getMessage());
-        } catch (IllegalAccessException iae) {
-            throw new ConnectionException("Illegal access to generated class during lookup : " + iae.getMessage());
-        }
-    }
-
-    /**
-     * Method close
-     */
-    public void close() {
-        hostContext.getInvocationHandler().close();
-    }
 }

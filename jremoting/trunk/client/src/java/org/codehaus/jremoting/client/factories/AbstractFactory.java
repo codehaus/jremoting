@@ -33,6 +33,8 @@ import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.responses.*;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.rmi.server.UID;
 import java.util.HashMap;
 
@@ -126,9 +128,7 @@ public abstract class AbstractFactory implements Factory {
         return retVal;
     }
 
-    protected abstract Class getFacadeClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException;
-
-    protected abstract Object getInstance(String publishedServiceName, String objectName, DefaultProxyHelper proxyHelper) throws ConnectionException;
+    protected abstract Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException;
 
     /**
      * Method registerReferenceObject
@@ -273,5 +273,40 @@ public abstract class AbstractFactory implements Factory {
             }
         }
     }
+
+
+    /**
+     * Method getInstance
+     *
+     * @param publishedServiceName
+     * @param objectName
+     * @return
+     * @throws ConnectionException
+     */
+    protected Object getInstance(String publishedServiceName, String objectName, DefaultProxyHelper proxyHelper) throws ConnectionException {
+
+        try {
+            Class stubClass = getStubClass(publishedServiceName, objectName);
+            Constructor[] constructors = stubClass.getConstructors();
+            return constructors[0].newInstance(new Object[]{proxyHelper});
+        } catch (InvocationTargetException ite) {
+            throw new ConnectionException("Generated class not instantiated : " + ite.getTargetException().getMessage());
+        } catch (ClassNotFoundException cnfe) {
+            throw new ConnectionException("Generated class not found during lookup : " + cnfe.getMessage());
+        } catch (InstantiationException ie) {
+            throw new ConnectionException("Generated class not instantiable during lookup : " + ie.getMessage());
+        } catch (IllegalAccessException iae) {
+            throw new ConnectionException("Illegal access to generated class during lookup : " + iae.getMessage());
+        }
+    }
+
+    /**
+     * Method close
+     */
+    public void close() {
+        hostContext.getInvocationHandler().close();
+    }    
+
+
 
 }
