@@ -359,7 +359,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         String publishedThing = cr.getPublishedServiceName() + "_" + cr.getObjectName();
 
         try {
-            return new StubResponse(stubRetriever.getStubClassBytes(publishedThing));
+            return new StubClass(stubRetriever.getStubClassBytes(publishedThing));
         } catch (StubRetrievalException e) {
             return new StubRetrievalFailed(e.getMessage());
         }

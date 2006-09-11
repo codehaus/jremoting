@@ -22,7 +22,7 @@ import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.requests.RetrieveClass;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
-import org.codehaus.jremoting.responses.StubResponse;
+import org.codehaus.jremoting.responses.StubClass;
 import org.codehaus.jremoting.responses.*;
 
 import java.util.HashMap;
@@ -49,7 +49,7 @@ public class ServerSideStubFactory extends AbstractStubFactory {
         if (publishedServiceClassLoaders.containsKey(stubClassName)) {
             tcl = (TransportedStubClassLoader) publishedServiceClassLoaders.get(stubClassName);
         } else {
-            StubResponse cr = null;
+            StubClass cr = null;
 
             try {
                 AbstractResponse ar = hostContext.getInvocationHandler().handleInvocation(new RetrieveClass(publishedServiceName, objectName));
@@ -64,7 +64,7 @@ public class ServerSideStubFactory extends AbstractStubFactory {
                     }    //TODO others.
                 }
 
-                cr = (StubResponse) ar;
+                cr = (StubClass) ar;
             } catch (NotPublishedException npe) {
                 throw new ConnectionException("Service " + publishedServiceName + " not published on Server");
             }

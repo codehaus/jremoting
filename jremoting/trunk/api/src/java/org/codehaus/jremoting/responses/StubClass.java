@@ -25,12 +25,12 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class StubResponse
+ * Class StubClass
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class StubResponse extends AbstractResponse {
+public final class StubClass extends AbstractResponse {
 
     static final long serialVersionUID = -3849144476006325180L;
 
@@ -41,14 +41,14 @@ public final class StubResponse extends AbstractResponse {
      *
      * @param proxyClassBytes a byte array of the class def for the class containing the methods.
      */
-    public StubResponse(byte[] proxyClassBytes) {
+    public StubClass(byte[] proxyClassBytes) {
         this.proxyClassBytes = proxyClassBytes;
     }
 
     /**
-     * Constructor StubResponse used by externalization.
+     * Constructor StubClass used by externalization.
      */
-    public StubResponse() {
+    public StubClass() {
     }
 
     /**
