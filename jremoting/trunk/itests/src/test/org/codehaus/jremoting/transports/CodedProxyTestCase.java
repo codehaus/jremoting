@@ -15,24 +15,24 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.test.proxies;
+package org.codehaus.jremoting.transports;
 
-import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
 import org.codehaus.jremoting.test.AbstractHelloTestCase;
+import org.codehaus.jremoting.test.proxies.CodedProxyTestInterfaceProxy;
 
 /**
- * Test Dynamic Proxy (reflection) for comparison sake
+ * Test Hand Coded Proxy for comparison sake
  *
  * @author Paul Hammant
  */
-public class DynamicProxyTestCase extends AbstractHelloTestCase {
+public class CodedProxyTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
 
         testServer = new TestInterfaceImpl();
-        testClient = (TestInterface) DynamicProxy.newInstance(testServer, new Class[]{TestInterface.class});
+        testClient = new CodedProxyTestInterfaceProxy(testServer);
 
     }
 

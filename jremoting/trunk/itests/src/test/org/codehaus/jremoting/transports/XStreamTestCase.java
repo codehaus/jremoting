@@ -1,4 +1,4 @@
-package org.codehaus.jremoting.test.socket;
+package org.codehaus.jremoting.transports;
 
 import org.codehaus.jremoting.test.*;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketXStreamServer;

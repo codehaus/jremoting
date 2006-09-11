@@ -15,13 +15,12 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.test.socket;
-
+package org.codehaus.jremoting.transports;
 
 import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
+import org.codehaus.jremoting.client.transports.direct.DirectMarshalledHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
 import org.codehaus.jremoting.test.AbstractHelloTestCase;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
@@ -30,29 +29,34 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
 
 
 /**
- * Test Custom Stream over sockets.
+ * Test Direct Marshalled Transport
  *
  * @author Paul Hammant
  */
-public class CustomStreamTestCase extends AbstractHelloTestCase {
+public class DirectMarshalledTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
 
         // server side setup.
-        server = new SelfContainedSocketCustomStreamServer(10333);
+        server = new DirectMarshalledServer();
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        factory = new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 10333), false);
+        factory = new ClientSideClassFactory(new DirectMarshalledHostContext((DirectMarshalledServer) server), false);
+
         testClient = (TestInterface) factory.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
         // threads, JRemoting being a client/server thing
         Thread.yield();
+    }
+
+    public void testHello2Call() throws Exception {
+        super.testHello2Call();
     }
 
 

@@ -15,72 +15,39 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.test.piped;
+package org.codehaus.jremoting.transports;
 
 import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
-import org.codehaus.jremoting.client.transports.piped.PipedObjectStreamHostContext;
+import org.codehaus.jremoting.client.transports.direct.DirectHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.transports.piped.PipedObjectStreamServer;
+import org.codehaus.jremoting.server.transports.direct.DirectServer;
 import org.codehaus.jremoting.test.AbstractHelloTestCase;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
-import org.codehaus.jremoting.tools.generator.BcelProxyGenerator;
 
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.io.File;
 
 /**
- * Test Piped Trasnport (Object Stream)
+ * Test Direct Transport
  *
  * @author Paul Hammant
  */
-public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
-
-
-    public PipedObjectStreamTestCase() {
-
-        // See http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
-        // This bug prevents ObjectStream from functioning correctly when used
-        // by JRemoting.  You can still use the ObjectStream transports, but
-        // should be aware of the limitations.  See testBugParadeBugNumber4499841()
-        // in the parent class.
-        testForBug4499841 = false;
-
-    }
+public class DirectTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
 
         // server side setup.
-        server = new PipedObjectStreamServer();
+        server = new DirectServer();
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
-
-
-        BcelProxyGenerator generator = new BcelProxyGenerator();
-        String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
-        generator.setClassGenDir(testClassesDir);
-        generator.setInterfacesToExpose(pd.getInterfacesToExpose());
-        generator.setAdditionalFacades(pd.getAdditionalFacades());
-        generator.setGenName("Hello33");
-        generator.generateSrc(this.getClass().getClassLoader());
-        generator.generateClass(this.getClass().getClassLoader());
-
-
-        server.publish(testServer, "Hello33", pd);
+        server.publish(testServer, "Hello", pd);
         server.start();
 
-        // For piped, server and client can see each other
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out = new PipedOutputStream();
-        ((PipedObjectStreamServer) server).makeNewConnection(in, out);
-
         // Client side setup
-        factory = new ClientSideClassFactory(new PipedObjectStreamHostContext(in, out), false);
-        testClient = (TestInterface) factory.lookup("Hello33");
+        factory = new ClientSideClassFactory(new DirectHostContext(server), false, this.getClass().getClassLoader());
+        testClient = (TestInterface) factory.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
         // threads, JRemoting being a client/server thing
@@ -88,7 +55,6 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
     }
 
     protected void tearDown() throws Exception {
-
         testClient = null;
         System.gc();
         Thread.yield();

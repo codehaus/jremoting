@@ -15,38 +15,46 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.test.direct;
+package org.codehaus.jremoting.transports;
 
 import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
-import org.codehaus.jremoting.client.transports.direct.DirectHostContext;
+import org.codehaus.jremoting.client.transports.piped.PipedCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.transports.direct.DirectServer;
+import org.codehaus.jremoting.server.transports.piped.PipedCustomStreamServer;
 import org.codehaus.jremoting.test.AbstractHelloTestCase;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
 
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 
 /**
- * Test Direct Transport
+ * Test Piped Trasnport (Custom Stream)
  *
  * @author Paul Hammant
  */
-public class DirectTestCase extends AbstractHelloTestCase {
+public class PipedCustomStreamTestCase extends AbstractHelloTestCase {
+
 
     protected void setUp() throws Exception {
         super.setUp();
 
         // server side setup.
-        server = new DirectServer();
+        server = new PipedCustomStreamServer();
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
+        // For piped, server and client can see each other
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out = new PipedOutputStream();
+        ((PipedCustomStreamServer) server).makeNewConnection(in, out);
+
         // Client side setup
-        factory = new ClientSideClassFactory(new DirectHostContext(server), false, this.getClass().getClassLoader());
+        factory = new ClientSideClassFactory(new PipedCustomStreamHostContext(in, out), false);
         testClient = (TestInterface) factory.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with

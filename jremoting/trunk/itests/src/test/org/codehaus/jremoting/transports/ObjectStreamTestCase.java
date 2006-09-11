@@ -15,12 +15,12 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.test.direct;
+package org.codehaus.jremoting.transports;
 
 import org.codehaus.jremoting.client.factories.ClientSideClassFactory;
-import org.codehaus.jremoting.client.transports.direct.DirectMarshalledHostContext;
+import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketObjectStreamServer;
 import org.codehaus.jremoting.test.AbstractHelloTestCase;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
@@ -29,36 +29,50 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
 
 
 /**
- * Test Direct Marshalled Transport
+ * Test Object Stream over sockets.
  *
  * @author Paul Hammant
  */
-public class DirectMarshalledTestCase extends AbstractHelloTestCase {
+public class ObjectStreamTestCase extends AbstractHelloTestCase {
+
+    public ObjectStreamTestCase() {
+
+        // See http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
+        // This bug prevents ObjectStream from functioning correctly when used
+        // by JRemoting.  You can still use the ObjectStream transports, but
+        // should be aware of the limitations.  See testBugParadeBugNumber4499841()
+        // in the parent class.
+        testForBug4499841 = false;
+
+    }
 
     protected void setUp() throws Exception {
         super.setUp();
 
         // server side setup.
-        server = new DirectMarshalledServer();
+        server = new SelfContainedSocketObjectStreamServer(10002);
+
         testServer = new TestInterfaceImpl();
+
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
+
         server.start();
 
         // Client side setup
-        factory = new ClientSideClassFactory(new DirectMarshalledHostContext((DirectMarshalledServer) server), false);
-
+        SocketObjectStreamHostContext hostContext = new SocketObjectStreamHostContext("127.0.0.1", 10002);
+        factory = new ClientSideClassFactory(hostContext, false);
         testClient = (TestInterface) factory.lookup("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with
         // threads, JRemoting being a client/server thing
         Thread.yield();
+
     }
 
-    public void testHello2Call() throws Exception {
-        super.testHello2Call();
+    public void testSpeed() throws Exception {
+        super.testSpeed();  
     }
-
 
     protected void tearDown() throws Exception {
         testClient = null;
