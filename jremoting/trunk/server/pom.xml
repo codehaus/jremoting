@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-	<parent>
-		<artifactId>jremoting-parent</artifactId>
-		<groupId>org.codehaus.jremoting</groupId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>jremoting-server</artifactId>
-	<name>JRemoting Server</name>
-	<version>1.0-SNAPSHOT</version>
-	<dependencies>
-		<dependency>
-			<groupId>${pom.groupId}</groupId>
-			<artifactId>jremoting-api</artifactId>
-			<version>${pom.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-		</dependency>		
+    <parent>
+        <artifactId>jremoting-parent</artifactId>
+        <groupId>org.codehaus.jremoting</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>jremoting-server</artifactId>
+    <name>JRemoting Server</name>
+    <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>${pom.groupId}</groupId>
+            <artifactId>jremoting-api</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
         <dependency>
             <groupId>xstream</groupId>
             <artifactId>xstream</artifactId>
         </dependency>
 
-	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<rmic base="${project.build.outputDirectory}"
-									classname="org.codehaus.jremoting.server.transports.rmi.RmiInvocationAdapter"
-									stubVersion="1.2">
-									<classpath>
-										<path refid="maven.compile.classpath" />
-									</classpath>
-								</rmic>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <rmic base="${project.build.outputDirectory}"
+                                      classname="org.codehaus.jremoting.server.transports.rmi.RmiInvocationAdapter"
+                                      stubVersion="1.2">
+                                    <classpath>
+                                        <path refid="maven.compile.classpath"/>
+                                    </classpath>
+                                </rmic>
 
-							</tasks>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

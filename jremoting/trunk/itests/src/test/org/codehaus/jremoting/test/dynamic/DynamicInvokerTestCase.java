@@ -44,16 +44,8 @@ public class DynamicInvokerTestCase extends TestCase {
     protected TestInterface testClient;
     protected HostContext hostContext;
     protected DynamicInvoker dynamicInvoker;
-    //-------Constructor----------//
-    /**
-     * Cons.
-     *
-     * @param name
-     */
-    public DynamicInvokerTestCase(String name) {
-        super(name);
-    }
 
+    
     //-------TestCase overrides-----//
 
     /**

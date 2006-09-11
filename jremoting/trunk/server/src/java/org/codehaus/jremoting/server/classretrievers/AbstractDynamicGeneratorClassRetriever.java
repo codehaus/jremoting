@@ -17,14 +17,7 @@
  */
 package org.codehaus.jremoting.server.classretrievers;
 
-import org.codehaus.jremoting.server.ClassRetrievalException;
-import org.codehaus.jremoting.server.ClassRetriever;
-import org.codehaus.jremoting.server.DynamicProxyGenerator;
-import org.codehaus.jremoting.server.ProxyGenerationEnvironmentException;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.PublicationDescriptionItem;
-import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.server.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,7 +35,6 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
 
     private String classpath;
     private String classGenDir = ".";
-    private String srcGenDir;
     private Class generatorClass;
 
     /**
@@ -172,15 +164,6 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
         return baos.toByteArray();
     }
 
-    /**
-     * Method setSrcGenDir
-     *
-     * @param srcGenDir the source generaton directory.
-     */
-    public void setSrcGenDir(String srcGenDir) {
-        this.srcGenDir = srcGenDir;
-    }
-
     private void generateProxy(String asName, PublicationDescription publicationDescription, ClassLoader classLoader, boolean deferred) throws PublicationException {
 
         if (classLoader == null) {
@@ -251,7 +234,6 @@ public class AbstractDynamicGeneratorClassRetriever implements DynamicProxyGener
                 System.err.println("** Exception while making String : ");
                 System.err.flush();
                 t.printStackTrace();
-                System.err.println("** SrcDir=" + srcGenDir);
                 System.err.println("** ClassDir=" + classGenDir);
                 System.err.println("** Name=" + asName);
                 System.err.println("** CLasspath=" + classpath);

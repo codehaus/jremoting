@@ -30,6 +30,7 @@ import org.codehaus.jremoting.server.ServerException;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.PlainClassRetriever;
+import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorClassRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContext;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -43,10 +44,6 @@ import java.util.HashMap;
  */
 
 public class ClientContextTestCase extends TestCase {
-
-    public ClientContextTestCase(String name) {
-        super(name);
-    }
 
 
     public void testSimple() {
@@ -121,7 +118,9 @@ public class ClientContextTestCase extends TestCase {
 
         final AccountManager accountManager = new AccountManagerImpl(ccf, one, two);
 
-        SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(new PlainClassRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 13333);
+        BcelDynamicGeneratorClassRetriever classRetriever = new BcelDynamicGeneratorClassRetriever(this.getClass().getClassLoader());
+        SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(classRetriever,
+                new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 13333);
         PublicationDescription pd = new PublicationDescription(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();

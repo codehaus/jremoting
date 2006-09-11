@@ -18,9 +18,7 @@
 package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.api.FacadeRefHolder;
-import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.responses.*;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
 import org.codehaus.jremoting.server.MethodInvocationMonitor;
@@ -227,7 +225,7 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
      * Correct the arguments for a request (seme are 'additional facades' and can;t be serialized).
      *
      * @param invokeMethod The method request
-     * @param args          The arguments to correct
+     * @param args         The arguments to correct
      */
     private void correctArgs(InvokeMethod invokeMethod, Object[] args) {
 

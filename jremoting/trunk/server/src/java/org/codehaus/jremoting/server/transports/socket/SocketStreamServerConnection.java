@@ -43,7 +43,7 @@ public class SocketStreamServerConnection extends AbstractStreamServerConnection
      *
      * @param abstractServer The Abstract Server that will process invocations and requests
      * @param socket         The Socket
-     * @param driver     The driver for the transport type
+     * @param driver         The driver for the transport type
      */
     public SocketStreamServerConnection(final AbstractServer abstractServer, final Socket socket, AbstractServerStreamDriver driver, ServerMonitor serverMonitor) {
 

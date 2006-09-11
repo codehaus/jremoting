@@ -36,10 +36,6 @@ import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketObject
  */
 public class BasicClientServerTestCase extends TestCase {
 
-    public BasicClientServerTestCase(String name) {
-        super(name);
-    }
-
     public void testNoServer() throws Exception {
         try {
             new ClientSideClassFactory(new SocketCustomStreamHostContext("127.0.0.1", 12345), false);

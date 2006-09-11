@@ -44,10 +44,6 @@ public class RmiTestCase extends TestCase {
     private TestInterfaceImpl testServer;
     private TestInterface testClient;
 
-    public RmiTestCase(String name) {
-        super(name);
-    }
-
     protected void setUp() throws Exception {
         super.setUp();
 

@@ -16,17 +16,16 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.api.ThreadPool;
-import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
-
-import java.io.*;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.api.ThreadPool;
+import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.server.ServerMonitor;
+
+import java.io.*;
 
 /**
  * Class ServerXStreamDriver

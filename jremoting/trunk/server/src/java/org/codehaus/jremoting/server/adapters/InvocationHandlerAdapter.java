@@ -18,41 +18,11 @@
 package org.codehaus.jremoting.server.adapters;
 
 
-import org.codehaus.jremoting.api.Contextualizable;
 import org.codehaus.jremoting.api.*;
-import org.codehaus.jremoting.requests.RetrieveClass;
-import org.codehaus.jremoting.responses.ClassResponse;
-import org.codehaus.jremoting.responses.ClassRetrievalFailed;
-import org.codehaus.jremoting.responses.ExceptionThrown;
-import org.codehaus.jremoting.requests.CollectGarbage;
-import org.codehaus.jremoting.responses.GarbageCollected;
-import org.codehaus.jremoting.requests.GroupedMethodRequest;
-import org.codehaus.jremoting.responses.InvocationExceptionThrown;
-import org.codehaus.jremoting.requests.ListInvokableMethods;
-import org.codehaus.jremoting.responses.InvokableMethods;
-import org.codehaus.jremoting.responses.PublishedObjectList;
-import org.codehaus.jremoting.requests.LookupPublishedObject;
-import org.codehaus.jremoting.responses.LookupResponse;
-import org.codehaus.jremoting.requests.InvokeAsyncMethod;
-import org.codehaus.jremoting.responses.FacadeArrayMethodInvoked;
-import org.codehaus.jremoting.requests.InvokeFacadeMethod;
-import org.codehaus.jremoting.responses.FacadeMethodInvoked;
-import org.codehaus.jremoting.responses.SimpleMethodInvoked;
-import org.codehaus.jremoting.responses.NoSuchSession;
-import org.codehaus.jremoting.responses.NotPublished;
-import org.codehaus.jremoting.responses.ConnectionOpened;
-import org.codehaus.jremoting.responses.Ping;
 import org.codehaus.jremoting.requests.*;
-import org.codehaus.jremoting.responses.AbstractResponse;
-import org.codehaus.jremoting.responses.ResponseConstants;
 import org.codehaus.jremoting.responses.*;
-import org.codehaus.jremoting.server.Authenticator;
-import org.codehaus.jremoting.server.ClassRetrievalException;
-import org.codehaus.jremoting.server.ClassRetriever;
-import org.codehaus.jremoting.server.MethodInvocationHandler;
-import org.codehaus.jremoting.server.ServerInvocationHandler;
-import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.ServerSideClientContextFactory;
+import org.codehaus.jremoting.responses.Ping;
+import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoClassRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -185,7 +155,8 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      */
     private AbstractResponse doMethodFacadeRequest(InvokeFacadeMethod facadeRequest, Object connectionDetails) {
 
-        if (!sessionExists(facadeRequest.getSession()) && (connectionDetails == null || !connectionDetails.equals("callback"))) {
+        if (!sessionExists(facadeRequest.getSession()) && (connectionDetails == null || !connectionDetails.equals("callback")))
+        {
             return new NoSuchSession(facadeRequest.getSession());
         }
 
@@ -228,7 +199,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     /**
      * Do a method facade request, returning an array
      *
-     * @param methodReply         The array to process.
+     * @param methodReply        The array to process.
      * @param invokeFacadeMethod The request
      * @return The reply
      */
@@ -271,7 +242,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     /**
      * Do a method facade request, returning things other that an array
      *
-     * @param beanImpl            The returned object to process.
+     * @param beanImpl           The returned object to process.
      * @param invokeFacadeMethod The request
      * @return The reply
      */
@@ -317,7 +288,8 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      */
     private AbstractResponse doMethodRequest(InvokeMethod invokeMethod, Object connectionDetails) {
 
-        if (!sessionExists(invokeMethod.getSession()) && (connectionDetails == null || !connectionDetails.equals("callback"))) {
+        if (!sessionExists(invokeMethod.getSession()) && (connectionDetails == null || !connectionDetails.equals("callback")))
+        {
             return new NoSuchSession(invokeMethod.getSession());
         }
 

@@ -43,7 +43,6 @@ public class CommonsLoggingServerMonitor implements ServerMonitor {
     }
 
 
-
     public void closeError(Class clazz, String s, IOException e) {
         Log log = LogFactory.getLog(clazz);
         if (log.isDebugEnabled()) {

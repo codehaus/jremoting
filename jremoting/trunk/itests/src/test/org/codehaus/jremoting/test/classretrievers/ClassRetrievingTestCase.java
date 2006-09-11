@@ -44,9 +44,6 @@ public class ClassRetrievingTestCase extends TestCase {
     protected TestImpl testServer;
     protected TestInterface testClient;
 
-    public ClassRetrievingTestCase(String name) {
-        super(name);
-    }
 
     protected void setUp() throws Exception {
         super.setUp();

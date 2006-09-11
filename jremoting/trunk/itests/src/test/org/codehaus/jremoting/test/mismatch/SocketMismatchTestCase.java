@@ -39,11 +39,6 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
  */
 public class SocketMismatchTestCase extends TestCase {
 
-
-    public SocketMismatchTestCase(String name) {
-        super(name);
-    }
-
     public void testCustomStreamObjectStreamMismatch() throws Exception {
 
         // server side setup.

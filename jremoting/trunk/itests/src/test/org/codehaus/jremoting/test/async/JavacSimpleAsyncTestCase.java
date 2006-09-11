@@ -23,17 +23,13 @@ import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorClassRe
 
 public class JavacSimpleAsyncTestCase extends AbstractSimpleAsyncTestCase {
 
-    public JavacSimpleAsyncTestCase(String name) {
-        super(name);
-    }
-
     protected AbstractDynamicGeneratorClassRetriever getAbstractDynamicGeneratorClassRetriever(ClassLoader cl) {
         return new BcelDynamicGeneratorClassRetriever(cl);
 
     }
 
     public static void main(String[] args) throws Exception {
-        AbstractSimpleAsyncTestCase simp = new JavacSimpleAsyncTestCase("testSimpleAsync");
+        AbstractSimpleAsyncTestCase simp = new JavacSimpleAsyncTestCase();
         simp.setUp();
         simp.testSimpleAsync();
         simp.tearDown();

@@ -56,7 +56,6 @@ public class BcelTestCase extends AbstractHelloTestCase {
         String class_gen_dir = getClassGenDir();
         cr.setClassGenDir(class_gen_dir);
         //cr.setClasspath("..\\build\\classes;%JAVA_HOME%\\lib\\tools.jar");
-        cr.setSrcGenDir(class_gen_dir);
         server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new ConsoleServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 10001);
 
         testServer = new TestInterfaceImpl();

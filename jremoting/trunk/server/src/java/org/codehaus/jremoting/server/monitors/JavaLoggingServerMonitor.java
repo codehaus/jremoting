@@ -69,6 +69,6 @@ public class JavaLoggingServerMonitor implements ServerMonitor {
     public void stopServerError(Class clazz, String s, Exception e) {
         Logger logger = Logger.getLogger(clazz.getName());
         logger.log(Level.INFO, "<stopServerError>" + s, e);
-        delegate.stopServerError(clazz, s, e);        
+        delegate.stopServerError(clazz, s, e);
     }
 }

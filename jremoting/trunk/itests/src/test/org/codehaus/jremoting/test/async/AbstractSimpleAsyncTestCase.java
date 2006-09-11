@@ -39,10 +39,6 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
     Factory factory;
     SelfContainedSocketCustomStreamServer server;
 
-    public AbstractSimpleAsyncTestCase(String name) {
-        super(name);
-    }
-
     protected abstract AbstractDynamicGeneratorClassRetriever getAbstractDynamicGeneratorClassRetriever(ClassLoader cl);
 
     /**
@@ -63,7 +59,6 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
         String class_gen_dir = getClassGenDir();
 
         cr.setClassGenDir(class_gen_dir);
-        cr.setSrcGenDir(new File(class_gen_dir).getParent() + File.separator + "generated_java");
 
         DefaultServerSideClientContextFactory ccf = new DefaultServerSideClientContextFactory();
         server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 11003);

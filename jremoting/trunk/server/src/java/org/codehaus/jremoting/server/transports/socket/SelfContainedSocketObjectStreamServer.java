@@ -44,7 +44,7 @@ public class SelfContainedSocketObjectStreamServer extends AbstractCompleteSocke
     public SelfContainedSocketObjectStreamServer(ClassRetriever classRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
         super(new InvocationHandlerAdapter(classRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
     }
-    
+
     /**
      * Construct a SelfContainedSocketObjectStreamServer
      *
