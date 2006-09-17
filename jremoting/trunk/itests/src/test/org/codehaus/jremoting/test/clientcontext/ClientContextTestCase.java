@@ -20,7 +20,6 @@ package org.codehaus.jremoting.test.clientcontext;
 import junit.framework.TestCase;
 import org.codehaus.jremoting.api.ClientContext;
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
@@ -36,6 +35,7 @@ import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFa
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
 
 import java.util.HashMap;
+import java.util.concurrent.Executors;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
@@ -119,7 +119,7 @@ public class ClientContextTestCase extends TestCase {
 
         BcelDynamicGeneratorStubRetriever classRetriever = new BcelDynamicGeneratorStubRetriever(this.getClass().getClassLoader());
         SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(classRetriever,
-                new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 13333);
+                new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), ccf, 13333);
         PublicationDescription pd = new PublicationDescription(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();

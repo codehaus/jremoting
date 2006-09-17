@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.server.transports.socket;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
@@ -44,7 +44,7 @@ public class SelfContainedSocketCustomStreamPipedConnection {
      * @param outputStream             the piped output stream
      * @throws ConnectionException if a problem
      */
-    public SelfContainedSocketCustomStreamPipedConnection(InvocationHandlerAdapter invocationHandlerAdapter, PipedInputStream inputStream, PipedOutputStream outputStream, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, ServerMonitor serverMonitor) throws ConnectionException {
+    public SelfContainedSocketCustomStreamPipedConnection(InvocationHandlerAdapter invocationHandlerAdapter, PipedInputStream inputStream, PipedOutputStream outputStream, ExecutorService threadPool, ServerSideClientContextFactory contextFactory, ServerMonitor serverMonitor) throws ConnectionException {
         pipedCustomStreamServer = new SelfContainedCustomStreamPipedServer(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
         pipedCustomStreamServer.start();
         pipedCustomStreamServer.makeNewConnection(inputStream, outputStream);

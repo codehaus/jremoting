@@ -18,15 +18,13 @@
 package org.codehaus.jremoting.client.transports.direct;
 
 import org.codehaus.jremoting.api.SerializationHelper;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.RequestFailed;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
-
-import java.io.IOException;
 
 /**
  * Class DirectInvocationHandler
@@ -48,7 +46,7 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
      * @param connectionPinger
      * @param invocationHandler
      */
-    public DirectMarshalledInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ServerMarshalledInvocationHandler invocationHandler, ClassLoader classLoader) {
+    public DirectMarshalledInvocationHandler(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ServerMarshalledInvocationHandler invocationHandler, ClassLoader classLoader) {
         super(threadPool, clientMonitor, connectionPinger);
         this.invocationHandler = invocationHandler;
         interfacesClassLoader = classLoader;

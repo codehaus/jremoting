@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.test.async;
 
 import junit.framework.TestCase;
-import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
@@ -28,6 +27,8 @@ import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
+
+import java.util.concurrent.Executors;
 
 public class SimpleAsync2TestCase extends TestCase {
 
@@ -52,7 +53,7 @@ public class SimpleAsync2TestCase extends TestCase {
         String class_gen_dir = getClassGenDir();
         cr.setClassGenDir(class_gen_dir);
 
-        server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 11009);
+        server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), 11009);
         asyncTestImpl = new AsyncTestImpl();
         // automatic determination of async elements.
         PublicationDescription pd = new PublicationDescription(AsyncTest.class);

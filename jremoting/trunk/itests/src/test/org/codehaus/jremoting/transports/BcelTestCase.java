@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.transports;
 
-import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -30,6 +29,8 @@ import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
+
+import java.util.concurrent.Executors;
 
 /**
  * Test case which tests the proxies generated using BCEL generator
@@ -55,8 +56,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
 
         String class_gen_dir = getClassGenDir();
         cr.setClassGenDir(class_gen_dir);
-        //cr.setClasspath("..\\build\\classes;%JAVA_HOME%\\lib\\tools.jar");
-        server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new ConsoleServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), 10001);
+        server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new ConsoleServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), 10001);
 
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});

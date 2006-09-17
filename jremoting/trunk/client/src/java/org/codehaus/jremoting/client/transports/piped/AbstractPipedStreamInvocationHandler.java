@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.transports.piped;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
@@ -51,7 +51,7 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
      * @param os
      * @param interfacesClassLoader
      */
-    public AbstractPipedStreamInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os, ClassLoader interfacesClassLoader) {
+    public AbstractPipedStreamInvocationHandler(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os, ClassLoader interfacesClassLoader) {
 
         super(threadPool, clientMonitor, connectionPinger, interfacesClassLoader);
 

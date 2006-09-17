@@ -17,9 +17,10 @@
  */
 package org.codehaus.jremoting.server.transports.rmi;
 
-import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.api.RmiInvocationHandler;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
@@ -65,17 +66,17 @@ public class RmiServer extends AbstractServer {
      * @param contextFactory
      * @param port
      */
-    public RmiServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+    public RmiServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory, int port) {
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
         this.port = port;
     }
 
-    public RmiServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+    public RmiServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory, int port) {
         this(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
     }
 
     public RmiServer(int port) {
-        this(new PlainStubRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
+        this(new PlainStubRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), port);
     }
 
     /**

@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.transports.rmi;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.Factory;
@@ -37,12 +37,12 @@ import org.codehaus.jremoting.client.factories.AbstractFactoryHelper;
  */
 public class RmiFactoryHelper extends AbstractFactoryHelper {
 
-    private ThreadPool threadPool;
+    private ExecutorService threadPool;
     private ClientMonitor clientMonitor;
     private ConnectionPinger connectionPinger;
 
 
-    public RmiFactoryHelper(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+    public RmiFactoryHelper(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
         this.threadPool = threadPool;
         this.clientMonitor = clientMonitor;
         this.connectionPinger = connectionPinger;

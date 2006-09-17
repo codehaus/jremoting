@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.transports.socket;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.Factory;
@@ -36,11 +36,11 @@ import org.codehaus.jremoting.client.factories.AbstractFactoryHelper;
  * @version $Revision: 1.2 $
  */
 public class SocketObjectStreamFactoryHelper extends AbstractFactoryHelper {
-    private ThreadPool threadPool;
+    private ExecutorService threadPool;
     private ClientMonitor clientMonitor;
     private ConnectionPinger connectionPinger;
 
-    public SocketObjectStreamFactoryHelper(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+    public SocketObjectStreamFactoryHelper(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
         this.threadPool = threadPool;
         this.clientMonitor = clientMonitor;
         this.connectionPinger = connectionPinger;

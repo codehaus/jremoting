@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.test.tools.generator;
 
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
@@ -41,7 +41,7 @@ import java.lang.reflect.Method;
 public class TstInvocationHandler extends AbstractClientInvocationHandler implements ServerInvocationHandler {
 
 
-    public TstInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+    public TstInvocationHandler(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
         super(threadPool, clientMonitor, connectionPinger);
     }
 

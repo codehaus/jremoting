@@ -18,8 +18,8 @@
 package org.codehaus.jremoting.server.transports.socket;
 
 import org.codehaus.jremoting.api.JRemotingRuntimeException;
-import org.codehaus.jremoting.api.ThreadContext;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.Future;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.server.ServerException;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
@@ -47,7 +47,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
     /**
      * The thread handling the listening
      */
-    private ThreadContext threadContext;
+    private Future future;
     private int port;
 
     /**
@@ -57,7 +57,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
      * @param port                     The port to use
      * @param serverMonitor
      */
-    public AbstractCompleteSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+    public AbstractCompleteSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory, int port) {
 
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
         this.port = port;
@@ -85,10 +85,8 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
 
                 SocketStreamServerConnection sssc = new SocketStreamServerConnection(this, sock, ssd, serverMonitor);
 
-                //TODO ? Two of these getThreadContexts? PH
-                ThreadContext threadContext = getThreadPool().getThreadContext(sssc);
-
-                threadContext.start();
+                //TODO ? Two of these getExecutors? PH
+                getExecutor().execute(sssc);
 
             }
         } catch (IOException ioe) {
@@ -113,7 +111,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
             throw new ServerException("Could not bind to a socket when setting up the server", ioe);
         }
         setState(STARTED);
-        getThreadContext().start();
+        future = getExecutor().submit(this);
     }
 
     /**
@@ -132,24 +130,11 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
             throw new JRemotingRuntimeException("Error stopping Complete Socket server", ioe);
         }
         killAllConnections();
-        getThreadContext().interrupt();
-
-        setState(STOPPED);
-    }
-
-    /**
-     * Get the thread used for connection processing
-     *
-     * @return
-     */
-    private ThreadContext getThreadContext() {
-
-        if (threadContext == null) {
-            threadContext = getThreadPool().getThreadContext(this);
-
+        if (future != null) {
+            future.cancel(true);
         }
 
-        return threadContext;
+        setState(STOPPED);
     }
 
     /**

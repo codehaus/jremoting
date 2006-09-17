@@ -20,7 +20,7 @@ package org.codehaus.jremoting.server.transports;
 import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.SerializationHelper;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -41,7 +41,7 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
 
-    public ServerCustomStreamDriver(ServerMonitor serverMonitor, ThreadPool threadPool) {
+    public ServerCustomStreamDriver(ServerMonitor serverMonitor, ExecutorService threadPool) {
         super(serverMonitor, threadPool);
     }
 

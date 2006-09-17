@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.api.ThreadPoolAware;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
@@ -49,10 +49,10 @@ public abstract class AbstractServerStreamDriver implements ThreadPoolAware {
     private OutputStream outputStream;
 
     protected final ServerMonitor serverMonitor;
-    protected final ThreadPool threadPool;
+    protected final ExecutorService threadPool;
     private Object connectionDetails;
 
-    public AbstractServerStreamDriver(ServerMonitor serverMonitor, ThreadPool threadPool) {
+    public AbstractServerStreamDriver(ServerMonitor serverMonitor, ExecutorService threadPool) {
         this.serverMonitor = serverMonitor;
         this.threadPool = threadPool;
     }

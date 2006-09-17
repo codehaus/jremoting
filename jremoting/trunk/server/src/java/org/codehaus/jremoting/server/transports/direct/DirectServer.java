@@ -17,8 +17,9 @@
  */
 package org.codehaus.jremoting.server.transports.direct;
 
-import org.codehaus.jremoting.api.DefaultThreadPool;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
@@ -50,12 +51,12 @@ public class DirectServer extends AbstractServer {
      * @param threadPool
      * @param contextFactory
      */
-    public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
+    public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
         super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory);
     }
 
     public DirectServer() {
-        this(new NoStubRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory());
+        this(new NoStubRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
     }
 
     /**

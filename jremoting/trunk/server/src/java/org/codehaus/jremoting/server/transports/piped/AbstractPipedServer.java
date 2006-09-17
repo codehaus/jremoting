@@ -18,8 +18,7 @@
 package org.codehaus.jremoting.server.transports.piped;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadContext;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -40,11 +39,11 @@ import java.io.PipedOutputStream;
  */
 public abstract class AbstractPipedServer extends AbstractServer {
 
-    public AbstractPipedServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
+    public AbstractPipedServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
         super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory);
     }
 
-    public AbstractPipedServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
+    public AbstractPipedServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
     }
 
@@ -76,9 +75,8 @@ public abstract class AbstractPipedServer extends AbstractServer {
 
             PipedStreamServerConnection pssc = new PipedStreamServerConnection(this, pIS, pOS, ssd, serverMonitor);
 
-            ThreadContext thread = getThreadPool().getThreadContext(pssc);
+            getExecutor().execute(pssc);
 
-            thread.start();
         } catch (IOException pe) {
             throw new ConnectionException("Some problem setting up server : " + pe.getMessage());
         }

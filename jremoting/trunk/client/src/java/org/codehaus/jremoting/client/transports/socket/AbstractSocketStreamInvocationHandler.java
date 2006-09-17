@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.transports.socket;
 
 import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
@@ -53,7 +53,7 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
      * @param host                  The host to connect to
      * @param port                  The port to conenct to
      */
-    public AbstractSocketStreamInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionRefusedException, BadConnectionException {
+    public AbstractSocketStreamInvocationHandler(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionRefusedException, BadConnectionException {
         super(threadPool, clientMonitor, connectionPinger, interfacesClassLoader);
         this.host = host;
         this.port = port;

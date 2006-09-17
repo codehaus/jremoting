@@ -18,7 +18,7 @@
 
 package org.codehaus.jremoting.server.transports.socket;
 
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
@@ -41,7 +41,7 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
      * @param invocationHandlerAdapter Use this invocation handler adapter.
      * @param serverMonitor            The server Monitor
      */
-    public AbstractPartialSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
+    public AbstractPartialSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
     }
 

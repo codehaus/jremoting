@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 
@@ -54,7 +54,7 @@ public interface ClientInvocationHandler {
 
     Object resolveArgument(String remoteObjName, String methodSignature, Class inputArgumentClass, Object inputArgumentInstance);
 
-    ThreadPool getThreadPool();
+    ExecutorService getExecutor();
 
     ClientMonitor getClientMonitor();
 

@@ -21,9 +21,10 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.DefaultThreadPool;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -49,17 +50,17 @@ public class SocketXStreamHostContext extends AbstractSocketStreamHostContext {
      * @param port
      * @throws org.codehaus.jremoting.api.ConnectionException
      */
-    public SocketXStreamHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
+    public SocketXStreamHostContext(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
         super(threadPool, clientMonitor, connectionPinger, new SocketXStreamInvocationHandler(threadPool, clientMonitor, connectionPinger, interfacesClassLoader, host, port));
         this.port = port;
     }
 
     public SocketXStreamHostContext(String host, int port, ClassLoader classLoader) throws ConnectionException {
-        this(new DefaultThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), classLoader, host, port);
+        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), classLoader, host, port);
     }
 
     public SocketXStreamHostContext(String host, int port) throws ConnectionException {
-        this(new DefaultThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), SocketXStreamHostContext.class.getClassLoader(), host, port);
+        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), SocketXStreamHostContext.class.getClassLoader(), host, port);
     }
 
 

@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.test.classretrievers;
 
 import junit.framework.TestCase;
-import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.piped.PipedCustomStreamHostContext;
@@ -32,6 +31,7 @@ import org.codehaus.jremoting.server.transports.piped.PipedCustomStreamServer;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.concurrent.Executors;
 
 /**
  * A special test case that tests dynamic class generation on the server side.
@@ -50,7 +50,7 @@ public class ClassRetrievingTestCase extends TestCase {
 
         // server side setup.
         AbstractDynamicGeneratorStubRetriever dyncgen = new BcelDynamicGeneratorStubRetriever();
-        server = new PipedCustomStreamServer(dyncgen, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory());
+        server = new PipedCustomStreamServer(dyncgen, new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
         testServer = new TestImpl();
         server.publish(testServer, "Kewl", TestInterface.class);
         dyncgen.generate("Kewl", TestInterface.class, this.getClass().getClassLoader());

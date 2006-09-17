@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.transports.direct;
 
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
@@ -33,8 +33,6 @@ import org.codehaus.jremoting.requests.RequestConstants;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.responses.TryLater;
 
-import java.io.IOException;
-
 /**
  * Class DirectInvocationHandler
  *
@@ -47,7 +45,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
     protected long lastRealRequest = System.currentTimeMillis();
 
 
-    public AbstractDirectInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+    public AbstractDirectInvocationHandler(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
         super(threadPool, clientMonitor, connectionPinger);
     }
 

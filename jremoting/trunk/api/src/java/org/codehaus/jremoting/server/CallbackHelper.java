@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 
 public interface CallbackHelper {
 
@@ -29,5 +29,5 @@ public interface CallbackHelper {
 
     StubRetriever createClassRetriever(ClassLoader classLoader);
 
-    Server createServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory serverSideClientContextFactory);
+    Server createServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory serverSideClientContextFactory);
 }

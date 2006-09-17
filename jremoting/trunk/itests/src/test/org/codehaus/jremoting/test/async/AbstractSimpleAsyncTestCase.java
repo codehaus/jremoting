@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.test.async;
 
 import junit.framework.TestCase;
-import org.codehaus.jremoting.api.DefaultThreadPool;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
@@ -29,6 +28,8 @@ import org.codehaus.jremoting.server.classretrievers.AbstractDynamicGeneratorStu
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
+
+import java.util.concurrent.Executors;
 
 public abstract class AbstractSimpleAsyncTestCase extends TestCase {
 
@@ -59,7 +60,7 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
         cr.setClassGenDir(class_gen_dir);
 
         DefaultServerSideClientContextFactory ccf = new DefaultServerSideClientContextFactory();
-        server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), ccf, 11003);
+        server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), ccf, 11003);
         asyncTestImpl = new AsyncTestImpl();
         PublicationDescription pd = new PublicationDescription();
         pd.addInterfaceToExpose(new PublicationDescriptionItem(AsyncTest.class, new String[]{"setOne(java.lang.String)", "setTwo(java.lang.String)", "setThree(java.lang.String)", }, new String[]{"fire()"}, new String[]{"whoa()"}));

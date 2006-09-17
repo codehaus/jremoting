@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.pingers;
 
-import org.codehaus.jremoting.api.ThreadContext;
+import java.util.concurrent.Future;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.ConnectionPinger;
@@ -34,7 +34,7 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
     private ClientInvocationHandler clientInvocationHandler;
     private boolean keepGoing = true;
     private Runnable runnable;
-    private ThreadContext threadContext;
+    private Future future;
     private final long pingInterval;
     private final long giveupInterval;
 
@@ -114,8 +114,7 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
             }
         };
 
-        threadContext = clientInvocationHandler.getThreadPool().getThreadContext(runnable);
-        threadContext.start();
+        future = clientInvocationHandler.getExecutor().submit(runnable);
     }
 
     /**
@@ -123,8 +122,8 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
      */
     public void stop() {
         keepGoing = false;
-        threadContext.interrupt();
-        threadContext = null;
+        future.cancel(true);
+        future = null;
     }
 
     protected abstract void ping();

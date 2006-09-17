@@ -18,8 +18,9 @@
 package org.codehaus.jremoting.client.transports.piped;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.DefaultThreadPool;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
@@ -47,12 +48,12 @@ public class PipedObjectStreamHostContext extends AbstractHostContext {
      * @param outputStream
      * @param classLoader
      */
-    public PipedObjectStreamHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream, ClassLoader classLoader) {
+    public PipedObjectStreamHostContext(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream, ClassLoader classLoader) {
         super(new PipedObjectStreamInvocationHandler(threadPool, clientMonitor, connectionPinger, inputStream, outputStream, classLoader));
     }
 
     public PipedObjectStreamHostContext(PipedInputStream inputStream, PipedOutputStream outputStream) {
-        this(new DefaultThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream, PipedObjectStreamHostContext.class.getClassLoader());
+        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream, PipedObjectStreamHostContext.class.getClassLoader());
     }
 
     /**

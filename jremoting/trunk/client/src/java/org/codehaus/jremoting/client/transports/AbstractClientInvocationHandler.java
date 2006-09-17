@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
@@ -37,18 +37,18 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
     protected final ConnectionPinger connectionPinger;
     protected final ClientMonitor clientMonitor;
     protected boolean stopped = false;
-    protected final ThreadPool threadPool;
+    protected final ExecutorService threadPool;
     protected final boolean methodLogging;
 
 
-    public AbstractClientInvocationHandler(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+    public AbstractClientInvocationHandler(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
         this.threadPool = threadPool;
         this.clientMonitor = clientMonitor;
         methodLogging = clientMonitor.methodLogging();
         this.connectionPinger = connectionPinger;
     }
 
-    public ThreadPool getThreadPool() {
+    public ExecutorService getExecutor() {
         return threadPool;
     }
 

@@ -18,8 +18,9 @@
 package org.codehaus.jremoting.client.transports.rmi;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.DefaultThreadPool;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
@@ -43,12 +44,12 @@ public class RmiHostContext extends AbstractHostContext {
      * @param port
      * @throws ConnectionException
      */
-    public RmiHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
+    public RmiHostContext(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
         super(new RmiClientInvocationHandler(threadPool, clientMonitor, connectionPinger, host, port));
     }
 
     public RmiHostContext(String host, int port) throws ConnectionException {
-        this(new DefaultThreadPool(), new SimpleRetryingClientMonitor(), new PerpetualConnectionPinger(), host, port);
+        this(Executors.newCachedThreadPool(), new SimpleRetryingClientMonitor(), new PerpetualConnectionPinger(), host, port);
 
     }
 }

@@ -20,7 +20,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -40,7 +40,7 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
     private XStream xStream;
 
 
-    public ServerXStreamDriver(ServerMonitor serverMonitor, ThreadPool threadPool) {
+    public ServerXStreamDriver(ServerMonitor serverMonitor, ExecutorService threadPool) {
         super(serverMonitor, threadPool);
         xStream = new XStream(new DomDriver());
     }

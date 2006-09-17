@@ -17,8 +17,9 @@
  */
 package org.codehaus.jremoting.server.transports.socket;
 
-import org.codehaus.jremoting.api.DefaultThreadPool;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -49,12 +50,12 @@ public class SelfContainedSocketXStreamServer extends AbstractCompleteSocketStre
      * @param contextFactory
      * @param port
      */
-    public SelfContainedSocketXStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, int port) {
+    public SelfContainedSocketXStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory, int port) {
         super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
     }
 
     public SelfContainedSocketXStreamServer(int port) {
-        this(new NoStubRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), port);
+        this(new NoStubRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), port);
     }
 
     /**

@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.api.ThreadPoolAware;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.InvokeMethod;
@@ -52,7 +52,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
     private int state = UNSTARTED;
 
     protected final ServerMonitor serverMonitor;
-    protected final ThreadPool threadPool;
+    protected final ExecutorService threadPool;
     protected final ServerSideClientContextFactory contextFactory;
 
     /**
@@ -61,7 +61,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @param invocationHandlerAdapter The invocation handler adapter to use.
      * @param serverMonitor            The Server monitor
      */
-    public AbstractServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory) {
+    public AbstractServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
         this.invocationHandlerAdapter = invocationHandlerAdapter;
         this.serverMonitor = serverMonitor;
         this.threadPool = threadPool;
@@ -69,7 +69,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
     }
 
 
-    public synchronized ThreadPool getThreadPool() {
+    public synchronized ExecutorService getExecutor() {
         return threadPool;
     }
 

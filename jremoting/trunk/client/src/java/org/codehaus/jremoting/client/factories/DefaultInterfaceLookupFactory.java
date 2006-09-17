@@ -17,8 +17,9 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import org.codehaus.jremoting.api.DefaultThreadPool;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamFactoryHelper;
@@ -38,10 +39,10 @@ public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactor
     public static final String[] SUPPORTEDSTREAMS = new String[]{"SocketObjectStream", "SocketCustomStream", "RMI"};
 
     public DefaultInterfaceLookupFactory() {
-        this(new DefaultThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger());
+        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger());
     }
 
-    public DefaultInterfaceLookupFactory(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+    public DefaultInterfaceLookupFactory(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
 
         addFactory("SocketObjectStream:", new SocketObjectStreamFactoryHelper(threadPool, clientMonitor, connectionPinger));
 

@@ -17,8 +17,9 @@
  */
 package org.codehaus.jremoting.client.transports.direct;
 
-import org.codehaus.jremoting.api.DefaultThreadPool;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
@@ -44,11 +45,11 @@ public class DirectMarshalledHostContext extends AbstractHostContext {
      * @param interfacesClassLoader
      * @param invocationHandler
      */
-    public DirectMarshalledHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, ServerMarshalledInvocationHandler invocationHandler) {
+    public DirectMarshalledHostContext(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, ServerMarshalledInvocationHandler invocationHandler) {
         super(new DirectMarshalledInvocationHandler(threadPool, clientMonitor, connectionPinger, invocationHandler, interfacesClassLoader));
     }
 
     public DirectMarshalledHostContext(ServerMarshalledInvocationHandler invocationHandler) {
-        this(new DefaultThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), DirectMarshalledHostContext.class.getClassLoader(), invocationHandler);
+        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), DirectMarshalledHostContext.class.getClassLoader(), invocationHandler);
     }
 }

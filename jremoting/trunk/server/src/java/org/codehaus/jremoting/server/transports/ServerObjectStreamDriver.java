@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -48,7 +48,7 @@ public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
     /**
      * Constructor ServerObjectStreamDriver
      */
-    public ServerObjectStreamDriver(ServerMonitor serverMonitor, ThreadPool threadPool) {
+    public ServerObjectStreamDriver(ServerMonitor serverMonitor, ExecutorService threadPool) {
         super(serverMonitor, threadPool);
     }
 

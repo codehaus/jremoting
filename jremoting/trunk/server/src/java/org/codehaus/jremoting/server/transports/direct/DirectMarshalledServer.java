@@ -17,8 +17,9 @@
  */
 package org.codehaus.jremoting.server.transports.direct;
 
-import org.codehaus.jremoting.api.DefaultThreadPool;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
@@ -53,13 +54,13 @@ public class DirectMarshalledServer extends AbstractServer implements ServerMars
      * @param marshalledInvocationHandlerAdapter
      *
      */
-    public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ThreadPool threadPool, ServerSideClientContextFactory contextFactory, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
+    public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
         super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
         this.marshalledInvocationHandlerAdapter = marshalledInvocationHandlerAdapter;
     }
 
     public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
-        this(invocationHandlerAdapter, new NullServerMonitor(), new DefaultThreadPool(), new DefaultServerSideClientContextFactory(), marshalledInvocationHandlerAdapter);
+        this(invocationHandlerAdapter, new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), marshalledInvocationHandlerAdapter);
     }
 
     public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter) {

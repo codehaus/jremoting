@@ -18,8 +18,9 @@
 package org.codehaus.jremoting.client.transports.socket;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.DefaultThreadPool;
-import org.codehaus.jremoting.api.ThreadPool;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractSocketStreamHostContext;
@@ -38,7 +39,7 @@ import java.lang.reflect.Method;
  */
 public class SocketObjectStreamHostContext extends AbstractSocketStreamHostContext {
 
-    private final ThreadPool threadPool;
+    private final ExecutorService threadPool;
     private final ClientMonitor clientMonitor;
     private final ConnectionPinger connectionPinger;
     private int port;
@@ -55,7 +56,7 @@ public class SocketObjectStreamHostContext extends AbstractSocketStreamHostConte
      * @param port
      * @throws ConnectionException
      */
-    public SocketObjectStreamHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
+    public SocketObjectStreamHostContext(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
         super(threadPool, clientMonitor, connectionPinger, new SocketObjectStreamInvocationHandler(threadPool, clientMonitor, connectionPinger, host, port, interfacesClassLoader));
         this.threadPool = threadPool;
         this.clientMonitor = clientMonitor;
@@ -64,12 +65,12 @@ public class SocketObjectStreamHostContext extends AbstractSocketStreamHostConte
         this.port = port;
     }
 
-    public SocketObjectStreamHostContext(ThreadPool threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
+    public SocketObjectStreamHostContext(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
         this(threadPool, clientMonitor, connectionPinger, SocketObjectStreamHostContext.class.getClassLoader(), host, port);
     }
 
     public SocketObjectStreamHostContext(String host, int port) throws ConnectionException {
-        this(new DefaultThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), SocketObjectStreamHostContext.class.getClassLoader(), host, port);
+        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), SocketObjectStreamHostContext.class.getClassLoader(), host, port);
     }
 
     private Object bind(Object object, PipedInputStream inputStream, PipedOutputStream outputStream) {
