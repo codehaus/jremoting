@@ -49,13 +49,13 @@ public class DirectMarshalledServer extends AbstractServer implements ServerMars
      *
      * @param invocationHandlerAdapter
      * @param serverMonitor
-     * @param threadPool
+     * @param executor
      * @param contextFactory
      * @param marshalledInvocationHandlerAdapter
      *
      */
-    public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
-        super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
+    public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
+        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
         this.marshalledInvocationHandlerAdapter = marshalledInvocationHandlerAdapter;
     }
 

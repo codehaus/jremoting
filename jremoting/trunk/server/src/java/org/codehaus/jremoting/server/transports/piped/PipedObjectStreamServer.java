@@ -44,11 +44,11 @@ public class PipedObjectStreamServer extends AbstractPipedServer {
      * @param stubRetriever
      * @param authenticator
      * @param serverMonitor
-     * @param threadPool
+     * @param executor
      * @param contextFactory
      */
-    public PipedObjectStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
-        super(stubRetriever, authenticator, serverMonitor, threadPool, contextFactory);
+    public PipedObjectStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+        super(stubRetriever, authenticator, serverMonitor, executor, contextFactory);
     }
 
     public PipedObjectStreamServer() {
@@ -56,6 +56,6 @@ public class PipedObjectStreamServer extends AbstractPipedServer {
     }
 
     protected AbstractServerStreamDriver createServerStreamDriver() {
-        return new ServerObjectStreamDriver(serverMonitor, threadPool);
+        return new ServerObjectStreamDriver(serverMonitor, executor);
     }
 }

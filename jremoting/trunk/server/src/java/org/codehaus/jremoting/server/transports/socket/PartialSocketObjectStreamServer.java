@@ -42,8 +42,8 @@ public class PartialSocketObjectStreamServer extends AbstractPartialSocketStream
      * @param serverMonitor the monitor
      * @param port ther port
      */
-    public PartialSocketObjectStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
-        super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
+    public PartialSocketObjectStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
     }
 
     /**
@@ -59,7 +59,7 @@ public class PartialSocketObjectStreamServer extends AbstractPartialSocketStream
      * @return The Server Stream Driver.
      */
     protected AbstractServerStreamDriver createServerStreamDriver() {
-        return new ServerObjectStreamDriver(serverMonitor, threadPool);
+        return new ServerObjectStreamDriver(serverMonitor, executor);
     }
 
 }

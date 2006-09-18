@@ -43,15 +43,15 @@ public class SocketXStreamHostContext extends AbstractSocketStreamHostContext {
     /**
      * Constructor SocketCustomStreamHostContext
      *
-     * @param threadPool
+     * @param executor
      * @param clientMonitor
      * @param connectionPinger
      * @param host
      * @param port
      * @throws org.codehaus.jremoting.api.ConnectionException
      */
-    public SocketXStreamHostContext(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(threadPool, clientMonitor, connectionPinger, new SocketXStreamInvocationHandler(threadPool, clientMonitor, connectionPinger, interfacesClassLoader, host, port));
+    public SocketXStreamHostContext(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
+        super(executor, clientMonitor, connectionPinger, new SocketXStreamInvocationHandler(executor, clientMonitor, connectionPinger, interfacesClassLoader, host, port));
         this.port = port;
     }
 

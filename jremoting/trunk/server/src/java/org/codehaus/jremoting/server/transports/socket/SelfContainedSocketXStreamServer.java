@@ -46,12 +46,12 @@ public class SelfContainedSocketXStreamServer extends AbstractCompleteSocketStre
      * @param stubRetriever
      * @param authenticator
      * @param serverMonitor
-     * @param threadPool
+     * @param executor
      * @param contextFactory
      * @param port
      */
-    public SelfContainedSocketXStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory, int port) {
-        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
+    public SelfContainedSocketXStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {
+        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, executor, contextFactory, port);
     }
 
     public SelfContainedSocketXStreamServer(int port) {
@@ -64,7 +64,7 @@ public class SelfContainedSocketXStreamServer extends AbstractCompleteSocketStre
      * @return The Server Stream Driver.
      */
     protected AbstractServerStreamDriver createServerStreamDriver() {
-        ServerXStreamDriver xsd = new ServerXStreamDriver(serverMonitor, threadPool);
+        ServerXStreamDriver xsd = new ServerXStreamDriver(serverMonitor, executor);
         return xsd;
     }
 }

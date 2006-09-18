@@ -48,11 +48,11 @@ public class DirectServer extends AbstractServer {
      * @param stubRetriever
      * @param authenticator
      * @param serverMonitor
-     * @param threadPool
+     * @param executor
      * @param contextFactory
      */
-    public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
-        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory);
+    public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, executor, contextFactory);
     }
 
     public DirectServer() {

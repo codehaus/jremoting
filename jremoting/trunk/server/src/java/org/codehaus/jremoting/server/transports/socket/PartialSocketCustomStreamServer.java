@@ -39,8 +39,8 @@ public class PartialSocketCustomStreamServer extends AbstractPartialSocketStream
      * @param invocationHandlerAdapter the handler
      * @param serverMonitor            the monitor
      */
-    public PartialSocketCustomStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
-        super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
+    public PartialSocketCustomStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
     }
 
 
@@ -57,7 +57,7 @@ public class PartialSocketCustomStreamServer extends AbstractPartialSocketStream
      * @return The Server Stream Driver.
      */
     protected AbstractServerStreamDriver createServerStreamDriver() {
-        return new ServerCustomStreamDriver(serverMonitor, threadPool);
+        return new ServerCustomStreamDriver(serverMonitor, executor);
     }
 
 }

@@ -40,8 +40,8 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
     private XStream xStream;
 
 
-    public ServerXStreamDriver(ServerMonitor serverMonitor, ExecutorService threadPool) {
-        super(serverMonitor, threadPool);
+    public ServerXStreamDriver(ServerMonitor serverMonitor, ExecutorService executor) {
+        super(serverMonitor, executor);
         xStream = new XStream(new DomDriver());
     }
 

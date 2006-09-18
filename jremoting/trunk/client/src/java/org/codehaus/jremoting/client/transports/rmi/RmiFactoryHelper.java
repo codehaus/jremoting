@@ -37,13 +37,13 @@ import org.codehaus.jremoting.client.factories.AbstractFactoryHelper;
  */
 public class RmiFactoryHelper extends AbstractFactoryHelper {
 
-    private ExecutorService threadPool;
+    private ExecutorService executor;
     private ClientMonitor clientMonitor;
     private ConnectionPinger connectionPinger;
 
 
-    public RmiFactoryHelper(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
-        this.threadPool = threadPool;
+    public RmiFactoryHelper(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+        this.executor = executor;
         this.clientMonitor = clientMonitor;
         this.connectionPinger = connectionPinger;
     }
@@ -59,7 +59,7 @@ public class RmiFactoryHelper extends AbstractFactoryHelper {
 
         // TODO maybe we should cache these.  Or the abstract parent class should.
         String[] terms = processFactoryString(factoryString);
-        HostContext hc = new RmiHostContext(threadPool, clientMonitor, connectionPinger, terms[1], Integer.parseInt(terms[2]));
+        HostContext hc = new RmiHostContext(executor, clientMonitor, connectionPinger, terms[1], Integer.parseInt(terms[2]));
         Factory af = createFactory(terms[3], hc, optimize);
 
         return af;

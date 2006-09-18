@@ -54,13 +54,13 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
     /**
      * Constructor StreamInvocationHandler
      *
-     * @param threadPool
+     * @param executor
      * @param clientMonitor
      * @param connectionPinger
      * @param interfacesClassLoader
      */
-    public StreamInvocationHandler(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader) {
-        super(threadPool, clientMonitor, connectionPinger);
+    public StreamInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader) {
+        super(executor, clientMonitor, connectionPinger);
         this.interfacesClassLoader = interfacesClassLoader;
         methodLogging = clientMonitor.methodLogging();
 

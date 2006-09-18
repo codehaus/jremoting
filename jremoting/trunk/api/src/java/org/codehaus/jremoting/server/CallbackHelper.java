@@ -29,5 +29,5 @@ public interface CallbackHelper {
 
     StubRetriever createClassRetriever(ClassLoader classLoader);
 
-    Server createServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory serverSideClientContextFactory);
+    Server createServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory serverSideClientContextFactory);
 }

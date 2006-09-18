@@ -57,9 +57,9 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
      * @param port                     The port to use
      * @param serverMonitor
      */
-    public AbstractCompleteSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory, int port) {
+    public AbstractCompleteSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {
 
-        super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
+        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
         this.port = port;
     }
 

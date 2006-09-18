@@ -41,14 +41,14 @@ public class PipedCustomStreamHostContext extends AbstractHostContext {
     /**
      * Constructor PipedCustomStreamHostContext
      *
-     * @param threadPool
+     * @param executor
      * @param clientMonitor
      * @param connectionPinger
      * @param inputStream
      * @param outputStream
      */
-    public PipedCustomStreamHostContext(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream) {
-        super(new PipedCustomStreamInvocationHandler(threadPool, clientMonitor, connectionPinger, inputStream, outputStream));
+    public PipedCustomStreamHostContext(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream) {
+        super(new PipedCustomStreamInvocationHandler(executor, clientMonitor, connectionPinger, inputStream, outputStream));
     }
 
     public PipedCustomStreamHostContext(PipedInputStream inputStream, PipedOutputStream outputStream) {

@@ -52,7 +52,7 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
     private int state = UNSTARTED;
 
     protected final ServerMonitor serverMonitor;
-    protected final ExecutorService threadPool;
+    protected final ExecutorService executor;
     protected final ServerSideClientContextFactory contextFactory;
 
     /**
@@ -64,13 +64,13 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
     public AbstractServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
         this.invocationHandlerAdapter = invocationHandlerAdapter;
         this.serverMonitor = serverMonitor;
-        this.threadPool = threadPool;
+        this.executor = threadPool;
         this.contextFactory = contextFactory;
     }
 
 
     public synchronized ExecutorService getExecutor() {
-        return threadPool;
+        return executor;
     }
 
 

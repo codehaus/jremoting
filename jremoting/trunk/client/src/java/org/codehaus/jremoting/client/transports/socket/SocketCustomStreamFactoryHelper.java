@@ -36,12 +36,12 @@ import org.codehaus.jremoting.client.factories.AbstractFactoryHelper;
  * @version $Revision: 1.2 $
  */
 public class SocketCustomStreamFactoryHelper extends AbstractFactoryHelper {
-    private ExecutorService threadPool;
+    private ExecutorService executor;
     private ClientMonitor clientMonitor;
     private ConnectionPinger connectionPinger;
 
-    public SocketCustomStreamFactoryHelper(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
-        this.threadPool = threadPool;
+    public SocketCustomStreamFactoryHelper(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+        this.executor = executor;
         this.clientMonitor = clientMonitor;
         this.connectionPinger = connectionPinger;
     }
@@ -57,7 +57,7 @@ public class SocketCustomStreamFactoryHelper extends AbstractFactoryHelper {
 
         // TODO maybe we should cache these.  Or the abstract parent class should.
         String[] terms = processFactoryString(factoryString);
-        HostContext hc = new SocketCustomStreamHostContext(threadPool, clientMonitor, connectionPinger, interfacesClassLoader, terms[1], Integer.parseInt(terms[2]));
+        HostContext hc = new SocketCustomStreamHostContext(executor, clientMonitor, connectionPinger, interfacesClassLoader, terms[1], Integer.parseInt(terms[2]));
         Factory af = createFactory(terms[3], hc, optimize);
 
         return af;

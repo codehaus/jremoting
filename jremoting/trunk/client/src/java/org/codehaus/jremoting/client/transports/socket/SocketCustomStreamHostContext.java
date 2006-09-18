@@ -44,15 +44,15 @@ public class SocketCustomStreamHostContext extends AbstractSocketStreamHostConte
     /**
      * Constructor SocketCustomStreamHostContext
      *
-     * @param threadPool
+     * @param executor
      * @param clientMonitor
      * @param connectionPinger
      * @param host
      * @param port
      * @throws ConnectionException
      */
-    public SocketCustomStreamHostContext(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(threadPool, clientMonitor, connectionPinger, new SocketCustomStreamInvocationHandler(threadPool, clientMonitor, connectionPinger, interfacesClassLoader, host, port));
+    public SocketCustomStreamHostContext(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
+        super(executor, clientMonitor, connectionPinger, new SocketCustomStreamInvocationHandler(executor, clientMonitor, connectionPinger, interfacesClassLoader, host, port));
         this.port = port;
     }
 

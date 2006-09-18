@@ -27,11 +27,11 @@ import org.codehaus.jremoting.server.transports.piped.AbstractPipedServer;
 
 public class SelfContainedCustomStreamPipedServer extends AbstractPipedServer {
 
-    public SelfContainedCustomStreamPipedServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
-        super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
+    public SelfContainedCustomStreamPipedServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
     }
 
     protected AbstractServerStreamDriver createServerStreamDriver() {
-        return new ServerCustomStreamDriver(serverMonitor, threadPool);
+        return new ServerCustomStreamDriver(serverMonitor, executor);
     }
 }

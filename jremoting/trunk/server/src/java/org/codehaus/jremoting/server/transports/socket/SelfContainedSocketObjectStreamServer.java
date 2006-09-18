@@ -42,8 +42,8 @@ import org.codehaus.jremoting.server.transports.ServerObjectStreamDriver;
 public class SelfContainedSocketObjectStreamServer extends AbstractCompleteSocketStreamServer {
 
 
-    public SelfContainedSocketObjectStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory, int port) {
-        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
+    public SelfContainedSocketObjectStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {
+        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, executor, contextFactory, port);
     }
 
     /**
@@ -62,7 +62,7 @@ public class SelfContainedSocketObjectStreamServer extends AbstractCompleteSocke
      */
     protected AbstractServerStreamDriver createServerStreamDriver() {
 
-        ServerObjectStreamDriver ssd = new ServerObjectStreamDriver(serverMonitor, threadPool);
+        ServerObjectStreamDriver ssd = new ServerObjectStreamDriver(serverMonitor, executor);
         return ssd;
     }
 }

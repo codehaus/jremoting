@@ -46,12 +46,12 @@ public class SelfContainedSocketCustomStreamServer extends AbstractCompleteSocke
      * @param stubRetriever
      * @param authenticator
      * @param serverMonitor
-     * @param threadPool
+     * @param executor
      * @param contextFactory
      * @param port
      */
-    public SelfContainedSocketCustomStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory, int port) {
-        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, threadPool, contextFactory, port);
+    public SelfContainedSocketCustomStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {
+        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, executor, contextFactory, port);
     }
 
     public SelfContainedSocketCustomStreamServer(int port) {
@@ -64,7 +64,7 @@ public class SelfContainedSocketCustomStreamServer extends AbstractCompleteSocke
      * @return The Server Stream Driver.
      */
     protected AbstractServerStreamDriver createServerStreamDriver() {
-        ServerCustomStreamDriver csd = new ServerCustomStreamDriver(serverMonitor, threadPool);
+        ServerCustomStreamDriver csd = new ServerCustomStreamDriver(serverMonitor, executor);
         return csd;
     }
 }

@@ -38,7 +38,7 @@ public final class SocketObjectStreamInvocationHandler extends AbstractSocketStr
     /**
      * Const a SocketObjectStreamInvocationHandler.
      *
-     * @param threadPool
+     * @param executor
      * @param clientMonitor
      * @param connectionPinger
      * @param host
@@ -46,9 +46,9 @@ public final class SocketObjectStreamInvocationHandler extends AbstractSocketStr
      * @param interfacesClassLoader
      * @throws ConnectionException
      */
-    public SocketObjectStreamInvocationHandler(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port, ClassLoader interfacesClassLoader) throws ConnectionException {
+    public SocketObjectStreamInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port, ClassLoader interfacesClassLoader) throws ConnectionException {
 
-        super(threadPool, clientMonitor, connectionPinger, interfacesClassLoader, host, port);
+        super(executor, clientMonitor, connectionPinger, interfacesClassLoader, host, port);
 
         //TODO - is this a pending problem?  The superclass invokes createClientStreamDriver
         // perhaps an init() is needed.

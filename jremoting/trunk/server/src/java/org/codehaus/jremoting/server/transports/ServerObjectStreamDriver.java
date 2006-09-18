@@ -48,8 +48,8 @@ public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
     /**
      * Constructor ServerObjectStreamDriver
      */
-    public ServerObjectStreamDriver(ServerMonitor serverMonitor, ExecutorService threadPool) {
-        super(serverMonitor, threadPool);
+    public ServerObjectStreamDriver(ServerMonitor serverMonitor, ExecutorService executor) {
+        super(serverMonitor, executor);
     }
 
     /**

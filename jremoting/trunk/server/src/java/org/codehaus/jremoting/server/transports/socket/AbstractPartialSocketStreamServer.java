@@ -41,8 +41,8 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
      * @param invocationHandlerAdapter Use this invocation handler adapter.
      * @param serverMonitor            The server Monitor
      */
-    public AbstractPartialSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
-        super(invocationHandlerAdapter, serverMonitor, threadPool, contextFactory);
+    public AbstractPartialSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
     }
 
     /**

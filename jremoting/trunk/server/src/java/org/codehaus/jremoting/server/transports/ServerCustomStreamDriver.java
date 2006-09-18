@@ -41,8 +41,8 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
 
-    public ServerCustomStreamDriver(ServerMonitor serverMonitor, ExecutorService threadPool) {
-        super(serverMonitor, threadPool);
+    public ServerCustomStreamDriver(ServerMonitor serverMonitor, ExecutorService executor) {
+        super(serverMonitor, executor);
     }
 
     /**

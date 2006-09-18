@@ -44,16 +44,16 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
     /**
      * Constructor AbstractPipedStreamInvocationHandler
      *
-     * @param threadPool
+     * @param executor
      * @param clientMonitor
      * @param connectionPinger
      * @param is
      * @param os
      * @param interfacesClassLoader
      */
-    public AbstractPipedStreamInvocationHandler(ExecutorService threadPool, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os, ClassLoader interfacesClassLoader) {
+    public AbstractPipedStreamInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os, ClassLoader interfacesClassLoader) {
 
-        super(threadPool, clientMonitor, connectionPinger, interfacesClassLoader);
+        super(executor, clientMonitor, connectionPinger, interfacesClassLoader);
 
         inputStream = is;
         outputStream = os;
