@@ -84,7 +84,7 @@ public final class LookupPublishedObject extends AbstractPublishedNameRequest im
      *
      * @return the session ID
      */
-    public Long getSession() {
+    public Long getSessionID() {
         return session;
     }
 

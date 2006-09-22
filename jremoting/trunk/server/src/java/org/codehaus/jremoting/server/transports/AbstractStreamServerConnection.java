@@ -21,7 +21,7 @@ import org.codehaus.jremoting.api.BadConnectionException;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
-import org.codehaus.jremoting.responses.ConnectionEnded;
+import org.codehaus.jremoting.responses.ConnectionKilled;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.server.ServerConnection;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -89,10 +89,10 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
                         response = abstractServer.handleInvocation(request, driver.getConnectionDetails());
                     }
 
-                    request = driver.writeReplyAndGetRequest(response);
+                    request = driver.writeResponseAndGetRequest(response);
                     //oOS.reset();
                     if (endConnection) {
-                        response = new ConnectionEnded();
+                        response = new ConnectionKilled();
                         more = false;
                     }
                 } catch (BadConnectionException bce) {
@@ -109,6 +109,7 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
                     if (ioe instanceof EOFException) {
                         driver.close();
                     } else if (isSafeEnd(ioe)) {
+                        //ioe.printStackTrace();
                         // TODO implement implementation independant logger
                         driver.close();
                     } else {

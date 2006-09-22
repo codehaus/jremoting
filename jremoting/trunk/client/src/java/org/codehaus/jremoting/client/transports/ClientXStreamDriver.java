@@ -16,16 +16,15 @@
  */
 package org.codehaus.jremoting.client.transports;
 
-import org.codehaus.jremoting.client.ClientStreamDriver;
-import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.responses.AbstractResponse;
-import org.codehaus.jremoting.requests.AbstractRequest;
-
-import java.io.*;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.client.ClientStreamDriver;
+import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.responses.AbstractResponse;
+
+import java.io.*;
 
 /**
  * Class ClientXStreamDriver
@@ -39,13 +38,14 @@ public class ClientXStreamDriver implements ClientStreamDriver {
     private PrintWriter printWriter;
     private ClassLoader interfacesClassLoader;
     private XStream xStream;
-
+    private BufferedOutputStream bufferedOutputStream;
 
 
     public ClientXStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
 
-        printWriter = new PrintWriter(new BufferedOutputStream(outputStream));
-        lineNumberReader = new LineNumberReader(new InputStreamReader(inputStream));
+        bufferedOutputStream = new BufferedOutputStream(outputStream);
+        printWriter = new PrintWriter(bufferedOutputStream);
+        lineNumberReader = new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream)));
         this.interfacesClassLoader = interfacesClassLoader;
         xStream = new XStream(new DomDriver());
     }
@@ -54,43 +54,49 @@ public class ClientXStreamDriver implements ClientStreamDriver {
 
         writeRequest(request);
 
-        AbstractResponse r = readReply();
+        AbstractResponse r = readResponse();
 
         return r;
     }
 
-    private void writeRequest(AbstractRequest request) {
+    private void writeRequest(AbstractRequest request) throws IOException {
 
         String xml = xStream.toXML(request);
 
-        //System.out.println("--> client write>\n" + xml.replace(' ', '_'));
-
         printWriter.write(xml + "\n");
         printWriter.flush();
+        bufferedOutputStream.flush();
     }
 
-    private AbstractResponse readReply() throws IOException {
+    private AbstractResponse readResponse() throws IOException {
 
         StringBuffer res = new StringBuffer();
+        long str = System.currentTimeMillis();
         String line = lineNumberReader.readLine();
-        res.append(line);
-        line = lineNumberReader.readLine();
-        while (line != null) {
-            res.append("\n").append(line);
-            if (!Character.isWhitespace(line.charAt(0))) {
-                line = null;
-            } else {
-                line = lineNumberReader.readLine();
+        res.append(line).append("\n");
+        if (!(line.endsWith("/>"))) {
+            str = System.currentTimeMillis();
+            line = lineNumberReader.readLine();
+            while (line != null) {
+                res.append(line).append("\n");
+                if (!Character.isWhitespace(line.charAt(0))) {
+                    line = null;
+                } else {
+                    str = System.currentTimeMillis();
+                    line = lineNumberReader.readLine();
+                }
             }
+
         }
 
         // todo ClassLoader magic ?  or use Reader with XStream direct ?
-        String expected = res.toString() + "\n";
+        String expected = res.toString();
 
-        if (expected.equals("null\n")) {
-            // TODO weird bug - chase it down?
-            return null;
-        }
+//        if (expected.equals("null\n")) {
+//            // TODO weird bug - chase it down?
+//            System.out.println("--> client read line > null!\n");
+//            return null;
+//        }
 
         try {
             return (AbstractResponse) xStream.fromXML(expected);
@@ -104,6 +110,6 @@ public class ClientXStreamDriver implements ClientStreamDriver {
         }
 
         //TODO use interfacesClassLoader
-        //Object reply = SerializationHelper.getInstanceFromBytes(byteArray, interfacesClassLoader);
+        //Object response = SerializationHelper.getInstanceFromBytes(byteArray, interfacesClassLoader);
     }
 }

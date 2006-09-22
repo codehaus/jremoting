@@ -20,12 +20,12 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.codehaus.jremoting.api.ConnectionException;
-import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import java.io.*;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Class ServerXStreamDriver
@@ -38,6 +38,7 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
     private LineNumberReader lineNumberReader;
     private PrintWriter printWriter;
     private XStream xStream;
+    private BufferedOutputStream bufferedOutputStream;
 
 
     public ServerXStreamDriver(ServerMonitor serverMonitor, ExecutorService executor) {
@@ -47,26 +48,28 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
 
 
     protected void initialize() throws IOException {
-        lineNumberReader = new LineNumberReader(new InputStreamReader(getInputStream()));
-        printWriter = new PrintWriter(new BufferedOutputStream(getOutputStream()));
+        lineNumberReader = new LineNumberReader(new BufferedReader(new InputStreamReader(getInputStream())));
+        bufferedOutputStream = new BufferedOutputStream(getOutputStream());
+        printWriter = new PrintWriter(bufferedOutputStream);
     }
 
-    protected synchronized AbstractRequest writeReplyAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
+    protected synchronized AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {
-            writeReply(response);
+            writeResponse(response);
         }
 
         return readRequest();
     }
 
-    private void writeReply(AbstractResponse response) throws IOException {
+    private void writeResponse(AbstractResponse response) throws IOException {
 
 
         String xml = xStream.toXML(response);
 
         printWriter.write(xml + "\n");
         printWriter.flush();
+        bufferedOutputStream.flush();
     }
 
     protected void close() {
@@ -83,23 +86,23 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
     }
 
     private AbstractRequest readRequest() throws IOException, ClassNotFoundException, ConnectionException {
-        long start = System.currentTimeMillis();
         StringBuffer req = new StringBuffer();
-
         String line = lineNumberReader.readLine();
-        req.append(line);
-        line = lineNumberReader.readLine();
-        while (line != null) {
-            req.append("\n").append(line);
-            if (!Character.isWhitespace(line.charAt(0))) {
-                line = null;
-            } else {
-                line = lineNumberReader.readLine();
+        req.append(line).append("\n");
+        if (!line.endsWith("/>")) {
+            line = lineNumberReader.readLine();
+            while (line != null) {
+                req.append(line).append("\n");
+                if (!Character.isWhitespace(line.charAt(0))) {
+                    line = null;
+                } else {
+                    line = lineNumberReader.readLine();
+                }
             }
         }
 
         // todo ClassLoader magic ?  or use Reader with XStream direct ?
-        String r = req.toString() + "\n";
+        String r = req.toString();
 
         try {
             Object o = xStream.fromXML(r);

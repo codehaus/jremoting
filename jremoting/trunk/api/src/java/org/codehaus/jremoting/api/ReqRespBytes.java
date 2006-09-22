@@ -21,18 +21,18 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 /**
- * ReqRepBytes
+ * ReqRespBytes
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ReqRepBytes {
+public class ReqRespBytes {
     int byteSize;
     byte[] bytes;
     Boolean isRequest;
     IOException ioe;
 
-    public ReqRepBytes(int byteSize, byte[] bytes, Boolean isRequest, IOException ioe) {
+    public ReqRespBytes(int byteSize, byte[] bytes, Boolean isRequest, IOException ioe) {
         this.byteSize = byteSize;
         this.bytes = bytes;
         this.isRequest = isRequest;
@@ -55,7 +55,7 @@ public class ReqRepBytes {
         return bytes;
     }
 
-    // request or reply
+    // request or response
     public boolean isRequest() {
         return isRequest.booleanValue();
     }
@@ -64,7 +64,7 @@ public class ReqRepBytes {
         return ioe;
     }
 
-    public static ReqRepBytes getRequestReplyBytesFromDataStream(DataInputStream dis) {
+    public static ReqRespBytes getRequestResponseBytesFromDataStream(DataInputStream dis) {
         int byteArraySize = 0;
         Boolean isRequest = null;
         byte[] byteArray = null;
@@ -77,7 +77,7 @@ public class ReqRepBytes {
         } catch (IOException e) {
             ioe = e;
         }
-        return new ReqRepBytes(byteArraySize, byteArray, isRequest, ioe);
+        return new ReqRespBytes(byteArraySize, byteArray, isRequest, ioe);
     }
 
 

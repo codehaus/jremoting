@@ -17,10 +17,7 @@
  */
 package org.codehaus.jremoting.api;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 /**
  * Class SerializationHelper
@@ -86,11 +83,14 @@ public class SerializationHelper {
             Object obj = oIs.readObject();
             oIs.close();
             return obj;
+
+        } catch (InvalidClassException ice) {
+            throw new RuntimeException("java.io.InvalidClassException", ice);
         } catch (IOException ioe) {
             if (ioe.getCause() instanceof RuntimeException) {
                 throw (RuntimeException) ioe.getCause();
             }
-            return null;
+            throw new RuntimeException("unexpected deserialization", ioe);
         }
     }
 }

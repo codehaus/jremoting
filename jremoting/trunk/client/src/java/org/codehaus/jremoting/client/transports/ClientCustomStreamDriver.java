@@ -62,7 +62,7 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
 
         writeRequest(request);
 
-        AbstractResponse r = readReply();
+        AbstractResponse r = readResponse();
 
         return r;
     }
@@ -76,7 +76,7 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
         dataOutputStream.flush();
     }
 
-    private AbstractResponse readReply() throws IOException, ClassNotFoundException {
+    private AbstractResponse readResponse() throws IOException, ClassNotFoundException {
 
         int byteArraySize = dataInputStream.readInt();
         byte[] byteArray = new byte[byteArraySize];
@@ -88,7 +88,7 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
             pos += read;
             cnt++;
         }
-        Object reply = SerializationHelper.getInstanceFromBytes(byteArray, interfacesClassLoader);
-        return (AbstractResponse) reply;
+        Object response = SerializationHelper.getInstanceFromBytes(byteArray, interfacesClassLoader);
+        return (AbstractResponse) response;
     }
 }

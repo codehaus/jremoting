@@ -30,5 +30,5 @@ public interface Sessionable {
      *
      * @return the session identifier
      */
-    Long getSession();
+    Long getSessionID();
 }

@@ -32,7 +32,7 @@ public interface MethodInvocationHandler {
      * Handle a method invocation.
      *
      * @param request the method request.
-     * @return the reply for the request.
+     * @return the response for the request.
      */
     AbstractResponse handleMethodInvocation(InvokeMethod request, Object connectionDetails);
 

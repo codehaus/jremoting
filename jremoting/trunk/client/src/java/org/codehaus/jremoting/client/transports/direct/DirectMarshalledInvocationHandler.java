@@ -56,9 +56,9 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
 
         try {
             byte[] serRequest = SerializationHelper.getBytesFromInstance(request);
-            byte[] serReply = invocationHandler.handleInvocation(serRequest, null);
+            byte[] serResponse = invocationHandler.handleInvocation(serRequest, null);
 
-            Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serReply, interfacesClassLoader);
+            Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serResponse, interfacesClassLoader);
             return (AbstractResponse) instanceFromBytes;
         } catch (ClassNotFoundException e) {
             String msg = "Some Class not found Exception on server side";

@@ -63,7 +63,7 @@ public class ClientObjectStreamDriver implements ClientStreamDriver {
 
     public synchronized AbstractResponse postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
         writeRequest(request);
-        return readReply();
+        return readResponse();
     }
 
     private void writeRequest(AbstractRequest request) throws IOException {
@@ -74,7 +74,7 @@ public class ClientObjectStreamDriver implements ClientStreamDriver {
         objectOutputStream.reset();
     }
 
-    private AbstractResponse readReply() throws IOException, ClassNotFoundException {
+    private AbstractResponse readResponse() throws IOException, ClassNotFoundException {
         return (AbstractResponse) objectInputStream.readObject();
     }
 }

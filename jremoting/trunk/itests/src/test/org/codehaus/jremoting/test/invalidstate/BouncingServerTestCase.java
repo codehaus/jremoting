@@ -88,7 +88,10 @@ public class BouncingServerTestCase extends TestCase {
         } finally {
             System.gc();
             Thread.yield();
-            factory.close();
+            try {
+                factory.close();
+            } catch (NoSuchSessionException e) {
+            }
             Thread.yield();
             server.stop();
             Thread.yield();

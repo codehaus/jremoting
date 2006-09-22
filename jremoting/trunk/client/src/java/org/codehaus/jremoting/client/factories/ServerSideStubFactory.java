@@ -35,7 +35,7 @@ import java.util.HashMap;
  */
 public class ServerSideStubFactory extends AbstractStubFactory {
 
-    private HashMap publishedServiceClassLoaders = new HashMap();
+    private final HashMap publishedServiceClassLoaders = new HashMap();
 
     public ServerSideStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
         super(hostContext, allowOptimize);
@@ -52,7 +52,7 @@ public class ServerSideStubFactory extends AbstractStubFactory {
             StubClass cr = null;
 
             try {
-                AbstractResponse ar = hostContext.getInvocationHandler().handleInvocation(new RetrieveClass(publishedServiceName, objectName));
+                AbstractResponse ar = clientInvocationHandler.handleInvocation(new RetrieveClass(publishedServiceName, objectName));
 
                 if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
                     if (ar instanceof RequestFailed) {
@@ -69,7 +69,7 @@ public class ServerSideStubFactory extends AbstractStubFactory {
                 throw new ConnectionException("Service " + publishedServiceName + " not published on Server");
             }
 
-            tcl = new TransportedStubClassLoader(hostContext.getInvocationHandler().getInterfacesClassLoader());
+            tcl = new TransportedStubClassLoader(clientInvocationHandler.getInterfacesClassLoader());
 
             tcl.add(stubClassName, cr.getStubClassBytes());
 

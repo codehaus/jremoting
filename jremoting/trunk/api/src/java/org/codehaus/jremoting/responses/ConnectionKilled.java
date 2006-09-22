@@ -22,18 +22,18 @@ import org.codehaus.jremoting.responses.AbstractResponse;
 
 
 /**
- * Class ConnectionEnded
+ * Class ConnectionKilled
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class ConnectionEnded extends AbstractResponse {
+public final class ConnectionKilled extends AbstractResponse {
     static final long serialVersionUID = 1736963237954338757L;
 
     /**
-     * Constructor ConnectionEnded
+     * Constructor ConnectionKilled
      */
-    public ConnectionEnded() {
+    public ConnectionKilled() {
     }
 
     /**

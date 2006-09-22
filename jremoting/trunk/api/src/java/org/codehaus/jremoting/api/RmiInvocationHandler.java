@@ -35,7 +35,7 @@ public interface RmiInvocationHandler extends Remote {
      * Handle method invocation.
      *
      * @param request the request to marshall over RMI
-     * @return the reply got back from the server
+     * @return the response got back from the server
      * @throws RemoteException in case there is outage.
      */
     AbstractResponse handleInvocation(AbstractRequest request) throws RemoteException;

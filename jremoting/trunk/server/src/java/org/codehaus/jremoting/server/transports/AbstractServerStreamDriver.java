@@ -90,7 +90,7 @@ public abstract class AbstractServerStreamDriver implements ThreadPoolAware {
      * @throws ConnectionException    if a problem during write & read.
      * @throws ClassNotFoundException If a Class is not found during serialization.
      */
-    protected abstract AbstractRequest writeReplyAndGetRequest(AbstractResponse response) throws IOException, ConnectionException, ClassNotFoundException;
+    protected abstract AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ConnectionException, ClassNotFoundException;
 
     /**
      * Close the stream.

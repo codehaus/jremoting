@@ -120,8 +120,8 @@ public abstract class StreamInvocationHandler extends AbstractClientInvocationHa
                         if (response.getResponseCode() >= 100) {
                             // special case for callabcks.
                             if (response.getResponseCode() == ResponseConstants.CLIENTABEND) {
-                                ClientInvocationAbended abendReply = (ClientInvocationAbended) response;
-                                throw abendReply.getIOException();
+                                ClientInvocationAbended abendResponse = (ClientInvocationAbended) response;
+                                throw abendResponse.getIOException();
                             }
 
                             if (response instanceof TryLater) {

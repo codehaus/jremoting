@@ -26,10 +26,10 @@ package org.codehaus.jremoting.server;
 public interface ServerMarshalledInvocationHandler {
 
     /**
-     * Handle a method Invocation using byte array representations of the request and reply
+     * Handle a method Invocation using byte array representations of the request and response
      *
      * @param request a byte array representing a request
-     * @return a byte array representing the reply
+     * @return a byte array representing the response
      */
     byte[] handleInvocation(byte[] request, Object connectionDetails);
 }

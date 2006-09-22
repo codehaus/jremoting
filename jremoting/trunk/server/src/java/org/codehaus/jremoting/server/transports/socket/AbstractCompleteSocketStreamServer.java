@@ -77,7 +77,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
                 accepting = false;
 
                 // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
-                sock.setSoTimeout(36000);
+                sock.setSoTimeout(60 * 1000);
 
                 AbstractServerStreamDriver ssd = createServerStreamDriver();
 

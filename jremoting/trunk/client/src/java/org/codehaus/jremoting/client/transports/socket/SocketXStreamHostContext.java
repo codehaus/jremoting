@@ -20,6 +20,7 @@ import org.codehaus.jremoting.client.factories.AbstractSocketStreamHostContext;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
+import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -56,11 +57,11 @@ public class SocketXStreamHostContext extends AbstractSocketStreamHostContext {
     }
 
     public SocketXStreamHostContext(String host, int port, ClassLoader classLoader) throws ConnectionException {
-        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), classLoader, host, port);
+        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger(), classLoader, host, port);
     }
 
     public SocketXStreamHostContext(String host, int port) throws ConnectionException {
-        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), SocketXStreamHostContext.class.getClassLoader(), host, port);
+        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger(), SocketXStreamHostContext.class.getClassLoader(), host, port);
     }
 
 

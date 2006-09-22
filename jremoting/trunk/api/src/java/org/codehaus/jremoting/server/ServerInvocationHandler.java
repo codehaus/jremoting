@@ -33,7 +33,7 @@ public interface ServerInvocationHandler {
      *
      * @param request           The request to handle
      * @param connectionDetails Some details of the connection.
-     * @return the reply that is a consequence of the request
+     * @return the response that is a consequence of the request
      */
     AbstractResponse handleInvocation(AbstractRequest request, Object connectionDetails);
 }

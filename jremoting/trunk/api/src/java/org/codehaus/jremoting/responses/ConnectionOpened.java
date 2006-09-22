@@ -79,7 +79,7 @@ public final class ConnectionOpened extends AbstractResponse implements Sessiona
      *
      * @return the session identifier.
      */
-    public Long getSession() {
+    public Long getSessionID() {
         return session;
     }
 
@@ -98,6 +98,7 @@ public final class ConnectionOpened extends AbstractResponse implements Sessiona
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
         out.writeObject(textToSign);
         out.writeObject(session);
     }
@@ -115,6 +116,7 @@ public final class ConnectionOpened extends AbstractResponse implements Sessiona
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
         textToSign = (String) in.readObject();
         session = (Long) in.readObject();
     }

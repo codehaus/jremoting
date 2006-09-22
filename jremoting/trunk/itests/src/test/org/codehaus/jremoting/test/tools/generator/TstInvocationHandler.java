@@ -66,13 +66,13 @@ public class TstInvocationHandler extends AbstractClientInvocationHandler implem
                                 return new ExceptionThrown(new Exception(invokeMethod.getMethodSignature() + ": arguments not marshalled correctly \n expected[" + TstRemoteInterface.class.getField(methods[i].getName() + "_arg" + j).get(null) + "] received[" + _arguments[j] + "]"));
                             }
                         }
-                        SimpleMethodInvoked methodReply = null;
+                        SimpleMethodInvoked methodResponse = null;
                         if (methods[i].getReturnType() != Void.TYPE) {
-                            methodReply = new SimpleMethodInvoked(TstRemoteInterface.class.getField(methods[i].getName() + "_retValue").get(null));
+                            methodResponse = new SimpleMethodInvoked(TstRemoteInterface.class.getField(methods[i].getName() + "_retValue").get(null));
                         } else {
-                            methodReply = new SimpleMethodInvoked();
+                            methodResponse = new SimpleMethodInvoked();
                         }
-                        return methodReply;
+                        return methodResponse;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

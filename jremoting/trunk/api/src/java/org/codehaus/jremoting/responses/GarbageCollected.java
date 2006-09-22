@@ -65,6 +65,7 @@ public final class GarbageCollected extends AbstractResponse {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
     }
 
     /**
@@ -80,5 +81,6 @@ public final class GarbageCollected extends AbstractResponse {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
     }
 }

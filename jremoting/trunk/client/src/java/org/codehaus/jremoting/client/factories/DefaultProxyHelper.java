@@ -189,7 +189,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
             return implBeans;
         } else {
-            throw makeUnexpectedReplyThrowable(response);
+            throw makeUnexpectedResponseThrowable(response);
         }
     }
 
@@ -215,7 +215,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
                 return or.getResponseObject();
             } else {
-                throw makeUnexpectedReplyThrowable(response);
+                throw makeUnexpectedResponseThrowable(response);
             }
         } catch (InvocationException ie) {
             clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
@@ -247,7 +247,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
                 return;
             } else {
-                throw makeUnexpectedReplyThrowable(response);
+                throw makeUnexpectedResponseThrowable(response);
             }
         } catch (InvocationException ie) {
             clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
@@ -282,7 +282,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                     SimpleMethodInvoked or = (SimpleMethodInvoked) response;
                     return;
                 } else {
-                    throw makeUnexpectedReplyThrowable(response);
+                    throw makeUnexpectedResponseThrowable(response);
                 }
             } catch (InvocationException ie) {
                 clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
@@ -326,7 +326,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
      * @param response The responsense that represents the unexpected responsense.
      * @return The exception that is pertient.
      */
-    private Throwable makeUnexpectedReplyThrowable(AbstractResponse response) {
+    private Throwable makeUnexpectedResponseThrowable(AbstractResponse response) {
 
         if (response.getResponseCode() == ResponseConstants.EXCEPTIONRESPONSE) {
             ExceptionThrown er = (ExceptionThrown) response;
@@ -403,11 +403,13 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 // One case where this can happen is if the server is restarted quickly.
                 //  An object created in one ivocation will try to be gced in the second
                 //  invocation.  As the object does not exist, an error is thrown.
-                /*
+
                 System.out.println("----> Got an ExceptionResponsensense in response to a CollectGarbage" );
-                ExceptionResponsensense er = (ExceptionResponsensense)response;
-                er.getReplyException().printStackTrace();
-                */
+                ExceptionThrown er = (ExceptionThrown)response;
+                er.getResponseException().printStackTrace();
+
+            } else if (response instanceof ConnectionClosed) {
+                // do nothing. GC came after connection was closed. Just bad timing.
             } else if (!(response instanceof GarbageCollected)) {
                 System.err.println("----> Some problem during Distributed Garbage Collection! Make sure stubFactory is closed. AbstractResponse = '" + response + "'");
             }

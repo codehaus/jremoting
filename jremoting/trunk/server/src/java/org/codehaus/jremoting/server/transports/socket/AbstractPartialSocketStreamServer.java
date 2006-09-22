@@ -54,7 +54,7 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
 
         // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
         try {
-            socket.setSoTimeout(36000);
+            socket.setSoTimeout(60 * 1000);
         } catch (SocketException se) {
             serverMonitor.unexpectedException(this.getClass(), "AbstractPartialSocketStreamServer.handleConnection(): Some error during " + "socket handling", se);
         }

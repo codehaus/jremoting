@@ -64,16 +64,16 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
      * @throws ConnectionException    In an IO Exception
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
-    protected synchronized AbstractRequest writeReplyAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
+    protected synchronized AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {
-            writeReply(response);
+            writeResponse(response);
         }
 
         return readRequest();
     }
 
-    private void writeReply(AbstractResponse response) throws IOException {
+    private void writeResponse(AbstractResponse response) throws IOException {
 
         byte[] aBytes = SerializationHelper.getBytesFromInstance(response);
 

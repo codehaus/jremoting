@@ -92,7 +92,7 @@ public class InvokeAsyncMethod extends AbstractPublishedNameRequest implements C
      *
      * @return the session ID
      */
-    public Long getSession() {
+    public Long getSessionID() {
         return session;
     }
 

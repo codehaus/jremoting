@@ -62,7 +62,7 @@ public interface ResponseConstants {
     int GCRESPONSE = 10;
 
     /**
-     * An instruction try again in local modes.  Used instread of an OpenConnectionReply.
+     * An instruction try again in local modes.  Used instread of an OpenConnection.
      */
     int SAMEVMRESPONSE = 11;
 
@@ -107,4 +107,6 @@ public interface ResponseConstants {
     int INVOCATIONEXCEPTIONRESPONSE = 109;
 
     int NOSUCHSESSIONRESPONSE = 110;
+
+    int CONNECTIONCLOSED = 111;
 }

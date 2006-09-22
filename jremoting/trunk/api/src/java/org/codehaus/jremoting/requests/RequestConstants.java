@@ -66,4 +66,6 @@ public interface RequestConstants {
      */
     int METHODASYNCREQUEST = 310;
 
+    int CLOSECONNECTIONREQUEST = 311;
+    
 }

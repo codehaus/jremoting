@@ -108,7 +108,7 @@ public class InvokeMethod extends AbstractPublishedNameRequest implements Contex
      *
      * @return the session ID
      */
-    public Long getSession() {
+    public Long getSessionID() {
         return session;
     }
 

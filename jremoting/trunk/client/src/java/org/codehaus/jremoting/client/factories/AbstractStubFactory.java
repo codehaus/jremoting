@@ -20,16 +20,14 @@ package org.codehaus.jremoting.client.factories;
 import org.codehaus.jremoting.api.Authentication;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.FacadeRefHolder;
-import org.codehaus.jremoting.client.ClientInvocationHandler;
-import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.client.HostContext;
-import org.codehaus.jremoting.client.Proxy;
+import org.codehaus.jremoting.client.*;
 import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.requests.ListPublishedObjects;
 import org.codehaus.jremoting.responses.PublishedObjectList;
 import org.codehaus.jremoting.requests.LookupPublishedObject;
 import org.codehaus.jremoting.responses.LookupResponse;
 import org.codehaus.jremoting.requests.OpenConnection;
+import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.responses.*;
 
 import java.lang.ref.WeakReference;
@@ -50,29 +48,27 @@ public abstract class AbstractStubFactory implements Factory {
 
     private static final UID U_ID = new UID((short) 20729);
     private static final int STEM_LEN = "JRemotingGenerated".length();
-    protected final HostContext hostContext;
-    protected ClientInvocationHandler clientInvocationHandler;
+    private static Class[] stubParams = new Class[] {ProxyHelper.class};
+    protected final ClientInvocationHandler clientInvocationHandler;
     protected final HashMap refObjs = new HashMap();
     private transient String textToSign;
-    protected Long session;
+    protected final Long sessionID;
 
 
     public AbstractStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
-        this.hostContext = hostContext;
-        clientInvocationHandler = this.hostContext.getInvocationHandler();
+        clientInvocationHandler = hostContext.getInvocationHandler();
         clientInvocationHandler.initialize();
 
         UID machineID = allowOptimize ? U_ID : null;
 
-        if (!(this.hostContext instanceof AbstractSocketStreamHostContext)) {
+        if (!(hostContext instanceof AbstractSocketStreamHostContext)) {
             machineID = null;
         }
 
         AbstractResponse response = clientInvocationHandler.handleInvocation(new OpenConnection(machineID));
-
         if (response instanceof ConnectionOpened) {
             textToSign = ((ConnectionOpened) response).getTextToSign();
-            session = ((ConnectionOpened) response).getSession();
+            sessionID = ((ConnectionOpened) response).getSessionID();
         } else {
 
             throw new ConnectionException("Setting of host context blocked for reasons of unknown, server-side response: (" + response.getClass().getName() + ")");
@@ -90,11 +86,11 @@ public abstract class AbstractStubFactory implements Factory {
      */
     public Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
-        AbstractResponse ar = clientInvocationHandler.handleInvocation(new LookupPublishedObject(publishedServiceName, authentication, session));
+        AbstractResponse ar = clientInvocationHandler.handleInvocation(new LookupPublishedObject(publishedServiceName, authentication, sessionID));
 
         if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
             if (ar instanceof NotPublished) {
-                throw new ConnectionException("Service " + publishedServiceName + " not published");
+                throw new ConnectionException("Service '" + publishedServiceName + "' not published");
             } else if (ar instanceof ExceptionThrown) {
                 ExceptionThrown er = (ExceptionThrown) ar;
 
@@ -116,11 +112,11 @@ public abstract class AbstractStubFactory implements Factory {
                 throw new ConnectionException("Problem doing lookup on service [exception: " + t.getMessage() + "]");
             }
         } else if (!(ar instanceof LookupResponse)) {
-            throw new UnsupportedOperationException("Unexpected reply to lookup [reply: " + ar + "]");
+            throw new UnsupportedOperationException("Unexpected response to lookup [response: " + ar + "]");
         }
 
         LookupResponse lr = (LookupResponse) ar;
-        DefaultProxyHelper baseObj = new DefaultProxyHelper(this, clientInvocationHandler, publishedServiceName, "Main", lr.getReferenceID(), session);
+        DefaultProxyHelper baseObj = new DefaultProxyHelper(this, clientInvocationHandler, publishedServiceName, "Main", lr.getReferenceID(), sessionID);
         Object retVal = getInstance(publishedServiceName, "Main", baseObj);
 
         baseObj.registerImplObject(retVal);
@@ -145,22 +141,10 @@ public abstract class AbstractStubFactory implements Factory {
         //Object o = refObjs.get(referenceID);
     }
 
-    /**
-     * Method getReferenceID
-     *
-     * @param obj
-     * @return
-     */
     public final Long getReferenceID(Proxy obj) {
         return obj.codehausRemotingGetReferenceID(this);
     }
 
-    /**
-     * Method getImplObj
-     *
-     * @param referenceID
-     * @return
-     */
     public final Object getImplObj(Long referenceID) {
 
         WeakReference wr = null;
@@ -182,13 +166,6 @@ public abstract class AbstractStubFactory implements Factory {
         return obj;
     }
 
-    /**
-     * Method lookup
-     *
-     * @param publishedServiceName
-     * @return
-     * @throws ConnectionException
-     */
     public final Object lookupService(String publishedServiceName) throws ConnectionException {
         return lookupService(publishedServiceName, null);
     }
@@ -198,25 +175,12 @@ public abstract class AbstractStubFactory implements Factory {
     }
 
     public String[] listServices() {
-
         AbstractResponse ar = clientInvocationHandler.handleInvocation(new ListPublishedObjects());
-
-        if (ar instanceof PublishedObjectList) {
-            return ((PublishedObjectList) ar).getListOfPublishedObjects();
-        } else {
-            return new String[]{};
-        }
+        return ((PublishedObjectList) ar).getListOfPublishedObjects();
     }
 
-
-    /**
-     * Is the service published.
-     *
-     * @param publishedServiceName
-     * @return
-     */
     public boolean hasService(String publishedServiceName) {
-        String[] services = listServices();
+        final String[] services = listServices();
         for (int i = 0; i < services.length; i++) {
             String service = services[i];
             if (service.equals(publishedServiceName)) {
@@ -226,14 +190,6 @@ public abstract class AbstractStubFactory implements Factory {
         return false;
     }
 
-
-    /**
-     * Wraps the reference to the remote obj within the FacadeRefHolder obj.
-     *
-     * @param obj
-     * @param objectName
-     * @return
-     */
     private FacadeRefHolder makeFacadeRefHolder(Proxy obj, String objectName) {
 
         Long refID = getReferenceID(obj);
@@ -278,7 +234,13 @@ public abstract class AbstractStubFactory implements Factory {
     protected Object getInstance(String publishedServiceName, String objectName, DefaultProxyHelper proxyHelper) throws ConnectionException {
 
         try {
+            Object foo = "foo";
             Class stubClass = getStubClass(publishedServiceName, objectName);
+            //boolean b1 = foo.getClass().isAssignableFrom(CharSequence.class);
+            //boolean b2 = CharSequence.class.isAssignableFrom(foo.getClass());
+            if(stubClass.getConstructors()[0].getParameterTypes().equals(stubParams)) {
+                throw new ConnectionException("Retreieved Stub class is not a Stub");
+            }
             Constructor[] constructors = stubClass.getConstructors();
             return constructors[0].newInstance(new Object[]{proxyHelper});
         } catch (InvocationTargetException ite) {
@@ -296,7 +258,9 @@ public abstract class AbstractStubFactory implements Factory {
      * Method close
      */
     public void close() {
-        hostContext.getInvocationHandler().close();
+        CloseConnection request = new CloseConnection(sessionID);
+        ConnectionClosed closed = (ConnectionClosed) clientInvocationHandler.handleInvocation(request);
+        clientInvocationHandler.close();
     }
 
 

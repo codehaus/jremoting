@@ -48,19 +48,13 @@ public class DirectTestCase extends AbstractHelloTestCase {
         factory = new ClientSideStubFactory(new DirectHostContext(server), false, this.getClass().getClassLoader());
         testClient = (TestInterface) factory.lookupService("Hello");
 
-        // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting being a client/server thing
-        Thread.yield();
     }
 
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-        Thread.yield();
         factory.close();
-        Thread.yield();
         server.stop();
-        Thread.yield();
         server = null;
         testServer = null;
         super.tearDown();

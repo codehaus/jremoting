@@ -23,8 +23,6 @@ import org.codehaus.jremoting.requests.*;
 import org.codehaus.jremoting.responses.*;
 import org.codehaus.jremoting.responses.Ping;
 import org.codehaus.jremoting.server.*;
-import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -45,20 +43,19 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     private static long c_session = 0;
     private static final UID U_ID = new UID((short) 20729);
     private Long lastSession = new Long(0);
-    private HashMap sessions = new HashMap();
+    private final HashMap sessions = new HashMap();
     private boolean suspend = false;
-    private StubRetriever stubRetriever = new NoStubRetriever();
-    private Authenticator authenticator = new DefaultAuthenticator();
-    private ServerMonitor serverMonitor;
+    private final StubRetriever stubRetriever;
+    private final Authenticator authenticator;
+    private final ServerMonitor serverMonitor;
 
-    private ServerSideClientContextFactory clientContextFactory;
-
+    private final ServerSideClientContextFactory clientContextFactory;
 
     public InvocationHandlerAdapter(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ServerSideClientContextFactory clientContextFactory) {
         this.stubRetriever = stubRetriever;
         this.authenticator = authenticator;
-        this.serverMonitor = serverMonitor;
-        this.clientContextFactory = clientContextFactory;
+        this.serverMonitor = serverMonitor != null ? serverMonitor : new ConsoleServerMonitor();
+        this.clientContextFactory = clientContextFactory != null ? clientContextFactory : new DefaultServerSideClientContextFactory();
     }
 
     /**
@@ -106,12 +103,16 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
                 OpenConnection openConnection = (OpenConnection) request;
                 return doOpenConnectionRequest(openConnection.getMachineID());
 
+            } else if (request.getRequestCode() == RequestConstants.CLOSECONNECTIONREQUEST) {
+                CloseConnection closeConnection = (CloseConnection) request;
+                return doCloseConnectionRequest(closeConnection.getSessionID());
+
             } else if (request.getRequestCode() == RequestConstants.PINGREQUEST) {
 
                 // we could communicate back useful state info in this transaction.
                 return new Ping();
             } else if (request.getRequestCode() == RequestConstants.LISTREQUEST) {
-                return doListRequest();
+                return doServiceListRequest();
             } else if (request.getRequestCode() == RequestConstants.LISTMETHODSREQUEST) {
                 return doListMethodsRequest(request);
             } else {
@@ -130,15 +131,13 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         }
     }
 
+
     protected synchronized ServerSideClientContextFactory getClientContextFactory() {
-        if (clientContextFactory == null) {
-            clientContextFactory = new DefaultServerSideClientContextFactory();
-        }
         return clientContextFactory;
     }
 
     private void setClientContext(Contextualizable request) {
-        Long session = request.getSession();
+        Long session = request.getSessionID();
         ClientContext clientSideClientContext = request.getContext();
 
         // *always* happens before method invocations.
@@ -155,9 +154,9 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      */
     private AbstractResponse doMethodFacadeRequest(InvokeFacadeMethod facadeRequest, Object connectionDetails) {
 
-        if (!sessionExists(facadeRequest.getSession()) && (connectionDetails == null || !connectionDetails.equals("callback")))
+        if (!sessionExists(facadeRequest.getSessionID()) && (connectionDetails == null || !connectionDetails.equals("callback")))
         {
-            return new NoSuchSession(facadeRequest.getSession());
+            return new NoSuchSession(facadeRequest.getSessionID());
         }
 
         String publishedThing = facadeRequest.getPublishedServiceName() + "_" + facadeRequest.getObjectName();
@@ -180,14 +179,14 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         } else if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
             return ar;
         } else if (ar.getResponseCode() == ResponseConstants.METHODRESPONSE) {
-            Object methodReply = ((SimpleMethodInvoked) ar).getResponseObject();
+            Object methodResponse = ((SimpleMethodInvoked) ar).getResponseObject();
 
-            if (methodReply == null) {
+            if (methodResponse == null) {
                 return new FacadeMethodInvoked(null, null);    // null passing
-            } else if (!methodReply.getClass().isArray()) {
-                return doMethodFacadeRequestNonArray(methodReply, facadeRequest);
+            } else if (!methodResponse.getClass().isArray()) {
+                return doMethodFacadeRequestNonArray(methodResponse, facadeRequest);
             } else {
-                return doMethodFacadeRequestArray(methodReply, facadeRequest);
+                return doMethodFacadeRequestArray(methodResponse, facadeRequest);
 
             }
         } else {
@@ -199,17 +198,17 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     /**
      * Do a method facade request, returning an array
      *
-     * @param methodReply        The array to process.
+     * @param methodResponse        The array to process.
      * @param invokeFacadeMethod The request
      * @return The reply
      */
-    private AbstractResponse doMethodFacadeRequestArray(Object methodReply, InvokeFacadeMethod invokeFacadeMethod) {
-        Object[] beanImpls = (Object[]) methodReply;
+    private AbstractResponse doMethodFacadeRequestArray(Object methodResponse, InvokeFacadeMethod invokeFacadeMethod) {
+        Object[] beanImpls = (Object[]) methodResponse;
         Long[] refs = new Long[beanImpls.length];
         String[] objectNames = new String[beanImpls.length];
 
-        if (!sessionExists(invokeFacadeMethod.getSession())) {
-            return new NoSuchSession(invokeFacadeMethod.getSession());
+        if (!sessionExists(invokeFacadeMethod.getSessionID())) {
+            return new NoSuchSession(invokeFacadeMethod.getSessionID());
         }
 
         for (int i = 0; i < beanImpls.length; i++) {
@@ -230,7 +229,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             } else {
                 refs[i] = methodInvocationHandler2.getOrMakeReferenceIDForBean(beanImpls[i]);
 
-                Session sess = (Session) sessions.get(invokeFacadeMethod.getSession());
+                Session sess = (Session) sessions.get(invokeFacadeMethod.getSessionID());
 
                 sess.addBeanInUse(refs[i], beanImpls[i]);
             }
@@ -248,8 +247,8 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      */
     private AbstractResponse doMethodFacadeRequestNonArray(Object beanImpl, InvokeFacadeMethod invokeFacadeMethod) {
 
-        if (!sessionExists(invokeFacadeMethod.getSession())) {
-            return new NoSuchSession(invokeFacadeMethod.getSession());
+        if (!sessionExists(invokeFacadeMethod.getSessionID())) {
+            return new NoSuchSession(invokeFacadeMethod.getSessionID());
         }
 
         MethodInvocationHandler mainMethodInvocationHandler = getMethodInvocationHandler(invokeFacadeMethod.getPublishedServiceName() + "_Main");
@@ -272,7 +271,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         Long newRef = methodInvocationHandler.getOrMakeReferenceIDForBean(beanImpl);
 
         // make sure the bean is not garbage collected.
-        Session sess = (Session) sessions.get(invokeFacadeMethod.getSession());
+        Session sess = (Session) sessions.get(invokeFacadeMethod.getSessionID());
 
         sess.addBeanInUse(newRef, beanImpl);
 
@@ -288,9 +287,9 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      */
     private AbstractResponse doMethodRequest(InvokeMethod invokeMethod, Object connectionDetails) {
 
-        if (!sessionExists(invokeMethod.getSession()) && (connectionDetails == null || !connectionDetails.equals("callback")))
+        if (!sessionExists(invokeMethod.getSessionID()) && (connectionDetails == null || !connectionDetails.equals("callback")))
         {
-            return new NoSuchSession(invokeMethod.getSession());
+            return new NoSuchSession(invokeMethod.getSessionID());
         }
 
         String publishedThing = invokeMethod.getPublishedServiceName() + "_" + invokeMethod.getObjectName();
@@ -306,8 +305,8 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
     private AbstractResponse doMethodAsyncRequest(InvokeAsyncMethod methodRequest, Object connectionDetails) {
 
-        if (!sessionExists(methodRequest.getSession())) {
-            return new NoSuchSession(methodRequest.getSession());
+        if (!sessionExists(methodRequest.getSessionID())) {
+            return new NoSuchSession(methodRequest.getSessionID());
         }
 
         String publishedThing = methodRequest.getPublishedServiceName() + "_" + methodRequest.getObjectName();
@@ -321,7 +320,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         GroupedMethodRequest[] requests = methodRequest.getGroupedRequests();
         for (int i = 0; i < requests.length; i++) {
             GroupedMethodRequest rawRequest = requests[i];
-            methodInvocationHandler.handleMethodInvocation(new InvokeMethod(methodRequest.getPublishedServiceName(), methodRequest.getObjectName(), rawRequest.getMethodSignature(), rawRequest.getArgs(), methodRequest.getReferenceID(), methodRequest.getSession()), connectionDetails);
+            methodInvocationHandler.handleMethodInvocation(new InvokeMethod(methodRequest.getPublishedServiceName(), methodRequest.getObjectName(), rawRequest.getMethodSignature(), rawRequest.getArgs(), methodRequest.getReferenceID(), methodRequest.getSessionID()), connectionDetails);
         }
 
         return new SimpleMethodInvoked();
@@ -382,16 +381,27 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         } else {
             Long session = getNewSession();
             sessions.put(session, new Session(session));
-            return new ConnectionOpened(authenticator.getTextToSign(), session);
+            String textToSign = authenticator == null ? "" : authenticator.getTextToSign();
+            return new ConnectionOpened(textToSign, session);
         }
     }
+
+    private AbstractResponse doCloseConnectionRequest(Long sessionID) {
+        if (!sessions.containsKey(sessionID)) {
+            return new NoSuchSession(sessionID);
+        } else {
+            sessions.remove(sessionID);
+            return new ConnectionClosed(sessionID);
+        }
+    }
+
 
     /**
      * Do a ListPublishedObjects
      *
      * @return The reply
      */
-    private AbstractResponse doListRequest() {
+    private AbstractResponse doServiceListRequest() {
         //return the list of published objects to the server
         Iterator iterator = getIteratorOfPublishedObjects();
         Vector vecOfPublishedObjectNames = new Vector();
@@ -425,14 +435,14 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             return new NotPublished();
         }
 
-        Long session = gcr.getSession();
-        if (!sessionExists(session)) {
+        Long sessionID = gcr.getSessionID();
+        if (!sessionExists(sessionID)) {
             return new InvocationExceptionThrown("TODO - you dirty rat/hacker");
         }
 
-        Session sess = (Session) sessions.get(session);
+        Session sess = (Session) sessions.get(sessionID);
         if (sess == null) {
-            System.err.println("DEBUG- GC on missing session - " + session);
+            return new ConnectionClosed(sessionID);
         } else {
             if (gcr.getReferenceID() == null) {
                 System.err.println("DEBUG- GC on missing referenceID -" + gcr.getReferenceID());
@@ -514,14 +524,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         suspend = false;
     }
 
-    public void setServerMonitor(ServerMonitor serverMonitor) {
-        this.serverMonitor = serverMonitor;
-    }
-
     public synchronized ServerMonitor getServerMonitor() {
-        if (serverMonitor == null) {
-            serverMonitor = new ConsoleServerMonitor();
-        }
         return serverMonitor;
     }
 
