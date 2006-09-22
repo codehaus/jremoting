@@ -145,7 +145,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
                 return response;
             }
         } catch (ClassNotFoundException e) {
-            throw new InvocationException("Class definition missing on Deserialization: " + e.getMessage());
+            throw new InvocationException("Class definition missing on Deserialization: " + e.getMessage(), e);
         }
     }
 

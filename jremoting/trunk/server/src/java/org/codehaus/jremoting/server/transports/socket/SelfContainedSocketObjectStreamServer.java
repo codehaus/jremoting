@@ -39,7 +39,7 @@ import org.codehaus.jremoting.server.transports.ServerObjectStreamDriver;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class SelfContainedSocketObjectStreamServer extends AbstractCompleteSocketStreamServer {
+public class SelfContainedSocketObjectStreamServer extends AbstractSelfContainedSocketStreamServer {
 
 
     public SelfContainedSocketObjectStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {

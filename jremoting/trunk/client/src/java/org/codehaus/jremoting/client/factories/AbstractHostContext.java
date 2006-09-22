@@ -30,27 +30,12 @@ public abstract class AbstractHostContext implements HostContext {
 
     protected final ClientInvocationHandler invocationHandler;
 
-    /**
-     * Constructor AbstractHostContext
-     *
-     * @param clientInvocationHandler
-     */
     public AbstractHostContext(ClientInvocationHandler clientInvocationHandler) {
         invocationHandler = clientInvocationHandler;
     }
 
-    /**
-     * Method getInvocationHandler
-     *
-     * @return
-     */
     public ClientInvocationHandler getInvocationHandler() {
         return invocationHandler;
-    }
-
-
-    public HostContext makeSameVmHostContext(String key) {
-        throw new UnsupportedOperationException();
     }
 
 }

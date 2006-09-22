@@ -37,7 +37,7 @@ import java.net.Socket;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractCompleteSocketStreamServer extends AbstractServer implements Runnable {
+public abstract class AbstractSelfContainedSocketStreamServer extends AbstractServer implements Runnable {
 
     /**
      * The server socket.
@@ -51,13 +51,13 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
     private int port;
 
     /**
-     * Construct a AbstractCompleteSocketStreamServer
+     * Construct a AbstractSelfContainedSocketStreamServer
      *
      * @param invocationHandlerAdapter The invocation handler adapter to use.
      * @param port                     The port to use
      * @param serverMonitor
      */
-    public AbstractCompleteSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {
+    public AbstractSelfContainedSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {
 
         super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
         this.port = port;
@@ -94,7 +94,7 @@ public abstract class AbstractCompleteSocketStreamServer extends AbstractServer 
             if (accepting & ioe.getMessage().equalsIgnoreCase("socket closed")) {
                 // do nothing, server shut down during accept();
             } else {
-                serverMonitor.unexpectedException(this.getClass(), "AbstractCompleteSocketStreamServer.run(): Some problem connecting client via sockets: " + ioe.getMessage(), ioe);
+                serverMonitor.unexpectedException(this.getClass(), "AbstractSelfContainedSocketStreamServer.run(): Some problem connecting client via sockets: " + ioe.getMessage(), ioe);
             }
         }
     }

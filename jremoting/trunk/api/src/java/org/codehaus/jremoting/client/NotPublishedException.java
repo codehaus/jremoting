@@ -29,10 +29,10 @@ public class NotPublishedException extends InvocationException {
     /**
      * Constructor NotPublishedException
      *
-     * @param publishedServiceName the service name that is not published
+     * @param service the service name that is not published
      * @param objectName           the object name within that that is not published
      */
-    public NotPublishedException(String publishedServiceName, String objectName) {
-        super("Service '" + publishedServiceName + "' object '" + objectName + "' not published by server");
+    public NotPublishedException(String service, String objectName) {
+        super("Service '" + service + "' object '" + objectName + "' not published by server");
     }
 }

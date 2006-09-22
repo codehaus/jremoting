@@ -28,7 +28,7 @@ import java.io.PipedOutputStream;
 
 
 /**
- * A Complete Sockect Custom Stream Piped Instance.
+ * A Complete Socket Custom Stream Piped Instance.
  *
  * @author Paul Hammant
  */

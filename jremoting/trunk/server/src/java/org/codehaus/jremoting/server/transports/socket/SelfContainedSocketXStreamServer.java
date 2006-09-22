@@ -39,7 +39,7 @@ import org.codehaus.jremoting.server.transports.ServerXStreamDriver;
  * @version $Revision: 1.2 $
  */
 
-public class SelfContainedSocketXStreamServer extends AbstractCompleteSocketStreamServer {
+public class SelfContainedSocketXStreamServer extends AbstractSelfContainedSocketStreamServer {
     /**
      * Construct a SelfContainedSocketCustomStreamServer
      *

@@ -153,7 +153,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
                         retryConnectTries++;
                     }
                 } else {
-                    throw new InvocationException("Unknown RMI problem : " + re.getMessage());
+                    throw new InvocationException("Unknown RMI problem : " + re.getMessage(), re);
                 }
             }
         }
