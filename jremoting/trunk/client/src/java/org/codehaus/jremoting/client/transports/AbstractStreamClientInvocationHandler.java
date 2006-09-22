@@ -63,11 +63,6 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
         this.interfacesClassLoader = interfacesClassLoader;
     }
 
-    /**
-     * Method getInterfacesClassLoader
-     *
-     * @return
-     */
     public ClassLoader getInterfacesClassLoader() {
         return interfacesClassLoader;
     }
@@ -79,12 +74,6 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
     protected void requestWritten() {
     }
 
-    /**
-     * Method handleInvocation
-     *
-     * @param request
-     * @return
-     */
     public synchronized AbstractResponse handleInvocation(AbstractRequest request) {
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
@@ -173,11 +162,6 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
         return false;
     }
 
-    /**
-     * Method getLastRealRequest
-     *
-     * @return
-     */
     public long getLastRealRequest() {
         return lastRealRequest;
     }
