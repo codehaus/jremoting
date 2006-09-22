@@ -111,8 +111,6 @@ public abstract class AbstractStubFactory implements Factory {
             } else {
                 throw new ConnectionException("Problem doing lookup on service [exception: " + t.getMessage() + "]");
             }
-        } else if (!(ar instanceof LookupResponse)) {
-            throw new UnsupportedOperationException("Unexpected response to lookup [response: " + ar + "]");
         }
 
         LookupResponse lr = (LookupResponse) ar;
