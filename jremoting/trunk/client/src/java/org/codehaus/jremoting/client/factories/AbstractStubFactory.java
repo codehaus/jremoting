@@ -22,9 +22,9 @@ import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.api.FacadeRefHolder;
 import org.codehaus.jremoting.client.*;
 import org.codehaus.jremoting.responses.ExceptionThrown;
-import org.codehaus.jremoting.requests.ListPublishedObjects;
-import org.codehaus.jremoting.responses.PublishedObjectList;
-import org.codehaus.jremoting.requests.LookupPublishedObject;
+import org.codehaus.jremoting.requests.ListServices;
+import org.codehaus.jremoting.responses.ServicesList;
+import org.codehaus.jremoting.requests.LookupService;
 import org.codehaus.jremoting.responses.LookupResponse;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.requests.CloseConnection;
@@ -86,7 +86,7 @@ public abstract class AbstractStubFactory implements Factory {
      */
     public Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
-        AbstractResponse ar = clientInvocationHandler.handleInvocation(new LookupPublishedObject(publishedServiceName, authentication, sessionID));
+        AbstractResponse ar = clientInvocationHandler.handleInvocation(new LookupService(publishedServiceName, authentication, sessionID));
 
         if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
             if (ar instanceof NotPublished) {
@@ -173,8 +173,8 @@ public abstract class AbstractStubFactory implements Factory {
     }
 
     public String[] listServices() {
-        AbstractResponse ar = clientInvocationHandler.handleInvocation(new ListPublishedObjects());
-        return ((PublishedObjectList) ar).getListOfPublishedObjects();
+        AbstractResponse ar = clientInvocationHandler.handleInvocation(new ListServices());
+        return ((ServicesList) ar).getServices();
     }
 
     public boolean hasService(String publishedServiceName) {

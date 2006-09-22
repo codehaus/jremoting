@@ -5,9 +5,9 @@ import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.responses.*;
 import org.codehaus.jremoting.requests.OpenConnection;
-import org.codehaus.jremoting.requests.LookupPublishedObject;
+import org.codehaus.jremoting.requests.LookupService;
 import org.codehaus.jremoting.requests.CloseConnection;
-import org.codehaus.jremoting.requests.ListPublishedObjects;
+import org.codehaus.jremoting.requests.ListServices;
 import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
 
@@ -20,7 +20,7 @@ public class AbstractStubFactoryTestCase extends MockObjectTestCase {
         hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("handleInvocation").with(isA(LookupPublishedObject.class)).will(returnValue(new LookupResponse((long) 321)));
+        ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new LookupResponse((long) 321)));
         ih.expects(once()).method("handleInvocation").with(isA(CloseConnection.class)).will(returnValue(new ConnectionClosed((long) 321)));
         ih.expects(once()).method("close");
 
@@ -49,7 +49,7 @@ public class AbstractStubFactoryTestCase extends MockObjectTestCase {
         hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("handleInvocation").with(isA(LookupPublishedObject.class)).will(returnValue(new NotPublished()));
+        ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new NotPublished()));
 
         AbstractStubFactory factory = new AbstractStubFactory((HostContext) hc.proxy(), true) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
@@ -73,7 +73,7 @@ public class AbstractStubFactoryTestCase extends MockObjectTestCase {
         hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("handleInvocation").with(isA(LookupPublishedObject.class)).will(returnValue(new ExceptionThrown(new ConnectionException("foo"))));
+        ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new ConnectionException("foo"))));
 
         AbstractStubFactory factory = new AbstractStubFactory((HostContext) hc.proxy(), true) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
@@ -95,7 +95,7 @@ public class AbstractStubFactoryTestCase extends MockObjectTestCase {
         hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("handleInvocation").with(isA(LookupPublishedObject.class)).will(returnValue(new ExceptionThrown(new RuntimeException("foo"))));
+        ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new RuntimeException("foo"))));
 
         AbstractStubFactory factory = new AbstractStubFactory((HostContext) hc.proxy(), true) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
@@ -117,7 +117,7 @@ public class AbstractStubFactoryTestCase extends MockObjectTestCase {
         hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("handleInvocation").with(isA(LookupPublishedObject.class)).will(returnValue(new ExceptionThrown(new Error("foo"))));
+        ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new Error("foo"))));
 
         AbstractStubFactory factory = new AbstractStubFactory((HostContext) hc.proxy(), true) {
             protected Class getStubClass(String publishedServiceName, String objectName) {
@@ -139,7 +139,7 @@ public class AbstractStubFactoryTestCase extends MockObjectTestCase {
         hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("handleInvocation").with(isA(ListPublishedObjects.class)).will(returnValue(new PublishedObjectList(new String[] {"1", "2"})));
+        ih.expects(once()).method("handleInvocation").with(isA(ListServices.class)).will(returnValue(new ServicesList(new String[] {"1", "2"})));
 
         AbstractStubFactory factory = new AbstractStubFactory((HostContext) hc.proxy(), true) {
             protected Class getStubClass(String publishedServiceName, String objectName) {

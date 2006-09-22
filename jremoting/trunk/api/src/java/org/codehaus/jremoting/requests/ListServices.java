@@ -22,12 +22,12 @@ import org.codehaus.jremoting.requests.RequestConstants;
 
 
 /**
- * Class ListPublishedObjects
+ * Class ListServices
  *
  * @author Vinay Chandrasekharan
  * @version $Revision: 1.2 $
  */
-public final class ListPublishedObjects extends AbstractRequest {
+public final class ListServices extends AbstractRequest {
     static final long serialVersionUID = -6048997904689623626L;
 
     /**
@@ -38,6 +38,6 @@ public final class ListPublishedObjects extends AbstractRequest {
      * @see org.codehaus.jremoting.requests.RequestConstants
      */
     public int getRequestCode() {
-        return RequestConstants.LISTREQUEST;
+        return RequestConstants.LISTSERVICESREQUEST;
     }
 }

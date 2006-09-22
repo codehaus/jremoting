@@ -15,48 +15,48 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.responses;
+package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.api.Authentication;
+import org.codehaus.jremoting.api.Sessionable;
+import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
+import org.codehaus.jremoting.requests.RequestConstants;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class PublishedObjectList
+ * Class LookupService
  *
- * @author Vinay Chandrasekharan
+ * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class PublishedObjectList extends AbstractResponse {
-    static final long serialVersionUID = -2491265577999411874L;
+public final class LookupService extends AbstractPublishedNameRequest implements Sessionable {
+    static final long serialVersionUID = 7509584735319760230L;
 
-    private String[] listOfPublishedObjects;
+    private Authentication authentication;
+    private Long session;
 
     /**
-     * Constructor LookupResponse
+     * Constructor LookupService
      *
-     * @param listOfPublishedObjects : list of Published Objects
+     * @param publishedService the published service name
+     * @param authentication       a plugable authenticator
+     * @param session              the session ID
      */
-    public PublishedObjectList(String[] listOfPublishedObjects) {
-        this.listOfPublishedObjects = listOfPublishedObjects;
+    public LookupService(String publishedService, Authentication authentication, Long session) {
+
+        super(publishedService, "Main");
+
+        this.authentication = authentication;
+        this.session = session;
     }
 
     /**
-     * Constructor PublishedObjectList for Externalization
+     * Constructor LookupService for Externalization
      */
-    public PublishedObjectList() {
-    }
-
-    /**
-     * Get the reference ID.
-     *
-     * @return the list of published Objects
-     */
-    public String[] getListOfPublishedObjects() {
-        return listOfPublishedObjects;
+    public LookupService() {
     }
 
     /**
@@ -64,10 +64,28 @@ public final class PublishedObjectList extends AbstractResponse {
      * This is quicker than instanceof for type checking.
      *
      * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
+     * @see org.codehaus.jremoting.requests.RequestConstants
      */
-    public int getResponseCode() {
-        return ResponseConstants.LISTRESPONSE;
+    public int getRequestCode() {
+        return RequestConstants.LOOKUPREQUEST;
+    }
+
+    /**
+     * Get Authentication handler
+     *
+     * @return the authenticator
+     */
+    public Authentication getAuthentication() {
+        return authentication;
+    }
+
+    /**
+     * Get the session ID.
+     *
+     * @return the session ID
+     */
+    public Long getSessionID() {
+        return session;
     }
 
     /**
@@ -85,7 +103,10 @@ public final class PublishedObjectList extends AbstractResponse {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(listOfPublishedObjects);
+
+        super.writeExternal(out);
+        out.writeObject(authentication);
+        out.writeObject(session);
     }
 
     /**
@@ -101,6 +122,10 @@ public final class PublishedObjectList extends AbstractResponse {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        listOfPublishedObjects = (String[]) in.readObject();
+
+        super.readExternal(in);
+
+        authentication = (Authentication) in.readObject();
+        session = (Long) in.readObject();
     }
 }

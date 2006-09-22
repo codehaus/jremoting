@@ -51,7 +51,7 @@ public interface RequestConstants {
     /**
      * A list of published services
      */
-    int LISTREQUEST = 307;
+    int LISTSERVICESREQUEST = 307;
     /**
      * A request for garbage collection for a finished with proxy
      */

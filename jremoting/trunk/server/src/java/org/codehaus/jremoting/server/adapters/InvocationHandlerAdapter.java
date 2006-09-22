@@ -111,7 +111,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
                 // we could communicate back useful state info in this transaction.
                 return new Ping();
-            } else if (request.getRequestCode() == RequestConstants.LISTREQUEST) {
+            } else if (request.getRequestCode() == RequestConstants.LISTSERVICESREQUEST) {
                 return doServiceListRequest();
             } else if (request.getRequestCode() == RequestConstants.LISTMETHODSREQUEST) {
                 return doListMethodsRequest(request);
@@ -335,7 +335,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * @return The reply
      */
     private AbstractResponse doLookupRequest(AbstractRequest request) {
-        LookupPublishedObject lr = (LookupPublishedObject) request;
+        LookupService lr = (LookupService) request;
         String publishedServiceName = lr.getPublishedServiceName();
 
         try {
@@ -397,28 +397,28 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
 
     /**
-     * Do a ListPublishedObjects
+     * Do a ListServices
      *
      * @return The reply
      */
     private AbstractResponse doServiceListRequest() {
         //return the list of published objects to the server
-        Iterator iterator = getIteratorOfPublishedObjects();
-        Vector vecOfPublishedObjectNames = new Vector();
+        Iterator iterator = getIteratorOfServices();
+        Vector vecOfServices = new Vector();
 
         while (iterator.hasNext()) {
             final String item = (String) iterator.next();
 
             if (item.endsWith("_Main")) {
-                vecOfPublishedObjectNames.add(item.substring(0, item.lastIndexOf("_Main")));
+                vecOfServices.add(item.substring(0, item.lastIndexOf("_Main")));
             }
         }
 
-        String[] listOfPublishedObjectNames = new String[vecOfPublishedObjectNames.size()];
+        String[] listOfServices = new String[vecOfServices.size()];
 
-        System.arraycopy(vecOfPublishedObjectNames.toArray(), 0, listOfPublishedObjectNames, 0, vecOfPublishedObjectNames.size());
+        System.arraycopy(vecOfServices.toArray(), 0, listOfServices, 0, vecOfServices.size());
 
-        return new PublishedObjectList(listOfPublishedObjectNames);
+        return new ServicesList(listOfServices);
     }
 
     /**

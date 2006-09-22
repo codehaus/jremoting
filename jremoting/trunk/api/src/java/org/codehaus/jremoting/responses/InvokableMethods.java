@@ -18,15 +18,12 @@
 
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.ResponseConstants;
-import org.codehaus.jremoting.responses.AbstractResponse;
-
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class PublishedObjectList
+ * Class InvokableMethods
  *
  * @author Vinay Chandrasekharan
  * @version $Revision: 1.2 $
@@ -34,16 +31,14 @@ import java.io.ObjectOutput;
 public final class InvokableMethods extends AbstractResponse {
 
     static final long serialVersionUID = 420067307396614451L;
-    /**
-     * String array of the methods list of the request publishedObject
-     */
+
     private String[] listOfMethods;
 
 
     /**
-     * Constructor initialized with remote method list of the publishedObject
+     * Constructor initialized with remote method list of the service
      *
-     * @param listOfMethods : list of remote methods exposed by the published Obj
+     * @param listOfMethods : list of remote methods exposed by the service
      */
     public InvokableMethods(String[] listOfMethods) {
         this.listOfMethods = listOfMethods;
@@ -55,39 +50,18 @@ public final class InvokableMethods extends AbstractResponse {
     public InvokableMethods() {
     }
 
-    //------Methods--------------//
-    /**
-     * Get the list of methods of the publishedObject.
-     *
-     * @return the list of methods
-     */
     public String[] getListOfMethods() {
         return listOfMethods;
     }
 
-    //-----AbstractResponse override---//
-    /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
-     *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
-     */
     public int getResponseCode() {
         return ResponseConstants.LISTRESPONSE;
     }
 
-    //----Externalizable Overrides--//
-    /**
-     * @see java.io.Externalizable#writeExternal(ObjectOutput)
-     */
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(listOfMethods);
     }
 
-    /**
-     * @see java.io.Externalizable#readExternal(ObjectInput)
-     */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         listOfMethods = (String[]) in.readObject();
     }
