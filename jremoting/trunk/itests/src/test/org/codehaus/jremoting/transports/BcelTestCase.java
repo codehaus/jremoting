@@ -73,6 +73,9 @@ public class BcelTestCase extends AbstractHelloTestCase {
         Thread.yield();
     }
 
+    public void testHelloCall() throws Exception {
+        super.testHelloCall();   
+    }
 
     protected void tearDown() throws Exception {
         testClient = null;

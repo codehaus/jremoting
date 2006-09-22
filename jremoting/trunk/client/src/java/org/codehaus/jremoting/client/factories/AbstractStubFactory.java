@@ -234,11 +234,6 @@ public abstract class AbstractStubFactory implements Factory {
         try {
             Object foo = "foo";
             Class stubClass = getStubClass(publishedServiceName, objectName);
-            //boolean b1 = foo.getClass().isAssignableFrom(CharSequence.class);
-            //boolean b2 = CharSequence.class.isAssignableFrom(foo.getClass());
-            if(stubClass.getConstructors()[0].getParameterTypes().equals(stubParams)) {
-                throw new ConnectionException("Retreieved Stub class is not a Stub");
-            }
             Constructor[] constructors = stubClass.getConstructors();
             return constructors[0].newInstance(new Object[]{proxyHelper});
         } catch (InvocationTargetException ite) {

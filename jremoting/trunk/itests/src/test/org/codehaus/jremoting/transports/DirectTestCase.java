@@ -50,6 +50,10 @@ public class DirectTestCase extends AbstractHelloTestCase {
 
     }
 
+    public void testHelloCall() throws Exception {
+        super.testHelloCall();  
+    }
+
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();

@@ -13,31 +13,6 @@ import org.jmock.Mock;
 
 public class AbstractStubFactoryTestCase extends MockObjectTestCase {
 
-    public void testBadStubClass() throws ConnectionException {
-
-        Mock hc = mock(HostContext.class);
-        Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
-        ih.expects(once()).method("initialize");
-        ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("handleInvocation").with(isA(LookupPublishedObject.class)).will(returnValue(new LookupResponse((long) 321)));
-
-        AbstractStubFactory factory = new AbstractStubFactory((HostContext) hc.proxy(), true) {
-            protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
-                return String.class;
-            }
-        };
-
-        try {
-            factory.lookupService("foo");
-            fail("should have barfed");
-        } catch (ConnectionException ce) {
-            assertEquals("Retreieved Stub class is not an instance of ProxyHelper", ce.getMessage());
-        }
-
-
-    }
-
     public void testOpenCloseSequence() throws ConnectionException {
 
         Mock hc = mock(HostContext.class);
