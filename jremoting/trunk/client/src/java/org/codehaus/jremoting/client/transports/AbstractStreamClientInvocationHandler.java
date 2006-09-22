@@ -25,7 +25,6 @@ import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.responses.ClientInvocationAbended;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
@@ -115,11 +114,6 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
                         long t2 = System.currentTimeMillis();
 
                         if (response.getResponseCode() >= 100) {
-                            // special case for callabcks.
-                            if (response.getResponseCode() == ResponseConstants.CLIENTABEND) {
-                                ClientInvocationAbended abendResponse = (ClientInvocationAbended) response;
-                                throw abendResponse.getIOException();
-                            }
 
                             if (response instanceof TryLater) {
                                 int millis = ((TryLater) response).getSuggestedDelayMillis();
