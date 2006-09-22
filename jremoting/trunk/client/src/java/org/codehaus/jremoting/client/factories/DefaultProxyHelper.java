@@ -421,7 +421,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
         this.clientContextClientFactory = clientContextClientFactory;
     }
 
-    private synchronized void setContext(AbstractPublishedNameRequest request) {
+    private synchronized void setContext(AbstractServiceRequest request) {
 
         if (clientContextClientFactory == null) {
             clientContextClientFactory = new DefaultClientContextFactory();

@@ -29,7 +29,7 @@ public class DynamicStub implements Proxy {
     /**
      * Name of the published obj for which this is a stub
      */
-    private String publishedName;
+    private String service;
     /**
      * ObjectName of the stub(facades have diff obj names)
      */
@@ -44,7 +44,7 @@ public class DynamicStub implements Proxy {
      * Constructor
      */
     public DynamicStub(String publishedName, String objectName, DefaultProxyHelper proxyHelper) {
-        this.publishedName = publishedName;
+        this.service = publishedName;
         this.objectName = objectName;
         this.proxyHelper = proxyHelper;
     }

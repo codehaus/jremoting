@@ -62,7 +62,7 @@ public class ProConClientTest {
         }
 
         //list
-        System.out.println("Listing Published Objects At Server...");
+        System.out.println("Listing services At Server...");
 
         String[] listOfPublishedObjectsOnServer = af.listServices();
 

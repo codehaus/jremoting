@@ -25,7 +25,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * AbstractRequest the list of remote methods within the published Object.
+ * AbstractRequest the list of remote methods within the service.
  *
  * @author <a href="mailto:vinayc@apache.org">Vinay Chandrasekharan</a>
  */
@@ -33,18 +33,18 @@ public final class ListInvokableMethods extends AbstractRequest {
 
     static final long serialVersionUID = 466389099971742704L;
     /**
-     * Name of the published object whose remote methods is sought
+     * Name of the service whose remote methods is sought
      */
-    private String publishedName;
+    private String service;
 
 
     /**
-     * Constructor .
+     * Constructor.
      *
      * @param publishedName
      */
     public ListInvokableMethods(String publishedName) {
-        this.publishedName = publishedName;
+        this.service = publishedName;
     }
 
     /**
@@ -53,15 +53,13 @@ public final class ListInvokableMethods extends AbstractRequest {
     public ListInvokableMethods() {
     }
 
-    //--------Methods---------------//
     /**
-     * Get the published objects name
+     * Get the service name
      */
-    public String getPublishedName() {
-        return publishedName;
+    public String getService() {
+        return service;
     }
 
-    //----AbstractRequest Override--//
     /**
      * Gets number that represents type for this class.
      * This is quicker than instanceof for type checking.
@@ -73,18 +71,11 @@ public final class ListInvokableMethods extends AbstractRequest {
         return RequestConstants.LISTMETHODSREQUEST;
     }
 
-    //----Externalizable Overrides---//
-    /**
-     * @see java.io.Externalizable#writeExternal(ObjectOutput)
-     */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(publishedName);
+        out.writeObject(service);
     }
 
-    /**
-     * @see java.io.Externalizable#readExternal(ObjectInput)
-     */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        publishedName = (String) in.readObject();
+        service = (String) in.readObject();
     }
 }

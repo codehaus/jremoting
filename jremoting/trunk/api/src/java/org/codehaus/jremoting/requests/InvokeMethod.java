@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.requests;
 
 import org.codehaus.jremoting.api.Contextualizable;
-import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
+import org.codehaus.jremoting.requests.AbstractServiceRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class InvokeMethod extends AbstractPublishedNameRequest implements Contextualizable {
+public class InvokeMethod extends AbstractServiceRequest implements Contextualizable {
     static final long serialVersionUID = -4850912985882914299L;
 
     private String methodSignature;
@@ -42,21 +42,21 @@ public class InvokeMethod extends AbstractPublishedNameRequest implements Contex
     /**
      * Constructor InvokeMethod
      *
-     * @param publishedServiceName the published service name
+     * @param service the service name
      * @param objectName           the object Name
      * @param methodSignature      the method signature
      * @param args                 an array of args for the method invocation
      * @param referenceID          the reference ID
-     * @param session              the session ID
+     * @param sessionID              the sessionID ID
      */
-    public InvokeMethod(String publishedServiceName, String objectName, String methodSignature, Object[] args, Long referenceID, Long session) {
+    public InvokeMethod(String service, String objectName, String methodSignature, Object[] args, Long referenceID, Long sessionID) {
 
-        super(publishedServiceName, objectName);
+        super(service, objectName);
 
         this.methodSignature = methodSignature;
         this.args = args;
         this.referenceID = referenceID;
-        this.session = session;
+        this.session = sessionID;
     }
 
     /**

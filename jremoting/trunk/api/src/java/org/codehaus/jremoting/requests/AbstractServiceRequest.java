@@ -24,26 +24,26 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class AbstractPublishedNameRequest
+ * Class AbstractServiceRequest
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractPublishedNameRequest extends AbstractRequest {
+public abstract class AbstractServiceRequest extends AbstractRequest {
     static final long serialVersionUID = 5995735372269955205L;
 
-    private String publishedServiceName;
+    private String service;
     private String objectName;
     private ClientContext context;
 
     /**
-     * Constructor AbstractPublishedNameRequest
+     * Constructor AbstractServiceRequest
      *
-     * @param publishedServiceName the published service name
-     * @param objectName           the object name within that
+     * @param service the published service name
+     * @param objectName the object name within that
      */
-    public AbstractPublishedNameRequest(String publishedServiceName, String objectName) {
-        this.publishedServiceName = publishedServiceName;
+    public AbstractServiceRequest(String service, String objectName) {
+        this.service = service;
         this.objectName = objectName;
     }
 
@@ -56,9 +56,9 @@ public abstract class AbstractPublishedNameRequest extends AbstractRequest {
     }
 
     /**
-     * Constructor AbstractPublishedNameRequest for Externalization
+     * Constructor AbstractServiceRequest for Externalization
      */
-    public AbstractPublishedNameRequest() {
+    public AbstractServiceRequest() {
     }
 
     /**
@@ -66,8 +66,8 @@ public abstract class AbstractPublishedNameRequest extends AbstractRequest {
      *
      * @return the published service name
      */
-    public String getPublishedServiceName() {
-        return publishedServiceName;
+    public String getService() {
+        return service;
     }
 
     /**
@@ -94,7 +94,7 @@ public abstract class AbstractPublishedNameRequest extends AbstractRequest {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(publishedServiceName);
+        out.writeObject(service);
         out.writeObject(objectName);
         out.writeObject(context);
     }
@@ -112,7 +112,7 @@ public abstract class AbstractPublishedNameRequest extends AbstractRequest {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        publishedServiceName = (String) in.readObject();
+        service = (String) in.readObject();
         objectName = (String) in.readObject();
         context = (ClientContext) in.readObject();
     }

@@ -28,33 +28,33 @@ public interface DynamicProxyGenerator {
     /**
      * Generate a proxy.
      *
-     * @param asName            the name of the generated proxy.  As used in lookup.
+     * @param service            the name of the generated proxy.  As used in lookup.
      * @param interfaceToExpose the princial lookupable interface
      * @param classLoader       - classloader containing all needed for proxy generation
      * @throws PublicationException if there is a problem publishing
      */
-    void generate(String asName, Class interfaceToExpose, ClassLoader classLoader) throws PublicationException;
+    void generate(String service, Class interfaceToExpose, ClassLoader classLoader) throws PublicationException;
 
     /**
      * Generate a proxy.
      *
-     * @param asName                 the name of the generated proxy.  As used in lookup.
+     * @param service                 the name of the generated proxy.  As used in lookup.
      * @param publicationDescription a descriptor detailing complex cases.
      * @param classLoader            - classloader containing all needed for proxy generation
      * @throws PublicationException if there is a problem publishing
      */
-    void generate(String asName, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException;
+    void generate(String service, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException;
 
     /**
      * Generate a proxy.  Deferred till a later moment for performance reasons (most of
      * use with javac generator)
      *
-     * @param asName                 the name of the generated proxy.  As used in lookup.
+     * @param service                 the name of the generated proxy.  As used in lookup.
      * @param publicationDescription a descriptor detailing complex cases.
      * @param classLoader            - classloader containing all needed for proxy generation
      * @throws PublicationException if there is a problem publishing
      */
-    void deferredGenerate(String asName, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException;
+    void deferredGenerate(String service, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException;
 
     /**
      * Generate the deferred proxies.

@@ -32,41 +32,41 @@ public interface Publisher {
      * Publish a object for subsequent lookup.
      *
      * @param impl              the object implementing the principle interface.
-     * @param asName            the lookup name of the published object
+     * @param service            the lookup name of the published object
      * @param interfaceToExpose the principal interface being published
      * @throws PublicationException if there is a problem publishing
      */
-    void publish(Object impl, String asName, Class interfaceToExpose) throws PublicationException;
+    void publish(Object impl, String service, Class interfaceToExpose) throws PublicationException;
 
     /**
      * Publish a object for subsequent lookup.
      *
      * @param impl                   the object implementing the principle interface.
-     * @param asName                 the lookup name of the published object
+     * @param service                 the lookup name of the published object
      * @param publicationDescription describing complex publishing cases.
      * @throws PublicationException if there is a problem publishing
      */
-    void publish(Object impl, String asName, PublicationDescription publicationDescription) throws PublicationException;
+    void publish(Object impl, String service, PublicationDescription publicationDescription) throws PublicationException;
 
     /**
      * UnPublish a previously published object.
      *
      * @param impl          the object implementing the principle interface.
-     * @param publishedName the lookup name of the published object
+     * @param service the lookup name of the published object
      * @throws org.codehaus.jremoting.server.PublicationException
      *          if there is a problem publishing
      */
-    void unPublish(Object impl, String publishedName) throws PublicationException;
+    void unPublish(Object impl, String service) throws PublicationException;
 
     /**
      * Replace Published object with another.
      *
      * @param oldImpl       the old object implementing the principle interface.
-     * @param publishedName the lookup name of the published object
+     * @param service the lookup name of the published object
      * @param withImpl      the new object implementing the principle interface.
      * @throws PublicationException if there is a problem publishing
      */
-    void replacePublished(Object oldImpl, String publishedName, Object withImpl) throws PublicationException;
+    void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException;
 
     /**
      * Get the MethodInvocationHandler for this transport.  Used in special adapters.
@@ -80,8 +80,8 @@ public interface Publisher {
     /**
      * Get the MethodInvocationHandler for a published lookup name. Used in special adapters.
      *
-     * @param publishedName the published lookup name.
+     * @param service the published lookup name.
      * @return a suitable MethodInvocationHandler
      */
-    MethodInvocationHandler getMethodInvocationHandler(String publishedName);
+    MethodInvocationHandler getMethodInvocationHandler(String service);
 }

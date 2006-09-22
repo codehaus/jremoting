@@ -27,7 +27,7 @@ import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.NotPublished;
-import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
+import org.codehaus.jremoting.requests.AbstractServiceRequest;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 import org.codehaus.jremoting.responses.*;
@@ -115,9 +115,9 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
                             } else if (response instanceof NoSuchSession) {
                                 throw new NoSuchSessionException(((NoSuchSession) response).getSessionID());
                             } else if (response instanceof NotPublished) {
-                                AbstractPublishedNameRequest pnr = (AbstractPublishedNameRequest) request;
+                                AbstractServiceRequest pnr = (AbstractServiceRequest) request;
 
-                                throw new NotPublishedException(pnr.getPublishedServiceName(), pnr.getObjectName());
+                                throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
                             }
                         }
                     } catch (IOException ioe) {

@@ -132,48 +132,48 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * Publish an object via its interface
      *
      * @param impl              The implementation
-     * @param asName            as this name.
+     * @param service            as this name.
      * @param interfaceToExpose The interface to expose.
      * @throws org.codehaus.jremoting.server.PublicationException
      *          if an error during publication.
      */
-    public void publish(Object impl, String asName, Class interfaceToExpose) throws PublicationException {
-        invocationHandlerAdapter.publish(impl, asName, interfaceToExpose);
+    public void publish(Object impl, String service, Class interfaceToExpose) throws PublicationException {
+        invocationHandlerAdapter.publish(impl, service, interfaceToExpose);
     }
 
     /**
      * Publish an object via its publication description
      *
      * @param impl                   The implementation
-     * @param asName                 as this name.
+     * @param service                 as this name.
      * @param publicationDescription The publication description.
      * @throws PublicationException if an error during publication.
      */
-    public void publish(Object impl, String asName, PublicationDescription publicationDescription) throws PublicationException {
-        invocationHandlerAdapter.publish(impl, asName, publicationDescription);
+    public void publish(Object impl, String service, PublicationDescription publicationDescription) throws PublicationException {
+        invocationHandlerAdapter.publish(impl, service, publicationDescription);
     }
 
     /**
      * UnPublish an object.
      *
      * @param impl   The implementation
-     * @param asName as this name.
+     * @param service as this name.
      * @throws PublicationException if an error during publication.
      */
-    public void unPublish(Object impl, String asName) throws PublicationException {
-        invocationHandlerAdapter.unPublish(impl, asName);
+    public void unPublish(Object impl, String service) throws PublicationException {
+        invocationHandlerAdapter.unPublish(impl, service);
     }
 
     /**
-     * Replace the server side instance of a published object
+     * Replace the server side instance of a service
      *
      * @param oldImpl       The previous implementation.
-     * @param publishedName The name it is published as.
+     * @param service The name it is published as.
      * @param withImpl      The impl to superceed.
      * @throws PublicationException if an error during publication.
      */
-    public void replacePublished(Object oldImpl, String publishedName, Object withImpl) throws PublicationException {
-        invocationHandlerAdapter.replacePublished(oldImpl, publishedName, withImpl);
+    public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
+        invocationHandlerAdapter.replacePublished(oldImpl, service, withImpl);
     }
 
     /**
@@ -190,11 +190,11 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
     /**
      * Get the MethodInvocationHandler for a particular published name.
      *
-     * @param publishedName The published name.
+     * @param service The published name.
      * @return The Method invocation handler
      */
-    public MethodInvocationHandler getMethodInvocationHandler(String publishedName) {
-        return invocationHandlerAdapter.getMethodInvocationHandler(publishedName);
+    public MethodInvocationHandler getMethodInvocationHandler(String service) {
+        return invocationHandlerAdapter.getMethodInvocationHandler(service);
     }
 
     /**

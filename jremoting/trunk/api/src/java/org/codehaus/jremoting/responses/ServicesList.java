@@ -53,7 +53,7 @@ public final class ServicesList extends AbstractResponse {
     /**
      * Get the reference ID.
      *
-     * @return the list of published Objects
+     * @return the list of services
      */
     public String[] getServices() {
         return services;

@@ -33,7 +33,7 @@ import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.requests.RequestConstants;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.responses.TryLater;
-import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
+import org.codehaus.jremoting.requests.AbstractServiceRequest;
 import org.codehaus.jremoting.requests.AbstractRequest;
 
 import java.net.MalformedURLException;
@@ -136,9 +136,9 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
                     } else if (response instanceof NoSuchReference) {
                         throw new NoSuchReferenceException(((NoSuchReference) response).getReferenceID());
                     } else if (response instanceof NotPublished) {
-                        AbstractPublishedNameRequest pnr = (AbstractPublishedNameRequest) request;
+                        AbstractServiceRequest pnr = (AbstractServiceRequest) request;
 
-                        throw new NotPublishedException(pnr.getPublishedServiceName(), pnr.getObjectName());
+                        throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
                     }
                 }
             } catch (RemoteException re) {

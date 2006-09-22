@@ -62,30 +62,30 @@ public class PublicationAdapter implements Publisher {
      * Publish an Object
      *
      * @param impl              The implementaion to publish
-     * @param asName            as this name.
+     * @param service            as this name.
      * @param interfaceToExpose The interface to expose.
      * @throws org.codehaus.jremoting.server.PublicationException
      *          if a problem during publication.
      */
-    public void publish(Object impl, String asName, Class interfaceToExpose) throws PublicationException {
-        publish(impl, asName, new PublicationDescription(interfaceToExpose));
+    public void publish(Object impl, String service, Class interfaceToExpose) throws PublicationException {
+        publish(impl, service, new PublicationDescription(interfaceToExpose));
     }
 
     /**
      * Publish an object
      *
      * @param impl                   The implementaion to publish
-     * @param asName                 as this name.
+     * @param service                 as this name.
      * @param publicationDescription a description of the publication.
      * @throws PublicationException if a problem during publication.
      */
-    public void publish(Object impl, String asName, PublicationDescription publicationDescription) throws PublicationException {
+    public void publish(Object impl, String service, PublicationDescription publicationDescription) throws PublicationException {
 
         PublicationDescriptionItem[] interfacesToExpose = publicationDescription.getInterfacesToExpose();
         PublicationDescriptionItem[] additionalFacades = publicationDescription.getAdditionalFacades();
 
-        if (services.containsKey(asName + "_Main")) {
-            throw new PublicationException("Service '" + asName + "' already published");
+        if (services.containsKey(service + "_Main")) {
+            throw new PublicationException("Service '" + service + "' already published");
         }
 
         String[] interfaceNames = new String[interfacesToExpose.length];
@@ -96,7 +96,7 @@ public class PublicationAdapter implements Publisher {
 
         // add method maps for main lookup-able service.
         HashMap mainMethodMap = new HashMap();
-        DefaultMethodInvocationHandler mainMethodInvocationHandler = new DefaultMethodInvocationHandler(this, asName + "_Main", mainMethodMap, publicationDescription);
+        DefaultMethodInvocationHandler mainMethodInvocationHandler = new DefaultMethodInvocationHandler(this, service + "_Main", mainMethodMap, publicationDescription);
 
         mainMethodInvocationHandler.addImplementationBean(new Long(0), impl);
 
@@ -129,14 +129,14 @@ public class PublicationAdapter implements Publisher {
         }
 
         // as the main service is lookup-able, it has a prexisting impl.
-        services.put(asName + "_Main", mainMethodInvocationHandler);
+        services.put(service + "_Main", mainMethodInvocationHandler);
 
         // add method maps for all the additional facades.
         for (int x = 0; x < additionalFacades.length; x++) {
             Class facadeClass = additionalFacades[x].getFacadeClass();
             String encodedClassName = MethodNameHelper.encodeClassName(additionalFacades[x].getFacadeClass().getName());
             HashMap methodMap = new HashMap();
-            MethodInvocationHandler methodInvocationHandler = new DefaultMethodInvocationHandler(this, asName + "_" + encodedClassName, methodMap, publicationDescription);
+            MethodInvocationHandler methodInvocationHandler = new DefaultMethodInvocationHandler(this, service + "_" + encodedClassName, methodMap, publicationDescription);
 
             Method methods[] = null;
             try {
@@ -163,7 +163,7 @@ public class PublicationAdapter implements Publisher {
                 }
             }
 
-            services.put(asName + "_" + encodedClassName, methodInvocationHandler);
+            services.put(service + "_" + encodedClassName, methodInvocationHandler);
         }
     }
 
@@ -171,33 +171,33 @@ public class PublicationAdapter implements Publisher {
      * UnPublish an object
      *
      * @param impl          the object to unpublish
-     * @param publishedName The name it was published as
+     * @param service The name it was published as
      * @throws PublicationException if a problem during publication.
      */
-    public void unPublish(Object impl, String publishedName) throws PublicationException {
+    public void unPublish(Object impl, String service) throws PublicationException {
 
-        if (!services.containsKey(publishedName + "_Main")) {
-            throw new PublicationException("Service '" + publishedName + "' not published");
+        if (!services.containsKey(service + "_Main")) {
+            throw new PublicationException("Service '" + service + "' not published");
         }
 
-        services.remove(publishedName + "_Main");
+        services.remove(service + "_Main");
     }
 
     /**
      * Replace a published impl
      *
      * @param oldImpl       the old published object
-     * @param publishedName The name it was published as
+     * @param service The name it was published as
      * @param withImpl      The new published impl
      * @throws PublicationException if a problem during publication.
      */
-    public void replacePublished(Object oldImpl, String publishedName, Object withImpl) throws PublicationException {
+    public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
 
-        if (!services.containsKey(publishedName + "_Main")) {
-            throw new PublicationException("Service '" + publishedName + "' not published");
+        if (!services.containsKey(service + "_Main")) {
+            throw new PublicationException("Service '" + service + "' not published");
         }
 
-        MethodInvocationHandler asih = (MethodInvocationHandler) services.get(publishedName + "_Main");
+        MethodInvocationHandler asih = (MethodInvocationHandler) services.get(service + "_Main");
 
         asih.replaceImplementationBean(oldImpl, withImpl);
     }
@@ -210,16 +210,16 @@ public class PublicationAdapter implements Publisher {
      * @return the method invoation handler
      */
     public MethodInvocationHandler getMethodInvocationHandler(InvokeMethod invokeMethod, String objectName) {
-        return (MethodInvocationHandler) services.get(invokeMethod.getPublishedServiceName() + "_" + objectName);
+        return (MethodInvocationHandler) services.get(invokeMethod.getService() + "_" + objectName);
     }
 
     /**
      * Get a method's InvocationHandler
      *
-     * @param publishedName The name of a published object
+     * @param service The name of a published object
      * @return the method invoation handler
      */
-    public MethodInvocationHandler getMethodInvocationHandler(String publishedName) {
-        return (MethodInvocationHandler) services.get(publishedName);
+    public MethodInvocationHandler getMethodInvocationHandler(String service) {
+        return (MethodInvocationHandler) services.get(service);
     }
 }

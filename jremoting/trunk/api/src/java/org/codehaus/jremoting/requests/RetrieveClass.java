@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
+import org.codehaus.jremoting.requests.AbstractServiceRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 
 
@@ -27,7 +27,7 @@ import org.codehaus.jremoting.requests.RequestConstants;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class RetrieveClass extends AbstractPublishedNameRequest {
+public final class RetrieveClass extends AbstractServiceRequest {
     static final long serialVersionUID = -6035363236398357203L;
 
     /**

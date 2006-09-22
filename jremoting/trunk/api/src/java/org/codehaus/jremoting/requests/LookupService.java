@@ -19,7 +19,7 @@ package org.codehaus.jremoting.requests;
 
 import org.codehaus.jremoting.api.Authentication;
 import org.codehaus.jremoting.api.Sessionable;
-import org.codehaus.jremoting.requests.AbstractPublishedNameRequest;
+import org.codehaus.jremoting.requests.AbstractServiceRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class LookupService extends AbstractPublishedNameRequest implements Sessionable {
+public final class LookupService extends AbstractServiceRequest implements Sessionable {
     static final long serialVersionUID = 7509584735319760230L;
 
     private Authentication authentication;

@@ -52,37 +52,37 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
     /**
      * Method generate
      *
-     * @param asName            the name to generate as
+     * @param service            the name to generate as
      * @param interfaceToExpose the interfaces to expose.
      * @param classLoader       the classloader to use during generation.
      * @throws PublicationException if the generation failed.
      */
-    public void generate(String asName, Class interfaceToExpose, ClassLoader classLoader) throws PublicationException {
-        generateProxy(asName, new PublicationDescription(interfaceToExpose), classLoader, false);
+    public void generate(String service, Class interfaceToExpose, ClassLoader classLoader) throws PublicationException {
+        generateProxy(service, new PublicationDescription(interfaceToExpose), classLoader, false);
     }
 
     /**
      * Method generate
      *
-     * @param asName                 the name to generate as
+     * @param service                 the name to generate as
      * @param publicationDescription the description of the publication
      * @param classLoader            the class loader to use.
      * @throws PublicationException if the generation failed.
      */
-    public void generate(String asName, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException {
-        generateProxy(asName, publicationDescription, classLoader, false);
+    public void generate(String service, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException {
+        generateProxy(service, publicationDescription, classLoader, false);
     }
 
     /**
      * Method deferredGenerate
      *
-     * @param asName                 the name of the clas to generate
+     * @param service                 the name of the clas to generate
      * @param publicationDescription the description of the publication
      * @param classLoader            the class loader to use.
      * @throws PublicationException if the generation failed.
      */
-    public void deferredGenerate(String asName, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException {
-        generateProxy(asName, publicationDescription, classLoader, true);
+    public void deferredGenerate(String service, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException {
+        generateProxy(service, publicationDescription, classLoader, true);
     }
 
     /**
@@ -115,12 +115,12 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
     /**
      * Method getProxyClassBytes
      *
-     * @param publishedName the name to publish as
+     * @param service the name to publish as
      * @return the byte array for the proxy class
      * @throws StubRetrievalException if the class cannot be retrieved.
      */
-    public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
-        return getThingBytes("JRemotingGenerated" + publishedName);
+    public final byte[] getStubClassBytes(String service) throws StubRetrievalException {
+        return getThingBytes("JRemotingGenerated" + service);
     }
 
     /**
@@ -164,7 +164,7 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
         return baos.toByteArray();
     }
 
-    private void generateProxy(String asName, PublicationDescription publicationDescription, ClassLoader classLoader, boolean deferred) throws PublicationException {
+    private void generateProxy(String service, PublicationDescription publicationDescription, ClassLoader classLoader, boolean deferred) throws PublicationException {
 
         if (classLoader == null) {
             classLoader = this.getClass().getClassLoader();
@@ -187,7 +187,7 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
         }
 
         proxyGenerator.setClassGenDir(classGenDir);
-        proxyGenerator.setGenName(asName);
+        proxyGenerator.setGenName(service);
         proxyGenerator.setClasspath(classpath);
         proxyGenerator.setInterfacesToExpose(interfacesToExpose);
         proxyGenerator.setAdditionalFacades(addInfs);
@@ -199,7 +199,7 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
             System.err.println("** Exception while making source : ");
             System.err.flush();
             t.printStackTrace();
-            System.err.println("** Name=" + asName);
+            System.err.println("** Name=" + service);
             System.err.println("** Classes/Interfaces to Expose..");
 
             for (int i = 0; i < interfacesToExpose.length; i++) {
@@ -235,7 +235,7 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
                 System.err.flush();
                 t.printStackTrace();
                 System.err.println("** ClassDir=" + classGenDir);
-                System.err.println("** Name=" + asName);
+                System.err.println("** Name=" + service);
                 System.err.println("** CLasspath=" + classpath);
                 System.err.println("** Classes/Interfaces to Expose..");
 
@@ -261,7 +261,7 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
         org.codehaus.jremoting.server.ProxyGenerator proxyGenerator;
 
         try {
-            proxyGenerator = (org.codehaus.jremoting.server.ProxyGenerator) generatorClass.newInstance();
+            proxyGenerator = (ProxyGenerator) generatorClass.newInstance();
         } catch (InstantiationException e) {
             throw new RuntimeException("ProxyGenerator cannot be instantiated.");
         } catch (IllegalAccessException e) {

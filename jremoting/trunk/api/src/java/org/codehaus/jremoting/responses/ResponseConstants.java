@@ -67,7 +67,7 @@ public interface ResponseConstants {
     int SAMEVMRESPONSE = 11;
 
 	/**
-     * The list of remote methods within the published Object
+     * The list of remote methods within the service
      */
     int LISTMETHODSRESPONSE=12;
 
