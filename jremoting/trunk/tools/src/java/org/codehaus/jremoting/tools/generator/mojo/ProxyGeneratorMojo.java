@@ -28,7 +28,6 @@ import java.util.List;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.jremoting.server.ProxyGenerationException;
 import org.codehaus.jremoting.server.ProxyGenerator;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 
@@ -145,9 +144,6 @@ public class ProxyGeneratorMojo
                     + e.getMessage(), e);
         } catch (MalformedURLException e) {
             throw new MojoExecutionException("Malformed classpath URLs: "
-                    + e.getMessage(), e);
-        } catch (ProxyGenerationException e) {
-            throw new MojoExecutionException("Proxy generation error: "
                     + e.getMessage(), e);
         }
     }

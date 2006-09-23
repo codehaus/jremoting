@@ -22,7 +22,6 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
-import org.codehaus.jremoting.server.ProxyGenerationException;
 import org.codehaus.jremoting.server.ProxyGenerator;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 
@@ -236,8 +235,6 @@ public class ProxyGeneratorTask extends Task {
             cnfe.printStackTrace();
 
             throw new BuildException("Class not found : " + cnfe.getMessage());
-        } catch (ProxyGenerationException sge) {
-            throw new BuildException("Proxy Gerneation error : " + sge.getMessage());
         }
     }
 

@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.tools.generator;
 
-import org.codehaus.jremoting.server.ProxyGenerationException;
 import org.codehaus.jremoting.server.ProxyGenerator;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 
@@ -202,9 +201,8 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      * Gernerate the source for the proxy class.
      *
      * @param classLoader the classloader to use while making the source.
-     * @throws ProxyGenerationException if an error during generation
      */
-    public void generateSrc(ClassLoader classLoader) throws ProxyGenerationException {
+    public void generateSrc(ClassLoader classLoader) {
         // default impl
     }
 

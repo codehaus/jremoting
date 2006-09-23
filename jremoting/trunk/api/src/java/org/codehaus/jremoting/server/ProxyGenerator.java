@@ -65,10 +65,8 @@ public interface ProxyGenerator {
      * Generate source
      *
      * @param classLoader the classloader active during generation of source.
-     * @throws org.codehaus.jremoting.server.ProxyGenerationException
-     *          for when source generation has failed.
      */
-    void generateSrc(ClassLoader classLoader) throws ProxyGenerationException;
+    void generateSrc(ClassLoader classLoader);
 
     /**
      * Generate class
