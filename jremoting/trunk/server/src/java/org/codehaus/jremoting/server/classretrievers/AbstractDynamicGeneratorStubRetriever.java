@@ -217,18 +217,6 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
                 //proxyGenerator.setClasspath(AbstractRequest.class.getProtectionDomain().getCodeSource().getLocation().getFile());
                 proxyGenerator.generateClass(classLoader);
             } catch (Throwable t) {
-                if ((t instanceof NoClassDefFoundError) && t.getMessage().equals("sun/tools/javac/Main")) {
-                    System.err.println("********************************************");
-                    System.err.println("*                                          *");
-                    System.err.println("* JRemoting problem......     *");
-                    System.err.println("* Please copy JAVA_HOME/lib/tools.jar      *");
-                    System.err.println("* to your applications classpath so      *");
-                    System.err.println("* that proxys can be compiled.             *");
-                    System.err.println("*                                          *");
-                    System.err.println("********************************************");
-
-                    throw new ProxyGenerationEnvironmentException("tools.jar not found in classpath.");
-                }
 
                 System.err.println("******");
                 System.err.println("** Exception while making String : ");
