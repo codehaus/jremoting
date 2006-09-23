@@ -63,7 +63,7 @@ public class BouncingServerTestCase extends TestCase {
 
             // Client side setup
             HostContext hostContext = new SocketCustomStreamHostContext("127.0.0.1", 12201);
-            factory = new ClientSideStubFactory(hostContext, false);
+            factory = new ClientSideStubFactory(hostContext);
             ClientInvocationHandler ih = hostContext.getInvocationHandler();
             TestInterface testClient = (TestInterface) factory.lookupService("Hello55");
 

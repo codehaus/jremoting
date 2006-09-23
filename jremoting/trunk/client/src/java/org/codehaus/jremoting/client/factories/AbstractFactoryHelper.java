@@ -50,12 +50,12 @@ public abstract class AbstractFactoryHelper implements InterfaceLookupFactory {
         return retval;
     }
 
-    protected Factory createFactory(String type, HostContext hostContext, boolean optimize) throws ConnectionException {
+    protected Factory createFactory(String type, HostContext hostContext) throws ConnectionException {
 
         if (type.equalsIgnoreCase("s")) {
-            return new ServerSideStubFactory(hostContext, optimize);
+            return new ServerSideStubFactory(hostContext);
         } else if (type.equalsIgnoreCase("c")) {
-            return new ClientSideStubFactory(hostContext, optimize);
+            return new ClientSideStubFactory(hostContext);
         } else {
             return null;
         }
@@ -69,8 +69,8 @@ public abstract class AbstractFactoryHelper implements InterfaceLookupFactory {
      * @return
      * @throws ConnectionException
      */
-    public final InterfaceLookup getInterfaceLookup(String factoryString, boolean optimize) throws ConnectionException {
-        return getInterfaceLookup(factoryString, this.getClass().getClassLoader(), optimize);
+    public final InterfaceLookup getInterfaceLookup(String factoryString) throws ConnectionException {
+        return getInterfaceLookup(factoryString, this.getClass().getClassLoader());
     }
 
 

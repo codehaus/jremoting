@@ -41,19 +41,17 @@ public interface InterfaceLookupFactory {
      * - "C" for client side proxy classes
      *
      * @param factoryString
-     * @param optimize
      * @return
      */
-    InterfaceLookup getInterfaceLookup(String factoryString, boolean optimize) throws ConnectionException;
+    InterfaceLookup getInterfaceLookup(String factoryString) throws ConnectionException;
 
     /**
      * Method getInterfaceLookup
      *
      * @param factoryString
      * @param interfacesClassLoader
-     * @param optimize
      * @return
      * @throws ConnectionException
      */
-    InterfaceLookup getInterfaceLookup(String factoryString, ClassLoader interfacesClassLoader, boolean optimize) throws ConnectionException;
+    InterfaceLookup getInterfaceLookup(String factoryString, ClassLoader interfacesClassLoader) throws ConnectionException;
 }

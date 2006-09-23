@@ -53,7 +53,7 @@ public class PipedCustomStreamTestCase extends AbstractHelloTestCase {
         ((PipedCustomStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        factory = new ClientSideStubFactory(new PipedCustomStreamHostContext(in, out), false);
+        factory = new ClientSideStubFactory(new PipedCustomStreamHostContext(in, out));
         testClient = (TestInterface) factory.lookupService("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with

@@ -41,7 +41,6 @@ import java.util.Vector;
 public class InvocationHandlerAdapter extends PublicationAdapter implements ServerInvocationHandler {
 
     private static long c_session = 0;
-    private static final UID U_ID = new UID((short) 20729);
     private Long lastSession = new Long(0);
     private final HashMap sessions = new HashMap();
     private boolean suspend = false;
@@ -100,8 +99,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
                 return doClassRequest(request);
 
             } else if (request.getRequestCode() == RequestConstants.OPENCONNECTIONREQUEST) {
-                OpenConnection openConnection = (OpenConnection) request;
-                return doOpenConnectionRequest(openConnection.getMachineID());
+                return doOpenConnectionRequest();
 
             } else if (request.getRequestCode() == RequestConstants.CLOSECONNECTIONREQUEST) {
                 CloseConnection closeConnection = (CloseConnection) request;
@@ -328,12 +326,6 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     }
 
 
-    /**
-     * DO a lokkup request
-     *
-     * @param request The request
-     * @return The reply
-     */
     private AbstractResponse doLookupRequest(AbstractRequest request) {
         LookupService lr = (LookupService) request;
         String publishedServiceName = lr.getService();
@@ -375,15 +367,11 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      *
      * @return The reply.
      */
-    private AbstractResponse doOpenConnectionRequest(UID machineID) {
-        if (machineID != null && machineID.equals(U_ID)) {
-            return new SameVMResponse();
-        } else {
-            Long session = getNewSession();
-            sessions.put(session, new Session(session));
-            String textToSign = authenticator == null ? "" : authenticator.getTextToSign();
-            return new ConnectionOpened(textToSign, session);
-        }
+    private AbstractResponse doOpenConnectionRequest() {
+        Long session = getNewSession();
+        sessions.put(session, new Session(session));
+        String textToSign = authenticator == null ? "" : authenticator.getTextToSign();
+        return new ConnectionOpened(textToSign, session);
     }
 
     private AbstractResponse doCloseConnectionRequest(Long sessionID) {

@@ -45,7 +45,7 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ClientSideStubFactory(new DirectMarshalledHostContext((DirectMarshalledServer) server), false);
+        factory = new ClientSideStubFactory(new DirectMarshalledHostContext((DirectMarshalledServer) server));
 
         testClient = (TestInterface) factory.lookupService("Hello");
 

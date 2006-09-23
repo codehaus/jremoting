@@ -24,7 +24,7 @@ import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostCon
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.AbstractDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -66,7 +66,7 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
 
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ExecutorService executor = Executors.newCachedThreadPool();
-        server = new SelfContainedSocketStreamServer(stubRetriever, new DefaultAuthenticator(),
+        server = new SelfContainedSocketStreamServer(stubRetriever, new NullAuthenticator(),
                 serverMonitor, new ServerCustomStreamDriver(serverMonitor, executor), executor,
                 ccf, 11003);
 
@@ -78,7 +78,7 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        factory = new ServerSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 11003), false);
+        factory = new ServerSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 11003));
         testClient = (AsyncTest) factory.lookupService("AsyncTest");
 
         // just a kludge for unit testing given we are intrinsically dealing with

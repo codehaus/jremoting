@@ -53,11 +53,11 @@ public class SocketObjectStreamFactoryHelper extends AbstractFactoryHelper {
      * @param interfacesClassLoader
      * @return
      */
-    public InterfaceLookup getInterfaceLookup(String factoryString, ClassLoader interfacesClassLoader, boolean optimize) throws ConnectionException {
+    public InterfaceLookup getInterfaceLookup(String factoryString, ClassLoader interfacesClassLoader) throws ConnectionException {
         // TODO maybe we should cache these.  Or the abstract parent class should.
         String[] terms = processFactoryString(factoryString);
         HostContext hc = new SocketObjectStreamHostContext(executor, clientMonitor, connectionPinger, interfacesClassLoader, terms[1], Integer.parseInt(terms[2]));
-        Factory af = createFactory(terms[3], hc, optimize);
+        Factory af = createFactory(terms[3], hc);
 
         return af;
     }

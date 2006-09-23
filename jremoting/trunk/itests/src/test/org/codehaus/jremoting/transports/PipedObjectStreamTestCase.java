@@ -77,7 +77,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         ((PipedObjectStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        factory = new ClientSideStubFactory(new PipedObjectStreamHostContext(in, out), false);
+        factory = new ClientSideStubFactory(new PipedObjectStreamHostContext(in, out));
         testClient = (TestInterface) factory.lookupService("Hello33");
 
         // just a kludge for unit testing given we are intrinsically dealing with

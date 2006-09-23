@@ -6,7 +6,7 @@ import org.codehaus.jremoting.server.transports.ServerXStreamDriver;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketXStreamHostContext;
@@ -27,7 +27,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         // server side setup.
         ExecutorService executor = Executors.newCachedThreadPool();
         ConsoleServerMonitor serverMonitor = new ConsoleServerMonitor();
-        server = new SelfContainedSocketStreamServer(new NoStubRetriever(), new DefaultAuthenticator(), serverMonitor,
+        server = new SelfContainedSocketStreamServer(new NoStubRetriever(), new NullAuthenticator(), serverMonitor,
                 new ServerXStreamDriver(serverMonitor, executor), executor, new DefaultServerSideClientContextFactory(), 10099);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -35,7 +35,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ClientSideStubFactory(new SocketXStreamHostContext("127.0.0.1", 10099), false);
+        factory = new ClientSideStubFactory(new SocketXStreamHostContext("127.0.0.1", 10099));
         testClient = (TestInterface) factory.lookupService("Hello");
 
     }

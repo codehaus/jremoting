@@ -54,7 +54,7 @@ public class ProConServerTest {
         }
 
         if (args[0].equals("S")) {
-            //as = new SelfContainedSocketCustomStreamServer(new JarFileStubRetriever("build/classes2"), new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), 1235);
+            //as = new SelfContainedSocketCustomStreamServer(new JarFileStubRetriever("build/classes2"), new NullAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), 1235);
         }
 
         //provider

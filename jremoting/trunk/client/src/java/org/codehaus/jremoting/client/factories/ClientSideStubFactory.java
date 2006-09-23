@@ -29,12 +29,12 @@ import org.codehaus.jremoting.client.HostContext;
 public class ClientSideStubFactory extends AbstractStubFactory {
     private ClassLoader classLoader;
 
-    public ClientSideStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
-        super(hostContext, allowOptimize);
+    public ClientSideStubFactory(HostContext hostContext) throws ConnectionException {
+        super(hostContext);
     }
 
-    public ClientSideStubFactory(HostContext hostContext, boolean allowOptimize, ClassLoader classLoader) throws ConnectionException {
-        super(hostContext, allowOptimize);
+    public ClientSideStubFactory(HostContext hostContext, ClassLoader classLoader) throws ConnectionException {
+        super(hostContext);
         this.classLoader = classLoader;
     }
 

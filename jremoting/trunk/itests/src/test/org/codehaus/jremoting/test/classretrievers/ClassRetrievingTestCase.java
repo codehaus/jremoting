@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.piped.PipedCustomStreamHostContext;
-import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.AbstractDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
@@ -50,7 +50,7 @@ public class ClassRetrievingTestCase extends TestCase {
 
         // server side setup.
         AbstractDynamicGeneratorStubRetriever dyncgen = new BcelDynamicGeneratorStubRetriever();
-        server = new PipedCustomStreamServer(dyncgen, new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
+        server = new PipedCustomStreamServer(dyncgen, new NullAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
         testServer = new TestImpl();
         server.publish(testServer, "Kewl", TestInterface.class);
         dyncgen.generate("Kewl", TestInterface.class, this.getClass().getClassLoader());
@@ -63,7 +63,7 @@ public class ClassRetrievingTestCase extends TestCase {
         ((PipedCustomStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        Factory af = new ServerSideStubFactory(new PipedCustomStreamHostContext(in, out), false);
+        Factory af = new ServerSideStubFactory(new PipedCustomStreamHostContext(in, out));
         testClient = (TestInterface) af.lookupService("Kewl");
 
         // just a kludge for unit testing given we are intrinsically dealing with

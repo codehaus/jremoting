@@ -73,7 +73,7 @@ public class MemoryLeakClientTst {
 
         System.out.println("Memory Leak Client");
 
-        Factory af = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 1277), false);
+        Factory af = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 1277));
 
         MemoryLeak ml = (MemoryLeak) af.lookupService("MemLeak");
 

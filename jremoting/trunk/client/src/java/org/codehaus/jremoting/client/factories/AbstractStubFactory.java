@@ -46,7 +46,6 @@ import java.util.HashMap;
  */
 public abstract class AbstractStubFactory implements Factory {
 
-    private static final UID U_ID = new UID((short) 20729);
     private static final int STEM_LEN = "JRemotingGenerated".length();
     private static Class[] stubParams = new Class[] {ProxyHelper.class};
     protected final ClientInvocationHandler clientInvocationHandler;
@@ -55,17 +54,11 @@ public abstract class AbstractStubFactory implements Factory {
     protected final Long sessionID;
 
 
-    public AbstractStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
+    public AbstractStubFactory(HostContext hostContext) throws ConnectionException {
         clientInvocationHandler = hostContext.getInvocationHandler();
         clientInvocationHandler.initialize();
 
-        UID machineID = allowOptimize ? U_ID : null;
-
-        if (!(hostContext instanceof AbstractSocketStreamHostContext)) {
-            machineID = null;
-        }
-
-        AbstractResponse response = clientInvocationHandler.handleInvocation(new OpenConnection(machineID));
+        AbstractResponse response = clientInvocationHandler.handleInvocation(new OpenConnection());
         if (response instanceof ConnectionOpened) {
             textToSign = ((ConnectionOpened) response).getTextToSign();
             sessionID = ((ConnectionOpened) response).getSessionID();

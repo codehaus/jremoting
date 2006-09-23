@@ -51,7 +51,7 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketObjectStreamHostContext("127.0.0.1", 12001), false);
+            factory = new ClientSideStubFactory(new SocketObjectStreamHostContext("127.0.0.1", 12001));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
@@ -90,7 +90,7 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 12002), false);
+            factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 12002));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
@@ -130,7 +130,7 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new RmiHostContext("127.0.0.1", 12003), false);
+            factory = new ClientSideStubFactory(new RmiHostContext("127.0.0.1", 12003));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
@@ -169,7 +169,7 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 12004), false);
+            factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 12004));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with

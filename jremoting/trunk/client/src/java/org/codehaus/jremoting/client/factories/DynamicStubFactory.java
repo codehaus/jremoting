@@ -30,8 +30,8 @@ import org.codehaus.jremoting.client.HostContext;
  */
 public class DynamicStubFactory extends AbstractStubFactory {
 
-    public DynamicStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
-        super(hostContext, allowOptimize);
+    public DynamicStubFactory(HostContext hostContext) throws ConnectionException {
+        super(hostContext);
     }
 
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {

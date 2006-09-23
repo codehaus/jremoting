@@ -37,8 +37,8 @@ public class ServerSideStubFactory extends AbstractStubFactory {
 
     private final HashMap publishedServiceClassLoaders = new HashMap();
 
-    public ServerSideStubFactory(HostContext hostContext, boolean allowOptimize) throws ConnectionException {
-        super(hostContext, allowOptimize);
+    public ServerSideStubFactory(HostContext hostContext) throws ConnectionException {
+        super(hostContext);
     }
 
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {

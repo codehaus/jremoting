@@ -21,7 +21,7 @@ import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -61,7 +61,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         stubRetriever.setClassGenDir(class_gen_dir);
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ExecutorService executor = Executors.newCachedThreadPool();
-        server = new SelfContainedSocketStreamServer(stubRetriever, new DefaultAuthenticator(), serverMonitor, new ServerCustomStreamDriver(serverMonitor, executor), executor, new DefaultServerSideClientContextFactory(), 10001);
+        server = new SelfContainedSocketStreamServer(stubRetriever, new NullAuthenticator(), serverMonitor, new ServerCustomStreamDriver(serverMonitor, executor), executor, new DefaultServerSideClientContextFactory(), 10001);
 
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -70,7 +70,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ServerSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 10001), false);
+        factory = new ServerSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 10001));
         testClient = (TestInterface) factory.lookupService("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with

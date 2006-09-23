@@ -6,7 +6,7 @@ import org.codehaus.jremoting.server.ServerException;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.responses.ConnectionOpened;
@@ -24,7 +24,7 @@ public class AbstractServerTestCase extends MockObjectTestCase {
     private AbstractServer server;
     protected void setUp() throws Exception {
 
-        iha = new InvocationHandlerAdapter(new NoStubRetriever(), new DefaultAuthenticator(), new ConsoleServerMonitor(), new DefaultServerSideClientContextFactory());
+        iha = new InvocationHandlerAdapter(new NoStubRetriever(), new NullAuthenticator(), new ConsoleServerMonitor(), new DefaultServerSideClientContextFactory());
         server = new AbstractServer(iha, new ConsoleServerMonitor(), Executors.newCachedThreadPool()) {
             public void start() throws ServerException {
             }

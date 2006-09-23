@@ -126,9 +126,5 @@ public final class FacadeArrayMethodInvoked extends AbstractResponse {
         } else {
             referenceIDs = (Long[]) longz;
         }
-        try {
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
     }
 }

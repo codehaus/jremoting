@@ -46,7 +46,7 @@ public class CustomStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 10333), false);
+        factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 10333));
         testClient = (TestInterface) factory.lookupService("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with

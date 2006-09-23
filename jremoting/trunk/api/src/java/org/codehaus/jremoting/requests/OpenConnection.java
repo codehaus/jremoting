@@ -31,7 +31,6 @@ import java.rmi.server.UID;
 public final class OpenConnection extends AbstractRequest {
     static final long serialVersionUID = -2904286124933186290L;
 
-    private UID uid;
 
     /**
      * Default constructor for externalization
@@ -39,23 +38,8 @@ public final class OpenConnection extends AbstractRequest {
     public OpenConnection() {
     }
 
-    /**
-     * Construct a request with a UID for the client machine
-     *
-     * @param uid the machine ID
-     */
-    public OpenConnection(UID uid) {
-        this.uid = uid;
-    }
 
-    /**
-     * Get the machine ID
-     *
-     * @return the machine ID
-     */
-    public UID getMachineID() {
-        return uid;
-    }
+
 
     /**
      * Gets number that represents type for this class.
@@ -83,7 +67,6 @@ public final class OpenConnection extends AbstractRequest {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(uid);
     }
 
     /**
@@ -99,7 +82,6 @@ public final class OpenConnection extends AbstractRequest {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        uid = (UID) in.readObject();
     }
 
 }

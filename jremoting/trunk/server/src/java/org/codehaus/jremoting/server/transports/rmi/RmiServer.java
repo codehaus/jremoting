@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
-import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.PlainStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.AbstractServer;
@@ -75,7 +75,7 @@ public class RmiServer extends AbstractServer {
     }
 
     public RmiServer(int port) {
-        this(new PlainStubRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), port);
+        this(new PlainStubRetriever(), new NullAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), port);
     }
 
     /**

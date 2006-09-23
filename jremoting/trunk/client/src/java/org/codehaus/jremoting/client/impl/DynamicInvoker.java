@@ -69,7 +69,7 @@ public class DynamicInvoker {
      */
     public DynamicInvoker(HostContext hostContext) throws Exception {
 
-        factory = new DynamicStubFactory(hostContext, false);
+        factory = new DynamicStubFactory(hostContext);
         //cache the invocationhandler
         clientInvocationHandler = hostContext.getInvocationHandler();
     }

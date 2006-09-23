@@ -55,7 +55,7 @@ public class RmiTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        Factory af = new ClientSideStubFactory(new RmiHostContext("127.0.0.1", 10003), false);
+        Factory af = new ClientSideStubFactory(new RmiHostContext("127.0.0.1", 10003));
         testClient = (TestInterface) af.lookupService("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with

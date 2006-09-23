@@ -24,7 +24,7 @@ import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.*;
-import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContext;
@@ -120,7 +120,7 @@ public class ClientContextTestCase extends TestCase {
 
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ExecutorService executor = Executors.newCachedThreadPool();
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(stubRetriever, new DefaultAuthenticator(),
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(stubRetriever, new NullAuthenticator(),
                 serverMonitor, new ServerCustomStreamDriver(serverMonitor, executor), executor,
                 ccf, 13333);
 
@@ -128,7 +128,7 @@ public class ClientContextTestCase extends TestCase {
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        Factory factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 13333), false);
+        Factory factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 13333));
         final AccountManager clientSideAccountManager = (AccountManager) factory.lookupService("OurAccountManager");
 
         Thread threadOne = makeThread(clientSideAccountManager, 11);

@@ -45,7 +45,7 @@ public class DirectTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ClientSideStubFactory(new DirectHostContext(server), false, this.getClass().getClassLoader());
+        factory = new ClientSideStubFactory(new DirectHostContext(server), this.getClass().getClassLoader());
         testClient = (TestInterface) factory.lookupService("Hello");
 
     }

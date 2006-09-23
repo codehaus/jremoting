@@ -44,8 +44,8 @@ public abstract class AbstractInterfaceLookupFactory implements InterfaceLookupF
      * @return
      * @throws ConnectionException
      */
-    public final InterfaceLookup getInterfaceLookup(String factoryString, boolean optimize) throws ConnectionException {
-        return getInterfaceLookup(factoryString, this.getClass().getClassLoader(), optimize);
+    public final InterfaceLookup getInterfaceLookup(String factoryString) throws ConnectionException {
+        return getInterfaceLookup(factoryString, this.getClass().getClassLoader());
     }
 
     /**
@@ -56,14 +56,14 @@ public abstract class AbstractInterfaceLookupFactory implements InterfaceLookupF
      * @return
      * @throws ConnectionException
      */
-    public InterfaceLookup getInterfaceLookup(String factoryString, ClassLoader interfacesClassLoader, boolean optimize) throws ConnectionException {
+    public InterfaceLookup getInterfaceLookup(String factoryString, ClassLoader interfacesClassLoader) throws ConnectionException {
 
         for (int i = 0; i < factories.size(); i++) {
             Factory factory = (Factory) factories.elementAt(i);
 
             if (factoryString.startsWith(factory.factoryStringPrefix)) {
 
-                InterfaceLookup interfaceLookup = factory.interfaceLookupFactory.getInterfaceLookup(factoryString, interfacesClassLoader, optimize);
+                InterfaceLookup interfaceLookup = factory.interfaceLookupFactory.getInterfaceLookup(factoryString, interfacesClassLoader);
                 return interfaceLookup;
             }
         }

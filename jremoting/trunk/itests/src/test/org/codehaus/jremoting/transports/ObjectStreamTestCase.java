@@ -60,7 +60,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         SocketObjectStreamHostContext hostContext = new SocketObjectStreamHostContext("127.0.0.1", 10002);
-        factory = new ClientSideStubFactory(hostContext, false);
+        factory = new ClientSideStubFactory(hostContext);
         testClient = (TestInterface) factory.lookupService("Hello");
 
         // just a kludge for unit testing given we are intrinsically dealing with

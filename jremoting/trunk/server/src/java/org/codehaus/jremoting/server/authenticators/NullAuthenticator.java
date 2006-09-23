@@ -15,32 +15,34 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.responses;
+package org.codehaus.jremoting.server.authenticators;
 
+import org.codehaus.jremoting.api.Authentication;
+import org.codehaus.jremoting.server.Authenticator;
 
 /**
- * Class SameVMResponse
+ * Check the Authority of a client to a service.
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class SameVMResponse extends AbstractResponse {
-    static final long serialVersionUID = -764673713874147364L;
+public class NullAuthenticator implements Authenticator {
 
     /**
-     * Constructor a SameVMResponse
+     * Check the Authority of a client to a service.
+     *
+     * @param authentication   The Authentication object
+     * @param publishedService the publishes server to authenticate against
      */
-    public SameVMResponse() {
+    public void checkAuthority(Authentication authentication, String publishedService) {
     }
 
     /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
+     * Get text to sign for a request.
      *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
+     * @return The text to sign.
      */
-    public int getResponseCode() {
-        return ResponseConstants.SAMEVMRESPONSE;
+    public String getTextToSign() {
+        return "random" + Math.random() + "-" + Math.random() + "-" + Math.random() + "!";
     }
 }

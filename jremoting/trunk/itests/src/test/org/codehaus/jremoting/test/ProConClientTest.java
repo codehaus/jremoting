@@ -56,9 +56,9 @@ public class ProConClientTest {
         Factory af = null;
 
         if (args[0].equals("S")) {
-            af = new ServerSideStubFactory(arhc, false);
+            af = new ServerSideStubFactory(arhc);
         } else {
-            af = new ClientSideStubFactory(arhc, false);
+            af = new ClientSideStubFactory(arhc);
         }
 
         //list

@@ -24,7 +24,7 @@ import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
-import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
@@ -52,7 +52,7 @@ public class PipedObjectStreamServer extends AbstractPipedServer {
     }
 
     public PipedObjectStreamServer() {
-        this(new NoStubRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
+        this(new NoStubRetriever(), new NullAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
     }
 
     protected AbstractServerStreamDriver createServerStreamDriver() {

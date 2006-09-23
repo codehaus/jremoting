@@ -23,10 +23,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.server.*;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
-import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.transports.*;
@@ -88,7 +86,7 @@ public class SelfContainedSocketStreamServer extends AbstractServer implements R
     }
 
     public SelfContainedSocketStreamServer(int port, ServerMonitor serverMonitor, ExecutorService executorService, ServerStreamDriver serverStreamDriver) {
-        this(new NoStubRetriever(), new DefaultAuthenticator(), serverMonitor, serverStreamDriver, executorService, new DefaultServerSideClientContextFactory(), port);
+        this(new NoStubRetriever(), new NullAuthenticator(), serverMonitor, serverStreamDriver, executorService, new DefaultServerSideClientContextFactory(), port);
     }
 
     public SelfContainedSocketStreamServer(int port, String streamType) {
