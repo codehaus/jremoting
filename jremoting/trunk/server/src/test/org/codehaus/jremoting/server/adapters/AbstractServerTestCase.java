@@ -7,10 +7,7 @@ import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.requests.OpenConnection;
-import org.codehaus.jremoting.requests.RetrieveStub;
-import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.requests.*;
 import org.codehaus.jremoting.responses.*;
 import org.jmock.MockObjectTestCase;
 
@@ -124,6 +121,19 @@ public class AbstractServerTestCase extends MockObjectTestCase {
         assertEquals("Unknown request :org.codehaus.jremoting.server.adapters.AbstractServerTestCase$MyAbstractRequest", ((RequestFailed) abstractResponse).getFailureReason());
     }
 
+    public void testListServicesRespondsAppropriately() throws PublicationException, IOException, ClassNotFoundException {
+        server.publish(impl, "foo", Map.class);
+        AbstractResponse abstractResponse = iha.handleInvocation(serializeAndDeserialize(new ListServices()), new Object());
+        assertTrue(abstractResponse instanceof ServicesList);
+        assertEquals(1, ((ServicesList ) abstractResponse).getServices().length);
+        assertEquals("foo", ((ServicesList ) abstractResponse).getServices()[0]);
+    }
+
+    public void testListServicesRespondsAppropriatelyWhenThereAreNone() throws PublicationException, IOException, ClassNotFoundException {
+        AbstractResponse abstractResponse = iha.handleInvocation(serializeAndDeserialize(new ListServices()), new Object());
+        assertTrue(abstractResponse instanceof ServicesList);
+        assertEquals(0, ((ServicesList ) abstractResponse).getServices().length);
+    }
 
     private static class MyAbstractRequest extends AbstractRequest {
         public MyAbstractRequest() {
