@@ -470,6 +470,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             return new InvokableMethods(new String[0]);
         }
 
+        //tODO cast back needed ?
         DefaultMethodInvocationHandler methodInvocationHandler = (DefaultMethodInvocationHandler) getMethodInvocationHandler(publishedThing);
 
         return new InvokableMethods(methodInvocationHandler.getListOfMethods());
