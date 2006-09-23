@@ -27,7 +27,6 @@ import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 
-import java.rmi.server.UID;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
@@ -67,7 +66,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
         try {
             if (suspend == true) {
-                return new ServiceSuspended();
+                return new ServicesSuspended();
             }
 
             // Method request is positioned first as

@@ -19,12 +19,12 @@ package org.codehaus.jremoting.responses;
 
 
 /**
- * Class ServiceSuspended
+ * Class ServicesSuspended
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class ServiceSuspended extends TryLater {
+public final class ServicesSuspended extends TryLater {
     static final long serialVersionUID = -5602483138541792903L;
 
     /**
