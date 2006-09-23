@@ -9,10 +9,8 @@ import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.OpenConnection;
-import org.codehaus.jremoting.responses.ConnectionOpened;
-import org.codehaus.jremoting.responses.AbstractResponse;
-import org.codehaus.jremoting.responses.NotPublished;
-import org.codehaus.jremoting.responses.ServicesSuspended;
+import org.codehaus.jremoting.requests.RetrieveStub;
+import org.codehaus.jremoting.responses.*;
 import org.jmock.MockObjectTestCase;
 
 import java.util.concurrent.Executors;
@@ -100,5 +98,12 @@ public class AbstractServerTestCase extends MockObjectTestCase {
         server.resume();
         assertTrue(iha.handleInvocation(new OpenConnection(), new Object()) instanceof ConnectionOpened);
     }
+
+    public void testStubRetrievalFailsWhenItsAppropriate() throws PublicationException {
+        server.publish(impl, "foo", Map.class);
+        AbstractResponse abstractResponse = iha.handleInvocation(new RetrieveStub("foo", "Main"), new Object());
+        assertTrue(abstractResponse instanceof StubRetrievalFailed);
+    }
+
 
 }

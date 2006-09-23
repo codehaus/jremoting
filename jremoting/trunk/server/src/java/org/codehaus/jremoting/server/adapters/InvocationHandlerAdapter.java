@@ -351,7 +351,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * @return The reply
      */
     private AbstractResponse doClassRequest(AbstractRequest request) {
-        RetrieveClass cr = (RetrieveClass) request;
+        RetrieveStub cr = (RetrieveStub) request;
         String publishedThing = cr.getService() + "_" + cr.getObjectName();
 
         try {

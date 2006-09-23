@@ -22,28 +22,28 @@ import org.codehaus.jremoting.requests.RequestConstants;
 
 
 /**
- * Class RetrieveClass
+ * Class RetrieveStub
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class RetrieveClass extends AbstractServiceRequest {
+public final class RetrieveStub extends AbstractServiceRequest {
     static final long serialVersionUID = -6035363236398357203L;
 
     /**
-     * Constructor RetrieveClass
+     * Constructor RetrieveStub
      *
      * @param publishedServiceName The service name that was originally looked up.
      * @param objectName           the object name of the node within that.
      */
-    public RetrieveClass(String publishedServiceName, String objectName) {
+    public RetrieveStub(String publishedServiceName, String objectName) {
         super(publishedServiceName, objectName);
     }
 
     /**
      * Constructor for Externalization.
      */
-    public RetrieveClass() {
+    public RetrieveStub() {
     }
 
     /**

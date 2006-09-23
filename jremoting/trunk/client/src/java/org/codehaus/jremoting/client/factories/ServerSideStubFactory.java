@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.factories;
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.requests.RetrieveClass;
+import org.codehaus.jremoting.requests.RetrieveStub;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.responses.StubClass;
 import org.codehaus.jremoting.responses.*;
@@ -52,7 +52,7 @@ public class ServerSideStubFactory extends AbstractStubFactory {
             StubClass cr = null;
 
             try {
-                AbstractResponse ar = clientInvocationHandler.handleInvocation(new RetrieveClass(publishedServiceName, objectName));
+                AbstractResponse ar = clientInvocationHandler.handleInvocation(new RetrieveStub(publishedServiceName, objectName));
 
                 if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
                     if (ar instanceof RequestFailed) {
