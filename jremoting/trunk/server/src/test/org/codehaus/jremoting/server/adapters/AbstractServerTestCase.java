@@ -10,6 +10,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.requests.RetrieveStub;
+import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.*;
 import org.jmock.MockObjectTestCase;
 
@@ -83,7 +84,13 @@ public class AbstractServerTestCase extends MockObjectTestCase {
 
     private AbstractResponse putTestEntry() {
         ConnectionOpened co = (ConnectionOpened) iha.handleInvocation(new OpenConnection(), new Object());
-        return iha.handleInvocation(new InvokeMethod("foo", "Main", "put(java.lang.Object, java.lang.Object)",new Object[] {"1","2"}, new Long(0), co.getSessionID()), new Object());
+        AbstractRequest request = new InvokeMethod("foo", "Main", "put(java.lang.Object, java.lang.Object)", new Object[]{"1", "2"}, (long) 0, co.getSessionID());
+        request = serializeAndDeserialize(request);
+        return iha.handleInvocation(request, new Object());
+    }
+
+    private AbstractRequest serializeAndDeserialize(AbstractRequest request) {
+        return request;
     }
 
     public void testPublishAndSuspendBlocksOperations() throws PublicationException {
@@ -105,5 +112,17 @@ public class AbstractServerTestCase extends MockObjectTestCase {
         assertTrue(abstractResponse instanceof StubRetrievalFailed);
     }
 
+    public void testRequestFailsOnUnknownRequestType() throws PublicationException {
+        server.publish(impl, "foo", Map.class);
+        AbstractResponse abstractResponse = iha.handleInvocation(new MyAbstractRequest(), new Object());
+        assertTrue(abstractResponse instanceof RequestFailed);
+        assertEquals("Unknown request :org.codehaus.jremoting.server.adapters.AbstractServerTestCase$MyAbstractRequest", ((RequestFailed) abstractResponse).getFailureReason());
+    }
 
+
+    private static class MyAbstractRequest extends AbstractRequest {
+        public int getRequestCode() {
+            return 999;
+        }
+    }
 }
