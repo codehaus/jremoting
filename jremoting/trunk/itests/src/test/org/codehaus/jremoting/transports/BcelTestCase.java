@@ -20,17 +20,20 @@ package org.codehaus.jremoting.transports;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Test case which tests the proxies generated using BCEL generator
@@ -52,15 +55,17 @@ public class BcelTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        BcelDynamicGeneratorStubRetriever cr = new BcelDynamicGeneratorStubRetriever(this.getClass().getClassLoader());
+        BcelDynamicGeneratorStubRetriever stubRetriever = new BcelDynamicGeneratorStubRetriever(this.getClass().getClassLoader());
 
         String class_gen_dir = getClassGenDir();
-        cr.setClassGenDir(class_gen_dir);
-        server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new ConsoleServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), 10001);
+        stubRetriever.setClassGenDir(class_gen_dir);
+        ServerMonitor serverMonitor = new ConsoleServerMonitor();
+        ExecutorService executor = Executors.newCachedThreadPool();
+        server = new SelfContainedSocketStreamServer(stubRetriever, new DefaultAuthenticator(), serverMonitor, new ServerCustomStreamDriver(serverMonitor, executor), executor, new DefaultServerSideClientContextFactory(), 10001);
 
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
-        cr.generate("Hello", pd, this.getClass().getClassLoader());
+        stubRetriever.generate("Hello", pd, this.getClass().getClassLoader());
         server.publish(testServer, "Hello", pd);
         server.start();
 
@@ -74,7 +79,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
     }
 
     public void testHelloCall() throws Exception {
-        super.testHelloCall();   
+        super.testHelloCall();
     }
 
     protected void tearDown() throws Exception {

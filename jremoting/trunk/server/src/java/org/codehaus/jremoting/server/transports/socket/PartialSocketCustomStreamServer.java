@@ -39,8 +39,8 @@ public class PartialSocketCustomStreamServer extends AbstractPartialSocketStream
      * @param invocationHandlerAdapter the handler
      * @param serverMonitor            the monitor
      */
-    public PartialSocketCustomStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
-        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
+    public PartialSocketCustomStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor) {
+        super(invocationHandlerAdapter, serverMonitor, executor);
     }
 
 

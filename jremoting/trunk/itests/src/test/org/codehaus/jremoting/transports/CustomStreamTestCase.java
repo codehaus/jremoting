@@ -21,7 +21,7 @@ package org.codehaus.jremoting.transports;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
@@ -39,7 +39,7 @@ public class CustomStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new SelfContainedSocketCustomStreamServer(10333);
+        server = new SelfContainedSocketStreamServer(10333);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

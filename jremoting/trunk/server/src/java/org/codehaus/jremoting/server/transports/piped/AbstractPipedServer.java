@@ -40,11 +40,11 @@ import java.io.PipedOutputStream;
 public abstract class AbstractPipedServer extends AbstractServer {
 
     public AbstractPipedServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
-        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, executor, contextFactory);
+        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, executor);
     }
 
     public AbstractPipedServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
-        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
+        super(invocationHandlerAdapter, serverMonitor, executor);
     }
 
     /**

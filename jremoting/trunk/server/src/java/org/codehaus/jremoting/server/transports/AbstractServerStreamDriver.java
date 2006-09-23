@@ -17,11 +17,7 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import org.codehaus.jremoting.api.ConnectionException;
 import java.util.concurrent.ExecutorService;
-import org.codehaus.jremoting.api.ThreadPoolAware;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import java.io.IOException;
@@ -35,34 +31,22 @@ import java.io.OutputStream;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractServerStreamDriver implements ThreadPoolAware {
+public abstract class AbstractServerStreamDriver implements ServerStreamDriver {
 
-
-    /**
-     * The input stream
-     */
     private InputStream inputStream;
 
-    /**
-     * The output stream
-     */
     private OutputStream outputStream;
 
     protected final ServerMonitor serverMonitor;
-    protected final ExecutorService threadPool;
+    protected final ExecutorService executorService;
     private Object connectionDetails;
 
-    public AbstractServerStreamDriver(ServerMonitor serverMonitor, ExecutorService threadPool) {
+    public AbstractServerStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService) {
         this.serverMonitor = serverMonitor;
-        this.threadPool = threadPool;
+        this.executorService = executorService;
     }
 
-    /**
-     * Method setStreams
-     *
-     * @param inputStream  The input stream
-     * @param outputStream the outpur stream
-     */
+
     public final void setStreams(InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
         this.inputStream = inputStream;
         this.outputStream = outputStream;
@@ -73,29 +57,10 @@ public abstract class AbstractServerStreamDriver implements ThreadPoolAware {
         return connectionDetails;
     }
 
-
-    /**
-     * Initialize the Driver.
-     *
-     * @throws IOException if a problem during initialization.
-     */
-    protected abstract void initialize() throws IOException;
-
-    /**
-     * Write a AbstractResponse, then Get a new AbstractRequest over the stream.
-     *
-     * @param response The response to pass back to the client
-     * @return The AbstractRequest that is new and incoming
-     * @throws IOException            if a problem during write & read.
-     * @throws ConnectionException    if a problem during write & read.
-     * @throws ClassNotFoundException If a Class is not found during serialization.
-     */
-    protected abstract AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ConnectionException, ClassNotFoundException;
-
     /**
      * Close the stream.
      */
-    protected void close() {
+    public void close() {
         try {
             inputStream.close();
         } catch (IOException e) {
@@ -109,20 +74,10 @@ public abstract class AbstractServerStreamDriver implements ThreadPoolAware {
         }
     }
 
-    /**
-     * Get the Input stream
-     *
-     * @return The input stream
-     */
     protected InputStream getInputStream() {
         return inputStream;
     }
 
-    /**
-     * Get the Output stream
-     *
-     * @return The Output stream
-     */
     protected OutputStream getOutputStream() {
         return outputStream;
     }

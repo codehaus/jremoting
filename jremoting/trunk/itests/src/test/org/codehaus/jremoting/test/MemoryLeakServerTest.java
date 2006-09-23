@@ -19,7 +19,6 @@ package org.codehaus.jremoting.test;
 
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.transports.AbstractServer;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
 
 /**
  * Class MemoryLeakServerTest
@@ -28,6 +27,8 @@ import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustom
  * @version $Revision: 1.2 $
  */
 public class MemoryLeakServerTest {
+
+    // TODO
 
     /**
      * Method main
@@ -39,10 +40,10 @@ public class MemoryLeakServerTest {
 
         System.out.println("MemoryLeak Server");
 
-        AbstractServer as = new SelfContainedSocketCustomStreamServer(1277);
+        //AbstractServer as = new SelfContainedSocketCustomStreamServer(1277);
         MemoryLeakImpl ml = new MemoryLeakImpl();
 
-        as.publish(ml, "MemLeak", new PublicationDescription(MemoryLeak.class, MemoryLeak.class));
-        as.start();
+        //as.publish(ml, "MemLeak", new PublicationDescription(MemoryLeak.class, MemoryLeak.class));
+        //as.start();
     }
 }

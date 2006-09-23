@@ -47,13 +47,13 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
     }
 
 
-    protected void initialize() throws IOException {
+    public void initialize() throws IOException {
         lineNumberReader = new LineNumberReader(new BufferedReader(new InputStreamReader(getInputStream())));
         bufferedOutputStream = new BufferedOutputStream(getOutputStream());
         printWriter = new PrintWriter(bufferedOutputStream);
     }
 
-    protected synchronized AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
+    public synchronized AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {
             writeResponse(response);
@@ -72,7 +72,7 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
         bufferedOutputStream.flush();
     }
 
-    protected void close() {
+    public void close() {
         try {
             getInputStream().close();
         } catch (IOException e) {

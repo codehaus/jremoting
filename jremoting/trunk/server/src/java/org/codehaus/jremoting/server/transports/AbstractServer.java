@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.server.transports;
 
 import java.util.concurrent.ExecutorService;
-import org.codehaus.jremoting.api.ThreadPoolAware;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.AbstractResponse;
@@ -34,7 +33,7 @@ import java.util.Vector;
  * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractServer implements Server, ThreadPoolAware {
+public abstract class AbstractServer implements Server {
 
     /**
      * A vector of connections
@@ -53,7 +52,6 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
 
     protected final ServerMonitor serverMonitor;
     protected final ExecutorService executor;
-    protected final ServerSideClientContextFactory contextFactory;
 
     /**
      * Construct a AbstractServer
@@ -61,11 +59,11 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
      * @param invocationHandlerAdapter The invocation handler adapter to use.
      * @param serverMonitor            The Server monitor
      */
-    public AbstractServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService threadPool, ServerSideClientContextFactory contextFactory) {
+    public AbstractServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor,
+                          ExecutorService threadPool) {
         this.invocationHandlerAdapter = invocationHandlerAdapter;
         this.serverMonitor = serverMonitor;
         this.executor = threadPool;
-        this.contextFactory = contextFactory;
     }
 
 
@@ -225,9 +223,6 @@ public abstract class AbstractServer implements Server, ThreadPoolAware {
         return state;
     }
 
-    protected ServerSideClientContextFactory getClientContextFactory() {
-        return contextFactory;
-    }
 
 
 }

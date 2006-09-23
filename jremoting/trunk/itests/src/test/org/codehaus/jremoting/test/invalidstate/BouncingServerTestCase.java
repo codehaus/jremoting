@@ -26,7 +26,7 @@ import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostCon
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerException;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
@@ -56,7 +56,7 @@ public class BouncingServerTestCase extends TestCase {
     public void testBouncingOfServerCausesClientProblems() throws Exception {
 
         // server side setup.
-        SelfContainedSocketCustomStreamServer server = startServer();
+        SelfContainedSocketStreamServer server = startServer();
 
         ClientSideStubFactory factory = null;
         try {
@@ -98,8 +98,8 @@ public class BouncingServerTestCase extends TestCase {
         }
     }
 
-    private SelfContainedSocketCustomStreamServer startServer() throws ServerException, PublicationException {
-        SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(12201);
+    private SelfContainedSocketStreamServer startServer() throws ServerException, PublicationException {
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(12201);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         server.publish(testServer, "Hello55", pd);
         server.start();

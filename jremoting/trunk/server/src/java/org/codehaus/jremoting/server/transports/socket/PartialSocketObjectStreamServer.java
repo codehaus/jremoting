@@ -42,8 +42,8 @@ public class PartialSocketObjectStreamServer extends AbstractPartialSocketStream
      * @param serverMonitor the monitor
      * @param port ther port
      */
-    public PartialSocketObjectStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
-        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
+    public PartialSocketObjectStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor) {
+        super(invocationHandlerAdapter, serverMonitor, executor);
     }
 
     /**

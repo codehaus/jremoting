@@ -21,6 +21,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.AbstractServer;
 import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 import org.codehaus.jremoting.server.transports.AbstractStreamServerConnection;
+import org.codehaus.jremoting.server.transports.ServerStreamDriver;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -45,7 +46,7 @@ public class SocketStreamServerConnection extends AbstractStreamServerConnection
      * @param socket         The Socket
      * @param driver         The driver for the transport type
      */
-    public SocketStreamServerConnection(final AbstractServer abstractServer, final Socket socket, AbstractServerStreamDriver driver, ServerMonitor serverMonitor) {
+    public SocketStreamServerConnection(final AbstractServer abstractServer, final Socket socket, ServerStreamDriver driver, ServerMonitor serverMonitor) {
 
         super(abstractServer, driver, serverMonitor);
         this.socket = socket;

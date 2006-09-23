@@ -23,19 +23,18 @@ import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.ServerException;
-import org.codehaus.jremoting.server.ServerSideClientContextFactory;
+import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
-import org.codehaus.jremoting.server.monitors.NullServerMonitor;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContext;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
 import java.util.HashMap;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
@@ -117,9 +116,14 @@ public class ClientContextTestCase extends TestCase {
 
         final AccountManager accountManager = new AccountManagerImpl(ccf, one, two);
 
-        BcelDynamicGeneratorStubRetriever classRetriever = new BcelDynamicGeneratorStubRetriever(this.getClass().getClassLoader());
-        SelfContainedSocketCustomStreamServer server = new SelfContainedSocketCustomStreamServer(classRetriever,
-                new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), ccf, 13333);
+        BcelDynamicGeneratorStubRetriever stubRetriever = new BcelDynamicGeneratorStubRetriever(this.getClass().getClassLoader());
+
+        ServerMonitor serverMonitor = new ConsoleServerMonitor();
+        ExecutorService executor = Executors.newCachedThreadPool();
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(stubRetriever, new DefaultAuthenticator(),
+                serverMonitor, new ServerCustomStreamDriver(serverMonitor, executor), executor,
+                ccf, 13333);
+
         PublicationDescription pd = new PublicationDescription(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();

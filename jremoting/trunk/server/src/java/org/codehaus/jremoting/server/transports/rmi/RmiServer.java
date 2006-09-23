@@ -63,16 +63,15 @@ public class RmiServer extends AbstractServer {
      * @param invocationHandlerAdapter
      * @param serverMonitor
      * @param executor
-     * @param contextFactory
      * @param port
      */
-    public RmiServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {
-        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
+    public RmiServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, int port) {
+        super(invocationHandlerAdapter, serverMonitor, executor);
         this.port = port;
     }
 
     public RmiServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {
-        this(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, executor, contextFactory, port);
+        this(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, executor, port);
     }
 
     public RmiServer(int port) {

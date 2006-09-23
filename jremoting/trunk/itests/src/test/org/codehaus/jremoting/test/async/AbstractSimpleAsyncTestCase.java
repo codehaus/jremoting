@@ -23,20 +23,23 @@ import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
+import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.AbstractDynamicGeneratorStubRetriever;
-import org.codehaus.jremoting.server.monitors.NullServerMonitor;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
+import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 public abstract class AbstractSimpleAsyncTestCase extends TestCase {
 
     AsyncTestImpl asyncTestImpl;
     AsyncTest testClient;
     Factory factory;
-    SelfContainedSocketCustomStreamServer server;
+    SelfContainedSocketStreamServer server;
 
     protected abstract AbstractDynamicGeneratorStubRetriever getAbstractDynamicGeneratorClassRetriever(ClassLoader cl);
 
@@ -52,19 +55,25 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
         super.setUp();
 
         // server side setup.
-        AbstractDynamicGeneratorStubRetriever cr = getAbstractDynamicGeneratorClassRetriever(this.getClass().getClassLoader());
+        AbstractDynamicGeneratorStubRetriever stubRetriever = getAbstractDynamicGeneratorClassRetriever(this.getClass().getClassLoader());
 
         // Fetch the dir to place the generated classes from the System properties
         String class_gen_dir = getClassGenDir();
 
-        cr.setClassGenDir(class_gen_dir);
+        stubRetriever.setClassGenDir(class_gen_dir);
 
         DefaultServerSideClientContextFactory ccf = new DefaultServerSideClientContextFactory();
-        server = new SelfContainedSocketCustomStreamServer(cr, new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), ccf, 11003);
+
+        ServerMonitor serverMonitor = new ConsoleServerMonitor();
+        ExecutorService executor = Executors.newCachedThreadPool();
+        server = new SelfContainedSocketStreamServer(stubRetriever, new DefaultAuthenticator(),
+                serverMonitor, new ServerCustomStreamDriver(serverMonitor, executor), executor,
+                ccf, 11003);
+
         asyncTestImpl = new AsyncTestImpl();
         PublicationDescription pd = new PublicationDescription();
         pd.addInterfaceToExpose(new PublicationDescriptionItem(AsyncTest.class, new String[]{"setOne(java.lang.String)", "setTwo(java.lang.String)", "setThree(java.lang.String)", }, new String[]{"fire()"}, new String[]{"whoa()"}));
-        cr.generate("AsyncTest", pd, this.getClass().getClassLoader());
+        stubRetriever.generate("AsyncTest", pd, this.getClass().getClassLoader());
         server.publish(asyncTestImpl, "AsyncTest", pd);
         server.start();
 

@@ -50,7 +50,7 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
      *
      * @throws IOException if an IO Excpetion
      */
-    protected void initialize() throws IOException {
+    public void initialize() throws IOException {
         dataInputStream = new DataInputStream(getInputStream());
         dataOutputStream = new DataOutputStream(new BufferedOutputStream(getOutputStream()));
     }
@@ -64,7 +64,7 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
      * @throws ConnectionException    In an IO Exception
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
-    protected synchronized AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
+    public synchronized AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {
             writeResponse(response);
@@ -82,7 +82,7 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
         dataOutputStream.flush();
     }
 
-    protected void close() {
+    public void close() {
         try {
             dataInputStream.close();
         } catch (IOException e) {

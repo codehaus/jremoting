@@ -52,7 +52,7 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
     /**
      * The Sever Stream Driver.
      */
-    private AbstractServerStreamDriver driver;
+    private ServerStreamDriver driver;
 
     protected final ServerMonitor serverMonitor;
 
@@ -62,7 +62,7 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
      * @param abstractServer The Abstract Server handling requests
      * @param driver         The Driver.
      */
-    public AbstractStreamServerConnection(AbstractServer abstractServer, AbstractServerStreamDriver driver, ServerMonitor serverMonitor) {
+    public AbstractStreamServerConnection(AbstractServer abstractServer, ServerStreamDriver driver, ServerMonitor serverMonitor) {
         this.abstractServer = abstractServer;
         this.driver = driver;
         this.serverMonitor = serverMonitor;

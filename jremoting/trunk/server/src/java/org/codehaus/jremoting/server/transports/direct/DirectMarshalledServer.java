@@ -50,17 +50,16 @@ public class DirectMarshalledServer extends AbstractServer implements ServerMars
      * @param invocationHandlerAdapter
      * @param serverMonitor
      * @param executor
-     * @param contextFactory
      * @param marshalledInvocationHandlerAdapter
      *
      */
-    public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
-        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
+    public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
+        super(invocationHandlerAdapter, serverMonitor, executor);
         this.marshalledInvocationHandlerAdapter = marshalledInvocationHandlerAdapter;
     }
 
     public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
-        this(invocationHandlerAdapter, new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), marshalledInvocationHandlerAdapter);
+        this(invocationHandlerAdapter, new NullServerMonitor(), Executors.newCachedThreadPool(), marshalledInvocationHandlerAdapter);
     }
 
     public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter) {
@@ -71,16 +70,10 @@ public class DirectMarshalledServer extends AbstractServer implements ServerMars
         this(new InvocationHandlerAdapter(new NoStubRetriever(), new DefaultAuthenticator(), new NullServerMonitor(), new DefaultServerSideClientContextFactory()));
     }
 
-    /**
-     * Method start
-     */
     public void start() {
         setState(STARTED);
     }
 
-    /**
-     * Method stop
-     */
     public void stop() {
 
         setState(SHUTTINGDOWN);
@@ -90,22 +83,10 @@ public class DirectMarshalledServer extends AbstractServer implements ServerMars
         setState(STOPPED);
     }
 
-    /**
-     * Method handleInvocation
-     *
-     * @param request
-     * @return
-     */
     public byte[] handleInvocation(byte[] request, Object connectionDetails) {
         return marshalledInvocationHandlerAdapter.handleInvocation(request, connectionDetails);
     }
 
-    /**
-     * Method handleInvocation
-     *
-     * @param request
-     * @return
-     */
     public AbstractResponse handleInvocation(AbstractRequest request, Object connectionDetails) {
 
         if (getState() == STARTED) {

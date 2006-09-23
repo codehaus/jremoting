@@ -17,15 +17,8 @@
  */
 package org.codehaus.jremoting.test;
 
-import org.codehaus.jremoting.server.authenticators.DefaultAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.JarFileStubRetriever;
-import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.AbstractServer;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketCustomStreamServer;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketObjectStreamServer;
-
-import java.util.concurrent.Executors;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
 /**
  * Class ProConServerTest
@@ -33,6 +26,8 @@ import java.util.concurrent.Executors;
  * @author Vinay Chandrasekharan
  */
 public class ProConServerTest {
+
+    //TODO - redo
 
     /**
      * Method main
@@ -49,30 +44,30 @@ public class ProConServerTest {
         if (args[1].equals("ObjectStream")) {
             System.out.println("(Object Stream)");
 
-            as = new SelfContainedSocketObjectStreamServer(1234);
+            as = new SelfContainedSocketStreamServer(1234, SelfContainedSocketStreamServer.OBJECTSTREAM);
         } else {
 
             // CustomStream
             System.out.println("(Custom Stream)");
 
-            as = new SelfContainedSocketCustomStreamServer(1235);
+            //as = new SelfContainedSocketCustomStreamServer(1235);
         }
 
         if (args[0].equals("S")) {
-            as = new SelfContainedSocketCustomStreamServer(new JarFileStubRetriever("build/classes2"), new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), 1235);
+            //as = new SelfContainedSocketCustomStreamServer(new JarFileStubRetriever("build/classes2"), new DefaultAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), 1235);
         }
 
         //provider
         TestProvider tpi = new TestProviderImpl();
 
-        as.publish(tpi, "P", TestProvider.class);
+        //as.publish(tpi, "P", TestProvider.class);
 
         //consumer
         TestConsumer tci = new TestConsumerImpl();
 
-        as.publish(tci, "C", TestConsumer.class);
+        //as.publish(tci, "C", TestConsumer.class);
 
         //start
-        as.start();
+        //as.start();
     }
 }
