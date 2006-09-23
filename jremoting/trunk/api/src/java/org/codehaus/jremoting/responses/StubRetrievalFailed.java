@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.ResponseConstants;
 import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class StubRetrievalFailed extends AbstractResponse {
+public final class StubRetrievalFailed extends AbstractResponse implements ProblemResponse{
     static final long serialVersionUID = -8931777755294495428L;
 
     private String reason;
@@ -53,17 +52,6 @@ public final class StubRetrievalFailed extends AbstractResponse {
      */
     public String getReason() {
         return reason;
-    }
-
-    /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
-     *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
-     */
-    public int getResponseCode() {
-        return ResponseConstants.CLASSRETRIEVALFAILEDRESPONSE;
     }
 
     /**

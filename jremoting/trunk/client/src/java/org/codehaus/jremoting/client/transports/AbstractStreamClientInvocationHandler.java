@@ -102,7 +102,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
 
                         long t2 = System.currentTimeMillis();
 
-                        if (response.getResponseCode() >= 100) {
+                        if (response instanceof ProblemResponse) {
 
                             if (response instanceof TryLater) {
                                 int millis = ((TryLater) response).getSuggestedDelayMillis();

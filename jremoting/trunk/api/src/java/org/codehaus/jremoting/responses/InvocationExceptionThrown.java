@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.ResponseConstants;
 import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
@@ -42,10 +41,6 @@ public class InvocationExceptionThrown extends AbstractResponse {
 
     public String getMessage() {
         return message;
-    }
-
-    public int getResponseCode() {
-        return ResponseConstants.INVOCATIONEXCEPTIONRESPONSE;
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {

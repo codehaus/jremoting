@@ -17,8 +17,6 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.ResponseConstants;
-
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -29,7 +27,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class NoSuchReference extends NotPublished {
+public final class NoSuchReference extends NotPublished implements ProblemResponse{
     static final long serialVersionUID = 4027710660600938555L;
 
     private Long referenceID;
@@ -47,17 +45,6 @@ public final class NoSuchReference extends NotPublished {
      */
     public NoSuchReference(Long referenceID) {
         this.referenceID = referenceID;
-    }
-
-    /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
-     *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
-     */
-    public int getResponseCode() {
-        return ResponseConstants.NOSUCHREFERENCERESPONSE;
     }
 
     /**

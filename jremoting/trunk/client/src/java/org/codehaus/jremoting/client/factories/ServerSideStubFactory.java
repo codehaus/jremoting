@@ -54,7 +54,7 @@ public class ServerSideStubFactory extends AbstractStubFactory {
             try {
                 AbstractResponse ar = clientInvocationHandler.handleInvocation(new RetrieveStub(publishedServiceName, objectName));
 
-                if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
+                if (ar instanceof ProblemResponse) {
                     if (ar instanceof RequestFailed) {
                         throw new ConnectionException(((RequestFailed) ar).getFailureReason());
                     } else if (ar instanceof StubRetrievalFailed) {

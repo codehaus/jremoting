@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.ResponseConstants;
 import org.codehaus.jremoting.responses.AbstractResponse;
 
 
@@ -27,23 +26,12 @@ import org.codehaus.jremoting.responses.AbstractResponse;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class NotPublished extends AbstractResponse {
+public class NotPublished extends AbstractResponse implements ProblemResponse {
     static final long serialVersionUID = 2421625946997973156L;
 
     /**
      * Constructor NotPublished
      */
     public NotPublished() {
-    }
-
-    /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
-     *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
-     */
-    public int getResponseCode() {
-        return ResponseConstants.NOTPUBLISHEDRESPONSE;
     }
 }

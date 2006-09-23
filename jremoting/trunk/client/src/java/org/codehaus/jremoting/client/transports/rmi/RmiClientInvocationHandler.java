@@ -28,11 +28,8 @@ import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.NoSuchReference;
-import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.responses.AbstractResponse;
-import org.codehaus.jremoting.responses.TryLater;
+import org.codehaus.jremoting.responses.*;
 import org.codehaus.jremoting.requests.AbstractServiceRequest;
 import org.codehaus.jremoting.requests.AbstractRequest;
 
@@ -126,7 +123,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
             try {
                 response = rmiInvocationHandler.handleInvocation(request);
 
-                if (response.getResponseCode() >= 100) {
+                if (response instanceof ProblemResponse) {
                     if (response instanceof TryLater) {
                         int millis = ((TryLater) response).getSuggestedDelayMillis();
 

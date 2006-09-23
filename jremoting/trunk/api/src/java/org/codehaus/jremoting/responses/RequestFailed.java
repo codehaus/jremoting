@@ -27,7 +27,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class RequestFailed extends AbstractResponse {
+public final class RequestFailed extends AbstractResponse implements ProblemResponse {
     static final long serialVersionUID = 8411019523629669181L;
 
     private String failureReason;
@@ -56,16 +56,6 @@ public final class RequestFailed extends AbstractResponse {
         return failureReason;
     }
 
-    /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
-     *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
-     */
-    public int getResponseCode() {
-        return ResponseConstants.REQUESTFAILEDRESPONSE;
-    }
 
     /**
      * The object implements the writeExternal method to save its contents

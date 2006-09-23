@@ -171,11 +171,11 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
         AbstractResponse ar = methodInvocationHandler.handleMethodInvocation(facadeRequest, connectionDetails);
 
-        if (ar.getResponseCode() == ResponseConstants.EXCEPTIONRESPONSE) {
+        if (ar instanceof ExceptionThrown) {
             return ar;
-        } else if (ar.getResponseCode() >= ResponseConstants.PROBLEMRESPONSE) {
+        } else if (ar instanceof ProblemResponse) {
             return ar;
-        } else if (ar.getResponseCode() == ResponseConstants.METHODRESPONSE) {
+        } else if (ar instanceof SimpleMethodInvoked) {
             Object methodResponse = ((SimpleMethodInvoked) ar).getResponseObject();
 
             if (methodResponse == null) {

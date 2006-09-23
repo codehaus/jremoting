@@ -131,7 +131,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
         setContext(request);
         AbstractResponse response = clientInvocationHandler.handleInvocation(request);
 
-        if (response.getResponseCode() == ResponseConstants.METHODFACADERESPONSE) {
+        if (response instanceof FacadeMethodInvoked) {
             FacadeMethodInvoked mfr = (FacadeMethodInvoked) response;
             Long ref = mfr.getReferenceID();
 
@@ -152,7 +152,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
             } else {
                 return implBean;
             }
-        } else if (response.getResponseCode() == ResponseConstants.METHODFACADEARRAYRESPONSE) {
+        } else if (response instanceof FacadeArrayMethodInvoked) {
             FacadeArrayMethodInvoked mfar = (FacadeArrayMethodInvoked) response;
             Long[] refs = mfar.getReferenceIDs();
             String[] objectNames = mfar.getObjectNames();
@@ -210,7 +210,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
             setContext(request);
             AbstractResponse response = clientInvocationHandler.handleInvocation(request);
 
-            if (response.getResponseCode() == ResponseConstants.METHODRESPONSE) {
+            if (response instanceof SimpleMethodInvoked) {
                 SimpleMethodInvoked or = (SimpleMethodInvoked) response;
 
                 return or.getResponseObject();
@@ -242,7 +242,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
             setContext(request);
             AbstractResponse response = clientInvocationHandler.handleInvocation(request);
 
-            if (response.getResponseCode() == ResponseConstants.METHODRESPONSE) {
+            if (response instanceof SimpleMethodInvoked) {
                 SimpleMethodInvoked or = (SimpleMethodInvoked) response;
 
                 return;
@@ -278,7 +278,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 setContext(request);
                 AbstractResponse response = clientInvocationHandler.handleInvocation(request);
 
-                if (response.getResponseCode() == ResponseConstants.METHODRESPONSE) {
+                if (response instanceof SimpleMethodInvoked) {
                     SimpleMethodInvoked or = (SimpleMethodInvoked) response;
                     return;
                 } else {
@@ -328,18 +328,18 @@ public final class DefaultProxyHelper implements ProxyHelper {
      */
     private Throwable makeUnexpectedResponseThrowable(AbstractResponse response) {
 
-        if (response.getResponseCode() == ResponseConstants.EXCEPTIONRESPONSE) {
+        if (response instanceof ExceptionThrown) {
             ExceptionThrown er = (ExceptionThrown) response;
             return er.getResponseException();
-        } else if (response.getResponseCode() == ResponseConstants.NOSUCHSESSIONRESPONSE) {
+        } else if (response instanceof NoSuchSession) {
             NoSuchSession nssr = (NoSuchSession) response;
             return new NoSuchSessionException(nssr.getSessionID());
         }
         //TODO remove some of these if clover indicates they are not used?
-        else if (response.getResponseCode() == ResponseConstants.NOSUCHREFERENCERESPONSE) {
+        else if (response instanceof NoSuchReference) {
             NoSuchReference nsrr = (NoSuchReference) response;
             return new NoSuchReferenceException(nsrr.getReferenceID());
-        } else if (response.getResponseCode() == ResponseConstants.INVOCATIONEXCEPTIONRESPONSE) {
+        } else if (response instanceof InvocationExceptionThrown) {
             InvocationExceptionThrown ier = (InvocationExceptionThrown) response;
             return new InvocationException(ier.getMessage());
         } else {

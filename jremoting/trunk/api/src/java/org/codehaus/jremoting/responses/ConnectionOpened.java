@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.responses;
 
 import org.codehaus.jremoting.api.Sessionable;
-import org.codehaus.jremoting.responses.ResponseConstants;
 import org.codehaus.jremoting.responses.AbstractResponse;
 
 import java.io.IOException;
@@ -52,17 +51,6 @@ public final class ConnectionOpened extends AbstractResponse implements Sessiona
      * Constructor ConnectionOpened for Externalization
      */
     public ConnectionOpened() {
-    }
-
-    /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
-     *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
-     */
-    public int getResponseCode() {
-        return ResponseConstants.OPENCONNECTIONRESPONSE;
     }
 
     /**

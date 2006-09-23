@@ -25,10 +25,6 @@ public class ConnectionClosed extends AbstractResponse {
 
     private Long session;
 
-    public int getResponseCode() {
-        return ResponseConstants.CONNECTIONCLOSED;
-    }
-
     public ConnectionClosed(Long session) {
         this.session = session;
     }

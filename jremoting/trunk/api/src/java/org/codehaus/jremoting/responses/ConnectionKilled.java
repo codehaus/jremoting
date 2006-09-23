@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.ResponseConstants;
 import org.codehaus.jremoting.responses.AbstractResponse;
 
 
@@ -36,14 +35,4 @@ public final class ConnectionKilled extends AbstractResponse {
     public ConnectionKilled() {
     }
 
-    /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
-     *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
-     */
-    public int getResponseCode() {
-        return ResponseConstants.ENDCONNECTIONRESPONSE;
-    }
 }

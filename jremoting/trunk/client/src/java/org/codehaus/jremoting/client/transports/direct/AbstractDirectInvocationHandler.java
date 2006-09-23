@@ -25,13 +25,10 @@ import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.NoSuchReference;
-import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.requests.AbstractServiceRequest;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.responses.AbstractResponse;
-import org.codehaus.jremoting.responses.TryLater;
+import org.codehaus.jremoting.responses.*;
 
 /**
  * Class DirectInvocationHandler
@@ -71,9 +68,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
 
             response = performInvocation(request);
 
-            //TODO test this is still true for 1.5
-            //if ((response instanceof ProblemResponse))  // slower by 11%
-            if (response.getResponseCode() >= 100) {
+            if (response instanceof ProblemResponse) {
                 if (response instanceof TryLater) {
                     int millis = ((TryLater) response).getSuggestedDelayMillis();
 

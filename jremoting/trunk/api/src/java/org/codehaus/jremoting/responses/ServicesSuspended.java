@@ -27,14 +27,4 @@ package org.codehaus.jremoting.responses;
 public final class ServicesSuspended extends TryLater {
     static final long serialVersionUID = -5602483138541792903L;
 
-    /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
-     *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
-     */
-    public int getResponseCode() {
-        return ResponseConstants.SUSPENDEDRESPONSE;
-    }
 }

@@ -33,15 +33,6 @@ public abstract class AbstractResponse implements Externalizable {
     static final long serialVersionUID = -1604781598397036131L;
 
     /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
-     *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
-     */
-    public abstract int getResponseCode();
-
-    /**
      * The object implements the writeExternal method to save its contents
      * by calling the methods of DataOutput for its primitive values or
      * calling the writeObject method of ObjectOutput for objects, strings,

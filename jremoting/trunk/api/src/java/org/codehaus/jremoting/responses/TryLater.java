@@ -27,7 +27,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class TryLater extends AbstractResponse {
+public abstract class TryLater extends AbstractResponse implements ProblemResponse {
     static final long serialVersionUID = -3748772312349051164L;
 
     private int suggestedDelayMillis;

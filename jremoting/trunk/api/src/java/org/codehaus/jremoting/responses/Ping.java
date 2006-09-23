@@ -17,8 +17,6 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.ResponseConstants;
-
 
 /**
  * Class Ping
@@ -29,14 +27,4 @@ import org.codehaus.jremoting.responses.ResponseConstants;
 public final class Ping extends NotPublished {
     static final long serialVersionUID = 2290360065017766788L;
 
-    /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
-     *
-     * @return the representative code
-     * @see org.codehaus.jremoting.responses.ResponseConstants
-     */
-    public int getResponseCode() {
-        return ResponseConstants.PINGRESPONSE;
-    }
 }

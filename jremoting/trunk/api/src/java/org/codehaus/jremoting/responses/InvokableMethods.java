@@ -54,10 +54,6 @@ public final class InvokableMethods extends AbstractResponse {
         return listOfMethods;
     }
 
-    public int getResponseCode() {
-        return ResponseConstants.LISTRESPONSE;
-    }
-
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(listOfMethods);
     }
