@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server.transports.socket;
 
-import org.codehaus.jremoting.api.JRemotingRuntimeException;
+import org.codehaus.jremoting.api.JRemotingException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -148,13 +148,13 @@ public class SelfContainedSocketStreamServer extends AbstractServer implements R
     /**
      * Method start
      */
-    public void start() throws ServerException {
+    public void start() {
 
         setState(STARTING);
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException ioe) {
-            throw new ServerException("Could not bind to a socket when setting up the server", ioe);
+            throw new JRemotingException("Could not bind to port '"+port+"'when setting up the server", ioe);
         }
         setState(STARTED);
         future = getExecutor().submit(this);
@@ -166,14 +166,14 @@ public class SelfContainedSocketStreamServer extends AbstractServer implements R
     public void stop() {
 
         if (getState() != STARTED) {
-            throw new JRemotingRuntimeException("Server Not Started at time of stop");
+            throw new JRemotingException("Server Not Started at time of stop");
         }
 
         setState(SHUTTINGDOWN);
         try {
             serverSocket.close();
         } catch (IOException ioe) {
-            throw new JRemotingRuntimeException("Error stopping Complete Socket server", ioe);
+            throw new JRemotingException("Error stopping Complete Socket server", ioe);
         }
         killAllConnections();
         if (future != null) {

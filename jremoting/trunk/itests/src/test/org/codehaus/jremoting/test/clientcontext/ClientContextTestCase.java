@@ -103,7 +103,7 @@ public class ClientContextTestCase extends TestCase {
 
     }
 
-    public void testWithCustomContextWithRPC() throws InterruptedException, ServerException, PublicationException, ConnectionException {
+    public void testWithCustomContextWithRPC() throws InterruptedException, PublicationException, ConnectionException {
 
         final HashMap hashMap = new HashMap();
 

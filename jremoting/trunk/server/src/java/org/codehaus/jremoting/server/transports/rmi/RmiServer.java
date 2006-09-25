@@ -18,6 +18,8 @@
 package org.codehaus.jremoting.server.transports.rmi;
 
 import org.codehaus.jremoting.api.RmiInvocationHandler;
+import org.codehaus.jremoting.api.JRemotingException;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -81,9 +83,8 @@ public class RmiServer extends AbstractServer {
     /**
      * Start the server.
      *
-     * @throws ServerException if an exception during starting.
      */
-    public void start() throws ServerException {
+    public void start() {
         setState(STARTING);
         try {
             rmiInvocationAdapter = new RmiInvocationAdapter(this);
@@ -95,7 +96,7 @@ public class RmiServer extends AbstractServer {
             registry.rebind(RmiInvocationHandler.class.getName(), rmiInvocationAdapter);
             setState(STARTED);
         } catch (RemoteException re) {
-            throw new ServerException("Some problem setting up RMI server", re);
+            throw new JRemotingException("Some problem setting up RMI server", re);
         }
     }
 

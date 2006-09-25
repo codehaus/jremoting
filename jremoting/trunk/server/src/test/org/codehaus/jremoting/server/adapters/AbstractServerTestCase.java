@@ -2,7 +2,6 @@ package org.codehaus.jremoting.server.adapters;
 
 import org.codehaus.jremoting.server.transports.AbstractServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.ServerException;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -26,7 +25,7 @@ public class AbstractServerTestCase extends MockObjectTestCase {
 
         iha = new InvocationHandlerAdapter(new NoStubRetriever(), new NullAuthenticator(), new ConsoleServerMonitor(), new DefaultServerSideClientContextFactory());
         server = new AbstractServer(iha, new ConsoleServerMonitor(), Executors.newCachedThreadPool()) {
-            public void start() throws ServerException {
+            public void start() {
             }
 
             public void stop() {

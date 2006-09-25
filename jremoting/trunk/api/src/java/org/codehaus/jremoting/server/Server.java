@@ -64,9 +64,8 @@ public interface Server extends Publisher, ServerInvocationHandler {
     /**
      * Start publishing
      *
-     * @throws ServerException if the server cannot start.
      */
-    void start() throws ServerException;
+    void start();
 
     /**
      * Stop publishing
