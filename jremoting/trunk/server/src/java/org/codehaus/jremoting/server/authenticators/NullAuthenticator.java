@@ -34,7 +34,8 @@ public class NullAuthenticator implements Authenticator {
      * @param authentication   The Authentication object
      * @param publishedService the publishes server to authenticate against
      */
-    public void checkAuthority(Authentication authentication, String publishedService) {
+    public boolean checkAuthority(Authentication authentication, String publishedService) {
+        return authentication == null;
     }
 
     /**
@@ -43,6 +44,6 @@ public class NullAuthenticator implements Authenticator {
      * @return The text to sign.
      */
     public String getTextToSign() {
-        return "random" + Math.random() + "-" + Math.random() + "-" + Math.random() + "!";
+        return "";
     }
 }

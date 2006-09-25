@@ -20,7 +20,7 @@ public class AbstractStubFactoryTestCase extends MockObjectTestCase {
         hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new LookupResponse((long) 321)));
+        ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new Service((long) 321)));
         ih.expects(once()).method("handleInvocation").with(isA(CloseConnection.class)).will(returnValue(new ConnectionClosed((long) 321)));
         ih.expects(once()).method("close");
 

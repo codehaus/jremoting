@@ -33,9 +33,8 @@ public interface Authenticator {
      *
      * @param auth             the authenicatin that needs to be checked.
      * @param publishedService the name of the published service.
-     * @throws AuthenticationException if autheication fails.
      */
-    void checkAuthority(Authentication auth, String publishedService) throws AuthenticationException;
+    boolean checkAuthority(Authentication auth, String publishedService);
 
     /**
      * Get the text to sign for PKI style autheticators

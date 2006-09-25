@@ -25,7 +25,7 @@ import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.requests.ListServices;
 import org.codehaus.jremoting.responses.ServicesList;
 import org.codehaus.jremoting.requests.LookupService;
-import org.codehaus.jremoting.responses.LookupResponse;
+import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.responses.*;
@@ -33,7 +33,6 @@ import org.codehaus.jremoting.responses.*;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.server.UID;
 import java.util.HashMap;
 
 
@@ -102,7 +101,7 @@ public abstract class AbstractStubFactory implements Factory {
             }
         }
 
-        LookupResponse lr = (LookupResponse) ar;
+        Service lr = (Service) ar;
         DefaultProxyHelper baseObj = new DefaultProxyHelper(this, clientInvocationHandler, publishedServiceName, "Main", lr.getReferenceID(), sessionID);
         Object retVal = getInstance(publishedServiceName, "Main", baseObj);
 

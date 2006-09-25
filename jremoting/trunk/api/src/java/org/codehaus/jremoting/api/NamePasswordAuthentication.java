@@ -22,32 +22,32 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class UserPasswordAuthentication
+ * Class NamePasswordAuthentication
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class UserPasswordAuthentication extends Authentication {
+public final class NamePasswordAuthentication extends Authentication {
     static final long serialVersionUID = -1387784311223571160L;
 
     private String userID;
     private String password;
 
     /**
-     * Constructor UserPasswordAuthentication
+     * Constructor NamePasswordAuthentication
      *
      * @param userID   the user ID
      * @param password the password
      */
-    public UserPasswordAuthentication(String userID, String password) {
+    public NamePasswordAuthentication(String userID, String password) {
         this.userID = userID;
         this.password = password;
     }
 
     /**
-     * Constructor UserPasswordAuthentication for Externalization
+     * Constructor NamePasswordAuthentication for Externalization
      */
-    public UserPasswordAuthentication() {
+    public NamePasswordAuthentication() {
     }
 
     /**

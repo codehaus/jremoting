@@ -24,29 +24,29 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class LookupResponse
+ * Class Service
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class LookupResponse extends AbstractResponse {
+public final class Service extends AbstractResponse {
     static final long serialVersionUID = -3292232924211406705L;
 
     private Long referenceID;
 
     /**
-     * Constructor LookupResponse
+     * Constructor Service
      *
      * @param referenceID the reference ID
      */
-    public LookupResponse(Long referenceID) {
+    public Service(Long referenceID) {
         this.referenceID = referenceID;
     }
 
     /**
-     * Constructor LookupResponse for Externalization
+     * Constructor Service for Externalization
      */
-    public LookupResponse() {
+    public Service() {
     }
 
     /**

@@ -329,10 +329,8 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         LookupService lr = (LookupService) request;
         String publishedServiceName = lr.getService();
 
-        try {
-            authenticator.checkAuthority(lr.getAuthentication(), publishedServiceName);
-        } catch (AuthenticationException aae) {
-            return new ExceptionThrown(aae);
+        if (!authenticator.checkAuthority(lr.getAuthentication(), publishedServiceName)) {
+            return new AuthenticationFailed();
         }
 
         if (!isPublished(publishedServiceName + "_Main")) {
@@ -341,7 +339,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
 
         //TODO a decent ref number for main?
-        return new LookupResponse(new Long(0));
+        return new Service(new Long(0));
     }
 
     /**
