@@ -39,7 +39,7 @@ public class AbstractServerTestCase extends MockObjectTestCase {
         server.publish(impl, "foo", Map.class);
         putTestEntry();
         server.unPublish(impl, "foo");
-        AbstractResponse resp = putTestEntry();
+        AbstractResponse resp = serDeSerResponse(putTestEntry());
         assertTrue(resp instanceof NotPublished);
     }
 
@@ -83,10 +83,10 @@ public class AbstractServerTestCase extends MockObjectTestCase {
     private AbstractResponse putTestEntry() throws IOException, ClassNotFoundException {
         ConnectionOpened co = (ConnectionOpened) iha.handleInvocation(new OpenConnection(), new Object());
         AbstractRequest request = new InvokeMethod("foo", "Main", "put(java.lang.Object, java.lang.Object)", new Object[]{"1", "2"}, (long) 0, co.getSessionID());
-        return iha.handleInvocation(serializeAndDeserialize(request), new Object());
+        return iha.handleInvocation(serDeSerRequest(request), new Object());
     }
 
-    private AbstractRequest serializeAndDeserialize(AbstractRequest request) throws IOException, ClassNotFoundException {
+    private AbstractRequest serDeSerRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(request);
@@ -95,43 +95,52 @@ public class AbstractServerTestCase extends MockObjectTestCase {
         return (AbstractRequest) ois.readObject();
     }
 
+    private AbstractResponse serDeSerResponse(AbstractResponse response) throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(response);
+        oos.flush();
+        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
+        return (AbstractResponse) ois.readObject();
+    }
+
     public void testPublishAndSuspendBlocksOperations() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
         server.suspend();
-        assertTrue(iha.handleInvocation(serializeAndDeserialize(new OpenConnection()), new Object()) instanceof ServicesSuspended);
+        assertTrue(serDeSerResponse(iha.handleInvocation(serDeSerRequest(new OpenConnection()), new Object())) instanceof ServicesSuspended);
     }
 
     public void testPublishAndSuspendAndResumeDoesNotBlockOperation() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
         server.suspend();
         server.resume();
-        assertTrue(iha.handleInvocation(serializeAndDeserialize(new OpenConnection()), new Object()) instanceof ConnectionOpened);
+        assertTrue(serDeSerResponse(iha.handleInvocation(serDeSerRequest(new OpenConnection()), new Object())) instanceof ConnectionOpened);
     }
 
     public void testStubRetrievalFailsWhenItsAppropriate() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        AbstractResponse abstractResponse = iha.handleInvocation(serializeAndDeserialize(new RetrieveStub("foo", "Main")), new Object());
+        AbstractResponse abstractResponse = serDeSerResponse(iha.handleInvocation(serDeSerRequest(new RetrieveStub("foo", "Main")), new Object()));
         assertTrue(abstractResponse instanceof StubRetrievalFailed);
     }
 
     public void testRequestFailsOnUnknownRequestType() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        AbstractResponse abstractResponse = iha.handleInvocation(serializeAndDeserialize(new MyAbstractRequest()), new Object());
+        AbstractResponse abstractResponse = serDeSerResponse(iha.handleInvocation(serDeSerRequest(new MyAbstractRequest()), new Object()));
         assertTrue(abstractResponse instanceof RequestFailed);
         assertEquals("Unknown request :org.codehaus.jremoting.server.adapters.AbstractServerTestCase$MyAbstractRequest", ((RequestFailed) abstractResponse).getFailureReason());
     }
 
     public void testListServicesRespondsAppropriately() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        AbstractResponse abstractResponse = iha.handleInvocation(serializeAndDeserialize(new ListServices()), new Object());
-        assertTrue(abstractResponse instanceof ServicesList);
+        AbstractResponse abstractResponse = iha.handleInvocation(serDeSerRequest(new ListServices()), new Object());
+        assertTrue(serDeSerResponse(abstractResponse) instanceof ServicesList);
         assertEquals(1, ((ServicesList ) abstractResponse).getServices().length);
         assertEquals("foo", ((ServicesList ) abstractResponse).getServices()[0]);
     }
 
     public void testListServicesRespondsAppropriatelyWhenThereAreNone() throws PublicationException, IOException, ClassNotFoundException {
-        AbstractResponse abstractResponse = iha.handleInvocation(serializeAndDeserialize(new ListServices()), new Object());
-        assertTrue(abstractResponse instanceof ServicesList);
+        AbstractResponse abstractResponse = iha.handleInvocation(serDeSerRequest(new ListServices()), new Object());
+        assertTrue(serDeSerResponse(abstractResponse) instanceof ServicesList);
         assertEquals(0, ((ServicesList ) abstractResponse).getServices().length);
     }
 
