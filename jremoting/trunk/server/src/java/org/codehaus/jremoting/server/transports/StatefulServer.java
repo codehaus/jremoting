@@ -37,19 +37,19 @@ public class StatefulServer implements Server {
      */
     private String state = UNSTARTED;
     protected final ServerMonitor serverMonitor;
-    protected final ExecutorService executor;
+    protected final ExecutorService executorService;
 
 
     public StatefulServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
                           ExecutorService executor) {
         this.invocationHandlerAdapter = invocationHandlerAdapter;
-        this.executor = executor;
+        this.executorService = executor;
         this.serverMonitor = serverMonitor;
     }
 
 
-    public synchronized ExecutorService getExecutor() {
-        return executor;
+    public synchronized ExecutorService getExecutorService() {
+        return executorService;
     }
 
     /**

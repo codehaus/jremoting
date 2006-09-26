@@ -26,25 +26,35 @@ import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
+import org.codehaus.jremoting.server.transports.ServerStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.ServerStreamDriver;
 
 import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
 /**
- * Class AbstractPipedServer
+ * Class PipedServer
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractPipedServer extends ConnectingServer {
+public class PipedServer extends ConnectingServer {
 
-    public AbstractPipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+    private final ServerStreamDriverFactory serverStreamDriverFactory;
+
+    public PipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
+                       ExecutorService executor, ServerSideClientContextFactory contextFactory,
+                       ServerStreamDriverFactory serverStreamDriverFactory) {
         super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executor);
+        this.serverStreamDriverFactory = serverStreamDriverFactory;
     }
 
-    public AbstractPipedServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+    public PipedServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
+                       ExecutorService executor, ServerSideClientContextFactory contextFactory,
+                       ServerStreamDriverFactory serverStreamDriverFactory) {
         super(serverMonitor, invocationHandlerAdapter, executor);
+        this.serverStreamDriverFactory = serverStreamDriverFactory;
     }
 
     /**
@@ -69,19 +79,15 @@ public abstract class AbstractPipedServer extends ConnectingServer {
             pIS.connect(out);
             in.connect(pOS);
 
-            AbstractServerStreamDriver ssd = createServerStreamDriver();
 
-            ssd.setStreams(pIS, pOS, "piped");
+            ServerStreamDriver ssd = serverStreamDriverFactory.createDriver(serverMonitor, executorService, pIS, pOS, "piped");
 
             PipedStreamConnection pssc = new PipedStreamConnection(this, pIS, pOS, ssd, serverMonitor);
 
-            getExecutor().execute(pssc);
+            getExecutorService().execute(pssc);
 
         } catch (IOException pe) {
             throw new ConnectionException("Some problem setting up server : " + pe.getMessage());
         }
     }
-
-
-    protected abstract AbstractServerStreamDriver createServerStreamDriver();
 }

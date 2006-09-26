@@ -20,8 +20,13 @@ package org.codehaus.jremoting.transports;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.piped.PipedObjectStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.transports.piped.PipedServer;
+import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.ServerObjectStreamDriverFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.piped.PipedObjectStreamServer;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
@@ -30,6 +35,7 @@ import org.codehaus.jremoting.tools.generator.BcelProxyGenerator;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.concurrent.Executors;
 
 /**
  * Test Piped Trasnport (Object Stream)
@@ -54,7 +60,8 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new PipedObjectStreamServer(new ConsoleServerMonitor());
+        server = new PipedServer(new ConsoleServerMonitor(), new NoStubRetriever(), new NullAuthenticator(),
+                Executors.newCachedThreadPool() ,new DefaultServerSideClientContextFactory(), new ServerObjectStreamDriverFactory());
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
 
@@ -75,7 +82,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         // For piped, server and client can see each other
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out = new PipedOutputStream();
-        ((PipedObjectStreamServer) server).makeNewConnection(in, out);
+        ((PipedServer) server).makeNewConnection(in, out);
 
         // Client side setup
         factory = new ClientSideStubFactory(new PipedObjectStreamHostContext(in, out));

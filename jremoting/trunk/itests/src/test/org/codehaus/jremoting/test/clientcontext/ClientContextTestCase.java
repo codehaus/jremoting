@@ -30,6 +30,7 @@ import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContext;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
+import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
 import java.util.HashMap;
@@ -121,7 +122,7 @@ public class ClientContextTestCase extends TestCase {
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ExecutorService executor = Executors.newCachedThreadPool();
         SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ServerCustomStreamDriver(serverMonitor, executor), executor,
+                new ServerCustomStreamDriverFactory(), executor,
                 ccf, 13333);
 
         PublicationDescription pd = new PublicationDescription(AccountManager.class);

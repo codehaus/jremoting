@@ -40,17 +40,10 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
     private XStream xStream;
     private BufferedOutputStream bufferedOutputStream;
 
-
-    public ServerXStreamDriver(ServerMonitor serverMonitor, ExecutorService executor) {
-        super(serverMonitor, executor);
+    public ServerXStreamDriver(ServerMonitor serverMonitor, ExecutorService executor, InputStream inputStream,
+                               OutputStream outputStream, Object connectionDetails) {
+        super(serverMonitor, executor, inputStream, outputStream, connectionDetails);
         xStream = new XStream(new DomDriver());
-    }
-
-
-    public void initialize() throws IOException {
-        lineNumberReader = new LineNumberReader(new BufferedReader(new InputStreamReader(getInputStream())));
-        bufferedOutputStream = new BufferedOutputStream(getOutputStream());
-        printWriter = new PrintWriter(bufferedOutputStream);
     }
 
     public synchronized AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
@@ -83,6 +76,12 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
         }
         printWriter.close();
         super.close();
+    }
+
+    public void initialize() throws IOException {
+        lineNumberReader = new LineNumberReader(new BufferedReader(new InputStreamReader(getInputStream())));
+        bufferedOutputStream = new BufferedOutputStream(getOutputStream());
+        printWriter = new PrintWriter(bufferedOutputStream);
     }
 
     private AbstractRequest readRequest() throws IOException, ClassNotFoundException, ConnectionException {

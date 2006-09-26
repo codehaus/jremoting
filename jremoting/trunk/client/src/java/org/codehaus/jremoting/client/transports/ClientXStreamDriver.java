@@ -99,6 +99,7 @@ public class ClientXStreamDriver implements ClientStreamDriver {
 //        }
 
         try {
+            //TODO use interfacesClassLoader
             return (AbstractResponse) xStream.fromXML(expected);
         } catch (ConversionException e) {
             Throwable cause = e.getCause();
@@ -108,8 +109,5 @@ public class ClientXStreamDriver implements ClientStreamDriver {
                 throw e;
             }
         }
-
-        //TODO use interfacesClassLoader
-        //Object response = SerializationHelper.getInstanceFromBytes(byteArray, interfacesClassLoader);
     }
 }

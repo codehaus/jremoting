@@ -63,6 +63,6 @@ public final class SocketObjectStreamInvocationHandler extends AbstractSocketStr
      * @throws ConnectionException if a problem
      */
     protected ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException {
-        return new ClientObjectStreamDriver(in, out);
+        return new ClientObjectStreamDriver(in, out, interfacesClassLoader);
     }
 }

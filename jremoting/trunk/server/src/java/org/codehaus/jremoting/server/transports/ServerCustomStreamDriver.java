@@ -25,10 +25,7 @@ import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMonitor;
 
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Class ServerCustomStreamDriver
@@ -41,18 +38,9 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
 
-    public ServerCustomStreamDriver(ServerMonitor serverMonitor, ExecutorService executor) {
-        super(serverMonitor, executor);
-    }
-
-    /**
-     * Initialize
-     *
-     * @throws IOException if an IO Excpetion
-     */
-    public void initialize() throws IOException {
-        dataInputStream = new DataInputStream(getInputStream());
-        dataOutputStream = new DataOutputStream(new BufferedOutputStream(getOutputStream()));
+    public ServerCustomStreamDriver(ServerMonitor serverMonitor, ExecutorService executor, InputStream inputStream,
+                                    OutputStream outputStream, Object connectionDetails) {
+        super(serverMonitor, executor, inputStream, outputStream, connectionDetails);
     }
 
     /**
@@ -92,6 +80,11 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
         } catch (IOException e) {
         }
         super.close();
+    }
+
+    public void initialize() {
+        dataInputStream = new DataInputStream(getInputStream());
+        dataOutputStream = new DataOutputStream(new BufferedOutputStream(getOutputStream()));        
     }
 
     private AbstractRequest readRequest() throws IOException, ClassNotFoundException, ConnectionException {

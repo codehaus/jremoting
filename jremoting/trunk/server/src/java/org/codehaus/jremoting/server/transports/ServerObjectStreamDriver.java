@@ -22,10 +22,7 @@ import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMonitor;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 /**
  * Class ServerObjectStreamDriver
@@ -48,18 +45,10 @@ public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
     /**
      * Constructor ServerObjectStreamDriver
      */
-    public ServerObjectStreamDriver(ServerMonitor serverMonitor, ExecutorService executor) {
-        super(serverMonitor, executor);
-    }
+    public ServerObjectStreamDriver(ServerMonitor serverMonitor, ExecutorService executor, InputStream inputStream,
+                                    OutputStream outputStream, Object connectionDetails) {
+        super(serverMonitor, executor, inputStream, outputStream, connectionDetails);
 
-    /**
-     * Initialize
-     *
-     * @throws IOException if an IO Excpetion
-     */
-    public void initialize() throws IOException {
-        objectInputStream = new ObjectInputStream(new BufferedInputStream(getInputStream()));
-        objectOutputStream = new ObjectOutputStream(getOutputStream());
     }
 
     /**
@@ -103,6 +92,11 @@ public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
         } catch (IOException e) {
         }
         super.close();
+    }
+
+    public void initialize() throws IOException {
+        objectInputStream = new ObjectInputStream(new BufferedInputStream(getInputStream()));
+        objectOutputStream = new ObjectOutputStream(getOutputStream());
     }
 
     /**

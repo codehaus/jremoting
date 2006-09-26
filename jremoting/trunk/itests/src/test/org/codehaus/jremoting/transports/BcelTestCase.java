@@ -26,6 +26,7 @@ import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRet
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
+import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
@@ -61,7 +62,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         stubRetriever.setClassGenDir(class_gen_dir);
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ExecutorService executor = Executors.newCachedThreadPool();
-        server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(), new ServerCustomStreamDriver(serverMonitor, executor), executor, new DefaultServerSideClientContextFactory(), 10001);
+        server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(), new ServerCustomStreamDriverFactory(), executor, new DefaultServerSideClientContextFactory(), 10001);
 
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});

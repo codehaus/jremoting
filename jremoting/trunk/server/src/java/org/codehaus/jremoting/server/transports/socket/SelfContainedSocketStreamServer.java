@@ -50,11 +50,12 @@ public class SelfContainedSocketStreamServer extends ConnectingServer implements
      */
     private Future future;
     //TODO cannot be instance variable because of setStreams()
-    private final ServerStreamDriver serverStreamDriver;
+//    private final ServerStreamDriver serverStreamDriver;
     private int port;
     public static final String OBJECTSTREAM = "objectstream";
     public static final String CUSTOMSTREAM = "customstream";
     public static final String XSTREAM = "xstream";
+    private final ServerStreamDriverFactory serverStreamDriverFactory;
 
     /**
      * Construct a SelfContainedSocketStreamServer
@@ -64,17 +65,17 @@ public class SelfContainedSocketStreamServer extends ConnectingServer implements
      * @param port                     The port to use
      */
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
-                                           ServerStreamDriver serverStreamDriver, ExecutorService executor, int port) {
+                                           ServerStreamDriverFactory serverStreamDriverFactory, ExecutorService executor, int port) {
 
         super(serverMonitor, invocationHandlerAdapter, executor);
-        this.serverStreamDriver = serverStreamDriver;
+        this.serverStreamDriverFactory = serverStreamDriverFactory;
         this.port = port;
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
-                                           ServerStreamDriver serverStreamDriver, ExecutorService executor,
+                                           ServerStreamDriverFactory serverStreamDriverFactory, ExecutorService executor,
                                            ServerSideClientContextFactory contextFactory, int port) {
-        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), serverStreamDriver, executor, port);
+        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), serverStreamDriverFactory, executor, port);
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port) {
@@ -82,11 +83,11 @@ public class SelfContainedSocketStreamServer extends ConnectingServer implements
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ExecutorService executorService) {
-        this(serverMonitor, port, executorService, new ServerCustomStreamDriver(serverMonitor, executorService));
+        this(serverMonitor, port, executorService, new ServerCustomStreamDriverFactory());
     }
 
-    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ExecutorService executorService, ServerStreamDriver serverStreamDriver) {
-        this(serverMonitor, new NoStubRetriever(), new NullAuthenticator(), serverStreamDriver, executorService, new DefaultServerSideClientContextFactory(), port);
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ExecutorService executorService, ServerStreamDriverFactory serverStreamDriverFactory) {
+        this(serverMonitor, new NoStubRetriever(), new NullAuthenticator(), serverStreamDriverFactory, executorService, new DefaultServerSideClientContextFactory(), port);
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, String streamType) {
@@ -94,16 +95,16 @@ public class SelfContainedSocketStreamServer extends ConnectingServer implements
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ExecutorService executorService, String streamType) {
-        this(serverMonitor, port, executorService, createZerverStreamDriver(serverMonitor, executorService, streamType));
+        this(serverMonitor, port, executorService, createZerverStreamDriverFactory(streamType));
     }
 
-    private static ServerStreamDriver createZerverStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService, String streamType) {
+    private static ServerStreamDriverFactory createZerverStreamDriverFactory(String streamType) {
         if (streamType.equals(CUSTOMSTREAM)) {
-            return new ServerCustomStreamDriver(serverMonitor, executorService);
+            return new ServerCustomStreamDriverFactory();
         } else if (streamType.equals(OBJECTSTREAM)) {
-            return new ServerObjectStreamDriver(serverMonitor, executorService);
+            return new ServerObjectStreamDriverFactory();
         } else if (streamType.equals(XSTREAM)) {
-            return new ServerXStreamDriver(serverMonitor, executorService);
+            return new ServerXStreamDriverFactory();
         }
         throw new IllegalArgumentException("streamType can only be '"+CUSTOMSTREAM+"', '"+OBJECTSTREAM+"' or '"+XSTREAM+"' ");
     }
@@ -125,12 +126,13 @@ public class SelfContainedSocketStreamServer extends ConnectingServer implements
                 // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
                 sock.setSoTimeout(60 * 1000);
 
-                serverStreamDriver.setStreams(sock.getInputStream(), sock.getOutputStream(), sock);
+                ServerStreamDriver serverStreamDriver = serverStreamDriverFactory.createDriver(serverMonitor,
+                        executorService, sock.getInputStream(), sock.getOutputStream(), sock);
 
                 SocketStreamConnection sssc = new SocketStreamConnection(this, sock, serverStreamDriver, serverMonitor);
 
                 //TODO ? Two of these getExecutors? PH
-                getExecutor().execute(sssc);
+                getExecutorService().execute(sssc);
 
             }
         } catch (IOException ioe) {
@@ -155,7 +157,7 @@ public class SelfContainedSocketStreamServer extends ConnectingServer implements
             throw new JRemotingException("Could not bind to port '"+port+"'when setting up the server", ioe);
         }
         setState(STARTED);
-        future = getExecutor().submit(this);
+        future = getExecutorService().submit(this);
     }
 
     /**

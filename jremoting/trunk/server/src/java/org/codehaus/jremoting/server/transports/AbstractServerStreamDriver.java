@@ -34,20 +34,15 @@ import java.io.OutputStream;
 public abstract class AbstractServerStreamDriver implements ServerStreamDriver {
 
     private InputStream inputStream;
-
     private OutputStream outputStream;
-
-    protected final ServerMonitor serverMonitor;
-    protected final ExecutorService executorService;
+    private final ServerMonitor serverMonitor;
+    private final ExecutorService executorService;
     private Object connectionDetails;
 
-    public AbstractServerStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService) {
+    public AbstractServerStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService,
+                                      InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
         this.serverMonitor = serverMonitor;
         this.executorService = executorService;
-    }
-
-
-    public final void setStreams(InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
         this.inputStream = inputStream;
         this.outputStream = outputStream;
         this.connectionDetails = connectionDetails;

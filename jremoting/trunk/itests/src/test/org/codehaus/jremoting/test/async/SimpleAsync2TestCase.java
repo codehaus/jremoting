@@ -28,6 +28,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
+import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
 import java.util.concurrent.Executors;
@@ -60,7 +61,7 @@ public class SimpleAsync2TestCase extends TestCase {
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ExecutorService executor = Executors.newCachedThreadPool();
         server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ServerCustomStreamDriver(serverMonitor, executor), executor,
+                new ServerCustomStreamDriverFactory(), executor,
                 new DefaultServerSideClientContextFactory(), 11009);
 
         asyncTestImpl = new AsyncTestImpl();

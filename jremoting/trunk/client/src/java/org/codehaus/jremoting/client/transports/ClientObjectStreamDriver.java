@@ -49,10 +49,11 @@ public class ClientObjectStreamDriver implements ClientStreamDriver {
      * @param outputStream
      * @throws ConnectionException
      */
-    public ClientObjectStreamDriver(InputStream inputStream, OutputStream outputStream) throws ConnectionException {
+    public ClientObjectStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
 
         try {
             objectOutputStream = new ObjectOutputStream(outputStream);
+            //TODO use that magix classloader that uses yje interfaces classlaoader
             objectInputStream = new ObjectInputStream(new BufferedInputStream(inputStream));
         } catch (EOFException eofe) {
             throw new BadConnectionException("Cannot connect to remote JRemoting server. Have we a mismatch on transports?");

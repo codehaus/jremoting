@@ -23,6 +23,8 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
+import org.codehaus.jremoting.server.transports.ServerStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.ServerStreamDriver;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -32,7 +34,8 @@ import java.net.SocketException;
  * @author Peter Royal
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractPartialSocketStreamServer extends ConnectingServer {
+public class AbstractPartialSocketStreamServer extends ConnectingServer {
+    private final ServerStreamDriverFactory serverStreamDriverFactory;
 
     /**
      * Construct a AbstractPartialSocketStreamServer
@@ -40,8 +43,10 @@ public abstract class AbstractPartialSocketStreamServer extends ConnectingServer
      * @param invocationHandlerAdapter Use this invocation handler adapter.
      * @param serverMonitor            The server Monitor
      */
-    public AbstractPartialSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor) {
-        super(serverMonitor, invocationHandlerAdapter, executor);
+    public AbstractPartialSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executorService,
+                                             ServerStreamDriverFactory serverStreamDriverFactory) {
+        super(serverMonitor, invocationHandlerAdapter, executorService);
+        this.serverStreamDriverFactory = serverStreamDriverFactory;
     }
 
     /**
@@ -60,12 +65,9 @@ public abstract class AbstractPartialSocketStreamServer extends ConnectingServer
 
         try {
             if (getState() == STARTED) {
-                AbstractServerStreamDriver ssd = createServerStreamDriver();
-
-                ssd.setStreams(socket.getInputStream(), socket.getOutputStream(), socket);
-
+                ServerStreamDriver ssd = serverStreamDriverFactory.createDriver(serverMonitor, executorService,
+                        socket.getInputStream(), socket.getOutputStream(), socket);
                 SocketStreamConnection sssc = new SocketStreamConnection(this, socket, ssd, serverMonitor);
-
                 sssc.run();
             }
         } catch (IOException ioe) {
@@ -73,13 +75,5 @@ public abstract class AbstractPartialSocketStreamServer extends ConnectingServer
             serverMonitor.unexpectedException(this.getClass(), "AbstractPartialSocketStreamServer.handleConnection(): Some problem connecting " + "client via sockets: ", ioe);
         }
     }
-
-    /**
-     * Create a Server Stream Driver.
-     *
-     * @return The Server Stream Driver.
-     */
-    protected abstract AbstractServerStreamDriver createServerStreamDriver();
-
 
 }

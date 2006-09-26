@@ -3,6 +3,7 @@ package org.codehaus.jremoting.transports;
 import org.codehaus.jremoting.test.*;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.ServerXStreamDriver;
+import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -28,7 +29,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         ExecutorService executor = Executors.newCachedThreadPool();
         ConsoleServerMonitor serverMonitor = new ConsoleServerMonitor();
         server = new SelfContainedSocketStreamServer(serverMonitor, new NoStubRetriever(), new NullAuthenticator(),
-                new ServerXStreamDriver(serverMonitor, executor), executor, new DefaultServerSideClientContextFactory(), 10099);
+                new ServerXStreamDriverFactory(), executor, new DefaultServerSideClientContextFactory(), 10099);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
