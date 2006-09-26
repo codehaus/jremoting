@@ -20,6 +20,7 @@ package org.codehaus.jremoting.transports;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.piped.PipedCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.piped.PipedCustomStreamServer;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
@@ -41,7 +42,7 @@ public class PipedCustomStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new PipedCustomStreamServer();
+        server = new PipedCustomStreamServer(new ConsoleServerMonitor());
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

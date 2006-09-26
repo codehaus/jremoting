@@ -22,7 +22,8 @@ import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.transports.AbstractServer;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.rmi.RmiServer;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
@@ -40,7 +41,7 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
  */
 public class RmiTestCase extends TestCase {
 
-    private AbstractServer server;
+    private ConnectingServer server;
     private TestInterfaceImpl testServer;
     private TestInterface testClient;
 
@@ -48,7 +49,7 @@ public class RmiTestCase extends TestCase {
         super.setUp();
 
         // server side setup.
-        server = new RmiServer(10003);
+        server = new RmiServer(new ConsoleServerMonitor(), 10003);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

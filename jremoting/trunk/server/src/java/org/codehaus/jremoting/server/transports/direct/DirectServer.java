@@ -20,9 +20,6 @@ package org.codehaus.jremoting.server.transports.direct;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
-import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -31,8 +28,8 @@ import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
-import org.codehaus.jremoting.server.transports.AbstractServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.StatefulServer;
 
 /**
  * Class DirectServer
@@ -40,7 +37,7 @@ import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFa
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class DirectServer extends AbstractServer {
+public class DirectServer extends StatefulServer {
 
     /**
      * Constructor DirectServer for use with pre-exiting InvocationHandlerAdapter.
@@ -52,44 +49,11 @@ public class DirectServer extends AbstractServer {
      * @param contextFactory
      */
     public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
-        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, executor);
+        super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executor);
     }
 
     public DirectServer() {
         this(new NoStubRetriever(), new NullAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
     }
 
-    /**
-     * Method start
-     */
-    public void start() {
-        setState(STARTED);
-    }
-
-    /**
-     * Method stop
-     */
-    public void stop() {
-
-        setState(SHUTTINGDOWN);
-
-        killAllConnections();
-
-        setState(STOPPED);
-    }
-
-    /**
-     * Method handleInvocation
-     *
-     * @param request
-     * @return
-     */
-    public AbstractResponse handleInvocation(AbstractRequest request) {
-
-        if (getState() == STARTED) {
-            return super.handleInvocation(request, "");
-        } else {
-            return new InvocationExceptionThrown("Service is not started");
-        }
-    }
 }

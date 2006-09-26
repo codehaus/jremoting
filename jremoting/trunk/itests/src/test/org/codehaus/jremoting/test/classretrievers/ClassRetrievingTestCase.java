@@ -25,7 +25,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.AbstractDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
-import org.codehaus.jremoting.server.transports.AbstractServer;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.piped.PipedCustomStreamServer;
 
@@ -40,7 +40,7 @@ import java.util.concurrent.Executors;
  */
 public class ClassRetrievingTestCase extends TestCase {
 
-    protected AbstractServer server;
+    protected ConnectingServer server;
     protected TestImpl testServer;
     protected TestInterface testClient;
 
@@ -50,7 +50,7 @@ public class ClassRetrievingTestCase extends TestCase {
 
         // server side setup.
         AbstractDynamicGeneratorStubRetriever dyncgen = new BcelDynamicGeneratorStubRetriever();
-        server = new PipedCustomStreamServer(dyncgen, new NullAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
+        server = new PipedCustomStreamServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
         testServer = new TestImpl();
         server.publish(testServer, "Kewl", TestInterface.class);
         dyncgen.generate("Kewl", TestInterface.class, this.getClass().getClassLoader());

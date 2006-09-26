@@ -24,7 +24,7 @@ import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
-import org.codehaus.jremoting.server.transports.AbstractServer;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 
 import java.io.IOException;
@@ -37,14 +37,14 @@ import java.io.PipedOutputStream;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractPipedServer extends AbstractServer {
+public abstract class AbstractPipedServer extends ConnectingServer {
 
-    public AbstractPipedServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
-        super(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, executor);
+    public AbstractPipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+        super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executor);
     }
 
-    public AbstractPipedServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
-        super(invocationHandlerAdapter, serverMonitor, executor);
+    public AbstractPipedServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+        super(serverMonitor, invocationHandlerAdapter, executor);
     }
 
     /**
@@ -73,7 +73,7 @@ public abstract class AbstractPipedServer extends AbstractServer {
 
             ssd.setStreams(pIS, pOS, "piped");
 
-            PipedStreamServerConnection pssc = new PipedStreamServerConnection(this, pIS, pOS, ssd, serverMonitor);
+            PipedStreamConnection pssc = new PipedStreamConnection(this, pIS, pOS, ssd, serverMonitor);
 
             getExecutor().execute(pssc);
 
@@ -82,24 +82,6 @@ public abstract class AbstractPipedServer extends AbstractServer {
         }
     }
 
-    /**
-     * Method start
-     */
-    public void start() {
-        setState(STARTED);
-    }
-
-    /**
-     * Method stop
-     */
-    public void stop() {
-
-        setState(SHUTTINGDOWN);
-
-        killAllConnections();
-
-        setState(STOPPED);
-    }
 
     protected abstract AbstractServerStreamDriver createServerStreamDriver();
 }

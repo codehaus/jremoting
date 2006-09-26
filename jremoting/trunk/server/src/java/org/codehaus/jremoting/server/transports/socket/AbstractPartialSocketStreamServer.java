@@ -20,9 +20,8 @@ package org.codehaus.jremoting.server.transports.socket;
 
 import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
-import org.codehaus.jremoting.server.transports.AbstractServer;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 
 import java.io.IOException;
@@ -33,7 +32,7 @@ import java.net.SocketException;
  * @author Peter Royal
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
+public abstract class AbstractPartialSocketStreamServer extends ConnectingServer {
 
     /**
      * Construct a AbstractPartialSocketStreamServer
@@ -42,7 +41,7 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
      * @param serverMonitor            The server Monitor
      */
     public AbstractPartialSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor) {
-        super(invocationHandlerAdapter, serverMonitor, executor);
+        super(serverMonitor, invocationHandlerAdapter, executor);
     }
 
     /**
@@ -65,7 +64,7 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
 
                 ssd.setStreams(socket.getInputStream(), socket.getOutputStream(), socket);
 
-                SocketStreamServerConnection sssc = new SocketStreamServerConnection(this, socket, ssd, serverMonitor);
+                SocketStreamConnection sssc = new SocketStreamConnection(this, socket, ssd, serverMonitor);
 
                 sssc.run();
             }
@@ -82,22 +81,5 @@ public abstract class AbstractPartialSocketStreamServer extends AbstractServer {
      */
     protected abstract AbstractServerStreamDriver createServerStreamDriver();
 
-    /**
-     * Method start
-     */
-    public void start() {
-        setState(STARTED);
-    }
 
-    /**
-     * Method stop
-     */
-    public void stop() {
-
-        setState(SHUTTINGDOWN);
-
-        killAllConnections();
-
-        setState(STOPPED);
-    }
 }

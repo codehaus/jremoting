@@ -80,12 +80,8 @@ public abstract class AbstractStubFactory implements Factory {
 
         AbstractResponse ar = clientInvocationHandler.handleInvocation(new LookupService(publishedServiceName, authentication, sessionID));
 
-        if (ar instanceof ProblemResponse) {
-            if (ar instanceof NotPublished) {
-                throw new ConnectionException("Service '" + publishedServiceName + "' not published");
-            } else {
-                throw new ConnectionException("Problem doing lookup on service");
-            }
+        if (ar instanceof NotPublished) {
+            throw new ConnectionException("Service '" + publishedServiceName + "' not published");
         } else if (ar instanceof ExceptionThrown) {
             ExceptionThrown er = (ExceptionThrown) ar;
             Throwable t = er.getResponseException();

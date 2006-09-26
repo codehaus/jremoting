@@ -20,18 +20,14 @@ package org.codehaus.jremoting.server.transports.direct;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
-import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.adapters.MarshalledInvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
-import org.codehaus.jremoting.server.monitors.NullServerMonitor;
-import org.codehaus.jremoting.server.transports.AbstractServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.StatefulServer;
 
 /**
  * Class DirectMarshalledServer
@@ -39,59 +35,38 @@ import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFa
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class DirectMarshalledServer extends AbstractServer implements ServerMarshalledInvocationHandler {
+public class DirectMarshalledServer extends StatefulServer implements ServerMarshalledInvocationHandler {
 
     private final MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter;
 
     /**
      * Constructor DirectMarshalledServer for use with pre-exiting InvocationHandlerAdapter and MarshalledInvocationHandler
      *
-     * @param invocationHandlerAdapter
      * @param serverMonitor
+     * @param invocationHandlerAdapter
      * @param executor
      * @param marshalledInvocationHandlerAdapter
      *
      */
-    public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
-        super(invocationHandlerAdapter, serverMonitor, executor);
+    public DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executor, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
+        super(serverMonitor, invocationHandlerAdapter, executor);
         this.marshalledInvocationHandlerAdapter = marshalledInvocationHandlerAdapter;
     }
 
-    public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
-        this(invocationHandlerAdapter, new NullServerMonitor(), Executors.newCachedThreadPool(), marshalledInvocationHandlerAdapter);
+    public DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
+        this(serverMonitor, invocationHandlerAdapter, Executors.newCachedThreadPool(), marshalledInvocationHandlerAdapter);
     }
 
-    public DirectMarshalledServer(InvocationHandlerAdapter invocationHandlerAdapter) {
-        this(invocationHandlerAdapter, new MarshalledInvocationHandlerAdapter(invocationHandlerAdapter));
+    public DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter) {
+        this(serverMonitor, invocationHandlerAdapter, new MarshalledInvocationHandlerAdapter(invocationHandlerAdapter));
     }
 
-    public DirectMarshalledServer() {
-        this(new InvocationHandlerAdapter(new NoStubRetriever(), new NullAuthenticator(), new NullServerMonitor(), new DefaultServerSideClientContextFactory()));
-    }
-
-    public void start() {
-        setState(STARTED);
-    }
-
-    public void stop() {
-
-        setState(SHUTTINGDOWN);
-
-        killAllConnections();
-
-        setState(STOPPED);
+    public DirectMarshalledServer(ServerMonitor serverMonitor) {
+        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, new NoStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory()));
     }
 
     public byte[] handleInvocation(byte[] request, Object connectionDetails) {
         return marshalledInvocationHandlerAdapter.handleInvocation(request, connectionDetails);
     }
 
-    public AbstractResponse handleInvocation(AbstractRequest request, Object connectionDetails) {
-
-        if (getState() == STARTED) {
-            return super.handleInvocation(request, connectionDetails);
-        } else {
-            return new InvocationExceptionThrown("Service is not started");
-        }
-    }
 }

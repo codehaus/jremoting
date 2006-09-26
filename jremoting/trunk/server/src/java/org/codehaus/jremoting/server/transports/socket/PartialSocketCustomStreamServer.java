@@ -36,20 +36,13 @@ public class PartialSocketCustomStreamServer extends AbstractPartialSocketStream
     /**
      * Construct a PartialSocketCustomStreamServer
      *
-     * @param invocationHandlerAdapter the handler
      * @param serverMonitor            the monitor
+     * @param invocationHandlerAdapter the handler
      */
-    public PartialSocketCustomStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor) {
+    public PartialSocketCustomStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executor) {
         super(invocationHandlerAdapter, serverMonitor, executor);
     }
 
-
-    /**
-     * Stop
-     */
-    public void stop() {
-        super.stop();
-    }
 
     /**
      * Create a Server Stream Driver.

@@ -24,6 +24,7 @@ import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.rmi.RmiServer;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.test.TestInterface;
@@ -41,7 +42,7 @@ public class SocketMismatchTestCase extends TestCase {
     public void testCustomStreamObjectStreamMismatch() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(12001);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12001);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -80,7 +81,7 @@ public class SocketMismatchTestCase extends TestCase {
     public void dont_testObjectStreamCustomStreamMismatch() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(12002, SelfContainedSocketStreamServer.OBJECTSTREAM);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12002, SelfContainedSocketStreamServer.OBJECTSTREAM);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -120,7 +121,7 @@ public class SocketMismatchTestCase extends TestCase {
     public void dont_testCustomStreamRmiMismatch() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(12003);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12003);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -159,7 +160,7 @@ public class SocketMismatchTestCase extends TestCase {
     public void dont_testRmiCustomStreamMismatch() throws Exception {
 
         // server side setup.
-        RmiServer server = new RmiServer(12004);
+        RmiServer server = new RmiServer(new ConsoleServerMonitor(), 12004);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

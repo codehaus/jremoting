@@ -15,62 +15,42 @@
  * limitations under the License.
  *
  */
+
 package org.codehaus.jremoting.server.transports;
 
-import java.util.concurrent.ExecutorService;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
+import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.InvocationExceptionThrown;
+import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.requests.InvokeMethod;
 
-import java.util.Vector;
+import java.util.concurrent.ExecutorService;
 
-/**
- * Class AbstractServer
- *
- * @author Paul Hammant
- * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
- * @version $Revision: 1.2 $
- */
-public abstract class AbstractServer implements Server {
-
-    /**
-     * A vector of connections
-     */
-    private Vector connections = new Vector();
-
+public class StatefulServer implements Server {
     /**
      * The invocation handler
      */
-    private InvocationHandlerAdapter invocationHandlerAdapter;
-
+    protected InvocationHandlerAdapter invocationHandlerAdapter;
     /**
      * The state of the system.
      */
-    private int state = UNSTARTED;
-
+    private String state = UNSTARTED;
     protected final ServerMonitor serverMonitor;
     protected final ExecutorService executor;
 
-    /**
-     * Construct a AbstractServer
-     *
-     * @param invocationHandlerAdapter The invocation handler adapter to use.
-     * @param serverMonitor            The Server monitor
-     */
-    public AbstractServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor,
-                          ExecutorService threadPool) {
+
+    public StatefulServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
+                          ExecutorService executor) {
         this.invocationHandlerAdapter = invocationHandlerAdapter;
+        this.executor = executor;
         this.serverMonitor = serverMonitor;
-        this.executor = threadPool;
     }
 
 
     public synchronized ExecutorService getExecutor() {
         return executor;
     }
-
 
     /**
      * Handle an Invocation
@@ -79,7 +59,11 @@ public abstract class AbstractServer implements Server {
      * @return An suitable reply.
      */
     public AbstractResponse handleInvocation(AbstractRequest request, Object connectionDetails) {
-        return invocationHandlerAdapter.handleInvocation(request, connectionDetails);
+        if (getState().equals(STARTED)) {
+            return invocationHandlerAdapter.handleInvocation(request, connectionDetails);
+        } else {
+            return new InvocationExceptionThrown("Service is not started");
+        }
     }
 
     /**
@@ -97,33 +81,17 @@ public abstract class AbstractServer implements Server {
     }
 
     /**
-     * Strart a connection
-     *
-     * @param connection The connection
+     * Method start
      */
-    protected void connectionStart(ServerConnection connection) {
-        connections.add(connection);
+    public void start() {
+        setState(STARTED);
     }
 
     /**
-     * Complete a connection.
-     *
-     * @param connection The connection
+     * Method stop
      */
-    protected void connectionCompleted(ServerConnection connection) {
-        connections.remove(connection);
-    }
-
-    /**
-     * Kill connections.
-     */
-    protected void killAllConnections() {
-        // Copy the connections into an array to avoid ConcurrentModificationExceptions
-        //  as the connections are closed.
-        ServerConnection[] connections = (ServerConnection[]) this.connections.toArray(new ServerConnection[0]);
-        for (int i = 0; i < connections.length; i++) {
-            connections[i].endConnection();
-        }
+    public void stop() {
+        setState(STOPPED);
     }
 
     /**
@@ -145,7 +113,7 @@ public abstract class AbstractServer implements Server {
      * @param impl                   The implementation
      * @param service                 as this name.
      * @param publicationDescription The publication description.
-     * @throws PublicationException if an error during publication.
+     * @throws org.codehaus.jremoting.server.PublicationException if an error during publication.
      */
     public void publish(Object impl, String service, PublicationDescription publicationDescription) throws PublicationException {
         invocationHandlerAdapter.publish(impl, service, publicationDescription);
@@ -156,7 +124,7 @@ public abstract class AbstractServer implements Server {
      *
      * @param impl   The implementation
      * @param service as this name.
-     * @throws PublicationException if an error during publication.
+     * @throws org.codehaus.jremoting.server.PublicationException if an error during publication.
      */
     public void unPublish(Object impl, String service) throws PublicationException {
         invocationHandlerAdapter.unPublish(impl, service);
@@ -168,7 +136,7 @@ public abstract class AbstractServer implements Server {
      * @param oldImpl       The previous implementation.
      * @param service The name it is published as.
      * @param withImpl      The impl to superceed.
-     * @throws PublicationException if an error during publication.
+     * @throws org.codehaus.jremoting.server.PublicationException if an error during publication.
      */
     public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
         invocationHandlerAdapter.replacePublished(oldImpl, service, withImpl);
@@ -204,13 +172,12 @@ public abstract class AbstractServer implements Server {
         return invocationHandlerAdapter;
     }
 
-
     /**
      * Set the state for the server
      *
      * @param state The state
      */
-    protected void setState(int state) {
+    protected void setState(String state) {
         this.state = state;
     }
 
@@ -219,10 +186,7 @@ public abstract class AbstractServer implements Server {
      *
      * @return the state.
      */
-    protected int getState() {
+    public String getState() {
         return state;
     }
-
-
-
 }

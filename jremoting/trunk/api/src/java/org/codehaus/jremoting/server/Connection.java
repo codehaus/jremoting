@@ -15,24 +15,18 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.api;
+package org.codehaus.jremoting.server;
 
 /**
- * Class AuthenticationException
+ * An Connection is connection in progress from a client to a server.
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ * @version * $Revision: 1.2 $
  */
-public class AuthenticationException extends ConnectionException {
-
-    static final long serialVersionUID = 355399012496642358L;
+public interface Connection {
 
     /**
-     * Constructor AuthenticationException
-     *
-     * @param msg message that is the cause root of the exception
+     * End the connection.
      */
-    public AuthenticationException(String msg) {
-        super(msg);
-    }
+    void endConnection();
 }

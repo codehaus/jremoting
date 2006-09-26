@@ -45,7 +45,7 @@ public class SelfContainedSocketObjectStreamPipedConnection {
      * @throws ConnectionException if a problem
      */
     public SelfContainedSocketObjectStreamPipedConnection(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, PipedInputStream inputStream, PipedOutputStream outputStream) throws ConnectionException {
-        selfContainedCustomStreamPipedServer = new SelfContainedCustomStreamPipedServer(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
+        selfContainedCustomStreamPipedServer = new SelfContainedCustomStreamPipedServer(serverMonitor, invocationHandlerAdapter, executor, contextFactory);
         selfContainedCustomStreamPipedServer.makeNewConnection(inputStream, outputStream);
         selfContainedCustomStreamPipedServer.start();
     }

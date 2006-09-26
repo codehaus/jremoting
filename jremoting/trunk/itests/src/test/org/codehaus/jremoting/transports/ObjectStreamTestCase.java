@@ -20,6 +20,7 @@ package org.codehaus.jremoting.transports;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
@@ -49,7 +50,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new SelfContainedSocketStreamServer(10002, SelfContainedSocketStreamServer.OBJECTSTREAM);
+        server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 10002, SelfContainedSocketStreamServer.OBJECTSTREAM);
 
         testServer = new TestInterfaceImpl();
 

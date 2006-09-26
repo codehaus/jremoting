@@ -49,7 +49,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
     private final ServerSideClientContextFactory clientContextFactory;
 
-    public InvocationHandlerAdapter(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ServerSideClientContextFactory clientContextFactory) {
+    public InvocationHandlerAdapter(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerSideClientContextFactory clientContextFactory) {
         this.stubRetriever = stubRetriever;
         this.authenticator = authenticator;
         this.serverMonitor = serverMonitor != null ? serverMonitor : new ConsoleServerMonitor();
@@ -113,7 +113,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             } else if (request.getRequestCode() == RequestConstants.LISTMETHODSREQUEST) {
                 return doListMethodsRequest(request);
             } else {
-                return new RequestFailed("Unknown request :" + request.getClass().getName());
+                return new RequestFailed("Unknown Request Type: " + request.getClass().getName());
             }
         } catch (NullPointerException npe) {
             npe.printStackTrace();
@@ -188,7 +188,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             }
         } else {
             // unknown reply type from
-            return new RequestFailed("TODO");
+            return new RequestFailed("Unknown Request Type: " + ar.getClass().getName());
         }
     }
 
@@ -420,23 +420,18 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         }
 
         Long sessionID = gcr.getSessionID();
-        if (!sessionExists(sessionID)) {
-            return new InvocationExceptionThrown("TODO - you dirty rat/hacker");
-        }
-
-        Session sess = (Session) sessions.get(sessionID);
-        if (sess == null) {
-            return new ConnectionClosed(sessionID);
-        } else {
-            if (gcr.getReferenceID() == null) {
-                System.err.println("DEBUG- GC on missing referenceID -" + gcr.getReferenceID());
+        if (sessionExists(sessionID)) {
+            Session sess = (Session) sessions.get(sessionID);
+            if (sess == null) {
+                return new ConnectionClosed(sessionID);
             } else {
-                sess.removeBeanInUse(gcr.getReferenceID());
+                if (gcr.getReferenceID() == null) {
+                    System.err.println("DEBUG- GC on missing referenceID -" + gcr.getReferenceID());
+                } else {
+                    sess.removeBeanInUse(gcr.getReferenceID());
+                }
             }
         }
-
-        MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
-
         return new GarbageCollected();
     }
 

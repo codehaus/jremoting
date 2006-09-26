@@ -1,32 +1,29 @@
 package org.codehaus.jremoting.server.adapters;
 
-import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.requests.*;
-import org.codehaus.jremoting.responses.*;
 import org.jmock.MockObjectTestCase;
+import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
+import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.PublicationException;
+import org.codehaus.jremoting.responses.*;
+import org.codehaus.jremoting.requests.*;
 
-import java.util.concurrent.Executors;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Executors;
 import java.io.*;
 
-public class AbstractServerTestCase extends MockObjectTestCase {
+public class DirectMarshalledTestCase extends MockObjectTestCase {
 
     private InvocationHandlerAdapter iha;
-    private ConnectingServer server;
+    private DirectMarshalledServer server;
     HashMap impl = new HashMap();
 
     protected void setUp() throws Exception {
-
         iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new NoStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory());
-        server = new ConnectingServer(new ConsoleServerMonitor(), iha, Executors.newCachedThreadPool()) {
-        };
-
+        server = new DirectMarshalledServer(new ConsoleServerMonitor(), iha, Executors.newCachedThreadPool(), new MarshalledInvocationHandlerAdapter(iha));
     }
 
     public void testPublishAndUnpublish() throws PublicationException, IOException, ClassNotFoundException {
@@ -119,9 +116,9 @@ public class AbstractServerTestCase extends MockObjectTestCase {
 
     public void testRequestFailsOnUnknownRequestType() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        AbstractResponse abstractResponse = serDeSerResponse(iha.handleInvocation(serDeSerRequest(new MyAbstractRequest()), new Object()));
+        AbstractResponse abstractResponse = serDeSerResponse(iha.handleInvocation(serDeSerRequest(new DirectMarshalledTestCase.MyAbstractRequest()), new Object()));
         assertTrue(abstractResponse instanceof RequestFailed);
-        assertEquals("Unknown Request Type: org.codehaus.jremoting.server.adapters.AbstractServerTestCase$MyAbstractRequest", ((RequestFailed) abstractResponse).getFailureReason());
+        assertEquals("Unknown Request Type: org.codehaus.jremoting.server.adapters.DirectMarshalledTestCase$MyAbstractRequest", ((RequestFailed) abstractResponse).getFailureReason());
     }
 
     public void testListServicesRespondsAppropriately() throws PublicationException, IOException, ClassNotFoundException {

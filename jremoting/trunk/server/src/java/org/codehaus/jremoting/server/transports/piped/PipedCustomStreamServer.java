@@ -40,19 +40,12 @@ import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
 public class PipedCustomStreamServer extends AbstractPipedServer {
 
 
-    /**
-     * @param stubRetriever
-     * @param authenticator
-     * @param serverMonitor
-     * @param executor
-     * @param contextFactory
-     */
-    public PipedCustomStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
-        super(stubRetriever, authenticator, serverMonitor, executor, contextFactory);
+    public PipedCustomStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+        super(serverMonitor, stubRetriever, authenticator, executor, contextFactory);
     }
 
-    public PipedCustomStreamServer() {
-        this(new NoStubRetriever(), new NullAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
+    public PipedCustomStreamServer(ServerMonitor serverMonitor) {
+        this(serverMonitor, new NoStubRetriever(), new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
     }
 
     protected AbstractServerStreamDriver createServerStreamDriver() {

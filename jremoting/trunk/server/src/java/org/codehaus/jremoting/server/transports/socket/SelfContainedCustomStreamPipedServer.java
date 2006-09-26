@@ -27,8 +27,8 @@ import org.codehaus.jremoting.server.transports.piped.AbstractPipedServer;
 
 public class SelfContainedCustomStreamPipedServer extends AbstractPipedServer {
 
-    public SelfContainedCustomStreamPipedServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
-        super(invocationHandlerAdapter, serverMonitor, executor, contextFactory);
+    public SelfContainedCustomStreamPipedServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+        super(serverMonitor, invocationHandlerAdapter, executor, contextFactory);
     }
 
     protected AbstractServerStreamDriver createServerStreamDriver() {

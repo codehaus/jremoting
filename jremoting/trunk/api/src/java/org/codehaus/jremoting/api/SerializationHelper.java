@@ -50,7 +50,6 @@ public class SerializationHelper {
             oOs.close();
             bAOS.close();
         } catch (IOException e) {
-            e.printStackTrace();
             throw new JRemotingException("Really out of the ordinary IOException", e);
         }
 

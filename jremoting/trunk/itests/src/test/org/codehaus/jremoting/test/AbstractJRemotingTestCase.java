@@ -19,7 +19,8 @@ package org.codehaus.jremoting.test;
 
 import junit.framework.TestCase;
 import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.server.transports.AbstractServer;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
+import org.codehaus.jremoting.server.transports.StatefulServer;
 
 /**
  * Extended by classes that name the transport.
@@ -28,7 +29,7 @@ import org.codehaus.jremoting.server.transports.AbstractServer;
  */
 public abstract class AbstractJRemotingTestCase extends TestCase {
 
-    protected AbstractServer server;
+    protected StatefulServer server;
     protected TestInterfaceImpl testServer;
     protected TestInterface testClient;
     protected Factory factory;

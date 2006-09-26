@@ -20,7 +20,7 @@ package org.codehaus.jremoting.server.transports.rmi;
 import org.codehaus.jremoting.api.RmiInvocationHandler;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
-import org.codehaus.jremoting.server.transports.AbstractServer;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
 
 import java.rmi.RemoteException;
 
@@ -34,15 +34,15 @@ public class RmiInvocationAdapter implements RmiInvocationHandler {
     /**
      * The abstract server
      */
-    private AbstractServer abstractServer;
+    private ConnectingServer connectingServer;
 
     /**
      * Constructor a RmiInvocationAdapter with an abstract server.
      *
-     * @param abstractServer The abstract server
+     * @param connectingServer The abstract server
      */
-    public RmiInvocationAdapter(AbstractServer abstractServer) {
-        this.abstractServer = abstractServer;
+    public RmiInvocationAdapter(ConnectingServer connectingServer) {
+        this.connectingServer = connectingServer;
     }
 
     /**
@@ -53,6 +53,6 @@ public class RmiInvocationAdapter implements RmiInvocationHandler {
      * @throws RemoteException if a problem during processing
      */
     public AbstractResponse handleInvocation(AbstractRequest request) throws RemoteException {
-        return abstractServer.handleInvocation(request, "RMI-TODO");
+        return connectingServer.handleInvocation(request, "RMI-TODO");
     }
 }

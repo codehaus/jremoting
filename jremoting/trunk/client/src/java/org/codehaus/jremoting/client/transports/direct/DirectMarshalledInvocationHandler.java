@@ -18,11 +18,12 @@
 package org.codehaus.jremoting.client.transports.direct;
 
 import org.codehaus.jremoting.api.SerializationHelper;
+import org.codehaus.jremoting.api.JRemotingException;
+
 import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.RequestFailed;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
 
@@ -61,9 +62,9 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
             Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serResponse, interfacesClassLoader);
             return (AbstractResponse) instanceFromBytes;
         } catch (ClassNotFoundException cnfe) {
-            String msg = "Some Class not found Exception on server side";
+            String msg = "Some ClassNotFoundException on client side";
             clientMonitor.classNotFound(DirectMarshalledInvocationHandler.class, msg, cnfe);
-            return new RequestFailed(msg + " : " + cnfe.getMessage());
+            throw new JRemotingException(msg, cnfe);
         }
     }
 

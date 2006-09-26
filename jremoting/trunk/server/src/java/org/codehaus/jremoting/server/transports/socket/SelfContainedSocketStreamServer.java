@@ -23,7 +23,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.server.*;
-import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
@@ -39,7 +38,7 @@ import java.net.Socket;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class SelfContainedSocketStreamServer extends AbstractServer implements Runnable {
+public class SelfContainedSocketStreamServer extends ConnectingServer implements Runnable {
 
     /**
      * The server socket.
@@ -50,6 +49,7 @@ public class SelfContainedSocketStreamServer extends AbstractServer implements R
      * The thread handling the listening
      */
     private Future future;
+    //TODO cannot be instance variable because of setStreams()
     private final ServerStreamDriver serverStreamDriver;
     private int port;
     public static final String OBJECTSTREAM = "objectstream";
@@ -59,45 +59,45 @@ public class SelfContainedSocketStreamServer extends AbstractServer implements R
     /**
      * Construct a SelfContainedSocketStreamServer
      *
+     * @param serverMonitor
      * @param invocationHandlerAdapter The invocation handler adapter to use.
      * @param port                     The port to use
-     * @param serverMonitor
      */
-    public SelfContainedSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor,
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
                                            ServerStreamDriver serverStreamDriver, ExecutorService executor, int port) {
 
-        super(invocationHandlerAdapter, serverMonitor, executor);
+        super(serverMonitor, invocationHandlerAdapter, executor);
         this.serverStreamDriver = serverStreamDriver;
         this.port = port;
     }
 
-    public SelfContainedSocketStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor,
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
                                            ServerStreamDriver serverStreamDriver, ExecutorService executor,
                                            ServerSideClientContextFactory contextFactory, int port) {
-        this(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, serverStreamDriver, executor, port);
+        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), serverStreamDriver, executor, port);
     }
 
-    public SelfContainedSocketStreamServer(int port) {
-        this(port, new NullServerMonitor(), Executors.newCachedThreadPool());
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port) {
+        this(serverMonitor, port, Executors.newCachedThreadPool());
     }
 
-    public SelfContainedSocketStreamServer(int port, ServerMonitor serverMonitor, ExecutorService executorService) {
-        this(port, serverMonitor, executorService, new ServerCustomStreamDriver(serverMonitor, executorService));
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ExecutorService executorService) {
+        this(serverMonitor, port, executorService, new ServerCustomStreamDriver(serverMonitor, executorService));
     }
 
-    public SelfContainedSocketStreamServer(int port, ServerMonitor serverMonitor, ExecutorService executorService, ServerStreamDriver serverStreamDriver) {
-        this(new NoStubRetriever(), new NullAuthenticator(), serverMonitor, serverStreamDriver, executorService, new DefaultServerSideClientContextFactory(), port);
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ExecutorService executorService, ServerStreamDriver serverStreamDriver) {
+        this(serverMonitor, new NoStubRetriever(), new NullAuthenticator(), serverStreamDriver, executorService, new DefaultServerSideClientContextFactory(), port);
     }
 
-    public SelfContainedSocketStreamServer(int port, String streamType) {
-        this(port, new NullServerMonitor(), Executors.newCachedThreadPool(), streamType);
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, String streamType) {
+        this(serverMonitor, port, Executors.newCachedThreadPool(), streamType);
     }
 
-    public SelfContainedSocketStreamServer(int port, ServerMonitor serverMonitor, ExecutorService executorService, String streamType) {
-        this(port, serverMonitor, executorService, createServerStreamDriver(serverMonitor, executorService, streamType));
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ExecutorService executorService, String streamType) {
+        this(serverMonitor, port, executorService, createZerverStreamDriver(serverMonitor, executorService, streamType));
     }
 
-    private static ServerStreamDriver createServerStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService, String streamType) {
+    private static ServerStreamDriver createZerverStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService, String streamType) {
         if (streamType.equals(CUSTOMSTREAM)) {
             return new ServerCustomStreamDriver(serverMonitor, executorService);
         } else if (streamType.equals(OBJECTSTREAM)) {
@@ -125,11 +125,9 @@ public class SelfContainedSocketStreamServer extends AbstractServer implements R
                 // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
                 sock.setSoTimeout(60 * 1000);
 
-                //ServerStreamDriver ssd = createServerStreamDriver();
-
                 serverStreamDriver.setStreams(sock.getInputStream(), sock.getOutputStream(), sock);
 
-                SocketStreamServerConnection sssc = new SocketStreamServerConnection(this, sock, serverStreamDriver, serverMonitor);
+                SocketStreamConnection sssc = new SocketStreamConnection(this, sock, serverStreamDriver, serverMonitor);
 
                 //TODO ? Two of these getExecutors? PH
                 getExecutor().execute(sssc);
@@ -182,11 +180,4 @@ public class SelfContainedSocketStreamServer extends AbstractServer implements R
 
         setState(STOPPED);
     }
-
-    /**
-     * Create a Server Stream Driver.
-     *
-     * @return The Server Stream Driver.
-     */
-   // protected abstract ServerStreamDriver createServerStreamDriver();
 }

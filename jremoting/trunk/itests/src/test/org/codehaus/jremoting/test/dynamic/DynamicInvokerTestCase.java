@@ -24,7 +24,8 @@ import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.impl.DynamicInvoker;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.transports.AbstractServer;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
@@ -39,7 +40,7 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
 public class DynamicInvokerTestCase extends TestCase {
 
     //-------Variables------------//
-    protected AbstractServer server;
+    protected ConnectingServer server;
     protected TestInterfaceImpl testServer;
     protected TestInterface testClient;
     protected HostContext hostContext;
@@ -55,7 +56,7 @@ public class DynamicInvokerTestCase extends TestCase {
         super.setUp();
 
         // server side setup.
-        server = new SelfContainedSocketStreamServer(10001);
+        server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 10001);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

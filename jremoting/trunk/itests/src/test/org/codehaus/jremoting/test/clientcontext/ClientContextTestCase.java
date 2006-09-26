@@ -120,8 +120,8 @@ public class ClientContextTestCase extends TestCase {
 
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ExecutorService executor = Executors.newCachedThreadPool();
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(stubRetriever, new NullAuthenticator(),
-                serverMonitor, new ServerCustomStreamDriver(serverMonitor, executor), executor,
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
+                new ServerCustomStreamDriver(serverMonitor, executor), executor,
                 ccf, 13333);
 
         PublicationDescription pd = new PublicationDescription(AccountManager.class);

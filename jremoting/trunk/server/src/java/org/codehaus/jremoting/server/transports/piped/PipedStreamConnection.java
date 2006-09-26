@@ -18,21 +18,21 @@
 package org.codehaus.jremoting.server.transports.piped;
 
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.transports.AbstractServer;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
-import org.codehaus.jremoting.server.transports.AbstractStreamServerConnection;
+import org.codehaus.jremoting.server.transports.StreamConnection;
 
 import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
 /**
- * Class PipedStreamServerConnection
+ * Class PipedStreamConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class PipedStreamServerConnection extends AbstractStreamServerConnection {
+public class PipedStreamConnection extends StreamConnection {
 
     /**
      * The piped input stream.
@@ -45,16 +45,16 @@ public class PipedStreamServerConnection extends AbstractStreamServerConnection 
     private PipedOutputStream pipedOut;
 
     /**
-     * Construct a PipedStreamServerConnection
+     * Construct a PipedStreamConnection
      *
-     * @param abstractServer The asbtract server than handles requests
+     * @param connectingServer The asbtract server than handles requests
      * @param pipedIn        The piped Input Stream
      * @param pipedOut       The piped Output Stream
      * @param driver         The Driver.
      */
-    public PipedStreamServerConnection(AbstractServer abstractServer, PipedInputStream pipedIn, PipedOutputStream pipedOut, AbstractServerStreamDriver driver, ServerMonitor serverMonitor) {
+    public PipedStreamConnection(ConnectingServer connectingServer, PipedInputStream pipedIn, PipedOutputStream pipedOut, AbstractServerStreamDriver driver, ServerMonitor serverMonitor) {
 
-        super(abstractServer, driver, serverMonitor);
+        super(connectingServer, driver, serverMonitor);
 
         this.pipedIn = pipedIn;
         this.pipedOut = pipedOut;
@@ -68,13 +68,13 @@ public class PipedStreamServerConnection extends AbstractStreamServerConnection 
         try {
             pipedIn.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "PipedStreamServerConnection.killConnection(): Some problem during closing of Input Stream", e);
+            serverMonitor.closeError(this.getClass(), "PipedStreamConnection.killConnection(): Some problem during closing of Input Stream", e);
         }
 
         try {
             pipedOut.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "PipedStreamServerConnection.killConnection(): Some problem during closing of Output Stream", e);
+            serverMonitor.closeError(this.getClass(), "PipedStreamConnection.killConnection(): Some problem during closing of Output Stream", e);
         }
     }
 }

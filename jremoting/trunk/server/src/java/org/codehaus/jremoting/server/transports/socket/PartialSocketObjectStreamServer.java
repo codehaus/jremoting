@@ -42,16 +42,10 @@ public class PartialSocketObjectStreamServer extends AbstractPartialSocketStream
      * @param serverMonitor the monitor
      * @param port ther port
      */
-    public PartialSocketObjectStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor) {
+    public PartialSocketObjectStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executor) {
         super(invocationHandlerAdapter, serverMonitor, executor);
     }
 
-    /**
-     * Stop
-     */
-    public void stop() {
-        super.stop();
-    }
 
     /**
      * Create a Server Stream Driver.

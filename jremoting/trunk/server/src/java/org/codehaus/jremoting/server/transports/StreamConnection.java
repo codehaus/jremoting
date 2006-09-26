@@ -23,7 +23,7 @@ import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.responses.ConnectionKilled;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
-import org.codehaus.jremoting.server.ServerConnection;
+import org.codehaus.jremoting.server.Connection;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import java.io.EOFException;
@@ -32,17 +32,17 @@ import java.io.InterruptedIOException;
 import java.net.SocketException;
 
 /**
- * Class AbstractStreamServerConnection
+ * Class StreamConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractStreamServerConnection implements Runnable, ServerConnection {
+public abstract class StreamConnection implements Runnable, Connection {
 
     /**
      * The Abstract Server
      */
-    private AbstractServer abstractServer;
+    private ConnectingServer connectingServer;
 
     /**
      * End connections
@@ -57,13 +57,13 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
     protected final ServerMonitor serverMonitor;
 
     /**
-     * Construct a AbstractStreamServerConnection
+     * Construct a StreamConnection
      *
-     * @param abstractServer The Abstract Server handling requests
+     * @param connectingServer The Abstract Server handling requests
      * @param driver         The Driver.
      */
-    public AbstractStreamServerConnection(AbstractServer abstractServer, ServerStreamDriver driver, ServerMonitor serverMonitor) {
-        this.abstractServer = abstractServer;
+    public StreamConnection(ConnectingServer connectingServer, ServerStreamDriver driver, ServerMonitor serverMonitor) {
+        this.connectingServer = connectingServer;
         this.driver = driver;
         this.serverMonitor = serverMonitor;
     }
@@ -74,7 +74,7 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
      */
     public void run() {
 
-        abstractServer.connectionStart(this);
+        connectingServer.connectionStart(this);
 
         try {
 
@@ -86,7 +86,7 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
             while (more) {
                 try {
                     if (request != null) {
-                        response = abstractServer.handleInvocation(request, driver.getConnectionDetails());
+                        response = connectingServer.handleInvocation(request, driver.getConnectionDetails());
                     }
 
                     request = driver.writeResponseAndGetRequest(response);
@@ -97,11 +97,11 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
                     }
                 } catch (BadConnectionException bce) {
                     more = false;
-                    serverMonitor.badConnection(this.getClass(), "AbstractStreamServerConnection.run(): Bad connection #0", bce);
+                    serverMonitor.badConnection(this.getClass(), "StreamConnection.run(): Bad connection #0", bce);
                     driver.close();
                 } catch (ConnectionException ace) {
                     more = false;
-                    serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected ConnectionException #0", ace);
+                    serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected ConnectionException #0", ace);
                     driver.close();
                 } catch (IOException ioe) {
                     more = false;
@@ -113,21 +113,21 @@ public abstract class AbstractStreamServerConnection implements Runnable, Server
                         // TODO implement implementation independant logger
                         driver.close();
                     } else {
-                        serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected IOE #1", ioe);
+                        serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected IOE #1", ioe);
                         driver.close();
                     }
                 } catch (NullPointerException npe) {
-                    serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected NPE", npe);
+                    serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected NPE", npe);
                     response = new InvocationExceptionThrown("NullPointerException on server: " + npe.getMessage());
                 }
             }
         } catch (IOException e) {
-            serverMonitor.unexpectedException(this.getClass(), "AbstractStreamServerConnection.run(): Unexpected IOE #2", e);
+            serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected IOE #2", e);
         } catch (ClassNotFoundException e) {
             serverMonitor.classNotFound(this.getClass(), e);
         }
 
-        abstractServer.connectionCompleted(this);
+        connectingServer.connectionCompleted(this);
     }
 
     private boolean isSafeEnd(IOException ioe) {

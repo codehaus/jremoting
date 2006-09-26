@@ -18,21 +18,20 @@
 package org.codehaus.jremoting.server.transports.socket;
 
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.transports.AbstractServer;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
-import org.codehaus.jremoting.server.transports.AbstractStreamServerConnection;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
+import org.codehaus.jremoting.server.transports.StreamConnection;
 import org.codehaus.jremoting.server.transports.ServerStreamDriver;
 
 import java.io.IOException;
 import java.net.Socket;
 
 /**
- * Class SocketStreamServerConnection
+ * Class SocketStreamConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class SocketStreamServerConnection extends AbstractStreamServerConnection {
+public class SocketStreamConnection extends StreamConnection {
 
     /**
      * The socket for the connection
@@ -42,13 +41,13 @@ public class SocketStreamServerConnection extends AbstractStreamServerConnection
     /**
      * Construct a Socket Stream Server Connection
      *
-     * @param abstractServer The Abstract Server that will process invocations and requests
+     * @param connectingServer The Abstract Server that will process invocations and requests
      * @param socket         The Socket
      * @param driver         The driver for the transport type
      */
-    public SocketStreamServerConnection(final AbstractServer abstractServer, final Socket socket, ServerStreamDriver driver, ServerMonitor serverMonitor) {
+    public SocketStreamConnection(final ConnectingServer connectingServer, final Socket socket, ServerStreamDriver driver, ServerMonitor serverMonitor) {
 
-        super(abstractServer, driver, serverMonitor);
+        super(connectingServer, driver, serverMonitor);
         this.socket = socket;
     }
 
@@ -60,7 +59,7 @@ public class SocketStreamServerConnection extends AbstractStreamServerConnection
         try {
             socket.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "SocketStreamServerConnection.killConnection(): Error closing Connection", e);
+            serverMonitor.closeError(this.getClass(), "SocketStreamConnection.killConnection(): Error closing Connection", e);
         }
     }
 }

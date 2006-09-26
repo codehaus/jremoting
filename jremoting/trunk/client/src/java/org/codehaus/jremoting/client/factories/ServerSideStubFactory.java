@@ -56,12 +56,13 @@ public class ServerSideStubFactory extends AbstractStubFactory {
 
                 if (ar instanceof ProblemResponse) {
                     if (ar instanceof RequestFailed) {
-                        throw new ConnectionException(((RequestFailed) ar).getFailureReason());
+                        RequestFailed requestFailed = (RequestFailed) ar;
+                        throw new ConnectionException(requestFailed.getFailureReason());
                     } else if (ar instanceof StubRetrievalFailed) {
                         StubRetrievalFailed srf = (StubRetrievalFailed) ar;
 
                         throw new ConnectionException("Class Retrieval Failed - " + srf.getReason());
-                    }    //TODO others.
+                    }
                 }
 
                 cr = (StubClass) ar;

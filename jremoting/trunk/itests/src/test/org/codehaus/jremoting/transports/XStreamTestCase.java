@@ -27,7 +27,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         // server side setup.
         ExecutorService executor = Executors.newCachedThreadPool();
         ConsoleServerMonitor serverMonitor = new ConsoleServerMonitor();
-        server = new SelfContainedSocketStreamServer(new NoStubRetriever(), new NullAuthenticator(), serverMonitor,
+        server = new SelfContainedSocketStreamServer(serverMonitor, new NoStubRetriever(), new NullAuthenticator(),
                 new ServerXStreamDriver(serverMonitor, executor), executor, new DefaultServerSideClientContextFactory(), 10099);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -46,11 +46,9 @@ public class XStreamTestCase extends AbstractHelloTestCase {
 
         System.gc();
 
-
         Thread.sleep(2000);
 
         factory.close();
-
 
         Thread.sleep(1000);
 

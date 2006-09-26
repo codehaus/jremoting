@@ -27,8 +27,13 @@ import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SocketStreamConnection;
 import org.codehaus.jremoting.requests.InvokeMethod;
+import org.jmock.MockObjectTestCase;
+import org.jmock.Mock;
 
 
 /**
@@ -36,7 +41,7 @@ import org.codehaus.jremoting.requests.InvokeMethod;
  *
  * @author Paul Hammant
  */
-public class BasicClientServerTestCase extends TestCase {
+public class BasicClientServerTestCase extends MockObjectTestCase {
 
     public void testNoServer() throws Exception {
         try {
@@ -50,7 +55,9 @@ public class BasicClientServerTestCase extends TestCase {
     public void testMismatch1() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(12346);
+        Mock serverMonitor = mock(ServerMonitor.class);
+        serverMonitor.expects(once()).method("badConnection").with(eq(SocketStreamConnection.class),eq("StreamConnection.run(): Bad connection #0"),isA(BadConnectionException.class));
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) serverMonitor.proxy(), 12346);
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -75,7 +82,7 @@ public class BasicClientServerTestCase extends TestCase {
     public void testNotPublishedExceptionThrownWhenNeeded() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(12333);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12333);
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -103,7 +110,7 @@ public class BasicClientServerTestCase extends TestCase {
     public void testNoReferenceExceptionThrownWhenNeeded() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(12331);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12331);
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -136,7 +143,7 @@ public class BasicClientServerTestCase extends TestCase {
 
         // server side setup.
         // Object
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(12347, SelfContainedSocketStreamServer.OBJECTSTREAM);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12347, SelfContainedSocketStreamServer.OBJECTSTREAM);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -160,7 +167,7 @@ public class BasicClientServerTestCase extends TestCase {
     public void donttestMismatch3() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(12348);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12348);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

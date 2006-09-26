@@ -27,8 +27,7 @@ import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.PlainStubRetriever;
-import org.codehaus.jremoting.server.monitors.NullServerMonitor;
-import org.codehaus.jremoting.server.transports.AbstractServer;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 
 import java.rmi.NotBoundException;
@@ -43,7 +42,7 @@ import java.rmi.server.UnicastRemoteObject;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class RmiServer extends AbstractServer {
+public class RmiServer extends ConnectingServer {
 
     /**
      * The invocation adapter
@@ -62,22 +61,22 @@ public class RmiServer extends AbstractServer {
     /**
      * Constructor a RmiServer with a preexiting invocation handler.
      *
-     * @param invocationHandlerAdapter
      * @param serverMonitor
+     * @param invocationHandlerAdapter
      * @param executor
      * @param port
      */
-    public RmiServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executor, int port) {
-        super(invocationHandlerAdapter, serverMonitor, executor);
+    public RmiServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executor, int port) {
+        super(serverMonitor, invocationHandlerAdapter, executor);
         this.port = port;
     }
 
-    public RmiServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {
-        this(new InvocationHandlerAdapter(stubRetriever, authenticator, serverMonitor, contextFactory), serverMonitor, executor, port);
+    public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {
+        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executor, port);
     }
 
-    public RmiServer(int port) {
-        this(new PlainStubRetriever(), new NullAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), port);
+    public RmiServer(ServerMonitor serverMonitor, int port) {
+        this(serverMonitor, new PlainStubRetriever(), new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), port);
     }
 
     /**

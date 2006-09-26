@@ -29,27 +29,27 @@ public interface Server extends Publisher, ServerInvocationHandler {
     /**
      * The state of the system while shutting down.
      */
-    int SHUTTINGDOWN = 101;
+    String SHUTTINGDOWN = "SHUTTING_DOWN";
 
     /**
      * The state of the starting system.
      */
-    int STARTING = 202;
+    String STARTING = "STARTING";
 
     /**
      * The state of the starting system.
      */
-    int STARTED = 303;
+    String STARTED = "STARTED";
 
     /**
      * The state of the system when stopped
      */
-    int STOPPED = 404;
+    String STOPPED = "STOPPED";
 
     /**
      * The state of the un started system.
      */
-    int UNSTARTED = 505;
+    String UNSTARTED = "UNSTARTED";
 
     /**
      * Suspend publishing
@@ -71,5 +71,13 @@ public interface Server extends Publisher, ServerInvocationHandler {
      * Stop publishing
      */
     void stop();
+    
+    /**
+     * Get the state for teh server.
+     *
+     * @return the state.
+     */
+    public String getState();
+
 
 }

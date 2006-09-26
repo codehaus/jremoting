@@ -17,8 +17,9 @@
  */
 package org.codehaus.jremoting.test;
 
-import org.codehaus.jremoting.server.transports.AbstractServer;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 
 /**
  * Class ProConServerTest
@@ -39,12 +40,12 @@ public class ProConServerTest {
 
         System.out.println("Stream over Socket Server");
 
-        AbstractServer as;
+        ConnectingServer as;
 
         if (args[1].equals("ObjectStream")) {
             System.out.println("(Object Stream)");
 
-            as = new SelfContainedSocketStreamServer(1234, SelfContainedSocketStreamServer.OBJECTSTREAM);
+            as = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 1234, SelfContainedSocketStreamServer.OBJECTSTREAM);
         } else {
 
             // CustomStream

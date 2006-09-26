@@ -59,8 +59,8 @@ public class SimpleAsync2TestCase extends TestCase {
 
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ExecutorService executor = Executors.newCachedThreadPool();
-        server = new SelfContainedSocketStreamServer(stubRetriever, new NullAuthenticator(),
-                serverMonitor, new ServerCustomStreamDriver(serverMonitor, executor), executor,
+        server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
+                new ServerCustomStreamDriver(serverMonitor, executor), executor,
                 new DefaultServerSideClientContextFactory(), 11009);
 
         asyncTestImpl = new AsyncTestImpl();

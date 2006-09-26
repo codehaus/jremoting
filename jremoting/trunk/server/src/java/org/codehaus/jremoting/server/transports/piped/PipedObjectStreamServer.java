@@ -41,18 +41,18 @@ public class PipedObjectStreamServer extends AbstractPipedServer {
 
 
     /**
+     * @param serverMonitor
      * @param stubRetriever
      * @param authenticator
-     * @param serverMonitor
      * @param executor
      * @param contextFactory
      */
-    public PipedObjectStreamServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
-        super(stubRetriever, authenticator, serverMonitor, executor, contextFactory);
+    public PipedObjectStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
+        super(serverMonitor, stubRetriever, authenticator, executor, contextFactory);
     }
 
-    public PipedObjectStreamServer() {
-        this(new NoStubRetriever(), new NullAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
+    public PipedObjectStreamServer(ServerMonitor serverMonitor) {
+        this(serverMonitor, new NoStubRetriever(), new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory());
     }
 
     protected AbstractServerStreamDriver createServerStreamDriver() {

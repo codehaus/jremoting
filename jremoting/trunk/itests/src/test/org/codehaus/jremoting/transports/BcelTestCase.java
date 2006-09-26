@@ -61,7 +61,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         stubRetriever.setClassGenDir(class_gen_dir);
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ExecutorService executor = Executors.newCachedThreadPool();
-        server = new SelfContainedSocketStreamServer(stubRetriever, new NullAuthenticator(), serverMonitor, new ServerCustomStreamDriver(serverMonitor, executor), executor, new DefaultServerSideClientContextFactory(), 10001);
+        server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(), new ServerCustomStreamDriver(serverMonitor, executor), executor, new DefaultServerSideClientContextFactory(), 10001);
 
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
