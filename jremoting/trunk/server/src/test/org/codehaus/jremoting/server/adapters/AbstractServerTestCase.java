@@ -1,19 +1,34 @@
 package org.codehaus.jremoting.server.adapters;
 
-import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Executors;
+
+import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.requests.ListServices;
+import org.codehaus.jremoting.requests.OpenConnection;
+import org.codehaus.jremoting.requests.RetrieveStub;
+import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.responses.NotPublished;
+import org.codehaus.jremoting.responses.RequestFailed;
+import org.codehaus.jremoting.responses.ServicesList;
+import org.codehaus.jremoting.responses.ServicesSuspended;
+import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.PublicationException;
+import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.requests.*;
-import org.codehaus.jremoting.responses.*;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
+import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.jmock.MockObjectTestCase;
-
-import java.util.concurrent.Executors;
-import java.util.Map;
-import java.util.HashMap;
-import java.io.*;
 
 public class AbstractServerTestCase extends MockObjectTestCase {
 

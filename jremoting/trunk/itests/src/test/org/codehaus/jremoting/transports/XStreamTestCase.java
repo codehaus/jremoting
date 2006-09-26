@@ -1,19 +1,21 @@
 package org.codehaus.jremoting.transports;
 
-import org.codehaus.jremoting.test.*;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.ServerXStreamDriver;
-import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
-import org.codehaus.jremoting.server.*;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketXStreamHostContext;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.test.TestInterface;
+import org.codehaus.jremoting.test.TestInterface2;
+import org.codehaus.jremoting.test.TestInterface3;
+import org.codehaus.jremoting.test.TestInterfaceImpl;
 
 /**
  * Test XStream over sockets.

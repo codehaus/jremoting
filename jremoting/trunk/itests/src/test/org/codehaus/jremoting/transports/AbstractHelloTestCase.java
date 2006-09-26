@@ -17,12 +17,17 @@
  */
 package org.codehaus.jremoting.transports;
 
-import org.codehaus.jremoting.test.*;
-
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 import junit.framework.Assert;
+
+import org.codehaus.jremoting.test.AbstractJRemotingTestCase;
+import org.codehaus.jremoting.test.CustomSerializableParam;
+import org.codehaus.jremoting.test.TestInterface2;
+import org.codehaus.jremoting.test.TestInterface3;
+import org.codehaus.jremoting.test.TestInterfaceImpl;
+import org.codehaus.jremoting.test.TstObject;
 
 /**
  * Extended by classes that name the transport.

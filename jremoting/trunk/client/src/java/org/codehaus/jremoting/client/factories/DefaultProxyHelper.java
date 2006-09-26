@@ -17,6 +17,9 @@
  */
 package org.codehaus.jremoting.client.factories;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import org.codehaus.jremoting.client.ClientContextFactory;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.InvocationException;
@@ -24,23 +27,22 @@ import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.Proxy;
 import org.codehaus.jremoting.client.ProxyHelper;
-import org.codehaus.jremoting.responses.ExceptionThrown;
+import org.codehaus.jremoting.requests.AbstractServiceRequest;
 import org.codehaus.jremoting.requests.CollectGarbage;
-import org.codehaus.jremoting.responses.GarbageCollected;
 import org.codehaus.jremoting.requests.GroupedMethodRequest;
-import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.requests.InvokeAsyncMethod;
+import org.codehaus.jremoting.requests.InvokeFacadeMethod;
+import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.ConnectionClosed;
+import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.responses.FacadeArrayMethodInvoked;
 import org.codehaus.jremoting.responses.FacadeMethodInvoked;
+import org.codehaus.jremoting.responses.GarbageCollected;
+import org.codehaus.jremoting.responses.InvocationExceptionThrown;
+import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NoSuchSession;
-import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.requests.InvokeFacadeMethod;
-import org.codehaus.jremoting.requests.*;
 import org.codehaus.jremoting.responses.SimpleMethodInvoked;
-import org.codehaus.jremoting.responses.*;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 /**
  * Class DefaultProxyHelper

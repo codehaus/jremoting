@@ -17,7 +17,11 @@
  */
 package org.codehaus.jremoting.api;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InvalidClassException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Class SerializationHelper

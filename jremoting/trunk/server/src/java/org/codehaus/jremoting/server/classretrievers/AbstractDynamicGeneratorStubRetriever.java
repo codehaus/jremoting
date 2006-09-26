@@ -17,12 +17,18 @@
  */
 package org.codehaus.jremoting.server.classretrievers;
 
-import org.codehaus.jremoting.server.*;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+
+import org.codehaus.jremoting.server.DynamicProxyGenerator;
+import org.codehaus.jremoting.server.ProxyGenerator;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.PublicationDescriptionItem;
+import org.codehaus.jremoting.server.PublicationException;
+import org.codehaus.jremoting.server.StubRetrievalException;
+import org.codehaus.jremoting.server.StubRetriever;
 
 
 /**

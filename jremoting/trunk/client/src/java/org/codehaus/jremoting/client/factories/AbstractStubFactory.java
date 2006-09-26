@@ -17,23 +17,30 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import org.codehaus.jremoting.api.Authentication;
-import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.FacadeRefHolder;
-import org.codehaus.jremoting.client.*;
-import org.codehaus.jremoting.responses.ExceptionThrown;
-import org.codehaus.jremoting.requests.ListServices;
-import org.codehaus.jremoting.responses.ServicesList;
-import org.codehaus.jremoting.requests.LookupService;
-import org.codehaus.jremoting.responses.Service;
-import org.codehaus.jremoting.requests.OpenConnection;
-import org.codehaus.jremoting.requests.CloseConnection;
-import org.codehaus.jremoting.responses.*;
-
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+
+import org.codehaus.jremoting.api.Authentication;
+import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.api.FacadeRefHolder;
+import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.Factory;
+import org.codehaus.jremoting.client.HostContext;
+import org.codehaus.jremoting.client.Proxy;
+import org.codehaus.jremoting.client.ProxyHelper;
+import org.codehaus.jremoting.requests.CloseConnection;
+import org.codehaus.jremoting.requests.ListServices;
+import org.codehaus.jremoting.requests.LookupService;
+import org.codehaus.jremoting.requests.OpenConnection;
+import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.ConnectionClosed;
+import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.responses.ExceptionThrown;
+import org.codehaus.jremoting.responses.NotPublished;
+import org.codehaus.jremoting.responses.Service;
+import org.codehaus.jremoting.responses.ServicesList;
 
 
 /**

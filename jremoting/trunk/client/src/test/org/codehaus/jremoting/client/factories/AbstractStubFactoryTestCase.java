@@ -1,15 +1,20 @@
 package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
-import org.codehaus.jremoting.responses.*;
-import org.codehaus.jremoting.requests.OpenConnection;
-import org.codehaus.jremoting.requests.LookupService;
+import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.ListServices;
-import org.jmock.MockObjectTestCase;
+import org.codehaus.jremoting.requests.LookupService;
+import org.codehaus.jremoting.requests.OpenConnection;
+import org.codehaus.jremoting.responses.ConnectionClosed;
+import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.responses.ExceptionThrown;
+import org.codehaus.jremoting.responses.NotPublished;
+import org.codehaus.jremoting.responses.Service;
+import org.codehaus.jremoting.responses.ServicesList;
 import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 public class AbstractStubFactoryTestCase extends MockObjectTestCase {
 
