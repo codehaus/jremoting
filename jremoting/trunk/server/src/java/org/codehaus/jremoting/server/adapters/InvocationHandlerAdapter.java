@@ -18,18 +18,55 @@
 package org.codehaus.jremoting.server.adapters;
 
 
-import org.codehaus.jremoting.api.*;
-import org.codehaus.jremoting.requests.*;
-import org.codehaus.jremoting.responses.*;
-import org.codehaus.jremoting.responses.Ping;
-import org.codehaus.jremoting.server.*;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
+
+import org.codehaus.jremoting.api.ClientContext;
+import org.codehaus.jremoting.api.Contextualizable;
+import org.codehaus.jremoting.api.MethodNameHelper;
+import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.requests.CloseConnection;
+import org.codehaus.jremoting.requests.CollectGarbage;
+import org.codehaus.jremoting.requests.GroupedMethodRequest;
+import org.codehaus.jremoting.requests.InvokeAsyncMethod;
+import org.codehaus.jremoting.requests.InvokeFacadeMethod;
+import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.requests.ListInvokableMethods;
+import org.codehaus.jremoting.requests.LookupService;
+import org.codehaus.jremoting.requests.RequestConstants;
+import org.codehaus.jremoting.requests.RetrieveStub;
+import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.AuthenticationFailed;
+import org.codehaus.jremoting.responses.ConnectionClosed;
+import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.responses.ExceptionThrown;
+import org.codehaus.jremoting.responses.FacadeArrayMethodInvoked;
+import org.codehaus.jremoting.responses.FacadeMethodInvoked;
+import org.codehaus.jremoting.responses.GarbageCollected;
+import org.codehaus.jremoting.responses.InvokableMethods;
+import org.codehaus.jremoting.responses.NoSuchSession;
+import org.codehaus.jremoting.responses.NotPublished;
+import org.codehaus.jremoting.responses.Ping;
+import org.codehaus.jremoting.responses.ProblemResponse;
+import org.codehaus.jremoting.responses.RequestFailed;
+import org.codehaus.jremoting.responses.Service;
+import org.codehaus.jremoting.responses.ServicesList;
+import org.codehaus.jremoting.responses.ServicesSuspended;
+import org.codehaus.jremoting.responses.SimpleMethodInvoked;
+import org.codehaus.jremoting.responses.StubClass;
+import org.codehaus.jremoting.responses.StubRetrievalFailed;
+import org.codehaus.jremoting.server.Authenticator;
+import org.codehaus.jremoting.server.MethodInvocationHandler;
+import org.codehaus.jremoting.server.ServerInvocationHandler;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.ServerSideClientContextFactory;
+import org.codehaus.jremoting.server.Session;
+import org.codehaus.jremoting.server.StubRetrievalException;
+import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
+import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 
 /**
  * Class InvocationHandlerAdapter
@@ -39,7 +76,7 @@ import java.util.Vector;
  */
 public class InvocationHandlerAdapter extends PublicationAdapter implements ServerInvocationHandler {
 
-    private static long c_session = 0;
+    private static long sessionId = 0;
     private Long lastSession = new Long(0);
     private final HashMap sessions = new HashMap();
     private boolean suspend = false;
@@ -169,14 +206,14 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         //}
 
         MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
-        AbstractResponse ar = methodInvocationHandler.handleMethodInvocation(facadeRequest, connectionDetails);
+        AbstractResponse response = methodInvocationHandler.handleMethodInvocation(facadeRequest, connectionDetails);
 
-        if (ar instanceof ExceptionThrown) {
-            return ar;
-        } else if (ar instanceof ProblemResponse) {
-            return ar;
-        } else if (ar instanceof SimpleMethodInvoked) {
-            Object methodResponse = ((SimpleMethodInvoked) ar).getResponseObject();
+        if (response instanceof ExceptionThrown) {
+            return response;
+        } else if (response instanceof ProblemResponse) {
+            return response;
+        } else if (response instanceof SimpleMethodInvoked) {
+            Object methodResponse = ((SimpleMethodInvoked) response).getResponseObject();
 
             if (methodResponse == null) {
                 return new FacadeMethodInvoked(null, null);    // null passing
@@ -188,7 +225,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             }
         } else {
             // unknown reply type from
-            return new RequestFailed("Unknown Request Type: " + ar.getClass().getName());
+            return new RequestFailed("Unknown Request Type: " + response.getClass().getName());
         }
     }
 
@@ -226,9 +263,9 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             } else {
                 refs[i] = methodInvocationHandler2.getOrMakeReferenceIDForBean(beanImpls[i]);
 
-                Session sess = (Session) sessions.get(invokeFacadeMethod.getSessionID());
+                Session session = (Session) sessions.get(invokeFacadeMethod.getSessionID());
 
-                sess.addBeanInUse(refs[i], beanImpls[i]);
+                session.addBeanInUse(refs[i], beanImpls[i]);
             }
         }
 
@@ -487,7 +524,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      */
     private Long getNewSession() {
         // approve everything and set session identifier.
-        return new Long((++c_session << 16) + ((long) (Math.random() * 65536)));
+        return new Long((++sessionId << 16) + ((long) (Math.random() * 65536)));
     }
 
     /**
