@@ -17,11 +17,11 @@
  */
 package org.codehaus.jremoting.server.adapters;
 
-import org.codehaus.jremoting.SerializationHelper;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
+import org.codehaus.jremoting.util.SerializationHelper;
 
 /**
  * Class MarshalledInvocationHandlerAdapter

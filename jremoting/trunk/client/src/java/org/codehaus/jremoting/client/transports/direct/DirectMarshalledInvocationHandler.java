@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.client.transports.direct;
 
 import org.codehaus.jremoting.JRemotingException;
-import org.codehaus.jremoting.SerializationHelper;
 
 import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
@@ -26,6 +25,7 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
+import org.codehaus.jremoting.util.SerializationHelper;
 
 /**
  * Class DirectInvocationHandler

@@ -23,8 +23,8 @@ import java.util.concurrent.Executors;
 
 import junit.framework.TestCase;
 
-import org.codehaus.jremoting.ClientContext;
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.client.ClientContext;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;

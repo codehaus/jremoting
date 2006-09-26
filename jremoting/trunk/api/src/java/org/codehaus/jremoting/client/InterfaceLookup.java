@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.client;
 
-import org.codehaus.jremoting.Authentication;
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.authentications.Authentication;
 
 /**
  * InterfaceLookup describes the initial client's interaction with

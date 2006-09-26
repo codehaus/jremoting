@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting;
+package org.codehaus.jremoting.annotations;
 
 
 import java.lang.annotation.ElementType;

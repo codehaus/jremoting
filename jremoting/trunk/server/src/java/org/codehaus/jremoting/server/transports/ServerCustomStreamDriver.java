@@ -27,10 +27,10 @@ import java.util.concurrent.ExecutorService;
 
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.SerializationHelper;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.util.SerializationHelper;
 
 /**
  * Class ServerCustomStreamDriver

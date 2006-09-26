@@ -22,9 +22,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.codehaus.jremoting.ClientContext;
 import org.codehaus.jremoting.Contextualizable;
-import org.codehaus.jremoting.MethodNameHelper;
+import org.codehaus.jremoting.client.ClientContext;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.CollectGarbage;
@@ -67,6 +66,7 @@ import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.util.MethodNameHelper;
 
 /**
  * Class InvocationHandlerAdapter

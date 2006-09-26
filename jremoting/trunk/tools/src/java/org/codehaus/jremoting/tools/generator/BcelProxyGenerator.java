@@ -32,8 +32,8 @@ import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.PUSH;
 import org.apache.bcel.generic.Type;
-import org.codehaus.jremoting.MethodNameHelper;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
+import org.codehaus.jremoting.util.MethodNameHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;

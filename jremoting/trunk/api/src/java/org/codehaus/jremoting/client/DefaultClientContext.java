@@ -15,12 +15,13 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting;
+package org.codehaus.jremoting.client;
 
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+
 
 public class DefaultClientContext implements ClientContext, Externalizable {
 

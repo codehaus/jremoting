@@ -15,13 +15,15 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting;
+package org.codehaus.jremoting.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import org.codehaus.jremoting.JRemotingException;
 
 /**
  * Class SerializationHelper

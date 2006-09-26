@@ -17,9 +17,9 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import org.codehaus.jremoting.ClientContext;
-import org.codehaus.jremoting.DefaultClientContext;
+import org.codehaus.jremoting.client.ClientContext;
 import org.codehaus.jremoting.client.ClientContextFactory;
+import org.codehaus.jremoting.client.DefaultClientContext;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)

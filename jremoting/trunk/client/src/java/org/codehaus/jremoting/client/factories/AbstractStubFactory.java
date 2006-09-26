@@ -22,9 +22,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-import org.codehaus.jremoting.Authentication;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.FacadeRefHolder;
+import org.codehaus.jremoting.authentications.Authentication;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.HostContext;

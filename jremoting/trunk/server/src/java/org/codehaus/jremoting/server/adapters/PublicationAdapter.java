@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.codehaus.jremoting.MethodNameHelper;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -29,6 +28,7 @@ import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Publisher;
 import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
+import org.codehaus.jremoting.util.MethodNameHelper;
 
 /**
  * Class PublicationAdapter

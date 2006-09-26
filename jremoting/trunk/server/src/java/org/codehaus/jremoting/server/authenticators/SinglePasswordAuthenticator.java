@@ -1,7 +1,7 @@
 package org.codehaus.jremoting.server.authenticators;
 
-import org.codehaus.jremoting.Authentication;
-import org.codehaus.jremoting.NamePasswordAuthentication;
+import org.codehaus.jremoting.authentications.Authentication;
+import org.codehaus.jremoting.authentications.NamePasswordAuthentication;
 import org.codehaus.jremoting.server.Authenticator;
 
 public class SinglePasswordAuthenticator implements Authenticator {

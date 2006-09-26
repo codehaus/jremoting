@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import org.codehaus.jremoting.ClientContext;
+import org.codehaus.jremoting.client.ClientContext;
 
 public class DefaultServerSideClientContext implements ClientContext {
     private Long session;

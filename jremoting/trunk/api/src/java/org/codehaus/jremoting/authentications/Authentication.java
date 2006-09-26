@@ -15,15 +15,16 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting;
+package org.codehaus.jremoting.authentications;
 
+import java.io.Externalizable;
 
-import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface AsynchronousFacade {
+/**
+ * Class Authentication
+ *
+ * @author Paul Hammant
+ * @version $Revision: 1.2 $
+ */
+public abstract class Authentication implements Externalizable {
+    static final long serialVersionUID = -4093932349132141782L;
 }

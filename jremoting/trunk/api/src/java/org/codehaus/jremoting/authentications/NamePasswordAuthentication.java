@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting;
+package org.codehaus.jremoting.authentications;
 
 import java.io.IOException;
 import java.io.ObjectInput;

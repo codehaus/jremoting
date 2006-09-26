@@ -18,7 +18,7 @@
 
 package org.codehaus.jremoting.server.transports;
 
-import org.codehaus.jremoting.ClientContext;
+import org.codehaus.jremoting.client.ClientContext;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 
 /**
