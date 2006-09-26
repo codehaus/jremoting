@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.client.impl;
+package org.codehaus.jremoting.client.invokers;
 
 import org.codehaus.jremoting.api.ConnectionException;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
@@ -30,10 +30,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * DynamicInvoker enables  complete dynamic
- * invocation of the remote methods ;Its a stubless execution working
+ * <p>
+ * DynamicInvoker enables complete dynamic
+ * invocation of the remote methods: it's a stubless execution working
  * directly with the JRemoting defined request and response messages.
- * .
+ * </p>
+ * <p>
  * One creates a DynamicInvoker as follows:
  * <code>
  * //create custom HostContext for the specific transport
@@ -50,7 +52,7 @@ import java.util.Map;
  * //Get the list quotes listed on the stock exchange
  * String[] quotes=(String[])invoker.invoke("StockExchange","getQuotes()",null,null);
  * </code>
- *
+ * </p>
  * @author <a href="mailto:vinayc@apache.org">Vinay Chandran</a>
  */
 public class DynamicInvoker {
