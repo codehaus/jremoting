@@ -41,13 +41,13 @@ public final class PipedCustomStreamInvocationHandler extends AbstractPipedStrea
     /**
      * Constructor PipedCustomStreamInvocationHandler
      *
-     * @param executor
+     * @param executorService
      * @param clientMonitor
      * @param connectionPinger
      * @param outputStream
      */
-    public PipedCustomStreamInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream) {
-        super(executor, clientMonitor, connectionPinger, inputStream, outputStream, PipedCustomStreamInvocationHandler.class.getClassLoader());
+    public PipedCustomStreamInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream) {
+        super(executorService, clientMonitor, connectionPinger, inputStream, outputStream, PipedCustomStreamInvocationHandler.class.getClassLoader());
     }
 
     protected ClientStreamDriver createClientStreamDriver(InputStream inputStream, OutputStream outputStream) throws ConnectionException {

@@ -123,9 +123,9 @@ public class ClientContextTestCase extends TestCase {
         BcelDynamicGeneratorStubRetriever stubRetriever = new BcelDynamicGeneratorStubRetriever(this.getClass().getClassLoader());
 
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
-        ExecutorService executor = Executors.newCachedThreadPool();
+        ExecutorService executorService = Executors.newCachedThreadPool();
         SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ServerCustomStreamDriverFactory(), executor,
+                new ServerCustomStreamDriverFactory(), executorService,
                 ccf, 13333);
 
         PublicationDescription pd = new PublicationDescription(AccountManager.class);

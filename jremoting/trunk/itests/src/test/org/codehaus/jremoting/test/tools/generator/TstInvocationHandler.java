@@ -41,8 +41,8 @@ import java.lang.reflect.Method;
 public class TstInvocationHandler extends AbstractClientInvocationHandler implements ServerInvocationHandler {
 
 
-    public TstInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
-        super(executor, clientMonitor, connectionPinger);
+    public TstInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+        super(executorService, clientMonitor, connectionPinger);
     }
 
     public AbstractResponse handleInvocation(AbstractRequest request) {

@@ -40,7 +40,6 @@ import java.lang.reflect.Method;
  */
 public class SocketObjectStreamHostContext extends AbstractSocketStreamHostContext {
 
-    private final ExecutorService executor;
     private final ClientMonitor clientMonitor;
     private final ConnectionPinger connectionPinger;
     private int port;
@@ -49,7 +48,7 @@ public class SocketObjectStreamHostContext extends AbstractSocketStreamHostConte
     /**
      * Constructor SocketObjectStreamHostContext
      *
-     * @param executor
+     * @param executorService
      * @param clientMonitor
      * @param connectionPinger
      * @param interfacesClassLoader
@@ -57,17 +56,16 @@ public class SocketObjectStreamHostContext extends AbstractSocketStreamHostConte
      * @param port
      * @throws ConnectionException
      */
-    public SocketObjectStreamHostContext(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(executor, clientMonitor, connectionPinger, new SocketObjectStreamInvocationHandler(executor, clientMonitor, connectionPinger, host, port, interfacesClassLoader));
-        this.executor = executor;
+    public SocketObjectStreamHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
+        super(executorService, clientMonitor, connectionPinger, new SocketObjectStreamInvocationHandler(executorService, clientMonitor, connectionPinger, host, port, interfacesClassLoader));
         this.clientMonitor = clientMonitor;
         this.connectionPinger = connectionPinger;
         classLoader = interfacesClassLoader;
         this.port = port;
     }
 
-    public SocketObjectStreamHostContext(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
-        this(executor, clientMonitor, connectionPinger, SocketObjectStreamHostContext.class.getClassLoader(), host, port);
+    public SocketObjectStreamHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
+        this(executorService, clientMonitor, connectionPinger, SocketObjectStreamHostContext.class.getClassLoader(), host, port);
     }
 
     public SocketObjectStreamHostContext(String host, int port) throws ConnectionException {

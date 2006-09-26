@@ -45,9 +45,9 @@ public class StatefulServer implements Server {
 
 
     public StatefulServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
-                          ExecutorService executor) {
+                          ExecutorService executorService) {
         this.invocationHandlerAdapter = invocationHandlerAdapter;
-        this.executorService = executor;
+        this.executorService = executorService;
         this.serverMonitor = serverMonitor;
     }
 

@@ -114,7 +114,7 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
             }
         };
 
-        future = clientInvocationHandler.getExecutor().submit(runnable);
+        future = clientInvocationHandler.getExecutorService().submit(runnable);
     }
 
     /**

@@ -75,9 +75,9 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
-                                           ServerStreamDriverFactory serverStreamDriverFactory, ExecutorService executor,
+                                           ServerStreamDriverFactory serverStreamDriverFactory, ExecutorService executorService,
                                            ServerSideClientContextFactory contextFactory, int port) {
-        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), serverStreamDriverFactory, executor, port);
+        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), serverStreamDriverFactory, executorService, port);
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port) {

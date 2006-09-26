@@ -45,11 +45,11 @@ public class DirectServer extends StatefulServer {
      * @param stubRetriever
      * @param authenticator
      * @param serverMonitor
-     * @param executor
+     * @param executorService
      * @param contextFactory
      */
-    public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executor, ServerSideClientContextFactory contextFactory) {
-        super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executor);
+    public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executorService, ServerSideClientContextFactory contextFactory) {
+        super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
     }
 
     public DirectServer() {

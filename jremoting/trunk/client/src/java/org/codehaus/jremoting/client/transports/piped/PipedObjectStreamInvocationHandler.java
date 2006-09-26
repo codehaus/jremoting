@@ -41,18 +41,18 @@ public class PipedObjectStreamInvocationHandler extends AbstractPipedStreamInvoc
     /**
      * Constructor PipedObjectStreamInvocationHandler
      *
-     * @param executor
+     * @param executorService
      * @param clientMonitor
      * @param connectionPinger
      * @param is
      * @param os
      */
-    public PipedObjectStreamInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os, ClassLoader classLoader) {
-        super(executor, clientMonitor, connectionPinger, is, os, classLoader);
+    public PipedObjectStreamInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os, ClassLoader classLoader) {
+        super(executorService, clientMonitor, connectionPinger, is, os, classLoader);
     }
 
-    public PipedObjectStreamInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os) {
-        this(executor, clientMonitor, connectionPinger, is, os, PipedObjectStreamInvocationHandler.class.getClassLoader());
+    public PipedObjectStreamInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os) {
+        this(executorService, clientMonitor, connectionPinger, is, os, PipedObjectStreamInvocationHandler.class.getClassLoader());
 
     }
 

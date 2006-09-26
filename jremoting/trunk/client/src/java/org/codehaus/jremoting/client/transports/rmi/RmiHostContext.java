@@ -45,8 +45,8 @@ public class RmiHostContext extends AbstractHostContext {
      * @param port
      * @throws ConnectionException
      */
-    public RmiHostContext(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
-        super(new RmiClientInvocationHandler(executor, clientMonitor, connectionPinger, host, port));
+    public RmiHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
+        super(new RmiClientInvocationHandler(executorService, clientMonitor, connectionPinger, host, port));
     }
 
     public RmiHostContext(String host, int port) throws ConnectionException {

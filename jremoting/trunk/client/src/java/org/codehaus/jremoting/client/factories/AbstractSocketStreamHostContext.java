@@ -24,13 +24,13 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 
 public abstract class AbstractSocketStreamHostContext extends AbstractHostContext {
 
-    protected final ExecutorService executor;
+    protected final ExecutorService executorService;
     protected final ClientMonitor clientMonitor;
     protected final ConnectionPinger connectionPinger;
 
-    public AbstractSocketStreamHostContext(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClientInvocationHandler clientInvocationHandler) {
+    public AbstractSocketStreamHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClientInvocationHandler clientInvocationHandler) {
         super(clientInvocationHandler);
-        this.executor = executor;
+        this.executorService = executorService;
         this.clientMonitor = clientMonitor;
         this.connectionPinger = connectionPinger;
     }

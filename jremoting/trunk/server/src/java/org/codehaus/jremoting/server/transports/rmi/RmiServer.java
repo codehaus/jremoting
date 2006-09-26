@@ -64,16 +64,16 @@ public class RmiServer extends ConnectingServer {
      *
      * @param serverMonitor
      * @param invocationHandlerAdapter
-     * @param executor
+     * @param executorService
      * @param port
      */
-    public RmiServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executor, int port) {
-        super(serverMonitor, invocationHandlerAdapter, executor);
+    public RmiServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executorService, int port) {
+        super(serverMonitor, invocationHandlerAdapter, executorService);
         this.port = port;
     }
 
-    public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executor, ServerSideClientContextFactory contextFactory, int port) {
-        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executor, port);
+    public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executorService, ServerSideClientContextFactory contextFactory, int port) {
+        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executorService, port);
     }
 
     public RmiServer(ServerMonitor serverMonitor, int port) {

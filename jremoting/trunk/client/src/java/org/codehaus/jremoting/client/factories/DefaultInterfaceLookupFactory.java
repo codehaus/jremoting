@@ -42,13 +42,13 @@ public class DefaultInterfaceLookupFactory extends AbstractInterfaceLookupFactor
         this(Executors.newCachedThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger());
     }
 
-    public DefaultInterfaceLookupFactory(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+    public DefaultInterfaceLookupFactory(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
 
-        addFactory("SocketObjectStream:", new SocketObjectStreamFactoryHelper(executor, clientMonitor, connectionPinger));
+        addFactory("SocketObjectStream:", new SocketObjectStreamFactoryHelper(executorService, clientMonitor, connectionPinger));
 
-        addFactory("SocketCustomStream:", new SocketCustomStreamFactoryHelper(executor, clientMonitor, connectionPinger));
+        addFactory("SocketCustomStream:", new SocketCustomStreamFactoryHelper(executorService, clientMonitor, connectionPinger));
 
-        addFactory("RMI:", new RmiFactoryHelper(executor, clientMonitor, connectionPinger));
+        addFactory("RMI:", new RmiFactoryHelper(executorService, clientMonitor, connectionPinger));
 
         // TODO - add the rest.
     }

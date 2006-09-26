@@ -44,16 +44,16 @@ public class PipedStreamServer extends ConnectingServer {
     private final ServerStreamDriverFactory serverStreamDriverFactory;
 
     public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
-                             ExecutorService executor, ServerSideClientContextFactory contextFactory,
+                             ExecutorService executorService, ServerSideClientContextFactory contextFactory,
                              ServerStreamDriverFactory serverStreamDriverFactory) {
-        super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executor);
+        super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
         this.serverStreamDriverFactory = serverStreamDriverFactory;
     }
 
     public PipedStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
-                             ExecutorService executor, ServerSideClientContextFactory contextFactory,
+                             ExecutorService executorService, ServerSideClientContextFactory contextFactory,
                              ServerStreamDriverFactory serverStreamDriverFactory) {
-        super(serverMonitor, invocationHandlerAdapter, executor);
+        super(serverMonitor, invocationHandlerAdapter, executorService);
         this.serverStreamDriverFactory = serverStreamDriverFactory;
     }
 

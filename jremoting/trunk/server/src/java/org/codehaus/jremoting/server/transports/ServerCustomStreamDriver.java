@@ -43,9 +43,9 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
 
-    public ServerCustomStreamDriver(ServerMonitor serverMonitor, ExecutorService executor, InputStream inputStream,
+    public ServerCustomStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService, InputStream inputStream,
                                     OutputStream outputStream, Object connectionDetails) {
-        super(serverMonitor, executor, inputStream, outputStream, connectionDetails);
+        super(serverMonitor, executorService, inputStream, outputStream, connectionDetails);
     }
 
     /**
@@ -89,7 +89,7 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
 
     public void initialize() {
         dataInputStream = new DataInputStream(getInputStream());
-        dataOutputStream = new DataOutputStream(new BufferedOutputStream(getOutputStream()));        
+        dataOutputStream = new DataOutputStream(new BufferedOutputStream(getOutputStream()));
     }
 
     private AbstractRequest readRequest() throws IOException, ClassNotFoundException, ConnectionException {

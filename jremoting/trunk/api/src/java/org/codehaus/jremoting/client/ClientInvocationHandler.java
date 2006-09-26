@@ -55,7 +55,7 @@ public interface ClientInvocationHandler {
 
     Object resolveArgument(String remoteObjName, String methodSignature, Class inputArgumentClass, Object inputArgumentInstance);
 
-    ExecutorService getExecutor();
+    ExecutorService getExecutorService();
 
     ClientMonitor getClientMonitor();
 

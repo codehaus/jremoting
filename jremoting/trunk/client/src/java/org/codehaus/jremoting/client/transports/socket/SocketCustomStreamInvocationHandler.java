@@ -44,8 +44,8 @@ public final class SocketCustomStreamInvocationHandler extends AbstractSocketStr
      * @param interfacesClassLoader the classloader for deserialization hints.
      * @throws ConnectionException if a problem
      */
-    public SocketCustomStreamInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(executor, clientMonitor, connectionPinger, interfacesClassLoader, host, port);
+    public SocketCustomStreamInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
+        super(executorService, clientMonitor, connectionPinger, interfacesClassLoader, host, port);
     }
 
     /**

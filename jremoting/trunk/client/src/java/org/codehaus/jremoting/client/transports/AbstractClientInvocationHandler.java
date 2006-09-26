@@ -38,19 +38,19 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
     protected final ConnectionPinger connectionPinger;
     protected final ClientMonitor clientMonitor;
     protected boolean stopped = false;
-    protected final ExecutorService executor;
+    protected final ExecutorService executorService;
     protected final boolean methodLogging;
 
 
-    public AbstractClientInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
-        this.executor = executor;
+    public AbstractClientInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+        this.executorService = executorService;
         this.clientMonitor = clientMonitor;
         methodLogging = clientMonitor.methodLogging();
         this.connectionPinger = connectionPinger;
     }
 
-    public ExecutorService getExecutor() {
-        return executor;
+    public ExecutorService getExecutorService() {
+        return executorService;
     }
 
     public ClientMonitor getClientMonitor() {

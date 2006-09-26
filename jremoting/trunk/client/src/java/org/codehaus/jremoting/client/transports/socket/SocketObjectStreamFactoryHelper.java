@@ -37,12 +37,12 @@ import org.codehaus.jremoting.client.factories.AbstractFactoryHelper;
  * @version $Revision: 1.2 $
  */
 public class SocketObjectStreamFactoryHelper extends AbstractFactoryHelper {
-    private ExecutorService executor;
+    private ExecutorService executorService;
     private ClientMonitor clientMonitor;
     private ConnectionPinger connectionPinger;
 
-    public SocketObjectStreamFactoryHelper(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
-        this.executor = executor;
+    public SocketObjectStreamFactoryHelper(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+        this.executorService = executorService;
         this.clientMonitor = clientMonitor;
         this.connectionPinger = connectionPinger;
     }
@@ -57,7 +57,7 @@ public class SocketObjectStreamFactoryHelper extends AbstractFactoryHelper {
     public InterfaceLookup getInterfaceLookup(String factoryString, ClassLoader interfacesClassLoader) throws ConnectionException {
         // TODO maybe we should cache these.  Or the abstract parent class should.
         String[] terms = processFactoryString(factoryString);
-        HostContext hc = new SocketObjectStreamHostContext(executor, clientMonitor, connectionPinger, interfacesClassLoader, terms[1], Integer.parseInt(terms[2]));
+        HostContext hc = new SocketObjectStreamHostContext(executorService, clientMonitor, connectionPinger, interfacesClassLoader, terms[1], Integer.parseInt(terms[2]));
         Factory af = createFactory(terms[3], hc);
 
         return af;

@@ -43,8 +43,8 @@ public final class SocketXStreamInvocationHandler extends AbstractSocketStreamIn
      * @param interfacesClassLoader the classloader for deserialization hints.
      * @throws org.codehaus.jremoting.ConnectionException if a problem
      */
-    public SocketXStreamInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(executor, clientMonitor, connectionPinger, interfacesClassLoader, host, port);
+    public SocketXStreamInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
+        super(executorService, clientMonitor, connectionPinger, interfacesClassLoader, host, port);
     }
 
     /**

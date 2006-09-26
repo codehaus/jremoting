@@ -42,15 +42,15 @@ public class PipedObjectStreamHostContext extends AbstractHostContext {
     /**
      * Constructor PipedObjectStreamHostContext
      *
-     * @param executor
+     * @param executorService
      * @param clientMonitor
      * @param connectionPinger
      * @param inputStream
      * @param outputStream
      * @param classLoader
      */
-    public PipedObjectStreamHostContext(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream, ClassLoader classLoader) {
-        super(new PipedObjectStreamInvocationHandler(executor, clientMonitor, connectionPinger, inputStream, outputStream, classLoader));
+    public PipedObjectStreamHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream, ClassLoader classLoader) {
+        super(new PipedObjectStreamInvocationHandler(executorService, clientMonitor, connectionPinger, inputStream, outputStream, classLoader));
     }
 
     public PipedObjectStreamHostContext(PipedInputStream inputStream, PipedOutputStream outputStream) {

@@ -28,7 +28,6 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.AbstractDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
@@ -66,9 +65,9 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
         DefaultServerSideClientContextFactory ccf = new DefaultServerSideClientContextFactory();
 
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
-        ExecutorService executor = Executors.newCachedThreadPool();
+        ExecutorService executorService = Executors.newCachedThreadPool();
         server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ServerCustomStreamDriverFactory(), executor,
+                new ServerCustomStreamDriverFactory(), executorService,
                 ccf, 11003);
 
         asyncTestImpl = new AsyncTestImpl();

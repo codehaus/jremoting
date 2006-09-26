@@ -44,12 +44,12 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
      *
      * @param serverMonitor
      * @param invocationHandlerAdapter
-     * @param executor
+     * @param executorService
      * @param marshalledInvocationHandlerAdapter
      *
      */
-    public DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executor, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
-        super(serverMonitor, invocationHandlerAdapter, executor);
+    public DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executorService, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
+        super(serverMonitor, invocationHandlerAdapter, executorService);
         this.marshalledInvocationHandlerAdapter = marshalledInvocationHandlerAdapter;
     }
 

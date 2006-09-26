@@ -57,13 +57,13 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
     /**
      * Constructor AbstractStreamClientInvocationHandler
      *
-     * @param executor
+     * @param executorService
      * @param clientMonitor
      * @param connectionPinger
      * @param interfacesClassLoader
      */
-    public AbstractStreamClientInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader) {
-        super(executor, clientMonitor, connectionPinger);
+    public AbstractStreamClientInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader) {
+        super(executorService, clientMonitor, connectionPinger);
         this.interfacesClassLoader = interfacesClassLoader;
     }
 

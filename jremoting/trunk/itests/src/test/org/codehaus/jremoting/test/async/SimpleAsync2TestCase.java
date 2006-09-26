@@ -27,7 +27,6 @@ import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRet
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.ServerCustomStreamDriver;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
@@ -59,9 +58,9 @@ public class SimpleAsync2TestCase extends TestCase {
 
 
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
-        ExecutorService executor = Executors.newCachedThreadPool();
+        ExecutorService executorService = Executors.newCachedThreadPool();
         server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ServerCustomStreamDriverFactory(), executor,
+                new ServerCustomStreamDriverFactory(), executorService,
                 new DefaultServerSideClientContextFactory(), 11009);
 
         asyncTestImpl = new AsyncTestImpl();

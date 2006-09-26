@@ -38,13 +38,13 @@ public class DirectHostContext extends AbstractHostContext {
     /**
      * Constructor DirectHostContext
      *
-     * @param executor
+     * @param executorService
      * @param clientMonitor
      * @param connectionPinger
      * @param invocationHandler
      */
-    public DirectHostContext(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler) {
-        super(new DirectInvocationHandler(executor, clientMonitor, connectionPinger, invocationHandler));
+    public DirectHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler) {
+        super(new DirectInvocationHandler(executorService, clientMonitor, connectionPinger, invocationHandler));
     }
 
     public DirectHostContext(ServerInvocationHandler invocationHandler) {
