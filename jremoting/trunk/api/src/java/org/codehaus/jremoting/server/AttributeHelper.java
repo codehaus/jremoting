@@ -17,9 +17,9 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.api.AsynchronousMethod;
-import org.codehaus.jremoting.api.AsynchronousRollbackMethod;
-import org.codehaus.jremoting.api.AsynchronousCommitMethod;
+import org.codehaus.jremoting.AsynchronousCommitMethod;
+import org.codehaus.jremoting.AsynchronousMethod;
+import org.codehaus.jremoting.AsynchronousRollbackMethod;
 
 import java.lang.reflect.Method;
 

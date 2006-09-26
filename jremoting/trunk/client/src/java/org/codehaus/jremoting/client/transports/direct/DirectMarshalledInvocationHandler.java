@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.client.transports.direct;
 
-import org.codehaus.jremoting.api.SerializationHelper;
-import org.codehaus.jremoting.api.JRemotingException;
+import org.codehaus.jremoting.JRemotingException;
+import org.codehaus.jremoting.SerializationHelper;
 
 import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;

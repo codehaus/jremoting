@@ -18,7 +18,8 @@
 package org.codehaus.jremoting.test;
 
 import junit.framework.TestCase;
-import org.codehaus.jremoting.api.BadConnectionException;
+
+import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.NoSuchSessionException;

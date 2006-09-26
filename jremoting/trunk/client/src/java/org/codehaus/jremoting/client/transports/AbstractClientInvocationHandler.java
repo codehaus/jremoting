@@ -17,7 +17,8 @@
  */
 package org.codehaus.jremoting.client.transports;
 
-import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.ConnectionException;
+
 import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.ClientMonitor;

@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.api.MethodNameHelper;
+import org.codehaus.jremoting.MethodNameHelper;
 
 import java.lang.reflect.Method;
 import java.util.Vector;

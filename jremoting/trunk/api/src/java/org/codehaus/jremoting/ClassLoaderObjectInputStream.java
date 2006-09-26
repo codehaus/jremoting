@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.api;
+package org.codehaus.jremoting;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -17,10 +17,10 @@
  */
 package org.codehaus.jremoting.test.async;
 
-import org.codehaus.jremoting.api.AsynchronousMethod;
-import org.codehaus.jremoting.api.AsynchronousRollbackMethod;
-import org.codehaus.jremoting.api.AsynchronousCommitMethod;
-import org.codehaus.jremoting.api.AsynchronousFacade;
+import org.codehaus.jremoting.AsynchronousCommitMethod;
+import org.codehaus.jremoting.AsynchronousFacade;
+import org.codehaus.jremoting.AsynchronousMethod;
+import org.codehaus.jremoting.AsynchronousRollbackMethod;
 
 @AsynchronousFacade
 public interface AsyncTest {

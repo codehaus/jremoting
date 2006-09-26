@@ -17,7 +17,8 @@
  */
 package org.codehaus.jremoting.server.transports.piped;
 
-import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.ConnectionException;
+
 import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.StubRetriever;

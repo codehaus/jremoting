@@ -25,7 +25,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.WeakHashMap;
 
-import org.codehaus.jremoting.api.FacadeRefHolder;
+import org.codehaus.jremoting.FacadeRefHolder;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.responses.ExceptionThrown;

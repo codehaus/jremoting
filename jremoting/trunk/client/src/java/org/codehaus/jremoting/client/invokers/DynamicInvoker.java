@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.invokers;
 
-import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.factories.DynamicStubFactory;

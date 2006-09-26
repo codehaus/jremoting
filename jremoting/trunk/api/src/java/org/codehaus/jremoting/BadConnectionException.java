@@ -15,16 +15,24 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.api;
+package org.codehaus.jremoting;
 
+/**
+ * Class BadConnectionException
+ *
+ * @author Paul Hammant
+ * @version $Revision: 1.2 $
+ */
+public class BadConnectionException extends ConnectionException {
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Retention;
+    static final long serialVersionUID = 4846126242567107752L;
 
-
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface AsynchronousRollbackMethod {
+    /**
+     * Constructor BadConnectionException
+     *
+     * @param msg message that is the cause root of the exception
+     */
+    public BadConnectionException(String msg) {
+        super(msg);
+    }
 }

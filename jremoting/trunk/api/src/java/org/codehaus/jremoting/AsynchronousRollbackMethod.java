@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.api;
+package org.codehaus.jremoting;
 
 
 import java.lang.annotation.ElementType;
@@ -26,5 +26,5 @@ import java.lang.annotation.Retention;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AsynchronousMethod {
+public @interface AsynchronousRollbackMethod {
 }

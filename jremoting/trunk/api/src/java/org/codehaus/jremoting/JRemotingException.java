@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.api;
+package org.codehaus.jremoting;
 
 /**
  * RumtimeException with cascade features.

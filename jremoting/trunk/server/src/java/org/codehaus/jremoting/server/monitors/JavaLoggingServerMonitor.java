@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server.monitors;
 
-import org.codehaus.jremoting.api.BadConnectionException;
+import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import java.io.IOException;

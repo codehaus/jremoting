@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.api.ClientContext;
+import org.codehaus.jremoting.ClientContext;
 
 import java.io.IOException;
 import java.io.ObjectInput;

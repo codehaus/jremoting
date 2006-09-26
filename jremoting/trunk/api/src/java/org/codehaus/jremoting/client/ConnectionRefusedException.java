@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client;
 
-import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.ConnectionException;
 
 /**
  * Class ConnectionRefusedException

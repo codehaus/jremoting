@@ -32,7 +32,7 @@ import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.PUSH;
 import org.apache.bcel.generic.Type;
-import org.codehaus.jremoting.api.MethodNameHelper;
+import org.codehaus.jremoting.MethodNameHelper;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 
 import java.io.File;

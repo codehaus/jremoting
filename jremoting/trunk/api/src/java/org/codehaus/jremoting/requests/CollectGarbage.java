@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.api.Sessionable;
+import org.codehaus.jremoting.Sessionable;
 import org.codehaus.jremoting.requests.AbstractServiceRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 

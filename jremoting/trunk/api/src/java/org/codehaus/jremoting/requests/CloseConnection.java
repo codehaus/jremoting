@@ -17,7 +17,7 @@
 
 package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.api.Sessionable;
+import org.codehaus.jremoting.Sessionable;
 
 import java.io.IOException;
 import java.io.ObjectInput;

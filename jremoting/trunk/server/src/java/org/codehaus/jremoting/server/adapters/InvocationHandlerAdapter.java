@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.codehaus.jremoting.api.ClientContext;
-import org.codehaus.jremoting.api.Contextualizable;
-import org.codehaus.jremoting.api.MethodNameHelper;
+import org.codehaus.jremoting.ClientContext;
+import org.codehaus.jremoting.Contextualizable;
+import org.codehaus.jremoting.MethodNameHelper;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.CollectGarbage;

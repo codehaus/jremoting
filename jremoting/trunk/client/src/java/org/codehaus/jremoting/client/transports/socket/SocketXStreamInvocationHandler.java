@@ -17,7 +17,8 @@
 package org.codehaus.jremoting.client.transports.socket;
 
 import java.util.concurrent.ExecutorService;
-import org.codehaus.jremoting.api.ConnectionException;
+
+import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.ClientStreamDriver;
@@ -40,7 +41,7 @@ public final class SocketXStreamInvocationHandler extends AbstractSocketStreamIn
      * @param host                  the host name
      * @param port                  the port
      * @param interfacesClassLoader the classloader for deserialization hints.
-     * @throws org.codehaus.jremoting.api.ConnectionException if a problem
+     * @throws org.codehaus.jremoting.ConnectionException if a problem
      */
     public SocketXStreamInvocationHandler(ExecutorService executor, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
         super(executor, clientMonitor, connectionPinger, interfacesClassLoader, host, port);
@@ -52,7 +53,7 @@ public final class SocketXStreamInvocationHandler extends AbstractSocketStreamIn
      * @param in  the input stream
      * @param out the output stream
      * @return the read/writer
-     * @throws org.codehaus.jremoting.api.ConnectionException if a problem
+     * @throws org.codehaus.jremoting.ConnectionException if a problem
      */
     protected ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException {
         return new ClientXStreamDriver(in, out, interfacesClassLoader);

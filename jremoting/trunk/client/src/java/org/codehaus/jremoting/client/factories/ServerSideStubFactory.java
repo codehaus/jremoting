@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.factories;
 
 import java.util.HashMap;
 
-import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.requests.RetrieveStub;

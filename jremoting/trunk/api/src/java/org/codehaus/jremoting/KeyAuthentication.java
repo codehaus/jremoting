@@ -15,57 +15,58 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.api;
+package org.codehaus.jremoting;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class NamePasswordAuthentication
+ * Class KeyAuthentication
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class NamePasswordAuthentication extends Authentication {
-    static final long serialVersionUID = -1387784311223571160L;
+public final class KeyAuthentication extends Authentication {
 
-    private String userID;
-    private String password;
+    static final long serialVersionUID = -6587101868869375750L;
+
+    private String publicKey;
+    private String signedText;
 
     /**
-     * Constructor NamePasswordAuthentication
+     * Constructor KeyAuthentication
      *
-     * @param userID   the user ID
-     * @param password the password
+     * @param publicKey  the public key
+     * @param signedText the signed text
      */
-    public NamePasswordAuthentication(String userID, String password) {
-        this.userID = userID;
-        this.password = password;
+    public KeyAuthentication(String publicKey, String signedText) {
+        this.publicKey = publicKey;
+        this.signedText = signedText;
     }
 
     /**
-     * Constructor NamePasswordAuthentication for Externalization
+     * Constructor KeyAuthentication for Externalization
      */
-    public NamePasswordAuthentication() {
+    public KeyAuthentication() {
     }
 
     /**
-     * Get user ID.
+     * Get the public key for authentication.
      *
-     * @return the user ID
+     * @return the public key
      */
-    public String getUserID() {
-        return userID;
+    public String getPublicKey() {
+        return publicKey;
     }
 
     /**
-     * Get password.
+     * Get the signed text for authentication
      *
-     * @return the password
+     * @return the signed text
      */
-    public String getPassword() {
-        return password;
+    public String getSignedText() {
+        return signedText;
     }
 
     /**
@@ -83,8 +84,8 @@ public final class NamePasswordAuthentication extends Authentication {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(userID);
-        out.writeObject(password);
+        out.writeObject(publicKey);
+        out.writeObject(signedText);
     }
 
     /**
@@ -100,7 +101,7 @@ public final class NamePasswordAuthentication extends Authentication {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        userID = (String) in.readObject();
-        password = (String) in.readObject();
+        publicKey = (String) in.readObject();
+        signedText = (String) in.readObject();
     }
 }

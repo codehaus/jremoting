@@ -18,7 +18,8 @@
 package org.codehaus.jremoting.test.mismatch;
 
 import junit.framework.TestCase;
-import org.codehaus.jremoting.api.BadConnectionException;
+
+import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;

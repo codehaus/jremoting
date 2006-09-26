@@ -15,28 +15,14 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.api;
+package org.codehaus.jremoting;
 
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Retention;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-
-/**
- * Interface RmiClientInvocationHandler
- *
- * @author Paul Hammant
- * @version * $Revision: 1.2 $
- */
-public interface RmiInvocationHandler extends Remote {
-
-    /**
-     * Handle method invocation.
-     *
-     * @param request the request to marshall over RMI
-     * @return the response got back from the server
-     * @throws RemoteException in case there is outage.
-     */
-    AbstractResponse handleInvocation(AbstractRequest request) throws RemoteException;
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface AsynchronousCommitMethod {
 }

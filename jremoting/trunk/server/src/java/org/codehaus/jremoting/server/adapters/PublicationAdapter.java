@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.codehaus.jremoting.api.MethodNameHelper;
+import org.codehaus.jremoting.MethodNameHelper;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
 import org.codehaus.jremoting.server.PublicationDescription;

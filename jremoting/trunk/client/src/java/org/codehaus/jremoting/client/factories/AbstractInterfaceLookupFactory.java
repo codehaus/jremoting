@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import org.codehaus.jremoting.api.ConnectionException;
+import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.InterfaceLookup;
 import org.codehaus.jremoting.client.InterfaceLookupFactory;
 

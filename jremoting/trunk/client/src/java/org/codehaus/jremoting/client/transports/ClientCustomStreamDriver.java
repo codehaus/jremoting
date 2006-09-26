@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.client.transports;
 
-import org.codehaus.jremoting.api.ConnectionException;
-import org.codehaus.jremoting.api.SerializationHelper;
+import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.SerializationHelper;
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.responses.AbstractResponse;

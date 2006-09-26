@@ -18,7 +18,8 @@
 package org.codehaus.jremoting.test.dynamic;
 
 import junit.framework.TestCase;
-import org.codehaus.jremoting.api.ConnectionException;
+
+import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.invokers.DynamicInvoker;

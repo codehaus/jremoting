@@ -15,15 +15,15 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.api;
+package org.codehaus.jremoting;
 
+import java.io.Serializable;
 
-import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+/**
+ * @author Paul Hammant and Rune Johanessen (pairing for part)
+ * @version $Revision: 1.2 $
+ */
 
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface AsynchronousFacade {
+public interface ClientContext extends Serializable {
+
 }

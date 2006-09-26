@@ -15,20 +15,16 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.api;
+package org.codehaus.jremoting;
+
+import java.io.Externalizable;
 
 /**
- * Interface Sessionable
+ * Class Authentication
  *
  * @author Paul Hammant
- * @version * $Revision: 1.2 $
+ * @version $Revision: 1.2 $
  */
-public interface Sessionable {
-
-    /**
-     * Get the session ID.
-     *
-     * @return the session identifier
-     */
-    Long getSessionID();
+public abstract class Authentication implements Externalizable {
+    static final long serialVersionUID = -4093932349132141782L;
 }
