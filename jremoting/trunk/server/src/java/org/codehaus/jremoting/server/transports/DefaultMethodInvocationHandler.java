@@ -25,7 +25,6 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.WeakHashMap;
 
-import org.codehaus.jremoting.FacadeRefHolder;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.responses.ExceptionThrown;
@@ -37,6 +36,7 @@ import org.codehaus.jremoting.server.MethodInvocationMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.Publisher;
 import org.codehaus.jremoting.server.monitors.NullMethodInvocationMonitor;
+import org.codehaus.jremoting.util.FacadeRefHolder;
 
 /**
  * Class DefaultMethodInvocationHandler

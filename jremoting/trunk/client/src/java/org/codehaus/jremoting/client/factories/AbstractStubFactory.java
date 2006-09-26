@@ -23,7 +23,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.FacadeRefHolder;
 import org.codehaus.jremoting.authentications.Authentication;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.Factory;
@@ -41,6 +40,7 @@ import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.responses.ServicesList;
+import org.codehaus.jremoting.util.FacadeRefHolder;
 
 
 /**
