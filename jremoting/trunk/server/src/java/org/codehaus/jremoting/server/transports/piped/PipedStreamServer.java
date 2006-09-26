@@ -26,7 +26,6 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 import org.codehaus.jremoting.server.transports.ServerStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.ServerStreamDriver;
 
@@ -35,25 +34,25 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
 /**
- * Class PipedServer
+ * Class PipedStreamServer
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class PipedServer extends ConnectingServer {
+public class PipedStreamServer extends ConnectingServer {
 
     private final ServerStreamDriverFactory serverStreamDriverFactory;
 
-    public PipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
-                       ExecutorService executor, ServerSideClientContextFactory contextFactory,
-                       ServerStreamDriverFactory serverStreamDriverFactory) {
+    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
+                             ExecutorService executor, ServerSideClientContextFactory contextFactory,
+                             ServerStreamDriverFactory serverStreamDriverFactory) {
         super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executor);
         this.serverStreamDriverFactory = serverStreamDriverFactory;
     }
 
-    public PipedServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
-                       ExecutorService executor, ServerSideClientContextFactory contextFactory,
-                       ServerStreamDriverFactory serverStreamDriverFactory) {
+    public PipedStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
+                             ExecutorService executor, ServerSideClientContextFactory contextFactory,
+                             ServerStreamDriverFactory serverStreamDriverFactory) {
         super(serverMonitor, invocationHandlerAdapter, executor);
         this.serverStreamDriverFactory = serverStreamDriverFactory;
     }
@@ -67,9 +66,9 @@ public class PipedServer extends ConnectingServer {
      */
     public void makeNewConnection(PipedInputStream in, PipedOutputStream out) throws ConnectionException {
 
-        if (getState() == UNSTARTED | getState() == STARTING) {
+        if (getState().equals(UNSTARTED) | getState().equals(STARTING)) {
             throw new ConnectionException("Server not started yet");
-        } else if (getState() == SHUTTINGDOWN) {
+        } else if (getState().equals(SHUTTINGDOWN)) {
             throw new ConnectionException("Server is Shutting down");
         }
 

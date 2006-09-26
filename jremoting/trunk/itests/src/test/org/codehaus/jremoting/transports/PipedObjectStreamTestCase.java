@@ -22,9 +22,8 @@ import org.codehaus.jremoting.client.transports.piped.PipedObjectStreamHostConte
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.transports.piped.PipedServer;
+import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
-import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.ServerObjectStreamDriverFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.test.TestInterface;
@@ -60,7 +59,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new PipedServer(new ConsoleServerMonitor(), new NoStubRetriever(), new NullAuthenticator(),
+        server = new PipedStreamServer(new ConsoleServerMonitor(), new NoStubRetriever(), new NullAuthenticator(),
                 Executors.newCachedThreadPool() ,new DefaultServerSideClientContextFactory(), new ServerObjectStreamDriverFactory());
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -82,7 +81,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         // For piped, server and client can see each other
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out = new PipedOutputStream();
-        ((PipedServer) server).makeNewConnection(in, out);
+        ((PipedStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
         factory = new ClientSideStubFactory(new PipedObjectStreamHostContext(in, out));

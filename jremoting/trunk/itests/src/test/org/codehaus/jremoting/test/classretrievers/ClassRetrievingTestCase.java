@@ -28,7 +28,7 @@ import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
-import org.codehaus.jremoting.server.transports.piped.PipedServer;
+import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -51,7 +51,7 @@ public class ClassRetrievingTestCase extends TestCase {
 
         // server side setup.
         AbstractDynamicGeneratorStubRetriever dyncgen = new BcelDynamicGeneratorStubRetriever();
-        server = new PipedServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(),
+        server = new PipedStreamServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(),
                 new ServerCustomStreamDriverFactory());
         testServer = new TestImpl();
         server.publish(testServer, "Kewl", TestInterface.class);
@@ -62,7 +62,7 @@ public class ClassRetrievingTestCase extends TestCase {
         // For piped, server and client can see each other
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out = new PipedOutputStream();
-        ((PipedServer) server).makeNewConnection(in, out);
+        ((PipedStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
         Factory af = new ServerSideStubFactory(new PipedCustomStreamHostContext(in, out));

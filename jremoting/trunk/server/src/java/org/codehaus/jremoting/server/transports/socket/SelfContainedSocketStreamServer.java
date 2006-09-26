@@ -32,11 +32,9 @@ import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
-import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.ServerObjectStreamDriverFactory;
-import org.codehaus.jremoting.server.transports.ServerStreamDriver;
 import org.codehaus.jremoting.server.transports.ServerStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
 
@@ -46,7 +44,7 @@ import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class SelfContainedSocketStreamServer extends ConnectingServer implements Runnable {
+public class SelfContainedSocketStreamServer extends SocketStreamServer implements Runnable {
 
     /**
      * The server socket.
@@ -57,13 +55,10 @@ public class SelfContainedSocketStreamServer extends ConnectingServer implements
      * The thread handling the listening
      */
     private Future future;
-    //TODO cannot be instance variable because of setStreams()
-//    private final ServerStreamDriver serverStreamDriver;
     private int port;
     public static final String OBJECTSTREAM = "objectstream";
     public static final String CUSTOMSTREAM = "customstream";
     public static final String XSTREAM = "xstream";
-    private final ServerStreamDriverFactory serverStreamDriverFactory;
 
     /**
      * Construct a SelfContainedSocketStreamServer
@@ -73,10 +68,9 @@ public class SelfContainedSocketStreamServer extends ConnectingServer implements
      * @param port                     The port to use
      */
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
-                                           ServerStreamDriverFactory serverStreamDriverFactory, ExecutorService executor, int port) {
+                                           ServerStreamDriverFactory serverStreamDriverFactory, ExecutorService executorService, int port) {
 
-        super(serverMonitor, invocationHandlerAdapter, executor);
-        this.serverStreamDriverFactory = serverStreamDriverFactory;
+        super(serverMonitor, invocationHandlerAdapter, executorService, serverStreamDriverFactory);
         this.port = port;
     }
 
@@ -103,10 +97,10 @@ public class SelfContainedSocketStreamServer extends ConnectingServer implements
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ExecutorService executorService, String streamType) {
-        this(serverMonitor, port, executorService, createZerverStreamDriverFactory(streamType));
+        this(serverMonitor, port, executorService, createServerStreamDriverFactory(streamType));
     }
 
-    private static ServerStreamDriverFactory createZerverStreamDriverFactory(String streamType) {
+    private static ServerStreamDriverFactory createServerStreamDriverFactory(String streamType) {
         if (streamType.equals(CUSTOMSTREAM)) {
             return new ServerCustomStreamDriverFactory();
         } else if (streamType.equals(OBJECTSTREAM)) {
@@ -125,33 +119,19 @@ public class SelfContainedSocketStreamServer extends ConnectingServer implements
 
         boolean accepting = false;
         try {
-            while (getState() == STARTED) {
+            while (getState().equals(STARTED)) {
 
                 accepting = true;
                 Socket sock = serverSocket.accept();
-                accepting = false;
-
-                // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
-                sock.setSoTimeout(60 * 1000);
-
-                ServerStreamDriver serverStreamDriver = serverStreamDriverFactory.createDriver(serverMonitor,
-                        executorService, sock.getInputStream(), sock.getOutputStream(), sock);
-
-                SocketStreamConnection sssc = new SocketStreamConnection(this, sock, serverStreamDriver, serverMonitor);
-
-                //TODO ? Two of these getExecutors? PH
-                getExecutorService().execute(sssc);
+                handleConnection(sock);
 
             }
         } catch (IOException ioe) {
-            // some JVM revisions report 'socket closed' , some 'Soclet closed'
-            if (accepting & ioe.getMessage().equalsIgnoreCase("socket closed")) {
-                // do nothing, server shut down during accept();
-            } else {
-                serverMonitor.unexpectedException(this.getClass(), "SelfContainedSocketStreamServer.run(): Some problem connecting client via sockets: " + ioe.getMessage(), ioe);
-            }
+            handleIOE(accepting, ioe);
         }
     }
+
+
 
     /**
      * Method start
@@ -173,7 +153,7 @@ public class SelfContainedSocketStreamServer extends ConnectingServer implements
      */
     public void stop() {
 
-        if (getState() != STARTED) {
+        if (!getState().equals(STARTED)) {
             throw new JRemotingException("Server Not Started at time of stop");
         }
 

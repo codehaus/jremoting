@@ -22,7 +22,6 @@ import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.AbstractServerStreamDriver;
 import org.codehaus.jremoting.server.transports.ServerStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.ServerStreamDriver;
 
@@ -34,17 +33,18 @@ import java.net.SocketException;
  * @author Peter Royal
  * @version $Revision: 1.2 $
  */
-public class AbstractPartialSocketStreamServer extends ConnectingServer {
+public abstract class SocketStreamServer extends ConnectingServer {
     private final ServerStreamDriverFactory serverStreamDriverFactory;
 
+    protected boolean accepting = true;
     /**
-     * Construct a AbstractPartialSocketStreamServer
+     * Construct a SocketStreamServer
      *
-     * @param invocationHandlerAdapter Use this invocation handler adapter.
      * @param serverMonitor            The server Monitor
+     * @param invocationHandlerAdapter Use this invocation handler adapter.
      */
-    public AbstractPartialSocketStreamServer(InvocationHandlerAdapter invocationHandlerAdapter, ServerMonitor serverMonitor, ExecutorService executorService,
-                                             ServerStreamDriverFactory serverStreamDriverFactory) {
+    public SocketStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executorService,
+                              ServerStreamDriverFactory serverStreamDriverFactory) {
         super(serverMonitor, invocationHandlerAdapter, executorService);
         this.serverStreamDriverFactory = serverStreamDriverFactory;
     }
@@ -59,21 +59,28 @@ public class AbstractPartialSocketStreamServer extends ConnectingServer {
         // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
         try {
             socket.setSoTimeout(60 * 1000);
-        } catch (SocketException se) {
-            serverMonitor.unexpectedException(this.getClass(), "AbstractPartialSocketStreamServer.handleConnection(): Some error during " + "socket handling", se);
-        }
-
-        try {
-            if (getState() == STARTED) {
+            if (getState().equals(STARTED)) {
                 ServerStreamDriver ssd = serverStreamDriverFactory.createDriver(serverMonitor, executorService,
                         socket.getInputStream(), socket.getOutputStream(), socket);
                 SocketStreamConnection sssc = new SocketStreamConnection(this, socket, ssd, serverMonitor);
                 sssc.run();
             }
         } catch (IOException ioe) {
-
-            serverMonitor.unexpectedException(this.getClass(), "AbstractPartialSocketStreamServer.handleConnection(): Some problem connecting " + "client via sockets: ", ioe);
+            handleIOE(accepting, ioe);
         }
     }
+
+    protected void handleIOE(boolean accepting, IOException ioe) {
+        // some JVM revisions report 'socket closed' , some 'Soclet closed'
+        if (accepting & ioe.getMessage().equalsIgnoreCase("socket closed")) {
+            // do nothing, server shut down during accept();
+        } else {
+            serverMonitor.unexpectedException(this.getClass(), "SocketStreamServer: Some problem connecting client via sockets: " + ioe.getMessage(), ioe);
+        }
+    }
+
+
+
+
 
 }
