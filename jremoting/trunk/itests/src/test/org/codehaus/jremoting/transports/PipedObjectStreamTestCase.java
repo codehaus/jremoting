@@ -69,7 +69,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         BcelProxyGenerator generator = new BcelProxyGenerator();
         String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
         generator.setClassGenDir(testClassesDir);
-        generator.setInterfacesToExpose(pd.getInterfacesToExpose());
+        generator.setPrimaryFacades(pd.getPrimaryFacades());
         generator.setAdditionalFacades(pd.getAdditionalFacades());
         generator.setGenName("Hello33");
         generator.generateSrc(this.getClass().getClassLoader());

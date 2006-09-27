@@ -33,10 +33,10 @@ public interface Publisher {
      *
      * @param impl              the object implementing the principle interface.
      * @param service            the lookup name of the published object
-     * @param interfaceToExpose the principal interface being published
+     * @param primaryFacade the principal interface being published
      * @throws PublicationException if there is a problem publishing
      */
-    void publish(Object impl, String service, Class interfaceToExpose) throws PublicationException;
+    void publish(Object impl, String service, Class primaryFacade) throws PublicationException;
 
     /**
      * Publish a object for subsequent lookup.

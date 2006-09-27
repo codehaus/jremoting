@@ -29,9 +29,9 @@ public interface ProxyGenerator {
     /**
      * Set the interfaces to expose.
      *
-     * @param interfacesToExpose the interfaces to expose
+     * @param primaryFacades the interfaces to expose
      */
-    void setInterfacesToExpose(PublicationDescriptionItem[] interfacesToExpose);
+    void setPrimaryFacades(PublicationDescriptionItem[] primaryFacades);
 
     /**
      * Set the additional facades

@@ -30,7 +30,7 @@ public final class PublicationDescription {
     /**
      * An array of interfaces to expose.
      */
-    private ArrayList interfacesToExpose = new ArrayList();
+    private ArrayList primaryFacades = new ArrayList();
     /**
      * An array of additional facades.
      */
@@ -39,52 +39,52 @@ public final class PublicationDescription {
     /**
      * Construct a publication description.
      *
-     * @param interfaceToExpose the principal interface implemented by the lookupable bean.
+     * @param primaryFacade the principal interface implemented by the lookupable bean.
      */
-    public PublicationDescription(Class interfaceToExpose) {
-        this(new Class[]{interfaceToExpose}, new Class[0]);
+    public PublicationDescription(Class primaryFacade) {
+        this(new Class[]{primaryFacade}, new Class[0]);
     }
 
     /**
      * Construct a publication description.
      *
-     * @param interfaceToExpose the principal interface implemented by the lookupable bean.
+     * @param primaryFacade the principal interface implemented by the lookupable bean.
      * @param additionalFacade  additional facade implemented by other beans that
      *                          would otherwise be serialized and treated as pass-by-value objects.
      */
-    public PublicationDescription(Class interfaceToExpose, Class additionalFacade) {
-        this(new Class[]{interfaceToExpose}, new Class[]{additionalFacade});
+    public PublicationDescription(Class primaryFacade, Class additionalFacade) {
+        this(new Class[]{primaryFacade}, new Class[]{additionalFacade});
     }
 
     /**
      * Construct a publication description.
      *
-     * @param interfaceToExpose the principal interface implemented by the lookupable bean.
+     * @param primaryFacade the principal interface implemented by the lookupable bean.
      * @param additionalFacades additional facades implemented by other beans that
      *                          would otherwise be serialized and treated as pass-by-value objects.
      */
-    public PublicationDescription(Class interfaceToExpose, Class[] additionalFacades) {
-        this(new Class[]{interfaceToExpose}, additionalFacades);
+    public PublicationDescription(Class primaryFacade, Class[] additionalFacades) {
+        this(new Class[]{primaryFacade}, additionalFacades);
     }
 
     /**
      * Construct a publication description.
      *
-     * @param interfacesToExpose the principal interfaces implemented by the lookupable bean.
+     * @param primaryFacades the principal interfaces implemented by the lookupable bean.
      */
-    public PublicationDescription(Class[] interfacesToExpose) {
-        this(interfacesToExpose, new Class[0]);
+    public PublicationDescription(Class[] primaryFacades) {
+        this(primaryFacades, new Class[0]);
     }
 
     /**
      * Construct a publication description.
      *
-     * @param interfacesToExpose the principal interfaces implemented by the lookupable bean.
+     * @param primaryFacades the principal interfaces implemented by the lookupable bean.
      * @param additionalFacades  assitional facades implemented by other beans that
      *                           would otherwise be serialized and treated as pass-by-value objects.
      */
-    public PublicationDescription(Class[] interfacesToExpose, Class[] additionalFacades) {
-        addInterfacesToExpose(interfacesToExpose);
+    public PublicationDescription(Class[] primaryFacades, Class[] additionalFacades) {
+        addPrimaryFacades(primaryFacades);
         addAdditionalFacadesToExpose(additionalFacades);
 
     }
@@ -92,62 +92,62 @@ public final class PublicationDescription {
     /**
      * Construct a publication description.
      *
-     * @param interfaceToExpose the principal interface implemented by the lookupable bean.
+     * @param primaryFacade the principal interface implemented by the lookupable bean.
      * @param classLoader       the classloader containing the classdefs (special cases)
      * @throws PublicationException if there is a problem publishing
      */
-    public PublicationDescription(String interfaceToExpose, ClassLoader classLoader) throws PublicationException {
-        this(makeClasses(new String[]{interfaceToExpose}, classLoader), new Class[0]);
+    public PublicationDescription(String primaryFacade, ClassLoader classLoader) throws PublicationException {
+        this(makeClasses(new String[]{primaryFacade}, classLoader), new Class[0]);
     }
 
     /**
      * Construct a publication description.
      *
-     * @param interfaceToExpose the principal interface implemented by the lookupable bean.
+     * @param primaryFacade the principal interface implemented by the lookupable bean.
      * @param additionalFacade  assitional facade implemented by other beans that
      *                          would otherwise be serialized and treated as pass-by-value objects.
      * @param classLoader       the classloader containing the classdefs (special cases)
      * @throws PublicationException if there is a problem publishing
      */
-    public PublicationDescription(String interfaceToExpose, String additionalFacade, ClassLoader classLoader) throws PublicationException {
-        this(makeClasses(new String[]{interfaceToExpose}, classLoader), makeClasses(new String[]{additionalFacade}, classLoader));
+    public PublicationDescription(String primaryFacade, String additionalFacade, ClassLoader classLoader) throws PublicationException {
+        this(makeClasses(new String[]{primaryFacade}, classLoader), makeClasses(new String[]{additionalFacade}, classLoader));
     }
 
     /**
      * Construct a publication description.
      *
-     * @param interfaceToExpose the principal interface implemented by the lookupable bean.
+     * @param primaryFacade the principal interface implemented by the lookupable bean.
      * @param additionalFacades assitional facades implemented by other beans that
      *                          would otherwise be serialized and treated as pass-by-value objects.
      * @param classLoader       the classloader containing the classdefs (special cases)
      * @throws PublicationException if there is a problem publishing
      */
-    public PublicationDescription(String interfaceToExpose, String[] additionalFacades, ClassLoader classLoader) throws PublicationException {
-        this(makeClasses(new String[]{interfaceToExpose}, classLoader), makeClasses(additionalFacades, classLoader));
+    public PublicationDescription(String primaryFacade, String[] additionalFacades, ClassLoader classLoader) throws PublicationException {
+        this(makeClasses(new String[]{primaryFacade}, classLoader), makeClasses(additionalFacades, classLoader));
     }
 
     /**
      * Construct a publication description.
      *
-     * @param interfacesToExpose the principal interfaces implemented by the lookupable bean.
+     * @param primaryFacades the principal interfaces implemented by the lookupable bean.
      * @param classLoader        the classloader containing the classdefs (special cases)
      * @throws PublicationException if there is a problem publishing
      */
-    public PublicationDescription(String[] interfacesToExpose, ClassLoader classLoader) throws PublicationException {
-        this(makeClasses(interfacesToExpose, classLoader), new Class[0]);
+    public PublicationDescription(String[] primaryFacades, ClassLoader classLoader) throws PublicationException {
+        this(makeClasses(primaryFacades, classLoader), new Class[0]);
     }
 
     /**
      * Construct a publication description.
      *
-     * @param interfacesToExpose the principal interfaces implemented by the lookupable bean.
+     * @param primaryFacades the principal interfaces implemented by the lookupable bean.
      * @param additionalFacades  assitional facades implemented by other beans that
      *                           would otherwise be serialized and treated as pass-by-value objects.
      * @param classLoader        the classloader containing the classdefs (special cases)
      * @throws PublicationException if there is a problem publishing
      */
-    public PublicationDescription(String[] interfacesToExpose, String[] additionalFacades, ClassLoader classLoader) throws PublicationException {
-        this(makeClasses(interfacesToExpose, classLoader), makeClasses(additionalFacades, classLoader));
+    public PublicationDescription(String[] primaryFacades, String[] additionalFacades, ClassLoader classLoader) throws PublicationException {
+        this(makeClasses(primaryFacades, classLoader), makeClasses(additionalFacades, classLoader));
     }
 
     public PublicationDescription() {
@@ -172,18 +172,18 @@ public final class PublicationDescription {
         }
     }
 
-    public void addInterfacesToExpose(Class[] interfacesToExpose) {
-        for (int i = 0; i < interfacesToExpose.length; i++) {
-            Class interfaceToExpose = interfacesToExpose[i];
-            addInterfaceToExpose(new PublicationDescriptionItem(interfaceToExpose));
+    public void addPrimaryFacades(Class[] primaryFacades) {
+        for (int i = 0; i < primaryFacades.length; i++) {
+            Class primaryFacade = primaryFacades[i];
+            addPrimaryFacade(new PublicationDescriptionItem(primaryFacade));
         }
     }
 
-    public void addInterfaceToExpose(PublicationDescriptionItem publicationDescriptionItem) {
-        addInterfacesToExpose(new PublicationDescriptionItem[]{publicationDescriptionItem});
+    public void addPrimaryFacade(PublicationDescriptionItem publicationDescriptionItem) {
+        addPrimaryFacades(new PublicationDescriptionItem[]{publicationDescriptionItem});
     }
 
-    public void addInterfacesToExpose(PublicationDescriptionItem[] publicationDescriptionItems) {
+    public void addPrimaryFacades(PublicationDescriptionItem[] publicationDescriptionItems) {
         for (int i = 0; i < publicationDescriptionItems.length; i++) {
             PublicationDescriptionItem publicationDescriptionItem = publicationDescriptionItems[i];
             if (publicationDescriptionItem == null) {
@@ -192,7 +192,7 @@ public final class PublicationDescription {
             if (publicationDescriptionItem.getFacadeClass() == null) {
                 throw new RuntimeException("'Class' cannot be null");
             }
-            interfacesToExpose.add(publicationDescriptionItem);
+            primaryFacades.add(publicationDescriptionItem);
         }
     }
 
@@ -226,9 +226,9 @@ public final class PublicationDescription {
      *
      * @return an array of those interfaces.
      */
-    public PublicationDescriptionItem[] getInterfacesToExpose() {
-        PublicationDescriptionItem[] items = new PublicationDescriptionItem[interfacesToExpose.size()];
-        interfacesToExpose.toArray(items);
+    public PublicationDescriptionItem[] getPrimaryFacades() {
+        PublicationDescriptionItem[] items = new PublicationDescriptionItem[primaryFacades.size()];
+        primaryFacades.toArray(items);
         return items;
     }
 

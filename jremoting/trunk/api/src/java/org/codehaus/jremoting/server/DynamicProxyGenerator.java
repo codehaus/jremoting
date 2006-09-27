@@ -29,11 +29,11 @@ public interface DynamicProxyGenerator {
      * Generate a proxy.
      *
      * @param service            the name of the generated proxy.  As used in lookup.
-     * @param interfaceToExpose the princial lookupable interface
+     * @param primaryFacade the princial lookupable interface
      * @param classLoader       - classloader containing all needed for proxy generation
      * @throws PublicationException if there is a problem publishing
      */
-    void generate(String service, Class interfaceToExpose, ClassLoader classLoader) throws PublicationException;
+    void generate(String service, Class primaryFacade, ClassLoader classLoader) throws PublicationException;
 
     /**
      * Generate a proxy.

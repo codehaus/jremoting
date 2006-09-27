@@ -38,7 +38,7 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
     private String classpath;
     private boolean verbose;
     private PublicationDescriptionItem[] additionalFacades;
-    private PublicationDescriptionItem[] interfacesToExpose;
+    private PublicationDescriptionItem[] primaryFacades;
 
     /**
      * Get the directory name of the class generation directory.
@@ -93,8 +93,8 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
      *
      * @return the interfaces
      */
-    public PublicationDescriptionItem[] getInterfacesToExpose() {
-        return interfacesToExpose;
+    public PublicationDescriptionItem[] getPrimaryFacades() {
+        return primaryFacades;
     }
 
     /**
@@ -110,10 +110,10 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
     /**
      * Set the interfaces to expose.
      *
-     * @param interfacesToExpose the interfaces.
+     * @param primaryFacades the interfaces.
      */
-    public void setInterfacesToExpose(PublicationDescriptionItem[] interfacesToExpose) {
-        this.interfacesToExpose = interfacesToExpose;
+    public void setPrimaryFacades(PublicationDescriptionItem[] primaryFacades) {
+        this.primaryFacades = primaryFacades;
     }
 
 
@@ -169,10 +169,10 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
             return false;
         }
 
-        for (int p = 0; p < additionalFacades.length; p++) {
-            if (clazz.getName().equals(additionalFacades[p].getFacadeClass().getName())) {
+        for (PublicationDescriptionItem additionalFacade : additionalFacades) {
+            if (clazz.getName().equals(additionalFacade.getFacadeClass().getName())) {
                 return true;
-            } else if (clazz.getName().equals("[L" + additionalFacades[p].getFacadeClass().getName() + ";")) {
+            } else if (clazz.getName().equals("[L" + additionalFacade.getFacadeClass().getName() + ";")) {
                 return true;
             }
         }
@@ -214,12 +214,11 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
     }
 
     /**
-     * @param publicationDescriptionItemses
-     * @return
+     * @param publicationDescriptionItems
+     * @return needs asyn behavior
      */
-    protected boolean needsAsyncBehavior(PublicationDescriptionItem[] publicationDescriptionItemses) {
-        for (int i = 0; i < publicationDescriptionItemses.length; i++) {
-            PublicationDescriptionItem publicationDescriptionItem = publicationDescriptionItemses[i];
+    protected boolean needsAsyncBehavior(PublicationDescriptionItem[] publicationDescriptionItems) {
+        for (PublicationDescriptionItem publicationDescriptionItem : publicationDescriptionItems) {
             if (publicationDescriptionItem.hasAsyncBehavior()) {
                 return true;
             }

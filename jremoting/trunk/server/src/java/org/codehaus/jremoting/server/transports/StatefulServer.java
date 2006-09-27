@@ -103,12 +103,12 @@ public class StatefulServer implements Server {
      *
      * @param impl              The implementation
      * @param service            as this name.
-     * @param interfaceToExpose The interface to expose.
+     * @param primaryFacade The interface to expose.
      * @throws org.codehaus.jremoting.server.PublicationException
      *          if an error during publication.
      */
-    public void publish(Object impl, String service, Class interfaceToExpose) throws PublicationException {
-        invocationHandlerAdapter.publish(impl, service, interfaceToExpose);
+    public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
+        invocationHandlerAdapter.publish(impl, service, primaryFacade);
     }
 
     /**

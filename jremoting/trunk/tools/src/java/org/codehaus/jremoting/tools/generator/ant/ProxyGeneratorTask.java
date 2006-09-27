@@ -31,13 +31,13 @@ import java.util.Vector;
 
 /**
  * Ant task to generate proxies
- * 
+ *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
 public class ProxyGeneratorTask extends Task {
 
-    protected String[] interfacesToExpose;
+    protected String[] primaryFacades;
     protected String[] additionalFacades;
     protected File classGenDir;
     protected String genName;
@@ -54,20 +54,20 @@ public class ProxyGeneratorTask extends Task {
     /**
      * Method setInterfaces
      *
-     * @param interfacesToExpose
+     * @param primaryFacades
      */
-    public void setInterfaces(String interfacesToExpose) {
+    public void setInterfaces(String primaryFacades) {
 
-        StringTokenizer st = new StringTokenizer(interfacesToExpose, ",");
+        StringTokenizer st = new StringTokenizer(primaryFacades, ",");
         Vector strings = new Vector();
 
         while (st.hasMoreTokens()) {
             strings.add(st.nextToken().trim());
         }
 
-        this.interfacesToExpose = new String[strings.size()];
+        this.primaryFacades = new String[strings.size()];
 
-        strings.copyInto(this.interfacesToExpose);
+        strings.copyInto(this.primaryFacades);
     }
 
     /**
@@ -170,7 +170,7 @@ public class ProxyGeneratorTask extends Task {
      */
     public void execute() throws BuildException {
 
-        if (interfacesToExpose == null) {
+        if (primaryFacades == null) {
             throw new BuildException("Specify at least one interface to expose");
         }
 
@@ -199,15 +199,15 @@ public class ProxyGeneratorTask extends Task {
             proxyGenerator.verbose(Boolean.valueOf(verbose).booleanValue());
             proxyGenerator.setClasspath(classpath.concatSystemClasspath("ignore").toString());
 
-            PublicationDescriptionItem[] interfacesToExpose = new PublicationDescriptionItem[this.interfacesToExpose.length];
+            PublicationDescriptionItem[] primaryFacades = new PublicationDescriptionItem[this.primaryFacades.length];
             ClassLoader classLoader = new AntClassLoader(getProject(), classpath);
 
-            for (int i = 0; i < this.interfacesToExpose.length; i++) {
-                String cn = this.interfacesToExpose[i];
-                interfacesToExpose[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
+            for (int i = 0; i < this.primaryFacades.length; i++) {
+                String cn = this.primaryFacades[i];
+                primaryFacades[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
             }
 
-            proxyGenerator.setInterfacesToExpose(interfacesToExpose);
+            proxyGenerator.setPrimaryFacades(primaryFacades);
 
             if (additionalFacades != null) {
                 PublicationDescriptionItem[] additionalFacades = new PublicationDescriptionItem[this.additionalFacades.length];

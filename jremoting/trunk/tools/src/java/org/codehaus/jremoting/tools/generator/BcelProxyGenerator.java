@@ -72,7 +72,7 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
     public void generateClass(ClassLoader classLoader) {
 
         //create the Main Stubs:
-        generateProxyClass(StubHelper.formatProxyClassName(getGenName()), getInterfacesToExpose());
+        generateProxyClass(StubHelper.formatProxyClassName(getGenName()), getPrimaryFacades());
 
         //Create the Additional Facades
         if (getAdditionalFacades() != null) {

@@ -67,12 +67,12 @@ public class PublicationAdapter implements Publisher {
      *
      * @param impl              The implementaion to publish
      * @param service            as this name.
-     * @param interfaceToExpose The interface to expose.
+     * @param primaryFacade The interface to expose.
      * @throws org.codehaus.jremoting.server.PublicationException
      *          if a problem during publication.
      */
-    public void publish(Object impl, String service, Class interfaceToExpose) throws PublicationException {
-        publish(impl, service, new PublicationDescription(interfaceToExpose));
+    public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
+        publish(impl, service, new PublicationDescription(primaryFacade));
     }
 
     /**
@@ -85,17 +85,17 @@ public class PublicationAdapter implements Publisher {
      */
     public void publish(Object impl, String service, PublicationDescription publicationDescription) throws PublicationException {
 
-        PublicationDescriptionItem[] interfacesToExpose = publicationDescription.getInterfacesToExpose();
+        PublicationDescriptionItem[] primaryFacades = publicationDescription.getPrimaryFacades();
         PublicationDescriptionItem[] additionalFacades = publicationDescription.getAdditionalFacades();
 
         if (services.containsKey(StubHelper.formatServiceName(service))) {
             throw new PublicationException("Service '" + service + "' already published");
         }
 
-        String[] interfaceNames = new String[interfacesToExpose.length];
+        String[] interfaceNames = new String[primaryFacades.length];
 
-        for (int i = 0; i < interfacesToExpose.length; i++) {
-            interfaceNames[i] = interfacesToExpose[i].getFacadeClass().getName();
+        for (int i = 0; i < primaryFacades.length; i++) {
+            interfaceNames[i] = primaryFacades[i].getFacadeClass().getName();
         }
 
         // add method maps for main lookup-able service.
@@ -104,8 +104,8 @@ public class PublicationAdapter implements Publisher {
 
         mainMethodInvocationHandler.addImplementationBean(new Long(0), impl);
 
-        for (int x = 0; x < interfacesToExpose.length; x++) {
-            Class clazz = interfacesToExpose[x].getFacadeClass();
+        for (int x = 0; x < primaryFacades.length; x++) {
+            Class clazz = primaryFacades[x].getFacadeClass();
 
             Method methods[] = null;
             try {

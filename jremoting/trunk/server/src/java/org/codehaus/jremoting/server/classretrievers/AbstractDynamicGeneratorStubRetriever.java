@@ -59,12 +59,12 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
      * Method generate
      *
      * @param service            the name to generate as
-     * @param interfaceToExpose the interfaces to expose.
+     * @param primaryFacade the interfaces to expose.
      * @param classLoader       the classloader to use during generation.
      * @throws PublicationException if the generation failed.
      */
-    public void generate(String service, Class interfaceToExpose, ClassLoader classLoader) throws PublicationException {
-        generateProxy(service, new PublicationDescription(interfaceToExpose), classLoader, false);
+    public void generate(String service, Class primaryFacade, ClassLoader classLoader) throws PublicationException {
+        generateProxy(service, new PublicationDescription(primaryFacade), classLoader, false);
     }
 
     /**
@@ -176,16 +176,16 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
             classLoader = this.getClass().getClassLoader();
         }
 
-        PublicationDescriptionItem[] interfacesToExpose = new PublicationDescriptionItem[0];
-        PublicationDescriptionItem[] addInfs = new PublicationDescriptionItem[0];
+        PublicationDescriptionItem[] primaryFacades = new PublicationDescriptionItem[0];
+        PublicationDescriptionItem[] additionalFacades = new PublicationDescriptionItem[0];
 
-        interfacesToExpose = publicationDescription.getInterfacesToExpose();
-        addInfs = publicationDescription.getAdditionalFacades();
+        primaryFacades = publicationDescription.getPrimaryFacades();
+        additionalFacades = publicationDescription.getAdditionalFacades();
 
         org.codehaus.jremoting.server.ProxyGenerator proxyGenerator;
 
         try {
-            proxyGenerator = (org.codehaus.jremoting.server.ProxyGenerator) generatorClass.newInstance();
+            proxyGenerator = (ProxyGenerator) generatorClass.newInstance();
         } catch (InstantiationException e) {
             throw new RuntimeException("ProxyGenerator cannot be instantiated.");
         } catch (IllegalAccessException e) {
@@ -195,8 +195,8 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
         proxyGenerator.setClassGenDir(classGenDir);
         proxyGenerator.setGenName(service);
         proxyGenerator.setClasspath(classpath);
-        proxyGenerator.setInterfacesToExpose(interfacesToExpose);
-        proxyGenerator.setAdditionalFacades(addInfs);
+        proxyGenerator.setPrimaryFacades(primaryFacades);
+        proxyGenerator.setAdditionalFacades(additionalFacades);
 
         try {
             proxyGenerator.generateSrc(classLoader);
@@ -208,8 +208,8 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
             System.err.println("** Name=" + service);
             System.err.println("** Classes/Interfaces to Expose..");
 
-            for (int i = 0; i < interfacesToExpose.length; i++) {
-                String aString = interfacesToExpose[i].getFacadeClass().getName();
+            for (int i = 0; i < primaryFacades.length; i++) {
+                String aString = primaryFacades[i].getFacadeClass().getName();
 
                 System.err.println("** .." + aString);
             }
@@ -233,8 +233,8 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
                 System.err.println("** CLasspath=" + classpath);
                 System.err.println("** Classes/Interfaces to Expose..");
 
-                for (int i = 0; i < interfacesToExpose.length; i++) {
-                    String aString = interfacesToExpose[i].getFacadeClass().getName();
+                for (int i = 0; i < primaryFacades.length; i++) {
+                    String aString = primaryFacades[i].getFacadeClass().getName();
 
                     System.err.println("** .." + aString);
                 }

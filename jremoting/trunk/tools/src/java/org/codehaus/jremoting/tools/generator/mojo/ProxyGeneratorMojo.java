@@ -131,7 +131,7 @@ public class ProxyGeneratorMojo
 
             ClassLoader classLoader = createClassLoader(classpathElements);
 
-            proxyGenerator.setInterfacesToExpose(createPublicationDescriptionItems(fromCSV(interfaces), classLoader));
+            proxyGenerator.setPrimaryFacades(createPublicationDescriptionItems(fromCSV(interfaces), classLoader));
 
             if (additionalFacades != null) {
                 proxyGenerator.setAdditionalFacades(createPublicationDescriptionItems(fromCSV(additionalFacades), classLoader));
@@ -155,8 +155,8 @@ public class ProxyGeneratorMojo
                     classLoader.loadClass(classNames[i]));
         }
         return items;
-    }    
-    
+    }
+
     private ClassLoader createClassLoader(List classpathElements) throws MalformedURLException {
         return new URLClassLoader(toClasspathURLs(classpathElements));
     }
@@ -188,7 +188,7 @@ public class ProxyGeneratorMojo
             if ( i.hasNext() ){
                 sb.append(COMMA);
             }
-        }        
+        }
         return sb.toString();
     }
 
