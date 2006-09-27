@@ -42,13 +42,13 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
     /**
      * Constructor DirectInvocationHandler
      *
-     * @param executorService
      * @param clientMonitor
+     * @param executorService
      * @param connectionPinger
      * @param invocationHandler
      */
-    public DirectMarshalledInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ServerMarshalledInvocationHandler invocationHandler, ClassLoader classLoader) {
-        super(executorService, clientMonitor, connectionPinger);
+    public DirectMarshalledInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ServerMarshalledInvocationHandler invocationHandler, ClassLoader classLoader) {
+        super(clientMonitor, executorService, connectionPinger);
         this.invocationHandler = invocationHandler;
         interfacesClassLoader = classLoader;
     }

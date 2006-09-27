@@ -136,8 +136,8 @@ public class SimpleRetryingClientMonitor implements ClientMonitor {
         delegate.invocationFailure(clazz, name, ie);
     }
 
-    public void unexpectedClosedConnection(Class clazz, String name, ConnectionClosedException cce) {
-        delegate.unexpectedClosedConnection(clazz, name, cce);
+    public void unexpectedConnectionClosed(Class clazz, String name, ConnectionClosedException cce) {
+        delegate.unexpectedConnectionClosed(clazz, name, cce);
     }
 
     public void unexpectedInterruption(Class clazz, String name, InterruptedException ie) {

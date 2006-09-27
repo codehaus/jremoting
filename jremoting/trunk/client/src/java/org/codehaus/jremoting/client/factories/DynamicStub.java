@@ -18,6 +18,7 @@
 package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.client.Proxy;
+import org.codehaus.jremoting.client.InvocationException;
 
 /**
  * Implementation of Proxy(client stub) for dynamic invocation.
@@ -83,7 +84,7 @@ public class DynamicStub implements Proxy {
                 throw (Error) t;
             } else {
                 t.printStackTrace();
-                throw new org.codehaus.jremoting.client.InvocationException("Should never get here: " + t.getMessage());
+                throw new InvocationException("Should never get here: " + t.getMessage());
             }
         }
     }

@@ -21,6 +21,7 @@ import junit.framework.TestCase;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.NoSuchSessionException;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -62,7 +63,7 @@ public class BouncingServerTestCase extends TestCase {
         try {
 
             // Client side setup
-            HostContext hostContext = new SocketCustomStreamHostContext("127.0.0.1", 12201);
+            HostContext hostContext = new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12201);
             factory = new ClientSideStubFactory(hostContext);
             ClientInvocationHandler ih = hostContext.getInvocationHandler();
             TestInterface testClient = (TestInterface) factory.lookupService("Hello55");

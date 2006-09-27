@@ -25,7 +25,6 @@ import java.util.concurrent.Executors;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
 
 import java.io.PipedInputStream;
@@ -42,18 +41,18 @@ public class PipedCustomStreamHostContext extends AbstractHostContext {
     /**
      * Constructor PipedCustomStreamHostContext
      *
-     * @param executorService
      * @param clientMonitor
+     * @param executorService
      * @param connectionPinger
      * @param inputStream
      * @param outputStream
      */
-    public PipedCustomStreamHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream) {
-        super(new PipedCustomStreamInvocationHandler(executorService, clientMonitor, connectionPinger, inputStream, outputStream));
+    public PipedCustomStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream) {
+        super(new PipedCustomStreamInvocationHandler(clientMonitor, executorService, connectionPinger, inputStream, outputStream));
     }
 
-    public PipedCustomStreamHostContext(PipedInputStream inputStream, PipedOutputStream outputStream) {
-        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream);
+    public PipedCustomStreamHostContext(ClientMonitor clientMonitor, PipedInputStream inputStream, PipedOutputStream outputStream) {
+        this(clientMonitor, Executors.newCachedThreadPool(), new DefaultConnectionPinger(), inputStream, outputStream);
     }
 
     /**

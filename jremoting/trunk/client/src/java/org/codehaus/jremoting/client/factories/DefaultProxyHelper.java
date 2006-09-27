@@ -53,7 +53,7 @@ import org.codehaus.jremoting.responses.SimpleMethodInvoked;
  */
 public final class DefaultProxyHelper implements ProxyHelper {
 
-    private final transient AbstractStubFactory stubFactory;
+    private final transient AbstractFactory factory;
     private final transient ClientInvocationHandler clientInvocationHandler;
     private final transient String publishedServiceName;
     private final transient String objectName;
@@ -65,23 +65,23 @@ public final class DefaultProxyHelper implements ProxyHelper {
     /**
      * Constructor DefaultProxyHelper
      *
-     * @param abstractStubFactory
+     * @param abstractFactory
      * @param clientInvocationHandler
      * @param pubishedServiceName
      * @param objectName
      * @param referenceID
      * @param session
      */
-    public DefaultProxyHelper(AbstractStubFactory abstractStubFactory, ClientInvocationHandler clientInvocationHandler, String pubishedServiceName, String objectName, Long referenceID, Long session) {
+    public DefaultProxyHelper(AbstractFactory abstractFactory, ClientInvocationHandler clientInvocationHandler, String pubishedServiceName, String objectName, Long referenceID, Long session) {
 
-        stubFactory = abstractStubFactory;
+        factory = abstractFactory;
         this.clientInvocationHandler = clientInvocationHandler;
         publishedServiceName = pubishedServiceName;
         this.objectName = objectName;
         this.referenceID = referenceID;
         this.session = session;
-        if (abstractStubFactory == null) {
-            throw new IllegalArgumentException("abstractStubFactory cannot be null");
+        if (abstractFactory == null) {
+            throw new IllegalArgumentException("abstractFactory cannot be null");
         }
         if (clientInvocationHandler == null) {
             throw new IllegalArgumentException("clientInvocationHandler cannot be null");
@@ -95,7 +95,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
      * @param implBean
      */
     public void registerImplObject(Object implBean) {
-        stubFactory.registerReferenceObject(implBean, referenceID);
+        factory.registerReferenceObject(implBean, referenceID);
     }
 
     /**
@@ -142,11 +142,11 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 return null;
             }
 
-            Object implBean = stubFactory.getImplObj(ref);
+            Object implBean = factory.getImplObj(ref);
 
             if (implBean == null) {
-                DefaultProxyHelper pHelper = new DefaultProxyHelper(stubFactory, clientInvocationHandler, publishedServiceName, mfr.getObjectName(), ref, session);
-                Object retFacade = stubFactory.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
+                DefaultProxyHelper pHelper = new DefaultProxyHelper(factory, clientInvocationHandler, publishedServiceName, mfr.getObjectName(), ref, session);
+                Object retFacade = factory.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
 
                 pHelper.registerImplObject(retFacade);
 
@@ -166,16 +166,16 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 if (ref == null) {
                     implBeans[i] = null;
                 } else {
-                    Object o = stubFactory.getImplObj(ref);
+                    Object o = factory.getImplObj(ref);
 
                     implBeans[i] = o;
 
                     if (implBeans[i] == null) {
-                        DefaultProxyHelper bo2 = new DefaultProxyHelper(stubFactory, clientInvocationHandler, publishedServiceName, objectNames[i], refs[i], session);
+                        DefaultProxyHelper bo2 = new DefaultProxyHelper(factory, clientInvocationHandler, publishedServiceName, objectNames[i], refs[i], session);
                         Object retFacade = null;
 
                         try {
-                            retFacade = stubFactory.getInstance(publishedServiceName, objectNames[i], bo2);
+                            retFacade = factory.getInstance(publishedServiceName, objectNames[i], bo2);
                         } catch (Exception e) {
                             System.out.println("objNameWithoutArray=" + returnClassType.getName());
                             System.out.flush();
@@ -206,7 +206,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
     public Object processObjectRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
 
         try {
-            stubFactory.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
+            factory.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
             InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
             setContext(request);
@@ -236,7 +236,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
     public void processVoidRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
 
         try {
-            stubFactory.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
+            factory.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
             InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
 
@@ -357,9 +357,9 @@ public final class DefaultProxyHelper implements ProxyHelper {
      */
     public Long getReferenceID(Object factory) {
 
-        // this checks the stubFactory because reference IDs should not be
+        // this checks the factory because reference IDs should not be
         // given out to any requester.  It should be privileged information.
-        if (factory == this.stubFactory) {
+        if (factory == this.factory) {
             return referenceID;
         } else {
             return null;
@@ -395,7 +395,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
     protected void finalize() throws Throwable {
 
-        synchronized (stubFactory) {
+        synchronized (factory) {
             AbstractResponse response = clientInvocationHandler.handleInvocation(new CollectGarbage(publishedServiceName, objectName, session, referenceID));
             if (response instanceof ExceptionThrown) {
                 // This happens if the object can not be GCed on the remote server
@@ -413,14 +413,10 @@ public final class DefaultProxyHelper implements ProxyHelper {
             } else if (response instanceof ConnectionClosed) {
                 // do nothing. GC came after connection was closed. Just bad timing.
             } else if (!(response instanceof GarbageCollected)) {
-                System.err.println("----> Some problem during Distributed Garbage Collection! Make sure stubFactory is closed. AbstractResponse = '" + response + "'");
+                System.err.println("----> Some problem during Distributed Garbage Collection! Make sure factory is closed. AbstractResponse = '" + response + "'");
             }
         }
         super.finalize();
-    }
-
-    public void setClientContextClientFactory(ClientContextFactory clientContextClientFactory) {
-        this.clientContextClientFactory = clientContextClientFactory;
     }
 
     private synchronized void setContext(AbstractServiceRequest request) {

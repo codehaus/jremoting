@@ -47,21 +47,21 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
     /**
      * AbstractSocketStreamInvocationHandler
      *
-     * @param executorService
      * @param clientMonitor
+     * @param executorService
      * @param connectionPinger
      * @param interfacesClassLoader The class loader
      * @param host                  The host to connect to
      * @param port                  The port to conenct to
      */
-    public AbstractSocketStreamInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionRefusedException, BadConnectionException {
-        super(executorService, clientMonitor, connectionPinger, interfacesClassLoader);
+    public AbstractSocketStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionRefusedException, BadConnectionException {
+        super(clientMonitor, executorService, connectionPinger, interfacesClassLoader);
         this.host = host;
         this.port = port;
 
         try {
-            Socket socket = makeSocket();
-
+            Socket socket = new Socket(this.host, this.port);
+            socket.setSoTimeout(60 * 1000);
             setObjectDriver(createClientStreamDriver(socket.getInputStream(), socket.getOutputStream()));
         } catch (IOException ioe) {
             if (ioe.getMessage().startsWith("Connection refused")) {
@@ -79,10 +79,9 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
     protected boolean tryReconnect() {
 
         try {
-            Socket socket = makeSocket();
-
+            Socket socket = new Socket(host, port);
+            socket.setSoTimeout(60 * 1000);
             setObjectDriver(createClientStreamDriver(socket.getInputStream(), socket.getOutputStream()));
-
             return true;
         } catch (ConnectionException ce) {
             // TODO log ?
@@ -92,19 +91,6 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
             // TODO log ?
             return false;
         }
-    }
-
-    private Socket makeSocket() throws IOException {
-
-        Socket socket = new Socket(host, port);
-
-        // The 1 second value was causing unwanted timeouts when the remote
-        //  method took more than a second to run or if either system was heavily
-        //  loaded.
-        //socket.setSoTimeout(1000);
-        socket.setSoTimeout(60 * 1000);
-
-        return socket;
     }
 
     protected abstract ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException;

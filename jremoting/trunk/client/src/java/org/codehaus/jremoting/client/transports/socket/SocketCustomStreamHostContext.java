@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractSocketStreamHostContext;
-import org.codehaus.jremoting.client.monitors.NullClientMonitor;
+import org.codehaus.jremoting.client.factories.AbstractHostContext;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 
 import java.io.PipedInputStream;
@@ -38,44 +38,28 @@ import java.lang.reflect.Method;
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public class SocketCustomStreamHostContext extends AbstractSocketStreamHostContext {
-
-    private int port;
+public class SocketCustomStreamHostContext extends AbstractHostContext {
 
     /**
      * Constructor SocketCustomStreamHostContext
      *
-     * @param executorService
      * @param clientMonitor
+     * @param executorService
      * @param connectionPinger
      * @param host
      * @param port
      * @throws ConnectionException
      */
-    public SocketCustomStreamHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(executorService, clientMonitor, connectionPinger, new SocketCustomStreamInvocationHandler(executorService, clientMonitor, connectionPinger, interfacesClassLoader, host, port));
-        this.port = port;
+    public SocketCustomStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
+        super(new SocketCustomStreamInvocationHandler(clientMonitor, executorService, connectionPinger, interfacesClassLoader, host, port));
     }
 
-    public SocketCustomStreamHostContext(String host, int port, ClassLoader classLoader) throws ConnectionException {
-        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), classLoader, host, port);
+    public SocketCustomStreamHostContext(ClientMonitor clientMonitor, String host, int port, ClassLoader classLoader) throws ConnectionException {
+        this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(), classLoader, host, port);
     }
 
-    public SocketCustomStreamHostContext(String host, int port) throws ConnectionException {
-        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), SocketCustomStreamHostContext.class.getClassLoader(), host, port);
+    public SocketCustomStreamHostContext(ClientMonitor clientMonitor, String host, int port) throws ConnectionException {
+        this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(), SocketCustomStreamHostContext.class.getClassLoader(), host, port);
     }
-
-
-    private Object bind(Object object, PipedInputStream inputStream, PipedOutputStream outputStream) {
-
-        try {
-            Object[] parms = new Object[]{inputStream, outputStream};
-            Method method = object.getClass().getMethod("bind", new Class[]{parms.getClass()});
-            return method.invoke(object, new Object[]{parms});
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
 
 }

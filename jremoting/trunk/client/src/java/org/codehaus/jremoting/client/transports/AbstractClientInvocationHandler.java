@@ -42,7 +42,7 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
     protected final boolean methodLogging;
 
 
-    public AbstractClientInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+    public AbstractClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger) {
         this.executorService = executorService;
         this.clientMonitor = clientMonitor;
         methodLogging = clientMonitor.methodLogging();

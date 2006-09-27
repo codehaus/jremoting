@@ -50,7 +50,7 @@ public class NullClientMonitor implements ClientMonitor {
     public void invocationFailure(Class clazz, String name, InvocationException ie) {
     }
 
-    public void unexpectedClosedConnection(Class clazz, String name, ConnectionClosedException cce) {
+    public void unexpectedConnectionClosed(Class clazz, String name, ConnectionClosedException cce) {
     }
 
     public void unexpectedInterruption(Class clazz, String name, InterruptedException ie) {

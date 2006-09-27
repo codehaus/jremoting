@@ -23,7 +23,6 @@ import java.util.concurrent.Executors;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
 
@@ -39,17 +38,17 @@ public class DirectMarshalledHostContext extends AbstractHostContext {
     /**
      * Constructor DirectMarshalledHostContext
      *
-     * @param executorService
      * @param clientMonitor
+     * @param executorService
      * @param connectionPinger
      * @param interfacesClassLoader
      * @param invocationHandler
      */
-    public DirectMarshalledHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, ServerMarshalledInvocationHandler invocationHandler) {
-        super(new DirectMarshalledInvocationHandler(executorService, clientMonitor, connectionPinger, invocationHandler, interfacesClassLoader));
+    public DirectMarshalledHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, ServerMarshalledInvocationHandler invocationHandler) {
+        super(new DirectMarshalledInvocationHandler(clientMonitor, executorService, connectionPinger, invocationHandler, interfacesClassLoader));
     }
 
-    public DirectMarshalledHostContext(ServerMarshalledInvocationHandler invocationHandler) {
-        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), DirectMarshalledHostContext.class.getClassLoader(), invocationHandler);
+    public DirectMarshalledHostContext(ClientMonitor clientMonitor, ServerMarshalledInvocationHandler invocationHandler) {
+        this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(), DirectMarshalledHostContext.class.getClassLoader(), invocationHandler);
     }
 }

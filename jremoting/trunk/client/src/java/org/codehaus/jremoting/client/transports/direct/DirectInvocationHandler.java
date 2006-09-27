@@ -38,13 +38,13 @@ public final class DirectInvocationHandler extends AbstractDirectInvocationHandl
     /**
      * Constructor DirectInvocationHandler
      *
-     * @param executorService
      * @param clientMonitor
+     * @param executorService
      * @param connectionPinger
      * @param invocationHandler
      */
-    public DirectInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler) {
-        super(executorService, clientMonitor, connectionPinger);
+    public DirectInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler) {
+        super(clientMonitor, executorService, connectionPinger);
         this.invocationHandler = invocationHandler;
     }
 

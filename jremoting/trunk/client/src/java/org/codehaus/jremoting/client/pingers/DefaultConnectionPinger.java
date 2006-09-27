@@ -23,7 +23,7 @@ package org.codehaus.jremoting.client.pingers;
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public class DefaultConnectionPinger extends AbstractConnectionPinger {
+public class DefaultConnectionPinger extends IntervalConnectionPinger {
 
     /**
      * Constructor DefaultConnectionPinger
@@ -53,7 +53,7 @@ public class DefaultConnectionPinger extends AbstractConnectionPinger {
     }
 
     /**
-     * Implemnt the abstract ping() from the AbstractConnectionPinger
+     * Implemnt the abstract ping() from the IntervalConnectionPinger
      */
     protected void ping() {
 

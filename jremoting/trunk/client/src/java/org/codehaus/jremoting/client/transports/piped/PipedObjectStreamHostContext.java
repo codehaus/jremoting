@@ -25,7 +25,6 @@ import java.util.concurrent.Executors;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
 
 import java.io.PipedInputStream;
@@ -42,19 +41,19 @@ public class PipedObjectStreamHostContext extends AbstractHostContext {
     /**
      * Constructor PipedObjectStreamHostContext
      *
-     * @param executorService
      * @param clientMonitor
+     * @param executorService
      * @param connectionPinger
      * @param inputStream
      * @param outputStream
      * @param classLoader
      */
-    public PipedObjectStreamHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream, ClassLoader classLoader) {
-        super(new PipedObjectStreamInvocationHandler(executorService, clientMonitor, connectionPinger, inputStream, outputStream, classLoader));
+    public PipedObjectStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream, ClassLoader classLoader) {
+        super(new PipedObjectStreamInvocationHandler(clientMonitor, executorService, connectionPinger, inputStream, outputStream, classLoader));
     }
 
-    public PipedObjectStreamHostContext(PipedInputStream inputStream, PipedOutputStream outputStream) {
-        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger(), inputStream, outputStream, PipedObjectStreamHostContext.class.getClassLoader());
+    public PipedObjectStreamHostContext(ClientMonitor clientMonitor, PipedInputStream inputStream, PipedOutputStream outputStream) {
+        this(clientMonitor, Executors.newCachedThreadPool(), new DefaultConnectionPinger(), inputStream, outputStream, PipedObjectStreamHostContext.class.getClassLoader());
     }
 
     /**

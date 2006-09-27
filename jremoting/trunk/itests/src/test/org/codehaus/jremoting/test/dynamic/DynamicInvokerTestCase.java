@@ -22,6 +22,7 @@ import junit.framework.TestCase;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.NotPublishedException;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.invokers.DynamicInvoker;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -64,7 +65,7 @@ public class DynamicInvokerTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        hostContext = new SocketCustomStreamHostContext("127.0.0.1", 10001);
+        hostContext = new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 10001);
         dynamicInvoker = new DynamicInvoker(hostContext);
 
         // just a kludge for unit testing given we are intrinsically dealing with

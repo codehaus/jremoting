@@ -28,7 +28,6 @@ import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.Proxy;
-import org.codehaus.jremoting.client.ProxyHelper;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.ListServices;
 import org.codehaus.jremoting.requests.LookupService;
@@ -44,23 +43,22 @@ import org.codehaus.jremoting.util.FacadeRefHolder;
 
 
 /**
- * Class AbstractStubFactory
+ * Class AbstractFactory
  *
  * @author Paul Hammant
  * @author Peter Royal <a href="mailto:proyal@managingpartners.com">proyal@managingpartners.com</a>
  * @version $Revision: 1.3 $
  */
-public abstract class AbstractStubFactory implements Factory {
+public abstract class AbstractFactory implements Factory {
 
     private static final int STEM_LEN = "JRemotingGenerated".length();
-    private static Class[] stubParams = new Class[] {ProxyHelper.class};
     protected final ClientInvocationHandler clientInvocationHandler;
-    protected final HashMap refObjs = new HashMap();
+    protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
     private transient String textToSign;
     protected final Long sessionID;
 
 
-    public AbstractStubFactory(HostContext hostContext) throws ConnectionException {
+    public AbstractFactory(HostContext hostContext) throws ConnectionException {
         clientInvocationHandler = hostContext.getInvocationHandler();
         clientInvocationHandler.initialize();
 
@@ -124,7 +122,7 @@ public abstract class AbstractStubFactory implements Factory {
     public final void registerReferenceObject(Object obj, Long referenceID) {
 
         synchronized (this) {
-            refObjs.put(referenceID, new WeakReference(obj));
+            refObjs.put(referenceID, new WeakReference<Object>(obj));
         }
 
         //Object o = refObjs.get(referenceID);
@@ -136,10 +134,10 @@ public abstract class AbstractStubFactory implements Factory {
 
     public final Object getImplObj(Long referenceID) {
 
-        WeakReference wr = null;
+        WeakReference<Object> wr;
 
         synchronized (this) {
-            wr = (WeakReference) refObjs.get(referenceID);
+            wr = refObjs.get(referenceID);
         }
 
         if (wr == null) {
@@ -170,8 +168,7 @@ public abstract class AbstractStubFactory implements Factory {
 
     public boolean hasService(String publishedServiceName) {
         final String[] services = listServices();
-        for (int i = 0; i < services.length; i++) {
-            String service = services[i];
+        for (String service : services) {
             if (service.equals(publishedServiceName)) {
                 return true;
             }
@@ -189,7 +186,7 @@ public abstract class AbstractStubFactory implements Factory {
 
     public void marshallCorrection(String remoteObjName, String methodSignature, Object[] args, Class[] argClasses) {
 
-        for (int i = 0; i < args.length; i++) {
+        for (int i = 0; i < argClasses.length; i++) {
             Class argClass = argClasses[i];
             if (argClass == null) {
                 continue;
@@ -223,7 +220,6 @@ public abstract class AbstractStubFactory implements Factory {
     protected Object getInstance(String publishedServiceName, String objectName, DefaultProxyHelper proxyHelper) throws ConnectionException {
 
         try {
-            Object foo = "foo";
             Class stubClass = getStubClass(publishedServiceName, objectName);
             Constructor[] constructors = stubClass.getConstructors();
             return constructors[0].newInstance(new Object[]{proxyHelper});

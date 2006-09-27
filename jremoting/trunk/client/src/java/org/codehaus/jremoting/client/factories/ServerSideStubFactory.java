@@ -35,7 +35,7 @@ import org.codehaus.jremoting.responses.StubRetrievalFailed;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ServerSideStubFactory extends AbstractStubFactory {
+public class ServerSideStubFactory extends AbstractFactory {
 
     private final HashMap publishedServiceClassLoaders = new HashMap();
 

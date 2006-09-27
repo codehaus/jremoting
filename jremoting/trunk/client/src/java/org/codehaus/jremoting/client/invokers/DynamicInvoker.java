@@ -82,7 +82,7 @@ public class DynamicInvoker {
 
     /**
      * Retrieve the list of published services on the server.
-     * Re-uses the impl within AbstractStubFactory.
+     * Re-uses the impl within AbstractFactory.
      */
     public String[] listServices() {
         return factory.listServices();

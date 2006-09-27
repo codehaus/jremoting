@@ -19,6 +19,7 @@ package org.codehaus.jremoting.test.async;
 
 import junit.framework.TestCase;
 import org.codehaus.jremoting.client.Factory;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -78,7 +79,7 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        factory = new ServerSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 11003));
+        factory = new ServerSideStubFactory(new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 11003));
         testClient = (AsyncTest) factory.lookupService("AsyncTest");
 
         // just a kludge for unit testing given we are intrinsically dealing with

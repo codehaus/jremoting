@@ -17,6 +17,9 @@
  */
 package org.codehaus.jremoting.client;
 
+import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.authentications.Authentication;
+
 
 /**
  * Interface Factory
@@ -24,6 +27,42 @@ package org.codehaus.jremoting.client;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public interface Factory extends InterfaceLookup {
+public interface Factory {
+
+    /**
+     * Lookup a name by which the remote service is
+     * published by the server.
+     * Usage:
+     * <code>
+     * InterfaceLookup lookupService= . . . . ;
+     * RemoteInterface remoteInterface = lookupService.lookup("Published-Name-Of-The-Remote-Server");
+     * </code>
+     *
+     * @param publishedServiceName
+     * @return proxy to the Remote service.
+     * @throws org.codehaus.jremoting.ConnectionException
+     */
+    Object lookupService(String publishedServiceName) throws ConnectionException;
+
+    /**
+     * Lookup a name by which the remote service is
+     * published by the server within the context of
+     * the Authentication credentials supplied.
+     *
+     * @param publishedServiceName
+     * @param authentication
+     * @return
+     * @throws ConnectionException
+     */
+    Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException;
+
+    String[] listServices();
+
+    String getTextToSignForAuthentication();
+
+    void close();
+
+    boolean hasService(String publishedServiceName);
+
 
 }

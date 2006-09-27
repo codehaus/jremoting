@@ -27,7 +27,7 @@ import org.codehaus.jremoting.requests.Ping;
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public class PerpetualConnectionPinger extends AbstractConnectionPinger {
+public class PerpetualConnectionPinger extends IntervalConnectionPinger {
 
     /**
      * Constructor PerpetualConnectionPinger

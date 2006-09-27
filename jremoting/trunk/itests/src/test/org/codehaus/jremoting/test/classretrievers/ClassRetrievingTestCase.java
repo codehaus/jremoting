@@ -19,6 +19,7 @@ package org.codehaus.jremoting.test.classretrievers;
 
 import junit.framework.TestCase;
 import org.codehaus.jremoting.client.Factory;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.piped.PipedCustomStreamHostContext;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
@@ -65,7 +66,7 @@ public class ClassRetrievingTestCase extends TestCase {
         ((PipedStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        Factory af = new ServerSideStubFactory(new PipedCustomStreamHostContext(in, out));
+        Factory af = new ServerSideStubFactory(new PipedCustomStreamHostContext(new ConsoleClientMonitor(), in, out));
         testClient = (TestInterface) af.lookupService("Kewl");
 
         // just a kludge for unit testing given we are intrinsically dealing with

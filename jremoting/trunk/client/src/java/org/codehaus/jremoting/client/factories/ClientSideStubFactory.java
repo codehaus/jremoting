@@ -26,11 +26,11 @@ import org.codehaus.jremoting.client.HostContext;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ClientSideStubFactory extends AbstractStubFactory {
+public class ClientSideStubFactory extends AbstractFactory {
     private ClassLoader classLoader;
 
     public ClientSideStubFactory(HostContext hostContext) throws ConnectionException {
-        super(hostContext);
+        this(hostContext, Thread.currentThread().getContextClassLoader());
     }
 
     public ClientSideStubFactory(HostContext hostContext, ClassLoader classLoader) throws ConnectionException {
@@ -40,16 +40,9 @@ public class ClientSideStubFactory extends AbstractStubFactory {
 
 
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
-
         String stubClassName = "JRemotingGenerated" + publishedServiceName + "_" + objectName;
-
         try {
-            if (classLoader == null) {
-                return Thread.currentThread().getContextClassLoader().loadClass(stubClassName);
-            } else {
-                return classLoader.loadClass(stubClassName);
-
-            }
+            return classLoader.loadClass(stubClassName);
         } catch (ClassNotFoundException e) {
             return this.getClass().getClassLoader().loadClass(stubClassName);
         }

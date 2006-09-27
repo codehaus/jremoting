@@ -62,7 +62,7 @@ public interface ClientMonitor {
 
     void invocationFailure(Class clazz, String name, InvocationException ie);
 
-    void unexpectedClosedConnection(Class clazz, String name, ConnectionClosedException cce);
+    void unexpectedConnectionClosed(Class clazz, String name, ConnectionClosedException cce);
 
     void unexpectedInterruption(Class clazz, String name, InterruptedException ie);
 

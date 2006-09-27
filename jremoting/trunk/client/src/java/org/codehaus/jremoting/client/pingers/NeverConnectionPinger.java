@@ -29,7 +29,7 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 public class NeverConnectionPinger implements ConnectionPinger {
 
     /**
-     * Implemnt the abstract ping() from the AbstractConnectionPinger
+     * Implemnt the abstract ping() from the IntervalConnectionPinger
      */
     protected void ping() {
     }

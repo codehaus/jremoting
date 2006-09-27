@@ -41,22 +41,22 @@ public class PipedObjectStreamInvocationHandler extends AbstractPipedStreamInvoc
     /**
      * Constructor PipedObjectStreamInvocationHandler
      *
-     * @param executorService
      * @param clientMonitor
+     * @param executorService
      * @param connectionPinger
      * @param is
      * @param os
      */
-    public PipedObjectStreamInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os, ClassLoader classLoader) {
-        super(executorService, clientMonitor, connectionPinger, is, os, classLoader);
+    public PipedObjectStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os, ClassLoader classLoader) {
+        super(clientMonitor, executorService, connectionPinger, is, os, classLoader);
     }
 
-    public PipedObjectStreamInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os) {
-        this(executorService, clientMonitor, connectionPinger, is, os, PipedObjectStreamInvocationHandler.class.getClassLoader());
+    public PipedObjectStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os) {
+        this(clientMonitor, executorService, connectionPinger, is, os, PipedObjectStreamInvocationHandler.class.getClassLoader());
 
     }
 
-    protected ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException {
-        return new ClientObjectStreamDriver(in, out);
+    protected ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out, ClassLoader interfacesClassLoader) throws ConnectionException {
+        return new ClientObjectStreamDriver(in, out, interfacesClassLoader);
     }
 }

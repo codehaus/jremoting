@@ -19,6 +19,7 @@ package org.codehaus.jremoting.test;
 
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.HostContext;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
@@ -46,11 +47,11 @@ public class ProConClientTest {
         if (args[1].equals("ObjectStream")) {
             System.out.println("(Object Stream)");
 
-            arhc = new SocketObjectStreamHostContext("127.0.0.1", 1234);
+            arhc = new SocketObjectStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 1234);
         } else {
             System.out.println("(Custom Stream)");
 
-            arhc = new SocketCustomStreamHostContext("127.0.0.1", 1235);
+            arhc = new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 1235);
         }
 
         Factory af = null;

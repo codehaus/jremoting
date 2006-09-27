@@ -18,10 +18,10 @@ package org.codehaus.jremoting.client.transports.socket;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.factories.AbstractSocketStreamHostContext;
+import org.codehaus.jremoting.client.factories.AbstractHostContext;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
-import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -36,44 +36,29 @@ import java.lang.reflect.Method;
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public class SocketXStreamHostContext extends AbstractSocketStreamHostContext {
+public class SocketXStreamHostContext extends AbstractHostContext {
 
-    private int port;
 
     /**
      * Constructor SocketCustomStreamHostContext
      *
-     * @param executorService
      * @param clientMonitor
+     * @param executorService
      * @param connectionPinger
      * @param host
      * @param port
      * @throws org.codehaus.jremoting.ConnectionException
      */
-    public SocketXStreamHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(executorService, clientMonitor, connectionPinger, new SocketXStreamInvocationHandler(executorService, clientMonitor, connectionPinger, interfacesClassLoader, host, port));
-        this.port = port;
+    public SocketXStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
+        super(new SocketXStreamInvocationHandler(clientMonitor, executorService, connectionPinger, interfacesClassLoader, host, port));
     }
 
-    public SocketXStreamHostContext(String host, int port, ClassLoader classLoader) throws ConnectionException {
-        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger(), classLoader, host, port);
+    public SocketXStreamHostContext(ClientMonitor clientMonitor, ClassLoader classLoader, String host, int port) throws ConnectionException {
+        this(clientMonitor, Executors.newCachedThreadPool(), new DefaultConnectionPinger(), classLoader, host, port);
     }
 
-    public SocketXStreamHostContext(String host, int port) throws ConnectionException {
-        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new DefaultConnectionPinger(), SocketXStreamHostContext.class.getClassLoader(), host, port);
+    public SocketXStreamHostContext(ClientMonitor clientMonitor, String host, int port) throws ConnectionException {
+        this(clientMonitor, Executors.newCachedThreadPool(), new DefaultConnectionPinger(), SocketXStreamHostContext.class.getClassLoader(), host, port);
     }
-
-
-    private Object bind(Object object, PipedInputStream inputStream, PipedOutputStream outputStream) {
-
-        try {
-            Object[] parms = new Object[]{inputStream, outputStream};
-            Method method = object.getClass().getMethod("bind", new Class[]{parms.getClass()});
-            return method.invoke(object, new Object[]{parms});
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
 
 }

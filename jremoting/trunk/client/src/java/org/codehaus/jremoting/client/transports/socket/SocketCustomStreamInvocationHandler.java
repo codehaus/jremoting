@@ -39,13 +39,13 @@ public final class SocketCustomStreamInvocationHandler extends AbstractSocketStr
     /**
      * Constructor SocketCustomStreamInvocationHandler
      *
+     * @param interfacesClassLoader the classloader for deserialization hints.
      * @param host                  the host name
      * @param port                  the port
-     * @param interfacesClassLoader the classloader for deserialization hints.
      * @throws ConnectionException if a problem
      */
-    public SocketCustomStreamInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(executorService, clientMonitor, connectionPinger, interfacesClassLoader, host, port);
+    public SocketCustomStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
+        super(clientMonitor, executorService, connectionPinger, interfacesClassLoader, host, port);
     }
 
     /**

@@ -97,7 +97,6 @@ public interface ProxyHelper {
 
     boolean isEquals(Object o1, Object o2);
 
-    void setClientContextClientFactory(ClientContextFactory clientContextClientFactory);
 
 
 }

@@ -23,7 +23,6 @@ import java.util.concurrent.Executors;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
-import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 
@@ -38,17 +37,17 @@ public class DirectHostContext extends AbstractHostContext {
     /**
      * Constructor DirectHostContext
      *
-     * @param executorService
      * @param clientMonitor
+     * @param executorService
      * @param connectionPinger
      * @param invocationHandler
      */
-    public DirectHostContext(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler) {
-        super(new DirectInvocationHandler(executorService, clientMonitor, connectionPinger, invocationHandler));
+    public DirectHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler) {
+        super(new DirectInvocationHandler(clientMonitor, executorService, connectionPinger, invocationHandler));
     }
 
-    public DirectHostContext(ServerInvocationHandler invocationHandler) {
-        this(Executors.newCachedThreadPool(), new NullClientMonitor(), new NeverConnectionPinger(), invocationHandler);
+    public DirectHostContext(ClientMonitor clientMonitor, ServerInvocationHandler invocationHandler) {
+        this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(), invocationHandler);
     }
 
 }

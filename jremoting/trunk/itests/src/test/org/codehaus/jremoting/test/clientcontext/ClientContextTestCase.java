@@ -26,6 +26,7 @@ import junit.framework.TestCase;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientContext;
 import org.codehaus.jremoting.client.Factory;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -132,7 +133,7 @@ public class ClientContextTestCase extends TestCase {
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        Factory factory = new ClientSideStubFactory(new SocketCustomStreamHostContext("127.0.0.1", 13333));
+        Factory factory = new ClientSideStubFactory(new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 13333));
         final AccountManager clientSideAccountManager = (AccountManager) factory.lookupService("OurAccountManager");
 
         Thread threadOne = makeThread(clientSideAccountManager, 11);

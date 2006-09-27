@@ -24,12 +24,12 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
 
 /**
- * Interface AbstractConnectionPinger
+ * Interface IntervalConnectionPinger
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public abstract class AbstractConnectionPinger implements ConnectionPinger {
+public abstract class IntervalConnectionPinger implements ConnectionPinger {
 
     private ClientInvocationHandler clientInvocationHandler;
     private boolean keepGoing = true;
@@ -39,32 +39,32 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
     private final long giveupInterval;
 
     /**
-     * Construct a AbstractConnectionPinger with seconds for interval.
+     * Construct a IntervalConnectionPinger with seconds for interval.
      *
      * @param pingIntervalSeconds   the interval to wait
      * @param giveupIntervalSeconds when to give up
      */
-    public AbstractConnectionPinger(int pingIntervalSeconds, int giveupIntervalSeconds) {
+    public IntervalConnectionPinger(int pingIntervalSeconds, int giveupIntervalSeconds) {
         pingInterval = pingIntervalSeconds * 1000;
         giveupInterval = giveupIntervalSeconds * 1000;
     }
 
     /**
-     * Construct a AbstractConnectionPinger with millisecond intervals
+     * Construct a IntervalConnectionPinger with millisecond intervals
      *
      * @param pingIntervalMilliSeconds   the interval to wait
      * @param giveupIntervalMilliSeconds when to give up
      */
-    public AbstractConnectionPinger(long pingIntervalMilliSeconds, long giveupIntervalMilliSeconds) {
+    public IntervalConnectionPinger(long pingIntervalMilliSeconds, long giveupIntervalMilliSeconds) {
         pingInterval = pingIntervalMilliSeconds;
         giveupInterval = giveupIntervalMilliSeconds;
     }
 
 
     /**
-     * Constructor AbstractConnectionPinger
+     * Constructor IntervalConnectionPinger
      */
-    public AbstractConnectionPinger() {
+    public IntervalConnectionPinger() {
         pingInterval = 10 * 1000;       // ten seconds
         giveupInterval = 100 * 1000;    // one hundred seconds.
     }
@@ -104,7 +104,7 @@ public abstract class AbstractConnectionPinger implements ConnectionPinger {
                     clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
                     // no need to ping anymore.
                 } catch (ConnectionClosedException cce) {
-                    clientInvocationHandler.getClientMonitor().unexpectedClosedConnection(this.getClass(), this.getClass().getName(), cce);
+                    clientInvocationHandler.getClientMonitor().unexpectedConnectionClosed(this.getClass(), this.getClass().getName(), cce);
                     // no need to ping anymore.
                 } catch (InterruptedException e) {
                     if (keepGoing) {
