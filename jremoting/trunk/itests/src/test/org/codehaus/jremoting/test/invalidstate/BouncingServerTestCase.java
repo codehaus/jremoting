@@ -18,11 +18,10 @@
 package org.codehaus.jremoting.test.invalidstate;
 
 import junit.framework.TestCase;
-import org.codehaus.jremoting.client.ClientInvocationHandler;
-import org.codehaus.jremoting.client.HostContext;
-import org.codehaus.jremoting.client.NoSuchSessionException;
+import org.codehaus.jremoting.client.*;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
+import org.codehaus.jremoting.client.factories.DefaultProxyHelper;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
@@ -33,6 +32,8 @@ import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
 import org.codehaus.jremoting.tools.generator.BcelProxyGenerator;
+import org.jmock.MockObjectTestCase;
+import org.jmock.Mock;
 
 
 /**
@@ -40,7 +41,7 @@ import org.codehaus.jremoting.tools.generator.BcelProxyGenerator;
  *
  * @author Paul Hammant
  */
-public class BouncingServerTestCase extends TestCase {
+public class BouncingServerTestCase extends MockObjectTestCase {
 
     PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
 
@@ -63,7 +64,12 @@ public class BouncingServerTestCase extends TestCase {
         try {
 
             // Client side setup
-            HostContext hostContext = new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12201);
+
+            Mock clientMonitor = mock(ClientMonitor.class);
+            clientMonitor.expects(once()).method("methodLogging").withNoArguments().will(returnValue(false));
+            clientMonitor.expects(once()).method("invocationFailure").with(eq(DefaultProxyHelper.class), isA(String.class), isA(InvocationException.class));
+
+            HostContext hostContext = new SocketCustomStreamHostContext((ClientMonitor) clientMonitor.proxy(), "127.0.0.1", 12201);
             factory = new ClientSideStubFactory(hostContext);
             ClientInvocationHandler ih = hostContext.getInvocationHandler();
             TestInterface testClient = (TestInterface) factory.lookupService("Hello55");
@@ -86,6 +92,8 @@ public class BouncingServerTestCase extends TestCase {
             }
 
 
+        } catch (Throwable e) {
+            e.printStackTrace();
         } finally {
             System.gc();
             Thread.yield();
