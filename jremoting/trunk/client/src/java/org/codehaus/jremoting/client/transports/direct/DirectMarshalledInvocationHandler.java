@@ -36,7 +36,7 @@ import org.codehaus.jremoting.util.SerializationHelper;
 public final class DirectMarshalledInvocationHandler extends AbstractDirectInvocationHandler {
 
     private ServerMarshalledInvocationHandler invocationHandler;
-    private ClassLoader interfacesClassLoader;
+    private ClassLoader facadesClassLoader;
 
 
     /**
@@ -50,7 +50,7 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
     public DirectMarshalledInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ServerMarshalledInvocationHandler invocationHandler, ClassLoader classLoader) {
         super(clientMonitor, executorService, connectionPinger);
         this.invocationHandler = invocationHandler;
-        interfacesClassLoader = classLoader;
+        facadesClassLoader = classLoader;
     }
 
     protected AbstractResponse performInvocation(AbstractRequest request) {
@@ -59,7 +59,7 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
             byte[] serRequest = SerializationHelper.getBytesFromInstance(request);
             byte[] serResponse = invocationHandler.handleInvocation(serRequest, null);
 
-            Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serResponse, interfacesClassLoader);
+            Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serResponse, facadesClassLoader);
             return (AbstractResponse) instanceFromBytes;
         } catch (ClassNotFoundException cnfe) {
             String msg = "Some ClassNotFoundException on client side";
@@ -68,8 +68,8 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
         }
     }
 
-    public ClassLoader getInterfacesClassLoader() {
-        return interfacesClassLoader;
+    public ClassLoader getfacadesClassLoader() {
+        return facadesClassLoader;
     }
 
 }

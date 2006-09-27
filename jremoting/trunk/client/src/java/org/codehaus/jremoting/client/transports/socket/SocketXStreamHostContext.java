@@ -49,8 +49,8 @@ public class SocketXStreamHostContext extends AbstractHostContext {
      * @param port
      * @throws org.codehaus.jremoting.ConnectionException
      */
-    public SocketXStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(new SocketXStreamInvocationHandler(clientMonitor, executorService, connectionPinger, interfacesClassLoader, host, port));
+    public SocketXStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, String host, int port) throws ConnectionException {
+        super(new SocketXStreamInvocationHandler(clientMonitor, executorService, connectionPinger, facadesClassLoader, host, port));
     }
 
     public SocketXStreamHostContext(ClientMonitor clientMonitor, ClassLoader classLoader, String host, int port) throws ConnectionException {

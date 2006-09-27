@@ -206,7 +206,7 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
             System.err.flush();
             t.printStackTrace();
             System.err.println("** Name=" + service);
-            System.err.println("** Classes/Interfaces to Expose..");
+            System.err.println("** Classes/Facades to Expose..");
 
             for (int i = 0; i < primaryFacades.length; i++) {
                 String aString = primaryFacades[i].getFacadeClass().getName();
@@ -231,7 +231,7 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
                 System.err.println("** ClassDir=" + classGenDir);
                 System.err.println("** Name=" + service);
                 System.err.println("** CLasspath=" + classpath);
-                System.err.println("** Classes/Interfaces to Expose..");
+                System.err.println("** Classes/Facades to Expose..");
 
                 for (int i = 0; i < primaryFacades.length; i++) {
                     String aString = primaryFacades[i].getFacadeClass().getName();

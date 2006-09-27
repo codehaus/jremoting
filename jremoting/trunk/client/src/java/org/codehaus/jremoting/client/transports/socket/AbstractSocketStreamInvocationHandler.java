@@ -50,12 +50,12 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
      * @param clientMonitor
      * @param executorService
      * @param connectionPinger
-     * @param interfacesClassLoader The class loader
+     * @param facadesClassLoader The class loader
      * @param host                  The host to connect to
      * @param port                  The port to conenct to
      */
-    public AbstractSocketStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionRefusedException, BadConnectionException {
-        super(clientMonitor, executorService, connectionPinger, interfacesClassLoader);
+    public AbstractSocketStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, String host, int port) throws ConnectionRefusedException, BadConnectionException {
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
         this.host = host;
         this.port = port;
 

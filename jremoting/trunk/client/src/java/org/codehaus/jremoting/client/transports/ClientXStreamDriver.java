@@ -44,17 +44,17 @@ public class ClientXStreamDriver implements ClientStreamDriver {
 
     private LineNumberReader lineNumberReader;
     private PrintWriter printWriter;
-    private ClassLoader interfacesClassLoader;
+    private ClassLoader facadesClassLoader;
     private XStream xStream;
     private BufferedOutputStream bufferedOutputStream;
 
 
-    public ClientXStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
+    public ClientXStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
 
         bufferedOutputStream = new BufferedOutputStream(outputStream);
         printWriter = new PrintWriter(bufferedOutputStream);
         lineNumberReader = new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream)));
-        this.interfacesClassLoader = interfacesClassLoader;
+        this.facadesClassLoader = facadesClassLoader;
         xStream = new XStream(new DomDriver());
     }
 
@@ -107,7 +107,7 @@ public class ClientXStreamDriver implements ClientStreamDriver {
 //        }
 
         try {
-            //TODO use interfacesClassLoader
+            //TODO use facadesClassLoader
             return (AbstractResponse) xStream.fromXML(expected);
         } catch (ConversionException e) {
             Throwable cause = e.getCause();

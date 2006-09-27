@@ -27,16 +27,16 @@ package org.codehaus.jremoting.server;
 public interface ProxyGenerator {
 
     /**
-     * Set the interfaces to expose.
+     * Set the primary facades.
      *
-     * @param primaryFacades the interfaces to expose
+     * @param primaryFacades the facades to expose
      */
     void setPrimaryFacades(PublicationDescriptionItem[] primaryFacades);
 
     /**
      * Set the additional facades
      *
-     * @param additionalFacades additional facades/interfaces to expose
+     * @param additionalFacades additional facades to expose
      */
     void setAdditionalFacades(PublicationDescriptionItem[] additionalFacades);
 

@@ -50,8 +50,8 @@ public class SocketCustomStreamHostContext extends AbstractHostContext {
      * @param port
      * @throws ConnectionException
      */
-    public SocketCustomStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(new SocketCustomStreamInvocationHandler(clientMonitor, executorService, connectionPinger, interfacesClassLoader, host, port));
+    public SocketCustomStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, String host, int port) throws ConnectionException {
+        super(new SocketCustomStreamInvocationHandler(clientMonitor, executorService, connectionPinger, facadesClassLoader, host, port));
     }
 
     public SocketCustomStreamHostContext(ClientMonitor clientMonitor, String host, int port, ClassLoader classLoader) throws ConnectionException {

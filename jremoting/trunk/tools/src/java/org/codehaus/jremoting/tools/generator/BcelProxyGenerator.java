@@ -91,11 +91,11 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
      * Generating name of form: [STUB_PREFIX][genName]_[STUB_POSTFIX].class
      *
      * @param generatedClassName the name of the class to generate.
-     * @param interfacesToStubify the interfaces to stubify.
+     * @param facadesToStubify the facades to stubify.
      */
-    protected void generateProxyClass(String generatedClassName, PublicationDescriptionItem[] interfacesToStubify) {
+    protected void generateProxyClass(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
         //Start creating class
-        createNewClassDeclaration(generatedClassName, interfacesToStubify);
+        createNewClassDeclaration(generatedClassName, facadesToStubify);
         //create constructor that takes ProxyHelper
         createConstructor(generatedClassName);
         //create fields
@@ -103,7 +103,7 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
         //create fields
         createGetReferenceIDMethod(generatedClassName);
         createHelperMethodForDotClassCalls(generatedClassName);
-        createInterfaceMethods(generatedClassName, interfacesToStubify);
+        createInterfaceMethods(generatedClassName, facadesToStubify);
 
         FileOutputStream fos = null;
         try {
@@ -124,17 +124,17 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
      *
      * @param generatedClassName the bean class name
      */
-    protected void createNewClassDeclaration(String generatedClassName, PublicationDescriptionItem[] interfacesToStubify) {
+    protected void createNewClassDeclaration(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
 
-        String[] interfaces = new String[interfacesToStubify.length + 1];
-        for (int i = 0; i < interfacesToStubify.length; i++) {
-            PublicationDescriptionItem publicationDescriptionItem = interfacesToStubify[i];
-            interfaces[i] = publicationDescriptionItem.getFacadeClass().getName();
+        String[] facades = new String[facadesToStubify.length + 1];
+        for (int i = 0; i < facadesToStubify.length; i++) {
+            PublicationDescriptionItem publicationDescriptionItem = facadesToStubify[i];
+            facades[i] = publicationDescriptionItem.getFacadeClass().getName();
         }
-        interfaces[interfacesToStubify.length] = "org.codehaus.jremoting.client.Proxy";
+        facades[facadesToStubify.length] = "org.codehaus.jremoting.client.Proxy";
 
 
-        classGen = new ClassGen(generatedClassName, "java.lang.Object", generatedClassName + ".java", Constants.ACC_PUBLIC | Constants.ACC_SUPER | Constants.ACC_FINAL, interfaces);
+        classGen = new ClassGen(generatedClassName, "java.lang.Object", generatedClassName + ".java", Constants.ACC_PUBLIC | Constants.ACC_SUPER | Constants.ACC_FINAL, facades);
         constantsPool = classGen.getConstantPool();
         factory = new InstructionFactory(classGen, constantsPool);
         internalFieldRepresentingClasses = new ArrayList();
@@ -229,16 +229,16 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
      * stubs in the process.
      *
      * @param generatedClassName  the generated class name
-     * @param interfacesToStubify the interfaces to make stubs for.
+     * @param facadesToStubify the facades to make stubs for.
      */
-    protected void createInterfaceMethods(String generatedClassName, PublicationDescriptionItem[] interfacesToStubify) {
-        for (int x = 0; x < interfacesToStubify.length; x++) {
-            Class clazz = interfacesToStubify[x].getFacadeClass();
+    protected void createInterfaceMethods(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
+        for (int x = 0; x < facadesToStubify.length; x++) {
+            Class clazz = facadesToStubify[x].getFacadeClass();
 
             Method[] methods = getGeneratableMethods(clazz);
             generateEqualsMethod(generatedClassName);
             for (int i = 0; i < methods.length; i++) {
-                createInterfaceMethod(generatedClassName, methods[i], interfacesToStubify[x]);
+                createInterfaceMethod(generatedClassName, methods[i], facadesToStubify[x]);
             }
 
         }

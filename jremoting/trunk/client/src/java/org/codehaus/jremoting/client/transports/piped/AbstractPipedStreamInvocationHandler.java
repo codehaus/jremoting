@@ -50,11 +50,11 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
      * @param connectionPinger
      * @param is
      * @param os
-     * @param interfacesClassLoader
+     * @param facadesClassLoader
      */
-    public AbstractPipedStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os, ClassLoader interfacesClassLoader) {
+    public AbstractPipedStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os, ClassLoader facadesClassLoader) {
 
-        super(clientMonitor, executorService, connectionPinger, interfacesClassLoader);
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
 
         inputStream = is;
         outputStream = os;
@@ -66,7 +66,7 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
      * @throws ConnectionException
      */
     public void initialize() throws ConnectionException {
-        setObjectDriver(createClientStreamDriver(inputStream, outputStream, interfacesClassLoader));
+        setObjectDriver(createClientStreamDriver(inputStream, outputStream, facadesClassLoader));
         super.initialize();
     }
 
@@ -76,6 +76,6 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
         throw new InvocationException("Piped connection broken, unable to reconnect.");
     }
 
-    protected abstract ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out, ClassLoader interfacesClassLoader) throws ConnectionException;
+    protected abstract ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out, ClassLoader facadesClassLoader) throws ConnectionException;
 
 }

@@ -80,9 +80,9 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
     }
 
     /**
-     * Get the interfaces to expose.
+     * Get the facades to expose.
      *
-     * @return the interfaces
+     * @return the facades
      */
     public PublicationDescriptionItem[] getPrimaryFacades() {
         return primaryFacades;
@@ -91,9 +91,9 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
 
 
     /**
-     * Set the interfaces to expose.
+     * Set the facades to expose.
      *
-     * @param primaryFacades the interfaces.
+     * @param primaryFacades the facades.
      */
     public void setPrimaryFacades(PublicationDescriptionItem[] primaryFacades) {
         this.primaryFacades = primaryFacades;

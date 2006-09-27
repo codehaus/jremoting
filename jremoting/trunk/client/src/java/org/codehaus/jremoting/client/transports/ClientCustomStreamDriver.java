@@ -40,7 +40,7 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
 
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
-    private ClassLoader interfacesClassLoader;
+    private ClassLoader facadesClassLoader;
 
 
     /**
@@ -48,14 +48,14 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
      *
      * @param inputStream
      * @param outputStream
-     * @param interfacesClassLoader
+     * @param facadesClassLoader
      * @throws ConnectionException
      */
-    public ClientCustomStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
+    public ClientCustomStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
 
         dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream));
         dataInputStream = new DataInputStream(inputStream);
-        this.interfacesClassLoader = interfacesClassLoader;
+        this.facadesClassLoader = facadesClassLoader;
     }
 
     public synchronized AbstractResponse postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
@@ -88,7 +88,7 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
             pos += read;
             cnt++;
         }
-        Object response = SerializationHelper.getInstanceFromBytes(byteArray, interfacesClassLoader);
+        Object response = SerializationHelper.getInstanceFromBytes(byteArray, facadesClassLoader);
         return (AbstractResponse) response;
     }
 }

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public final class PublicationDescription {
 
     /**
-     * An array of interfaces to expose.
+     * An array of facades to expose.
      */
     private ArrayList primaryFacades = new ArrayList();
     /**
@@ -222,7 +222,7 @@ public final class PublicationDescription {
 
 
     /**
-     * Get the princiapal interfaces to expose.
+     * Get the principal facades to expose.
      *
      * @return an array of those interfaces.
      */

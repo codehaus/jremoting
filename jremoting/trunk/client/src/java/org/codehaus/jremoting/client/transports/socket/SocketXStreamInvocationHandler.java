@@ -38,13 +38,13 @@ public final class SocketXStreamInvocationHandler extends AbstractSocketStreamIn
     /**
      * Constructor SocketCustomStreamInvocationHandler
      *
-     * @param interfacesClassLoader the classloader for deserialization hints.
+     * @param facadesClassLoader the classloader for deserialization hints.
      * @param host                  the host name
      * @param port                  the port
      * @throws org.codehaus.jremoting.ConnectionException if a problem
      */
-    public SocketXStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(clientMonitor, executorService, connectionPinger, interfacesClassLoader, host, port);
+    public SocketXStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, String host, int port) throws ConnectionException {
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, host, port);
     }
 
     /**
@@ -56,6 +56,6 @@ public final class SocketXStreamInvocationHandler extends AbstractSocketStreamIn
      * @throws org.codehaus.jremoting.ConnectionException if a problem
      */
     protected ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException {
-        return new ClientXStreamDriver(in, out, interfacesClassLoader);
+        return new ClientXStreamDriver(in, out, facadesClassLoader);
     }
 }

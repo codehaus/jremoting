@@ -41,13 +41,13 @@ public class SocketObjectStreamHostContext extends AbstractHostContext {
      * @param clientMonitor
      * @param executorService
      * @param connectionPinger
-     * @param interfacesClassLoader
+     * @param facadesClassLoader
      * @param host
      * @param port
      * @throws ConnectionException
      */
-    public SocketObjectStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, String host, int port) throws ConnectionException {
-        super(new SocketObjectStreamInvocationHandler(clientMonitor, executorService, connectionPinger, interfacesClassLoader, host, port));
+    public SocketObjectStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, String host, int port) throws ConnectionException {
+        super(new SocketObjectStreamInvocationHandler(clientMonitor, executorService, connectionPinger, facadesClassLoader, host, port));
 
     }
 

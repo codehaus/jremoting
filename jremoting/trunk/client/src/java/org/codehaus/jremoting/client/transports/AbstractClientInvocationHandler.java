@@ -80,7 +80,7 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
 
     protected abstract boolean tryReconnect();
 
-    public ClassLoader getInterfacesClassLoader() {
+    public ClassLoader getfacadesClassLoader() {
         return AbstractClientInvocationHandler.class.getClassLoader();
     }
 

@@ -41,11 +41,11 @@ public class DirectMarshalledHostContext extends AbstractHostContext {
      * @param clientMonitor
      * @param executorService
      * @param connectionPinger
-     * @param interfacesClassLoader
+     * @param facadesClassLoader
      * @param invocationHandler
      */
-    public DirectMarshalledHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader, ServerMarshalledInvocationHandler invocationHandler) {
-        super(new DirectMarshalledInvocationHandler(clientMonitor, executorService, connectionPinger, invocationHandler, interfacesClassLoader));
+    public DirectMarshalledHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, ServerMarshalledInvocationHandler invocationHandler) {
+        super(new DirectMarshalledInvocationHandler(clientMonitor, executorService, connectionPinger, invocationHandler, facadesClassLoader));
     }
 
     public DirectMarshalledHostContext(ClientMonitor clientMonitor, ServerMarshalledInvocationHandler invocationHandler) {

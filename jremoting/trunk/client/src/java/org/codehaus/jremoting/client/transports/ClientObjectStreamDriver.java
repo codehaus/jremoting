@@ -41,13 +41,13 @@ public class ClientObjectStreamDriver implements ClientStreamDriver {
 
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
-    private ClassLoader interfacesClassLoader;
+    private ClassLoader facadesClassLoader;
 
     /**
      * Constructor ClientObjectStreamDriver
      *
-     * @param inputStream
-     * @param outputStream
+     * @param in
+     * @param out
      * @throws ConnectionException
      */
     public ClientObjectStreamDriver(InputStream in, OutputStream out) throws ConnectionException {
@@ -60,14 +60,14 @@ public class ClientObjectStreamDriver implements ClientStreamDriver {
      *
      * @param inputStream
      * @param outputStream
-     * @param interfacesClassLoader 
+     * @param facadesClassLoader
      * @throws ConnectionException
      */
-    public ClientObjectStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader interfacesClassLoader) throws ConnectionException {
+    public ClientObjectStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         try {
             objectOutputStream = new ObjectOutputStream(outputStream);
-            //TODO use that magix classloader that uses yje interfaces classlaoader
-            this.interfacesClassLoader = interfacesClassLoader;
+            //TODO use that magix classloader that uses the facades classlaoader
+            this.facadesClassLoader = facadesClassLoader;
             objectInputStream = new ObjectInputStream(new BufferedInputStream(inputStream));
         } catch (EOFException eofe) {
             throw new BadConnectionException("Cannot connect to remote JRemoting server. Have we a mismatch on transports?");

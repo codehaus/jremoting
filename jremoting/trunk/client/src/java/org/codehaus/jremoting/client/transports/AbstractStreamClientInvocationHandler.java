@@ -52,7 +52,7 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
     private ClientStreamDriver objectDriver;
     private boolean methodLogging = false;
     private long lastRealRequest = System.currentTimeMillis();
-    protected final ClassLoader interfacesClassLoader;
+    protected final ClassLoader facadesClassLoader;
 
     /**
      * Constructor AbstractStreamClientInvocationHandler
@@ -60,15 +60,15 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
      * @param clientMonitor
      * @param executorService
      * @param connectionPinger
-     * @param interfacesClassLoader
+     * @param facadesClassLoader
      */
-    public AbstractStreamClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader interfacesClassLoader) {
+    public AbstractStreamClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
         super(clientMonitor, executorService, connectionPinger);
-        this.interfacesClassLoader = interfacesClassLoader;
+        this.facadesClassLoader = facadesClassLoader;
     }
 
-    public ClassLoader getInterfacesClassLoader() {
-        return interfacesClassLoader;
+    public ClassLoader getfacadesClassLoader() {
+        return facadesClassLoader;
     }
 
     protected void setObjectDriver(ClientStreamDriver objectDriver) {
