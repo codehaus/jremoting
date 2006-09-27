@@ -43,6 +43,7 @@ import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.responses.SimpleMethodInvoked;
+import org.codehaus.jremoting.ConnectionException;
 
 /**
  * Class DefaultProxyHelper
@@ -111,87 +112,91 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
     public Object processObjectRequestGettingFacade(Class returnClassType, String methodSignature, Object[] args, String objectName) throws Throwable {
         try {
-            return processObjectRequestGettingFacade2(returnClassType, methodSignature, args, objectName);
+            Object result;
+
+            InvokeFacadeMethod request;
+
+            if (objectName.endsWith("[]")) {
+                request = new InvokeFacadeMethod(publishedServiceName, this.objectName, methodSignature, args, referenceID, objectName.substring(0, objectName.length() - 2), session);
+            } else {
+                request = new InvokeFacadeMethod(publishedServiceName, this.objectName, methodSignature, args, referenceID, objectName, session);
+            }
+
+            setContext(request);
+            AbstractResponse response = clientInvocationHandler.handleInvocation(request);
+
+            if (response instanceof FacadeMethodInvoked) {
+                result = facadeMethodInvoked(response);
+            } else if (response instanceof FacadeArrayMethodInvoked) {
+                result = facadeArrayMethodInvoked(response, returnClassType);
+            } else {
+                throw makeUnexpectedResponseThrowable(response);
+            }
+            return result;
         } catch (InvocationException ie) {
             clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
             throw ie;
         }
     }
 
-    private Object processObjectRequestGettingFacade2(Class returnClassType, String methodSignature, Object[] args, String objectName) throws Throwable {
+    private Object facadeArrayMethodInvoked(AbstractResponse response, Class returnClassType) {
+        FacadeArrayMethodInvoked mfar = (FacadeArrayMethodInvoked) response;
+        Long[] refs = mfar.getReferenceIDs();
+        String[] objectNames = mfar.getObjectNames();
+        Object[] implBeans = (Object[]) Array.newInstance(returnClassType, refs.length);
 
-        boolean arrayRetVal = objectName.endsWith("[]");
-        String objNameWithoutArray = objectName.substring(0, objectName.length() - 2);
-        InvokeFacadeMethod request;
+        for (int i = 0; i < refs.length; i++) {
+            Long ref = refs[i];
 
-        if (arrayRetVal) {
-            request = new InvokeFacadeMethod(publishedServiceName, this.objectName, methodSignature, args, referenceID, objNameWithoutArray, session);
-        } else {
-            request = new InvokeFacadeMethod(publishedServiceName, this.objectName, methodSignature, args, referenceID, objectName, session);
-        }
-
-        setContext(request);
-        AbstractResponse response = clientInvocationHandler.handleInvocation(request);
-
-        if (response instanceof FacadeMethodInvoked) {
-            FacadeMethodInvoked mfr = (FacadeMethodInvoked) response;
-            Long ref = mfr.getReferenceID();
-
-            // it might be that the return value was intended to be null.
             if (ref == null) {
-                return null;
-            }
-
-            Object implBean = factory.getImplObj(ref);
-
-            if (implBean == null) {
-                DefaultProxyHelper pHelper = new DefaultProxyHelper(factory, clientInvocationHandler, publishedServiceName, mfr.getObjectName(), ref, session);
-                Object retFacade = factory.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
-
-                pHelper.registerImplObject(retFacade);
-
-                return retFacade;
+                implBeans[i] = null;
             } else {
-                return implBean;
-            }
-        } else if (response instanceof FacadeArrayMethodInvoked) {
-            FacadeArrayMethodInvoked mfar = (FacadeArrayMethodInvoked) response;
-            Long[] refs = mfar.getReferenceIDs();
-            String[] objectNames = mfar.getObjectNames();
-            Object[] implBeans = (Object[]) Array.newInstance(returnClassType, refs.length);
+                Object o = factory.getImplObj(ref);
 
-            for (int i = 0; i < refs.length; i++) {
-                Long ref = refs[i];
+                implBeans[i] = o;
 
-                if (ref == null) {
-                    implBeans[i] = null;
-                } else {
-                    Object o = factory.getImplObj(ref);
+                if (implBeans[i] == null) {
+                    DefaultProxyHelper bo2 = new DefaultProxyHelper(factory, clientInvocationHandler, publishedServiceName, objectNames[i], refs[i], session);
+                    Object retFacade = null;
 
-                    implBeans[i] = o;
-
-                    if (implBeans[i] == null) {
-                        DefaultProxyHelper bo2 = new DefaultProxyHelper(factory, clientInvocationHandler, publishedServiceName, objectNames[i], refs[i], session);
-                        Object retFacade = null;
-
-                        try {
-                            retFacade = factory.getInstance(publishedServiceName, objectNames[i], bo2);
-                        } catch (Exception e) {
-                            System.out.println("objNameWithoutArray=" + returnClassType.getName());
-                            System.out.flush();
-                            e.printStackTrace();
-                        }
-
-                        bo2.registerImplObject(retFacade);
-
-                        implBeans[i] = retFacade;
+                    try {
+                        retFacade = factory.getInstance(publishedServiceName, objectNames[i], bo2);
+                    } catch (Exception e) {
+                        System.out.println("objNameWithoutArray=" + returnClassType.getName());
+                        System.out.flush();
+                        e.printStackTrace();
                     }
+
+                    bo2.registerImplObject(retFacade);
+
+                    implBeans[i] = retFacade;
                 }
             }
+        }
 
-            return implBeans;
+        return implBeans;
+    }
+
+    private Object facadeMethodInvoked(AbstractResponse response) throws ConnectionException {
+        FacadeMethodInvoked mfr = (FacadeMethodInvoked) response;
+        Long ref = mfr.getReferenceID();
+
+        // it might be that the return value was intended to be null.
+        if (ref == null) {
+            return null;
+        }
+
+        Object implBean = factory.getImplObj(ref);
+
+        if (implBean == null) {
+            DefaultProxyHelper pHelper = new DefaultProxyHelper(factory, clientInvocationHandler, publishedServiceName, mfr.getObjectName(), ref, session);
+            Object retFacade = factory.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
+
+            pHelper.registerImplObject(retFacade);
+
+            return retFacade;
         } else {
-            throw makeUnexpectedResponseThrowable(response);
+            return implBean;
         }
     }
 

@@ -42,11 +42,7 @@ public class ClientSideStubFactory extends AbstractFactory {
 
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
         String stubClassName = StubHelper.formatStubClassName(publishedServiceName, objectName);
-        try {
-            return classLoader.loadClass(stubClassName);
-        } catch (ClassNotFoundException e) {
-            return this.getClass().getClassLoader().loadClass(stubClassName);
-        }
+        return classLoader.loadClass(stubClassName);
     }
 
 }
