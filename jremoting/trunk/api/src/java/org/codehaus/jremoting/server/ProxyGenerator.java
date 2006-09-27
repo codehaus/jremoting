@@ -80,11 +80,5 @@ public interface ProxyGenerator {
      */
     void generateDeferredClasses();
 
-    /**
-     * verbose mode.
-     *
-     * @param trueFalse report on generation process
-     */
-    void verbose(boolean trueFalse);
 
 }

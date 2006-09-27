@@ -235,9 +235,6 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
         for (int x = 0; x < interfacesToStubify.length; x++) {
             Class clazz = interfacesToStubify[x].getFacadeClass();
 
-            if (isVerbose()) {
-                System.out.println("ProxyGen: Processing interface: " + clazz.getName());
-            }
             Method[] methods = getGeneratableMethods(clazz);
             generateEqualsMethod(generatedClassName);
             for (int i = 0; i < methods.length; i++) {

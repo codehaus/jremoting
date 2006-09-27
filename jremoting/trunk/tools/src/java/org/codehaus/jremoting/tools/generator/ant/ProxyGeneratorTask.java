@@ -42,7 +42,6 @@ public class ProxyGeneratorTask extends Task {
     protected File classGenDir;
     protected String genName;
     protected Path classpath;
-    protected String verbose = "false";
     private String generatorClass = "org.codehaus.jremoting.tools.generator.BcelProxyGenerator";
 
     /**
@@ -145,14 +144,6 @@ public class ProxyGeneratorTask extends Task {
         createClasspath().setRefid(r);
     }
 
-    /**
-     * Method setVerbose
-     *
-     * @param verbose
-     */
-    public void setVerbose(String verbose) {
-        this.verbose = verbose;
-    }
 
     /**
      * Sets the GeneratorClass
@@ -196,7 +187,6 @@ public class ProxyGeneratorTask extends Task {
         try {
             proxyGenerator.setClassGenDir(classGenDir.getAbsolutePath());
             proxyGenerator.setGenName(genName);
-            proxyGenerator.verbose(Boolean.valueOf(verbose).booleanValue());
             proxyGenerator.setClasspath(classpath.concatSystemClasspath("ignore").toString());
 
             PublicationDescriptionItem[] primaryFacades = new PublicationDescriptionItem[this.primaryFacades.length];

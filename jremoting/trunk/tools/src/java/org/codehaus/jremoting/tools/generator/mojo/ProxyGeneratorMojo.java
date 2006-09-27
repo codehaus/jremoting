@@ -85,11 +85,6 @@ public class ProxyGeneratorMojo
      */
     protected String additionalFacades;
 
-    /**
-     * Whether to give verbose output
-     * @parameter
-     */
-    protected boolean verbose;
 
     public void execute()
         throws MojoExecutionException, MojoFailureException
@@ -124,7 +119,6 @@ public class ProxyGeneratorMojo
         try {
             proxyGenerator.setGenName(genName);
             proxyGenerator.setClassGenDir(classGenDir.getAbsolutePath());
-            proxyGenerator.verbose(Boolean.valueOf(verbose).booleanValue());
             String classpath = toCSV(classpathElements);
             proxyGenerator.setClasspath(classpath);
             getLog().debug("ProxyGenerator classpath: " + classpath);

@@ -36,7 +36,6 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
     private String classGenDir;
     private String genName;
     private String classpath;
-    private boolean verbose;
     private PublicationDescriptionItem[] additionalFacades;
     private PublicationDescriptionItem[] primaryFacades;
 
@@ -70,14 +69,6 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
         return classpath;
     }
 
-    /**
-     * Is verbose debugging level
-     *
-     * @return verbose or not
-     */
-    public boolean isVerbose() {
-        return verbose;
-    }
 
     /**
      * Get the additional facades
@@ -97,14 +88,6 @@ public abstract class AbstractProxyGenerator implements ProxyGenerator {
         return primaryFacades;
     }
 
-    /**
-     * Set the verbose logging level for class generation.
-     *
-     * @param trueFalse set the verbose level
-     */
-    public void verbose(boolean trueFalse) {
-        verbose = trueFalse;
-    }
 
 
     /**
