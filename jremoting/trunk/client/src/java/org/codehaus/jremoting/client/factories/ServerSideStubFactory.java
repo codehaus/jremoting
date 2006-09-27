@@ -28,6 +28,7 @@ import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.RequestFailed;
 import org.codehaus.jremoting.responses.StubClass;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
+import org.codehaus.jremoting.util.StubHelper;
 
 /**
  * Class ServerSideStubFactory
@@ -46,8 +47,8 @@ public class ServerSideStubFactory extends AbstractFactory {
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
 
         TransportedStubClassLoader tcl = null;
-        String stubClassName = "JRemotingGenerated" + publishedServiceName + "_" + objectName;
-
+        String stubClassName = StubHelper.formatStubClassName(publishedServiceName, objectName);
+        
         if (publishedServiceClassLoaders.containsKey(stubClassName)) {
             tcl = (TransportedStubClassLoader) publishedServiceClassLoaders.get(stubClassName);
         } else {

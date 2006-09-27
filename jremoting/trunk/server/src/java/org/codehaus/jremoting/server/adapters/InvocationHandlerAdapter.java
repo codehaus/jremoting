@@ -66,13 +66,13 @@ import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.util.StubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
 /**
  * Class InvocationHandlerAdapter
  *
  * @author Paul Hammant
- * @version $Revision: 1.3 $
  */
 public class InvocationHandlerAdapter extends PublicationAdapter implements ServerInvocationHandler {
 
@@ -247,11 +247,11 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
         for (int i = 0; i < beanImpls.length; i++) {
             Object impl = beanImpls[i];
-            MethodInvocationHandler mainMethodInvocationHandler = getMethodInvocationHandler(invokeFacadeMethod.getService() + "_Main");
+            MethodInvocationHandler mainMethodInvocationHandler = getMethodInvocationHandler(StubHelper.formatServiceName(invokeFacadeMethod.getService()));
 
             objectNames[i] = MethodNameHelper.encodeClassName(mainMethodInvocationHandler.getMostDerivedType(beanImpls[i]).getName());
 
-            MethodInvocationHandler methodInvocationHandler2 = getMethodInvocationHandler(invokeFacadeMethod.getService() + "_" + objectNames[i]);
+            MethodInvocationHandler methodInvocationHandler2 = getMethodInvocationHandler(StubHelper.formatServiceName(invokeFacadeMethod.getService(), objectNames[i]));
 
             if (methodInvocationHandler2 == null) {
                 return new NotPublished();
@@ -285,7 +285,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             return new NoSuchSession(invokeFacadeMethod.getSessionID());
         }
 
-        MethodInvocationHandler mainMethodInvocationHandler = getMethodInvocationHandler(invokeFacadeMethod.getService() + "_Main");
+        MethodInvocationHandler mainMethodInvocationHandler = getMethodInvocationHandler(StubHelper.formatServiceName(invokeFacadeMethod.getService()));
 
         String objectName = MethodNameHelper.encodeClassName(mainMethodInvocationHandler.getMostDerivedType(beanImpl).getName());
 
@@ -370,7 +370,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             return new AuthenticationFailed();
         }
 
-        if (!isPublished(publishedServiceName + "_Main")) {
+        if (!isPublished(StubHelper.formatServiceName(publishedServiceName))) {
             return new NotPublished();
         }
 
@@ -430,8 +430,8 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         while (iterator.hasNext()) {
             final String item = (String) iterator.next();
 
-            if (item.endsWith("_Main")) {
-                vecOfServices.add(item.substring(0, item.lastIndexOf("_Main")));
+            if ( StubHelper.isService(item) ) {
+                vecOfServices.add(StubHelper.getServiceName(item));
             }
         }
 
@@ -480,8 +480,8 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      */
     private AbstractResponse doListMethodsRequest(AbstractRequest request) {
         ListInvokableMethods lReq = (ListInvokableMethods) request;
-        String publishedThing = lReq.getService() + "_Main";
-
+        String publishedThing = StubHelper.formatServiceName(lReq.getService());
+        
         if (!isPublished(publishedThing)) {
             //Should it throw an exception back?
             return new InvokableMethods(new String[0]);

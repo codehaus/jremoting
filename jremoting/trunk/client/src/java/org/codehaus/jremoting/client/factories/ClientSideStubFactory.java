@@ -19,6 +19,7 @@ package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.HostContext;
+import org.codehaus.jremoting.util.StubHelper;
 
 /**
  * Class ClientSideStubFactory
@@ -40,7 +41,7 @@ public class ClientSideStubFactory extends AbstractFactory {
 
 
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
-        String stubClassName = "JRemotingGenerated" + publishedServiceName + "_" + objectName;
+        String stubClassName = StubHelper.formatStubClassName(publishedServiceName, objectName);
         try {
             return classLoader.loadClass(stubClassName);
         } catch (ClassNotFoundException e) {

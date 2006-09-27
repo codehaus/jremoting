@@ -17,18 +17,18 @@
  */
 package org.codehaus.jremoting.server.classretrievers;
 
-import org.codehaus.jremoting.server.StubRetrievalException;
-import org.codehaus.jremoting.server.StubRetriever;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.codehaus.jremoting.server.StubRetrievalException;
+import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.util.StubHelper;
 
 /**
  * Class AbstractStubRetriever
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
  */
 public abstract class AbstractStubRetriever implements StubRetriever {
 
@@ -51,7 +51,7 @@ public abstract class AbstractStubRetriever implements StubRetriever {
      * @throws StubRetrievalException if the bytes cannot be retrieved.
      */
     public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
-        return getThingBytes("JRemotingGenerated" + publishedName);
+        return getThingBytes(StubHelper.formatStubClassName(publishedName));
     }
 
     /**

@@ -34,6 +34,7 @@ import org.apache.bcel.generic.PUSH;
 import org.apache.bcel.generic.Type;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.util.MethodNameHelper;
+import org.codehaus.jremoting.util.StubHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,12 +54,10 @@ import java.util.ArrayList;
  * by using the original stub-generator(which generates pure java code).
  *
  * @author <a href="mailto:vinayc77@yahoo.com">Vinay Chandran</a>
- * @version $Revision: 1.2 $
  */
 public class BcelProxyGenerator extends AbstractProxyGenerator {
 
-    //bcel
-    private static final String STUB_PREFIX = "JRemotingGenerated";
+    //bcel    
     private InstructionFactory factory;
     private ConstantPoolGen constantsPool;
     private ClassGen classGen;
@@ -73,13 +72,13 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
     public void generateClass(ClassLoader classLoader) {
 
         //create the Main Stubs:
-        generateProxyClass(STUB_PREFIX + getGenName() + "_Main", getInterfacesToExpose());
+        generateProxyClass(StubHelper.formatProxyClassName(getGenName()), getInterfacesToExpose());
 
         //Create the Additional Facades
         if (getAdditionalFacades() != null) {
             for (int i = 0; i < getAdditionalFacades().length; i++) {
                 String encodedClassName = MethodNameHelper.encodeClassName(getAdditionalFacades()[i].getFacadeClass());
-                generateProxyClass(STUB_PREFIX + getGenName() + "_" + encodedClassName, new PublicationDescriptionItem[]{getAdditionalFacades()[i]});
+                generateProxyClass(StubHelper.formatProxyClassName(getGenName(), encodedClassName), new PublicationDescriptionItem[]{getAdditionalFacades()[i]});
 
             }
         }
@@ -89,7 +88,7 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
     /**
      * Method generateProxyClass.
      * Create Proxy Implementation with all interface methods
-     * Generating JRemotingGeneratedGENNAME_Main class
+     * Generating name of form: [STUB_PREFIX][genName]_[STUB_POSTFIX].class
      *
      * @param generatedClassName the name of the class to generate.
      * @param interfacesToStubify the interfaces to stubify.
@@ -97,13 +96,10 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
     protected void generateProxyClass(String generatedClassName, PublicationDescriptionItem[] interfacesToStubify) {
         //Start creating class
         createNewClassDeclaration(generatedClassName, interfacesToStubify);
-        /******** CONSTRUCTOR **************/
         //create constructor that takes ProxyHelper
         createConstructor(generatedClassName);
-        /******** FIELDS *************/
         //create fields
         createFields();
-        /******** METHODS *************/
         //create fields
         createGetReferenceIDMethod(generatedClassName);
         createHelperMethodForDotClassCalls(generatedClassName);
@@ -121,8 +117,7 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
         }
     }
 
-    //<BCEL>  <!-- Enter the BCEL Arena -->
-
+    //BCEL
     /**
      * Method createAndInitializeClass.
      * This method starts creating the class.
@@ -168,11 +163,10 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
     }
 
     /**
-     * Method createFields.
-     * =================adding===============
+     * Add method
+     * <pre>
      * private transient org.codehaus.jremoting.client.ProxyHelper proxyHelper;
-     * =================adding===============
-     * Add
+     * </pre>
      */
     protected void createFields() {
         FieldGen field;
@@ -181,13 +175,12 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
     }
 
     /**
-     * Method createGetReferenceIDMethod.
-     * =================adding=====================================
+     * Add method
+     * <pre>
      * public Long codehausRemotingGetReferenceID(Object factoryThatIsAsking) {
      * return proxyHelper.getReferenceID(factoryThatIsAsking);
      * }
-     * =================adding=====================================
-     *
+     * </pre>
      * @param generatedClassName the generated class name
      */
     protected void createGetReferenceIDMethod(String generatedClassName) {
@@ -205,8 +198,7 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
     }
 
     /**
-     * Method createHelperMethodForDotClassCalls.
-     * This class creates a method class$(String) which is used
+     * Creates a method class$(String) which is used
      * during SomeClass.class instruction
      *
      * @param generatedClassName the bean class name
@@ -232,7 +224,6 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
     }
 
     /**
-     * Method createInterfaceMethods.
      * This methods shall iterate through the set of methods
      * of the interface creating equivalent methods for the
      * stubs in the process.
@@ -258,7 +249,6 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
     }
 
     /**
-     * Method createInterfaceMethod.
      * Add the java.lang.reflect.Method wrapper into the stub
      *
      * @param generatedClassName the bean class name

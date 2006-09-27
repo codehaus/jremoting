@@ -28,13 +28,13 @@ import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Publisher;
 import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
+import org.codehaus.jremoting.util.StubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
 /**
  * Class PublicationAdapter
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
  */
 public class PublicationAdapter implements Publisher {
 
@@ -88,7 +88,7 @@ public class PublicationAdapter implements Publisher {
         PublicationDescriptionItem[] interfacesToExpose = publicationDescription.getInterfacesToExpose();
         PublicationDescriptionItem[] additionalFacades = publicationDescription.getAdditionalFacades();
 
-        if (services.containsKey(service + "_Main")) {
+        if (services.containsKey(StubHelper.formatServiceName(service))) {
             throw new PublicationException("Service '" + service + "' already published");
         }
 
@@ -133,7 +133,7 @@ public class PublicationAdapter implements Publisher {
         }
 
         // as the main service is lookup-able, it has a prexisting impl.
-        services.put(service + "_Main", mainMethodInvocationHandler);
+        services.put(StubHelper.formatServiceName(service), mainMethodInvocationHandler);
 
         // add method maps for all the additional facades.
         for (int x = 0; x < additionalFacades.length; x++) {
@@ -180,11 +180,11 @@ public class PublicationAdapter implements Publisher {
      */
     public void unPublish(Object impl, String service) throws PublicationException {
 
-        if (!services.containsKey(service + "_Main")) {
+        String serviceName = StubHelper.formatServiceName(service);
+        if (!services.containsKey(serviceName)) {
             throw new PublicationException("Service '" + service + "' not published");
         }
-
-        services.remove(service + "_Main");
+        services.remove(serviceName);
     }
 
     /**
@@ -197,11 +197,12 @@ public class PublicationAdapter implements Publisher {
      */
     public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
 
-        if (!services.containsKey(service + "_Main")) {
+        String serviceName = StubHelper.formatServiceName(service);
+        if (!services.containsKey(serviceName)) {
             throw new PublicationException("Service '" + service + "' not published");
         }
 
-        MethodInvocationHandler asih = (MethodInvocationHandler) services.get(service + "_Main");
+        MethodInvocationHandler asih = (MethodInvocationHandler) services.get(serviceName);
 
         asih.replaceImplementationBean(oldImpl, withImpl);
     }

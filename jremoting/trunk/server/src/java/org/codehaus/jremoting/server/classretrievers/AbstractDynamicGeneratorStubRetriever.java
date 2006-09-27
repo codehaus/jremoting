@@ -29,13 +29,13 @@ import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.StubRetrievalException;
 import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.util.StubHelper;
 
 
 /**
  * Class JarFileStubRetriever
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
  */
 public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenerator, StubRetriever {
 
@@ -126,7 +126,7 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
      * @throws StubRetrievalException if the class cannot be retrieved.
      */
     public final byte[] getStubClassBytes(String service) throws StubRetrievalException {
-        return getThingBytes("JRemotingGenerated" + service);
+        return getThingBytes(StubHelper.formatStubClassName(service));
     }
 
     /**
