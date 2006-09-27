@@ -76,11 +76,6 @@ public abstract class IntervalConnectionPinger implements ConnectionPinger {
         clientInvocationHandler = invocationHandler;
     }
 
-    /**
-     * Get the Invocation handler.
-     *
-     * @return
-     */
     protected ClientInvocationHandler getInvocationHandler() {
         return clientInvocationHandler;
     }
@@ -92,7 +87,6 @@ public abstract class IntervalConnectionPinger implements ConnectionPinger {
 
         runnable = new Runnable() {
             public void run() {
-
                 try {
                     while (keepGoing) {
                         Thread.sleep(pingInterval);
@@ -101,7 +95,7 @@ public abstract class IntervalConnectionPinger implements ConnectionPinger {
                         }
                     }
                 } catch (InvocationException ie) {
-                    clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
+                    clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), "n/a", "n/a", "n/a", ie);
                     // no need to ping anymore.
                 } catch (ConnectionClosedException cce) {
                     clientInvocationHandler.getClientMonitor().unexpectedConnectionClosed(this.getClass(), this.getClass().getName(), cce);

@@ -47,7 +47,7 @@ public class NullClientMonitor implements ClientMonitor {
         throw new InvocationException("JRemoting Service has Abended.", cause);
     }
 
-    public void invocationFailure(Class clazz, String name, InvocationException ie) {
+    public void invocationFailure(Class clazz, String publishedServiceName, String objectName, String methodSignature, InvocationException ie) {
     }
 
     public void unexpectedConnectionClosed(Class clazz, String name, ConnectionClosedException cce) {

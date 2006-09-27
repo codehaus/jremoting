@@ -60,7 +60,7 @@ public interface ClientMonitor {
      */
     void serviceAbend(Class clazz, int attempt, IOException cause);
 
-    void invocationFailure(Class clazz, String name, InvocationException ie);
+    void invocationFailure(Class clazz, String publishedServiceName, String objectName, String methodSignature, InvocationException ie);
 
     void unexpectedConnectionClosed(Class clazz, String name, ConnectionClosedException cce);
 

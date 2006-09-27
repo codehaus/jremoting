@@ -134,7 +134,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
             }
             return result;
         } catch (InvocationException ie) {
-            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
+            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
             throw ie;
         }
     }
@@ -225,7 +225,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 throw makeUnexpectedResponseThrowable(response);
             }
         } catch (InvocationException ie) {
-            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
+            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
             throw ie;
         }
     }
@@ -257,7 +257,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 throw makeUnexpectedResponseThrowable(response);
             }
         } catch (InvocationException ie) {
-            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
+            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
             throw ie;
         }
     }
@@ -292,7 +292,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                     throw makeUnexpectedResponseThrowable(response);
                 }
             } catch (InvocationException ie) {
-                clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), this.getClass().getName(), ie);
+                clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, "<various-async-grouped>", ie);
                 throw ie;
             }
         }

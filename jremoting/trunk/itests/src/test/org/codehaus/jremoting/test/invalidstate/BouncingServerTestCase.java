@@ -34,6 +34,7 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
 import org.codehaus.jremoting.tools.generator.BcelProxyGenerator;
 import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
+import org.jmock.core.Constraint;
 
 
 /**
@@ -67,7 +68,8 @@ public class BouncingServerTestCase extends MockObjectTestCase {
 
             Mock clientMonitor = mock(ClientMonitor.class);
             clientMonitor.expects(once()).method("methodLogging").withNoArguments().will(returnValue(false));
-            clientMonitor.expects(once()).method("invocationFailure").with(eq(DefaultProxyHelper.class), isA(String.class), isA(InvocationException.class));
+            clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(DefaultProxyHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
+            )});
 
             HostContext hostContext = new SocketCustomStreamHostContext((ClientMonitor) clientMonitor.proxy(), "127.0.0.1", 12201);
             factory = new ClientSideStubFactory(hostContext);

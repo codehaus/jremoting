@@ -8,7 +8,7 @@ import org.codehaus.jremoting.requests.AbstractRequest;
 import java.io.IOException;
 
 /**
- * Class NullClientMonitor
+ * Class ConsoleClientMonitor
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
@@ -34,20 +34,23 @@ public class ConsoleClientMonitor implements ClientMonitor {
     }
 
     public void serviceSuspended(Class clazz, final AbstractRequest request, final int attempt, final int suggestedWaitMillis) {
-        System.out.println("ConsoleClientMonitor: invocationFailure: for class'" + clazz.getName() + "' attempt: '" + attempt + "' waiting: '" + suggestedWaitMillis + "'" );
+        System.out.println("ConsoleClientMonitor: serviceSuspended: for class'" + clazz.getName() + "' attempt: '" + attempt + "' waiting: '" + suggestedWaitMillis + "'" );
         delegate.serviceSuspended(clazz, request, attempt, suggestedWaitMillis);
     }
 
     public void serviceAbend(Class clazz, int attempt, IOException cause) {
-        System.out.println("ConsoleClientMonitor: invocationFailure: for class'" + clazz.getName() + "' attempt: '" + attempt + "' IOException: '" + cause.getMessage() + "'" );
+        System.out.println("ConsoleClientMonitor: serviceAbend: for class'" + clazz.getName() + "' attempt: '" + attempt + "' IOException: '" + cause.getMessage() + "'" );
         cause.printStackTrace();
         delegate.serviceAbend(clazz, attempt, cause);
     }
 
-    public void invocationFailure(Class clazz, String name, InvocationException ie) {
-        System.out.println("ConsoleClientMonitor: invocationFailure: for class'" + clazz.getName() + "' name: '" + name + "' InvocationException: '" + ie.getMessage() + "'" );
+    public void invocationFailure(Class clazz, String publishedServiceName, String objectName, String methodSignature, InvocationException ie) {
+        System.out.println("ConsoleClientMonitor: invocationFailure: for class'" + clazz.getName() + "' publishedServiceName: '" + publishedServiceName +
+                "' objectName: '" + objectName +
+                "' methodSignature: '" + methodSignature +
+                "' InvocationException: '" + ie.getMessage() + "'" );
         ie.printStackTrace();
-        delegate.invocationFailure(clazz, name, ie);
+        delegate.invocationFailure(clazz, publishedServiceName, objectName, methodSignature, ie);
     }
 
     public void unexpectedConnectionClosed(Class clazz, String name, ConnectionClosedException cce) {
