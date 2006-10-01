@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -29,7 +29,7 @@ import java.io.ObjectOutput;
  * @author Vinay Chandrasekharan
  * @version $Revision: 1.2 $
  */
-public final class ServicesList extends AbstractResponse {
+public final class ServicesList extends Response {
     static final long serialVersionUID = -2491265577999411874L;
 
     private String[] services;

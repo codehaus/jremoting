@@ -20,8 +20,8 @@ package org.codehaus.jremoting.client.transports;
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientStreamDriver;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -76,18 +76,18 @@ public class ClientObjectStreamDriver implements ClientStreamDriver {
         }
     }
 
-    public synchronized AbstractResponse postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
+    public synchronized Response postRequest(Request request) throws IOException, ClassNotFoundException {
         writeRequest(request);
         return readResponse();
     }
 
-    private void writeRequest(AbstractRequest request) throws IOException {
+    private void writeRequest(Request request) throws IOException {
         objectOutputStream.writeObject(request);
         objectOutputStream.flush();
         objectOutputStream.reset();
     }
 
-    private AbstractResponse readResponse() throws IOException, ClassNotFoundException {
-        return (AbstractResponse) objectInputStream.readObject();
+    private Response readResponse() throws IOException, ClassNotFoundException {
+        return (Response) objectInputStream.readObject();
     }
 }

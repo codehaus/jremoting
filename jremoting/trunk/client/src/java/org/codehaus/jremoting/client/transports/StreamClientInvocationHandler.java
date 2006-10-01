@@ -30,11 +30,11 @@ import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.requests.AbstractServiceRequest;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.ServiceRequest;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.responses.NotPublished;
@@ -82,7 +82,7 @@ public abstract class StreamClientInvocationHandler extends AbstractClientInvoca
     protected void requestWritten() {
     }
 
-    public synchronized AbstractResponse handleInvocation(AbstractRequest request) {
+    public synchronized Response handleInvocation(Request request) {
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
         }
@@ -90,7 +90,7 @@ public abstract class StreamClientInvocationHandler extends AbstractClientInvoca
         try {
             while (true) {
                 boolean again = true;
-                AbstractResponse response = null;
+                Response response = null;
                 int tries = 0;
                 long start = 0;
 
@@ -106,7 +106,7 @@ public abstract class StreamClientInvocationHandler extends AbstractClientInvoca
                     try {
                         long t1 = System.currentTimeMillis();
 
-                        response = (AbstractResponse) objectDriver.postRequest(request);
+                        response = (Response) objectDriver.postRequest(request);
 
                         long t2 = System.currentTimeMillis();
 
@@ -123,7 +123,7 @@ public abstract class StreamClientInvocationHandler extends AbstractClientInvoca
                             } else if (response instanceof NoSuchSession) {
                                 throw new NoSuchSessionException(((NoSuchSession) response).getSessionID());
                             } else if (response instanceof NotPublished) {
-                                AbstractServiceRequest pnr = (AbstractServiceRequest) request;
+                                ServiceRequest pnr = (ServiceRequest) request;
 
                                 throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
                             }

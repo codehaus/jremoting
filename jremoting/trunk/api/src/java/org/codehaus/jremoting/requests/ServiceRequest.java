@@ -17,29 +17,67 @@
  */
 package org.codehaus.jremoting.requests;
 
-import java.io.Externalizable;
+import org.codehaus.jremoting.client.ClientContext;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class AbstractRequest
+ * Class ServiceRequest
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractRequest implements Externalizable {
+public abstract class ServiceRequest extends Request {
+    static final long serialVersionUID = 5995735372269955205L;
 
-    static final long serialVersionUID = 3003722657216604838L;
+    private String service;
+    private String objectName;
+    private ClientContext context;
 
     /**
-     * Gets number that represents type for this class.
-     * This is quicker than instanceof for type checking.
+     * Constructor ServiceRequest
      *
-     * @return the representative code
-     * @see org.codehaus.jremoting.requests.RequestConstants
+     * @param service the published service name
+     * @param objectName the object name within that
      */
-    public abstract int getRequestCode();
+    public ServiceRequest(String service, String objectName) {
+        this.service = service;
+        this.objectName = objectName;
+    }
+
+    public void setContext(ClientContext context) {
+        this.context = context;
+    }
+
+    public ClientContext getContext() {
+        return context;
+    }
+
+    /**
+     * Constructor ServiceRequest for Externalization
+     */
+    public ServiceRequest() {
+    }
+
+    /**
+     * Get published service name
+     *
+     * @return the published service name
+     */
+    public String getService() {
+        return service;
+    }
+
+    /**
+     * Get object name
+     *
+     * @return the object name
+     */
+    public String getObjectName() {
+        return objectName;
+    }
 
     /**
      * The object implements the writeExternal method to save its contents
@@ -56,6 +94,9 @@ public abstract class AbstractRequest implements Externalizable {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(service);
+        out.writeObject(objectName);
+        out.writeObject(context);
     }
 
     /**
@@ -71,5 +112,8 @@ public abstract class AbstractRequest implements Externalizable {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        service = (String) in.readObject();
+        objectName = (String) in.readObject();
+        context = (ClientContext) in.readObject();
     }
 }

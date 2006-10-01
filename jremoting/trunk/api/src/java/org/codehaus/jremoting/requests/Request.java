@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.responses;
+package org.codehaus.jremoting.requests;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -23,14 +23,23 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class AbstractResponse
+ * Class Request
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractResponse implements Externalizable {
+public abstract class Request implements Externalizable {
 
-    static final long serialVersionUID = -1604781598397036131L;
+    static final long serialVersionUID = 3003722657216604838L;
+
+    /**
+     * Gets number that represents type for this class.
+     * This is quicker than instanceof for type checking.
+     *
+     * @return the representative code
+     * @see org.codehaus.jremoting.requests.RequestConstants
+     */
+    public abstract int getRequestCode();
 
     /**
      * The object implements the writeExternal method to save its contents

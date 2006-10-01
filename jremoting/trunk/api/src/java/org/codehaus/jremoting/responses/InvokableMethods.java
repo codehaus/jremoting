@@ -28,7 +28,7 @@ import java.io.ObjectOutput;
  * @author Vinay Chandrasekharan
  * @version $Revision: 1.2 $
  */
-public final class InvokableMethods extends AbstractResponse {
+public final class InvokableMethods extends Response {
 
     static final long serialVersionUID = 420067307396614451L;
 

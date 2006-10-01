@@ -20,8 +20,8 @@ package org.codehaus.jremoting.client;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.util.concurrent.ExecutorService;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 
 /**
  * Interface ClientInvocationHandler
@@ -31,7 +31,7 @@ import org.codehaus.jremoting.responses.AbstractResponse;
  */
 public interface ClientInvocationHandler {
 
-    AbstractResponse handleInvocation(AbstractRequest request);
+    Response handleInvocation(Request request);
 
     void initialize() throws ConnectionException;
 

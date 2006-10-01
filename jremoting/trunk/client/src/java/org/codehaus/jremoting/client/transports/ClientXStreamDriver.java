@@ -27,8 +27,8 @@ import java.io.PrintWriter;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientStreamDriver;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
@@ -58,16 +58,16 @@ public class ClientXStreamDriver implements ClientStreamDriver {
         xStream = new XStream(new DomDriver());
     }
 
-    public synchronized AbstractResponse postRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
+    public synchronized Response postRequest(Request request) throws IOException, ClassNotFoundException {
 
         writeRequest(request);
 
-        AbstractResponse r = readResponse();
+        Response r = readResponse();
 
         return r;
     }
 
-    private void writeRequest(AbstractRequest request) throws IOException {
+    private void writeRequest(Request request) throws IOException {
 
         String xml = xStream.toXML(request);
 
@@ -76,7 +76,7 @@ public class ClientXStreamDriver implements ClientStreamDriver {
         bufferedOutputStream.flush();
     }
 
-    private AbstractResponse readResponse() throws IOException {
+    private Response readResponse() throws IOException {
 
         StringBuffer res = new StringBuffer();
         long str = System.currentTimeMillis();
@@ -108,7 +108,7 @@ public class ClientXStreamDriver implements ClientStreamDriver {
 
         try {
             //TODO use facadesClassLoader
-            return (AbstractResponse) xStream.fromXML(expected);
+            return (Response) xStream.fromXML(expected);
         } catch (ConversionException e) {
             Throwable cause = e.getCause();
             if (cause != null && cause instanceof ClassCastException) {

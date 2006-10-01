@@ -36,11 +36,11 @@ import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.requests.AbstractServiceRequest;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.ServiceRequest;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.ProblemResponse;
@@ -112,14 +112,14 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
      * @param request
      * @return
      */
-    public synchronized AbstractResponse handleInvocation(AbstractRequest request) {
+    public synchronized Response handleInvocation(Request request) {
 
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
         }
 
         boolean again = true;
-        AbstractResponse response = null;
+        Response response = null;
         int tries = 0;
         long start = 0;
 
@@ -145,7 +145,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
                     } else if (response instanceof NoSuchReference) {
                         throw new NoSuchReferenceException(((NoSuchReference) response).getReferenceID());
                     } else if (response instanceof NotPublished) {
-                        AbstractServiceRequest pnr = (AbstractServiceRequest) request;
+                        ServiceRequest pnr = (ServiceRequest) request;
 
                         throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
                     }

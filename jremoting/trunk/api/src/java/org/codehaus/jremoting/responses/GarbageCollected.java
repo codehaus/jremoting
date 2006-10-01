@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -29,7 +29,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class GarbageCollected extends AbstractResponse {
+public final class GarbageCollected extends Response {
     static final long serialVersionUID = -6876914024095000894L;
 
     /**

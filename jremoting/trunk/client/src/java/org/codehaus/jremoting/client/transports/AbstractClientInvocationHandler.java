@@ -25,7 +25,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.requests.Ping;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 
 /**
  * Class AbstractClientInvocationHandler
@@ -75,7 +75,7 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
             throw new ConnectionClosedException("Connection closed");
         }
 
-        AbstractResponse ar = handleInvocation(new Ping());
+        Response ar = handleInvocation(new Ping());
     }
 
     protected abstract boolean tryReconnect();

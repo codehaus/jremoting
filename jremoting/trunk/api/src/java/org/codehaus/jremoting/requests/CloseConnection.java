@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-public class CloseConnection extends AbstractRequest implements Sessionable {
+public class CloseConnection extends Request implements Sessionable {
 
     private Long session;
 

@@ -210,7 +210,7 @@ public class PublicationAdapter implements Publisher {
     /**
      * Get a Server's  InvocationHandler
      *
-     * @param invokeMethod The method AbstractRequest.
+     * @param invokeMethod The method Request.
      * @param objectName   The object name.
      * @return the method invoation handler
      */

@@ -20,9 +20,9 @@ package org.codehaus.jremoting.server.transports;
 
 import java.util.concurrent.ExecutorService;
 
-import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -62,7 +62,7 @@ public class StatefulServer implements Server {
      * @param request The request of the invocation.
      * @return An suitable reply.
      */
-    public AbstractResponse handleInvocation(AbstractRequest request, Object connectionDetails) {
+    public Response handleInvocation(Request request, Object connectionDetails) {
         if (getState().equals(STARTED)) {
             return invocationHandlerAdapter.handleInvocation(request, connectionDetails);
         } else {

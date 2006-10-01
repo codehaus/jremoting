@@ -4,7 +4,7 @@ import java.io.ObjectOutput;
 import java.io.IOException;
 import java.io.ObjectInput;
 
-public class AuthenticationFailed extends AbstractResponse {
+public class AuthenticationFailed extends Response {
 
     public AuthenticationFailed() {
     }

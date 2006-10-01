@@ -220,7 +220,7 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
 
         if (!deferred) {
             try {
-                //proxyGenerator.setClasspath(AbstractRequest.class.getProtectionDomain().getCodeSource().getLocation().getFile());
+                //proxyGenerator.setClasspath(Request.class.getProtectionDomain().getCodeSource().getLocation().getFile());
                 proxyGenerator.generateClass(classLoader);
             } catch (Throwable t) {
 

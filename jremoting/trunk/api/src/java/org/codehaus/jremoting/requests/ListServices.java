@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.RequestConstants;
 
 
@@ -27,7 +27,7 @@ import org.codehaus.jremoting.requests.RequestConstants;
  * @author Vinay Chandrasekharan
  * @version $Revision: 1.2 $
  */
-public final class ListServices extends AbstractRequest {
+public final class ListServices extends Request {
     static final long serialVersionUID = -6048997904689623626L;
 
     /**

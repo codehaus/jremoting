@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 
 
 /**
@@ -26,7 +26,7 @@ import org.codehaus.jremoting.responses.AbstractResponse;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class ConnectionKilled extends AbstractResponse {
+public final class ConnectionKilled extends Response {
     static final long serialVersionUID = 1736963237954338757L;
 
     /**

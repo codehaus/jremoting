@@ -9,12 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.ListServices;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.requests.RetrieveStub;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.RequestFailed;
@@ -48,7 +48,7 @@ public class AbstractServerTestCase extends MockObjectTestCase {
         server.publish(impl, "foo", Map.class);
         putTestEntry();
         server.unPublish(impl, "foo");
-        AbstractResponse resp = serDeSerResponse(putTestEntry());
+        Response resp = serDeSerResponse(putTestEntry());
         assertTrue(resp instanceof NotPublished);
     }
 
@@ -89,28 +89,28 @@ public class AbstractServerTestCase extends MockObjectTestCase {
         assertNull(impl.get("1"));
     }
 
-    private AbstractResponse putTestEntry() throws IOException, ClassNotFoundException {
+    private Response putTestEntry() throws IOException, ClassNotFoundException {
         ConnectionOpened co = (ConnectionOpened) iha.handleInvocation(new OpenConnection(), new Object());
-        AbstractRequest request = new InvokeMethod("foo", "Main", "put(java.lang.Object, java.lang.Object)", new Object[]{"1", "2"}, (long) 0, co.getSessionID());
+        Request request = new InvokeMethod("foo", "Main", "put(java.lang.Object, java.lang.Object)", new Object[]{"1", "2"}, (long) 0, co.getSessionID());
         return iha.handleInvocation(serDeSerRequest(request), new Object());
     }
 
-    private AbstractRequest serDeSerRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
+    private Request serDeSerRequest(Request request) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(request);
         oos.flush();
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        return (AbstractRequest) ois.readObject();
+        return (Request) ois.readObject();
     }
 
-    private AbstractResponse serDeSerResponse(AbstractResponse response) throws IOException, ClassNotFoundException {
+    private Response serDeSerResponse(Response response) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(response);
         oos.flush();
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        return (AbstractResponse) ois.readObject();
+        return (Response) ois.readObject();
     }
 
     public void testPublishAndSuspendBlocksOperations() throws PublicationException, IOException, ClassNotFoundException {
@@ -128,33 +128,33 @@ public class AbstractServerTestCase extends MockObjectTestCase {
 
     public void testStubRetrievalFailsWhenItsAppropriate() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        AbstractResponse abstractResponse = serDeSerResponse(iha.handleInvocation(serDeSerRequest(new RetrieveStub("foo", "Main")), new Object()));
-        assertTrue(abstractResponse instanceof StubRetrievalFailed);
+        Response response = serDeSerResponse(iha.handleInvocation(serDeSerRequest(new RetrieveStub("foo", "Main")), new Object()));
+        assertTrue(response instanceof StubRetrievalFailed);
     }
 
     public void testRequestFailsOnUnknownRequestType() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        AbstractResponse abstractResponse = serDeSerResponse(iha.handleInvocation(serDeSerRequest(new MyAbstractRequest()), new Object()));
-        assertTrue(abstractResponse instanceof RequestFailed);
-        assertEquals("Unknown Request Type: org.codehaus.jremoting.server.adapters.AbstractServerTestCase$MyAbstractRequest", ((RequestFailed) abstractResponse).getFailureReason());
+        Response response = serDeSerResponse(iha.handleInvocation(serDeSerRequest(new MyRequest()), new Object()));
+        assertTrue(response instanceof RequestFailed);
+        assertEquals("Unknown Request Type: org.codehaus.jremoting.server.adapters.AbstractServerTestCase$MyRequest", ((RequestFailed) response).getFailureReason());
     }
 
     public void testListServicesRespondsAppropriately() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        AbstractResponse abstractResponse = iha.handleInvocation(serDeSerRequest(new ListServices()), new Object());
-        assertTrue(serDeSerResponse(abstractResponse) instanceof ServicesList);
-        assertEquals(1, ((ServicesList ) abstractResponse).getServices().length);
-        assertEquals("foo", ((ServicesList ) abstractResponse).getServices()[0]);
+        Response response = iha.handleInvocation(serDeSerRequest(new ListServices()), new Object());
+        assertTrue(serDeSerResponse(response) instanceof ServicesList);
+        assertEquals(1, ((ServicesList ) response).getServices().length);
+        assertEquals("foo", ((ServicesList ) response).getServices()[0]);
     }
 
     public void testListServicesRespondsAppropriatelyWhenThereAreNone() throws PublicationException, IOException, ClassNotFoundException {
-        AbstractResponse abstractResponse = iha.handleInvocation(serDeSerRequest(new ListServices()), new Object());
-        assertTrue(serDeSerResponse(abstractResponse) instanceof ServicesList);
-        assertEquals(0, ((ServicesList ) abstractResponse).getServices().length);
+        Response response = iha.handleInvocation(serDeSerRequest(new ListServices()), new Object());
+        assertTrue(serDeSerResponse(response) instanceof ServicesList);
+        assertEquals(0, ((ServicesList ) response).getServices().length);
     }
 
-    private static class MyAbstractRequest extends AbstractRequest {
-        public MyAbstractRequest() {
+    private static class MyRequest extends Request {
+        public MyRequest() {
         }
 
         public int getRequestCode() {

@@ -27,13 +27,12 @@ import java.io.PrintWriter;
 import java.util.concurrent.ExecutorService;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 
 /**
  * Class ServerXStreamDriver
@@ -55,7 +54,7 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
     }
 
     //TODO - review IOE and ConnExcept in the throws list. one extends the other.
-    public synchronized AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
+    public synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {
             writeResponse(response);
@@ -64,7 +63,7 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
         return readRequest();
     }
 
-    private void writeResponse(AbstractResponse response) throws IOException {
+    private void writeResponse(Response response) throws IOException {
 
 
         String xml = xStream.toXML(response);
@@ -93,7 +92,7 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
         printWriter = new PrintWriter(bufferedOutputStream);
     }
 
-    private AbstractRequest readRequest() throws IOException, ClassNotFoundException, ConnectionException {
+    private Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
         StringBuffer req = new StringBuffer();
         String line = lineNumberReader.readLine();
         req.append(line).append("\n");
@@ -114,7 +113,7 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
 
         try {
             Object o = xStream.fromXML(r);
-            return (AbstractRequest) o;
+            return (Request) o;
         } catch (ConversionException e) {
             Throwable cause = e.getCause();
             if (cause != null && cause instanceof ClassCastException) {

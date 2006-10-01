@@ -71,7 +71,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(DefaultProxyHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
             )});
 
-            factory = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+            factory = new ClientSideStubFactory(new SocketStreamInvocationHandler((ClientMonitor) clientMonitor.proxy(),
                     new ClientCustomStreamDriverFactory(), "127.0.0.1", 12201));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello55");
 
@@ -93,8 +93,6 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             }
 
 
-        } catch (Throwable e) {
-            e.printStackTrace();
         } finally {
             System.gc();
             Thread.yield();

@@ -19,8 +19,8 @@ package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.ConnectionKilled;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.server.Connection;
@@ -81,8 +81,8 @@ public abstract class StreamConnection implements Runnable, Connection {
             driver.initialize();
 
             boolean more = true;
-            AbstractRequest request = null;
-            AbstractResponse response = null;
+            Request request = null;
+            Response response = null;
             while (more) {
                 try {
                     if (request != null) {

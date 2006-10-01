@@ -21,7 +21,7 @@ import java.io.ObjectOutput;
 import java.io.IOException;
 import java.io.ObjectInput;
 
-public class ConnectionClosed extends AbstractResponse {
+public class ConnectionClosed extends Response {
 
     private Long session;
 

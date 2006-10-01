@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 
 /**
  * Interface InvocationHandler
@@ -35,5 +35,5 @@ public interface ServerInvocationHandler {
      * @param connectionDetails Some details of the connection.
      * @return the response that is a consequence of the request
      */
-    AbstractResponse handleInvocation(AbstractRequest request, Object connectionDetails);
+    Response handleInvocation(Request request, Object connectionDetails);
 }

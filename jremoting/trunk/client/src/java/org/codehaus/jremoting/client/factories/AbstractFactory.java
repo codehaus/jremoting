@@ -31,7 +31,7 @@ import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.ListServices;
 import org.codehaus.jremoting.requests.LookupService;
 import org.codehaus.jremoting.requests.OpenConnection;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.responses.ExceptionThrown;
@@ -62,7 +62,7 @@ public abstract class AbstractFactory implements Factory {
         this.clientInvocationHandler = clientInvocationHandler;
         clientInvocationHandler.initialize();
 
-        AbstractResponse response = clientInvocationHandler.handleInvocation(new OpenConnection());
+        Response response = clientInvocationHandler.handleInvocation(new OpenConnection());
         if (response instanceof ConnectionOpened) {
             textToSign = ((ConnectionOpened) response).getTextToSign();
             sessionID = ((ConnectionOpened) response).getSessionID();
@@ -83,7 +83,7 @@ public abstract class AbstractFactory implements Factory {
      */
     public Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
-        AbstractResponse ar = clientInvocationHandler.handleInvocation(new LookupService(publishedServiceName, authentication, sessionID));
+        Response ar = clientInvocationHandler.handleInvocation(new LookupService(publishedServiceName, authentication, sessionID));
 
         if (ar instanceof NotPublished) {
             throw new ConnectionException("Service '" + publishedServiceName + "' not published");
@@ -162,7 +162,7 @@ public abstract class AbstractFactory implements Factory {
     }
 
     public String[] listServices() {
-        AbstractResponse ar = clientInvocationHandler.handleInvocation(new ListServices());
+        Response ar = clientInvocationHandler.handleInvocation(new ListServices());
         return ((ServicesList) ar).getServices();
     }
 

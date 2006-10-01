@@ -15,69 +15,22 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.requests;
+package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.client.ClientContext;
-
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class AbstractServiceRequest
+ * Class Response
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractServiceRequest extends AbstractRequest {
-    static final long serialVersionUID = 5995735372269955205L;
+public abstract class Response implements Externalizable {
 
-    private String service;
-    private String objectName;
-    private ClientContext context;
-
-    /**
-     * Constructor AbstractServiceRequest
-     *
-     * @param service the published service name
-     * @param objectName the object name within that
-     */
-    public AbstractServiceRequest(String service, String objectName) {
-        this.service = service;
-        this.objectName = objectName;
-    }
-
-    public void setContext(ClientContext context) {
-        this.context = context;
-    }
-
-    public ClientContext getContext() {
-        return context;
-    }
-
-    /**
-     * Constructor AbstractServiceRequest for Externalization
-     */
-    public AbstractServiceRequest() {
-    }
-
-    /**
-     * Get published service name
-     *
-     * @return the published service name
-     */
-    public String getService() {
-        return service;
-    }
-
-    /**
-     * Get object name
-     *
-     * @return the object name
-     */
-    public String getObjectName() {
-        return objectName;
-    }
+    static final long serialVersionUID = -1604781598397036131L;
 
     /**
      * The object implements the writeExternal method to save its contents
@@ -94,9 +47,6 @@ public abstract class AbstractServiceRequest extends AbstractRequest {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(service);
-        out.writeObject(objectName);
-        out.writeObject(context);
     }
 
     /**
@@ -112,8 +62,5 @@ public abstract class AbstractServiceRequest extends AbstractRequest {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        service = (String) in.readObject();
-        objectName = (String) in.readObject();
-        context = (ClientContext) in.readObject();
     }
 }

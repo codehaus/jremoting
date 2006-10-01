@@ -25,11 +25,11 @@ import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.requests.AbstractServiceRequest;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.ServiceRequest;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.ProblemResponse;
@@ -51,14 +51,14 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
         super(clientMonitor, executorService, connectionPinger);
     }
 
-    public AbstractResponse handleInvocation(AbstractRequest request) {
+    public Response handleInvocation(Request request) {
 
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
         }
 
         boolean again = true;
-        AbstractResponse response = null;
+        Response response = null;
         int tries = 0;
         long start = 0;
 
@@ -83,7 +83,7 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
                 } else if (response instanceof NoSuchReference) {
                     throw new NoSuchReferenceException(((NoSuchReference) response).getReferenceID());
                 } else if (response instanceof NotPublished) {
-                    AbstractServiceRequest pnr = (AbstractServiceRequest) request;
+                    ServiceRequest pnr = (ServiceRequest) request;
 
                     throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
                 }
@@ -109,5 +109,5 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
         return lastRealRequest;
     }
 
-    protected abstract AbstractResponse performInvocation(AbstractRequest request);
+    protected abstract Response performInvocation(Request request);
 }

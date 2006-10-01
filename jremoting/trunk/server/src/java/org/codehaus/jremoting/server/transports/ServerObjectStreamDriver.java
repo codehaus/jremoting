@@ -25,8 +25,8 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.concurrent.ExecutorService;
 
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 /**
@@ -64,7 +64,7 @@ public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
      * @throws IOException            In an IO Exception
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
-    public synchronized AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException {
+    public synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException {
 
         if (response != null) {
             writeResponse(response);
@@ -79,7 +79,7 @@ public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
      * @param response The response to write
      * @throws IOException If and IO Exception
      */
-    private void writeResponse(AbstractResponse response) throws IOException {
+    private void writeResponse(Response response) throws IOException {
 
         objectOutputStream.writeObject(response);
         objectOutputStream.flush();
@@ -111,8 +111,8 @@ public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
      * @throws IOException            If an IO Exception
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
-    private AbstractRequest readRequest() throws IOException, ClassNotFoundException {
-        AbstractRequest request = (AbstractRequest) objectInputStream.readObject();
+    private Request readRequest() throws IOException, ClassNotFoundException {
+        Request request = (Request) objectInputStream.readObject();
         return request;
     }
 }

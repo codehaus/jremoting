@@ -11,10 +11,10 @@ import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.authentications.Authentication;
 import org.codehaus.jremoting.authentications.NamePasswordAuthentication;
-import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.LookupService;
 import org.codehaus.jremoting.requests.OpenConnection;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.AuthenticationFailed;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.responses.Service;
@@ -41,7 +41,7 @@ public class AuthenticationTestCase extends MockObjectTestCase {
         iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new NoStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
-        AbstractResponse resp = serDeSerResponse(putTestEntry(null));
+        Response resp = serDeSerResponse(putTestEntry(null));
         assertTrue(resp instanceof Service);
     }
 
@@ -49,7 +49,7 @@ public class AuthenticationTestCase extends MockObjectTestCase {
         iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new NoStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
-        AbstractResponse resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("", "")));
+        Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("", "")));
         assertTrue(resp instanceof AuthenticationFailed);
     }
 
@@ -57,7 +57,7 @@ public class AuthenticationTestCase extends MockObjectTestCase {
         iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new NoStubRetriever(), new SinglePasswordAuthenticator("fred"), new DefaultServerSideClientContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
-        AbstractResponse resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("FRED", "fred")));
+        Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("FRED", "fred")));
         assertTrue(resp instanceof Service);
     }
 
@@ -65,31 +65,31 @@ public class AuthenticationTestCase extends MockObjectTestCase {
         iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new NoStubRetriever(), new SinglePasswordAuthenticator("fred"), new DefaultServerSideClientContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
-        AbstractResponse resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("FRED", "wilma")));
+        Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("FRED", "wilma")));
         assertTrue(resp instanceof AuthenticationFailed);
     }
 
-    private AbstractResponse putTestEntry(Authentication auth)  {
+    private Response putTestEntry(Authentication auth)  {
         ConnectionOpened co = (ConnectionOpened) iha.handleInvocation(new OpenConnection(), new Object());
         return iha.handleInvocation(new LookupService("foo", auth, co.getSessionID()), new Object());
     }
 
-    private AbstractRequest serDeSerRequest(AbstractRequest request) throws IOException, ClassNotFoundException {
+    private Request serDeSerRequest(Request request) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(request);
         oos.flush();
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        return (AbstractRequest) ois.readObject();
+        return (Request) ois.readObject();
     }
 
-    private AbstractResponse serDeSerResponse(AbstractResponse response) throws IOException, ClassNotFoundException {
+    private Response serDeSerResponse(Response response) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(response);
         oos.flush();
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
-        return (AbstractResponse) ois.readObject();
+        return (Response) ois.readObject();
     }
 
 

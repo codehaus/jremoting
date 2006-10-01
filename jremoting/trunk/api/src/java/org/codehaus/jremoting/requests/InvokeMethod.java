@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.requests;
 
 import org.codehaus.jremoting.Contextualizable;
-import org.codehaus.jremoting.requests.AbstractServiceRequest;
+import org.codehaus.jremoting.requests.ServiceRequest;
 import org.codehaus.jremoting.requests.RequestConstants;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class InvokeMethod extends AbstractServiceRequest implements Contextualizable {
+public class InvokeMethod extends ServiceRequest implements Contextualizable {
     static final long serialVersionUID = -4850912985882914299L;
 
     private String methodSignature;

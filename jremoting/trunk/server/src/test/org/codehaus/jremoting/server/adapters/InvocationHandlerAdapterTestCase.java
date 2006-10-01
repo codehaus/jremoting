@@ -22,7 +22,7 @@ import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.NoSuchSession;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 import junit.framework.TestCase;
 
 public class InvocationHandlerAdapterTestCase extends TestCase {
@@ -46,9 +46,9 @@ public class InvocationHandlerAdapterTestCase extends TestCase {
 
     public void testCloseConnectionErrorsOnBogusSession() {
         InvocationHandlerAdapter invocationHandle = new InvocationHandlerAdapter(null, null, null, null);
-        AbstractResponse abstractResponse = invocationHandle.handleInvocation(new CloseConnection(new Long(123)), new Object());
-        assertTrue(abstractResponse instanceof NoSuchSession);
-        NoSuchSession noSuchSession = (NoSuchSession) abstractResponse;
+        Response response = invocationHandle.handleInvocation(new CloseConnection(new Long(123)), new Object());
+        assertTrue(response instanceof NoSuchSession);
+        NoSuchSession noSuchSession = (NoSuchSession) response;
         assertNotNull(noSuchSession);
         assertNotNull(noSuchSession.getSessionID());
         assertEquals(noSuchSession.getSessionID(), new Long(123));

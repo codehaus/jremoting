@@ -27,8 +27,8 @@ import java.util.concurrent.ExecutorService;
 
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.util.SerializationHelper;
 
@@ -57,7 +57,7 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
      * @throws ConnectionException    In an IO Exception
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
-    public synchronized AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
+    public synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {
             writeResponse(response);
@@ -66,7 +66,7 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
         return readRequest();
     }
 
-    private void writeResponse(AbstractResponse response) throws IOException {
+    private void writeResponse(Response response) throws IOException {
 
         byte[] aBytes = SerializationHelper.getBytesFromInstance(response);
 
@@ -92,7 +92,7 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
         dataOutputStream = new DataOutputStream(new BufferedOutputStream(getOutputStream()));
     }
 
-    private AbstractRequest readRequest() throws IOException, ClassNotFoundException, ConnectionException {
+    private Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
         int byteArraySize = dataInputStream.readInt();
         if (byteArraySize < 0) {
             throw new BadConnectionException("Transport mismatch, Unable to " + "read packet of data from CustomStream.");
@@ -118,6 +118,6 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
                 " reads to read all, " + byteArraySize + ", required bytes." );
         }
         */
-        return (AbstractRequest) SerializationHelper.getInstanceFromBytes(byteArray);
+        return (Request) SerializationHelper.getInstanceFromBytes(byteArray);
     }
 }

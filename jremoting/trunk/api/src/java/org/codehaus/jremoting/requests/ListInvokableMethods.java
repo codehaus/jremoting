@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.RequestConstants;
 
 import java.io.IOException;
@@ -25,11 +25,11 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * AbstractRequest the list of remote methods within the service.
+ * Request the list of remote methods within the service.
  *
  * @author <a href="mailto:vinayc@apache.org">Vinay Chandrasekharan</a>
  */
-public final class ListInvokableMethods extends AbstractRequest {
+public final class ListInvokableMethods extends Request {
 
     static final long serialVersionUID = 466389099971742704L;
     /**

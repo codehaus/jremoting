@@ -3,7 +3,7 @@ package org.codehaus.jremoting.client.monitors;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.ConnectionClosedException;
-import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.requests.Request;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -45,7 +45,7 @@ public class CommonsLoggingClientMonitor implements ClientMonitor {
         return false;
     }
 
-    public void serviceSuspended(Class clazz, final AbstractRequest request, final int attempt, final int suggestedWaitMillis) {
+    public void serviceSuspended(Class clazz, final Request request, final int attempt, final int suggestedWaitMillis) {
         getLog(clazz).debug("ConsoleClientMonitor: serviceSuspended:" + maybeWriteClass(clazz) + "' attempt: '" + attempt + "' waiting: '" + suggestedWaitMillis + "'");
         delegate.serviceSuspended(clazz, request, attempt, suggestedWaitMillis);
     }

@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 
 
 /**
@@ -26,7 +26,7 @@ import org.codehaus.jremoting.responses.AbstractResponse;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class NotPublished extends AbstractResponse implements ProblemResponse {
+public class NotPublished extends Response implements ProblemResponse {
     static final long serialVersionUID = 2421625946997973156L;
 
     /**

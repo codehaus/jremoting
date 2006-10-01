@@ -24,7 +24,7 @@ package org.codehaus.jremoting.requests;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class Ping extends AbstractRequest {
+public final class Ping extends Request {
     static final long serialVersionUID = -7551156841939653959L;
 
     /**

@@ -3,21 +3,21 @@ package org.codehaus.jremoting.server.transports;
 import java.io.IOException;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 
 public interface ServerStreamDriver {
 
     /**
-     * Write a AbstractResponse, then Get a new AbstractRequest over the stream.
+     * Write a Response, then Get a new Request over the stream.
      *
      * @param response The response to pass back to the client
-     * @return The AbstractRequest that is new and incoming
+     * @return The Request that is new and incoming
      * @throws IOException            if a problem during write & read.
      * @throws ConnectionException    if a problem during write & read.
      * @throws ClassNotFoundException If a Class is not found during serialization.
      */
-    AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ConnectionException, ClassNotFoundException;
+    Request writeResponseAndGetRequest(Response response) throws IOException, ConnectionException, ClassNotFoundException;
 
     Object getConnectionDetails();
 

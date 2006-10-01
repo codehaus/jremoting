@@ -26,8 +26,8 @@ import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.SimpleMethodInvoked;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.responses.ConnectionOpened;
-import org.codehaus.jremoting.requests.AbstractRequest;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 
 import java.lang.reflect.Method;
@@ -45,11 +45,11 @@ public class TstInvocationHandler extends AbstractClientInvocationHandler implem
         super(clientMonitor, executorService, connectionPinger);
     }
 
-    public AbstractResponse handleInvocation(AbstractRequest request) {
+    public Response handleInvocation(Request request) {
         return handleInvocation(request, "test");
     }
 
-    public AbstractResponse handleInvocation(AbstractRequest request, Object connectionDetails) {
+    public Response handleInvocation(Request request, Object connectionDetails) {
         if (request instanceof OpenConnection) {
             return new ConnectionOpened();
         } else if (request instanceof InvokeMethod) {

@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.WeakHashMap;
 
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.responses.NoSuchReference;
@@ -174,7 +174,7 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
      * @param request The emthod request
      * @return The reply.
      */
-    public AbstractResponse handleMethodInvocation(InvokeMethod request, Object connectionDetails) {
+    public Response handleMethodInvocation(InvokeMethod request, Object connectionDetails) {
 
         String methodSignature = request.getMethodSignature();
 

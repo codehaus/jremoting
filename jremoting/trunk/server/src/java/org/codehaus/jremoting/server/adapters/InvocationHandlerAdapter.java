@@ -24,7 +24,7 @@ import java.util.Vector;
 
 import org.codehaus.jremoting.Contextualizable;
 import org.codehaus.jremoting.client.ClientContext;
-import org.codehaus.jremoting.requests.AbstractRequest;
+import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.CollectGarbage;
 import org.codehaus.jremoting.requests.GroupedMethodRequest;
@@ -35,7 +35,7 @@ import org.codehaus.jremoting.requests.ListInvokableMethods;
 import org.codehaus.jremoting.requests.LookupService;
 import org.codehaus.jremoting.requests.RequestConstants;
 import org.codehaus.jremoting.requests.RetrieveStub;
-import org.codehaus.jremoting.responses.AbstractResponse;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.AuthenticationFailed;
 import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.ConnectionOpened;
@@ -99,7 +99,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * @param request The request
      * @return The reply.
      */
-    public AbstractResponse handleInvocation(AbstractRequest request, Object connectionDetails) {
+    public Response handleInvocation(Request request, Object connectionDetails) {
 
         try {
             if (suspend == true) {
@@ -181,12 +181,12 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
 
     /**
-     * Do a Method Facade AbstractRequest
+     * Do a Method Facade Request
      *
      * @param facadeRequest the request
      * @return The reply
      */
-    private AbstractResponse doMethodFacadeRequest(InvokeFacadeMethod facadeRequest, Object connectionDetails) {
+    private Response doMethodFacadeRequest(InvokeFacadeMethod facadeRequest, Object connectionDetails) {
 
         if (!sessionExists(facadeRequest.getSessionID()) && (connectionDetails == null || !connectionDetails.equals("callback")))
         {
@@ -206,7 +206,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         //}
 
         MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
-        AbstractResponse response = methodInvocationHandler.handleMethodInvocation(facadeRequest, connectionDetails);
+        Response response = methodInvocationHandler.handleMethodInvocation(facadeRequest, connectionDetails);
 
         if (response instanceof ExceptionThrown) {
             return response;
@@ -236,7 +236,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * @param invokeFacadeMethod The request
      * @return The reply
      */
-    private AbstractResponse doMethodFacadeRequestArray(Object methodResponse, InvokeFacadeMethod invokeFacadeMethod) {
+    private Response doMethodFacadeRequestArray(Object methodResponse, InvokeFacadeMethod invokeFacadeMethod) {
         Object[] beanImpls = (Object[]) methodResponse;
         Long[] refs = new Long[beanImpls.length];
         String[] objectNames = new String[beanImpls.length];
@@ -279,7 +279,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * @param invokeFacadeMethod The request
      * @return The reply
      */
-    private AbstractResponse doMethodFacadeRequestNonArray(Object beanImpl, InvokeFacadeMethod invokeFacadeMethod) {
+    private Response doMethodFacadeRequestNonArray(Object beanImpl, InvokeFacadeMethod invokeFacadeMethod) {
 
         if (!sessionExists(invokeFacadeMethod.getSessionID())) {
             return new NoSuchSession(invokeFacadeMethod.getSessionID());
@@ -319,7 +319,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * @param invokeMethod The request
      * @return The reply
      */
-    private AbstractResponse doMethodRequest(InvokeMethod invokeMethod, Object connectionDetails) {
+    private Response doMethodRequest(InvokeMethod invokeMethod, Object connectionDetails) {
 
         if (!sessionExists(invokeMethod.getSessionID()) && (connectionDetails == null || !connectionDetails.equals("callback")))
         {
@@ -337,7 +337,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         return methodInvocationHandler.handleMethodInvocation(invokeMethod, connectionDetails);
     }
 
-    private AbstractResponse doMethodAsyncRequest(InvokeAsyncMethod methodRequest, Object connectionDetails) {
+    private Response doMethodAsyncRequest(InvokeAsyncMethod methodRequest, Object connectionDetails) {
 
         if (!sessionExists(methodRequest.getSessionID())) {
             return new NoSuchSession(methodRequest.getSessionID());
@@ -362,7 +362,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     }
 
 
-    private AbstractResponse doLookupRequest(AbstractRequest request) {
+    private Response doLookupRequest(Request request) {
         LookupService lr = (LookupService) request;
         String publishedServiceName = lr.getService();
 
@@ -385,7 +385,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * @param request The request
      * @return The reply
      */
-    private AbstractResponse doClassRequest(AbstractRequest request) {
+    private Response doClassRequest(Request request) {
         RetrieveStub cr = (RetrieveStub) request;
         String publishedThing = cr.getService() + "_" + cr.getObjectName();
 
@@ -401,14 +401,14 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      *
      * @return The reply.
      */
-    private AbstractResponse doOpenConnectionRequest() {
+    private Response doOpenConnectionRequest() {
         Long session = getNewSession();
         sessions.put(session, new Session(session));
         String textToSign = authenticator == null ? "" : authenticator.getTextToSign();
         return new ConnectionOpened(textToSign, session);
     }
 
-    private AbstractResponse doCloseConnectionRequest(Long sessionID) {
+    private Response doCloseConnectionRequest(Long sessionID) {
         if (!sessions.containsKey(sessionID)) {
             return new NoSuchSession(sessionID);
         } else {
@@ -423,7 +423,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      *
      * @return The reply
      */
-    private AbstractResponse doServiceListRequest() {
+    private Response doServiceListRequest() {
         Iterator iterator = getIteratorOfServices();
         Vector vecOfServices = new Vector();
 
@@ -443,12 +443,12 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     }
 
     /**
-     * Do a GarbageCollection AbstractRequest
+     * Do a GarbageCollection Request
      *
      * @param request The request
      * @return The reply
      */
-    private AbstractResponse doGarbageCollectionRequest(AbstractRequest request) {
+    private Response doGarbageCollectionRequest(Request request) {
         CollectGarbage gcr = (CollectGarbage) request;
         String publishedThing = gcr.getService() + "_" + gcr.getObjectName();
 
@@ -473,12 +473,12 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     }
 
     /**
-     * Do a ListMethods AbstractRequest
+     * Do a ListMethods Request
      *
      * @param request The request
      * @return The reply
      */
-    private AbstractResponse doListMethodsRequest(AbstractRequest request) {
+    private Response doListMethodsRequest(Request request) {
         ListInvokableMethods lReq = (ListInvokableMethods) request;
         String publishedThing = StubHelper.formatServiceName(lReq.getService());
         

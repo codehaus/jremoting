@@ -20,7 +20,6 @@ package org.codehaus.jremoting.requests;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.rmi.server.UID;
 
 /**
  * Class OpenConnection
@@ -28,7 +27,7 @@ import java.rmi.server.UID;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class OpenConnection extends AbstractRequest {
+public final class OpenConnection extends Request {
     static final long serialVersionUID = -2904286124933186290L;
 
 
