@@ -60,12 +60,4 @@ public class PipedObjectStreamHostContext extends AbstractHostContext {
         this(clientMonitor, Executors.newCachedThreadPool(), new DefaultConnectionPinger(), inputStream, outputStream, PipedObjectStreamHostContext.class.getClassLoader());
     }
 
-    /**
-     * Method initialize
-     *
-     * @throws ConnectionException If a problem
-     */
-    public void initialize() throws ConnectionException {
-        (invocationHandler).initialize();
-    }
 }

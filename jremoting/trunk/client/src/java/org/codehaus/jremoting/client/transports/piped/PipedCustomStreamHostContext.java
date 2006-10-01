@@ -67,13 +67,4 @@ public class PipedCustomStreamHostContext extends AbstractHostContext {
                 Thread.currentThread().getContextClassLoader());
     }
 
-
-    /**
-     * Method initialize
-     *
-     * @throws ConnectionException If a problem
-     */
-    public void initialize() throws ConnectionException {
-        invocationHandler.initialize();
-    }
 }
