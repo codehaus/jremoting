@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
-import org.codehaus.jremoting.client.transports.AbstractStreamClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.StreamClientInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
 
 import java.io.IOException;
@@ -36,14 +36,14 @@ import java.net.Socket;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class AbstractSocketStreamInvocationHandler extends AbstractStreamClientInvocationHandler {
+public class SocketStreamInvocationHandler extends StreamClientInvocationHandler {
 
     private final String host;
     private final int port;
 
 
     /**
-     * AbstractSocketStreamInvocationHandler
+     * SocketStreamInvocationHandler
      *
      * @param clientMonitor
      * @param executorService
@@ -52,7 +52,7 @@ public class AbstractSocketStreamInvocationHandler extends AbstractStreamClientI
      * @param host                  The host to connect to
      * @param port                  The port to conenct to
      */
-    public AbstractSocketStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public SocketStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                                                  ClientStreamDriverFactory streamDriverFactory,
                                                  String host, int port) throws ConnectionRefusedException, BadConnectionException {

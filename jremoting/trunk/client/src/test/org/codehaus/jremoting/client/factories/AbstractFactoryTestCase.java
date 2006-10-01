@@ -22,7 +22,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
+        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new Service((long) 321)));
@@ -51,7 +51,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
+        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new NotPublished()));
@@ -75,7 +75,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
+        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new ConnectionException("foo"))));
@@ -97,7 +97,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
+        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new RuntimeException("foo"))));
@@ -119,7 +119,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
+        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new Error("foo"))));
@@ -141,7 +141,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
+        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(ListServices.class)).will(returnValue(new ServicesList(new String[] {"1", "2"})));

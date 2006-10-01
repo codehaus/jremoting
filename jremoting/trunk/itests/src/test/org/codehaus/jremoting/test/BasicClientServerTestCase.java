@@ -17,8 +17,6 @@
  */
 package org.codehaus.jremoting.test;
 
-import junit.framework.TestCase;
-
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.NotPublishedException;
@@ -125,7 +123,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
             SocketCustomStreamHostContext hostContext = new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12331);
             ClientSideStubFactory cssf = new ClientSideStubFactory(hostContext);
             cssf.lookupService("Hello");
-            hostContext.getInvocationHandler().handleInvocation(new InvokeMethod("Hello", "Main", "ping()",new Object [0], new Long(44332), new Long(21)));
+            hostContext.getClientInvocationHandler().handleInvocation(new InvokeMethod("Hello", "Main", "ping()",new Object [0], new Long(44332), new Long(21)));
 
             fail("should have barfed");
         } catch (NoSuchSessionException e) {

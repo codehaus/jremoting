@@ -42,12 +42,12 @@ import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.TryLater;
 
 /**
- * Class AbstractStreamClientInvocationHandler
+ * Class StreamClientInvocationHandler
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractStreamClientInvocationHandler extends AbstractClientInvocationHandler {
+public abstract class StreamClientInvocationHandler extends AbstractClientInvocationHandler {
 
     private ClientStreamDriver objectDriver;
     private boolean methodLogging = false;
@@ -56,14 +56,14 @@ public abstract class AbstractStreamClientInvocationHandler extends AbstractClie
     protected final ClientStreamDriverFactory streamDriverFactory;
 
     /**
-     * Constructor AbstractStreamClientInvocationHandler
+     * Constructor StreamClientInvocationHandler
      *
      * @param clientMonitor
      * @param executorService
      * @param connectionPinger
      * @param facadesClassLoader
      */
-    public AbstractStreamClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public StreamClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                                                  ClientStreamDriverFactory streamDriverFactory) {
         super(clientMonitor, executorService, connectionPinger);

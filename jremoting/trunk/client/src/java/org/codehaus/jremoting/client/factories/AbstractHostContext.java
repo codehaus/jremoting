@@ -34,7 +34,7 @@ public abstract class AbstractHostContext implements HostContext {
         invocationHandler = clientInvocationHandler;
     }
 
-    public ClientInvocationHandler getInvocationHandler() {
+    public ClientInvocationHandler getClientInvocationHandler() {
         return invocationHandler;
     }
 

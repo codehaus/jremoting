@@ -17,9 +17,7 @@
  */
 package org.codehaus.jremoting.test.invalidstate;
 
-import junit.framework.TestCase;
 import org.codehaus.jremoting.client.*;
-import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.factories.DefaultProxyHelper;
 import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
@@ -73,7 +71,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
 
             HostContext hostContext = new SocketCustomStreamHostContext((ClientMonitor) clientMonitor.proxy(), "127.0.0.1", 12201);
             factory = new ClientSideStubFactory(hostContext);
-            ClientInvocationHandler ih = hostContext.getInvocationHandler();
+            ClientInvocationHandler ih = hostContext.getClientInvocationHandler();
             TestInterface testClient = (TestInterface) factory.lookupService("Hello55");
 
             // just a kludge for unit testing given we are intrinsically dealing with

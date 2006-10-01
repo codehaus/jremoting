@@ -34,5 +34,5 @@ public interface HostContext {
      *
      * @return InvocationHandler
      */
-    ClientInvocationHandler getInvocationHandler();
+    ClientInvocationHandler getClientInvocationHandler();
 }

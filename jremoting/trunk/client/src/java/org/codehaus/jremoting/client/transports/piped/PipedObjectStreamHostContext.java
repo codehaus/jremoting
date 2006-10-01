@@ -24,7 +24,6 @@ import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
 import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
@@ -53,7 +52,7 @@ public class PipedObjectStreamHostContext extends AbstractHostContext {
     public PipedObjectStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService,
                                         ConnectionPinger connectionPinger, PipedInputStream inputStream,
                                         PipedOutputStream outputStream, ClassLoader classLoader) {
-        super(new AbstractPipedStreamInvocationHandler(clientMonitor, executorService, connectionPinger, inputStream,
+        super(new PipedStreamInvocationHandler(clientMonitor, executorService, connectionPinger, inputStream,
                 outputStream, classLoader, new ClientObjectStreamDriverFactory()));
     }
 

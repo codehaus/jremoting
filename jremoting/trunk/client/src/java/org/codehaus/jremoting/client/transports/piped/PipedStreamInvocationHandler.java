@@ -21,30 +21,27 @@ import org.codehaus.jremoting.ConnectionException;
 
 import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.transports.AbstractStreamClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.StreamClientInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
 /**
- * Class AbstractPipedStreamInvocationHandler
+ * Class PipedStreamInvocationHandler
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class AbstractPipedStreamInvocationHandler extends AbstractStreamClientInvocationHandler {
+public class PipedStreamInvocationHandler extends StreamClientInvocationHandler {
 
     private PipedInputStream inputStream;
     private PipedOutputStream outputStream;
 
     /**
-     * Constructor AbstractPipedStreamInvocationHandler
+     * Constructor PipedStreamInvocationHandler
      *
      * @param clientMonitor
      * @param executorService
@@ -53,7 +50,7 @@ public class AbstractPipedStreamInvocationHandler extends AbstractStreamClientIn
      * @param os
      * @param facadesClassLoader
      */
-    public AbstractPipedStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public PipedStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
                                                 ConnectionPinger connectionPinger, PipedInputStream is,
                                                 PipedOutputStream os, ClassLoader facadesClassLoader,
                                                 ClientStreamDriverFactory clientStreamDriverFactory) {

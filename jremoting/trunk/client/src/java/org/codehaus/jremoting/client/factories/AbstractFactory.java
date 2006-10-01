@@ -60,7 +60,7 @@ public abstract class AbstractFactory implements Factory {
 
 
     public AbstractFactory(HostContext hostContext) throws ConnectionException {
-        clientInvocationHandler = hostContext.getInvocationHandler();
+        clientInvocationHandler = hostContext.getClientInvocationHandler();
         clientInvocationHandler.initialize();
 
         AbstractResponse response = clientInvocationHandler.handleInvocation(new OpenConnection());

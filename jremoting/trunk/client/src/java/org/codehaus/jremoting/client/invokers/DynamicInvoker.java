@@ -73,7 +73,7 @@ public class DynamicInvoker {
 
         factory = new DynamicStubFactory(hostContext);
         //cache the invocationhandler
-        clientInvocationHandler = hostContext.getInvocationHandler();
+        clientInvocationHandler = hostContext.getClientInvocationHandler();
     }
 
     public void close() {

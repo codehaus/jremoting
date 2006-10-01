@@ -48,7 +48,7 @@ public class SocketObjectStreamHostContext extends AbstractHostContext {
      * @throws ConnectionException
      */
     public SocketObjectStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, String host, int port) throws ConnectionException {
-        super(new AbstractSocketStreamInvocationHandler(clientMonitor, executorService, connectionPinger, facadesClassLoader,
+        super(new SocketStreamInvocationHandler(clientMonitor, executorService, connectionPinger, facadesClassLoader,
                 new ClientObjectStreamDriverFactory(), host, port));
 
     }
