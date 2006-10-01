@@ -20,7 +20,7 @@ package org.codehaus.jremoting.test.tools.generator;
 import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.StatefulClientInvocationHandler;
 import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.SimpleMethodInvoked;
@@ -33,16 +33,16 @@ import org.codehaus.jremoting.server.ServerInvocationHandler;
 import java.lang.reflect.Method;
 
 /**
- * TstInvocationHandler
+ * TstClientInvocationHandler
  *
  * @author <a href="mailto:vinayc@apache">Vinay Chandrasekharan</a>
  * @version 1.0
  */
-public class TstInvocationHandler extends AbstractClientInvocationHandler implements ServerInvocationHandler {
+public class TstClientInvocationHandler extends StatefulClientInvocationHandler implements ServerInvocationHandler {
 
 
-    public TstInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
-        super(clientMonitor, executorService, connectionPinger, TstInvocationHandler.class.getClassLoader());
+    public TstClientInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+        super(clientMonitor, executorService, connectionPinger, TstClientInvocationHandler.class.getClassLoader());
     }
 
     public Response handleInvocation(Request request) {
@@ -85,7 +85,7 @@ public class TstInvocationHandler extends AbstractClientInvocationHandler implem
     }
 
     /*
-     * @see AbstractClientInvocationHandler#tryReconnect()
+     * @see StatefulClientInvocationHandler#tryReconnect()
      */
     protected boolean tryReconnect() {
         return true;

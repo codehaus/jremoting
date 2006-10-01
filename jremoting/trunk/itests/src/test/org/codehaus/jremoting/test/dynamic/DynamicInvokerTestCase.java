@@ -23,7 +23,7 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.invokers.DynamicInvoker;
-import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -64,7 +64,7 @@ public class DynamicInvokerTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        dynamicInvoker = new DynamicInvoker(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+        dynamicInvoker = new DynamicInvoker(new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(),
                 "127.0.0.1", 10101));
 

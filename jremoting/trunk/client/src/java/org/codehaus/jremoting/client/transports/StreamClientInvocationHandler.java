@@ -47,21 +47,13 @@ import org.codehaus.jremoting.responses.TryLater;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class StreamClientInvocationHandler extends AbstractClientInvocationHandler {
+public abstract class StreamClientInvocationHandler extends StatefulClientInvocationHandler {
 
     private ClientStreamDriver objectDriver;
     private boolean methodLogging = false;
     private long lastRealRequest = System.currentTimeMillis();
     protected final ClientStreamDriverFactory streamDriverFactory;
 
-    /**
-     * Constructor StreamClientInvocationHandler
-     *
-     * @param clientMonitor
-     * @param executorService
-     * @param connectionPinger
-     * @param facadesClassLoader
-     */
     public StreamClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                                                  ClientStreamDriverFactory streamDriverFactory) {
@@ -135,7 +127,7 @@ public abstract class StreamClientInvocationHandler extends AbstractClientInvoca
                                 retryConnectTries++;
                             }
                         } else {
-                            throw clientMonitor.unexpectedIOException(AbstractClientInvocationHandler.class, "handleInvocation()", ioe);
+                            throw clientMonitor.unexpectedIOException(StatefulClientInvocationHandler.class, "handleInvocation()", ioe);
                         }
                     }
                 }

@@ -33,18 +33,18 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
 /**
- * Class PipedStreamInvocationHandler
+ * Class PipedClientStreamInvocationHandler
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class PipedStreamInvocationHandler extends StreamClientInvocationHandler {
+public class PipedClientStreamInvocationHandler extends StreamClientInvocationHandler {
 
     private PipedInputStream inputStream;
     private PipedOutputStream outputStream;
 
     /**
-     * Constructor PipedStreamInvocationHandler
+     * Constructor PipedClientStreamInvocationHandler
      *
      * @param clientMonitor
      * @param executorService
@@ -53,7 +53,7 @@ public class PipedStreamInvocationHandler extends StreamClientInvocationHandler 
      * @param is
      * @param os
      */
-    public PipedStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public PipedClientStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
                                         ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, ClientStreamDriverFactory clientStreamDriverFactory, PipedInputStream is,
                                         PipedOutputStream os
     ) {
@@ -65,7 +65,7 @@ public class PipedStreamInvocationHandler extends StreamClientInvocationHandler 
     }
 
 
-    public PipedStreamInvocationHandler(ClientMonitor clientMonitor,
+    public PipedClientStreamInvocationHandler(ClientMonitor clientMonitor,
                                         ClientStreamDriverFactory streamDriverFactory,
                                         PipedInputStream inputStream, PipedOutputStream outputStream) {
         this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(),

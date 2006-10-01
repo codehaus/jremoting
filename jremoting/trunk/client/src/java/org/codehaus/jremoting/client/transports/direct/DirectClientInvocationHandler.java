@@ -28,31 +28,23 @@ import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 
 /**
- * Class DirectInvocationHandler
+ * Class DirectClientInvocationHandler
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class DirectInvocationHandler extends AbstractDirectInvocationHandler {
+public final class DirectClientInvocationHandler extends StatefulDirectClientInvocationHandler {
 
     private ServerInvocationHandler invocationHandler;
 
 
-    /**
-     * Constructor DirectInvocationHandler
-     *
-     * @param clientMonitor
-     * @param executorService
-     * @param connectionPinger
-     * @param invocationHandler
-     */
-    public DirectInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger,
+    public DirectClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger,
                                    ServerInvocationHandler invocationHandler) {
-        super(clientMonitor, executorService, connectionPinger, DirectInvocationHandler.class.getClassLoader());
+        super(clientMonitor, executorService, connectionPinger, DirectClientInvocationHandler.class.getClassLoader());
         this.invocationHandler = invocationHandler;
     }
 
-    public DirectInvocationHandler(ClientMonitor clientMonitor, ServerInvocationHandler invocationHandler) {
+    public DirectClientInvocationHandler(ClientMonitor clientMonitor, ServerInvocationHandler invocationHandler) {
         this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(), invocationHandler );
         this.invocationHandler = invocationHandler;
     }

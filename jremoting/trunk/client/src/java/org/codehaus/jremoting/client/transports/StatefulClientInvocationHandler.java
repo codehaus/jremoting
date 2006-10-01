@@ -28,12 +28,12 @@ import org.codehaus.jremoting.requests.Ping;
 import org.codehaus.jremoting.responses.Response;
 
 /**
- * Class AbstractClientInvocationHandler
+ * Class StatefulClientInvocationHandler
  *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public abstract class AbstractClientInvocationHandler implements ClientInvocationHandler {
+public abstract class StatefulClientInvocationHandler implements ClientInvocationHandler {
 
     protected final ConnectionPinger connectionPinger;
     protected final ClientMonitor clientMonitor;
@@ -43,7 +43,7 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
     protected final boolean methodLogging;
 
 
-    public AbstractClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public StatefulClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
                                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
         this.executorService = executorService;
         this.clientMonitor = clientMonitor;

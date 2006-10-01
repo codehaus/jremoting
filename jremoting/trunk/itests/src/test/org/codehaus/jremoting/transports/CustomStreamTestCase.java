@@ -19,7 +19,7 @@ package org.codehaus.jremoting.transports;
 
 
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -49,7 +49,7 @@ public class CustomStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(), 
+        factory = new ClientSideStubFactory(new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), "localhost", 10333));
         testClient = (TestInterface) factory.lookupService("Hello");
 

@@ -28,7 +28,7 @@ import org.codehaus.jremoting.client.ClientContext;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
@@ -134,7 +134,7 @@ public class ClientContextTestCase extends TestCase {
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        Factory factory = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(), 
+        Factory factory = new ClientSideStubFactory(new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(),
                 "127.0.0.1", 13333));
         final AccountManager clientSideAccountManager = (AccountManager) factory.lookupService("OurAccountManager");

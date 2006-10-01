@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.transports;
 
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -72,7 +72,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ServerSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+        factory = new ServerSideStubFactory(new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 10201));
         testClient = (TestInterface) factory.lookupService("Hello");
 

@@ -35,7 +35,7 @@ import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
-import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.StatefulClientInvocationHandler;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.ServiceRequest;
 import org.codehaus.jremoting.requests.InvokeMethod;
@@ -52,19 +52,12 @@ import org.codehaus.jremoting.responses.TryLater;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class RmiClientInvocationHandler extends AbstractClientInvocationHandler {
+public final class RmiClientInvocationHandler extends StatefulClientInvocationHandler {
 
     private RmiInvocationHandler rmiInvocationHandler;
     private String url;
     private long lastRealRequest = System.currentTimeMillis();
 
-    /**
-     * Constructor RmiClientInvocationHandler
-     *
-     * @param host
-     * @param port
-     * @throws ConnectionException
-     */
     public RmiClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
 
         super(clientMonitor, executorService, connectionPinger, RmiClientInvocationHandler.class.getClassLoader());

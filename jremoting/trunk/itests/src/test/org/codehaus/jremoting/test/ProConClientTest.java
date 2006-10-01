@@ -22,7 +22,7 @@ import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 
@@ -48,12 +48,12 @@ public class ProConClientTest {
         if (args[1].equals("ObjectStream")) {
             System.out.println("(Object Stream)");
 
-            ih = new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+            ih = new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
                 new ClientObjectStreamDriverFactory(), "127.0.0.1", 1234);
         } else {
             System.out.println("(Custom Stream)");
 
-            ih = new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+            ih = new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 1235);
         }
 

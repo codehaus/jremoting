@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.rmi.RmiClientInvocationHandler;
-import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
@@ -55,7 +55,7 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+            factory = new ClientSideStubFactory(new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
                 new ClientObjectStreamDriverFactory(), "127.0.0.1", 12001));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
@@ -95,7 +95,7 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+            factory = new ClientSideStubFactory(new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 12002));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
@@ -175,7 +175,7 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+            factory = new ClientSideStubFactory(new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
                 new ClientObjectStreamDriverFactory(), "127.0.0.1", 12004));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 

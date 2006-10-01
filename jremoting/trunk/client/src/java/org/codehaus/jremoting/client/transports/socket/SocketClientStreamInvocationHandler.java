@@ -39,14 +39,14 @@ import java.net.Socket;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class SocketStreamInvocationHandler extends StreamClientInvocationHandler {
+public class SocketClientStreamInvocationHandler extends StreamClientInvocationHandler {
 
     private final String host;
     private final int port;
 
 
     /**
-     * SocketStreamInvocationHandler
+     * SocketClientStreamInvocationHandler
      *
      * @param clientMonitor
      * @param executorService
@@ -55,7 +55,7 @@ public class SocketStreamInvocationHandler extends StreamClientInvocationHandler
      * @param host                  The host to connect to
      * @param port                  The port to conenct to
      */
-    public SocketStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public SocketClientStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                                                  ClientStreamDriverFactory streamDriverFactory,
                                                  String host, int port) throws ConnectionRefusedException, BadConnectionException {
@@ -76,7 +76,7 @@ public class SocketStreamInvocationHandler extends StreamClientInvocationHandler
     }
 
 
-    public SocketStreamInvocationHandler(ClientMonitor clientMonitor, ClientStreamDriverFactory streamDriverFactory, String host, int port) throws ConnectionRefusedException, BadConnectionException {
+    public SocketClientStreamInvocationHandler(ClientMonitor clientMonitor, ClientStreamDriverFactory streamDriverFactory, String host, int port) throws ConnectionRefusedException, BadConnectionException {
         this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(),
                 Thread.currentThread().getContextClassLoader(), streamDriverFactory, host, port);
     }
