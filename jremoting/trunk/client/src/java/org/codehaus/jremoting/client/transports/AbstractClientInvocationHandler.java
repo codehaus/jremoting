@@ -37,14 +37,17 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
 
     protected final ConnectionPinger connectionPinger;
     protected final ClientMonitor clientMonitor;
+    private final ClassLoader facadesClassLoader;
     protected boolean stopped = false;
     protected final ExecutorService executorService;
     protected final boolean methodLogging;
 
 
-    public AbstractClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger) {
+    public AbstractClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+                                           ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
         this.executorService = executorService;
         this.clientMonitor = clientMonitor;
+        this.facadesClassLoader = facadesClassLoader;
         methodLogging = clientMonitor.methodLogging();
         this.connectionPinger = connectionPinger;
     }
@@ -80,8 +83,8 @@ public abstract class AbstractClientInvocationHandler implements ClientInvocatio
 
     protected abstract boolean tryReconnect();
 
-    public ClassLoader getfacadesClassLoader() {
-        return AbstractClientInvocationHandler.class.getClassLoader();
+    public ClassLoader getFacadesClassLoader() {
+        return facadesClassLoader;
     }
 
 

@@ -73,7 +73,7 @@ public class ServerSideStubFactory extends AbstractFactory {
                 throw new ConnectionException("Service " + publishedServiceName + " not published on Server");
             }
 
-            tcl = new TransportedStubClassLoader(clientInvocationHandler.getfacadesClassLoader());
+            tcl = new TransportedStubClassLoader(clientInvocationHandler.getFacadesClassLoader());
 
             tcl.add(stubClassName, cr.getStubClassBytes());
 

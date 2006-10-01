@@ -78,7 +78,7 @@ public class PipedStreamInvocationHandler extends StreamClientInvocationHandler 
      * @throws ConnectionException
      */
     public void initialize() throws ConnectionException {
-        setObjectDriver(streamDriverFactory.makeDriver(inputStream, outputStream, facadesClassLoader));
+        setObjectDriver(streamDriverFactory.makeDriver(inputStream, outputStream, getFacadesClassLoader()));
         super.initialize();
     }
 

@@ -42,7 +42,7 @@ public class TstInvocationHandler extends AbstractClientInvocationHandler implem
 
 
     public TstInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
-        super(clientMonitor, executorService, connectionPinger);
+        super(clientMonitor, executorService, connectionPinger, TstInvocationHandler.class.getClassLoader());
     }
 
     public Response handleInvocation(Request request) {

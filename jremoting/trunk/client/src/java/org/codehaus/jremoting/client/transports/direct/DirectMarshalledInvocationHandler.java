@@ -36,8 +36,6 @@ import org.codehaus.jremoting.util.SerializationHelper;
 public final class DirectMarshalledInvocationHandler extends AbstractDirectInvocationHandler {
 
     private ServerMarshalledInvocationHandler invocationHandler;
-    private ClassLoader facadesClassLoader;
-
 
     /**
      * Constructor DirectInvocationHandler
@@ -47,10 +45,11 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
      * @param connectionPinger
      * @param invocationHandler
      */
-    public DirectMarshalledInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ServerMarshalledInvocationHandler invocationHandler, ClassLoader classLoader) {
-        super(clientMonitor, executorService, connectionPinger);
+    public DirectMarshalledInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+                                             ConnectionPinger connectionPinger, ServerMarshalledInvocationHandler invocationHandler,
+                                             ClassLoader facadesClassLoader) {
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
         this.invocationHandler = invocationHandler;
-        facadesClassLoader = classLoader;
     }
 
     protected Response performInvocation(Request request) {
@@ -59,17 +58,13 @@ public final class DirectMarshalledInvocationHandler extends AbstractDirectInvoc
             byte[] serRequest = SerializationHelper.getBytesFromInstance(request);
             byte[] serResponse = invocationHandler.handleInvocation(serRequest, null);
 
-            Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serResponse, facadesClassLoader);
+            Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serResponse, getFacadesClassLoader());
             return (Response) instanceFromBytes;
         } catch (ClassNotFoundException cnfe) {
             String msg = "Some ClassNotFoundException on client side";
             clientMonitor.classNotFound(DirectMarshalledInvocationHandler.class, msg, cnfe);
             throw new JRemotingException(msg, cnfe);
         }
-    }
-
-    public ClassLoader getfacadesClassLoader() {
-        return facadesClassLoader;
     }
 
 }

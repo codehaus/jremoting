@@ -47,8 +47,9 @@ public abstract class AbstractDirectInvocationHandler extends AbstractClientInvo
     protected long lastRealRequest = System.currentTimeMillis();
 
 
-    public AbstractDirectInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger) {
-        super(clientMonitor, executorService, connectionPinger);
+    public AbstractDirectInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+                                           ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
     }
 
     public Response handleInvocation(Request request) {

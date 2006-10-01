@@ -52,7 +52,6 @@ public abstract class StreamClientInvocationHandler extends AbstractClientInvoca
     private ClientStreamDriver objectDriver;
     private boolean methodLogging = false;
     private long lastRealRequest = System.currentTimeMillis();
-    protected final ClassLoader facadesClassLoader;
     protected final ClientStreamDriverFactory streamDriverFactory;
 
     /**
@@ -66,14 +65,10 @@ public abstract class StreamClientInvocationHandler extends AbstractClientInvoca
     public StreamClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                                                  ClientStreamDriverFactory streamDriverFactory) {
-        super(clientMonitor, executorService, connectionPinger);
-        this.facadesClassLoader = facadesClassLoader;
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
         this.streamDriverFactory = streamDriverFactory;
     }
 
-    public ClassLoader getfacadesClassLoader() {
-        return facadesClassLoader;
-    }
 
     protected void setObjectDriver(ClientStreamDriver objectDriver) {
         this.objectDriver = objectDriver;

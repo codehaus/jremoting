@@ -46,8 +46,9 @@ public final class DirectInvocationHandler extends AbstractDirectInvocationHandl
      * @param connectionPinger
      * @param invocationHandler
      */
-    public DirectInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ServerInvocationHandler invocationHandler) {
-        super(clientMonitor, executorService, connectionPinger);
+    public DirectInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger,
+                                   ServerInvocationHandler invocationHandler) {
+        super(clientMonitor, executorService, connectionPinger, DirectInvocationHandler.class.getClassLoader());
         this.invocationHandler = invocationHandler;
     }
 

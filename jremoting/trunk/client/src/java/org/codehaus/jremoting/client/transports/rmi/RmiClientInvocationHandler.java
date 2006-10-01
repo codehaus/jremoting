@@ -67,7 +67,7 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
      */
     public RmiClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
 
-        super(clientMonitor, executorService, connectionPinger);
+        super(clientMonitor, executorService, connectionPinger, RmiClientInvocationHandler.class.getClassLoader());
 
         url = "rmi://" + host + ":" + port + "/" + RmiInvocationHandler.class.getName();
 

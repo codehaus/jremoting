@@ -41,7 +41,7 @@ public interface ClientInvocationHandler {
 
     void ping();
 
-    ClassLoader getfacadesClassLoader();
+    ClassLoader getFacadesClassLoader();
 
     /**
      * morphObject handles any changes  to the arguments being
