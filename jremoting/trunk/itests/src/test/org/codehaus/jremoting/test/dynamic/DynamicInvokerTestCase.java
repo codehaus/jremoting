@@ -20,11 +20,11 @@ package org.codehaus.jremoting.test.dynamic;
 import junit.framework.TestCase;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.invokers.DynamicInvoker;
-import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
+import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
@@ -45,7 +45,6 @@ public class DynamicInvokerTestCase extends TestCase {
     protected ConnectingServer server;
     protected TestInterfaceImpl testServer;
     protected TestInterface testClient;
-    protected HostContext hostContext;
     protected DynamicInvoker dynamicInvoker;
 
 
@@ -65,8 +64,9 @@ public class DynamicInvokerTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        hostContext = new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 10101);
-        dynamicInvoker = new DynamicInvoker(hostContext);
+        dynamicInvoker = new DynamicInvoker(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientCustomStreamDriverFactory(),
+                "127.0.0.1", 10101));
 
         // just a kludge for unit testing given we are intrinsically dealing with
         // threads, JRemoting being a client/server thing

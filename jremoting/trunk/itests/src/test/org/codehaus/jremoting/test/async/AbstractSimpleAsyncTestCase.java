@@ -21,7 +21,8 @@ import junit.framework.TestCase;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
+import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -79,7 +80,8 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        factory = new ServerSideStubFactory(new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 11003));
+        factory = new ServerSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientCustomStreamDriverFactory(),"127.0.0.1", 11003));
         testClient = (AsyncTest) factory.lookupService("AsyncTest");
 
         // just a kludge for unit testing given we are intrinsically dealing with

@@ -26,7 +26,6 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.authentications.Authentication;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.Proxy;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.ListServices;
@@ -59,8 +58,8 @@ public abstract class AbstractFactory implements Factory {
     protected final Long sessionID;
 
 
-    public AbstractFactory(HostContext hostContext) throws ConnectionException {
-        clientInvocationHandler = hostContext.getClientInvocationHandler();
+    public AbstractFactory(ClientInvocationHandler clientInvocationHandler) throws ConnectionException {
+        this.clientInvocationHandler = clientInvocationHandler;
         clientInvocationHandler.initialize();
 
         AbstractResponse response = clientInvocationHandler.handleInvocation(new OpenConnection());

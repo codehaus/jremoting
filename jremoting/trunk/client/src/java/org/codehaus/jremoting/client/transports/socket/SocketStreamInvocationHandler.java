@@ -21,9 +21,12 @@ import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
+import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.StreamClientInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
 
@@ -70,6 +73,12 @@ public class SocketStreamInvocationHandler extends StreamClientInvocationHandler
             }
             throw new BadConnectionException("Cannot open Stream(s) for socket: " + ioe.getMessage());
         }
+    }
+
+
+    public SocketStreamInvocationHandler(ClientMonitor clientMonitor, ClientStreamDriverFactory streamDriverFactory, String host, int port) throws ConnectionRefusedException, BadConnectionException {
+        this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(),
+                Thread.currentThread().getContextClassLoader(), streamDriverFactory, host, port);
     }
 
     /**

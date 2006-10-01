@@ -20,8 +20,8 @@ package org.codehaus.jremoting.client.factories;
 import java.util.HashMap;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.NotPublishedException;
+import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.requests.RetrieveStub;
 import org.codehaus.jremoting.responses.AbstractResponse;
 import org.codehaus.jremoting.responses.ProblemResponse;
@@ -40,8 +40,8 @@ public class ServerSideStubFactory extends AbstractFactory {
 
     private final HashMap publishedServiceClassLoaders = new HashMap();
 
-    public ServerSideStubFactory(HostContext hostContext) throws ConnectionException {
-        super(hostContext);
+    public ServerSideStubFactory(ClientInvocationHandler clientInvocationHandler) throws ConnectionException {
+        super(clientInvocationHandler);
     }
 
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {

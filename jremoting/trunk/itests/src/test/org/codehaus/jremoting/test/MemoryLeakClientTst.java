@@ -20,7 +20,8 @@ package org.codehaus.jremoting.test;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
+import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 
 /**
  * Class MemoryLeakClientTst
@@ -74,7 +75,7 @@ public class MemoryLeakClientTst {
 
         System.out.println("Memory Leak Client");
 
-        Factory af = new ClientSideStubFactory(new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 1277));
+        Factory af = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(), new ClientCustomStreamDriverFactory(), "localhost", 1277));
 
         MemoryLeak ml = (MemoryLeak) af.lookupService("MemLeak");
 

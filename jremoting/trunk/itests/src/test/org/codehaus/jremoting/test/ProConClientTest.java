@@ -18,12 +18,13 @@
 package org.codehaus.jremoting.test;
 
 import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.client.HostContext;
+import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
-import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
+import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 
 /**
  * Class ProConClientTest
@@ -42,24 +43,26 @@ public class ProConClientTest {
 
         System.out.println("Stream over Socket Client");
 
-        HostContext arhc;
+        ClientInvocationHandler ih;
 
         if (args[1].equals("ObjectStream")) {
             System.out.println("(Object Stream)");
 
-            arhc = new SocketObjectStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 1234);
+            ih = new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientObjectStreamDriverFactory(), "127.0.0.1", 1234);
         } else {
             System.out.println("(Custom Stream)");
 
-            arhc = new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 1235);
+            ih = new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientCustomStreamDriverFactory(), "127.0.0.1", 1235);
         }
 
         Factory af = null;
 
         if (args[0].equals("S")) {
-            af = new ServerSideStubFactory(arhc);
+            af = new ServerSideStubFactory(ih);
         } else {
-            af = new ClientSideStubFactory(arhc);
+            af = new ClientSideStubFactory(ih);
         }
 
         //list

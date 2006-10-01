@@ -24,6 +24,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
@@ -33,6 +34,7 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NotPublishedException;
+import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.AbstractClientInvocationHandler;
 import org.codehaus.jremoting.requests.AbstractRequest;
 import org.codehaus.jremoting.requests.AbstractServiceRequest;
@@ -81,6 +83,12 @@ public final class RmiClientInvocationHandler extends AbstractClientInvocationHa
             throw new ConnectionException("Unknown Remote Exception : " + re.getMessage());
         }
     }
+
+    public RmiClientInvocationHandler(ClientMonitor clientMonitor, String host, int port) throws ConnectionException {
+        this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(), host, port);
+
+    }
+
 
     /**
      * Method tryReconnect

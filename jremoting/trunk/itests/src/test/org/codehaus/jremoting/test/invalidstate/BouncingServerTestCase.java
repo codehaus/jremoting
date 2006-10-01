@@ -18,9 +18,11 @@
 package org.codehaus.jremoting.test.invalidstate;
 
 import org.codehaus.jremoting.client.*;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.factories.DefaultProxyHelper;
-import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
+import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -69,9 +71,8 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(DefaultProxyHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
             )});
 
-            HostContext hostContext = new SocketCustomStreamHostContext((ClientMonitor) clientMonitor.proxy(), "127.0.0.1", 12201);
-            factory = new ClientSideStubFactory(hostContext);
-            ClientInvocationHandler ih = hostContext.getClientInvocationHandler();
+            factory = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                    new ClientCustomStreamDriverFactory(), "127.0.0.1", 12201));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello55");
 
             // just a kludge for unit testing given we are intrinsically dealing with
@@ -108,7 +109,8 @@ public class BouncingServerTestCase extends MockObjectTestCase {
     }
 
     private SelfContainedSocketStreamServer startServer() throws PublicationException {
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12201);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12201,
+                SelfContainedSocketStreamServer.CUSTOMSTREAM);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         server.publish(testServer, "Hello55", pd);
         server.start();

@@ -23,9 +23,10 @@ import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
-import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
-import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
+import org.codehaus.jremoting.client.transports.rmi.RmiClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -45,7 +46,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
     public void testNoServer() throws Exception {
         try {
-            new ClientSideStubFactory(new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12345));
+            new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientCustomStreamDriverFactory(), "127.0.0.1", 12345));
             fail("Should have have failed.");
         } catch (ConnectionRefusedException e) {
             // what we expetcted
@@ -67,7 +69,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
 
-            new ClientSideStubFactory(new SocketObjectStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12346));
+            new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientObjectStreamDriverFactory(), "127.0.0.1", 12346));
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {
@@ -92,7 +95,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
 
-            ClientSideStubFactory cssf = new ClientSideStubFactory(new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12333));
+            ClientSideStubFactory cssf = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientCustomStreamDriverFactory(), "127.0.0.1", 12333));
             cssf.lookupService("foo");
 
             fail("should have barfed");
@@ -110,7 +114,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     public void testNoReferenceExceptionThrownWhenNeeded() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12331);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12331,
+                SelfContainedSocketStreamServer.OBJECTSTREAM);
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -120,10 +125,11 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
 
-            SocketCustomStreamHostContext hostContext = new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12331);
-            ClientSideStubFactory cssf = new ClientSideStubFactory(hostContext);
+            SocketStreamInvocationHandler clientInvocationHandler = new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                    new ClientObjectStreamDriverFactory(), "localhost", 12331);
+            ClientSideStubFactory cssf = new ClientSideStubFactory(clientInvocationHandler);
             cssf.lookupService("Hello");
-            hostContext.getClientInvocationHandler().handleInvocation(new InvokeMethod("Hello", "Main", "ping()",new Object [0], new Long(44332), new Long(21)));
+            clientInvocationHandler.handleInvocation(new InvokeMethod("Hello", "Main", "ping()",new Object [0], new Long(44332), new Long(21)));
 
             fail("should have barfed");
         } catch (NoSuchSessionException e) {
@@ -152,7 +158,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // Client side setup
         try {
-            new ClientSideStubFactory(new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12347));
+            new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientCustomStreamDriverFactory(), "127.0.0.1", 12347));
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {
@@ -175,7 +182,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // Client side setup
         try {
-            new ClientSideStubFactory(new RmiHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12348));
+            new ClientSideStubFactory(new RmiClientInvocationHandler(new ConsoleClientMonitor(), "127.0.0.1", 12348));
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {

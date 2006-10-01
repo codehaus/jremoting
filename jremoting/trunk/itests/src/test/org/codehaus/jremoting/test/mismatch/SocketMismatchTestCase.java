@@ -21,9 +21,10 @@ import junit.framework.TestCase;
 
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.transports.rmi.RmiHostContext;
-import org.codehaus.jremoting.client.transports.socket.SocketCustomStreamHostContext;
-import org.codehaus.jremoting.client.transports.socket.SocketObjectStreamHostContext;
+import org.codehaus.jremoting.client.transports.rmi.RmiClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.socket.SocketStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -54,7 +55,8 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketObjectStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12001));
+            factory = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientObjectStreamDriverFactory(), "127.0.0.1", 12001));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
@@ -93,7 +95,8 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12002));
+            factory = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientCustomStreamDriverFactory(), "127.0.0.1", 12002));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
@@ -133,7 +136,7 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new RmiHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12003));
+            factory = new ClientSideStubFactory(new RmiClientInvocationHandler(new ConsoleClientMonitor(), "127.0.0.1", 12003));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with
@@ -172,7 +175,8 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 12004));
+            factory = new ClientSideStubFactory(new SocketStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientObjectStreamDriverFactory(), "127.0.0.1", 12004));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
             // just a kludge for unit testing given we are intrinsically dealing with

@@ -2,7 +2,6 @@ package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
-import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.ListServices;
 import org.codehaus.jremoting.requests.LookupService;
@@ -20,16 +19,14 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testOpenCloseSequence() throws ConnectionException {
 
-        Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new Service((long) 321)));
         ih.expects(once()).method("handleInvocation").with(isA(CloseConnection.class)).will(returnValue(new ConnectionClosed((long) 321)));
         ih.expects(once()).method("close");
 
-        AbstractFactory factory = new AbstractFactory((HostContext) hc.proxy()) {
+        AbstractFactory factory = new AbstractFactory((ClientInvocationHandler) ih.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -49,14 +46,12 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testNotPublishedResponseToLookup() throws ConnectionException {
 
-        Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new NotPublished()));
 
-        AbstractFactory factory = new AbstractFactory((HostContext) hc.proxy()) {
+        AbstractFactory factory = new AbstractFactory((ClientInvocationHandler) ih.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -73,14 +68,12 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testConnectionExceptionThrownResponseToLookup() throws ConnectionException {
 
-        Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new ConnectionException("foo"))));
 
-        AbstractFactory factory = new AbstractFactory((HostContext) hc.proxy()) {
+        AbstractFactory factory = new AbstractFactory((ClientInvocationHandler) ih.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -95,14 +88,12 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testRuntimeExceptionThrownResponseToLookup() throws ConnectionException {
 
-        Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new RuntimeException("foo"))));
 
-        AbstractFactory factory = new AbstractFactory((HostContext) hc.proxy()) {
+        AbstractFactory factory = new AbstractFactory((ClientInvocationHandler) ih.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -117,14 +108,12 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testErrorThrownResponseToLookup() throws ConnectionException {
 
-        Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new Error("foo"))));
 
-        AbstractFactory factory = new AbstractFactory((HostContext) hc.proxy()) {
+        AbstractFactory factory = new AbstractFactory((ClientInvocationHandler) ih.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) {
                 return null;
             }
@@ -139,14 +128,12 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testLookupUpOfServices() throws ConnectionException {
 
-        Mock hc = mock(HostContext.class);
         Mock ih = mock(ClientInvocationHandler.class);
-        hc.expects(once()).method("getClientInvocationHandler").withNoArguments().will(returnValue(ih.proxy()));
         ih.expects(once()).method("initialize");
         ih.expects(once()).method("handleInvocation").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("handleInvocation").with(isA(ListServices.class)).will(returnValue(new ServicesList(new String[] {"1", "2"})));
 
-        AbstractFactory factory = new AbstractFactory((HostContext) hc.proxy()) {
+        AbstractFactory factory = new AbstractFactory((ClientInvocationHandler) ih.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) {
                 return null;
             }

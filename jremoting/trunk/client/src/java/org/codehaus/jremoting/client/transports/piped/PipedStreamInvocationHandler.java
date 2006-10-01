@@ -20,9 +20,12 @@ package org.codehaus.jremoting.client.transports.piped;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
+import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.StreamClientInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
 
@@ -46,19 +49,27 @@ public class PipedStreamInvocationHandler extends StreamClientInvocationHandler 
      * @param clientMonitor
      * @param executorService
      * @param connectionPinger
+     * @param facadesClassLoader
      * @param is
      * @param os
-     * @param facadesClassLoader
      */
     public PipedStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
-                                                ConnectionPinger connectionPinger, PipedInputStream is,
-                                                PipedOutputStream os, ClassLoader facadesClassLoader,
-                                                ClientStreamDriverFactory clientStreamDriverFactory) {
+                                        ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, ClientStreamDriverFactory clientStreamDriverFactory, PipedInputStream is,
+                                        PipedOutputStream os
+    ) {
 
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader, clientStreamDriverFactory);
 
         inputStream = is;
         outputStream = os;
+    }
+
+
+    public PipedStreamInvocationHandler(ClientMonitor clientMonitor,
+                                        ClientStreamDriverFactory streamDriverFactory,
+                                        PipedInputStream inputStream, PipedOutputStream outputStream) {
+        this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(),
+                Thread.currentThread().getContextClassLoader(), streamDriverFactory, inputStream, outputStream);
     }
 
     /**

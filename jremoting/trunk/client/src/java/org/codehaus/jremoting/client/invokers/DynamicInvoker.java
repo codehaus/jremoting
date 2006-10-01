@@ -19,7 +19,6 @@ package org.codehaus.jremoting.client.invokers;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
-import org.codehaus.jremoting.client.HostContext;
 import org.codehaus.jremoting.client.factories.DynamicStubFactory;
 import org.codehaus.jremoting.client.factories.DynamicStub;
 import org.codehaus.jremoting.requests.ListInvokableMethods;
@@ -66,14 +65,13 @@ public class DynamicInvoker {
     /**
      * Constructor
      *
-     * @param hostContext
+     * @param clientInvocationHandler
      * @throws Exception
      */
-    public DynamicInvoker(HostContext hostContext) throws Exception {
+    public DynamicInvoker(ClientInvocationHandler clientInvocationHandler) throws Exception {
 
-        factory = new DynamicStubFactory(hostContext);
-        //cache the invocationhandler
-        clientInvocationHandler = hostContext.getClientInvocationHandler();
+        factory = new DynamicStubFactory(clientInvocationHandler);
+        this.clientInvocationHandler = clientInvocationHandler;
     }
 
     public void close() {

@@ -18,7 +18,9 @@
 package org.codehaus.jremoting.transports;
 
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.transports.piped.PipedObjectStreamHostContext;
+import org.codehaus.jremoting.client.transports.piped.PipedStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
@@ -85,7 +87,8 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         ((PipedStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        factory = new ClientSideStubFactory(new PipedObjectStreamHostContext(new ConsoleClientMonitor(), in, out));
+        factory = new ClientSideStubFactory(new PipedStreamInvocationHandler(new ConsoleClientMonitor(),
+                new ClientObjectStreamDriverFactory(), in, out));
         testClient = (TestInterface) factory.lookupService("Hello33");
 
         // just a kludge for unit testing given we are intrinsically dealing with
