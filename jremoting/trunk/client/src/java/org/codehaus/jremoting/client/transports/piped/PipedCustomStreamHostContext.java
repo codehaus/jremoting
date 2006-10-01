@@ -24,6 +24,8 @@ import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.transports.AbstractStreamClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
 import org.codehaus.jremoting.client.pingers.DefaultConnectionPinger;
 
@@ -47,13 +49,25 @@ public class PipedCustomStreamHostContext extends AbstractHostContext {
      * @param inputStream
      * @param outputStream
      */
-    public PipedCustomStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, PipedInputStream inputStream, PipedOutputStream outputStream) {
-        super(new PipedCustomStreamInvocationHandler(clientMonitor, executorService, connectionPinger, inputStream, outputStream));
+    public PipedCustomStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService,
+                                        ConnectionPinger connectionPinger, PipedInputStream inputStream,
+                                        PipedOutputStream outputStream, ClassLoader facadesClassLoader) {
+        super(new AbstractPipedStreamInvocationHandler(clientMonitor, executorService, connectionPinger,
+                inputStream, outputStream, facadesClassLoader, new ClientCustomStreamDriverFactory() ));
     }
 
-    public PipedCustomStreamHostContext(ClientMonitor clientMonitor, PipedInputStream inputStream, PipedOutputStream outputStream) {
-        this(clientMonitor, Executors.newCachedThreadPool(), new DefaultConnectionPinger(), inputStream, outputStream);
+    public PipedCustomStreamHostContext(ClientMonitor clientMonitor, PipedInputStream inputStream,
+                                        PipedOutputStream outputStream, ClassLoader facadesClassLoader) {
+        this(clientMonitor, Executors.newCachedThreadPool(), new DefaultConnectionPinger(), inputStream, outputStream,
+                facadesClassLoader);
     }
+
+    public PipedCustomStreamHostContext(ClientMonitor clientMonitor, PipedInputStream inputStream,
+                                        PipedOutputStream outputStream) {
+        this(clientMonitor, Executors.newCachedThreadPool(), new DefaultConnectionPinger(), inputStream, outputStream,
+                Thread.currentThread().getContextClassLoader());
+    }
+
 
     /**
      * Method initialize

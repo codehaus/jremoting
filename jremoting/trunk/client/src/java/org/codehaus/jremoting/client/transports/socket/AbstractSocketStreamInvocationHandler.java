@@ -22,14 +22,12 @@ import org.codehaus.jremoting.ConnectionException;
 
 import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.transports.AbstractStreamClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 
 /**
@@ -38,7 +36,7 @@ import java.net.Socket;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractSocketStreamInvocationHandler extends AbstractStreamClientInvocationHandler {
+public class AbstractSocketStreamInvocationHandler extends AbstractStreamClientInvocationHandler {
 
     private final String host;
     private final int port;
@@ -54,15 +52,18 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
      * @param host                  The host to connect to
      * @param port                  The port to conenct to
      */
-    public AbstractSocketStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, String host, int port) throws ConnectionRefusedException, BadConnectionException {
-        super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
+    public AbstractSocketStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+                                                 ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
+                                                 ClientStreamDriverFactory streamDriverFactory,
+                                                 String host, int port) throws ConnectionRefusedException, BadConnectionException {
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamDriverFactory);
         this.host = host;
         this.port = port;
 
         try {
             Socket socket = new Socket(this.host, this.port);
             socket.setSoTimeout(60 * 1000);
-            setObjectDriver(createClientStreamDriver(socket.getInputStream(), socket.getOutputStream()));
+            setObjectDriver(streamDriverFactory.makeDriver(socket.getInputStream(), socket.getOutputStream(), facadesClassLoader));
         } catch (IOException ioe) {
             if (ioe.getMessage().startsWith("Connection refused")) {
                 throw new ConnectionRefusedException("Connection to port " + port + " on host " + host + " refused.");
@@ -81,7 +82,7 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
         try {
             Socket socket = new Socket(host, port);
             socket.setSoTimeout(60 * 1000);
-            setObjectDriver(createClientStreamDriver(socket.getInputStream(), socket.getOutputStream()));
+            setObjectDriver(streamDriverFactory.makeDriver(socket.getInputStream(), socket.getOutputStream(), facadesClassLoader));
             return true;
         } catch (ConnectionException ce) {
             // TODO log ?
@@ -93,5 +94,4 @@ public abstract class AbstractSocketStreamInvocationHandler extends AbstractStre
         }
     }
 
-    protected abstract ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out) throws ConnectionException;
 }

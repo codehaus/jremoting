@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.factories.AbstractHostContext;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 
@@ -47,7 +48,8 @@ public class SocketObjectStreamHostContext extends AbstractHostContext {
      * @throws ConnectionException
      */
     public SocketObjectStreamHostContext(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, String host, int port) throws ConnectionException {
-        super(new SocketObjectStreamInvocationHandler(clientMonitor, executorService, connectionPinger, facadesClassLoader, host, port));
+        super(new AbstractSocketStreamInvocationHandler(clientMonitor, executorService, connectionPinger, facadesClassLoader,
+                new ClientObjectStreamDriverFactory(), host, port));
 
     }
 

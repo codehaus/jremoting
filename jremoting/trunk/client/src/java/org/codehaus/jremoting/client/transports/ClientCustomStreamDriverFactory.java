@@ -14,18 +14,16 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server.transports;
+package org.codehaus.jremoting.client.transports;
 
-import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.client.ClientStreamDriver;
+import org.codehaus.jremoting.ConnectionException;
 
-import java.util.concurrent.ExecutorService;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
 
-public interface ServerStreamDriverFactory {
-
-    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ExecutorService executorService,
-                                           InputStream inputStream, OutputStream outputStream, Object connectionDetails) throws IOException;
-
+public class ClientCustomStreamDriverFactory implements ClientStreamDriverFactory {
+    public ClientStreamDriver makeDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+        return new ClientCustomStreamDriver(inputStream, outputStream, facadesClassLoader);
+    }
 }

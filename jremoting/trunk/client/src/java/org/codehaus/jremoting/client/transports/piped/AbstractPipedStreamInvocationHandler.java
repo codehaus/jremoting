@@ -25,6 +25,7 @@ import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.transports.AbstractStreamClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,7 +38,7 @@ import java.io.PipedOutputStream;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractPipedStreamInvocationHandler extends AbstractStreamClientInvocationHandler {
+public class AbstractPipedStreamInvocationHandler extends AbstractStreamClientInvocationHandler {
 
     private PipedInputStream inputStream;
     private PipedOutputStream outputStream;
@@ -52,9 +53,12 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
      * @param os
      * @param facadesClassLoader
      */
-    public AbstractPipedStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, PipedInputStream is, PipedOutputStream os, ClassLoader facadesClassLoader) {
+    public AbstractPipedStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+                                                ConnectionPinger connectionPinger, PipedInputStream is,
+                                                PipedOutputStream os, ClassLoader facadesClassLoader,
+                                                ClientStreamDriverFactory clientStreamDriverFactory) {
 
-        super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, clientStreamDriverFactory);
 
         inputStream = is;
         outputStream = os;
@@ -66,7 +70,7 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
      * @throws ConnectionException
      */
     public void initialize() throws ConnectionException {
-        setObjectDriver(createClientStreamDriver(inputStream, outputStream, facadesClassLoader));
+        setObjectDriver(streamDriverFactory.makeDriver(inputStream, outputStream, facadesClassLoader));
         super.initialize();
     }
 
@@ -75,7 +79,5 @@ public abstract class AbstractPipedStreamInvocationHandler extends AbstractStrea
         // blimey how do we reconnect this?
         throw new InvocationException("Piped connection broken, unable to reconnect.");
     }
-
-    protected abstract ClientStreamDriver createClientStreamDriver(InputStream in, OutputStream out, ClassLoader facadesClassLoader) throws ConnectionException;
 
 }

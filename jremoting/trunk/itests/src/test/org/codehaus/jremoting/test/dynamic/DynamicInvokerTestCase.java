@@ -58,14 +58,14 @@ public class DynamicInvokerTestCase extends TestCase {
         super.setUp();
 
         // server side setup.
-        server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 10001);
+        server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 10101);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        hostContext = new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 10001);
+        hostContext = new SocketCustomStreamHostContext(new ConsoleClientMonitor(), "127.0.0.1", 10101);
         dynamicInvoker = new DynamicInvoker(hostContext);
 
         // just a kludge for unit testing given we are intrinsically dealing with
