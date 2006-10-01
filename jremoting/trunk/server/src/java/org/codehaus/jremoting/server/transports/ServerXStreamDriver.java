@@ -49,11 +49,12 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
     private BufferedOutputStream bufferedOutputStream;
 
     public ServerXStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService, InputStream inputStream,
-                               OutputStream outputStream, Object connectionDetails) {
+                               OutputStream outputStream, Object connectionDetails, XStream xStream) {
         super(serverMonitor, executorService, inputStream, outputStream, connectionDetails);
-        xStream = new XStream(new DomDriver());
+        this.xStream = xStream;
     }
 
+    //TODO - review IOE and ConnExcept in the throws list. one extends the other.
     public synchronized AbstractRequest writeResponseAndGetRequest(AbstractResponse response) throws IOException, ClassNotFoundException, ConnectionException {
 
         if (response != null) {

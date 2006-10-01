@@ -6,11 +6,26 @@ import java.util.concurrent.ExecutorService;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
 public class ServerXStreamDriverFactory implements ServerStreamDriverFactory {
+
+    private XStream xStream;
+
+
+    public ServerXStreamDriverFactory(XStream xstream) {
+        this.xStream = xstream;
+    }
+
+
+    public ServerXStreamDriverFactory() {
+        this (new XStream(new DomDriver()));
+    }
 
     public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ExecutorService executorService,
                                            InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
-        return new ServerXStreamDriver(serverMonitor, executorService, inputStream, outputStream, connectionDetails);
+        return new ServerXStreamDriver(serverMonitor, executorService, inputStream, outputStream, connectionDetails, xStream);
     }
 
 }
