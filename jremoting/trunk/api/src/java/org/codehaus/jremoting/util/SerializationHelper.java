@@ -77,14 +77,14 @@ public class SerializationHelper {
      * Get instance from bytes.
      *
      * @param byteArray   to turn into an instance
-     * @param classLoader the classloader that can resolve the class-def
+     * @param facadesClassLoader the classloader that can resolve the class-def
      * @return the instance
      * @throws ClassNotFoundException if the class-def can't be resolved.
      */
-    public static Object getInstanceFromBytes(byte[] byteArray, ClassLoader classLoader) throws ClassNotFoundException {
+    public static Object getInstanceFromBytes(byte[] byteArray, ClassLoader facadesClassLoader) throws ClassNotFoundException {
 
         try {
-            ObjectInputStream oIs = new ClassLoaderObjectInputStream(classLoader, byteArray);
+            ObjectInputStream oIs = new ClassLoaderObjectInputStream(facadesClassLoader, byteArray);
             Object obj = oIs.readObject();
             oIs.close();
             return obj;
