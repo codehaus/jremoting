@@ -43,14 +43,6 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
     private ClassLoader facadesClassLoader;
 
 
-    /**
-     * Constructor ClientCustomStreamDriver
-     *
-     * @param inputStream
-     * @param outputStream
-     * @param facadesClassLoader
-     * @throws ConnectionException
-     */
     public ClientCustomStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
 
         dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream));

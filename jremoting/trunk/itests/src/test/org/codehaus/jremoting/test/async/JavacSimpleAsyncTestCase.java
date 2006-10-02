@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.test.async;
 
-import org.codehaus.jremoting.server.classretrievers.AbstractDynamicGeneratorStubRetriever;
-import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.AbstractDynamicGeneratorStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.BcelDynamicGeneratorStubRetriever;
 
 
 public class JavacSimpleAsyncTestCase extends AbstractSimpleAsyncTestCase {

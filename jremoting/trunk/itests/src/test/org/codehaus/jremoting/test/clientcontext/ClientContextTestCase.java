@@ -35,7 +35,7 @@ import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.BcelDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContext;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;

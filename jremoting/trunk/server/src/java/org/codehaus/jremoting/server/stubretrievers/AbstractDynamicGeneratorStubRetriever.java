@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server.classretrievers;
+package org.codehaus.jremoting.server.stubretrievers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -33,7 +33,7 @@ import org.codehaus.jremoting.util.StubHelper;
 
 
 /**
- * Class JarFileStubRetriever
+ * Class AbstractDynamicGeneratorStubRetriever
  *
  * @author Paul Hammant
  */

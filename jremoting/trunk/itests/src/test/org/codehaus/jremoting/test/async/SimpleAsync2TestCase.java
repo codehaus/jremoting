@@ -25,7 +25,7 @@ import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocat
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.classretrievers.BcelDynamicGeneratorStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.BcelDynamicGeneratorStubRetriever;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;

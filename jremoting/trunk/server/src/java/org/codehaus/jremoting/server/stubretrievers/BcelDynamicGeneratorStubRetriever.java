@@ -15,24 +15,30 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server.classretrievers;
-
-import org.codehaus.jremoting.server.StubRetrievalException;
+package org.codehaus.jremoting.server.stubretrievers;
 
 /**
- * Class NoStubRetriever
+ * Class BcelDynamicGeneratorStubRetriever
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class NoStubRetriever extends AbstractStubRetriever {
+public class BcelDynamicGeneratorStubRetriever extends AbstractDynamicGeneratorStubRetriever {
+    /**
+     * Contruct a Dynamic Class Generator with a classloader pointing to the generator classes.
+     *
+     * @param classLoader the classloader in which the proxy generater will be found.
+     */
+
+    public BcelDynamicGeneratorStubRetriever(ClassLoader classLoader) {
+        super(classLoader, "org.codehaus.jremoting.tools.generator.BcelProxyGenerator");
+    }
 
     /**
-     * @param thingName get a byte array for a thing.
-     * @return the byte array
-     * @throws StubRetrievalException if the retrieval failed.
+     * Contruct a Dynamic Class Generator using the classes own classloader.
      */
-    protected byte[] getThingBytes(String thingName) throws StubRetrievalException {
-        throw new StubRetrievalException("This JRemoting server does not support class forwarding");
+
+    public BcelDynamicGeneratorStubRetriever() {
+        super(BcelDynamicGeneratorStubRetriever.class.getClassLoader(), "org.codehaus.jremoting.tools.generator.BcelProxyGenerator");
     }
 }

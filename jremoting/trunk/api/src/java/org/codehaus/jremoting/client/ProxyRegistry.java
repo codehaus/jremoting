@@ -1,6 +1,5 @@
 package org.codehaus.jremoting.client;
 
-import org.codehaus.jremoting.client.factories.DefaultProxyHelper;
 import org.codehaus.jremoting.ConnectionException;
 
 public interface ProxyRegistry {

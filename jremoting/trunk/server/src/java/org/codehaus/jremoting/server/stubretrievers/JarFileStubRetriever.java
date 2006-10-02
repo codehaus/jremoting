@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server.classretrievers;
+package org.codehaus.jremoting.server.stubretrievers;
 
 import java.io.File;
 import java.net.MalformedURLException;

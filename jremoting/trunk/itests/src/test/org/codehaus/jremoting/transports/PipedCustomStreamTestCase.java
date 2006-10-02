@@ -23,7 +23,7 @@ import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;

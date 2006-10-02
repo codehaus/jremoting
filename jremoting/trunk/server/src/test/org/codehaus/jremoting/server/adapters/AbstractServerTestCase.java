@@ -24,7 +24,7 @@ import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.classretrievers.NoStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.NoStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
