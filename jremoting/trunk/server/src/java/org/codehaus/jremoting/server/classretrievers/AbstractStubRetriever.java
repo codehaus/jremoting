@@ -43,25 +43,8 @@ public abstract class AbstractStubRetriever implements StubRetriever {
         this.classLoader = classLoader;
     }
 
-    /**
-     * Method getProxyClassBytes
-     *
-     * @param publishedName the publication name
-     * @return a byte array for the Bean.
-     * @throws StubRetrievalException if the bytes cannot be retrieved.
-     */
     public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
-        return getThingBytes(StubHelper.formatStubClassName(publishedName));
-    }
-
-    /**
-     * Method getThingBytes
-     *
-     * @param thingName the publication name
-     * @return a byte array for the thing.
-     * @throws StubRetrievalException if the bytes cannot be retrieved.
-     */
-    protected byte[] getThingBytes(String thingName) throws StubRetrievalException {
+        String thingName = StubHelper.formatStubClassName(publishedName);
 
         InputStream is = null;
 
@@ -92,4 +75,5 @@ public abstract class AbstractStubRetriever implements StubRetriever {
 
         return baos.toByteArray();
     }
+
 }
