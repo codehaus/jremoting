@@ -118,8 +118,12 @@ public class SimpleRetryingClientMonitor implements ClientMonitor {
                     msg = msg + "Unknown cause of abend.";
                 }
             }
-            //TODO replace with call to delegate ?
-            throw new InvocationException(msg);
+            try {
+                delegate.serviceAbend(clazz, attempt, cause);
+            } catch (InvocationException ie) {
+                throw new InvocationException(msg, ie);
+            }
+
         }
 
         printMessage("JRemoting service abnormally ended, Trying to reconnect (attempt " + attempt + ")");
