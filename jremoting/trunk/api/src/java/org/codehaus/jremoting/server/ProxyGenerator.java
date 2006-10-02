@@ -64,16 +64,16 @@ public interface ProxyGenerator {
     /**
      * Generate source
      *
-     * @param classLoader the classloader active during generation of source.
+     * @param facadesClassLoader the classloader active during generation of source.
      */
-    void generateSrc(ClassLoader classLoader);
+    void generateSrc(ClassLoader facadesClassLoader);
 
     /**
      * Generate class
      *
-     * @param classLoader the classloader active during compilation/generation.
+     * @param facadesClassLoader the classloader active during compilation/generation.
      */
-    void generateClass(ClassLoader classLoader);
+    void generateClass(ClassLoader facadesClassLoader);
 
     /**
      * Generate deferred classes

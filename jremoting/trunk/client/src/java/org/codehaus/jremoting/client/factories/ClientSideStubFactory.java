@@ -34,9 +34,9 @@ public class ClientSideStubFactory extends AbstractFactory {
         this(clientInvocationHandler, Thread.currentThread().getContextClassLoader());
     }
 
-    public ClientSideStubFactory(ClientInvocationHandler clientInvocationHandler, ClassLoader classLoader) throws ConnectionException {
+    public ClientSideStubFactory(ClientInvocationHandler clientInvocationHandler, ClassLoader facadesClassLoader) throws ConnectionException {
         super(clientInvocationHandler);
-        this.classLoader = classLoader;
+        this.classLoader = facadesClassLoader;
     }
 
 

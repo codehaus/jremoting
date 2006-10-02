@@ -30,20 +30,20 @@ public interface DynamicProxyGenerator {
      *
      * @param service            the name of the generated proxy.  As used in lookup.
      * @param primaryFacade the princial lookupable interface
-     * @param classLoader       - classloader containing all needed for proxy generation
+     * @param facadesClassLoader       - classloader containing all needed for proxy generation
      * @throws PublicationException if there is a problem publishing
      */
-    void generate(String service, Class primaryFacade, ClassLoader classLoader) throws PublicationException;
+    void generate(String service, Class primaryFacade, ClassLoader facadesClassLoader) throws PublicationException;
 
     /**
      * Generate a proxy.
      *
      * @param service                 the name of the generated proxy.  As used in lookup.
      * @param publicationDescription a descriptor detailing complex cases.
-     * @param classLoader            - classloader containing all needed for proxy generation
+     * @param facadesClassLoader            - classloader containing all needed for proxy generation
      * @throws PublicationException if there is a problem publishing
      */
-    void generate(String service, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException;
+    void generate(String service, PublicationDescription publicationDescription, ClassLoader facadesClassLoader) throws PublicationException;
 
     /**
      * Generate a proxy.  Deferred till a later moment for performance reasons (most of
@@ -51,15 +51,15 @@ public interface DynamicProxyGenerator {
      *
      * @param service                 the name of the generated proxy.  As used in lookup.
      * @param publicationDescription a descriptor detailing complex cases.
-     * @param classLoader            - classloader containing all needed for proxy generation
+     * @param facadesClassLoader            - classloader containing all needed for proxy generation
      * @throws PublicationException if there is a problem publishing
      */
-    void deferredGenerate(String service, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException;
+    void deferredGenerate(String service, PublicationDescription publicationDescription, ClassLoader facadesClassLoader) throws PublicationException;
 
     /**
      * Generate the deferred proxies.
      *
-     * @param classLoader the class loader.
+     * @param facadesClassLoader the class loader.
      */
-    void generateDeferred(ClassLoader classLoader);
+    void generateDeferred(ClassLoader facadesClassLoader);
 }

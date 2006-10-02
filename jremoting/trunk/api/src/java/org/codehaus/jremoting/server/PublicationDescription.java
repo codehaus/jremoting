@@ -93,11 +93,11 @@ public final class PublicationDescription {
      * Construct a publication description.
      *
      * @param primaryFacade the principal interface implemented by the lookupable bean.
-     * @param classLoader       the classloader containing the classdefs (special cases)
+     * @param facadesClassLoader       the classloader containing the classdefs (special cases)
      * @throws PublicationException if there is a problem publishing
      */
-    public PublicationDescription(String primaryFacade, ClassLoader classLoader) throws PublicationException {
-        this(makeClasses(new String[]{primaryFacade}, classLoader), new Class[0]);
+    public PublicationDescription(String primaryFacade, ClassLoader facadesClassLoader) throws PublicationException {
+        this(makeClasses(new String[]{primaryFacade}, facadesClassLoader), new Class[0]);
     }
 
     /**
@@ -106,11 +106,11 @@ public final class PublicationDescription {
      * @param primaryFacade the principal interface implemented by the lookupable bean.
      * @param additionalFacade  assitional facade implemented by other beans that
      *                          would otherwise be serialized and treated as pass-by-value objects.
-     * @param classLoader       the classloader containing the classdefs (special cases)
+     * @param facadesClassLoader       the classloader containing the classdefs (special cases)
      * @throws PublicationException if there is a problem publishing
      */
-    public PublicationDescription(String primaryFacade, String additionalFacade, ClassLoader classLoader) throws PublicationException {
-        this(makeClasses(new String[]{primaryFacade}, classLoader), makeClasses(new String[]{additionalFacade}, classLoader));
+    public PublicationDescription(String primaryFacade, String additionalFacade, ClassLoader facadesClassLoader) throws PublicationException {
+        this(makeClasses(new String[]{primaryFacade}, facadesClassLoader), makeClasses(new String[]{additionalFacade}, facadesClassLoader));
     }
 
     /**
@@ -119,22 +119,22 @@ public final class PublicationDescription {
      * @param primaryFacade the principal interface implemented by the lookupable bean.
      * @param additionalFacades assitional facades implemented by other beans that
      *                          would otherwise be serialized and treated as pass-by-value objects.
-     * @param classLoader       the classloader containing the classdefs (special cases)
+     * @param facadesClassLoader       the classloader containing the classdefs (special cases)
      * @throws PublicationException if there is a problem publishing
      */
-    public PublicationDescription(String primaryFacade, String[] additionalFacades, ClassLoader classLoader) throws PublicationException {
-        this(makeClasses(new String[]{primaryFacade}, classLoader), makeClasses(additionalFacades, classLoader));
+    public PublicationDescription(String primaryFacade, String[] additionalFacades, ClassLoader facadesClassLoader) throws PublicationException {
+        this(makeClasses(new String[]{primaryFacade}, facadesClassLoader), makeClasses(additionalFacades, facadesClassLoader));
     }
 
     /**
      * Construct a publication description.
      *
      * @param primaryFacades the principal interfaces implemented by the lookupable bean.
-     * @param classLoader        the classloader containing the classdefs (special cases)
+     * @param facadesClassLoader        the classloader containing the classdefs (special cases)
      * @throws PublicationException if there is a problem publishing
      */
-    public PublicationDescription(String[] primaryFacades, ClassLoader classLoader) throws PublicationException {
-        this(makeClasses(primaryFacades, classLoader), new Class[0]);
+    public PublicationDescription(String[] primaryFacades, ClassLoader facadesClassLoader) throws PublicationException {
+        this(makeClasses(primaryFacades, facadesClassLoader), new Class[0]);
     }
 
     /**
@@ -143,17 +143,17 @@ public final class PublicationDescription {
      * @param primaryFacades the principal interfaces implemented by the lookupable bean.
      * @param additionalFacades  assitional facades implemented by other beans that
      *                           would otherwise be serialized and treated as pass-by-value objects.
-     * @param classLoader        the classloader containing the classdefs (special cases)
+     * @param facadesClassLoader        the classloader containing the classdefs (special cases)
      * @throws PublicationException if there is a problem publishing
      */
-    public PublicationDescription(String[] primaryFacades, String[] additionalFacades, ClassLoader classLoader) throws PublicationException {
-        this(makeClasses(primaryFacades, classLoader), makeClasses(additionalFacades, classLoader));
+    public PublicationDescription(String[] primaryFacades, String[] additionalFacades, ClassLoader facadesClassLoader) throws PublicationException {
+        this(makeClasses(primaryFacades, facadesClassLoader), makeClasses(additionalFacades, facadesClassLoader));
     }
 
     public PublicationDescription() {
     }
 
-    private static Class[] makeClasses(String[] classNames, ClassLoader classLoader) throws PublicationException {
+    private static Class[] makeClasses(String[] classNames, ClassLoader facadesClassLoader) throws PublicationException {
 
         try {
             Class[] classes = new Class[classNames.length];
@@ -161,7 +161,7 @@ public final class PublicationDescription {
             for (int i = 0; i < classNames.length; i++) {
                 String clsNam = classNames[i];
 
-                classes[i] = classLoader.loadClass(clsNam);
+                classes[i] = facadesClassLoader.loadClass(clsNam);
             }
 
             return classes;

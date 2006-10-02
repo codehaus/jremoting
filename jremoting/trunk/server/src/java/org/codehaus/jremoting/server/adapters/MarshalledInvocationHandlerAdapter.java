@@ -38,7 +38,7 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
     /**
      * The class loader.
      */
-    private ClassLoader classLoader;
+    private ClassLoader facadesClassLoader;
 
     /**
      * Constructor MarshalledInvocationHandlerAdapter
@@ -47,18 +47,18 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
      */
     public MarshalledInvocationHandlerAdapter(ServerInvocationHandler invocationHandler) {
         this.invocationHandler = invocationHandler;
-        classLoader = getClass().getClassLoader();
+        facadesClassLoader = getClass().getClassLoader();
     }
 
     /**
      * Constructor MarshalledInvocationHandlerAdapter
      *
      * @param invocationHandler The invocation handler
-     * @param classLoader       The classloader
+     * @param facadesClassLoader       The classloader
      */
-    public MarshalledInvocationHandlerAdapter(ServerInvocationHandler invocationHandler, ClassLoader classLoader) {
+    public MarshalledInvocationHandlerAdapter(ServerInvocationHandler invocationHandler, ClassLoader facadesClassLoader) {
         this.invocationHandler = invocationHandler;
-        this.classLoader = classLoader;
+        this.facadesClassLoader = facadesClassLoader;
     }
 
     /**
@@ -70,7 +70,7 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
     public byte[] handleInvocation(byte[] request, Object connectionDetails) {
 
         try {
-            Request ar = (Request) SerializationHelper.getInstanceFromBytes(request, classLoader);
+            Request ar = (Request) SerializationHelper.getInstanceFromBytes(request, facadesClassLoader);
             Response response = invocationHandler.handleInvocation(ar, connectionDetails);
 
             return SerializationHelper.getBytesFromInstance(response);

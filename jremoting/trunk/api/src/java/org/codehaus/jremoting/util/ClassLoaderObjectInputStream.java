@@ -36,16 +36,16 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
     /**
      * Constructor ClassLoaderObjectInputStream
      *
-     * @param classLoader the classloader that containes the classes that may be deserialized
+     * @param facadesClassLoader the classloader that containes the classes that may be deserialized
      * @param byteArray   tye bytes for the thing to be deserialized.
-     * @throws IOException              from super
-     * @throws StreamCorruptedException from super
+     * @throws java.io.IOException              from super
+     * @throws java.io.StreamCorruptedException from super
      */
-    public ClassLoaderObjectInputStream(final ClassLoader classLoader, byte[] byteArray) throws IOException, StreamCorruptedException {
+    public ClassLoaderObjectInputStream(final ClassLoader facadesClassLoader, byte[] byteArray) throws IOException, StreamCorruptedException {
 
         super(new ByteArrayInputStream(byteArray));
 
-        this.facadesClassLoader = classLoader;
+        this.facadesClassLoader = facadesClassLoader;
     }
 
 
