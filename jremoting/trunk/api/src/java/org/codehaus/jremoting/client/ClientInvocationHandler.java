@@ -37,7 +37,7 @@ public interface ClientInvocationHandler {
 
     void close();
 
-    long getLastRealRequest();
+    long getLastRealRequestTime();
 
     void ping();
 

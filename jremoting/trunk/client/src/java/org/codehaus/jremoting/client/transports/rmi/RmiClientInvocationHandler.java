@@ -170,11 +170,11 @@ public final class RmiClientInvocationHandler extends StatefulClientInvocationHa
     }
 
     /**
-     * Method getLastRealRequest
+     * Method getLastRealRequestTime
      *
      * @return
      */
-    public long getLastRealRequest() {
+    public long getLastRealRequestTime() {
         return lastRealRequest;
     }
 }

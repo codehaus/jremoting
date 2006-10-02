@@ -157,7 +157,7 @@ public abstract class StreamClientInvocationHandler extends StatefulClientInvoca
         return false;
     }
 
-    public long getLastRealRequest() {
+    public long getLastRealRequestTime() {
         return lastRealRequest;
     }
 }

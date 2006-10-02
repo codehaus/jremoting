@@ -106,7 +106,7 @@ public abstract class StatefulDirectClientInvocationHandler extends StatefulClie
         throw new InvocationException("Direct connection broken, unable to reconnect.");
     }
 
-    public long getLastRealRequest() {
+    public long getLastRealRequestTime() {
         return lastRealRequest;
     }
 

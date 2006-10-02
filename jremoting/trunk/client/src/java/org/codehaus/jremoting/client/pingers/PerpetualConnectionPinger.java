@@ -20,29 +20,23 @@ package org.codehaus.jremoting.client.pingers;
 import org.codehaus.jremoting.requests.Ping;
 
 /**
- * Interface PerpetualConnectionPinger
- * <p/>
- * Pings every ten seconds.
+ * PerpetualConnectionPinger pings forever.
+ * You are going to have to stop() it yourself
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
 public class PerpetualConnectionPinger extends IntervalConnectionPinger {
 
-    /**
-     * Constructor PerpetualConnectionPinger
-     *
-     * @param pingIntervalSeconds
-     * @param giveupIntervalSeconds
-     */
-    public PerpetualConnectionPinger(int pingIntervalSeconds, int giveupIntervalSeconds) {
-        super(pingIntervalSeconds, giveupIntervalSeconds);
+    public PerpetualConnectionPinger(int pingIntervalSeconds) {
+        super(pingIntervalSeconds);
     }
 
     /**
-     * Constructor PerpetualConnectionPinger
+     * Ping every 10 seconds
      */
     public PerpetualConnectionPinger() {
+        this(10);
     }
 
     protected void ping() {

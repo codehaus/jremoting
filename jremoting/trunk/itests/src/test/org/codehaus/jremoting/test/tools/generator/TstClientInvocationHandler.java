@@ -92,9 +92,9 @@ public class TstClientInvocationHandler extends StatefulClientInvocationHandler 
     }
 
     /*
-     * @see ClientInvocationHandler#getLastRealRequest()
+     * @see ClientInvocationHandler#getLastRealRequestTime()
      */
-    public long getLastRealRequest() {
+    public long getLastRealRequestTime() {
         return 0;
     }
 

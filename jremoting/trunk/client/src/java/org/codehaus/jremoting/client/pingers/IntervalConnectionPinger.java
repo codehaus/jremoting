@@ -35,39 +35,26 @@ public abstract class IntervalConnectionPinger implements ConnectionPinger {
     private boolean keepGoing = true;
     private Runnable runnable;
     private Future future;
-    private final long pingInterval;
-    private final long giveupInterval;
+    private final long pingIntervalMillis;
 
     /**
      * Construct a IntervalConnectionPinger with seconds for interval.
      *
      * @param pingIntervalSeconds   the interval to wait
-     * @param giveupIntervalSeconds when to give up
      */
-    public IntervalConnectionPinger(int pingIntervalSeconds, int giveupIntervalSeconds) {
-        pingInterval = pingIntervalSeconds * 1000;
-        giveupInterval = giveupIntervalSeconds * 1000;
+    public IntervalConnectionPinger(int pingIntervalSeconds) {
+        pingIntervalMillis = pingIntervalSeconds * 1000;
     }
 
     /**
      * Construct a IntervalConnectionPinger with millisecond intervals
      *
      * @param pingIntervalMilliSeconds   the interval to wait
-     * @param giveupIntervalMilliSeconds when to give up
      */
-    public IntervalConnectionPinger(long pingIntervalMilliSeconds, long giveupIntervalMilliSeconds) {
-        pingInterval = pingIntervalMilliSeconds;
-        giveupInterval = giveupIntervalMilliSeconds;
+    public IntervalConnectionPinger(long pingIntervalMilliSeconds) {
+        pingIntervalMillis = pingIntervalMilliSeconds;
     }
 
-
-    /**
-     * Constructor IntervalConnectionPinger
-     */
-    public IntervalConnectionPinger() {
-        pingInterval = 10 * 1000;       // ten seconds
-        giveupInterval = 100 * 1000;    // one hundred seconds.
-    }
 
     /**
      * Method setInvocationHandler
@@ -89,7 +76,7 @@ public abstract class IntervalConnectionPinger implements ConnectionPinger {
             public void run() {
                 try {
                     while (keepGoing) {
-                        Thread.sleep(pingInterval);
+                        Thread.sleep(pingIntervalMillis);
                         if (keepGoing) {
                             ping();
                         }
@@ -122,7 +109,4 @@ public abstract class IntervalConnectionPinger implements ConnectionPinger {
 
     protected abstract void ping();
 
-    public long getGiveupInterval() {
-        return giveupInterval;
-    }
 }
