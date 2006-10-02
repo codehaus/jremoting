@@ -19,6 +19,7 @@ package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.ProxyHelper;
 
 /**
  * DynamicStubFactory creates stubs(@see DynamicStub) for the given
@@ -39,7 +40,7 @@ public class DynamicStubFactory extends AbstractFactory {
         return null;
     }
 
-    protected Object getInstance(String publishedServiceName, String objectName, DefaultProxyHelper proxyHelper) throws ConnectionException {
+    protected Object getInstance(String publishedServiceName, String objectName, ProxyHelper proxyHelper) throws ConnectionException {
         return new DynamicStub(publishedServiceName, objectName, proxyHelper);
     }
 

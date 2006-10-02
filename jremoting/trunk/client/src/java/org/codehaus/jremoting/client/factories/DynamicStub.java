@@ -19,6 +19,7 @@ package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.client.Proxy;
 import org.codehaus.jremoting.client.InvocationException;
+import org.codehaus.jremoting.client.ProxyHelper;
 
 /**
  * Implementation of Proxy(client stub) for dynamic invocation.
@@ -38,13 +39,13 @@ public class DynamicStub implements Proxy {
     /**
      * Proxy Helper
      */
-    private DefaultProxyHelper proxyHelper;
+    private ProxyHelper proxyHelper;
 
     //-------Constructor--------------//
     /**
      * Constructor
      */
-    public DynamicStub(String publishedName, String objectName, DefaultProxyHelper proxyHelper) {
+    public DynamicStub(String publishedName, String objectName, ProxyHelper proxyHelper) {
         this.service = publishedName;
         this.objectName = objectName;
         this.proxyHelper = proxyHelper;

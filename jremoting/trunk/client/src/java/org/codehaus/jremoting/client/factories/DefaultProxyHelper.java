@@ -20,13 +20,7 @@ package org.codehaus.jremoting.client.factories;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-import org.codehaus.jremoting.client.ClientContextFactory;
-import org.codehaus.jremoting.client.ClientInvocationHandler;
-import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.NoSuchReferenceException;
-import org.codehaus.jremoting.client.NoSuchSessionException;
-import org.codehaus.jremoting.client.Proxy;
-import org.codehaus.jremoting.client.ProxyHelper;
+import org.codehaus.jremoting.client.*;
 import org.codehaus.jremoting.requests.ServiceRequest;
 import org.codehaus.jremoting.requests.CollectGarbage;
 import org.codehaus.jremoting.requests.GroupedMethodRequest;
@@ -54,7 +48,7 @@ import org.codehaus.jremoting.ConnectionException;
  */
 public final class DefaultProxyHelper implements ProxyHelper {
 
-    private final transient AbstractFactory factory;
+    private final transient ProxyRegistry proxyRegistry;
     private final transient ClientInvocationHandler clientInvocationHandler;
     private final transient String publishedServiceName;
     private final transient String objectName;
@@ -63,26 +57,16 @@ public final class DefaultProxyHelper implements ProxyHelper {
     private ClientContextFactory clientContextClientFactory;
     private ArrayList queuedAsyncRequests = new ArrayList();
 
-    /**
-     * Constructor DefaultProxyHelper
-     *
-     * @param abstractFactory
-     * @param clientInvocationHandler
-     * @param pubishedServiceName
-     * @param objectName
-     * @param referenceID
-     * @param session
-     */
-    public DefaultProxyHelper(AbstractFactory abstractFactory, ClientInvocationHandler clientInvocationHandler, String pubishedServiceName, String objectName, Long referenceID, Long session) {
+    public DefaultProxyHelper(ProxyRegistry proxyRegistry, ClientInvocationHandler clientInvocationHandler, String pubishedServiceName, String objectName, Long referenceID, Long session) {
 
-        factory = abstractFactory;
+        this.proxyRegistry = proxyRegistry;
         this.clientInvocationHandler = clientInvocationHandler;
         publishedServiceName = pubishedServiceName;
         this.objectName = objectName;
         this.referenceID = referenceID;
         this.session = session;
-        if (abstractFactory == null) {
-            throw new IllegalArgumentException("abstractFactory cannot be null");
+        if (proxyRegistry == null) {
+            throw new IllegalArgumentException("proxyRegistry cannot be null");
         }
         if (clientInvocationHandler == null) {
             throw new IllegalArgumentException("clientInvocationHandler cannot be null");
@@ -90,25 +74,9 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
     }
 
-    /**
-     * Method registerImplObject
-     *
-     * @param implBean
-     */
     public void registerImplObject(Object implBean) {
-        factory.registerReferenceObject(implBean, referenceID);
+        proxyRegistry.registerReferenceObject(implBean, referenceID);
     }
-
-    /**
-     * Method processObjectRequestGettingFacade
-     *
-     * @param returnClassType
-     * @param methodSignature
-     * @param args
-     * @param objectName
-     * @return
-     * @throws Throwable
-     */
 
     public Object processObjectRequestGettingFacade(Class returnClassType, String methodSignature, Object[] args, String objectName) throws Throwable {
         try {
@@ -151,16 +119,16 @@ public final class DefaultProxyHelper implements ProxyHelper {
             if (ref == null) {
                 implBeans[i] = null;
             } else {
-                Object o = factory.getImplObj(ref);
+                Object o = proxyRegistry.getImplObj(ref);
 
                 implBeans[i] = o;
 
                 if (implBeans[i] == null) {
-                    DefaultProxyHelper bo2 = new DefaultProxyHelper(factory, clientInvocationHandler, publishedServiceName, objectNames[i], refs[i], session);
+                    DefaultProxyHelper bo2 = new DefaultProxyHelper(proxyRegistry, clientInvocationHandler, publishedServiceName, objectNames[i], refs[i], session);
                     Object retFacade = null;
 
                     try {
-                        retFacade = factory.getInstance(publishedServiceName, objectNames[i], bo2);
+                        retFacade = proxyRegistry.getInstance(publishedServiceName, objectNames[i], bo2);
                     } catch (Exception e) {
                         System.out.println("objNameWithoutArray=" + returnClassType.getName());
                         System.out.flush();
@@ -186,11 +154,11 @@ public final class DefaultProxyHelper implements ProxyHelper {
             return null;
         }
 
-        Object implBean = factory.getImplObj(ref);
+        Object implBean = proxyRegistry.getImplObj(ref);
 
         if (implBean == null) {
-            DefaultProxyHelper pHelper = new DefaultProxyHelper(factory, clientInvocationHandler, publishedServiceName, mfr.getObjectName(), ref, session);
-            Object retFacade = factory.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
+            DefaultProxyHelper pHelper = new DefaultProxyHelper(proxyRegistry, clientInvocationHandler, publishedServiceName, mfr.getObjectName(), ref, session);
+            Object retFacade = proxyRegistry.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
 
             pHelper.registerImplObject(retFacade);
 
@@ -200,18 +168,10 @@ public final class DefaultProxyHelper implements ProxyHelper {
         }
     }
 
-    /**
-     * Method processObjectRequest
-     *
-     * @param methodSignature
-     * @param args
-     * @return
-     * @throws Throwable
-     */
     public Object processObjectRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
 
         try {
-            factory.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
+            proxyRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
             InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
             setContext(request);
@@ -231,17 +191,10 @@ public final class DefaultProxyHelper implements ProxyHelper {
     }
 
 
-    /**
-     * Method processVoidRequest
-     *
-     * @param methodSignature
-     * @param args
-     * @throws Throwable
-     */
     public void processVoidRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
 
         try {
-            factory.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
+            proxyRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
             InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
 
@@ -305,13 +258,6 @@ public final class DefaultProxyHelper implements ProxyHelper {
     }
 
 
-    /**
-     * Method processVoidRequestWithRedirect
-     *
-     * @param methodSignature
-     * @param args
-     * @throws Throwable
-     */
     public void processVoidRequestWithRedirect(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
 
         Object[] newArgs = new Object[args.length];
@@ -329,10 +275,6 @@ public final class DefaultProxyHelper implements ProxyHelper {
     }
 
 
-    /**
-     * @param response The responsense that represents the unexpected responsense.
-     * @return The exception that is pertient.
-     */
     private Throwable makeUnexpectedResponseThrowable(Response response) {
 
         if (response instanceof ExceptionThrown) {
@@ -354,17 +296,11 @@ public final class DefaultProxyHelper implements ProxyHelper {
         }
     }
 
-    /**
-     * Method getReferenceID
-     *
-     * @param factory
-     * @return reference ID
-     */
-    public Long getReferenceID(Object factory) {
+    public Long getReferenceID(Object proxyRegistry) {
 
         // this checks the factory because reference IDs should not be
         // given out to any requester.  It should be privileged information.
-        if (factory == this.factory) {
+        if (proxyRegistry == proxyRegistry) {
             return referenceID;
         } else {
             return null;
@@ -400,7 +336,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
     protected void finalize() throws Throwable {
 
-        synchronized (factory) {
+        synchronized (proxyRegistry) {
             Response response = clientInvocationHandler.handleInvocation(new CollectGarbage(publishedServiceName, objectName, session, referenceID));
             if (response instanceof ExceptionThrown) {
                 // This happens if the object can not be GCed on the remote server
@@ -432,6 +368,5 @@ public final class DefaultProxyHelper implements ProxyHelper {
         request.setContext(clientContextClientFactory.getClientContext());
 
     }
-
 
 }
