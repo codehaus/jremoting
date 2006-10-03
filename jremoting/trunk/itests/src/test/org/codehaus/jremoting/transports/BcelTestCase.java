@@ -76,9 +76,6 @@ public class BcelTestCase extends AbstractHelloTestCase {
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 10201));
         testClient = (TestInterface) factory.lookupService("Hello");
 
-        // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting being a client/server thing
-        Thread.yield();
     }
 
     public void testHelloCall() throws Exception {
@@ -88,14 +85,9 @@ public class BcelTestCase extends AbstractHelloTestCase {
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-        Thread.yield();
+        Thread.sleep(300);
         factory.close();
-        Thread.yield();
         server.stop();
-        Thread.yield();
-        server = null;
-        testServer = null;
-        super.tearDown();
     }
 
 
