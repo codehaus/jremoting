@@ -83,4 +83,26 @@ public class SerializationHelper {
             throw new RuntimeException("unexpected deserialization", ioe);
         }
     }
+
+    public static String getXml(LineNumberReader lineNumberReader) throws IOException {
+        StringBuffer obj = new StringBuffer();
+        String line = lineNumberReader.readLine();
+        obj.append(line).append("\n");
+        if (!(line.endsWith("/>"))) {
+            line = lineNumberReader.readLine();
+            while (line != null) {
+                obj.append(line).append("\n");
+                if (!Character.isWhitespace(line.charAt(0))) {
+                    line = null;
+                } else {
+                    line = lineNumberReader.readLine();
+                }
+            }
+
+        }
+        return obj.toString();
+    }
+
+
+
 }

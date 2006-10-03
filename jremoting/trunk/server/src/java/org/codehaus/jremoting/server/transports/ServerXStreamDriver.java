@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 import java.util.concurrent.ExecutorService;
 
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.util.SerializationHelper;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.Response;
@@ -99,26 +100,9 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
     }
 
     private Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
-        StringBuffer req = new StringBuffer();
-        String line = lineNumberReader.readLine();
-        req.append(line).append("\n");
-        if (!line.endsWith("/>")) {
-            line = lineNumberReader.readLine();
-            while (line != null) {
-                req.append(line).append("\n");
-                if (!Character.isWhitespace(line.charAt(0))) {
-                    line = null;
-                } else {
-                    line = lineNumberReader.readLine();
-                }
-            }
-        }
-
-        // todo ClassLoader magic ?  or use Reader with XStream direct ?
-        String r = req.toString();
-
+        String xml = SerializationHelper.getXml(lineNumberReader);
         try {
-            Object o = xStream.fromXML(r);
+            Object o = xStream.fromXML(xml);
 
 //            if (o instanceof InvokeMethod) {
 //                System.out.println("-->Req " + r);

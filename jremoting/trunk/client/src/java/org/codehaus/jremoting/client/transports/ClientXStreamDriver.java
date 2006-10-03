@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.util.SerializationHelper;
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
@@ -78,7 +79,7 @@ public class ClientXStreamDriver implements ClientStreamDriver {
 
     private Response readResponse() throws IOException {
 
-        String xml = getXml();
+        String xml = SerializationHelper.getXml(lineNumberReader);
 
         try {
             //TODO use facadesClassLoader
@@ -93,22 +94,4 @@ public class ClientXStreamDriver implements ClientStreamDriver {
         }
     }
 
-    protected String getXml() throws IOException {
-        StringBuffer obj = new StringBuffer();
-        String line = lineNumberReader.readLine();
-        obj.append(line).append("\n");
-        if (!(line.endsWith("/>"))) {
-            line = lineNumberReader.readLine();
-            while (line != null) {
-                obj.append(line).append("\n");
-                if (!Character.isWhitespace(line.charAt(0))) {
-                    line = null;
-                } else {
-                    line = lineNumberReader.readLine();
-                }
-            }
-
-        }
-        return obj.toString();
-    }
 }
