@@ -28,6 +28,7 @@ import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.util.ClassLoaderObjectInputStream;
 
 /**
  * Class ServerObjectStreamDriver
@@ -37,53 +38,25 @@ import org.codehaus.jremoting.server.ServerMonitor;
  */
 public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
 
-    /**
-     * The Object Input Stream
-     */
     private ObjectInputStream objectInputStream;
 
-    /**
-     * The Object Output Stream
-     */
     private ObjectOutputStream objectOutputStream;
 
-    /**
-     * Constructor ServerObjectStreamDriver
-     */
     public ServerObjectStreamDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
                                     OutputStream outputStream, Object connectionDetails) {
         super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
-
     }
 
-    /**
-     * Write a response, and wait for a request
-     *
-     * @param response The response to send
-     * @return The new request
-     * @throws IOException            In an IO Exception
-     * @throws ClassNotFoundException If a class not found during deserialization.
-     */
     public synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException {
-
         if (response != null) {
             writeResponse(response);
         }
-
         return readRequest();
     }
 
-    /**
-     * Write a rpely.
-     *
-     * @param response The response to write
-     * @throws IOException If and IO Exception
-     */
     private void writeResponse(Response response) throws IOException {
-
         objectOutputStream.writeObject(response);
         objectOutputStream.flush();
-
         objectOutputStream.reset();
     }
 
@@ -100,19 +73,11 @@ public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
     }
 
     public void initialize() throws IOException {
-        objectInputStream = new ObjectInputStream(new BufferedInputStream(getInputStream()));
+        objectInputStream = new ClassLoaderObjectInputStream(getFacadesClassLoader(), new BufferedInputStream(getInputStream()));
         objectOutputStream = new ObjectOutputStream(getOutputStream());
     }
 
-    /**
-     * Read a request
-     *
-     * @return The request
-     * @throws IOException            If an IO Exception
-     * @throws ClassNotFoundException If a class not found during deserialization.
-     */
     private Request readRequest() throws IOException, ClassNotFoundException {
-        Request request = (Request) objectInputStream.readObject();
-        return request;
+        return (Request) objectInputStream.readObject();
     }
 }
