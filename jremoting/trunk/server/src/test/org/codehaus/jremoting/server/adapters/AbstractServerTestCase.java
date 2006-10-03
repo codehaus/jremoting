@@ -24,7 +24,7 @@ import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.NoStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -38,7 +38,7 @@ public class AbstractServerTestCase extends MockObjectTestCase {
 
     protected void setUp() throws Exception {
 
-        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new NoStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory());
+        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory());
         server = new ConnectingServer(new ConsoleServerMonitor(), iha, Executors.newCachedThreadPool()) {
         };
 

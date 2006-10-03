@@ -18,21 +18,17 @@
 package org.codehaus.jremoting.server.stubretrievers;
 
 import org.codehaus.jremoting.server.StubRetrievalException;
+import org.codehaus.jremoting.server.StubRetriever;
 
 /**
- * Class NoStubRetriever
+ * Class RefusingStubRetriever
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class NoStubRetriever extends AbstractStubRetriever {
+public class RefusingStubRetriever implements StubRetriever {
 
-    /**
-     * @param thingName get a byte array for a thing.
-     * @return the byte array
-     * @throws StubRetrievalException if the retrieval failed.
-     */
-    protected byte[] getThingBytes(String thingName) throws StubRetrievalException {
+    public byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
         throw new StubRetrievalException("This JRemoting server does not support class forwarding");
     }
 }

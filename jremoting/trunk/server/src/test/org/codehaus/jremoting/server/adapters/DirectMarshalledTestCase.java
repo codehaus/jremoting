@@ -23,7 +23,7 @@ import org.codehaus.jremoting.responses.ServicesSuspended;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.NoStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
@@ -36,7 +36,7 @@ public class DirectMarshalledTestCase extends MockObjectTestCase {
     HashMap impl = new HashMap();
 
     protected void setUp() throws Exception {
-        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new NoStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory());
+        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory());
         server = new DirectMarshalledServer(new ConsoleServerMonitor(), iha, Executors.newCachedThreadPool(), new MarshalledInvocationHandlerAdapter(iha));
     }
 

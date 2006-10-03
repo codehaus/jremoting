@@ -28,7 +28,7 @@ import java.net.URLClassLoader;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class JarFileStubRetriever extends AbstractStubRetriever {
+public class JarFileStubRetriever extends FromClassLoaderStubRetriever {
 
     /**
      * Contruct a StubRetriever from url of a JAR file.
@@ -36,7 +36,7 @@ public class JarFileStubRetriever extends AbstractStubRetriever {
      * @param urlOfJarFile the jar file URL.
      */
     public JarFileStubRetriever(URL urlOfJarFile) {
-        setClassLoader(new URLClassLoader(new URL[]{urlOfJarFile}));
+        super(new URLClassLoader(new URL[]{urlOfJarFile}));
     }
 
     /**
@@ -45,7 +45,7 @@ public class JarFileStubRetriever extends AbstractStubRetriever {
      * @param urlsOfJarFiles the jar file URLs.
      */
     public JarFileStubRetriever(URL[] urlsOfJarFiles) {
-        setClassLoader(new URLClassLoader(urlsOfJarFiles));
+        super(new URLClassLoader(urlsOfJarFiles));
     }
 
     /**
@@ -55,14 +55,16 @@ public class JarFileStubRetriever extends AbstractStubRetriever {
      * @throws MalformedURLException if the paths are not mappable to URLS.
      */
     public JarFileStubRetriever(String[] pathsOfJarFiles) throws MalformedURLException {
+        super(new URLClassLoader(makeUrls(pathsOfJarFiles)));
+    }
 
+    private static URL[] makeUrls(String[] pathsOfJarFiles) throws MalformedURLException {
         URL[] urls = new URL[pathsOfJarFiles.length];
 
         for (int i = 0; i < pathsOfJarFiles.length; i++) {
             urls[i] = new File(pathsOfJarFiles[i]).toURL();
         }
-
-        setClassLoader(new URLClassLoader(urls));
+        return urls;
     }
 
     /**
@@ -72,6 +74,6 @@ public class JarFileStubRetriever extends AbstractStubRetriever {
      * @throws MalformedURLException if the path is not mappable to a URL.
      */
     public JarFileStubRetriever(String pathOfJarFile) throws MalformedURLException {
-        setClassLoader(new URLClassLoader(new URL[]{new File(pathOfJarFile).toURL()}));
+        super(new URLClassLoader(new URL[]{new File(pathOfJarFile).toURL()}));
     }
 }

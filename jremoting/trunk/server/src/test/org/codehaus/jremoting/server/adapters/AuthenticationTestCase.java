@@ -21,7 +21,7 @@ import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.authenticators.SinglePasswordAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.NoStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -38,7 +38,7 @@ public class AuthenticationTestCase extends MockObjectTestCase {
     }
 
     public void testNullAuthenticationAuthorizes() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new NoStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory());
+        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
         Response resp = serDeSerResponse(putTestEntry(null));
@@ -46,7 +46,7 @@ public class AuthenticationTestCase extends MockObjectTestCase {
     }
 
     public void testNullAuthenticationBlocksIfMismatchedAuthentication() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new NoStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory());
+        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
         Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("", "")));
@@ -54,7 +54,7 @@ public class AuthenticationTestCase extends MockObjectTestCase {
     }
 
     public void testWorkingPasswordAuthorizes() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new NoStubRetriever(), new SinglePasswordAuthenticator("fred"), new DefaultServerSideClientContextFactory());
+        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new RefusingStubRetriever(), new SinglePasswordAuthenticator("fred"), new DefaultServerSideClientContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
         Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("FRED", "fred")));
@@ -62,7 +62,7 @@ public class AuthenticationTestCase extends MockObjectTestCase {
     }
 
     public void testBogusPasswordBlocks() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new NoStubRetriever(), new SinglePasswordAuthenticator("fred"), new DefaultServerSideClientContextFactory());
+        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new RefusingStubRetriever(), new SinglePasswordAuthenticator("fred"), new DefaultServerSideClientContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
         Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("FRED", "wilma")));

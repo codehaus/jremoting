@@ -17,55 +17,47 @@
  */
 package org.codehaus.jremoting.server.stubretrievers;
 
-import org.codehaus.jremoting.server.StubRetrievalException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.codehaus.jremoting.server.StubRetrievalException;
+import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.util.StubHelper;
+
 /**
- * Class PlainStubRetriever
+ * Class FromClassLoaderStubRetriever
  *
  * @author Paul Hammant
- * @author Vinay Chandrasekharan <a href="mailto:vinay_chandran@users.sourceforge.net">
- *         vinay_chandran@users.sourceforge.net</a>
- * @version $Revision: 1.2 $
  */
-public class PlainStubRetriever extends AbstractStubRetriever {
+public class FromClassLoaderStubRetriever implements StubRetriever {
 
     private ClassLoader classLoader;
 
-    /**
-     * Constructor PlainStubRetriever
-     */
-    public PlainStubRetriever() {
-        classLoader = this.getClass().getClassLoader();
+
+    public FromClassLoaderStubRetriever() {
+        this(FromClassLoaderStubRetriever.class.getClassLoader());
     }
 
-    /**
-     * Create a plain clasretriever from a classloader.
-     *
-     * @param classLoader the classloader.
-     */
-    public PlainStubRetriever(ClassLoader classLoader) {
+    public FromClassLoaderStubRetriever(ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 
-    /**
-     * Get the classfile byte array for the thing name
-     *
-     * @param thingName the things name
-     * @return the byte array of the thing.
-     * @throws StubRetrievalException if the bytes are not available.
-     */
-    protected byte[] getThingBytes(String thingName) throws StubRetrievalException {
+    public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
+        String thingName = StubHelper.formatStubClassName(publishedName);
 
         InputStream is = null;
 
-        is = classLoader.getResourceAsStream(thingName + ".class");
+        thingName = thingName.replace('.', '\\') + ".class";
+
+        try {
+            is = classLoader.getResourceAsStream(thingName);
+        } catch (Exception e) {
+            throw new StubRetrievalException("Generated class not found in classloader specified : " + e.getMessage());
+        }
 
         if (is == null) {
-            throw new StubRetrievalException("Generated class for " + thingName + " not found in specified classloader ");
+            throw new StubRetrievalException("Generated class not found in classloader specified.");
         }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -83,4 +75,5 @@ public class PlainStubRetriever extends AbstractStubRetriever {
 
         return baos.toByteArray();
     }
+
 }

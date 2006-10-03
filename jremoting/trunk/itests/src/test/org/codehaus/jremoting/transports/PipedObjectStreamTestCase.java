@@ -22,7 +22,7 @@ import org.codehaus.jremoting.client.transports.piped.PipedClientStreamInvocatio
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.stubretrievers.NoStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -61,7 +61,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new PipedStreamServer(new ConsoleServerMonitor(), new NoStubRetriever(), new NullAuthenticator(),
+        server = new PipedStreamServer(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(),
                 Executors.newCachedThreadPool() ,new DefaultServerSideClientContextFactory(), new ServerObjectStreamDriverFactory());
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});

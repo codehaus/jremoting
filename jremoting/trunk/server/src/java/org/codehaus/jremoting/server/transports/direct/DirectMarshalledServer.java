@@ -25,7 +25,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.adapters.MarshalledInvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.NoStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.StatefulServer;
 
@@ -62,7 +62,7 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
     }
 
     public DirectMarshalledServer(ServerMonitor serverMonitor) {
-        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, new NoStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory()));
+        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideClientContextFactory()));
     }
 
     public byte[] handleInvocation(byte[] request, Object connectionDetails) {

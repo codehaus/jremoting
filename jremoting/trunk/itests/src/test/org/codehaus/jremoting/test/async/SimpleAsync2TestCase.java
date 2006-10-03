@@ -25,7 +25,7 @@ import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocat
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.stubretrievers.BcelDynamicGeneratorStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
@@ -54,7 +54,7 @@ public class SimpleAsync2TestCase extends TestCase {
         super.setUp();
 
         // server side setup.
-        BcelDynamicGeneratorStubRetriever stubRetriever = new BcelDynamicGeneratorStubRetriever(this.getClass().getClassLoader());
+        BcelDynamicStubRetriever stubRetriever = new BcelDynamicStubRetriever(this.getClass().getClassLoader());
         String class_gen_dir = getClassGenDir();
         stubRetriever.setClassGenDir(class_gen_dir);
 

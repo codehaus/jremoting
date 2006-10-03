@@ -9,7 +9,7 @@ import org.codehaus.jremoting.client.transports.ClientXStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.NoStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
@@ -32,7 +32,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         // server side setup.
         ExecutorService executorService = Executors.newCachedThreadPool();
         ConsoleServerMonitor serverMonitor = new ConsoleServerMonitor();
-        server = new SelfContainedSocketStreamServer(serverMonitor, new NoStubRetriever(), new NullAuthenticator(),
+        server = new SelfContainedSocketStreamServer(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(),
                 new ServerXStreamDriverFactory(), executorService, new DefaultServerSideClientContextFactory(), 10099);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});

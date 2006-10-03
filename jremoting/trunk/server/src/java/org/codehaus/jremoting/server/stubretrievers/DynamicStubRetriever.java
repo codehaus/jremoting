@@ -33,11 +33,11 @@ import org.codehaus.jremoting.util.StubHelper;
 
 
 /**
- * Class AbstractDynamicGeneratorStubRetriever
+ * Class DynamicStubRetriever
  *
  * @author Paul Hammant
  */
-public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenerator, StubRetriever {
+public class DynamicStubRetriever implements DynamicProxyGenerator, StubRetriever {
 
     private String classpath;
     private String classGenDir = ".";
@@ -47,7 +47,7 @@ public class AbstractDynamicGeneratorStubRetriever implements DynamicProxyGenera
      * @param classLoader        the classloader in which the proxy generater will be found.
      * @param generatorClassName the name of the proxy gen class
      */
-    public AbstractDynamicGeneratorStubRetriever(ClassLoader classLoader, String generatorClassName) {
+    public DynamicStubRetriever(ClassLoader classLoader, String generatorClassName) {
         try {
             generatorClass = classLoader.loadClass(generatorClassName);
         } catch (ClassNotFoundException e) {

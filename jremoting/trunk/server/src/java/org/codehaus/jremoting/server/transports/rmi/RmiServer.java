@@ -31,9 +31,9 @@ import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.FromClassLoaderStubRetriever;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.PlainStubRetriever;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
 
@@ -45,28 +45,9 @@ import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFa
  */
 public class RmiServer extends ConnectingServer {
 
-    /**
-     * The invocation adapter
-     */
-    private RmiInvocationAdapter rmiInvocationAdapter;
-
-    /**
-     * The port
-     */
     private int port;
-    /**
-     * The registry
-     */
     private Registry registry;
 
-    /**
-     * Constructor a RmiServer with a preexiting invocation handler.
-     *
-     * @param serverMonitor
-     * @param invocationHandlerAdapter
-     * @param executorService
-     * @param port
-     */
     public RmiServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executorService, int port) {
         super(serverMonitor, invocationHandlerAdapter, executorService);
         this.port = port;
@@ -77,17 +58,13 @@ public class RmiServer extends ConnectingServer {
     }
 
     public RmiServer(ServerMonitor serverMonitor, int port) {
-        this(serverMonitor, new PlainStubRetriever(), new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), port);
+        this(serverMonitor, new FromClassLoaderStubRetriever(), new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), port);
     }
 
-    /**
-     * Start the server.
-     *
-     */
     public void start() {
         setState(STARTING);
         try {
-            rmiInvocationAdapter = new RmiInvocationAdapter(this);
+            RmiInvocationAdapter rmiInvocationAdapter = new RmiInvocationAdapter(this);
 
             UnicastRemoteObject.exportObject(rmiInvocationAdapter);
 
@@ -100,9 +77,6 @@ public class RmiServer extends ConnectingServer {
         }
     }
 
-    /**
-     * Stop the server.
-     */
     public void stop() {
 
         setState(SHUTTINGDOWN);

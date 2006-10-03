@@ -18,27 +18,19 @@
 package org.codehaus.jremoting.server.stubretrievers;
 
 /**
- * Class BcelDynamicGeneratorStubRetriever
+ * Class BcelDynamicStubRetriever
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class BcelDynamicGeneratorStubRetriever extends AbstractDynamicGeneratorStubRetriever {
-    /**
-     * Contruct a Dynamic Class Generator with a classloader pointing to the generator classes.
-     *
-     * @param classLoader the classloader in which the proxy generater will be found.
-     */
+public class BcelDynamicStubRetriever extends DynamicStubRetriever {
 
-    public BcelDynamicGeneratorStubRetriever(ClassLoader classLoader) {
+    public BcelDynamicStubRetriever(ClassLoader classLoader) {
         super(classLoader, "org.codehaus.jremoting.tools.generator.BcelProxyGenerator");
     }
 
-    /**
-     * Contruct a Dynamic Class Generator using the classes own classloader.
-     */
 
-    public BcelDynamicGeneratorStubRetriever() {
-        super(BcelDynamicGeneratorStubRetriever.class.getClassLoader(), "org.codehaus.jremoting.tools.generator.BcelProxyGenerator");
+    public BcelDynamicStubRetriever() {
+        super(BcelDynamicStubRetriever.class.getClassLoader(), "org.codehaus.jremoting.tools.generator.BcelProxyGenerator");
     }
 }
