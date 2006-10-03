@@ -33,7 +33,7 @@ public abstract class AbstractJRemotingTestCase extends TestCase {
     protected TestInterfaceImpl testServer;
     protected TestInterface testClient;
     protected Factory factory;
-    protected boolean testForBug4499841 = true;
+    protected boolean bugParadeBug4499841StillExists = true;
 
     public void testHelloCall() throws Exception {
         // lookup worked ?

@@ -205,15 +205,22 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
 
     }
 
-    public void testBugParadeBugNumber4499841() throws Exception {
+    /**
+     *
+     */
+    public void testExistanceOfBugParadeBugNumber4499841() throws Exception {
         TstObject[] tos = testClient.getTestObjects();
         testClient.changeTestObjectNames();
         TstObject[] tos2 = testClient.getTestObjects();
         for (int i = 0; i < tos.length; i++) {
             TstObject to = tos[i];
             TstObject to2 = tos2[i];
-            if (testForBug4499841) {
+            if (bugParadeBug4499841StillExists) {
+                // the transport in question highlights bug parade #4499841
                 assertEquals(to.getName().toLowerCase(), to2.getName());
+            } else {
+                // the transport in question is immune to bug parade #4499841
+                assertFalse(to.getName().toLowerCase().equals(to2.getName()));
             }
         }
     }

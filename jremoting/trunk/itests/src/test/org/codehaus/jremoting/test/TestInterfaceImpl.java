@@ -150,7 +150,7 @@ public class TestInterfaceImpl implements TestInterface {
 
     /**
      * Method getTestObjects
-     * Helps ilustrate the bug http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
+     * Helps illustrate the bug http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
      *
      * @return
      */
@@ -168,7 +168,7 @@ public class TestInterfaceImpl implements TestInterface {
 
     /**
      * Method changeTestObjectNames
-     * Helps ilustrate the bug http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
+     * Helps illustrate the bug http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
      */
     public void changeTestObjectNames() {
 
@@ -179,7 +179,7 @@ public class TestInterfaceImpl implements TestInterface {
 
     /**
      * Method makeNewTestObjectNames
-     * Helps ilustrate the bug http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
+     * Helps illustrate the bug http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
      */
     public void makeNewTestObjectNames() {
 

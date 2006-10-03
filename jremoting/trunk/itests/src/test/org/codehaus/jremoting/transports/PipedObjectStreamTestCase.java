@@ -53,7 +53,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         // by JRemoting.  You can still use the ObjectStream transports, but
         // should be aware of the limitations.  See testBugParadeBugNumber4499841()
         // in the parent class.
-        testForBug4499841 = false;
+        bugParadeBug4499841StillExists = true;
 
     }
 
