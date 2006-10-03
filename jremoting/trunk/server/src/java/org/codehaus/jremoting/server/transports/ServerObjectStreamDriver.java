@@ -50,9 +50,9 @@ public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
     /**
      * Constructor ServerObjectStreamDriver
      */
-    public ServerObjectStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService, InputStream inputStream,
+    public ServerObjectStreamDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
                                     OutputStream outputStream, Object connectionDetails) {
-        super(serverMonitor, executorService, inputStream, outputStream, connectionDetails);
+        super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
 
     }
 

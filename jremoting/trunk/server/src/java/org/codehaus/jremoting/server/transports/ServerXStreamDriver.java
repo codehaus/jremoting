@@ -49,9 +49,9 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
     private XStream xStream;
     private BufferedOutputStream bufferedOutputStream;
 
-    public ServerXStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService, InputStream inputStream,
+    public ServerXStreamDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
                                OutputStream outputStream, Object connectionDetails, XStream xStream) {
-        super(serverMonitor, executorService, inputStream, outputStream, connectionDetails);
+        super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
         this.xStream = xStream;
     }
 

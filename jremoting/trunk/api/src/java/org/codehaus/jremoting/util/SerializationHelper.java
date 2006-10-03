@@ -57,18 +57,7 @@ public class SerializationHelper {
 
         return aBytes;
     }
-
-    /**
-     * Get instance from bytes.
-     *
-     * @param byteArray to turn into an instance
-     * @return the instance
-     * @throws ClassNotFoundException if the class-def can't be resolved.
-     */
-    public static Object getInstanceFromBytes(byte[] byteArray) throws ClassNotFoundException {
-        return getInstanceFromBytes(byteArray, SerializationHelper.class.getClassLoader());
-    }
-
+    
     /**
      * Get instance from bytes.
      *

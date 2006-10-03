@@ -24,10 +24,11 @@ import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideClientContextFactory;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
-import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.ServerStreamDriverFactory;
-import org.codehaus.jremoting.server.transports.ServerStreamDriver;
+import org.codehaus.jremoting.server.transports.*;
 
 import java.io.IOException;
 import java.io.PipedInputStream;
@@ -42,19 +43,28 @@ import java.io.PipedOutputStream;
 public class PipedStreamServer extends ConnectingServer {
 
     private final ServerStreamDriverFactory serverStreamDriverFactory;
+    private final ClassLoader facadesClassLoader;
 
     public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
                              ExecutorService executorService, ServerSideClientContextFactory contextFactory,
-                             ServerStreamDriverFactory serverStreamDriverFactory) {
+                             ServerStreamDriverFactory serverStreamDriverFactory,
+                             ClassLoader facadesClassLoader) {
         super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
         this.serverStreamDriverFactory = serverStreamDriverFactory;
+        this.facadesClassLoader = facadesClassLoader;
     }
 
     public PipedStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
-                             ExecutorService executorService, ServerSideClientContextFactory contextFactory,
-                             ServerStreamDriverFactory serverStreamDriverFactory) {
+                             ExecutorService executorService,
+                             ServerStreamDriverFactory serverStreamDriverFactory,
+                             ClassLoader facadesClassLoader) {
         super(serverMonitor, invocationHandlerAdapter, executorService);
         this.serverStreamDriverFactory = serverStreamDriverFactory;
+        this.facadesClassLoader = facadesClassLoader;
+    }
+
+    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executorService, ServerSideClientContextFactory serverSideClientContextFactory, ServerStreamDriverFactory serverStreamDriverFactory) {
+        this(serverMonitor, stubRetriever, authenticator, executorService, serverSideClientContextFactory, serverStreamDriverFactory, PipedStreamServer.class.getClassLoader());        
     }
 
     /**
@@ -80,7 +90,7 @@ public class PipedStreamServer extends ConnectingServer {
             in.connect(pOS);
 
 
-            ServerStreamDriver ssd = serverStreamDriverFactory.createDriver(serverMonitor, executorService, pIS, pOS, "piped");
+            ServerStreamDriver ssd = serverStreamDriverFactory.createDriver(serverMonitor, facadesClassLoader, pIS, pOS, "piped");
 
             PipedStreamConnection pssc = new PipedStreamConnection(this, pIS, pOS, ssd, serverMonitor);
 

@@ -43,9 +43,10 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
 
-    public ServerCustomStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService, InputStream inputStream,
-                                    OutputStream outputStream, Object connectionDetails) {
-        super(serverMonitor, executorService, inputStream, outputStream, connectionDetails);
+    public ServerCustomStreamDriver(ServerMonitor serverMonitor, InputStream inputStream,
+                                    OutputStream outputStream,
+                                    ClassLoader facadesClassLoader, Object connectionDetails) {
+        super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
     }
 
     /**
@@ -118,6 +119,6 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
                 " reads to read all, " + byteArraySize + ", required bytes." );
         }
         */
-        return (Request) SerializationHelper.getInstanceFromBytes(byteArray);
+        return (Request) SerializationHelper.getInstanceFromBytes(byteArray, getFacadesClassLoader());
     }
 }

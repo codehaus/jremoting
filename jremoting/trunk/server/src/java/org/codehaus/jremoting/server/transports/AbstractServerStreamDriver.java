@@ -33,18 +33,19 @@ import java.io.OutputStream;
  */
 public abstract class AbstractServerStreamDriver implements ServerStreamDriver {
 
-    private InputStream inputStream;
-    private OutputStream outputStream;
+    private final InputStream inputStream;
+    private final OutputStream outputStream;
     private final ServerMonitor serverMonitor;
-    private final ExecutorService executorService;
-    private Object connectionDetails;
+    private final ClassLoader facadesClassLoader;
+    private final Object connectionDetails;
 
-    public AbstractServerStreamDriver(ServerMonitor serverMonitor, ExecutorService executorService,
-                                      InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
+    public AbstractServerStreamDriver(ServerMonitor serverMonitor,
+                                      InputStream inputStream, OutputStream outputStream,
+                                      ClassLoader facadesClassLoader, Object connectionDetails) {
         this.serverMonitor = serverMonitor;
-        this.executorService = executorService;
         this.inputStream = inputStream;
         this.outputStream = outputStream;
+        this.facadesClassLoader = facadesClassLoader;
         this.connectionDetails = connectionDetails;
     }
 
@@ -75,5 +76,9 @@ public abstract class AbstractServerStreamDriver implements ServerStreamDriver {
 
     protected OutputStream getOutputStream() {
         return outputStream;
+    }
+
+    public ClassLoader getFacadesClassLoader() {
+        return facadesClassLoader;
     }
 }

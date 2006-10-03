@@ -8,9 +8,9 @@ import java.io.OutputStream;
 
 public class ServerCustomStreamDriverFactory implements ServerStreamDriverFactory {
 
-    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ExecutorService executorService,
+    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
                                            InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
-        return new ServerCustomStreamDriver(serverMonitor, executorService, inputStream, outputStream, connectionDetails);
+        return new ServerCustomStreamDriver(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
     }
 
 }

@@ -23,9 +23,9 @@ public class ServerXStreamDriverFactory implements ServerStreamDriverFactory {
         this (new XStream(new DomDriver()));
     }
 
-    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ExecutorService executorService,
+    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
                                            InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
-        return new ServerXStreamDriver(serverMonitor, executorService, inputStream, outputStream, connectionDetails, xStream);
+        return new ServerXStreamDriver(serverMonitor, facadesClassLoader, inputStream, outputStream, connectionDetails, xStream);
     }
 
 }

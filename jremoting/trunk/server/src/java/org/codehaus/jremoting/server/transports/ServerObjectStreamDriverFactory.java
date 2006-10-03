@@ -9,9 +9,9 @@ import java.io.IOException;
 
 public class ServerObjectStreamDriverFactory implements ServerStreamDriverFactory {
 
-    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ExecutorService executorService,
+    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
                                            InputStream inputStream, OutputStream outputStream, Object connectionDetails) throws IOException {
-        return new ServerObjectStreamDriver(serverMonitor, executorService, inputStream, outputStream, connectionDetails);
+        return new ServerObjectStreamDriver(serverMonitor, facadesClassLoader, inputStream, outputStream, connectionDetails);
     }
 
 }

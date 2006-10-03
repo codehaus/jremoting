@@ -25,7 +25,7 @@ import java.io.IOException;
 
 public interface ServerStreamDriverFactory {
 
-    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ExecutorService executorService,
+    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
                                            InputStream inputStream, OutputStream outputStream, Object connectionDetails) throws IOException;
 
 }

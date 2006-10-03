@@ -78,37 +78,11 @@ public class ClientXStreamDriver implements ClientStreamDriver {
 
     private Response readResponse() throws IOException {
 
-        StringBuffer res = new StringBuffer();
-        long str = System.currentTimeMillis();
-        String line = lineNumberReader.readLine();
-        res.append(line).append("\n");
-        if (!(line.endsWith("/>"))) {
-            str = System.currentTimeMillis();
-            line = lineNumberReader.readLine();
-            while (line != null) {
-                res.append(line).append("\n");
-                if (!Character.isWhitespace(line.charAt(0))) {
-                    line = null;
-                } else {
-                    str = System.currentTimeMillis();
-                    line = lineNumberReader.readLine();
-                }
-            }
-
-        }
-
-        // todo ClassLoader magic ?  or use Reader with XStream direct ?
-        String expected = res.toString();
-
-//        if (expected.equals("null\n")) {
-//            // TODO weird bug - chase it down?
-//            System.out.println("--> client read line > null!\n");
-//            return null;
-//        }
+        String xml = getXml();
 
         try {
             //TODO use facadesClassLoader
-            return (Response) xStream.fromXML(expected);
+            return (Response) xStream.fromXML(xml);
         } catch (ConversionException e) {
             Throwable cause = e.getCause();
             if (cause != null && cause instanceof ClassCastException) {
@@ -117,5 +91,24 @@ public class ClientXStreamDriver implements ClientStreamDriver {
                 throw e;
             }
         }
+    }
+
+    protected String getXml() throws IOException {
+        StringBuffer obj = new StringBuffer();
+        String line = lineNumberReader.readLine();
+        obj.append(line).append("\n");
+        if (!(line.endsWith("/>"))) {
+            line = lineNumberReader.readLine();
+            while (line != null) {
+                obj.append(line).append("\n");
+                if (!Character.isWhitespace(line.charAt(0))) {
+                    line = null;
+                } else {
+                    line = lineNumberReader.readLine();
+                }
+            }
+
+        }
+        return obj.toString();
     }
 }

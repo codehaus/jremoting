@@ -35,6 +35,7 @@ import java.net.SocketException;
  */
 public abstract class SocketStreamServer extends ConnectingServer {
     private final ServerStreamDriverFactory serverStreamDriverFactory;
+    private final ClassLoader facadesClassLoader;
 
     protected boolean accepting = true;
     /**
@@ -44,9 +45,10 @@ public abstract class SocketStreamServer extends ConnectingServer {
      * @param invocationHandlerAdapter Use this invocation handler adapter.
      */
     public SocketStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executorService,
-                              ServerStreamDriverFactory serverStreamDriverFactory) {
+                              ServerStreamDriverFactory serverStreamDriverFactory, ClassLoader facadesClassLoader) {
         super(serverMonitor, invocationHandlerAdapter, executorService);
         this.serverStreamDriverFactory = serverStreamDriverFactory;
+        this.facadesClassLoader = facadesClassLoader;
     }
 
     /**
@@ -60,7 +62,7 @@ public abstract class SocketStreamServer extends ConnectingServer {
         try {
             socket.setSoTimeout(60 * 1000);
             if (getState().equals(STARTED)) {
-                ServerStreamDriver ssd = serverStreamDriverFactory.createDriver(serverMonitor, executorService,
+                ServerStreamDriver ssd = serverStreamDriverFactory.createDriver(serverMonitor, facadesClassLoader,
                         socket.getInputStream(), socket.getOutputStream(), socket);
                 SocketStreamConnection sssc = new SocketStreamConnection(this, socket, ssd, serverMonitor);
                 sssc.run();
