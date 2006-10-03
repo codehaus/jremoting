@@ -28,11 +28,4 @@ public class BcelSimpleAsyncTestCase extends AbstractSimpleAsyncTestCase {
 
     }
 
-    public static void main(String[] args) throws Exception {
-        AbstractSimpleAsyncTestCase simp = new BcelSimpleAsyncTestCase();
-        simp.setUp();
-        simp.testSimpleAsync();
-        simp.tearDown();
-    }
-
 }

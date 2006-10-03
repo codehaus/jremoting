@@ -26,14 +26,21 @@ import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocat
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
+import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.rmi.RmiServer;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SocketStreamConnection;
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
+import org.jmock.MockObjectTestCase;
+import org.jmock.Mock;
+
+import java.io.IOException;
 
 /**
  * Test Custom Stream over sockets.
@@ -41,44 +48,72 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
  * @author Paul Hammant
  */
 public class SocketMismatchTestCase extends TestCase {
+    private Class x_class;
+    private String x_msg;
+    private BadConnectionException x_bce;
+
 
     public void testCustomStreamObjectStreamMismatch() throws Exception {
 
-        // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12001);
+        ServerMonitor sm = new ServerMonitor() {
+            public void closeError(Class clazz, String s, IOException e) {
+                fail();
+            }
+            public void badConnection(Class clazz, String s, BadConnectionException bce) {
+                x_class = clazz;
+                x_msg =s;
+                x_bce = bce;
+            }
+            public void classNotFound(Class clazz, ClassNotFoundException e) {
+                fail();
+            }
+            public void unexpectedException(Class clazz, String s, Exception e) {
+                fail();
+            }
+            public void stopServerError(Class clazz, String s, Exception e) {
+                fail();
+            }
+        };
+
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(sm, 12001);
+
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         ClientSideStubFactory factory = null;
+        TestInterface testClient;
         try {
 
             // Client side setup
             factory = new ClientSideStubFactory(new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
                 new ClientObjectStreamDriverFactory(), "127.0.0.1", 12001));
-            TestInterface testClient = (TestInterface) factory.lookupService("Hello");
-
-            // just a kludge for unit testing given we are intrinsically dealing with
-            // threads, JRemoting being a client/server thing
-            Thread.yield();
+            testClient = (TestInterface) factory.lookupService("Hello");
 
             testClient.hello("hello");
+
+
             fail("CustomStreams and ObjectStreams cannot interoperate");
         } catch (BadConnectionException bce) {
-            // expected.
+
+            assertEquals("StreamConnection.run(): Bad connection #0", x_msg);
+            assertNotNull(x_bce);
+            assertSame(SocketStreamConnection.class, x_class);
+
         } finally {
 
+            testClient = null;
             System.gc();
-            Thread.yield();
 
             try {
                 factory.close();
             } catch (Exception e) {
             }
-            Thread.yield();
+
             server.stop();
-            Thread.yield();
+
+
         }
     }
 
@@ -99,9 +134,6 @@ public class SocketMismatchTestCase extends TestCase {
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 12002));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
-            // just a kludge for unit testing given we are intrinsically dealing with
-            // threads, JRemoting being a client/server thing
-            Thread.yield();
 
             testClient.hello("hello");
             fail("CustomStreams and ObjectStreams cannot interoperate");
@@ -110,15 +142,15 @@ public class SocketMismatchTestCase extends TestCase {
         } finally {
 
             System.gc();
-            Thread.yield();
+
 
             try {
                 factory.close();
             } catch (Exception e) {
             }
-            Thread.yield();
+
             server.stop();
-            Thread.yield();
+
         }
     }
 
@@ -139,9 +171,6 @@ public class SocketMismatchTestCase extends TestCase {
             factory = new ClientSideStubFactory(new RmiClientInvocationHandler(new ConsoleClientMonitor(), "127.0.0.1", 12003));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
-            // just a kludge for unit testing given we are intrinsically dealing with
-            // threads, JRemoting being a client/server thing
-            Thread.yield();
 
             testClient.hello("hello");
             fail("CustomStreams and RMI trasnports cannot interoperate");
@@ -150,15 +179,15 @@ public class SocketMismatchTestCase extends TestCase {
         } finally {
 
             System.gc();
-            Thread.yield();
+
 
             try {
                 factory.close();
             } catch (Exception e) {
             }
-            Thread.yield();
+
             server.stop();
-            Thread.yield();
+
         }
     }
 
@@ -179,9 +208,6 @@ public class SocketMismatchTestCase extends TestCase {
                 new ClientObjectStreamDriverFactory(), "127.0.0.1", 12004));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
-            // just a kludge for unit testing given we are intrinsically dealing with
-            // threads, JRemoting being a client/server thing
-            Thread.yield();
 
             testClient.hello("hello");
             fail("CustomStreams and RMI trasnports cannot interoperate");
@@ -190,15 +216,15 @@ public class SocketMismatchTestCase extends TestCase {
         } finally {
 
             System.gc();
-            Thread.yield();
+
 
             try {
                 factory.close();
             } catch (Exception e) {
             }
-            Thread.yield();
+
             server.stop();
-            Thread.yield();
+
         }
     }
 

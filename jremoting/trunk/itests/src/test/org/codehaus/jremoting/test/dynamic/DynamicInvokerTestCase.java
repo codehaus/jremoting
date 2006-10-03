@@ -54,7 +54,6 @@ public class DynamicInvokerTestCase extends TestCase {
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {
-        super.setUp();
 
         // server side setup.
         server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 10101);
@@ -68,9 +67,6 @@ public class DynamicInvokerTestCase extends TestCase {
                 new ClientCustomStreamDriverFactory(),
                 "127.0.0.1", 10101));
 
-        // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting being a client/server thing
-        Thread.yield();
     }
 
     /**
@@ -80,11 +76,11 @@ public class DynamicInvokerTestCase extends TestCase {
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-        Thread.yield();
+
         dynamicInvoker.close(); //close@client
-        Thread.yield();
+
         server.stop(); //close@server
-        Thread.yield();
+
         server = null;
         testServer = null;
         super.tearDown();

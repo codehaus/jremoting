@@ -27,7 +27,6 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
 public class XStreamTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         // server side setup.
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -64,9 +63,6 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         Thread.sleep(1000);
 
         server.stop();
-        server = null;
-        testServer = null;
-        super.tearDown();
     }
 
 

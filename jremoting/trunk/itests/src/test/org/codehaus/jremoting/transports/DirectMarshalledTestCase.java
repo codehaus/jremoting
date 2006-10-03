@@ -37,7 +37,6 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
 public class DirectMarshalledTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         // server side setup.
         server = new DirectMarshalledServer(new ConsoleServerMonitor());
@@ -51,9 +50,6 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
 
         testClient = (TestInterface) factory.lookupService("Hello");
 
-        // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting being a client/server thing
-        Thread.yield();
     }
 
     public void testHello2Call() throws Exception {
@@ -68,14 +64,11 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-        Thread.yield();
+
         factory.close();
-        Thread.yield();
+
         server.stop();
-        Thread.yield();
-        server = null;
-        testServer = null;
-        super.tearDown();
+
     }
 
 

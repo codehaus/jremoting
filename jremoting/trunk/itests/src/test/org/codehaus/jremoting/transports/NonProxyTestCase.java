@@ -27,7 +27,6 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
 public class NonProxyTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         testServer = new TestInterfaceImpl();
         testClient = testServer;

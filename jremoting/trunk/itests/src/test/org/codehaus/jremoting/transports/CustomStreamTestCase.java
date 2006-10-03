@@ -39,7 +39,6 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
 public class CustomStreamTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         // server side setup.
         server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 10333);
@@ -53,23 +52,15 @@ public class CustomStreamTestCase extends AbstractHelloTestCase {
                 new ClientCustomStreamDriverFactory(), "localhost", 10333));
         testClient = (TestInterface) factory.lookupService("Hello");
 
-        // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting being a client/server thing
-        Thread.yield();
     }
 
 
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-        Thread.yield();
+        Thread.sleep(300);
         factory.close();
-        Thread.yield();
         server.stop();
-        Thread.yield();
-        server = null;
-        testServer = null;
-        super.tearDown();
     }
 
 

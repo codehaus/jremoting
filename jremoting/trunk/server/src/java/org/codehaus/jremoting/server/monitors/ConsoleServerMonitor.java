@@ -38,10 +38,6 @@ public class ConsoleServerMonitor implements ServerMonitor {
         System.out.println("[badConnection] " + s + " : " + bce.getMessage());
     }
 
-    public void c(String s, IOException ioe) {
-        System.out.println("[badConnection] " + s + " : " + ioe.getMessage());
-    }
-
     public void classNotFound(Class clazz, ClassNotFoundException e) {
         System.out.println("[classNotFound] " + e.getMessage());
     }

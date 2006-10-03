@@ -2,6 +2,7 @@ package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.ProxyHelper;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.ListServices;
 import org.codehaus.jremoting.requests.LookupService;
@@ -31,7 +32,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
                 return null;
             }
 
-            protected Object getInstance(String publishedServiceName, String objectName, DefaultProxyHelper proxyHelper) throws ConnectionException {
+            protected Object getInstance(String publishedServiceName, String objectName, ProxyHelper proxyHelper) throws ConnectionException {
                 return "bar";
             }
         };
@@ -139,7 +140,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
             }
         };
 
-        String[] services = (String[]) factory.listServices();
+        String[] services = factory.listServices();
         assertEquals(2, services.length);
         assertEquals("1", services[0]);
         assertEquals("2", services[1]);

@@ -49,7 +49,6 @@ public class ClassRetrievingTestCase extends TestCase {
 
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         // server side setup.
         DynamicStubRetriever dyncgen = new BcelDynamicStubRetriever();
@@ -71,14 +70,11 @@ public class ClassRetrievingTestCase extends TestCase {
                 new ClientCustomStreamDriverFactory(), in, out));
         testClient = (TestInterface) af.lookupService("Kewl");
 
-        // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting being a client/server thing
-        Thread.yield();
     }
 
     protected void tearDown() throws Exception {
         server.stop();
-        Thread.yield();
+
         server = null;
         testServer = null;
         super.tearDown();

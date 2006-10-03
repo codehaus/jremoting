@@ -54,7 +54,6 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         // server side setup.
         DynamicStubRetriever stubRetriever = getAbstractDynamicGeneratorClassRetriever(this.getClass().getClassLoader());
@@ -84,9 +83,6 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
                 new ClientCustomStreamDriverFactory(),"127.0.0.1", 11003));
         testClient = (AsyncTest) factory.lookupService("AsyncTest");
 
-        // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting being a client/server thing
-        Thread.yield();
     }
 
     public void testSimpleAsync() throws Exception {
@@ -129,18 +125,12 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
 
     }
 
-
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-        Thread.yield();
+        Thread.sleep(300);
         factory.close();
-        Thread.yield();
         server.stop();
-        Thread.yield();
-        server = null;
-        asyncTestImpl = null;
-        super.tearDown();
     }
 
 

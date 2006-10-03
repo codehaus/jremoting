@@ -36,7 +36,6 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
 public class DirectTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         // server side setup.
         server = new DirectServer();
@@ -60,9 +59,6 @@ public class DirectTestCase extends AbstractHelloTestCase {
         System.gc();
         factory.close();
         server.stop();
-        server = null;
-        testServer = null;
-        super.tearDown();
     }
 
 

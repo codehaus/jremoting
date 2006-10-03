@@ -51,7 +51,6 @@ public class SimpleAsync2TestCase extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         // server side setup.
         BcelDynamicStubRetriever stubRetriever = new BcelDynamicStubRetriever(this.getClass().getClassLoader());
@@ -77,9 +76,6 @@ public class SimpleAsync2TestCase extends TestCase {
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 11009));
         testClient = (AsyncTest) factory.lookupService("AsyncTestB");
 
-        // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting being a client/server thing
-        Thread.yield();
     }
 
     public void testSimpleAsync() throws Exception {
@@ -126,11 +122,11 @@ public class SimpleAsync2TestCase extends TestCase {
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-        Thread.yield();
+
         factory.close();
-        Thread.yield();
+
         server.stop();
-        Thread.yield();
+
         server = null;
         asyncTestImpl = null;
         super.tearDown();

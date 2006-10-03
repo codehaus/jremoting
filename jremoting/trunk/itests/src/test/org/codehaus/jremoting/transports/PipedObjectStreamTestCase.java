@@ -58,7 +58,6 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
     }
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         // server side setup.
         server = new PipedStreamServer(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(),
@@ -90,23 +89,13 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
                 new ClientObjectStreamDriverFactory(), in, out));
         testClient = (TestInterface) factory.lookupService("Hello33");
 
-        // just a kludge for unit testing given we are intrinsically dealing with
-        // threads, JRemoting being a client/server thing
-        Thread.yield();
     }
 
     protected void tearDown() throws Exception {
-
         testClient = null;
         System.gc();
-        Thread.yield();
         factory.close();
-        Thread.yield();
         server.stop();
-        Thread.yield();
-        server = null;
-        testServer = null;
-        super.tearDown();
     }
 
 

@@ -54,7 +54,6 @@ public class BcelTestCase extends AbstractHelloTestCase {
     }
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         // server side setup.
         BcelDynamicStubRetriever stubRetriever = new BcelDynamicStubRetriever(this.getClass().getClassLoader());

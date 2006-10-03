@@ -28,7 +28,6 @@ import org.codehaus.jremoting.test.proxies.CodedProxyTestInterfaceProxy;
 public class CodedProxyTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         testServer = new TestInterfaceImpl();
         testClient = new CodedProxyTestInterfaceProxy(testServer);

@@ -74,9 +74,6 @@ public class BouncingServerTestCase extends MockObjectTestCase {
                     new ClientCustomStreamDriverFactory(), "127.0.0.1", 12201));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello55");
 
-            // just a kludge for unit testing given we are intrinsically dealing with
-            // threads, JRemoting being a client/server thing
-            Thread.yield();
 
             testClient.hello2(100);
 
@@ -94,14 +91,14 @@ public class BouncingServerTestCase extends MockObjectTestCase {
 
         } finally {
             System.gc();
-            Thread.yield();
+
             try {
                 factory.close();
             } catch (NoSuchSessionException e) {
             }
-            Thread.yield();
+
             server.stop();
-            Thread.yield();
+
         }
     }
 

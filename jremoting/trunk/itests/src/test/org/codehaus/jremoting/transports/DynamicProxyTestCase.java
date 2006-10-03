@@ -29,7 +29,6 @@ import org.codehaus.jremoting.test.proxies.DynamicProxy;
 public class DynamicProxyTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
-        super.setUp();
 
         testServer = new TestInterfaceImpl();
         testClient = (TestInterface) DynamicProxy.newInstance(testServer, new Class[]{TestInterface.class});
