@@ -19,6 +19,7 @@ package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.util.ClassLoaderObjectInputStream;
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
@@ -68,7 +69,7 @@ public class ClientObjectStreamDriver implements ClientStreamDriver {
             objectOutputStream = new ObjectOutputStream(outputStream);
             //TODO use that magix classloader that uses the facades classlaoader
             this.facadesClassLoader = facadesClassLoader;
-            objectInputStream = new ObjectInputStream(new BufferedInputStream(inputStream));
+            objectInputStream = new ClassLoaderObjectInputStream(facadesClassLoader, new BufferedInputStream(inputStream));
         } catch (EOFException eofe) {
             throw new BadConnectionException("Cannot connect to remote JRemoting server. Have we a mismatch on transports?");
         } catch (IOException ioe) {

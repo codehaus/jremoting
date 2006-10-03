@@ -28,7 +28,9 @@ import java.util.concurrent.ExecutorService;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.SimpleMethodInvoked;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import com.thoughtworks.xstream.XStream;
@@ -67,6 +69,10 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
 
 
         String xml = xStream.toXML(response);
+
+//        if (response instanceof SimpleMethodInvoked) {
+//            System.out.println("-->Resp " + xml);
+//        }
 
         printWriter.write(xml + "\n");
         printWriter.flush();
@@ -113,6 +119,11 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
 
         try {
             Object o = xStream.fromXML(r);
+
+//            if (o instanceof InvokeMethod) {
+//                System.out.println("-->Req " + r);
+//            }
+
             return (Request) o;
         } catch (ConversionException e) {
             Throwable cause = e.getCause();

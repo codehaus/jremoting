@@ -46,6 +46,11 @@ public class XStreamTestCase extends AbstractHelloTestCase {
 
     }
 
+
+    public void testHello4Call() throws Exception {
+        super.testHello4Call();  
+    }
+
     protected void tearDown() throws Exception {
 
         testClient = null;

@@ -17,11 +17,7 @@
  */
 package org.codehaus.jremoting.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InvalidClassException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 import org.codehaus.jremoting.JRemotingException;
 
@@ -84,7 +80,7 @@ public class SerializationHelper {
     public static Object getInstanceFromBytes(byte[] byteArray, ClassLoader facadesClassLoader) throws ClassNotFoundException {
 
         try {
-            ObjectInputStream oIs = new ClassLoaderObjectInputStream(facadesClassLoader, byteArray);
+            ObjectInputStream oIs = new ClassLoaderObjectInputStream(facadesClassLoader, new ByteArrayInputStream(byteArray));
             Object obj = oIs.readObject();
             oIs.close();
             return obj;

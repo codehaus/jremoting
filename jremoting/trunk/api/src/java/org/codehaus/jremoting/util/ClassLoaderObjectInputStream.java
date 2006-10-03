@@ -17,11 +17,7 @@
  */
 package org.codehaus.jremoting.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectStreamClass;
-import java.io.StreamCorruptedException;
+import java.io.*;
 
 /**
  * A special ObjectInputStream to handle highly transient classes hosted
@@ -33,30 +29,13 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
 
     private ClassLoader facadesClassLoader;
 
-    /**
-     * Constructor ClassLoaderObjectInputStream
-     *
-     * @param facadesClassLoader the classloader that containes the classes that may be deserialized
-     * @param byteArray   tye bytes for the thing to be deserialized.
-     * @throws java.io.IOException              from super
-     * @throws java.io.StreamCorruptedException from super
-     */
-    public ClassLoaderObjectInputStream(final ClassLoader facadesClassLoader, byte[] byteArray) throws IOException, StreamCorruptedException {
+    public ClassLoaderObjectInputStream(final ClassLoader facadesClassLoader, InputStream inputStream) throws IOException, StreamCorruptedException {
 
-        super(new ByteArrayInputStream(byteArray));
+        super(inputStream);
 
         this.facadesClassLoader = facadesClassLoader;
     }
 
-
-    /**
-     * This method overrides the super and adds classloader aware deserialization
-     *
-     * @param objectStreamClass the class that we're looking for during deserialization
-     * @return the class itself if found, null if not.
-     * @throws IOException            some general problem classloading from files/resources.
-     * @throws ClassNotFoundException this nor its super knowns about the class.
-     */
     protected Class resolveClass(final ObjectStreamClass objectStreamClass) throws IOException, ClassNotFoundException {
 
         Class clazz = null;
