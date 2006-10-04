@@ -42,7 +42,7 @@ public class DefaultServerSideContext implements Context {
             if (!session.equals(other.session)) {
                 return false;
             }
-            if (!context.equals(other.context)) {
+            if (context == null || !context.equals(other.context)) {
                 return false;
             }
             return true;
@@ -51,7 +51,7 @@ public class DefaultServerSideContext implements Context {
     }
 
     public String toString() {
-        return "DefaultServerSideContext[" + session + "," + context.toString() + "]";
+        return "DefaultServerSideContext[session=" + session + ", context=" + context + "]";
     }
 
 }

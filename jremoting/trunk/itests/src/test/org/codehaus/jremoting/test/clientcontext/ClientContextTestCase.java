@@ -28,6 +28,7 @@ import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
+import org.codehaus.jremoting.client.factories.SimpleContextFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -49,112 +50,119 @@ import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStream
 
 public class ClientContextTestCase extends TestCase {
 
+    public void testSimpleMathsWorks() {
 
-    public void testSimple() {
-
-        AccountListener al = new AccountListener() {
+        AccountListener nullAccountListener = new AccountListener() {
             public void record(String event, Context context) {
             }
         };
 
         ServerSideContextFactory contextFactory = new DefaultServerSideContextFactory();
 
-        AccountImpl one = new AccountImpl(contextFactory, "one", al);
-        AccountImpl two = new AccountImpl(contextFactory, "two", al);
+        Account fredsAccount = new TalkativeAccountStartingWith123Dollars(contextFactory, "fredsAccount", nullAccountListener);
+        Account wilmasAccount = new TalkativeAccountStartingWith123Dollars(contextFactory, "wilmasAccount", nullAccountListener);
 
-        final AccountManager accountManager = new AccountManagerImpl(contextFactory, one, two);
+        final AccountManager accountManager = new AccountManagerImpl(contextFactory, fredsAccount, wilmasAccount);
 
         try {
-            accountManager.transferAmount("one", "two", 23);
+            accountManager.transferAmount("fredsAccount", "wilmasAccount", 23);
         } catch (TransferBarfed transferBarfed) {
             fail("Transfer should have worked");
         }
 
-        assertEquals(one.getBalance(), 100);
-        assertEquals(two.getBalance(), 146);
+        assertEquals(fredsAccount.getBalance(), 100);
+        assertEquals(wilmasAccount.getBalance(), 146);
 
     }
 
     public void testWithCustomContextWithoutRPC() throws InterruptedException {
 
-        final HashMap hashMap = new HashMap();
+        final HashMap<String, Context> contextualEvents = new HashMap<String, Context>();
 
-        AccountListener al = makeAccountListener(hashMap);
+        AccountListener al = new AccountListener() {
+            public void record(String event, Context context) {
+                contextualEvents.put(event, context);
+            }
+        };
 
         ServerSideContextFactory contextFactory = new TestContextFactory();
 
-        AccountImpl one = new AccountImpl(contextFactory, "one", al);
-        AccountImpl two = new AccountImpl(contextFactory, "two", al);
+        Account fredsAccount = new TalkativeAccountStartingWith123Dollars(contextFactory, "fredsAccount", al);
+        Account wilmasAccount = new TalkativeAccountStartingWith123Dollars(contextFactory, "wilmasAccount", al);
 
-        final AccountManager accountManager = new AccountManagerImpl(contextFactory, one, two);
+        final AccountManager accountManager = new AccountManagerImpl(contextFactory, fredsAccount, wilmasAccount);
 
-        Thread threadOne = makeThread(accountManager, 11);
-        Thread threadTwo = makeThread(accountManager, 22);
+        Thread threadOne = makeAmountTransferringThread(accountManager, "fredsAccount", "wilmasAccount", 11);
+        Thread threadTwo = makeAmountTransferringThread(accountManager, "fredsAccount", "wilmasAccount", 22);
         threadOne.start();
         threadTwo.start();
 
         Thread.sleep(2000);
 
-        Context debit11 = (Context) hashMap.get("one:debit:11");
-        Context credit11 = (Context) hashMap.get("two:credit:11");
+        Context debit11Context = contextualEvents.get("fredsAccount:debited:11");
+        Context credit11Context = contextualEvents.get("wilmasAccount:credited:11");
 
-        basicAsserts(debit11, credit11);
+        basicAsserts(debit11Context, credit11Context);
 
-        Context debit22 = (Context) hashMap.get("one:debit:22");
-        Context credit22 = (Context) hashMap.get("two:credit:22");
+        Context debit22Context = contextualEvents.get("fredsAccount:debited:22");
+        Context credit22Context = contextualEvents.get("wilmasAccount:credited:22");
 
-        basicAsserts(debit22, credit22);
+        basicAsserts(debit22Context, credit22Context);
 
-        assertFalse(debit11 == credit22);
+        assertFalse(debit11Context == credit22Context);
 
     }
 
     public void testWithCustomContextWithRPC() throws InterruptedException, PublicationException, ConnectionException {
 
-        final HashMap hashMap = new HashMap();
+        final HashMap<String, Context> contextualEvents = new HashMap<String, Context>();
 
-        AccountListener al = makeAccountListener(hashMap);
+        AccountListener al = new AccountListener() {
+            public void record(String event, Context context) {
+                ((HashMap<String, Context>) contextualEvents).put(event, context);
+            }
+        };
 
-        ServerSideContextFactory ccf = new DefaultServerSideContextFactory();
+        ServerSideContextFactory sscf = new DefaultServerSideContextFactory();
 
-        AccountImpl one = new AccountImpl(ccf, "one", al);
-        AccountImpl two = new AccountImpl(ccf, "two", al);
+        Account fredsAccount = new TalkativeAccountStartingWith123Dollars(sscf, "fredsAccount", al);
+        Account wilmasAccount = new TalkativeAccountStartingWith123Dollars(sscf, "wilmasAccount", al);
 
-        final AccountManager accountManager = new AccountManagerImpl(ccf, one, two);
+        final AccountManager accountManager = new AccountManagerImpl(sscf, fredsAccount, wilmasAccount);
 
         BcelDynamicStubRetriever stubRetriever = new BcelDynamicStubRetriever(this.getClass().getClassLoader());
 
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ExecutorService executorService = Executors.newCachedThreadPool();
         SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ServerCustomStreamDriverFactory(), executorService,
-                ccf, 13333);
+                new ServerCustomStreamDriverFactory(), executorService, sscf, 13333);
 
         PublicationDescription pd = new PublicationDescription(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        Factory factory = new ClientSideStubFactory(new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
-                new ClientCustomStreamDriverFactory(),
-                "127.0.0.1", 13333));
+        Factory factory = new ClientSideStubFactory(
+                new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(), new ClientCustomStreamDriverFactory(), "127.0.0.1", 13333),
+                new SimpleContextFactory());
+
         final AccountManager clientSideAccountManager = (AccountManager) factory.lookupService("OurAccountManager");
 
-        Thread threadOne = makeThread(clientSideAccountManager, 11);
-        Thread threadTwo = makeThread(clientSideAccountManager, 22);
+        Thread threadOne = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 11);
+        Thread threadTwo = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 22);
         threadOne.start();
         threadTwo.start();
 
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
-        Context debit11 = (Context) hashMap.get("one:debit:11");
-        Context credit11 = (Context) hashMap.get("two:credit:11");
+        Context debit11 = (Context) contextualEvents.get("fredsAccount:debited:11");
+        Context credit11 = (Context) contextualEvents.get("wilmasAccount:credited:11");
 
         basicAsserts(debit11, credit11);
 
         assertTrue("Wrong type of Context", credit11 instanceof DefaultServerSideContext);
 
-        Context debit22 = (Context) hashMap.get("one:debit:22");
-        Context credit22 = (Context) hashMap.get("two:credit:22");
+        Context debit22 = (Context) contextualEvents.get("fredsAccount:debited:22");
+        Context credit22 = (Context) contextualEvents.get("wilmasAccount:credited:22");
 
         basicAsserts(debit22, credit22);
 
@@ -169,21 +177,12 @@ public class ClientContextTestCase extends TestCase {
         assertEquals("Debit Context and Credit Context should be .equals()", debitContext, creditContext);
     }
 
-    private AccountListener makeAccountListener(final HashMap hashMap) {
-        AccountListener al = new AccountListener() {
-            public void record(String event, Context context) {
-                //System.out.println("EVENT-" + event + " " + context);
-                hashMap.put(event, context);
-            }
-        };
-        return al;
-    }
-
-    private Thread makeThread(final AccountManager accountManager, final int amount) {
+    private Thread makeAmountTransferringThread(final AccountManager accountManager,
+                                                final String from, final String to, final int amount) {
         Thread thread = new Thread(new Runnable() {
             public void run() {
                 try {
-                    accountManager.transferAmount("one", "two", amount);
+                    accountManager.transferAmount(from, to, amount);
                 } catch (TransferBarfed transferBarfed) {
                     fail("Transfer should have worked");
                 }

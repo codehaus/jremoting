@@ -51,14 +51,16 @@ public abstract class AbstractFactory implements Factory {
 
     private static final int STUB_PREFIX_LENGTH = StubHelper.getStubPrefixLength();
     protected final ClientInvocationHandler clientInvocationHandler;
+    private final ContextFactory contextFactory;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
     private transient String textToSign;
     protected final Long sessionID;
     private ProxyRegistry proxyRegistry;
 
 
-    public AbstractFactory(final ClientInvocationHandler clientInvocationHandler) throws ConnectionException {
+    public AbstractFactory(final ClientInvocationHandler clientInvocationHandler, ContextFactory contextFactory) throws ConnectionException {
         this.clientInvocationHandler = clientInvocationHandler;
+        this.contextFactory = contextFactory;
         clientInvocationHandler.initialize();
 
         Response response = clientInvocationHandler.handleInvocation(new OpenConnection());
@@ -145,7 +147,8 @@ public abstract class AbstractFactory implements Factory {
         }
 
         Service lr = (Service) ar;
-        DefaultProxyHelper baseObj = new DefaultProxyHelper(proxyRegistry, clientInvocationHandler, publishedServiceName, "Main", lr.getReferenceID(), sessionID);
+        DefaultProxyHelper baseObj = new DefaultProxyHelper(proxyRegistry, clientInvocationHandler,
+                contextFactory, publishedServiceName, "Main", lr.getReferenceID(), sessionID);
         Object retVal = getInstance(publishedServiceName, "Main", baseObj);
 
         baseObj.registerImplObject(retVal);

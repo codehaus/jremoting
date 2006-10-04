@@ -24,10 +24,12 @@ package org.codehaus.jremoting.test.clientcontext;
 
 public interface Account {
 
-    String getSymbolicKey();
+    String getID();
 
     void debit(int amt) throws DebitBarfed;
 
     void credit(int amt) throws CreditBarfed;
+
+    int getBalance();
 
 }

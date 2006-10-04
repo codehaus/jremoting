@@ -25,21 +25,21 @@ import org.codehaus.jremoting.server.ServerSideContextFactory;
  * @version $Revision: 1.2 $
  */
 
-public class AccountImpl implements Account {
+public class TalkativeAccountStartingWith123Dollars implements Account {
 
     private ServerSideContextFactory contextFactory;
-    String symbolicKey;
+    private String id;
     private int balance = 123;
     private AccountListener accountListener;
 
-    public AccountImpl(ServerSideContextFactory contextFactory, String symbolicKey, AccountListener accountListener) {
+    public TalkativeAccountStartingWith123Dollars(ServerSideContextFactory contextFactory, String id, AccountListener accountListener) {
         this.contextFactory = contextFactory;
-        this.symbolicKey = symbolicKey;
+        this.id = id;
         this.accountListener = accountListener;
     }
 
-    public String getSymbolicKey() {
-        return symbolicKey;
+    public String getID() {
+        return id;
     }
 
     public int getBalance() {
@@ -49,12 +49,12 @@ public class AccountImpl implements Account {
     public void debit(int amt) throws DebitBarfed {
         Context cc = contextFactory.get();
         balance = balance - amt;
-        accountListener.record(getSymbolicKey() + ":debit:" + amt, cc);
+        accountListener.record(getID() + ":debited:" + amt, cc);
     }
 
     public void credit(int amt) throws CreditBarfed {
         Context cc = contextFactory.get();
         balance = balance + amt;
-        accountListener.record(getSymbolicKey() + ":credit:" + amt, cc);
+        accountListener.record(getID() + ":credited:" + amt, cc);
     }
 }

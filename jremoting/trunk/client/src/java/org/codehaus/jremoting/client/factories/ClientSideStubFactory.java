@@ -19,6 +19,7 @@ package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.util.StubHelper;
 
 /**
@@ -31,11 +32,16 @@ public class ClientSideStubFactory extends AbstractFactory {
     private ClassLoader classLoader;
 
     public ClientSideStubFactory(ClientInvocationHandler clientInvocationHandler) throws ConnectionException {
-        this(clientInvocationHandler, Thread.currentThread().getContextClassLoader());
+        this(clientInvocationHandler, Thread.currentThread().getContextClassLoader(), new NullContextFactory());
     }
 
-    public ClientSideStubFactory(ClientInvocationHandler clientInvocationHandler, ClassLoader facadesClassLoader) throws ConnectionException {
-        super(clientInvocationHandler);
+    public ClientSideStubFactory(ClientInvocationHandler clientInvocationHandler, ContextFactory contextFactory) throws ConnectionException {
+        this(clientInvocationHandler, Thread.currentThread().getContextClassLoader(), contextFactory);
+    }
+
+    public ClientSideStubFactory(ClientInvocationHandler clientInvocationHandler, ClassLoader facadesClassLoader, ContextFactory contextFactory
+    ) throws ConnectionException {
+        super(clientInvocationHandler, contextFactory);
         this.classLoader = facadesClassLoader;
     }
 

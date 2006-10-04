@@ -29,26 +29,22 @@ import java.util.HashMap;
 
 public class AccountManagerImpl implements AccountManager {
 
-    private HashMap accounts = new HashMap();
-    private ServerSideContextFactory contextFactory;
+    private HashMap<String, Account> accounts = new HashMap<String, Account>();
 
     public AccountManagerImpl(ServerSideContextFactory contextFactory, Account one, Account two) {
-        this.contextFactory = contextFactory;
-        accounts.put(one.getSymbolicKey(), one);
-        accounts.put(two.getSymbolicKey(), two);
+        accounts.put(one.getID(), one);
+        accounts.put(two.getID(), two);
     }
 
 
-    public void transferAmount(String acct1, String acct2, int amt) throws TransferBarfed {
+    public void transferAmount(String from, String to, int amt) throws TransferBarfed {
 
-        Account from = (Account) accounts.get(acct1);
-        Account to = (Account) accounts.get(acct2);
-
-        Context cc = contextFactory.get();
+        Account fromAccount = accounts.get(from);
+        Account toAccount = accounts.get(to);
 
         try {
-            from.debit(amt);
-            to.credit(amt);
+            fromAccount.debit(amt);
+            toAccount.credit(amt);
         } catch (DebitBarfed debitBarfed) {
             throw new TransferBarfed();
         } catch (CreditBarfed creditBarfed) {

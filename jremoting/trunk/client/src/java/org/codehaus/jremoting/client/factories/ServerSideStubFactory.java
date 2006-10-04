@@ -22,6 +22,7 @@ import java.util.HashMap;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.requests.RetrieveStub;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.ProblemResponse;
@@ -41,7 +42,11 @@ public class ServerSideStubFactory extends AbstractFactory {
     private final HashMap publishedServiceClassLoaders = new HashMap();
 
     public ServerSideStubFactory(ClientInvocationHandler clientInvocationHandler) throws ConnectionException {
-        super(clientInvocationHandler);
+        super(clientInvocationHandler, new NullContextFactory());
+    }
+
+    public ServerSideStubFactory(ClientInvocationHandler clientInvocationHandler, ContextFactory contextFactory) throws ConnectionException {
+        super(clientInvocationHandler, contextFactory);
     }
 
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {

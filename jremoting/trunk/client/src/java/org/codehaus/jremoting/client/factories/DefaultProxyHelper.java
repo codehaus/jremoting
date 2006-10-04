@@ -54,10 +54,13 @@ public final class DefaultProxyHelper implements ProxyHelper {
     private final transient String objectName;
     private final transient Long referenceID;
     private final transient Long session;
-    private ContextFactory clientContextFactory;
-    private ArrayList queuedAsyncRequests = new ArrayList();
+    private ContextFactory contextFactory;
+    private ArrayList<GroupedMethodRequest> queuedAsyncRequests = new ArrayList<GroupedMethodRequest>();
 
-    public DefaultProxyHelper(ProxyRegistry proxyRegistry, ClientInvocationHandler clientInvocationHandler, String pubishedServiceName, String objectName, Long referenceID, Long session) {
+    public DefaultProxyHelper(ProxyRegistry proxyRegistry, ClientInvocationHandler clientInvocationHandler,
+                              ContextFactory contextFactory, String pubishedServiceName, String objectName,
+                              Long referenceID, Long session) {
+        this.contextFactory = contextFactory;
 
         this.proxyRegistry = proxyRegistry;
         this.clientInvocationHandler = clientInvocationHandler;
@@ -124,7 +127,8 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 implBeans[i] = o;
 
                 if (implBeans[i] == null) {
-                    DefaultProxyHelper bo2 = new DefaultProxyHelper(proxyRegistry, clientInvocationHandler, publishedServiceName, objectNames[i], refs[i], session);
+                    DefaultProxyHelper bo2 = new DefaultProxyHelper(proxyRegistry, clientInvocationHandler,
+                            contextFactory, publishedServiceName, objectNames[i], refs[i], session);
                     Object retFacade = null;
 
                     try {
@@ -157,7 +161,8 @@ public final class DefaultProxyHelper implements ProxyHelper {
         Object implBean = proxyRegistry.getImplObj(ref);
 
         if (implBean == null) {
-            DefaultProxyHelper pHelper = new DefaultProxyHelper(proxyRegistry, clientInvocationHandler, publishedServiceName, mfr.getObjectName(), ref, session);
+            DefaultProxyHelper pHelper = new DefaultProxyHelper(proxyRegistry, clientInvocationHandler,
+                    contextFactory, publishedServiceName, mfr.getObjectName(), ref, session);
             Object retFacade = proxyRegistry.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
 
             pHelper.registerImplObject(retFacade);
@@ -362,10 +367,10 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
     private synchronized void setContext(ServiceRequest request) {
 
-        if (clientContextFactory == null) {
-            clientContextFactory = new SimpleContextFactory();
+        if (contextFactory == null) {
+            contextFactory = new SimpleContextFactory();
         }
-        request.setContext(clientContextFactory.getClientContext());
+        request.setContext(contextFactory.getClientContext());
 
     }
 
