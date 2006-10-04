@@ -29,13 +29,13 @@ import org.codehaus.jremoting.JRemotingException;
 import org.codehaus.jremoting.RmiInvocationHandler;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.ServerSideClientContextFactory;
+import org.codehaus.jremoting.server.ServerSideContextFactory;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.stubretrievers.FromClassLoaderStubRetriever;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
 
 /**
  * Class RmiServer for serving of 'over RMI'
@@ -53,12 +53,12 @@ public class RmiServer extends ConnectingServer {
         this.port = port;
     }
 
-    public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executorService, ServerSideClientContextFactory contextFactory, int port) {
+    public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executorService, ServerSideContextFactory contextFactory, int port) {
         this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executorService, port);
     }
 
     public RmiServer(ServerMonitor serverMonitor, int port) {
-        this(serverMonitor, new FromClassLoaderStubRetriever(), new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(), port);
+        this(serverMonitor, new FromClassLoaderStubRetriever(), new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideContextFactory(), port);
     }
 
     public void start() {

@@ -54,7 +54,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
     private final transient String objectName;
     private final transient Long referenceID;
     private final transient Long session;
-    private ClientContextFactory clientContextClientFactory;
+    private ContextFactory clientContextFactory;
     private ArrayList queuedAsyncRequests = new ArrayList();
 
     public DefaultProxyHelper(ProxyRegistry proxyRegistry, ClientInvocationHandler clientInvocationHandler, String pubishedServiceName, String objectName, Long referenceID, Long session) {
@@ -362,10 +362,10 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
     private synchronized void setContext(ServiceRequest request) {
 
-        if (clientContextClientFactory == null) {
-            clientContextClientFactory = new DefaultClientContextFactory();
+        if (clientContextFactory == null) {
+            clientContextFactory = new SimpleContextFactory();
         }
-        request.setContext(clientContextClientFactory.getClientContext());
+        request.setContext(clientContextFactory.getClientContext());
 
     }
 

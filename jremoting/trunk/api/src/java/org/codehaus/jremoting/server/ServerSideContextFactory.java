@@ -15,34 +15,21 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.test.clientcontext;
+package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.client.ClientContext;
-
+import org.codehaus.jremoting.client.Context;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
  * @version $Revision: 1.2 $
  */
 
-public class TestClientContext implements ClientContext {
+public interface ServerSideContextFactory {
 
-    private String ctx;
+    Context get();
 
-    public TestClientContext() {
-        ctx = "TestCCF:" + System.identityHashCode(Thread.currentThread());
-    }
+    void set(Long session, Context context);
 
-    public int hashCode() {
-        return ctx.hashCode();
-    }
-
-    public String toString() {
-        return ctx;
-    }
-
-    public boolean equals(Object obj) {
-        return ctx.equals(((TestClientContext) obj).ctx);
-    }
+    boolean isSet();
 
 }

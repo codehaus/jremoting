@@ -29,7 +29,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.DynamicStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
@@ -63,7 +63,7 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
 
         stubRetriever.setClassGenDir(class_gen_dir);
 
-        DefaultServerSideClientContextFactory ccf = new DefaultServerSideClientContextFactory();
+        DefaultServerSideContextFactory ccf = new DefaultServerSideContextFactory();
 
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ExecutorService executorService = Executors.newCachedThreadPool();

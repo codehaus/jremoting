@@ -17,18 +17,18 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import org.codehaus.jremoting.client.ClientContext;
+import org.codehaus.jremoting.client.Context;
 
-public class DefaultServerSideClientContext implements ClientContext {
+public class DefaultServerSideContext implements Context {
     private Long session;
-    private ClientContext clientSideClientContext;
+    private Context context;
     private int hashCode;
 
-    public DefaultServerSideClientContext(Long session, ClientContext clientSideClientContext) {
+    public DefaultServerSideContext(Long session, Context context) {
         this.session = session;
-        this.clientSideClientContext = clientSideClientContext;
-        if (session != null && clientSideClientContext != null) {
-            hashCode = session.hashCode() + clientSideClientContext.hashCode();
+        this.context = context;
+        if (session != null && context != null) {
+            hashCode = session.hashCode() + context.hashCode();
         }
     }
 
@@ -37,12 +37,12 @@ public class DefaultServerSideClientContext implements ClientContext {
     }
 
     public boolean equals(Object obj) {
-        if (obj instanceof DefaultServerSideClientContext) {
-            DefaultServerSideClientContext other = (DefaultServerSideClientContext) obj;
+        if (obj instanceof DefaultServerSideContext) {
+            DefaultServerSideContext other = (DefaultServerSideContext) obj;
             if (!session.equals(other.session)) {
                 return false;
             }
-            if (!clientSideClientContext.equals(other.clientSideClientContext)) {
+            if (!context.equals(other.context)) {
                 return false;
             }
             return true;
@@ -51,7 +51,7 @@ public class DefaultServerSideClientContext implements ClientContext {
     }
 
     public String toString() {
-        return "DefaultServerSideClientContext[" + session + "," + clientSideClientContext.toString() + "]";
+        return "DefaultServerSideContext[" + session + "," + context.toString() + "]";
     }
 
 }

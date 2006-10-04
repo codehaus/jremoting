@@ -23,10 +23,7 @@ import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.ServerSideClientContextFactory;
-import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.ServerSideContextFactory;
 import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
 import org.codehaus.jremoting.server.transports.*;
 
@@ -46,7 +43,7 @@ public class PipedStreamServer extends ConnectingServer {
     private final ClassLoader facadesClassLoader;
 
     public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
-                             ExecutorService executorService, ServerSideClientContextFactory contextFactory,
+                             ExecutorService executorService, ServerSideContextFactory contextFactory,
                              ServerStreamDriverFactory serverStreamDriverFactory,
                              ClassLoader facadesClassLoader) {
         super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
@@ -63,8 +60,8 @@ public class PipedStreamServer extends ConnectingServer {
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executorService, ServerSideClientContextFactory serverSideClientContextFactory, ServerStreamDriverFactory serverStreamDriverFactory) {
-        this(serverMonitor, stubRetriever, authenticator, executorService, serverSideClientContextFactory, serverStreamDriverFactory, PipedStreamServer.class.getClassLoader());        
+    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executorService, ServerSideContextFactory serverSideContextFactory, ServerStreamDriverFactory serverStreamDriverFactory) {
+        this(serverMonitor, stubRetriever, authenticator, executorService, serverSideContextFactory, serverStreamDriverFactory, PipedStreamServer.class.getClassLoader());
     }
 
     /**

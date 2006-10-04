@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.codehaus.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,35 +15,34 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.client.factories;
+package org.codehaus.jremoting.test.clientcontext;
 
-import org.codehaus.jremoting.client.ClientContext;
-import org.codehaus.jremoting.client.ClientContextFactory;
-import org.codehaus.jremoting.client.DefaultClientContext;
+import org.codehaus.jremoting.client.Context;
+
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
  * @version $Revision: 1.2 $
  */
 
-public class DefaultClientContextFactory implements ClientContextFactory {
+public class TestContext implements Context {
 
-    // The next serial number to be assigned
-    private static long nextSerialNum = 0;
+    private String ctx;
 
-    private static ThreadLocal serialContext = new ThreadLocal() {
-        protected synchronized Object initialValue() {
-            return new DefaultClientContext(nextSerialNum++);
-        }
-    };
-
-    public static ClientContext get() {
-        return (ClientContext) (serialContext.get());
+    public TestContext() {
+        ctx = "TestCCF:" + System.identityHashCode(Thread.currentThread());
     }
 
+    public int hashCode() {
+        return ctx.hashCode();
+    }
 
-    public ClientContext getClientContext() {
-        return get();
+    public String toString() {
+        return ctx;
+    }
+
+    public boolean equals(Object obj) {
+        return ctx.equals(((TestContext) obj).ctx);
     }
 
 }

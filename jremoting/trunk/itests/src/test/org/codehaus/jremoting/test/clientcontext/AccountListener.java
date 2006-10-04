@@ -18,7 +18,7 @@
 
 package org.codehaus.jremoting.test.clientcontext;
 
-import org.codehaus.jremoting.client.ClientContext;
+import org.codehaus.jremoting.client.Context;
 
 
 /**
@@ -28,6 +28,6 @@ import org.codehaus.jremoting.client.ClientContext;
 
 public interface AccountListener {
 
-    void record(String event, ClientContext clientContext);
+    void record(String event, Context context);
 
 }

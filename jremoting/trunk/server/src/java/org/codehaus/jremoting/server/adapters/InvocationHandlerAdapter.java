@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.codehaus.jremoting.Contextualizable;
-import org.codehaus.jremoting.client.ClientContext;
+import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.CollectGarbage;
@@ -59,13 +59,13 @@ import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
 import org.codehaus.jremoting.server.ServerInvocationHandler;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.ServerSideClientContextFactory;
+import org.codehaus.jremoting.server.ServerSideContextFactory;
 import org.codehaus.jremoting.server.Session;
 import org.codehaus.jremoting.server.StubRetrievalException;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
 import org.codehaus.jremoting.util.StubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
@@ -84,13 +84,13 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     private final Authenticator authenticator;
     private final ServerMonitor serverMonitor;
 
-    private final ServerSideClientContextFactory clientContextFactory;
+    private final ServerSideContextFactory contextFactory;
 
-    public InvocationHandlerAdapter(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerSideClientContextFactory clientContextFactory) {
+    public InvocationHandlerAdapter(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerSideContextFactory contextFactory) {
         this.stubRetriever = stubRetriever;
         this.authenticator = authenticator;
         this.serverMonitor = serverMonitor != null ? serverMonitor : new ConsoleServerMonitor();
-        this.clientContextFactory = clientContextFactory != null ? clientContextFactory : new DefaultServerSideClientContextFactory();
+        this.contextFactory = contextFactory != null ? contextFactory : new DefaultServerSideContextFactory();
     }
 
     /**
@@ -166,16 +166,16 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     }
 
 
-    protected synchronized ServerSideClientContextFactory getClientContextFactory() {
-        return clientContextFactory;
+    protected synchronized ServerSideContextFactory getClientContextFactory() {
+        return contextFactory;
     }
 
     private void setClientContext(Contextualizable request) {
         Long session = request.getSessionID();
-        ClientContext clientSideClientContext = request.getContext();
+        Context clientSideContext = request.getContext();
 
         // *always* happens before method invocations.
-        getClientContextFactory().set(session, clientSideClientContext);
+        getClientContextFactory().set(session, clientSideContext);
 
     }
 

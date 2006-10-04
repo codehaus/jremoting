@@ -22,39 +22,36 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-
-public class DefaultClientContext implements ClientContext, Externalizable {
+public class SimpleContext implements Context, Externalizable {
 
     private long contextSeq;
     private int hashCode;
 
-    public DefaultClientContext(long contextSeq) {
+    public SimpleContext(long contextSeq) {
         this.contextSeq = contextSeq;
-        setConstants();
     }
 
     // for externalization.
-    public DefaultClientContext() {
-    }
-
-    private void setConstants() {
-        hashCode = new Long(contextSeq).hashCode();
+    public SimpleContext() {
     }
 
     public int hashCode() {
+        if (hashCode == 0) {
+            hashCode = new Long(contextSeq).hashCode();
+        }
         return hashCode;
     }
 
     public boolean equals(Object obj) {
-        if (!(obj instanceof DefaultClientContext)) {
+        if (!(obj instanceof SimpleContext)) {
             return false;
         } else {
-            return contextSeq == ((DefaultClientContext) obj).contextSeq;
+            return contextSeq == ((SimpleContext) obj).contextSeq;
         }
     }
 
     public String toString() {
-        return "DefaultClientContext:" + contextSeq;
+        return "SimpleContext:" + contextSeq;
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
@@ -63,6 +60,5 @@ public class DefaultClientContext implements ClientContext, Externalizable {
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         contextSeq = in.readLong();
-        setConstants();
     }
 }

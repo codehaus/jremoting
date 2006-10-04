@@ -28,7 +28,7 @@ import org.codehaus.jremoting.server.stubretrievers.DynamicStubRetriever;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
 
@@ -52,7 +52,7 @@ public class ClassRetrievingTestCase extends TestCase {
 
         // server side setup.
         DynamicStubRetriever dyncgen = new BcelDynamicStubRetriever();
-        server = new PipedStreamServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideClientContextFactory(),
+        server = new PipedStreamServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideContextFactory(),
                 new ServerCustomStreamDriverFactory());
         testServer = new TestImpl();
         server.publish(testServer, "Kewl", TestInterface.class);

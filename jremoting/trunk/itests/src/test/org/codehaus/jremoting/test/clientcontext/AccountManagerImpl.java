@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.test.clientcontext;
 
-import org.codehaus.jremoting.client.ClientContext;
-import org.codehaus.jremoting.server.ServerSideClientContextFactory;
+import org.codehaus.jremoting.client.Context;
+import org.codehaus.jremoting.server.ServerSideContextFactory;
 
 import java.util.HashMap;
 
@@ -30,10 +30,10 @@ import java.util.HashMap;
 public class AccountManagerImpl implements AccountManager {
 
     private HashMap accounts = new HashMap();
-    private ServerSideClientContextFactory clientContextFactory;
+    private ServerSideContextFactory contextFactory;
 
-    public AccountManagerImpl(ServerSideClientContextFactory clientContextFactory, Account one, Account two) {
-        this.clientContextFactory = clientContextFactory;
+    public AccountManagerImpl(ServerSideContextFactory contextFactory, Account one, Account two) {
+        this.contextFactory = contextFactory;
         accounts.put(one.getSymbolicKey(), one);
         accounts.put(two.getSymbolicKey(), two);
     }
@@ -44,7 +44,7 @@ public class AccountManagerImpl implements AccountManager {
         Account from = (Account) accounts.get(acct1);
         Account to = (Account) accounts.get(acct2);
 
-        ClientContext cc = clientContextFactory.get();
+        Context cc = contextFactory.get();
 
         try {
             from.debit(amt);

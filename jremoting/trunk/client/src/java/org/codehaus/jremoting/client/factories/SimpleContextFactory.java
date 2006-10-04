@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.codehaus.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,31 +15,35 @@
  * limitations under the License.
  *
  */
+package org.codehaus.jremoting.client.factories;
 
-package org.codehaus.jremoting.server.transports;
-
-import org.codehaus.jremoting.client.ClientContext;
-import org.codehaus.jremoting.server.ServerSideClientContextFactory;
+import org.codehaus.jremoting.client.Context;
+import org.codehaus.jremoting.client.ContextFactory;
+import org.codehaus.jremoting.client.SimpleContext;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
  * @version $Revision: 1.2 $
  */
 
-public class DefaultServerSideClientContextFactory implements ServerSideClientContextFactory {
+public class SimpleContextFactory implements ContextFactory {
 
-    private static ThreadLocal c_contexts = new ThreadLocal();
+    // The next serial number to be assigned
+    private static long nextSerialNum = 1;
 
-    public ClientContext get() {
-        return (ClientContext) c_contexts.get();
+    private static ThreadLocal serialContext = new ThreadLocal() {
+        protected synchronized Object initialValue() {
+            return new SimpleContext(nextSerialNum++);
+        }
+    };
+
+    public static Context get() {
+        return (Context) (serialContext.get());
     }
 
-    public void set(Long session, ClientContext clientContext) {
-        c_contexts.set(new DefaultServerSideClientContext(session, clientContext));
-    }
 
-    public boolean isSet() {
-        return c_contexts.get() != null;
+    public Context getClientContext() {
+        return get();
     }
 
 }

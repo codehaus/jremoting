@@ -35,6 +35,9 @@ import org.codehaus.jremoting.responses.SimpleMethodInvoked;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.core.JVM;
+import com.thoughtworks.xstream.annotations.AnnotationReflectionConverter;
+import com.thoughtworks.xstream.annotations.AnnotationProvider;
 import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
@@ -54,6 +57,15 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
                                OutputStream outputStream, Object connectionDetails, XStream xStream) {
         super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
         this.xStream = xStream;
+        xStream.registerConverter(new AnnotationReflectionConverter(
+                xStream.getMapper(),
+                new JVM().bestReflectionProvider(),
+                new AnnotationProvider()) {
+            public boolean canConvert(Class type) {
+                return Request.class.isAssignableFrom(type) | Response.class.isAssignableFrom(type);
+            }
+        }, XStream.PRIORITY_LOW);
+
     }
 
     //TODO - review IOE and ConnExcept in the throws list. one extends the other.
@@ -105,7 +117,7 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
             Object o = xStream.fromXML(xml);
 
 //            if (o instanceof InvokeMethod) {
-//                System.out.println("-->Req " + r);
+//              System.out.println("-->Req " + xml);
 //            }
 
             return (Request) o;

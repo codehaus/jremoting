@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.test.clientcontext;
 
-import org.codehaus.jremoting.client.ClientContext;
-import org.codehaus.jremoting.server.ServerSideClientContextFactory;
+import org.codehaus.jremoting.client.Context;
+import org.codehaus.jremoting.server.ServerSideContextFactory;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
@@ -27,13 +27,13 @@ import org.codehaus.jremoting.server.ServerSideClientContextFactory;
 
 public class AccountImpl implements Account {
 
-    private ServerSideClientContextFactory clientContextFactory;
+    private ServerSideContextFactory contextFactory;
     String symbolicKey;
     private int balance = 123;
     private AccountListener accountListener;
 
-    public AccountImpl(ServerSideClientContextFactory clientContextFactory, String symbolicKey, AccountListener accountListener) {
-        this.clientContextFactory = clientContextFactory;
+    public AccountImpl(ServerSideContextFactory contextFactory, String symbolicKey, AccountListener accountListener) {
+        this.contextFactory = contextFactory;
         this.symbolicKey = symbolicKey;
         this.accountListener = accountListener;
     }
@@ -47,13 +47,13 @@ public class AccountImpl implements Account {
     }
 
     public void debit(int amt) throws DebitBarfed {
-        ClientContext cc = clientContextFactory.get();
+        Context cc = contextFactory.get();
         balance = balance - amt;
         accountListener.record(getSymbolicKey() + ":debit:" + amt, cc);
     }
 
     public void credit(int amt) throws CreditBarfed {
-        ClientContext cc = clientContextFactory.get();
+        Context cc = contextFactory.get();
         balance = balance + amt;
         accountListener.record(getSymbolicKey() + ":credit:" + amt, cc);
     }

@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.requests;
 
-import org.codehaus.jremoting.client.ClientContext;
+import org.codehaus.jremoting.client.Context;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -34,7 +34,7 @@ public abstract class ServiceRequest extends Request {
 
     private String service;
     private String objectName;
-    private ClientContext context;
+    private Context context;
 
     /**
      * Constructor ServiceRequest
@@ -47,11 +47,11 @@ public abstract class ServiceRequest extends Request {
         this.objectName = objectName;
     }
 
-    public void setContext(ClientContext context) {
+    public void setContext(Context context) {
         this.context = context;
     }
 
-    public ClientContext getContext() {
+    public Context getContext() {
         return context;
     }
 
@@ -114,6 +114,6 @@ public abstract class ServiceRequest extends Request {
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         service = (String) in.readObject();
         objectName = (String) in.readObject();
-        context = (ClientContext) in.readObject();
+        context = (Context) in.readObject();
     }
 }

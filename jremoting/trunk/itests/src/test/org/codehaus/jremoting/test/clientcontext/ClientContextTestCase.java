@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 import junit.framework.TestCase;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.ClientContext;
+import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
@@ -33,12 +33,12 @@ import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.ServerSideClientContextFactory;
+import org.codehaus.jremoting.server.ServerSideContextFactory;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContext;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.DefaultServerSideContext;
+import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
@@ -53,16 +53,16 @@ public class ClientContextTestCase extends TestCase {
     public void testSimple() {
 
         AccountListener al = new AccountListener() {
-            public void record(String event, ClientContext clientContext) {
+            public void record(String event, Context context) {
             }
         };
 
-        ServerSideClientContextFactory clientContextFactory = new DefaultServerSideClientContextFactory();
+        ServerSideContextFactory contextFactory = new DefaultServerSideContextFactory();
 
-        AccountImpl one = new AccountImpl(clientContextFactory, "one", al);
-        AccountImpl two = new AccountImpl(clientContextFactory, "two", al);
+        AccountImpl one = new AccountImpl(contextFactory, "one", al);
+        AccountImpl two = new AccountImpl(contextFactory, "two", al);
 
-        final AccountManager accountManager = new AccountManagerImpl(clientContextFactory, one, two);
+        final AccountManager accountManager = new AccountManagerImpl(contextFactory, one, two);
 
         try {
             accountManager.transferAmount("one", "two", 23);
@@ -81,12 +81,12 @@ public class ClientContextTestCase extends TestCase {
 
         AccountListener al = makeAccountListener(hashMap);
 
-        ServerSideClientContextFactory clientContextFactory = new TestClientContextFactory();
+        ServerSideContextFactory contextFactory = new TestContextFactory();
 
-        AccountImpl one = new AccountImpl(clientContextFactory, "one", al);
-        AccountImpl two = new AccountImpl(clientContextFactory, "two", al);
+        AccountImpl one = new AccountImpl(contextFactory, "one", al);
+        AccountImpl two = new AccountImpl(contextFactory, "two", al);
 
-        final AccountManager accountManager = new AccountManagerImpl(clientContextFactory, one, two);
+        final AccountManager accountManager = new AccountManagerImpl(contextFactory, one, two);
 
         Thread threadOne = makeThread(accountManager, 11);
         Thread threadTwo = makeThread(accountManager, 22);
@@ -95,13 +95,13 @@ public class ClientContextTestCase extends TestCase {
 
         Thread.sleep(2000);
 
-        ClientContext debit11 = (ClientContext) hashMap.get("one:debit:11");
-        ClientContext credit11 = (ClientContext) hashMap.get("two:credit:11");
+        Context debit11 = (Context) hashMap.get("one:debit:11");
+        Context credit11 = (Context) hashMap.get("two:credit:11");
 
         basicAsserts(debit11, credit11);
 
-        ClientContext debit22 = (ClientContext) hashMap.get("one:debit:22");
-        ClientContext credit22 = (ClientContext) hashMap.get("two:credit:22");
+        Context debit22 = (Context) hashMap.get("one:debit:22");
+        Context credit22 = (Context) hashMap.get("two:credit:22");
 
         basicAsserts(debit22, credit22);
 
@@ -115,7 +115,7 @@ public class ClientContextTestCase extends TestCase {
 
         AccountListener al = makeAccountListener(hashMap);
 
-        ServerSideClientContextFactory ccf = new DefaultServerSideClientContextFactory();
+        ServerSideContextFactory ccf = new DefaultServerSideContextFactory();
 
         AccountImpl one = new AccountImpl(ccf, "one", al);
         AccountImpl two = new AccountImpl(ccf, "two", al);
@@ -146,15 +146,15 @@ public class ClientContextTestCase extends TestCase {
 
         Thread.sleep(2000);
 
-        ClientContext debit11 = (ClientContext) hashMap.get("one:debit:11");
-        ClientContext credit11 = (ClientContext) hashMap.get("two:credit:11");
+        Context debit11 = (Context) hashMap.get("one:debit:11");
+        Context credit11 = (Context) hashMap.get("two:credit:11");
 
         basicAsserts(debit11, credit11);
 
-        assertTrue("Wrong type of ClientContext", credit11 instanceof DefaultServerSideClientContext);
+        assertTrue("Wrong type of Context", credit11 instanceof DefaultServerSideContext);
 
-        ClientContext debit22 = (ClientContext) hashMap.get("one:debit:22");
-        ClientContext credit22 = (ClientContext) hashMap.get("two:credit:22");
+        Context debit22 = (Context) hashMap.get("one:debit:22");
+        Context credit22 = (Context) hashMap.get("two:credit:22");
 
         basicAsserts(debit22, credit22);
 
@@ -163,7 +163,7 @@ public class ClientContextTestCase extends TestCase {
 
     }
 
-    private void basicAsserts(ClientContext debitContext, ClientContext creditContext) {
+    private void basicAsserts(Context debitContext, Context creditContext) {
         assertNotNull("Debit should have been registered on server side", debitContext);
         assertNotNull("Credit should have been registered on server side", creditContext);
         assertEquals("Debit Context and Credit Context should be .equals()", debitContext, creditContext);
@@ -171,9 +171,9 @@ public class ClientContextTestCase extends TestCase {
 
     private AccountListener makeAccountListener(final HashMap hashMap) {
         AccountListener al = new AccountListener() {
-            public void record(String event, ClientContext clientContext) {
-                //System.out.println("EVENT-" + event + " " + clientContext);
-                hashMap.put(event, clientContext);
+            public void record(String event, Context context) {
+                //System.out.println("EVENT-" + event + " " + context);
+                hashMap.put(event, context);
             }
         };
         return al;

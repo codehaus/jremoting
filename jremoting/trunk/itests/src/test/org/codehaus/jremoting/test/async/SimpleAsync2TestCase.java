@@ -28,7 +28,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
@@ -62,7 +62,7 @@ public class SimpleAsync2TestCase extends TestCase {
         ExecutorService executorService = Executors.newCachedThreadPool();
         server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
                 new ServerCustomStreamDriverFactory(), executorService,
-                new DefaultServerSideClientContextFactory(), 11009);
+                new DefaultServerSideContextFactory(), 11009);
 
         asyncTestImpl = new AsyncTestImpl();
         // automatic determination of async elements.

@@ -17,13 +17,13 @@
  */
 package org.codehaus.jremoting.client;
 
+import java.io.Serializable;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
  * @version $Revision: 1.2 $
  */
-public interface ClientContextFactory {
 
-    ClientContext getClientContext();
+public interface Context extends Serializable {
 
 }

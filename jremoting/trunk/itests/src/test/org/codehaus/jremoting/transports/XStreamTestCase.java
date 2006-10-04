@@ -11,7 +11,7 @@ import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.DefaultServerSideClientContextFactory;
+import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
 import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.test.TestInterface;
@@ -32,7 +32,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         ExecutorService executorService = Executors.newCachedThreadPool();
         ConsoleServerMonitor serverMonitor = new ConsoleServerMonitor();
         server = new SelfContainedSocketStreamServer(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(),
-                new ServerXStreamDriverFactory(), executorService, new DefaultServerSideClientContextFactory(), 10099);
+                new ServerXStreamDriverFactory(), executorService, new DefaultServerSideContextFactory(), 10099);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -46,22 +46,11 @@ public class XStreamTestCase extends AbstractHelloTestCase {
     }
 
 
-    public void testHello4Call() throws Exception {
-        super.testHello4Call();  
-    }
-
     protected void tearDown() throws Exception {
-
         testClient = null;
-
         System.gc();
-
-        Thread.sleep(2000);
-
+        Thread.sleep(400);
         factory.close();
-
-        Thread.sleep(1000);
-
         server.stop();
     }
 

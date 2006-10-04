@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting;
 
-import org.codehaus.jremoting.client.ClientContext;
+import org.codehaus.jremoting.client.Context;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
@@ -26,8 +26,8 @@ import org.codehaus.jremoting.client.ClientContext;
 
 public interface Contextualizable extends Sessionable {
 
-    ClientContext getContext();
+    Context getContext();
 
-    void setContext(ClientContext serializable);
+    void setContext(Context serializable);
 
 }
