@@ -19,7 +19,11 @@ package org.codehaus.jremoting.transports;
 
 import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
-import org.codehaus.jremoting.test.proxies.DynamicProxy;
+
+import java.lang.reflect.Proxy;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Test Dynamic Proxy (reflection) for comparison sake
@@ -31,7 +35,22 @@ public class DynamicProxyTestCase extends AbstractHelloTestCase {
     protected void setUp() throws Exception {
 
         testServer = new TestInterfaceImpl();
-        testClient = (TestInterface) DynamicProxy.newInstance(testServer, new Class[]{TestInterface.class});
+        final Class[] interfaces = new Class[]{TestInterface.class};
+
+        final ClassLoader classLoader = testServer.getClass().getClassLoader();
+
+        // Standard dynamic proxy code.
+        final InvocationHandler proxy = new InvocationHandler() {
+            public Object invoke(Object object, Method method, Object[] objects) throws Throwable {
+                try {
+                    return method.invoke(testServer, objects);
+                } catch (final InvocationTargetException ite) {
+                    throw ite.getTargetException();
+                }
+            }
+        };
+
+        testClient = (TestInterface) Proxy.newProxyInstance(classLoader, interfaces, proxy);
 
     }
 
