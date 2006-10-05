@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server.transports.direct;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
@@ -39,22 +39,13 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
 
     private final MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter;
 
-    /**
-     * Constructor DirectMarshalledServer for use with pre-exiting InvocationHandlerAdapter and MarshalledInvocationHandler
-     *
-     * @param serverMonitor
-     * @param invocationHandlerAdapter
-     * @param executorService
-     * @param marshalledInvocationHandlerAdapter
-     *
-     */
-    public DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executorService, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
+    public DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ScheduledExecutorService executorService, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
         super(serverMonitor, invocationHandlerAdapter, executorService);
         this.marshalledInvocationHandlerAdapter = marshalledInvocationHandlerAdapter;
     }
 
     public DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, MarshalledInvocationHandlerAdapter marshalledInvocationHandlerAdapter) {
-        this(serverMonitor, invocationHandlerAdapter, Executors.newCachedThreadPool(), marshalledInvocationHandlerAdapter);
+        this(serverMonitor, invocationHandlerAdapter, Executors.newScheduledThreadPool(10), marshalledInvocationHandlerAdapter);
     }
 
     public DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter) {

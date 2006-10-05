@@ -61,7 +61,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
 
         // server side setup.
         server = new PipedStreamServer(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(),
-                Executors.newCachedThreadPool() ,new DefaultServerSideContextFactory(), new ServerObjectStreamDriverFactory());
+                Executors.newScheduledThreadPool(10) ,new DefaultServerSideContextFactory(), new ServerObjectStreamDriverFactory());
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
 

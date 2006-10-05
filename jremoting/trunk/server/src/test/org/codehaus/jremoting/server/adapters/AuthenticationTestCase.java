@@ -34,7 +34,7 @@ public class AuthenticationTestCase extends MockObjectTestCase {
     HashMap impl = new HashMap();
 
     private void makeServer() {
-        server = new ConnectingServer(new ConsoleServerMonitor(), iha, Executors.newCachedThreadPool()){};
+        server = new ConnectingServer(new ConsoleServerMonitor(), iha, Executors.newScheduledThreadPool(10)){};
     }
 
     public void testNullAuthenticationAuthorizes() throws PublicationException, IOException, ClassNotFoundException {

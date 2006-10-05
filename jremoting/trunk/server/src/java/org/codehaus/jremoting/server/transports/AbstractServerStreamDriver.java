@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import java.util.concurrent.ExecutorService;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import java.io.IOException;

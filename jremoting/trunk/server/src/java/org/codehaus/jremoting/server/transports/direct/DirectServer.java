@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server.transports.direct;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.server.Authenticator;
@@ -48,12 +48,12 @@ public class DirectServer extends StatefulServer {
      * @param executorService
      * @param contextFactory
      */
-    public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ExecutorService executorService, ServerSideContextFactory contextFactory) {
+    public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ScheduledExecutorService executorService, ServerSideContextFactory contextFactory) {
         super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
     }
 
     public DirectServer() {
-        this(new RefusingStubRetriever(), new NullAuthenticator(), new NullServerMonitor(), Executors.newCachedThreadPool(), new DefaultServerSideContextFactory());
+        this(new RefusingStubRetriever(), new NullAuthenticator(), new NullServerMonitor(), Executors.newScheduledThreadPool(10), new DefaultServerSideContextFactory());
     }
 
 }

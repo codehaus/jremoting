@@ -61,9 +61,11 @@ public abstract class AbstractFactory implements Factory {
     public AbstractFactory(final ClientInvocationHandler clientInvocationHandler, ContextFactory contextFactory) throws ConnectionException {
         this.clientInvocationHandler = clientInvocationHandler;
         this.contextFactory = contextFactory;
+
         clientInvocationHandler.initialize();
 
         Response response = clientInvocationHandler.handleInvocation(new OpenConnection());
+
         if (response instanceof ConnectionOpened) {
             textToSign = ((ConnectionOpened) response).getTextToSign();
             sessionID = ((ConnectionOpened) response).getSessionID();
@@ -71,6 +73,7 @@ public abstract class AbstractFactory implements Factory {
 
             throw new ConnectionException("Setting of host context blocked for reasons of unknown, server-side response: (" + response.getClass().getName() + ")");
         }
+
         proxyRegistry = new ProxyRegistry() {
 
             public void registerReferenceObject(Object implBean, Long referenceID) {

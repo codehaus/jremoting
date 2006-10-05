@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.requests;
 
 import org.codehaus.jremoting.Contextualizable;
-import org.codehaus.jremoting.requests.ServiceRequest;
+import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.requests.RequestConstants;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class InvokeAsyncMethod extends ServiceRequest implements Contextualizable {
+public class InvokeAsyncMethod extends Servicable implements Contextualizable {
     static final long serialVersionUID = -5928783250529633953L;
 
     private GroupedMethodRequest[] groupedRequests;

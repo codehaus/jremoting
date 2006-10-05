@@ -35,7 +35,8 @@ public class Session {
     /**
      * A map of in-use beans
      */
-    private HashMap beansInUse = new HashMap();
+    private HashMap<Long, Object> beansInUse = new HashMap<Long, Object>();
+    private long lastTouched;
 
     /**
      * Construct an Session with a session ID
@@ -72,5 +73,9 @@ public class Session {
      */
     public void removeBeanInUse(Long referenceID) {
         beansInUse.remove(referenceID);
+    }
+
+    public void refresh() {
+        lastTouched = System.currentTimeMillis();
     }
 }

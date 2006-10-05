@@ -18,7 +18,7 @@
 
 package org.codehaus.jremoting.server.transports;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.InvokeMethod;
@@ -41,18 +41,18 @@ public class StatefulServer implements Server {
      */
     private String state = UNSTARTED;
     protected final ServerMonitor serverMonitor;
-    protected final ExecutorService executorService;
+    protected final ScheduledExecutorService executorService;
 
 
     public StatefulServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
-                          ExecutorService executorService) {
+                          ScheduledExecutorService executorService) {
         this.invocationHandlerAdapter = invocationHandlerAdapter;
         this.executorService = executorService;
         this.serverMonitor = serverMonitor;
     }
 
 
-    public synchronized ExecutorService getExecutorService() {
+    public synchronized ScheduledExecutorService getScheduledExecutorService() {
         return executorService;
     }
 

@@ -20,6 +20,9 @@ package org.codehaus.jremoting.client.transports;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.requests.Servicable;
+import org.codehaus.jremoting.requests.LookupService;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.util.SerializationHelper;
 
@@ -38,10 +41,9 @@ import java.io.OutputStream;
  */
 public class ClientCustomStreamDriver implements ClientStreamDriver {
 
-    private DataInputStream dataInputStream;
-    private DataOutputStream dataOutputStream;
-    private ClassLoader facadesClassLoader;
-
+    private final DataInputStream dataInputStream;
+    private final DataOutputStream dataOutputStream;
+    private final ClassLoader facadesClassLoader;
 
     public ClientCustomStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
 
@@ -64,6 +66,7 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
         byte[] aBytes = SerializationHelper.getBytesFromInstance(request);
 
         dataOutputStream.writeInt(aBytes.length);
+        dataOutputStream.writeUTF(request instanceof LookupService ? ((Servicable) request).getService() : "");
         dataOutputStream.write(aBytes);
         dataOutputStream.flush();
     }
@@ -73,12 +76,8 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
         int byteArraySize = dataInputStream.readInt();
         byte[] byteArray = new byte[byteArraySize];
         int pos = 0;
-        int cnt = 0;
-        // Loop here until the entire array has been read in.
         while (pos < byteArraySize) {
-            int read = dataInputStream.read(byteArray, pos, byteArraySize - pos);
-            pos += read;
-            cnt++;
+            pos += dataInputStream.read(byteArray, pos, byteArraySize - pos);
         }
         Object response = SerializationHelper.getInstanceFromBytes(byteArray, facadesClassLoader);
         return (Response) response;

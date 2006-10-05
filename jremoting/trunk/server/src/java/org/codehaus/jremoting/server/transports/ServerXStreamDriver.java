@@ -24,7 +24,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.util.SerializationHelper;

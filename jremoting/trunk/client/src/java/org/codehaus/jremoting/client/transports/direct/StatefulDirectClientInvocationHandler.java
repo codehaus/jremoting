@@ -26,7 +26,7 @@ import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.transports.StatefulClientInvocationHandler;
 import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.ServiceRequest;
+import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.RequestConstants;
 import org.codehaus.jremoting.responses.Response;
@@ -84,7 +84,7 @@ public abstract class StatefulDirectClientInvocationHandler extends StatefulClie
                 } else if (response instanceof NoSuchReference) {
                     throw new NoSuchReferenceException(((NoSuchReference) response).getReferenceID());
                 } else if (response instanceof NotPublished) {
-                    ServiceRequest pnr = (ServiceRequest) request;
+                    Servicable pnr = (Servicable) request;
 
                     throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
                 }

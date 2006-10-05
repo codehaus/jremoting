@@ -52,7 +52,7 @@ public class ClassRetrievingTestCase extends TestCase {
 
         // server side setup.
         DynamicStubRetriever dyncgen = new BcelDynamicStubRetriever();
-        server = new PipedStreamServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideContextFactory(),
+        server = new PipedStreamServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newScheduledThreadPool(10), new DefaultServerSideContextFactory(),
                 new ServerCustomStreamDriverFactory());
         testServer = new TestImpl();
         server.publish(testServer, "Kewl", TestInterface.class);

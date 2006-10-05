@@ -23,7 +23,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
@@ -95,30 +95,19 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
 
     private Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
         int byteArraySize = dataInputStream.readInt();
+        String lookupServiceName = dataInputStream.readUTF();
         if (byteArraySize < 0) {
             throw new BadConnectionException("Transport mismatch, Unable to " + "read packet of data from CustomStream.");
         }
         byte[] byteArray = new byte[byteArraySize];
         int pos = 0;
-        int cnt = 0;
 
         // Loop here until the entire array has been read in.
         while (pos < byteArraySize) {
             //TODO cater for DOS attack here.
-            int read = dataInputStream.read(byteArray, pos, byteArraySize - pos);
-
-            pos += read;
-
-            cnt++;
+            pos += dataInputStream.read(byteArray, pos, byteArraySize - pos);
         }
 
-        /*
-        if (cnt > 1)
-        {
-            System.out.println( "ServerCustomStreamDriver.readReply took " + cnt +
-                " reads to read all, " + byteArraySize + ", required bytes." );
-        }
-        */
         return (Request) SerializationHelper.getInstanceFromBytes(byteArray, getFacadesClassLoader());
     }
 }

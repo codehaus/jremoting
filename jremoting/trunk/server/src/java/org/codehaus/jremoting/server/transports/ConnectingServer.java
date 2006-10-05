@@ -19,7 +19,7 @@ package org.codehaus.jremoting.server.transports;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.codehaus.jremoting.server.Connection;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -34,19 +34,10 @@ import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
  */
 public abstract class ConnectingServer extends StatefulServer {
 
-    /**
-     * A vector of connections
-     */
     private List<Connection> connections = new ArrayList<Connection>();
 
-    /**
-     * Construct a ConnectingServer
-     *
-     * @param serverMonitor            The Server monitor
-     * @param invocationHandlerAdapter The invocation handler adapter to use.
-     */
     public ConnectingServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
-                            ExecutorService executor) {
+                            ScheduledExecutorService executor) {
         super(serverMonitor, invocationHandlerAdapter, executor);
     }
 
@@ -58,27 +49,14 @@ public abstract class ConnectingServer extends StatefulServer {
     }
 
 
-    /**
-     * Strart a connection
-     *
-     * @param connection The connection
-     */
     protected void connectionStart(Connection connection) {
         connections.add(connection);
     }
 
-    /**
-     * Complete a connection.
-     *
-     * @param connection The connection
-     */
     protected void connectionCompleted(Connection connection) {
         connections.remove(connection);
     }
 
-    /**
-     * Kill connections.
-     */
     protected void killAllConnections() {
         // Copy the connections into an array to avoid ConcurrentModificationExceptions
         //  as the connections are closed.

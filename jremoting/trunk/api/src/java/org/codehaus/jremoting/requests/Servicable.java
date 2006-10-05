@@ -24,12 +24,12 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class ServiceRequest
+ * Class Servicable
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class ServiceRequest extends Request {
+public abstract class Servicable extends Request {
     static final long serialVersionUID = 5995735372269955205L;
 
     private String service;
@@ -37,12 +37,12 @@ public abstract class ServiceRequest extends Request {
     private Context context;
 
     /**
-     * Constructor ServiceRequest
+     * Constructor Servicable
      *
      * @param service the published service name
      * @param objectName the object name within that
      */
-    public ServiceRequest(String service, String objectName) {
+    public Servicable(String service, String objectName) {
         this.service = service;
         this.objectName = objectName;
     }
@@ -56,9 +56,9 @@ public abstract class ServiceRequest extends Request {
     }
 
     /**
-     * Constructor ServiceRequest for Externalization
+     * Constructor Servicable for Externalization
      */
-    public ServiceRequest() {
+    public Servicable() {
     }
 
     /**

@@ -20,17 +20,22 @@ package org.codehaus.jremoting.test.clientcontext;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import junit.framework.TestCase;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.Factory;
+import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.factories.SimpleContextFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -119,7 +124,7 @@ public class ClientContextTestCase extends TestCase {
 
         AccountListener al = new AccountListener() {
             public void record(String event, Context context) {
-                ((HashMap<String, Context>) contextualEvents).put(event, context);
+                contextualEvents.put(event, context);
             }
         };
 
@@ -133,17 +138,19 @@ public class ClientContextTestCase extends TestCase {
         BcelDynamicStubRetriever stubRetriever = new BcelDynamicStubRetriever(this.getClass().getClassLoader());
 
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
-        ExecutorService executorService = Executors.newCachedThreadPool();
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ServerCustomStreamDriverFactory(), executorService, sscf, 13333);
+                new ServerCustomStreamDriverFactory(), executorService, sscf, 19333);
 
         PublicationDescription pd = new PublicationDescription(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        Factory factory = new ClientSideStubFactory(
-                new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(), new ClientCustomStreamDriverFactory(), "127.0.0.1", 13333),
-                new SimpleContextFactory());
+        ClientStreamDriverFactory factory0 = new ClientCustomStreamDriverFactory();
+        ClientMonitor cm = new ConsoleClientMonitor();
+        ClientInvocationHandler handler = new SocketClientStreamInvocationHandler(cm, factory0, "127.0.0.1", 19333);
+        SimpleContextFactory factory1 = new SimpleContextFactory();
+        Factory factory = new ClientSideStubFactory(handler, factory1);
 
         final AccountManager clientSideAccountManager = (AccountManager) factory.lookupService("OurAccountManager");
 
@@ -154,15 +161,16 @@ public class ClientContextTestCase extends TestCase {
 
         Thread.sleep(1000);
 
-        Context debit11 = (Context) contextualEvents.get("fredsAccount:debited:11");
-        Context credit11 = (Context) contextualEvents.get("wilmasAccount:credited:11");
+        Context debit11 = contextualEvents.get("fredsAccount:debited:11");
+        Context credit11 = contextualEvents.get("wilmasAccount:credited:11");
+
 
         basicAsserts(debit11, credit11);
 
         assertTrue("Wrong type of Context", credit11 instanceof DefaultServerSideContext);
 
-        Context debit22 = (Context) contextualEvents.get("fredsAccount:debited:22");
-        Context credit22 = (Context) contextualEvents.get("wilmasAccount:credited:22");
+        Context debit22 = contextualEvents.get("fredsAccount:debited:22");
+        Context credit22 = contextualEvents.get("wilmasAccount:credited:22");
 
         basicAsserts(debit22, credit22);
 

@@ -34,6 +34,8 @@ import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStream
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class SimpleAsync2TestCase extends TestCase {
 
@@ -57,9 +59,8 @@ public class SimpleAsync2TestCase extends TestCase {
         String class_gen_dir = getClassGenDir();
         stubRetriever.setClassGenDir(class_gen_dir);
 
-
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
-        ExecutorService executorService = Executors.newCachedThreadPool();
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
                 new ServerCustomStreamDriverFactory(), executorService,
                 new DefaultServerSideContextFactory(), 11009);

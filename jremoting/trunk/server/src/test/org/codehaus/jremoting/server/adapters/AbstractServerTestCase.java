@@ -39,7 +39,7 @@ public class AbstractServerTestCase extends MockObjectTestCase {
     protected void setUp() throws Exception {
 
         iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideContextFactory());
-        server = new ConnectingServer(new ConsoleServerMonitor(), iha, Executors.newCachedThreadPool()) {
+        server = new ConnectingServer(new ConsoleServerMonitor(), iha, Executors.newScheduledThreadPool(10)) {
         };
 
     }

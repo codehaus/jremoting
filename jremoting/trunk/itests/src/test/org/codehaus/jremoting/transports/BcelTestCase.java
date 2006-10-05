@@ -36,6 +36,8 @@ import org.codehaus.jremoting.test.TestInterfaceImpl;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Test case which tests the proxies generated using BCEL generator
@@ -61,7 +63,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         String class_gen_dir = getClassGenDir();
         stubRetriever.setClassGenDir(class_gen_dir);
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
-        ExecutorService executorService = Executors.newCachedThreadPool();
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(), new ServerCustomStreamDriverFactory(), executorService, new DefaultServerSideContextFactory(), 10201);
 
         testServer = new TestInterfaceImpl();

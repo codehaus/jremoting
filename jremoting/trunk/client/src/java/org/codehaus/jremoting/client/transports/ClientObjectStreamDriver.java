@@ -40,35 +40,12 @@ import java.io.BufferedInputStream;
  */
 public class ClientObjectStreamDriver implements ClientStreamDriver {
 
-    private ObjectInputStream objectInputStream;
-    private ObjectOutputStream objectOutputStream;
-    private ClassLoader facadesClassLoader;
+    private final ObjectInputStream objectInputStream;
+    private final ObjectOutputStream objectOutputStream;
 
-    /**
-     * Constructor ClientObjectStreamDriver
-     *
-     * @param in
-     * @param out
-     * @throws ConnectionException
-     */
-    public ClientObjectStreamDriver(InputStream in, OutputStream out) throws ConnectionException {
-        this(in, out, null);
-    }
-
-
-    /**
-     * Constructor ClientObjectStreamDriver
-     *
-     * @param inputStream
-     * @param outputStream
-     * @param facadesClassLoader
-     * @throws ConnectionException
-     */
     public ClientObjectStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         try {
             objectOutputStream = new ObjectOutputStream(outputStream);
-            //TODO use that magix classloader that uses the facades classlaoader
-            this.facadesClassLoader = facadesClassLoader;
             objectInputStream = new ClassLoaderObjectInputStream(facadesClassLoader, new BufferedInputStream(inputStream));
         } catch (EOFException eofe) {
             throw new BadConnectionException("Cannot connect to remote JRemoting server. Have we a mismatch on transports?");

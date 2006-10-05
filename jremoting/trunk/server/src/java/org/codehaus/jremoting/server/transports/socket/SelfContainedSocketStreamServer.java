@@ -20,7 +20,7 @@ package org.codehaus.jremoting.server.transports.socket;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -68,7 +68,7 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
      * @param port                     The port to use
      */
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
-                                           ServerStreamDriverFactory serverStreamDriverFactory, ExecutorService executorService,
+                                           ServerStreamDriverFactory serverStreamDriverFactory, ScheduledExecutorService executorService,
                                            ClassLoader facadesClassLoader, int port) {
 
         super(serverMonitor, invocationHandlerAdapter, executorService, serverStreamDriverFactory, facadesClassLoader);
@@ -76,7 +76,7 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
-                                           ServerStreamDriverFactory serverStreamDriverFactory, ExecutorService executorService,
+                                           ServerStreamDriverFactory serverStreamDriverFactory, ScheduledExecutorService executorService,
                                            ServerSideContextFactory contextFactory,
                                            ClassLoader facadesClassLoader, int port) {
         this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory),
@@ -84,28 +84,28 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port) {
-        this(serverMonitor, port, Executors.newCachedThreadPool());
+        this(serverMonitor, port, Executors.newScheduledThreadPool(10));
     }
 
-    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ExecutorService executorService) {
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService) {
         this(serverMonitor, port, executorService, new ServerCustomStreamDriverFactory());
     }
 
-    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ExecutorService executorService,
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService,
                                            ServerStreamDriverFactory serverStreamDriverFactory) {
         this(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), serverStreamDriverFactory, executorService,
                 new DefaultServerSideContextFactory(), SelfContainedSocketStreamServer.class.getClassLoader(), port);
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, String streamType) {
-        this(serverMonitor, port, Executors.newCachedThreadPool(), streamType);
+        this(serverMonitor, port, Executors.newScheduledThreadPool(10), streamType);
     }
 
-    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ExecutorService executorService, String streamType) {
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService, String streamType) {
         this(serverMonitor, port, executorService, createServerStreamDriverFactory(streamType));
     }
 
-    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerStreamDriverFactory streamDriverFactory, ExecutorService executorService, ServerSideContextFactory serverSideContextFactory, int port) {
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerStreamDriverFactory streamDriverFactory, ScheduledExecutorService executorService, ServerSideContextFactory serverSideContextFactory, int port) {
         this(serverMonitor, stubRetriever, authenticator, streamDriverFactory, executorService, serverSideContextFactory, SelfContainedSocketStreamServer.class.getClassLoader(), port);
     }
 
@@ -154,7 +154,7 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
             throw new JRemotingException("Could not bind to port '"+port+"'when setting up the server", ioe);
         }
         setState(STARTED);
-        future = getExecutorService().submit(this);
+        future = getScheduledExecutorService().submit(this);
     }
 
     /**

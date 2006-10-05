@@ -19,7 +19,7 @@ package org.codehaus.jremoting.server.transports.piped;
 
 import org.codehaus.jremoting.ConnectionException;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -43,7 +43,7 @@ public class PipedStreamServer extends ConnectingServer {
     private final ClassLoader facadesClassLoader;
 
     public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
-                             ExecutorService executorService, ServerSideContextFactory contextFactory,
+                             ScheduledExecutorService executorService, ServerSideContextFactory contextFactory,
                              ServerStreamDriverFactory serverStreamDriverFactory,
                              ClassLoader facadesClassLoader) {
         super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
@@ -52,7 +52,7 @@ public class PipedStreamServer extends ConnectingServer {
     }
 
     public PipedStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
-                             ExecutorService executorService,
+                             ScheduledExecutorService executorService,
                              ServerStreamDriverFactory serverStreamDriverFactory,
                              ClassLoader facadesClassLoader) {
         super(serverMonitor, invocationHandlerAdapter, executorService);
@@ -60,7 +60,7 @@ public class PipedStreamServer extends ConnectingServer {
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executorService, ServerSideContextFactory serverSideContextFactory, ServerStreamDriverFactory serverStreamDriverFactory) {
+    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerSideContextFactory serverSideContextFactory, ServerStreamDriverFactory serverStreamDriverFactory) {
         this(serverMonitor, stubRetriever, authenticator, executorService, serverSideContextFactory, serverStreamDriverFactory, PipedStreamServer.class.getClassLoader());
     }
 
@@ -91,7 +91,7 @@ public class PipedStreamServer extends ConnectingServer {
 
             PipedStreamConnection pssc = new PipedStreamConnection(this, pIS, pOS, ssd, serverMonitor);
 
-            getExecutorService().execute(pssc);
+            getScheduledExecutorService().execute(pssc);
 
         } catch (IOException pe) {
             throw new ConnectionException("Some problem setting up server : " + pe.getMessage());

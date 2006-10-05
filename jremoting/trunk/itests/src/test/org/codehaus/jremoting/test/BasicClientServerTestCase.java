@@ -54,34 +54,6 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         }
     }
 
-    public void testMismatch1() throws Exception {
-
-        // server side setup.
-        Mock serverMonitor = mock(ServerMonitor.class);
-        serverMonitor.expects(once()).method("badConnection").with(eq(SocketStreamConnection.class),eq("StreamConnection.run(): Bad connection #0"),isA(BadConnectionException.class));
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) serverMonitor.proxy(), 12346);
-
-        TestInterfaceImpl testServer = new TestInterfaceImpl();
-        PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
-        server.publish(testServer, "Hello", pd);
-        server.start();
-
-        // Client side setup
-        try {
-
-            new ClientSideStubFactory(new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
-                new ClientObjectStreamDriverFactory(), "127.0.0.1", 12346));
-            fail("Expected mismatch exception");
-        } catch (BadConnectionException e) {
-            if (e.getMessage().indexOf("mismatch") < 0) {
-                throw e;
-            }
-        } finally {
-            //server.stop();
-        }
-
-    }
-
     public void testNotPublishedExceptionThrownWhenNeeded() throws Exception {
 
         // server side setup.
@@ -129,7 +101,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
                     new ClientObjectStreamDriverFactory(), "localhost", 12331);
             ClientSideStubFactory cssf = new ClientSideStubFactory(clientInvocationHandler);
             cssf.lookupService("Hello");
-            clientInvocationHandler.handleInvocation(new InvokeMethod("Hello", "Main", "ping()",new Object [0], new Long(44332), new Long(21)));
+            clientInvocationHandler.handleInvocation(new InvokeMethod("Hello", "Main", "ping()",new Object [0], (long) 44332, (long) 21));
 
             fail("should have barfed");
         } catch (NoSuchSessionException e) {

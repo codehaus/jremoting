@@ -21,7 +21,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import org.codehaus.jremoting.client.*;
-import org.codehaus.jremoting.requests.ServiceRequest;
+import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.requests.CollectGarbage;
 import org.codehaus.jremoting.requests.GroupedMethodRequest;
 import org.codehaus.jremoting.requests.InvokeAsyncMethod;
@@ -365,7 +365,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
         super.finalize();
     }
 
-    private synchronized void setContext(ServiceRequest request) {
+    private synchronized void setContext(Servicable request) {
 
         if (contextFactory == null) {
             contextFactory = new SimpleContextFactory();

@@ -31,7 +31,7 @@ import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.ServiceRequest;
+import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.RequestConstants;
 import org.codehaus.jremoting.responses.Response;
@@ -91,11 +91,7 @@ public abstract class StreamClientInvocationHandler extends StatefulClientInvoca
                     again = false;
 
                     try {
-                        long t1 = System.currentTimeMillis();
-
-                        response = (Response) objectDriver.postRequest(request);
-
-                        long t2 = System.currentTimeMillis();
+                        response = objectDriver.postRequest(request);
 
                         if (response instanceof ProblemResponse) {
 
@@ -110,7 +106,7 @@ public abstract class StreamClientInvocationHandler extends StatefulClientInvoca
                             } else if (response instanceof NoSuchSession) {
                                 throw new NoSuchSessionException(((NoSuchSession) response).getSessionID());
                             } else if (response instanceof NotPublished) {
-                                ServiceRequest pnr = (ServiceRequest) request;
+                                Servicable pnr = (Servicable) request;
 
                                 throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
                             }

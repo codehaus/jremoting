@@ -22,7 +22,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.JRemotingException;
@@ -48,17 +48,17 @@ public class RmiServer extends ConnectingServer {
     private int port;
     private Registry registry;
 
-    public RmiServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ExecutorService executorService, int port) {
+    public RmiServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ScheduledExecutorService executorService, int port) {
         super(serverMonitor, invocationHandlerAdapter, executorService);
         this.port = port;
     }
 
-    public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ExecutorService executorService, ServerSideContextFactory contextFactory, int port) {
+    public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerSideContextFactory contextFactory, int port) {
         this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executorService, port);
     }
 
     public RmiServer(ServerMonitor serverMonitor, int port) {
-        this(serverMonitor, new FromClassLoaderStubRetriever(), new NullAuthenticator(), Executors.newCachedThreadPool(), new DefaultServerSideContextFactory(), port);
+        this(serverMonitor, new FromClassLoaderStubRetriever(), new NullAuthenticator(), Executors.newScheduledThreadPool(10), new DefaultServerSideContextFactory(), port);
     }
 
     public void start() {

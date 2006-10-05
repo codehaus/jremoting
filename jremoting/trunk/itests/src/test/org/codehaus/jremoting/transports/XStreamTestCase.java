@@ -2,6 +2,8 @@ package org.codehaus.jremoting.transports;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
@@ -29,7 +31,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
     protected void setUp() throws Exception {
 
         // server side setup.
-        ExecutorService executorService = Executors.newCachedThreadPool();
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         ConsoleServerMonitor serverMonitor = new ConsoleServerMonitor();
         server = new SelfContainedSocketStreamServer(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(),
                 new ServerXStreamDriverFactory(), executorService, new DefaultServerSideContextFactory(), 10099);
@@ -45,6 +47,10 @@ public class XStreamTestCase extends AbstractHelloTestCase {
 
     }
 
+
+    public void testHello4Call() throws Exception {
+        super.testHello4Call();    //To change body of overridden methods use File | Settings | File Templates.
+    }
 
     protected void tearDown() throws Exception {
         testClient = null;

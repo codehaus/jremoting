@@ -19,7 +19,7 @@ package org.codehaus.jremoting.requests;
 
 import org.codehaus.jremoting.Sessionable;
 import org.codehaus.jremoting.authentications.Authentication;
-import org.codehaus.jremoting.requests.ServiceRequest;
+import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.requests.RequestConstants;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class LookupService extends ServiceRequest implements Sessionable {
+public final class LookupService extends Servicable implements Sessionable {
     static final long serialVersionUID = 7509584735319760230L;
 
     private Authentication authentication;

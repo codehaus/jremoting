@@ -53,16 +53,14 @@ public class SocketMismatchTestCase extends TestCase {
     private BadConnectionException x_bce;
 
 
-    public void testCustomStreamObjectStreamMismatch() throws Exception {
+    public void testCustomStreamObjectStreamMismatchCanCauseTimeOut() throws Exception {
 
         ServerMonitor sm = new ServerMonitor() {
             public void closeError(Class clazz, String s, IOException e) {
                 fail();
             }
             public void badConnection(Class clazz, String s, BadConnectionException bce) {
-                x_class = clazz;
-                x_msg =s;
-                x_bce = bce;
+                fail();
             }
             public void classNotFound(Class clazz, ClassNotFoundException e) {
                 fail();
@@ -97,9 +95,7 @@ public class SocketMismatchTestCase extends TestCase {
             fail("CustomStreams and ObjectStreams cannot interoperate");
         } catch (BadConnectionException bce) {
 
-            assertEquals("StreamConnection.run(): Bad connection #0", x_msg);
-            assertNotNull(x_bce);
-            assertSame(SocketStreamConnection.class, x_class);
+            // expected
 
         } finally {
 
