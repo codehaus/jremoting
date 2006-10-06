@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.ConnectionException;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.client.ClientInvocationHandler;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
@@ -39,11 +39,11 @@ public abstract class StatefulClientInvocationHandler implements ClientInvocatio
     protected final ClientMonitor clientMonitor;
     private final ClassLoader facadesClassLoader;
     protected boolean stopped = false;
-    protected final ExecutorService executorService;
+    protected final ScheduledExecutorService executorService;
     protected final boolean methodLogging;
 
 
-    public StatefulClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public StatefulClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
         this.executorService = executorService;
         this.clientMonitor = clientMonitor;
@@ -52,7 +52,7 @@ public abstract class StatefulClientInvocationHandler implements ClientInvocatio
         this.connectionPinger = connectionPinger;
     }
 
-    public ExecutorService getExecutorService() {
+    public ScheduledExecutorService getScheduledExecutorService() {
         return executorService;
     }
 

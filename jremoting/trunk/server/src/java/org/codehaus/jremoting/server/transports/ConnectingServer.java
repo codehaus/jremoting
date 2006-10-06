@@ -20,10 +20,12 @@ package org.codehaus.jremoting.server.transports;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ScheduledFuture;
 
 import org.codehaus.jremoting.server.Connection;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
+import org.codehaus.jremoting.server.adapters.InvocationHandlerDelegate;
 
 /**
  * Class ConnectingServer
@@ -32,18 +34,38 @@ import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
  * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
  * @version $Revision: 1.2 $
  */
-public abstract class ConnectingServer extends StatefulServer {
+public class ConnectingServer extends StatefulServer {
 
     private List<Connection> connections = new ArrayList<Connection>();
+    private ScheduledFuture pruner;
+    int pruneStaleLongerThan = 5 * 60 * 1000;
+    int pruneSessionInterval = 100;
 
-    public ConnectingServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
-                            ScheduledExecutorService executor) {
-        super(serverMonitor, invocationHandlerAdapter, executor);
+    public void setPruneStaleLongerThan(int millis) {
+        this.pruneStaleLongerThan = millis;
     }
 
+    public void setPruneSessionsInterval(int seconds) {
+        this.pruneSessionInterval = seconds;
+    }
+
+    public ConnectingServer(ServerMonitor serverMonitor, InvocationHandlerDelegate invocationHandlerDelegate,
+                            ScheduledExecutorService executor) {
+        super(serverMonitor, invocationHandlerDelegate, executor);
+    }
+
+    public void start() {
+        super.start();
+        pruner =  executorService.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                invocationHandlerDelegate.pruneSessionsStaleForLongerThan(pruneStaleLongerThan);
+            }
+        }, pruneSessionInterval, pruneSessionInterval, TimeUnit.SECONDS);
+    }
 
     public void stop() {
         setState(SHUTTINGDOWN);
+        pruner.cancel(true);
         killAllConnections();
         super.stop();
     }

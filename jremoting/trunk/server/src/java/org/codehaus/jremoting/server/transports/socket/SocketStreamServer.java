@@ -20,14 +20,13 @@ package org.codehaus.jremoting.server.transports.socket;
 
 import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
+import org.codehaus.jremoting.server.adapters.InvocationHandlerDelegate;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.ServerStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.ServerStreamDriver;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
 
 /**
  * @author Peter Royal
@@ -42,11 +41,11 @@ public abstract class SocketStreamServer extends ConnectingServer {
      * Construct a SocketStreamServer
      *
      * @param serverMonitor            The server Monitor
-     * @param invocationHandlerAdapter Use this invocation handler adapter.
+     * @param invocationHandlerDelegate Use this invocation handler adapter.
      */
-    public SocketStreamServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ScheduledExecutorService executorService,
+    public SocketStreamServer(ServerMonitor serverMonitor, InvocationHandlerDelegate invocationHandlerDelegate, ScheduledExecutorService executorService,
                               ServerStreamDriverFactory serverStreamDriverFactory, ClassLoader facadesClassLoader) {
-        super(serverMonitor, invocationHandlerAdapter, executorService);
+        super(serverMonitor, invocationHandlerDelegate, executorService);
         this.serverStreamDriverFactory = serverStreamDriverFactory;
         this.facadesClassLoader = facadesClassLoader;
     }

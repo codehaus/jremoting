@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.transports.direct;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.client.ClientMonitor;
@@ -38,14 +38,14 @@ public final class DirectClientInvocationHandler extends StatefulDirectClientInv
     private ServerInvocationHandler invocationHandler;
 
 
-    public DirectClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger,
+    public DirectClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger,
                                    ServerInvocationHandler invocationHandler) {
         super(clientMonitor, executorService, connectionPinger, DirectClientInvocationHandler.class.getClassLoader());
         this.invocationHandler = invocationHandler;
     }
 
     public DirectClientInvocationHandler(ClientMonitor clientMonitor, ServerInvocationHandler invocationHandler) {
-        this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(), invocationHandler );
+        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), invocationHandler );
         this.invocationHandler = invocationHandler;
     }
 

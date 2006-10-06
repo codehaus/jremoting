@@ -72,4 +72,5 @@ public interface MethodInvocationHandler {
     void setMethodInvocationMonitor(MethodInvocationMonitor monitor);
 
 
+    String[] getListOfMethods();
 }

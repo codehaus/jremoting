@@ -31,12 +31,12 @@ import org.jmock.MockObjectTestCase;
 
 public class DirectMarshalledTestCase extends MockObjectTestCase {
 
-    private InvocationHandlerAdapter iha;
+    private InvocationHandlerDelegate iha;
     private DirectMarshalledServer server;
     HashMap impl = new HashMap();
 
     protected void setUp() throws Exception {
-        iha = new InvocationHandlerAdapter(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideContextFactory());
+        iha = new InvocationHandlerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideContextFactory());
         server = new DirectMarshalledServer(new ConsoleServerMonitor(), iha, Executors.newScheduledThreadPool(10), new MarshalledInvocationHandlerAdapter(iha));
     }
 

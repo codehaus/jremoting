@@ -29,13 +29,13 @@ import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Server;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
+import org.codehaus.jremoting.server.adapters.InvocationHandlerDelegate;
 
 public class StatefulServer implements Server {
     /**
      * The invocation handler
      */
-    protected InvocationHandlerAdapter invocationHandlerAdapter;
+    protected InvocationHandlerDelegate invocationHandlerDelegate;
     /**
      * The state of the system.
      */
@@ -44,9 +44,9 @@ public class StatefulServer implements Server {
     protected final ScheduledExecutorService executorService;
 
 
-    public StatefulServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter,
+    public StatefulServer(ServerMonitor serverMonitor, InvocationHandlerDelegate invocationHandlerDelegate,
                           ScheduledExecutorService executorService) {
-        this.invocationHandlerAdapter = invocationHandlerAdapter;
+        this.invocationHandlerDelegate = invocationHandlerDelegate;
         this.executorService = executorService;
         this.serverMonitor = serverMonitor;
     }
@@ -64,7 +64,7 @@ public class StatefulServer implements Server {
      */
     public Response handleInvocation(Request request, Object connectionDetails) {
         if (getState().equals(STARTED)) {
-            return invocationHandlerAdapter.handleInvocation(request, connectionDetails);
+            return invocationHandlerDelegate.handleInvocation(request, connectionDetails);
         } else {
             return new InvocationExceptionThrown("Service is not started");
         }
@@ -74,14 +74,14 @@ public class StatefulServer implements Server {
      * Suspend the server with open connections.
      */
     public void suspend() {
-        invocationHandlerAdapter.suspend();
+        invocationHandlerDelegate.suspend();
     }
 
     /**
      * Resume a server with open connections.
      */
     public void resume() {
-        invocationHandlerAdapter.resume();
+        invocationHandlerDelegate.resume();
     }
 
     /**
@@ -108,7 +108,7 @@ public class StatefulServer implements Server {
      *          if an error during publication.
      */
     public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
-        invocationHandlerAdapter.publish(impl, service, primaryFacade);
+        invocationHandlerDelegate.publish(impl, service, primaryFacade);
     }
 
     /**
@@ -120,7 +120,7 @@ public class StatefulServer implements Server {
      * @throws org.codehaus.jremoting.server.PublicationException if an error during publication.
      */
     public void publish(Object impl, String service, PublicationDescription publicationDescription) throws PublicationException {
-        invocationHandlerAdapter.publish(impl, service, publicationDescription);
+        invocationHandlerDelegate.publish(impl, service, publicationDescription);
     }
 
     /**
@@ -131,7 +131,7 @@ public class StatefulServer implements Server {
      * @throws org.codehaus.jremoting.server.PublicationException if an error during publication.
      */
     public void unPublish(Object impl, String service) throws PublicationException {
-        invocationHandlerAdapter.unPublish(impl, service);
+        invocationHandlerDelegate.unPublish(impl, service);
     }
 
     /**
@@ -143,7 +143,7 @@ public class StatefulServer implements Server {
      * @throws org.codehaus.jremoting.server.PublicationException if an error during publication.
      */
     public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
-        invocationHandlerAdapter.replacePublished(oldImpl, service, withImpl);
+        invocationHandlerDelegate.replacePublished(oldImpl, service, withImpl);
     }
 
     /**
@@ -154,7 +154,7 @@ public class StatefulServer implements Server {
      * @return The Method invocation handler
      */
     public MethodInvocationHandler getMethodInvocationHandler(InvokeMethod invokeMethod, String objectName) {
-        return invocationHandlerAdapter.getMethodInvocationHandler(invokeMethod, objectName);
+        return invocationHandlerDelegate.getMethodInvocationHandler(invokeMethod, objectName);
     }
 
     /**
@@ -164,7 +164,7 @@ public class StatefulServer implements Server {
      * @return The Method invocation handler
      */
     public MethodInvocationHandler getMethodInvocationHandler(String service) {
-        return invocationHandlerAdapter.getMethodInvocationHandler(service);
+        return invocationHandlerDelegate.getMethodInvocationHandler(service);
     }
 
     /**
@@ -172,8 +172,8 @@ public class StatefulServer implements Server {
      *
      * @return the invocation handler adapter.
      */
-    public InvocationHandlerAdapter getInovcationHandlerAdapter() {
-        return invocationHandlerAdapter;
+    public InvocationHandlerDelegate getInvocationHandlerDelegate() {
+        return invocationHandlerDelegate;
     }
 
     /**

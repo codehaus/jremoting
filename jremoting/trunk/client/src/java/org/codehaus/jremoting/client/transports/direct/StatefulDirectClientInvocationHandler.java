@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.transports.direct;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
@@ -47,7 +47,7 @@ public abstract class StatefulDirectClientInvocationHandler extends StatefulClie
     protected long lastRealRequest = System.currentTimeMillis();
 
 
-    public StatefulDirectClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public StatefulDirectClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
     }

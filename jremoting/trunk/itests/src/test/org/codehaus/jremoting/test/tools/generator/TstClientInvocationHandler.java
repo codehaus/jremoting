@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.test.tools.generator;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.StatefulClientInvocationHandler;
@@ -41,7 +41,7 @@ import java.lang.reflect.Method;
 public class TstClientInvocationHandler extends StatefulClientInvocationHandler implements ServerInvocationHandler {
 
 
-    public TstClientInvocationHandler(ExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+    public TstClientInvocationHandler(ScheduledExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
         super(clientMonitor, executorService, connectionPinger, TstClientInvocationHandler.class.getClassLoader());
     }
 

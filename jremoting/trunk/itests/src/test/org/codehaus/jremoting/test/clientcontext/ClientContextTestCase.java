@@ -18,10 +18,8 @@
 package org.codehaus.jremoting.test.clientcontext;
 
 import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Executors;
 
 import junit.framework.TestCase;
 

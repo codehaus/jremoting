@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.transports.piped;
 
 import org.codehaus.jremoting.ConnectionException;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.client.ClientMonitor;
@@ -53,7 +53,7 @@ public class PipedClientStreamInvocationHandler extends StreamClientInvocationHa
      * @param is
      * @param os
      */
-    public PipedClientStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public PipedClientStreamInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                         ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, ClientStreamDriverFactory clientStreamDriverFactory, PipedInputStream is,
                                         PipedOutputStream os
     ) {
@@ -68,7 +68,7 @@ public class PipedClientStreamInvocationHandler extends StreamClientInvocationHa
     public PipedClientStreamInvocationHandler(ClientMonitor clientMonitor,
                                         ClientStreamDriverFactory streamDriverFactory,
                                         PipedInputStream inputStream, PipedOutputStream outputStream) {
-        this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(),
+        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
                 Thread.currentThread().getContextClassLoader(), streamDriverFactory, inputStream, outputStream);
     }
 

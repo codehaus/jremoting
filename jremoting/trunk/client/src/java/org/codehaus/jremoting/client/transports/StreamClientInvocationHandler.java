@@ -21,7 +21,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.SocketException;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ClientStreamDriver;
@@ -54,7 +54,7 @@ public abstract class StreamClientInvocationHandler extends StatefulClientInvoca
     private long lastRealRequest = System.currentTimeMillis();
     protected final ClientStreamDriverFactory streamDriverFactory;
 
-    public StreamClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public StreamClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                                                  ClientStreamDriverFactory streamDriverFactory) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);

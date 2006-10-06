@@ -32,7 +32,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideContextFactory;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.stubretrievers.FromClassLoaderStubRetriever;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
+import org.codehaus.jremoting.server.adapters.InvocationHandlerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
@@ -48,13 +48,13 @@ public class RmiServer extends ConnectingServer {
     private int port;
     private Registry registry;
 
-    public RmiServer(ServerMonitor serverMonitor, InvocationHandlerAdapter invocationHandlerAdapter, ScheduledExecutorService executorService, int port) {
-        super(serverMonitor, invocationHandlerAdapter, executorService);
+    public RmiServer(ServerMonitor serverMonitor, InvocationHandlerDelegate invocationHandlerDelegate, ScheduledExecutorService executorService, int port) {
+        super(serverMonitor, invocationHandlerDelegate, executorService);
         this.port = port;
     }
 
     public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerSideContextFactory contextFactory, int port) {
-        this(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executorService, port);
+        this(serverMonitor, new InvocationHandlerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService, port);
     }
 
     public RmiServer(ServerMonitor serverMonitor, int port) {

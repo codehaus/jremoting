@@ -36,4 +36,8 @@ public interface ServerInvocationHandler {
      * @return the response that is a consequence of the request
      */
     Response handleInvocation(Request request, Object connectionDetails);
+
+
+//    void pruneSessionsOlderThan(long millis);
+
 }

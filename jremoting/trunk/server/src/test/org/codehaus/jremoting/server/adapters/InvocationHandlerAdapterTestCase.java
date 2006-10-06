@@ -28,14 +28,14 @@ import junit.framework.TestCase;
 public class InvocationHandlerAdapterTestCase extends TestCase {
 
     public void testOpenConnection() {
-        InvocationHandlerAdapter invocationHandle = new InvocationHandlerAdapter(null, null, null, null);
+        InvocationHandlerDelegate invocationHandle = new InvocationHandlerDelegate(null, null, null, null);
         ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.handleInvocation(new OpenConnection(), new Object());
         assertNotNull(connectionOpened);
         assertNotNull(connectionOpened.getSessionID());
     }
 
     public void testCloseConnectionAfterOpenConnection() {
-        InvocationHandlerAdapter invocationHandle = new InvocationHandlerAdapter(null, null, null, null);
+        InvocationHandlerDelegate invocationHandle = new InvocationHandlerDelegate(null, null, null, null);
         ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.handleInvocation(new OpenConnection(), new Object());
         ConnectionClosed connectionClosed = (ConnectionClosed) invocationHandle.handleInvocation(new CloseConnection(connectionOpened.getSessionID()), new Object());
         assertNotNull(connectionClosed);
@@ -45,7 +45,7 @@ public class InvocationHandlerAdapterTestCase extends TestCase {
     }
 
     public void testCloseConnectionErrorsOnBogusSession() {
-        InvocationHandlerAdapter invocationHandle = new InvocationHandlerAdapter(null, null, null, null);
+        InvocationHandlerDelegate invocationHandle = new InvocationHandlerDelegate(null, null, null, null);
         Response response = invocationHandle.handleInvocation(new CloseConnection(new Long(123)), new Object());
         assertTrue(response instanceof NoSuchSession);
         NoSuchSession noSuchSession = (NoSuchSession) response;

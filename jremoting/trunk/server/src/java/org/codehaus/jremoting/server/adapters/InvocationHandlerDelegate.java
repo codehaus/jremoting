@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.server.adapters;
 
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -64,22 +63,17 @@ import org.codehaus.jremoting.server.Session;
 import org.codehaus.jremoting.server.StubRetrievalException;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
 import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
 import org.codehaus.jremoting.util.StubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
 /**
- * Class InvocationHandlerAdapter
+ * Class InvocationHandlerDelegate
  *
  * @author Paul Hammant
  */
-public class InvocationHandlerAdapter extends PublicationAdapter implements ServerInvocationHandler {
+public class InvocationHandlerDelegate extends SessionAdapter implements ServerInvocationHandler {
 
-    private static long sessionId = 0;
-    private Long lastSessionID = (long) 0;
-    private Session lastSession;
-    private final HashMap<Long, Session> sessions = new HashMap<Long, Session>();
     private boolean suspended = false;
     private final StubRetriever stubRetriever;
     private final Authenticator authenticator;
@@ -87,8 +81,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
     private final ServerSideContextFactory contextFactory;
 
-
-    public InvocationHandlerAdapter(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
+    public InvocationHandlerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
                                     ServerSideContextFactory contextFactory) {
         this.stubRetriever = stubRetriever;
         this.authenticator = authenticator;
@@ -96,12 +89,6 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         this.contextFactory = contextFactory != null ? contextFactory : new DefaultServerSideContextFactory();
     }
 
-    /**
-     * Handle an invocation
-     *
-     * @param request The request
-     * @return The reply.
-     */
     public Response handleInvocation(Request request, Object connectionDetails) {
 
         try {
@@ -160,15 +147,14 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             npe.printStackTrace();
             if (request instanceof InvokeMethod) {
                 String methd = ((InvokeMethod) request).getMethodSignature();
-                getServerMonitor().unexpectedException(InvocationHandlerAdapter.class, "InvocationHandlerAdapter.handleInvocation() NPE processing method " + methd, npe);
+                getServerMonitor().unexpectedException(InvocationHandlerDelegate.class, "InvocationHandlerDelegate.handleInvocation() NPE processing method " + methd, npe);
                 throw new NullPointerException("Null pointer exception, processing method " + methd);
             } else {
-                getServerMonitor().unexpectedException(InvocationHandlerAdapter.class, "InvocationHandlerAdapter.handleInvocation() NPE", npe);
+                getServerMonitor().unexpectedException(InvocationHandlerDelegate.class, "InvocationHandlerDelegate.handleInvocation() NPE", npe);
                 throw npe;
             }
         }
     }
-
 
     protected synchronized ServerSideContextFactory getClientContextFactory() {
         return contextFactory;
@@ -183,17 +169,9 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
     }
 
-
-    /**
-     * Do a Method Facade Request
-     *
-     * @param facadeRequest the request
-     * @return The reply
-     */
     private Response doMethodFacadeRequest(InvokeFacadeMethod facadeRequest, Object connectionDetails) {
 
-        if (!doesSessionExistAndRefreshItIfItDoes(facadeRequest.getSessionID()) && (connectionDetails == null || !connectionDetails.equals("callback")))
-        {
+        if (!doesSessionExistAndRefreshItIfItDoes(facadeRequest.getSessionID()) && (connectionDetails == null || !connectionDetails.equals("callback"))) {
             return new NoSuchSession(facadeRequest.getSessionID());
         }
 
@@ -236,7 +214,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     /**
      * Do a method facade request, returning an array
      *
-     * @param methodResponse        The array to process.
+     * @param methodResponse     The array to process.
      * @param invokeFacadeMethod The request
      * @return The reply
      */
@@ -267,7 +245,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
             } else {
                 refs[i] = methodInvocationHandler2.getOrMakeReferenceIDForBean(beanImpls[i]);
 
-                Session session = sessions.get(invokeFacadeMethod.getSessionID());
+                Session session = getSession(invokeFacadeMethod.getSessionID());
 
                 session.addBeanInUse(refs[i], beanImpls[i]);
             }
@@ -275,6 +253,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
         return new FacadeArrayMethodInvoked(refs, objectNames);
     }
+
 
     /**
      * Do a method facade request, returning things other that an array
@@ -309,7 +288,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         Long newRef = methodInvocationHandler.getOrMakeReferenceIDForBean(beanImpl);
 
         // make sure the bean is not garbage collected.
-        Session sess = sessions.get(invokeFacadeMethod.getSessionID());
+        Session sess = getSession(invokeFacadeMethod.getSessionID());
 
         sess.addBeanInUse(newRef, beanImpl);
 
@@ -317,16 +296,9 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         return new FacadeMethodInvoked(newRef, objectName);
     }
 
-    /**
-     * Do a method request
-     *
-     * @param invokeMethod The request
-     * @return The reply
-     */
     private Response doMethodRequest(InvokeMethod invokeMethod, Object connectionDetails) {
 
-        if (!doesSessionExistAndRefreshItIfItDoes(invokeMethod.getSessionID()) && (connectionDetails == null || !connectionDetails.equals("callback")))
-        {
+        if (!doesSessionExistAndRefreshItIfItDoes(invokeMethod.getSessionID()) && (connectionDetails == null || !connectionDetails.equals("callback"))) {
             return new NoSuchSession(invokeMethod.getSessionID());
         }
 
@@ -349,7 +321,6 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         }
 
 
-
         String publishedThing = methodRequest.getService() + "_" + methodRequest.getObjectName();
 
         if (!isPublished(publishedThing)) {
@@ -357,13 +328,12 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         }
 
 
-        Session sess = sessions.get(session);
+        Session sess = getSession(session);
 
         MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
 
         GroupedMethodRequest[] requests = methodRequest.getGroupedRequests();
-        for (int i = 0; i < requests.length; i++) {
-            GroupedMethodRequest rawRequest = requests[i];
+        for (GroupedMethodRequest rawRequest : requests) {
             methodInvocationHandler.handleMethodInvocation(new InvokeMethod(methodRequest.getService(), methodRequest.getObjectName(), rawRequest.getMethodSignature(), rawRequest.getArgs(), methodRequest.getReferenceID(), methodRequest.getSessionID()), connectionDetails);
         }
 
@@ -383,7 +353,6 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         if (!isPublished(StubHelper.formatServiceName(publishedServiceName))) {
             return new NotPublished();
         }
-
 
         //TODO a decent ref number for main?
         return new Service((long) 0);
@@ -412,17 +381,17 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
      * @return The reply.
      */
     private Response doOpenConnectionRequest() {
-        Long session = getNewSession();
-        sessions.put(session, new Session(session));
+        Long session = newSession();
         String textToSign = authenticator == null ? "" : authenticator.getTextToSign();
         return new ConnectionOpened(textToSign, session);
     }
 
+
     private Response doCloseConnectionRequest(Long sessionID) {
-        if (!sessions.containsKey(sessionID)) {
+        if (!sessionExists(sessionID)) {
             return new NoSuchSession(sessionID);
         } else {
-            sessions.remove(sessionID);
+            removeSession(sessionID);
             return new ConnectionClosed(sessionID);
         }
     }
@@ -440,7 +409,7 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
         while (iterator.hasNext()) {
             final String item = (String) iterator.next();
 
-            if ( StubHelper.isService(item) ) {
+            if (StubHelper.isService(item)) {
                 vecOfServices.add(StubHelper.getServiceName(item));
             }
         }
@@ -468,15 +437,11 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
 
         Long sessionID = gcr.getSessionID();
         if (doesSessionExistAndRefreshItIfItDoes(sessionID)) {
-            Session sess = sessions.get(sessionID);
-            if (sess == null) {
-                return new ConnectionClosed(sessionID);
+            Session sess = getSession(sessionID);
+            if (gcr.getReferenceID() == null) {
+                System.err.println("DEBUG- GC on missing referenceID -" + gcr.getReferenceID());
             } else {
-                if (gcr.getReferenceID() == null) {
-                    System.err.println("DEBUG- GC on missing referenceID -" + gcr.getReferenceID());
-                } else {
-                    sess.removeBeanInUse(gcr.getReferenceID());
-                }
+                sess.removeBeanInUse(gcr.getReferenceID());
             }
         }
         return new GarbageCollected();
@@ -485,7 +450,6 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     private Response doPing(Request request) {
         return new Ping();
     }
-
 
     /**
      * Do a ListMethods Request
@@ -496,53 +460,15 @@ public class InvocationHandlerAdapter extends PublicationAdapter implements Serv
     private Response doListMethodsRequest(Request request) {
         ListInvokableMethods lReq = (ListInvokableMethods) request;
         String publishedThing = StubHelper.formatServiceName(lReq.getService());
-        
+
         if (!isPublished(publishedThing)) {
             //Should it throw an exception back?
             return new InvokableMethods(new String[0]);
         }
 
-        //tODO cast back needed ?
-        DefaultMethodInvocationHandler methodInvocationHandler = (DefaultMethodInvocationHandler) getMethodInvocationHandler(publishedThing);
-
-        return new InvokableMethods(methodInvocationHandler.getListOfMethods());
+        return new InvokableMethods(getMethodInvocationHandler(publishedThing).getListOfMethods());
     }
 
-    /**
-     * Does a session exist
-     *
-     * @param session The session
-     * @return true if it exists
-     */
-    private boolean doesSessionExistAndRefreshItIfItDoes(Long session) {
-
-        if (lastSessionID.equals(session)) {
-
-            lastSession.refresh();
-            // buffer last session for performance.
-            return true;
-        } else {
-            if (sessions.containsKey(session)) {
-                lastSessionID = session;
-                lastSession = sessions.get(session);
-                lastSession.refresh();
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Get a new session ID
-     *
-     * @return The session
-     */
-    private Long getNewSession() {
-        // approve everything and set session identifier.
-        return new Long((++sessionId << 16) + ((long) (Math.random() * 65536)));
-    }
 
     /**
      * Suspend an service

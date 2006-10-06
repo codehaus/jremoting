@@ -27,55 +27,32 @@ import java.util.HashMap;
  */
 public class Session {
 
-    /**
-     * Session ID
-     */
     private Long session;
 
-    /**
-     * A map of in-use beans
-     */
     private HashMap<Long, Object> beansInUse = new HashMap<Long, Object>();
     private long lastTouched;
 
-    /**
-     * Construct an Session with a session ID
-     *
-     * @param session the session ID
-     */
     public Session(Long session) {
         this.session = session;
     }
 
-    /**
-     * Get the Session ID
-     *
-     * @return The session ID
-     */
     public Long getSession() {
         return session;
     }
 
-    /**
-     * Add a bean in use.
-     *
-     * @param referenceID The reference ID
-     * @param bean        The bean to use.
-     */
     public void addBeanInUse(Long referenceID, Object bean) {
         beansInUse.put(referenceID, bean);
     }
 
-    /**
-     * Remove a bean in use
-     *
-     * @param referenceID The reference ID.
-     */
     public void removeBeanInUse(Long referenceID) {
         beansInUse.remove(referenceID);
     }
 
     public void refresh() {
         lastTouched = System.currentTimeMillis();
+    }
+
+    public long getLastTouched() {
+        return lastTouched;
     }
 }

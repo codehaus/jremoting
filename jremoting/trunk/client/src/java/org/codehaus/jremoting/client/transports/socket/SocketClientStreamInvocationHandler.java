@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.transports.socket;
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.client.ClientMonitor;
@@ -55,7 +55,7 @@ public class SocketClientStreamInvocationHandler extends StreamClientInvocationH
      * @param host                  The host to connect to
      * @param port                  The port to conenct to
      */
-    public SocketClientStreamInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public SocketClientStreamInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                                                  ClientStreamDriverFactory streamDriverFactory,
                                                  String host, int port) throws ConnectionRefusedException, BadConnectionException {
@@ -77,7 +77,7 @@ public class SocketClientStreamInvocationHandler extends StreamClientInvocationH
 
 
     public SocketClientStreamInvocationHandler(ClientMonitor clientMonitor, ClientStreamDriverFactory streamDriverFactory, String host, int port) throws ConnectionRefusedException, BadConnectionException {
-        this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(),
+        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
                 Thread.currentThread().getContextClassLoader(), streamDriverFactory, host, port);
     }
 

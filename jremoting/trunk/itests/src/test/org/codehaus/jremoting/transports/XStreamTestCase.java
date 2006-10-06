@@ -1,8 +1,8 @@
 package org.codehaus.jremoting.transports;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;

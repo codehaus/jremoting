@@ -23,7 +23,7 @@ import java.rmi.ConnectIOException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.BadConnectionException;
@@ -58,7 +58,7 @@ public final class RmiClientInvocationHandler extends StatefulClientInvocationHa
     private String url;
     private long lastRealRequest = System.currentTimeMillis();
 
-    public RmiClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
+    public RmiClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
 
         super(clientMonitor, executorService, connectionPinger, RmiClientInvocationHandler.class.getClassLoader());
 
@@ -78,7 +78,7 @@ public final class RmiClientInvocationHandler extends StatefulClientInvocationHa
     }
 
     public RmiClientInvocationHandler(ClientMonitor clientMonitor, String host, int port) throws ConnectionException {
-        this(clientMonitor, Executors.newCachedThreadPool(), new NeverConnectionPinger(), host, port);
+        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), host, port);
 
     }
 

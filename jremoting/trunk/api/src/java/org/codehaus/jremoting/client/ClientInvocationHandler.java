@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client;
 
 import org.codehaus.jremoting.ConnectionException;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
@@ -55,7 +55,7 @@ public interface ClientInvocationHandler {
 
     Object resolveArgument(String remoteObjName, String methodSignature, Class inputArgumentClass, Object inputArgumentInstance);
 
-    ExecutorService getExecutorService();
+    ScheduledExecutorService getScheduledExecutorService();
 
     ClientMonitor getClientMonitor();
 

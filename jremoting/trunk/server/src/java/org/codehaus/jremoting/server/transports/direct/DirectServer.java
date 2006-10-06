@@ -24,7 +24,7 @@ import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideContextFactory;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerAdapter;
+import org.codehaus.jremoting.server.adapters.InvocationHandlerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
@@ -40,7 +40,7 @@ import org.codehaus.jremoting.server.transports.StatefulServer;
 public class DirectServer extends StatefulServer {
 
     /**
-     * Constructor DirectServer for use with pre-exiting InvocationHandlerAdapter.
+     * Constructor DirectServer for use with pre-exiting InvocationHandlerDelegate.
      *
      * @param stubRetriever
      * @param authenticator
@@ -49,7 +49,7 @@ public class DirectServer extends StatefulServer {
      * @param contextFactory
      */
     public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ScheduledExecutorService executorService, ServerSideContextFactory contextFactory) {
-        super(serverMonitor, new InvocationHandlerAdapter(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
+        super(serverMonitor, new InvocationHandlerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
     }
 
     public DirectServer() {

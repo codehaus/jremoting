@@ -28,13 +28,8 @@ public class TimingOutConnectionPinger extends IntervalConnectionPinger {
     private final long giveUpIntervalMilliSeconds;
 
     public TimingOutConnectionPinger(int pingIntervalSeconds, int giveUpIntervalSeconds) {
-        this(pingIntervalSeconds* 1000, (long) giveUpIntervalSeconds * 1000);
-    }
-
-    public TimingOutConnectionPinger(long pingIntervalMilliSeconds, long giveUpIntervalMilliSeconds) {
-        super(pingIntervalMilliSeconds);
-
-        this.giveUpIntervalMilliSeconds = giveUpIntervalMilliSeconds;
+        super(pingIntervalSeconds);
+        this.giveUpIntervalMilliSeconds = giveUpIntervalSeconds;
     }
 
     /**

@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.transports.direct;
 
 import org.codehaus.jremoting.JRemotingException;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.requests.Request;
@@ -37,7 +37,7 @@ public final class DirectMarshalledClientInvocationHandler extends StatefulDirec
 
     private ServerMarshalledInvocationHandler invocationHandler;
 
-    public DirectMarshalledClientInvocationHandler(ClientMonitor clientMonitor, ExecutorService executorService,
+    public DirectMarshalledClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                              ConnectionPinger connectionPinger, ServerMarshalledInvocationHandler invocationHandler,
                                              ClassLoader facadesClassLoader) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
