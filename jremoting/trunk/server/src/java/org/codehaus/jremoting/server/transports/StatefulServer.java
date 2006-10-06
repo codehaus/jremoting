@@ -29,13 +29,13 @@ import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Server;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerDelegate;
+import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 
 public class StatefulServer implements Server {
     /**
      * The invocation handler
      */
-    protected InvocationHandlerDelegate invocationHandlerDelegate;
+    protected InvokerDelegate invocationHandlerDelegate;
     /**
      * The state of the system.
      */
@@ -44,7 +44,7 @@ public class StatefulServer implements Server {
     protected final ScheduledExecutorService executorService;
 
 
-    public StatefulServer(ServerMonitor serverMonitor, InvocationHandlerDelegate invocationHandlerDelegate,
+    public StatefulServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate,
                           ScheduledExecutorService executorService) {
         this.invocationHandlerDelegate = invocationHandlerDelegate;
         this.executorService = executorService;
@@ -62,9 +62,9 @@ public class StatefulServer implements Server {
      * @param request The request of the invocation.
      * @return An suitable reply.
      */
-    public Response handleInvocation(Request request, Object connectionDetails) {
+    public Response invoke(Request request, Object connectionDetails) {
         if (getState().equals(STARTED)) {
-            return invocationHandlerDelegate.handleInvocation(request, connectionDetails);
+            return invocationHandlerDelegate.invoke(request, connectionDetails);
         } else {
             return new InvocationExceptionThrown("Service is not started");
         }
@@ -172,7 +172,7 @@ public class StatefulServer implements Server {
      *
      * @return the invocation handler adapter.
      */
-    public InvocationHandlerDelegate getInvocationHandlerDelegate() {
+    public InvokerDelegate getInvocationHandlerDelegate() {
         return invocationHandlerDelegate;
     }
 

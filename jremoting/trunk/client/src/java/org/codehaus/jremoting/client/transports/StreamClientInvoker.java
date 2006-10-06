@@ -42,19 +42,19 @@ import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.TryLater;
 
 /**
- * Class StreamClientInvocationHandler
+ * Class StreamClientInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class StreamClientInvocationHandler extends StatefulClientInvocationHandler {
+public abstract class StreamClientInvoker extends StatefulClientInvoker {
 
     private ClientStreamDriver objectDriver;
     private boolean methodLogging = false;
     private long lastRealRequest = System.currentTimeMillis();
     protected final ClientStreamDriverFactory streamDriverFactory;
 
-    public StreamClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public StreamClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                                                  ClientStreamDriverFactory streamDriverFactory) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
@@ -69,7 +69,7 @@ public abstract class StreamClientInvocationHandler extends StatefulClientInvoca
     protected void requestWritten() {
     }
 
-    public synchronized Response handleInvocation(Request request) {
+    public synchronized Response invoke(Request request) {
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
         }
@@ -123,7 +123,7 @@ public abstract class StreamClientInvocationHandler extends StatefulClientInvoca
                                 retryConnectTries++;
                             }
                         } else {
-                            throw clientMonitor.unexpectedIOException(StatefulClientInvocationHandler.class, "handleInvocation()", ioe);
+                            throw clientMonitor.unexpectedIOException(StatefulClientInvoker.class, "invoke()", ioe);
                         }
                     }
                 }

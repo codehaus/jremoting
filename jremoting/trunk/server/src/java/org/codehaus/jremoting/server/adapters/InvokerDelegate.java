@@ -56,7 +56,7 @@ import org.codehaus.jremoting.responses.StubClass;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.MethodInvocationHandler;
-import org.codehaus.jremoting.server.ServerInvocationHandler;
+import org.codehaus.jremoting.server.ServerInvoker;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideContextFactory;
 import org.codehaus.jremoting.server.Session;
@@ -68,11 +68,11 @@ import org.codehaus.jremoting.util.StubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
 /**
- * Class InvocationHandlerDelegate
+ * Class InvokerDelegate
  *
  * @author Paul Hammant
  */
-public class InvocationHandlerDelegate extends SessionAdapter implements ServerInvocationHandler {
+public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
 
     private boolean suspended = false;
     private final StubRetriever stubRetriever;
@@ -81,7 +81,7 @@ public class InvocationHandlerDelegate extends SessionAdapter implements ServerI
 
     private final ServerSideContextFactory contextFactory;
 
-    public InvocationHandlerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
+    public InvokerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
                                     ServerSideContextFactory contextFactory) {
         this.stubRetriever = stubRetriever;
         this.authenticator = authenticator;
@@ -89,7 +89,7 @@ public class InvocationHandlerDelegate extends SessionAdapter implements ServerI
         this.contextFactory = contextFactory != null ? contextFactory : new DefaultServerSideContextFactory();
     }
 
-    public Response handleInvocation(Request request, Object connectionDetails) {
+    public Response invoke(Request request, Object connectionDetails) {
 
         try {
             if (suspended) {
@@ -147,10 +147,10 @@ public class InvocationHandlerDelegate extends SessionAdapter implements ServerI
             npe.printStackTrace();
             if (request instanceof InvokeMethod) {
                 String methd = ((InvokeMethod) request).getMethodSignature();
-                getServerMonitor().unexpectedException(InvocationHandlerDelegate.class, "InvocationHandlerDelegate.handleInvocation() NPE processing method " + methd, npe);
+                getServerMonitor().unexpectedException(InvokerDelegate.class, "InvokerDelegate.invoke() NPE processing method " + methd, npe);
                 throw new NullPointerException("Null pointer exception, processing method " + methd);
             } else {
-                getServerMonitor().unexpectedException(InvocationHandlerDelegate.class, "InvocationHandlerDelegate.handleInvocation() NPE", npe);
+                getServerMonitor().unexpectedException(InvokerDelegate.class, "InvokerDelegate.invoke() NPE", npe);
                 throw npe;
             }
         }

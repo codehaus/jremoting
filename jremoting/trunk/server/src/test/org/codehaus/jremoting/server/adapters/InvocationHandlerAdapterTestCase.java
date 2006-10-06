@@ -28,16 +28,16 @@ import junit.framework.TestCase;
 public class InvocationHandlerAdapterTestCase extends TestCase {
 
     public void testOpenConnection() {
-        InvocationHandlerDelegate invocationHandle = new InvocationHandlerDelegate(null, null, null, null);
-        ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.handleInvocation(new OpenConnection(), new Object());
+        InvokerDelegate invocationHandle = new InvokerDelegate(null, null, null, null);
+        ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.invoke(new OpenConnection(), new Object());
         assertNotNull(connectionOpened);
         assertNotNull(connectionOpened.getSessionID());
     }
 
     public void testCloseConnectionAfterOpenConnection() {
-        InvocationHandlerDelegate invocationHandle = new InvocationHandlerDelegate(null, null, null, null);
-        ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.handleInvocation(new OpenConnection(), new Object());
-        ConnectionClosed connectionClosed = (ConnectionClosed) invocationHandle.handleInvocation(new CloseConnection(connectionOpened.getSessionID()), new Object());
+        InvokerDelegate invocationHandle = new InvokerDelegate(null, null, null, null);
+        ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.invoke(new OpenConnection(), new Object());
+        ConnectionClosed connectionClosed = (ConnectionClosed) invocationHandle.invoke(new CloseConnection(connectionOpened.getSessionID()), new Object());
         assertNotNull(connectionClosed);
         assertNotNull(connectionClosed.getSessionID());
         assertEquals(connectionClosed.getSessionID(), connectionOpened.getSessionID());
@@ -45,8 +45,8 @@ public class InvocationHandlerAdapterTestCase extends TestCase {
     }
 
     public void testCloseConnectionErrorsOnBogusSession() {
-        InvocationHandlerDelegate invocationHandle = new InvocationHandlerDelegate(null, null, null, null);
-        Response response = invocationHandle.handleInvocation(new CloseConnection(new Long(123)), new Object());
+        InvokerDelegate invocationHandle = new InvokerDelegate(null, null, null, null);
+        Response response = invocationHandle.invoke(new CloseConnection(new Long(123)), new Object());
         assertTrue(response instanceof NoSuchSession);
         NoSuchSession noSuchSession = (NoSuchSession) response;
         assertNotNull(noSuchSession);

@@ -27,11 +27,11 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.ClientInvoker;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.factories.SimpleContextFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -146,7 +146,7 @@ public class ClientContextTestCase extends TestCase {
 
         ClientStreamDriverFactory factory0 = new ClientCustomStreamDriverFactory();
         ClientMonitor cm = new ConsoleClientMonitor();
-        ClientInvocationHandler handler = new SocketClientStreamInvocationHandler(cm, factory0, "127.0.0.1", 19333);
+        ClientInvoker handler = new SocketClientStreamInvoker(cm, factory0, "127.0.0.1", 19333);
         SimpleContextFactory factory1 = new SimpleContextFactory();
         Factory factory = new ClientSideStubFactory(handler, factory1);
 

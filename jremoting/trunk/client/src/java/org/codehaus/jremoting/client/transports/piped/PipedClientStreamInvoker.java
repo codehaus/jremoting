@@ -26,25 +26,25 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
-import org.codehaus.jremoting.client.transports.StreamClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.StreamClientInvoker;
 import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
 /**
- * Class PipedClientStreamInvocationHandler
+ * Class PipedClientStreamInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class PipedClientStreamInvocationHandler extends StreamClientInvocationHandler {
+public class PipedClientStreamInvoker extends StreamClientInvoker {
 
     private PipedInputStream inputStream;
     private PipedOutputStream outputStream;
 
     /**
-     * Constructor PipedClientStreamInvocationHandler
+     * Constructor PipedClientStreamInvoker
      *
      * @param clientMonitor
      * @param executorService
@@ -53,7 +53,7 @@ public class PipedClientStreamInvocationHandler extends StreamClientInvocationHa
      * @param is
      * @param os
      */
-    public PipedClientStreamInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public PipedClientStreamInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                         ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, ClientStreamDriverFactory clientStreamDriverFactory, PipedInputStream is,
                                         PipedOutputStream os
     ) {
@@ -65,7 +65,7 @@ public class PipedClientStreamInvocationHandler extends StreamClientInvocationHa
     }
 
 
-    public PipedClientStreamInvocationHandler(ClientMonitor clientMonitor,
+    public PipedClientStreamInvoker(ClientMonitor clientMonitor,
                                         ClientStreamDriverFactory streamDriverFactory,
                                         PipedInputStream inputStream, PipedOutputStream outputStream) {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),

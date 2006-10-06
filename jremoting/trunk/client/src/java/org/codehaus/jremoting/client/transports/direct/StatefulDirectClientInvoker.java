@@ -24,7 +24,7 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.client.transports.StatefulClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.StatefulClientInvoker;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.requests.InvokeMethod;
@@ -36,23 +36,23 @@ import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.TryLater;
 
 /**
- * Class StatefulDirectClientInvocationHandler
+ * Class StatefulDirectClientInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class StatefulDirectClientInvocationHandler extends StatefulClientInvocationHandler {
+public abstract class StatefulDirectClientInvoker extends StatefulClientInvoker {
 
     protected boolean methodLogging = false;
     protected long lastRealRequest = System.currentTimeMillis();
 
 
-    public StatefulDirectClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public StatefulDirectClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
     }
 
-    public Response handleInvocation(Request request) {
+    public Response invoke(Request request) {
 
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();

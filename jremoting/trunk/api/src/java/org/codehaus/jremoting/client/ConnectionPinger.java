@@ -29,7 +29,7 @@ public interface ConnectionPinger {
     /**
      * Method setInvocationHandler
      */
-    void setInvocationHandler(ClientInvocationHandler invocationHandler);
+    void setInvocationHandler(ClientInvoker invoker);
 
     /**
      * Method start

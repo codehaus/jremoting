@@ -21,12 +21,12 @@ import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
 /**
- * Interface InvocationHandler
+ * Interface ServerInvoker
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public interface ServerInvocationHandler {
+public interface ServerInvoker {
 
     /**
      * Handle a method invocation
@@ -35,9 +35,6 @@ public interface ServerInvocationHandler {
      * @param connectionDetails Some details of the connection.
      * @return the response that is a consequence of the request
      */
-    Response handleInvocation(Request request, Object connectionDetails);
-
-
-//    void pruneSessionsOlderThan(long millis);
+    Response invoke(Request request, Object connectionDetails);
 
 }

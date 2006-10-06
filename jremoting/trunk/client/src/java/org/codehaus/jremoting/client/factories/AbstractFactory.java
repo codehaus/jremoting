@@ -50,7 +50,7 @@ import org.codehaus.jremoting.util.StubHelper;
 public abstract class AbstractFactory implements Factory {
 
     private static final int STUB_PREFIX_LENGTH = StubHelper.getStubPrefixLength();
-    protected final ClientInvocationHandler clientInvocationHandler;
+    protected final ClientInvoker clientInvoker;
     private final ContextFactory contextFactory;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
     private transient String textToSign;
@@ -58,13 +58,13 @@ public abstract class AbstractFactory implements Factory {
     private ProxyRegistry proxyRegistry;
 
 
-    public AbstractFactory(final ClientInvocationHandler clientInvocationHandler, ContextFactory contextFactory) throws ConnectionException {
-        this.clientInvocationHandler = clientInvocationHandler;
+    public AbstractFactory(final ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
+        this.clientInvoker = clientInvoker;
         this.contextFactory = contextFactory;
 
-        clientInvocationHandler.initialize();
+        clientInvoker.initialize();
 
-        Response response = clientInvocationHandler.handleInvocation(new OpenConnection());
+        Response response = clientInvoker.invoke(new OpenConnection());
 
         if (response instanceof ConnectionOpened) {
             textToSign = ((ConnectionOpened) response).getTextToSign();
@@ -120,7 +120,7 @@ public abstract class AbstractFactory implements Factory {
                         }
                     } else // Let the specific InvocationHandlers be given the last chance to modify the arguments.
                     {
-                        args[i] = clientInvocationHandler.resolveArgument(remoteObjectName, methodSignature, argClasses[i], args[i]);
+                        args[i] = clientInvoker.resolveArgument(remoteObjectName, methodSignature, argClasses[i], args[i]);
                     }
                 }
             }
@@ -130,7 +130,7 @@ public abstract class AbstractFactory implements Factory {
 
     public Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
-        Response ar = clientInvocationHandler.handleInvocation(new LookupService(publishedServiceName, authentication, sessionID));
+        Response ar = clientInvoker.invoke(new LookupService(publishedServiceName, authentication, sessionID));
 
         if (ar instanceof NotPublished) {
             throw new ConnectionException("Service '" + publishedServiceName + "' not published");
@@ -150,7 +150,7 @@ public abstract class AbstractFactory implements Factory {
         }
 
         Service lr = (Service) ar;
-        DefaultProxyHelper baseObj = new DefaultProxyHelper(proxyRegistry, clientInvocationHandler,
+        DefaultProxyHelper baseObj = new DefaultProxyHelper(proxyRegistry, clientInvoker,
                 contextFactory, publishedServiceName, "Main", lr.getReferenceID(), sessionID);
         Object retVal = getInstance(publishedServiceName, "Main", baseObj);
 
@@ -174,7 +174,7 @@ public abstract class AbstractFactory implements Factory {
     }
 
     public String[] listServices() {
-        Response ar = clientInvocationHandler.handleInvocation(new ListServices());
+        Response ar = clientInvoker.invoke(new ListServices());
         return ((ServicesList) ar).getServices();
     }
 
@@ -213,8 +213,8 @@ public abstract class AbstractFactory implements Factory {
 
     public void close() {
         CloseConnection request = new CloseConnection(sessionID);
-        ConnectionClosed closed = (ConnectionClosed) clientInvocationHandler.handleInvocation(request);
-        clientInvocationHandler.close();
+        ConnectionClosed closed = (ConnectionClosed) clientInvoker.invoke(request);
+        clientInvoker.close();
     }
 
 

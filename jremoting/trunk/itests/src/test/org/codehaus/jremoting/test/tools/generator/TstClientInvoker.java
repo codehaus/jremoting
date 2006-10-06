@@ -20,7 +20,7 @@ package org.codehaus.jremoting.test.tools.generator;
 import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.transports.StatefulClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.StatefulClientInvoker;
 import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.SimpleMethodInvoked;
@@ -28,28 +28,28 @@ import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.server.ServerInvocationHandler;
+import org.codehaus.jremoting.server.ServerInvoker;
 
 import java.lang.reflect.Method;
 
 /**
- * TstClientInvocationHandler
+ * TstClientInvoker
  *
  * @author <a href="mailto:vinayc@apache">Vinay Chandrasekharan</a>
  * @version 1.0
  */
-public class TstClientInvocationHandler extends StatefulClientInvocationHandler implements ServerInvocationHandler {
+public class TstClientInvoker extends StatefulClientInvoker implements ServerInvoker {
 
 
-    public TstClientInvocationHandler(ScheduledExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
-        super(clientMonitor, executorService, connectionPinger, TstClientInvocationHandler.class.getClassLoader());
+    public TstClientInvoker(ScheduledExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+        super(clientMonitor, executorService, connectionPinger, TstClientInvoker.class.getClassLoader());
     }
 
-    public Response handleInvocation(Request request) {
-        return handleInvocation(request, "test");
+    public Response invoke(Request request) {
+        return invoke(request, "test");
     }
 
-    public Response handleInvocation(Request request, Object connectionDetails) {
+    public Response invoke(Request request, Object connectionDetails) {
         if (request instanceof OpenConnection) {
             return new ConnectionOpened();
         } else if (request instanceof InvokeMethod) {
@@ -85,14 +85,14 @@ public class TstClientInvocationHandler extends StatefulClientInvocationHandler 
     }
 
     /*
-     * @see StatefulClientInvocationHandler#tryReconnect()
+     * @see StatefulClientInvoker#tryReconnect()
      */
     protected boolean tryReconnect() {
         return true;
     }
 
     /*
-     * @see ClientInvocationHandler#getLastRealRequestTime()
+     * @see ClientInvoker#getLastRealRequestTime()
      */
     public long getLastRealRequestTime() {
         return 0;

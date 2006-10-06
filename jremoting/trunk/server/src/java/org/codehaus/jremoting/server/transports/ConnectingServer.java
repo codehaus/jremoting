@@ -25,7 +25,7 @@ import java.util.concurrent.ScheduledFuture;
 
 import org.codehaus.jremoting.server.Connection;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerDelegate;
+import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 
 /**
  * Class ConnectingServer
@@ -49,7 +49,7 @@ public class ConnectingServer extends StatefulServer {
         this.pruneSessionInterval = seconds;
     }
 
-    public ConnectingServer(ServerMonitor serverMonitor, InvocationHandlerDelegate invocationHandlerDelegate,
+    public ConnectingServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate,
                             ScheduledExecutorService executor) {
         super(serverMonitor, invocationHandlerDelegate, executor);
     }

@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
@@ -34,8 +34,6 @@ import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 
 public abstract class AbstractSimpleAsyncTestCase extends TestCase {
@@ -81,7 +79,7 @@ public abstract class AbstractSimpleAsyncTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        factory = new ServerSideStubFactory(new SocketClientStreamInvocationHandler(new ConsoleClientMonitor(),
+        factory = new ServerSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(),"127.0.0.1", 11003));
         testClient = (AsyncTest) factory.lookupService("AsyncTest");
 

@@ -24,7 +24,7 @@ package org.codehaus.jremoting.server;
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public interface Server extends Publisher, ServerInvocationHandler {
+public interface Server extends Publisher, ServerInvoker {
 
     /**
      * The state of the system while shutting down.

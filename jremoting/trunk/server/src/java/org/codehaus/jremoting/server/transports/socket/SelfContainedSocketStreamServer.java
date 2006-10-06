@@ -29,7 +29,7 @@ import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideContextFactory;
 import org.codehaus.jremoting.server.StubRetriever;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerDelegate;
+import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
@@ -67,7 +67,7 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
      * @param invocationHandlerDelegate The invocation handler adapter to use.
      * @param port                     The port to use
      */
-    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, InvocationHandlerDelegate invocationHandlerDelegate,
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate,
                                            ServerStreamDriverFactory serverStreamDriverFactory, ScheduledExecutorService executorService,
                                            ClassLoader facadesClassLoader, int port) {
 
@@ -79,7 +79,7 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
                                            ServerStreamDriverFactory serverStreamDriverFactory, ScheduledExecutorService executorService,
                                            ServerSideContextFactory contextFactory,
                                            ClassLoader facadesClassLoader, int port) {
-        this(serverMonitor, new InvocationHandlerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
+        this(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
                 serverStreamDriverFactory, executorService, facadesClassLoader, port);
     }
 

@@ -86,7 +86,7 @@ public abstract class StreamConnection implements Runnable, Connection {
             while (more) {
                 try {
                     if (request != null) {
-                        response = connectingServer.handleInvocation(request, driver.getConnectionDetails());
+                        response = connectingServer.invoke(request, driver.getConnectionDetails());
                     }
 
                     request = driver.writeResponseAndGetRequest(response);

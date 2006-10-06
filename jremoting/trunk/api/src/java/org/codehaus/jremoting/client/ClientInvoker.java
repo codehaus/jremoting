@@ -24,14 +24,14 @@ import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
 /**
- * Interface ClientInvocationHandler
+ * Interface ClientInvoker
  *
  * @author Paul Hammant
  * @version * $Revision: 1.3 $
  */
-public interface ClientInvocationHandler {
+public interface ClientInvoker {
 
-    Response handleInvocation(Request request);
+    Response invoke(Request request);
 
     void initialize() throws ConnectionException;
 

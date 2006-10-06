@@ -25,32 +25,32 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.server.ServerInvocationHandler;
+import org.codehaus.jremoting.server.ServerInvoker;
 
 /**
- * Class DirectClientInvocationHandler
+ * Class DirectClientInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class DirectClientInvocationHandler extends StatefulDirectClientInvocationHandler {
+public final class DirectClientInvoker extends StatefulDirectClientInvoker {
 
-    private ServerInvocationHandler invocationHandler;
+    private ServerInvoker invoker;
 
 
-    public DirectClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger,
-                                   ServerInvocationHandler invocationHandler) {
-        super(clientMonitor, executorService, connectionPinger, DirectClientInvocationHandler.class.getClassLoader());
-        this.invocationHandler = invocationHandler;
+    public DirectClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger,
+                                   ServerInvoker invoker) {
+        super(clientMonitor, executorService, connectionPinger, DirectClientInvoker.class.getClassLoader());
+        this.invoker = invoker;
     }
 
-    public DirectClientInvocationHandler(ClientMonitor clientMonitor, ServerInvocationHandler invocationHandler) {
-        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), invocationHandler );
-        this.invocationHandler = invocationHandler;
+    public DirectClientInvoker(ClientMonitor clientMonitor, ServerInvoker invoker) {
+        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), invoker);
+        this.invoker = invoker;
     }
 
     protected Response performInvocation(Request request) {
-        return invocationHandler.handleInvocation(request, "");
+        return invoker.invoke(request, "");
     }
 
 }

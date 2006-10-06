@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.pingers;
 
-import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.ClientInvoker;
 import org.codehaus.jremoting.client.ConnectionPinger;
 
 /**
@@ -34,7 +34,7 @@ public class NeverConnectionPinger implements ConnectionPinger {
     protected void ping() {
     }
 
-    public void setInvocationHandler(ClientInvocationHandler invocationHandler) {
+    public void setInvocationHandler(ClientInvoker invoker) {
     }
 
     public void start() {

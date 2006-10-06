@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.pingers;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.ClientInvoker;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
@@ -33,7 +33,7 @@ import org.codehaus.jremoting.client.InvocationException;
  */
 public abstract class IntervalConnectionPinger implements ConnectionPinger {
 
-    private ClientInvocationHandler clientInvocationHandler;
+    private ClientInvoker clientInvoker;
     private Future future;
     private final long pingInterval;
 
@@ -41,12 +41,12 @@ public abstract class IntervalConnectionPinger implements ConnectionPinger {
         pingInterval = pingIntervalSeconds;
     }
 
-    public void setInvocationHandler(ClientInvocationHandler invocationHandler) {
-        clientInvocationHandler = invocationHandler;
+    public void setInvocationHandler(ClientInvoker invoker) {
+        clientInvoker = invoker;
     }
 
-    protected ClientInvocationHandler getInvocationHandler() {
-        return clientInvocationHandler;
+    protected ClientInvoker getInvocationHandler() {
+        return clientInvoker;
     }
 
     public void start() {
@@ -56,16 +56,16 @@ public abstract class IntervalConnectionPinger implements ConnectionPinger {
                 try {
                     ping();
                 } catch (InvocationException ie) {
-                    clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), "n/a", "n/a", "n/a", ie);
+                    clientInvoker.getClientMonitor().invocationFailure(this.getClass(), "n/a", "n/a", "n/a", ie);
                     // no need to ping anymore?
                 } catch (ConnectionClosedException cce) {
-                    clientInvocationHandler.getClientMonitor().unexpectedConnectionClosed(this.getClass(), this.getClass().getName(), cce);
+                    clientInvoker.getClientMonitor().unexpectedConnectionClosed(this.getClass(), this.getClass().getName(), cce);
                     // no need to ping anymore?
                 }
             }
         };
 
-        future = clientInvocationHandler.getScheduledExecutorService().scheduleAtFixedRate(runnable, pingInterval, pingInterval, TimeUnit.SECONDS);
+        future = clientInvoker.getScheduledExecutorService().scheduleAtFixedRate(runnable, pingInterval, pingInterval, TimeUnit.SECONDS);
 
     }
 

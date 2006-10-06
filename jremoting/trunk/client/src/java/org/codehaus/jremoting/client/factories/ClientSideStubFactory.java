@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.ClientInvoker;
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.util.StubHelper;
 
@@ -31,17 +31,17 @@ import org.codehaus.jremoting.util.StubHelper;
 public class ClientSideStubFactory extends AbstractFactory {
     private ClassLoader classLoader;
 
-    public ClientSideStubFactory(ClientInvocationHandler clientInvocationHandler) throws ConnectionException {
-        this(clientInvocationHandler, Thread.currentThread().getContextClassLoader(), new NullContextFactory());
+    public ClientSideStubFactory(ClientInvoker clientInvoker) throws ConnectionException {
+        this(clientInvoker, Thread.currentThread().getContextClassLoader(), new NullContextFactory());
     }
 
-    public ClientSideStubFactory(ClientInvocationHandler clientInvocationHandler, ContextFactory contextFactory) throws ConnectionException {
-        this(clientInvocationHandler, Thread.currentThread().getContextClassLoader(), contextFactory);
+    public ClientSideStubFactory(ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
+        this(clientInvoker, Thread.currentThread().getContextClassLoader(), contextFactory);
     }
 
-    public ClientSideStubFactory(ClientInvocationHandler clientInvocationHandler, ClassLoader facadesClassLoader, ContextFactory contextFactory
+    public ClientSideStubFactory(ClientInvoker clientInvoker, ClassLoader facadesClassLoader, ContextFactory contextFactory
     ) throws ConnectionException {
-        super(clientInvocationHandler, contextFactory);
+        super(clientInvoker, contextFactory);
         this.classLoader = facadesClassLoader;
     }
 

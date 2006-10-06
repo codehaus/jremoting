@@ -19,7 +19,7 @@ package org.codehaus.jremoting.server.adapters;
 
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.server.ServerInvocationHandler;
+import org.codehaus.jremoting.server.ServerInvoker;
 import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
 import org.codehaus.jremoting.util.SerializationHelper;
 
@@ -34,7 +34,7 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
     /**
      * The invocation hamdeler
      */
-    private ServerInvocationHandler invocationHandler;
+    private ServerInvoker invoker;
     /**
      * The class loader.
      */
@@ -43,21 +43,21 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
     /**
      * Constructor MarshalledInvocationHandlerAdapter
      *
-     * @param invocationHandler The invocation handler
+     * @param invoker The invocation handler
      */
-    public MarshalledInvocationHandlerAdapter(ServerInvocationHandler invocationHandler) {
-        this.invocationHandler = invocationHandler;
+    public MarshalledInvocationHandlerAdapter(ServerInvoker invoker) {
+        this.invoker = invoker;
         facadesClassLoader = getClass().getClassLoader();
     }
 
     /**
      * Constructor MarshalledInvocationHandlerAdapter
      *
-     * @param invocationHandler The invocation handler
+     * @param invoker The invocation handler
      * @param facadesClassLoader       The classloader
      */
-    public MarshalledInvocationHandlerAdapter(ServerInvocationHandler invocationHandler, ClassLoader facadesClassLoader) {
-        this.invocationHandler = invocationHandler;
+    public MarshalledInvocationHandlerAdapter(ServerInvoker invoker, ClassLoader facadesClassLoader) {
+        this.invoker = invoker;
         this.facadesClassLoader = facadesClassLoader;
     }
 
@@ -71,7 +71,7 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
 
         try {
             Request ar = (Request) SerializationHelper.getInstanceFromBytes(request, facadesClassLoader);
-            Response response = invocationHandler.handleInvocation(ar, connectionDetails);
+            Response response = invoker.invoke(ar, connectionDetails);
 
             return SerializationHelper.getBytesFromInstance(response);
         } catch (ClassNotFoundException e) {

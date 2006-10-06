@@ -20,7 +20,7 @@ package org.codehaus.jremoting.test.invalidstate;
 import org.codehaus.jremoting.client.*;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
 import org.codehaus.jremoting.client.factories.DefaultProxyHelper;
-import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvocationHandler;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
@@ -70,7 +70,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(DefaultProxyHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
             )});
 
-            factory = new ClientSideStubFactory(new SocketClientStreamInvocationHandler((ClientMonitor) clientMonitor.proxy(),
+            factory = new ClientSideStubFactory(new SocketClientStreamInvoker((ClientMonitor) clientMonitor.proxy(),
                     new ClientCustomStreamDriverFactory(), "127.0.0.1", 12201));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello55");
 

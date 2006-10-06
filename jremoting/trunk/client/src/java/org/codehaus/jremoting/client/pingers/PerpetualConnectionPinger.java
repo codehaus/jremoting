@@ -40,6 +40,6 @@ public class PerpetualConnectionPinger extends IntervalConnectionPinger {
     }
 
     protected void ping() {
-        getInvocationHandler().handleInvocation(new Ping());
+        getInvocationHandler().invoke(new Ping());
     }
 }

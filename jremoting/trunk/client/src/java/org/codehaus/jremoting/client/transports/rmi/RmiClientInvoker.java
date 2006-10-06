@@ -35,7 +35,7 @@ import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
-import org.codehaus.jremoting.client.transports.StatefulClientInvocationHandler;
+import org.codehaus.jremoting.client.transports.StatefulClientInvoker;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.requests.InvokeMethod;
@@ -47,20 +47,20 @@ import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.TryLater;
 
 /**
- * Class RmiClientInvocationHandler
+ * Class RmiClientInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class RmiClientInvocationHandler extends StatefulClientInvocationHandler {
+public final class RmiClientInvoker extends StatefulClientInvoker {
 
     private RmiInvocationHandler rmiInvocationHandler;
     private String url;
     private long lastRealRequest = System.currentTimeMillis();
 
-    public RmiClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
+    public RmiClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
 
-        super(clientMonitor, executorService, connectionPinger, RmiClientInvocationHandler.class.getClassLoader());
+        super(clientMonitor, executorService, connectionPinger, RmiClientInvoker.class.getClassLoader());
 
         url = "rmi://" + host + ":" + port + "/" + RmiInvocationHandler.class.getName();
 
@@ -77,7 +77,7 @@ public final class RmiClientInvocationHandler extends StatefulClientInvocationHa
         }
     }
 
-    public RmiClientInvocationHandler(ClientMonitor clientMonitor, String host, int port) throws ConnectionException {
+    public RmiClientInvoker(ClientMonitor clientMonitor, String host, int port) throws ConnectionException {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), host, port);
 
     }
@@ -100,12 +100,12 @@ public final class RmiClientInvocationHandler extends StatefulClientInvocationHa
     }
 
     /**
-     * Method handleInvocation
+     * Method invoke
      *
      * @param request
      * @return
      */
-    public synchronized Response handleInvocation(Request request) {
+    public synchronized Response invoke(Request request) {
 
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();

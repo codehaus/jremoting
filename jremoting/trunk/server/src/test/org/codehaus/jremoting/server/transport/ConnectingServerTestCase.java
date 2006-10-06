@@ -21,7 +21,7 @@ package org.codehaus.jremoting.server.transport;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerDelegate;
+import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
@@ -34,7 +34,7 @@ public class ConnectingServerTestCase extends TestCase {
 
     public void testSessionsCanBePruned() throws InterruptedException {
         ServerMonitor sm = new ConsoleServerMonitor();
-        MyInvocationHandlerDelegate ihd = new MyInvocationHandlerDelegate(sm);
+        MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
         ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10));
         assertTrue(ihd.sessionExists(ihd.tstSession));
         cs.setPruneSessionsInterval(1);
@@ -47,7 +47,7 @@ public class ConnectingServerTestCase extends TestCase {
 
     public void testSessionsAreNotPrunedIfTheServerIsStopped() throws InterruptedException {
         ServerMonitor sm = new ConsoleServerMonitor();
-        MyInvocationHandlerDelegate ihd = new MyInvocationHandlerDelegate(sm);
+        MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
         ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10));
         assertTrue(ihd.sessionExists(ihd.tstSession));
         cs.setPruneSessionsInterval(1);
@@ -60,7 +60,7 @@ public class ConnectingServerTestCase extends TestCase {
 
     public void testSessionsCannotBePrunedIfRefreshed() throws InterruptedException {
         ServerMonitor sm = new ConsoleServerMonitor();
-        MyInvocationHandlerDelegate ihd = new MyInvocationHandlerDelegate(sm);
+        MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
         ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10));
         assertTrue(ihd.sessionExists(ihd.tstSession));
         cs.setPruneSessionsInterval(1);
@@ -81,9 +81,9 @@ public class ConnectingServerTestCase extends TestCase {
 
     }
 
-    private static class MyInvocationHandlerDelegate extends InvocationHandlerDelegate {
+    private static class MyInvokerDelegate extends InvokerDelegate {
         Long tstSession;
-        public MyInvocationHandlerDelegate(ServerMonitor sm) {
+        public MyInvokerDelegate(ServerMonitor sm) {
             super(sm, new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideContextFactory());
             tstSession = super.newSession();
         }

@@ -49,7 +49,7 @@ import org.codehaus.jremoting.ConnectionException;
 public final class DefaultProxyHelper implements ProxyHelper {
 
     private final transient ProxyRegistry proxyRegistry;
-    private final transient ClientInvocationHandler clientInvocationHandler;
+    private final transient ClientInvoker clientInvoker;
     private final transient String publishedServiceName;
     private final transient String objectName;
     private final transient Long referenceID;
@@ -57,13 +57,13 @@ public final class DefaultProxyHelper implements ProxyHelper {
     private ContextFactory contextFactory;
     private ArrayList<GroupedMethodRequest> queuedAsyncRequests = new ArrayList<GroupedMethodRequest>();
 
-    public DefaultProxyHelper(ProxyRegistry proxyRegistry, ClientInvocationHandler clientInvocationHandler,
+    public DefaultProxyHelper(ProxyRegistry proxyRegistry, ClientInvoker clientInvoker,
                               ContextFactory contextFactory, String pubishedServiceName, String objectName,
                               Long referenceID, Long session) {
         this.contextFactory = contextFactory;
 
         this.proxyRegistry = proxyRegistry;
-        this.clientInvocationHandler = clientInvocationHandler;
+        this.clientInvoker = clientInvoker;
         publishedServiceName = pubishedServiceName;
         this.objectName = objectName;
         this.referenceID = referenceID;
@@ -71,8 +71,8 @@ public final class DefaultProxyHelper implements ProxyHelper {
         if (proxyRegistry == null) {
             throw new IllegalArgumentException("proxyRegistry cannot be null");
         }
-        if (clientInvocationHandler == null) {
-            throw new IllegalArgumentException("clientInvocationHandler cannot be null");
+        if (clientInvoker == null) {
+            throw new IllegalArgumentException("clientInvoker cannot be null");
         }
 
     }
@@ -94,7 +94,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
             }
 
             setContext(request);
-            Response response = clientInvocationHandler.handleInvocation(request);
+            Response response = clientInvoker.invoke(request);
 
             if (response instanceof FacadeMethodInvoked) {
                 result = facadeMethodInvoked(response);
@@ -105,7 +105,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
             }
             return result;
         } catch (InvocationException ie) {
-            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
+            clientInvoker.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
             throw ie;
         }
     }
@@ -127,7 +127,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 implBeans[i] = o;
 
                 if (implBeans[i] == null) {
-                    DefaultProxyHelper bo2 = new DefaultProxyHelper(proxyRegistry, clientInvocationHandler,
+                    DefaultProxyHelper bo2 = new DefaultProxyHelper(proxyRegistry, clientInvoker,
                             contextFactory, publishedServiceName, objectNames[i], refs[i], session);
                     Object retFacade = null;
 
@@ -161,7 +161,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
         Object implBean = proxyRegistry.getImplObj(ref);
 
         if (implBean == null) {
-            DefaultProxyHelper pHelper = new DefaultProxyHelper(proxyRegistry, clientInvocationHandler,
+            DefaultProxyHelper pHelper = new DefaultProxyHelper(proxyRegistry, clientInvoker,
                     contextFactory, publishedServiceName, mfr.getObjectName(), ref, session);
             Object retFacade = proxyRegistry.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
 
@@ -180,7 +180,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
             InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
             setContext(request);
-            Response response = clientInvocationHandler.handleInvocation(request);
+            Response response = clientInvoker.invoke(request);
 
             if (response instanceof SimpleMethodInvoked) {
                 SimpleMethodInvoked or = (SimpleMethodInvoked) response;
@@ -190,7 +190,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 throw makeUnexpectedResponseThrowable(response);
             }
         } catch (InvocationException ie) {
-            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
+            clientInvoker.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
             throw ie;
         }
     }
@@ -205,7 +205,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
             //debug(args);
             setContext(request);
-            Response response = clientInvocationHandler.handleInvocation(request);
+            Response response = clientInvoker.invoke(request);
 
             if (response instanceof SimpleMethodInvoked) {
                 SimpleMethodInvoked or = (SimpleMethodInvoked) response;
@@ -215,7 +215,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 throw makeUnexpectedResponseThrowable(response);
             }
         } catch (InvocationException ie) {
-            clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
+            clientInvoker.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
             throw ie;
         }
     }
@@ -241,7 +241,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
                 //debug(args);
                 setContext(request);
-                Response response = clientInvocationHandler.handleInvocation(request);
+                Response response = clientInvoker.invoke(request);
 
                 if (response instanceof SimpleMethodInvoked) {
                     SimpleMethodInvoked or = (SimpleMethodInvoked) response;
@@ -250,7 +250,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
                     throw makeUnexpectedResponseThrowable(response);
                 }
             } catch (InvocationException ie) {
-                clientInvocationHandler.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, "<various-async-grouped>", ie);
+                clientInvoker.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, "<various-async-grouped>", ie);
                 throw ie;
             }
         }
@@ -342,7 +342,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
     protected void finalize() throws Throwable {
 
         synchronized (proxyRegistry) {
-            Response response = clientInvocationHandler.handleInvocation(new CollectGarbage(publishedServiceName, objectName, session, referenceID));
+            Response response = clientInvoker.invoke(new CollectGarbage(publishedServiceName, objectName, session, referenceID));
             if (response instanceof ExceptionThrown) {
                 // This happens if the object can not be GCed on the remote server
                 //  for any reason.

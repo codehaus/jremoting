@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.transports;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.util.concurrent.ScheduledExecutorService;
-import org.codehaus.jremoting.client.ClientInvocationHandler;
+import org.codehaus.jremoting.client.ClientInvoker;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.ConnectionPinger;
@@ -28,12 +28,12 @@ import org.codehaus.jremoting.requests.Ping;
 import org.codehaus.jremoting.responses.Response;
 
 /**
- * Class StatefulClientInvocationHandler
+ * Class StatefulClientInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public abstract class StatefulClientInvocationHandler implements ClientInvocationHandler {
+public abstract class StatefulClientInvoker implements ClientInvoker {
 
     protected final ConnectionPinger connectionPinger;
     protected final ClientMonitor clientMonitor;
@@ -43,7 +43,7 @@ public abstract class StatefulClientInvocationHandler implements ClientInvocatio
     protected final boolean methodLogging;
 
 
-    public StatefulClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public StatefulClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
         this.executorService = executorService;
         this.clientMonitor = clientMonitor;
@@ -78,7 +78,7 @@ public abstract class StatefulClientInvocationHandler implements ClientInvocatio
             throw new ConnectionClosedException("Connection closed");
         }
 
-        Response ar = handleInvocation(new Ping());
+        Response ar = invoke(new Ping());
     }
 
     protected abstract boolean tryReconnect();

@@ -28,16 +28,16 @@ import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
 import org.codehaus.jremoting.util.SerializationHelper;
 
 /**
- * Class DirectMarshalledClientInvocationHandler
+ * Class DirectMarshalledClientInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class DirectMarshalledClientInvocationHandler extends StatefulDirectClientInvocationHandler {
+public final class DirectMarshalledClientInvoker extends StatefulDirectClientInvoker {
 
     private ServerMarshalledInvocationHandler invocationHandler;
 
-    public DirectMarshalledClientInvocationHandler(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public DirectMarshalledClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                              ConnectionPinger connectionPinger, ServerMarshalledInvocationHandler invocationHandler,
                                              ClassLoader facadesClassLoader) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
@@ -54,7 +54,7 @@ public final class DirectMarshalledClientInvocationHandler extends StatefulDirec
             return (Response) instanceFromBytes;
         } catch (ClassNotFoundException cnfe) {
             String msg = "Some ClassNotFoundException on client side";
-            clientMonitor.classNotFound(DirectMarshalledClientInvocationHandler.class, msg, cnfe);
+            clientMonitor.classNotFound(DirectMarshalledClientInvoker.class, msg, cnfe);
             throw new JRemotingException(msg, cnfe);
         }
     }

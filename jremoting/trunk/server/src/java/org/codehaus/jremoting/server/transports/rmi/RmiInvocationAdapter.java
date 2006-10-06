@@ -53,6 +53,6 @@ public class RmiInvocationAdapter implements RmiInvocationHandler {
      * @throws RemoteException if a problem during processing
      */
     public Response handleInvocation(Request request) throws RemoteException {
-        return connectingServer.handleInvocation(request, "RMI-TODO");
+        return connectingServer.invoke(request, "RMI-TODO");
     }
 }

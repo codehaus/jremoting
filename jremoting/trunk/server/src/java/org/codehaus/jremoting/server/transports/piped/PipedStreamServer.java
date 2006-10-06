@@ -24,7 +24,7 @@ import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideContextFactory;
-import org.codehaus.jremoting.server.adapters.InvocationHandlerDelegate;
+import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.transports.*;
 
 import java.io.IOException;
@@ -46,12 +46,12 @@ public class PipedStreamServer extends ConnectingServer {
                              ScheduledExecutorService executorService, ServerSideContextFactory contextFactory,
                              ServerStreamDriverFactory serverStreamDriverFactory,
                              ClassLoader facadesClassLoader) {
-        super(serverMonitor, new InvocationHandlerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
+        super(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
         this.serverStreamDriverFactory = serverStreamDriverFactory;
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public PipedStreamServer(ServerMonitor serverMonitor, InvocationHandlerDelegate invocationHandlerDelegate,
+    public PipedStreamServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate,
                              ScheduledExecutorService executorService,
                              ServerStreamDriverFactory serverStreamDriverFactory,
                              ClassLoader facadesClassLoader) {
