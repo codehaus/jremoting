@@ -15,28 +15,21 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting;
-
-import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.responses.Response;
-
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+package org.codehaus.jremoting.client;
 
 /**
- * Interface RmiClientInvocationHandler
+ * Interface ClientMarshalledInvoker
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public interface RmiInvocationHandler extends Remote {
+public interface ClientMarshalledInvoker {
 
     /**
-     * Handle method invocation.
+     * Handle a method Invocation using byte array representations of the request and response
      *
-     * @param request the request to marshall over RMI
-     * @return the response got back from the server
-     * @throws RemoteException in case there is outage.
+     * @param request a byte array representing a request
+     * @return a byte array representing the response
      */
-    Response handleInvocation(Request request) throws RemoteException;
+    byte[] handleInvocation(byte[] request);
 }

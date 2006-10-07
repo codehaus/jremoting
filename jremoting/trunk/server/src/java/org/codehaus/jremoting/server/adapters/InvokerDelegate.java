@@ -55,7 +55,7 @@ import org.codehaus.jremoting.responses.SimpleMethodInvoked;
 import org.codehaus.jremoting.responses.StubClass;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.Authenticator;
-import org.codehaus.jremoting.server.MethodInvocationHandler;
+import org.codehaus.jremoting.server.MethodInvoker;
 import org.codehaus.jremoting.server.ServerInvoker;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideContextFactory;
@@ -187,8 +187,8 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         //        new InvocationException( "TODO - you dirty rat/hacker" ) );
         //}
 
-        MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
-        Response response = methodInvocationHandler.handleMethodInvocation(facadeRequest, connectionDetails);
+        MethodInvoker methodInvoker = getMethodInvoker(publishedThing);
+        Response response = methodInvoker.handleMethodInvocation(facadeRequest, connectionDetails);
 
         if (response instanceof ExceptionThrown) {
             return response;
@@ -229,13 +229,13 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
 
         for (int i = 0; i < beanImpls.length; i++) {
             Object impl = beanImpls[i];
-            MethodInvocationHandler mainMethodInvocationHandler = getMethodInvocationHandler(StubHelper.formatServiceName(invokeFacadeMethod.getService()));
+            MethodInvoker mainMethodInvoker = getMethodInvoker(StubHelper.formatServiceName(invokeFacadeMethod.getService()));
 
-            objectNames[i] = MethodNameHelper.encodeClassName(mainMethodInvocationHandler.getMostDerivedType(beanImpls[i]).getName());
+            objectNames[i] = MethodNameHelper.encodeClassName(mainMethodInvoker.getMostDerivedType(beanImpls[i]).getName());
 
-            MethodInvocationHandler methodInvocationHandler2 = getMethodInvocationHandler(StubHelper.formatServiceName(invokeFacadeMethod.getService(), objectNames[i]));
+            MethodInvoker methodInvoker2 = getMethodInvoker(StubHelper.formatServiceName(invokeFacadeMethod.getService(), objectNames[i]));
 
-            if (methodInvocationHandler2 == null) {
+            if (methodInvoker2 == null) {
                 return new NotPublished();
             }
 
@@ -243,7 +243,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             if (beanImpls[i] == null) {
                 refs[i] = null;
             } else {
-                refs[i] = methodInvocationHandler2.getOrMakeReferenceIDForBean(beanImpls[i]);
+                refs[i] = methodInvoker2.getOrMakeReferenceIDForBean(beanImpls[i]);
 
                 Session session = getSession(invokeFacadeMethod.getSessionID());
 
@@ -268,13 +268,13 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             return new NoSuchSession(invokeFacadeMethod.getSessionID());
         }
 
-        MethodInvocationHandler mainMethodInvocationHandler = getMethodInvocationHandler(StubHelper.formatServiceName(invokeFacadeMethod.getService()));
+        MethodInvoker mainMethodInvoker = getMethodInvoker(StubHelper.formatServiceName(invokeFacadeMethod.getService()));
 
-        String objectName = MethodNameHelper.encodeClassName(mainMethodInvocationHandler.getMostDerivedType(beanImpl).getName());
+        String objectName = MethodNameHelper.encodeClassName(mainMethodInvoker.getMostDerivedType(beanImpl).getName());
 
-        MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(invokeFacadeMethod.getService() + "_" + objectName);
+        MethodInvoker methodInvoker = getMethodInvoker(invokeFacadeMethod.getService() + "_" + objectName);
 
-        if (methodInvocationHandler == null) {
+        if (methodInvoker == null) {
             return new NotPublished();
         }
 
@@ -285,7 +285,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         //}
 
         //TODO a decent ref number for main?
-        Long newRef = methodInvocationHandler.getOrMakeReferenceIDForBean(beanImpl);
+        Long newRef = methodInvoker.getOrMakeReferenceIDForBean(beanImpl);
 
         // make sure the bean is not garbage collected.
         Session sess = getSession(invokeFacadeMethod.getSessionID());
@@ -308,9 +308,9 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             return new NotPublished();
         }
 
-        MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
+        MethodInvoker methodInvoker = getMethodInvoker(publishedThing);
 
-        return methodInvocationHandler.handleMethodInvocation(invokeMethod, connectionDetails);
+        return methodInvoker.handleMethodInvocation(invokeMethod, connectionDetails);
     }
 
     private Response doMethodAsyncRequest(InvokeAsyncMethod methodRequest, Object connectionDetails) {
@@ -330,11 +330,11 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
 
         Session sess = getSession(session);
 
-        MethodInvocationHandler methodInvocationHandler = getMethodInvocationHandler(publishedThing);
+        MethodInvoker methodInvoker = getMethodInvoker(publishedThing);
 
         GroupedMethodRequest[] requests = methodRequest.getGroupedRequests();
         for (GroupedMethodRequest rawRequest : requests) {
-            methodInvocationHandler.handleMethodInvocation(new InvokeMethod(methodRequest.getService(), methodRequest.getObjectName(), rawRequest.getMethodSignature(), rawRequest.getArgs(), methodRequest.getReferenceID(), methodRequest.getSessionID()), connectionDetails);
+            methodInvoker.handleMethodInvocation(new InvokeMethod(methodRequest.getService(), methodRequest.getObjectName(), rawRequest.getMethodSignature(), rawRequest.getArgs(), methodRequest.getReferenceID(), methodRequest.getSessionID()), connectionDetails);
         }
 
         return new SimpleMethodInvoked();
@@ -448,6 +448,8 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
     }
 
     private Response doPing(Request request) {
+        org.codehaus.jremoting.requests.Ping ping = (org.codehaus.jremoting.requests.Ping) request;
+        super.doesSessionExistAndRefreshItIfItDoes(ping.getSession());
         return new Ping();
     }
 
@@ -466,7 +468,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             return new InvokableMethods(new String[0]);
         }
 
-        return new InvokableMethods(getMethodInvocationHandler(publishedThing).getListOfMethods());
+        return new InvokableMethods(getMethodInvoker(publishedThing).getListOfMethods());
     }
 
 

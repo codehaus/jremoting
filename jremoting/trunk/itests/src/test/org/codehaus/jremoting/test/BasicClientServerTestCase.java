@@ -94,11 +94,11 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
 
-            SocketClientStreamInvoker clientInvocationHandler = new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+            SocketClientStreamInvoker invoker = new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                     new ClientObjectStreamDriverFactory(), "localhost", 12331);
-            ClientSideStubFactory cssf = new ClientSideStubFactory(clientInvocationHandler);
+            ClientSideStubFactory cssf = new ClientSideStubFactory(invoker);
             cssf.lookupService("Hello");
-            clientInvocationHandler.invoke(new InvokeMethod("Hello", "Main", "ping()",new Object [0], (long) 44332, (long) 21));
+            invoker.invoke(new InvokeMethod("Hello", "Main", "ping()",new Object [0], (long) 44332, (long) 21));
 
             fail("should have barfed");
         } catch (NoSuchSessionException e) {

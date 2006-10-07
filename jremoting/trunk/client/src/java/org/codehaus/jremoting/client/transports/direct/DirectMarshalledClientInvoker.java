@@ -24,7 +24,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
+import org.codehaus.jremoting.server.ServerMarshalledInvoker;
 import org.codehaus.jremoting.util.SerializationHelper;
 
 /**
@@ -35,20 +35,20 @@ import org.codehaus.jremoting.util.SerializationHelper;
  */
 public final class DirectMarshalledClientInvoker extends StatefulDirectClientInvoker {
 
-    private ServerMarshalledInvocationHandler invocationHandler;
+    private ServerMarshalledInvoker invoker;
 
     public DirectMarshalledClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
-                                             ConnectionPinger connectionPinger, ServerMarshalledInvocationHandler invocationHandler,
+                                             ConnectionPinger connectionPinger, ServerMarshalledInvoker invoker,
                                              ClassLoader facadesClassLoader) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
-        this.invocationHandler = invocationHandler;
+        this.invoker = invoker;
     }
 
     protected Response performInvocation(Request request) {
 
         try {
             byte[] serRequest = SerializationHelper.getBytesFromInstance(request);
-            byte[] serResponse = invocationHandler.handleInvocation(serRequest, null);
+            byte[] serResponse = invoker.handleInvocation(serRequest, null);
 
             Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serResponse, getFacadesClassLoader());
             return (Response) instanceFromBytes;

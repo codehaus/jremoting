@@ -61,7 +61,7 @@ public abstract class StatefulClientInvoker implements ClientInvoker {
     }
 
     public void initialize() throws ConnectionException {
-        connectionPinger.setInvocationHandler(this);
+        connectionPinger.setInvoker(this);
         connectionPinger.start();
     }
 

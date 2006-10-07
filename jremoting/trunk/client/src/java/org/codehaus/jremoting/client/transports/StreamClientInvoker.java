@@ -34,12 +34,8 @@ import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.responses.NoSuchReference;
-import org.codehaus.jremoting.responses.NoSuchSession;
-import org.codehaus.jremoting.responses.NotPublished;
-import org.codehaus.jremoting.responses.ProblemResponse;
-import org.codehaus.jremoting.responses.TryLater;
+import org.codehaus.jremoting.responses.*;
+import com.sun.corba.se.pept.transport.Connection;
 
 /**
  * Class StreamClientInvoker
@@ -53,6 +49,7 @@ public abstract class StreamClientInvoker extends StatefulClientInvoker {
     private boolean methodLogging = false;
     private long lastRealRequest = System.currentTimeMillis();
     protected final ClientStreamDriverFactory streamDriverFactory;
+    private Long session;
 
     public StreamClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
@@ -72,6 +69,9 @@ public abstract class StreamClientInvoker extends StatefulClientInvoker {
     public synchronized Response invoke(Request request) {
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
+
+        } else {
+            ((org.codehaus.jremoting.requests.Ping) request).setSession(session);
         }
 
         try {
@@ -110,6 +110,9 @@ public abstract class StreamClientInvoker extends StatefulClientInvoker {
 
                                 throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
                             }
+                        }
+                        if (response instanceof ConnectionOpened) {
+                            session = ((ConnectionOpened) response).getSessionID();
                         }
                     } catch (IOException ioe) {
                         if (isSafeEnd(ioe)) {

@@ -43,8 +43,8 @@ public class TimingOutConnectionPinger extends IntervalConnectionPinger {
     protected void ping() {
 
         long shouldHaveGivenUpBy = System.currentTimeMillis() - giveUpIntervalMilliSeconds;
-        if (getInvocationHandler().getLastRealRequestTime() > shouldHaveGivenUpBy) {
-            getInvocationHandler().ping();
+        if (getInvoker().getLastRealRequestTime() > shouldHaveGivenUpBy) {
+            getInvoker().ping();
         } else {
             //TODO should be restartable after reconnect of socket.
             stop();

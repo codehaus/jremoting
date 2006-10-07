@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- * Class SocketCustomStreamInvocationHandler
+ * Class SocketClientStreamInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $

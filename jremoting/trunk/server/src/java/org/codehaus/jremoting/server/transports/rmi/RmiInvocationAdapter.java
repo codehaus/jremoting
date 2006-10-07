@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server.transports.rmi;
 
-import org.codehaus.jremoting.RmiInvocationHandler;
+import org.codehaus.jremoting.RmiInvoker;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
@@ -30,7 +30,7 @@ import java.rmi.RemoteException;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class RmiInvocationAdapter implements RmiInvocationHandler {
+public class RmiInvocationAdapter implements RmiInvoker {
     /**
      * The abstract server
      */

@@ -20,16 +20,16 @@ package org.codehaus.jremoting.server.adapters;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerInvoker;
-import org.codehaus.jremoting.server.ServerMarshalledInvocationHandler;
+import org.codehaus.jremoting.server.ServerMarshalledInvoker;
 import org.codehaus.jremoting.util.SerializationHelper;
 
 /**
- * Class MarshalledInvocationHandlerAdapter
+ * Class MarshalledInvokerAdapter
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvocationHandler {
+public class MarshalledInvokerAdapter implements ServerMarshalledInvoker {
 
     /**
      * The invocation hamdeler
@@ -41,22 +41,22 @@ public class MarshalledInvocationHandlerAdapter implements ServerMarshalledInvoc
     private ClassLoader facadesClassLoader;
 
     /**
-     * Constructor MarshalledInvocationHandlerAdapter
+     * Constructor MarshalledInvokerAdapter
      *
      * @param invoker The invocation handler
      */
-    public MarshalledInvocationHandlerAdapter(ServerInvoker invoker) {
+    public MarshalledInvokerAdapter(ServerInvoker invoker) {
         this.invoker = invoker;
         facadesClassLoader = getClass().getClassLoader();
     }
 
     /**
-     * Constructor MarshalledInvocationHandlerAdapter
+     * Constructor MarshalledInvokerAdapter
      *
      * @param invoker The invocation handler
      * @param facadesClassLoader       The classloader
      */
-    public MarshalledInvocationHandlerAdapter(ServerInvoker invoker, ClassLoader facadesClassLoader) {
+    public MarshalledInvokerAdapter(ServerInvoker invoker, ClassLoader facadesClassLoader) {
         this.invoker = invoker;
         this.facadesClassLoader = facadesClassLoader;
     }

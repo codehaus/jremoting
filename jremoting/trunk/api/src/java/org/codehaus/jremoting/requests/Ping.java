@@ -17,6 +17,10 @@
  */
 package org.codehaus.jremoting.requests;
 
+import java.io.ObjectOutput;
+import java.io.IOException;
+import java.io.ObjectInput;
+
 
 /**
  * Class Ping
@@ -26,6 +30,7 @@ package org.codehaus.jremoting.requests;
  */
 public final class Ping extends Request {
     static final long serialVersionUID = -7551156841939653959L;
+    private Long session;
 
     /**
      * Gets number that represents type for this class.
@@ -36,5 +41,24 @@ public final class Ping extends Request {
      */
     public int getRequestCode() {
         return RequestConstants.PINGREQUEST;
+    }
+
+    public void setSession(Long session) {
+        this.session = session;
+        System.err.println("--> sess " + session);
+    }
+
+    public Long getSession() {
+        return session;
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeLong(session);
+        super.writeExternal(out);
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        session = in.readLong();
+        super.readExternal(in);
     }
 }

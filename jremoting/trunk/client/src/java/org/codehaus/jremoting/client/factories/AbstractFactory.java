@@ -118,7 +118,7 @@ public abstract class AbstractFactory implements Factory {
 
                             args[i] = makeFacadeRefHolder(proxy, objName);
                         }
-                    } else // Let the specific InvocationHandlers be given the last chance to modify the arguments.
+                    } else // Let the specific Invokers be given the last chance to modify the arguments.
                     {
                         args[i] = clientInvoker.resolveArgument(remoteObjectName, methodSignature, argClasses[i], args[i]);
                     }

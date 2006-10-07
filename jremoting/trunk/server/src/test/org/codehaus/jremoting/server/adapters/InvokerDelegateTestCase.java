@@ -25,7 +25,7 @@ import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.responses.Response;
 import junit.framework.TestCase;
 
-public class InvocationHandlerAdapterTestCase extends TestCase {
+public class InvokerDelegateTestCase extends TestCase {
 
     public void testOpenConnection() {
         InvokerDelegate invocationHandle = new InvokerDelegate(null, null, null, null);

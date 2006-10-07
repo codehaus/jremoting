@@ -25,6 +25,7 @@ import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
+import org.codehaus.jremoting.requests.Ping;
 
 import java.util.concurrent.Executors;
 
@@ -95,5 +96,31 @@ public class ConnectingServerTestCase extends TestCase {
             return super.sessionExists(session);
         }
     }
+
+    public void testSessionIsKeptAliveByPing() throws InterruptedException {
+        ServerMonitor sm = new ConsoleServerMonitor();
+        MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
+        ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10));
+        assertTrue(ihd.sessionExists(ihd.tstSession));
+        cs.setPruneSessionsInterval(1);
+        cs.setPruneStaleLongerThan(1000);
+        cs.start();
+        Thread.sleep(300);
+        Ping ping = new Ping();
+        ping.setSession(ihd.tstSession);
+        ihd.invoke(ping, new Object());
+        Thread.sleep(300);
+        ihd.invoke(ping, new Object());
+        Thread.sleep(300);
+        ihd.invoke(ping, new Object());
+        Thread.sleep(300);
+        ihd.invoke(ping, new Object());
+        assertTrue(ihd.sessionExists(ihd.tstSession));
+        Thread.sleep(2000);
+        assertFalse(ihd.sessionExists(ihd.tstSession));
+        cs.stop();
+
+    }
+
 
 }

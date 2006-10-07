@@ -22,12 +22,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.server.MethodInvocationHandler;
+import org.codehaus.jremoting.server.MethodInvoker;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Publisher;
-import org.codehaus.jremoting.server.transports.DefaultMethodInvocationHandler;
+import org.codehaus.jremoting.server.transports.DefaultMethodInvoker;
 import org.codehaus.jremoting.util.StubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
@@ -100,9 +100,9 @@ public class PublicationAdapter implements Publisher {
 
         // add method maps for main lookup-able service.
         HashMap mainMethodMap = new HashMap();
-        DefaultMethodInvocationHandler mainMethodInvocationHandler = new DefaultMethodInvocationHandler(this, service + "_Main", mainMethodMap, publicationDescription);
+        DefaultMethodInvoker mainMethodInvoker = new DefaultMethodInvoker(this, service + "_Main", mainMethodMap, publicationDescription);
 
-        mainMethodInvocationHandler.addImplementationBean(new Long(0), impl);
+        mainMethodInvoker.addImplementationBean(new Long(0), impl);
 
         for (int x = 0; x < primaryFacades.length; x++) {
             Class clazz = primaryFacades[x].getFacadeClass();
@@ -133,14 +133,14 @@ public class PublicationAdapter implements Publisher {
         }
 
         // as the main service is lookup-able, it has a prexisting impl.
-        services.put(StubHelper.formatServiceName(service), mainMethodInvocationHandler);
+        services.put(StubHelper.formatServiceName(service), mainMethodInvoker);
 
         // add method maps for all the additional facades.
         for (int x = 0; x < additionalFacades.length; x++) {
             Class facadeClass = additionalFacades[x].getFacadeClass();
             String encodedClassName = MethodNameHelper.encodeClassName(additionalFacades[x].getFacadeClass().getName());
             HashMap methodMap = new HashMap();
-            MethodInvocationHandler methodInvocationHandler = new DefaultMethodInvocationHandler(this, service + "_" + encodedClassName, methodMap, publicationDescription);
+            MethodInvoker methodInvoker = new DefaultMethodInvoker(this, service + "_" + encodedClassName, methodMap, publicationDescription);
 
             Method methods[] = null;
             try {
@@ -167,7 +167,7 @@ public class PublicationAdapter implements Publisher {
                 }
             }
 
-            services.put(service + "_" + encodedClassName, methodInvocationHandler);
+            services.put(service + "_" + encodedClassName, methodInvoker);
         }
     }
 
@@ -202,20 +202,20 @@ public class PublicationAdapter implements Publisher {
             throw new PublicationException("Service '" + service + "' not published");
         }
 
-        MethodInvocationHandler asih = (MethodInvocationHandler) services.get(serviceName);
+        MethodInvoker asih = (MethodInvoker) services.get(serviceName);
 
         asih.replaceImplementationBean(oldImpl, withImpl);
     }
 
     /**
-     * Get a Server's  InvocationHandler
+     * Get a Server's  MethodInvoker
      *
      * @param invokeMethod The method Request.
      * @param objectName   The object name.
      * @return the method invoation handler
      */
-    public MethodInvocationHandler getMethodInvocationHandler(InvokeMethod invokeMethod, String objectName) {
-        return (MethodInvocationHandler) services.get(invokeMethod.getService() + "_" + objectName);
+    public MethodInvoker getMethodInvoker(InvokeMethod invokeMethod, String objectName) {
+        return (MethodInvoker) services.get(invokeMethod.getService() + "_" + objectName);
     }
 
     /**
@@ -224,7 +224,7 @@ public class PublicationAdapter implements Publisher {
      * @param service The name of a published object
      * @return the method invoation handler
      */
-    public MethodInvocationHandler getMethodInvocationHandler(String service) {
-        return (MethodInvocationHandler) services.get(service);
+    public MethodInvoker getMethodInvoker(String service) {
+        return (MethodInvoker) services.get(service);
     }
 }

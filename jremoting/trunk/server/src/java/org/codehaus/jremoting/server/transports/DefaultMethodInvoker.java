@@ -31,7 +31,7 @@ import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.SimpleMethodInvoked;
-import org.codehaus.jremoting.server.MethodInvocationHandler;
+import org.codehaus.jremoting.server.MethodInvoker;
 import org.codehaus.jremoting.server.MethodInvocationMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.Publisher;
@@ -39,13 +39,13 @@ import org.codehaus.jremoting.server.monitors.NullMethodInvocationMonitor;
 import org.codehaus.jremoting.util.FacadeRefHolder;
 
 /**
- * Class DefaultMethodInvocationHandler
+ * Class DefaultMethodInvoker
  *
  * @author Paul Hammant
  * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
  * @version $Revision: 1.2 $
  */
-public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
+public class DefaultMethodInvoker implements MethodInvoker {
 
     private MessageFormat messageFormat = new MessageFormat("");
 
@@ -91,14 +91,14 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
     private MethodInvocationMonitor methodInvocationMonitor = new NullMethodInvocationMonitor();
 
     /**
-     * Constructor DefaultMethodInvocationHandler
+     * Constructor DefaultMethodInvoker
      *
      * @param publisher              The publisher
      * @param publishedThing         The published Thing
      * @param methodMap              The method map
      * @param publicationDescription The publication description
      */
-    public DefaultMethodInvocationHandler(Publisher publisher, String publishedThing, HashMap methodMap, PublicationDescription publicationDescription) {
+    public DefaultMethodInvoker(Publisher publisher, String publishedThing, HashMap methodMap, PublicationDescription publicationDescription) {
 
         this.publisher = publisher;
         this.publishedThing = publishedThing;
@@ -238,8 +238,9 @@ public class DefaultMethodInvocationHandler implements MethodInvocationHandler {
             // TODO find a faster way to do this....
             if (args[i] instanceof FacadeRefHolder) {
                 FacadeRefHolder frh = (FacadeRefHolder) args[i];
-                DefaultMethodInvocationHandler methodInvocationHandler = (DefaultMethodInvocationHandler) publisher.getMethodInvocationHandler(frh.getObjectName());
-                WeakReference wr = (WeakReference) methodInvocationHandler.refBeans.get(frh.getReferenceID());
+                // use abstraction ?
+                DefaultMethodInvoker methodInvoker = (DefaultMethodInvoker) publisher.getMethodInvoker(frh.getObjectName());
+                WeakReference wr = (WeakReference) methodInvoker.refBeans.get(frh.getReferenceID());
 
                 args[i] = wr.get();
             }

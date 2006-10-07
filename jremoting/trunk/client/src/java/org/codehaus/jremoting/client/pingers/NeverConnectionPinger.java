@@ -34,7 +34,7 @@ public class NeverConnectionPinger implements ConnectionPinger {
     protected void ping() {
     }
 
-    public void setInvocationHandler(ClientInvoker invoker) {
+    public void setInvoker(ClientInvoker invoker) {
     }
 
     public void start() {

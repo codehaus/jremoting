@@ -24,7 +24,7 @@ import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
-import org.codehaus.jremoting.server.MethodInvocationHandler;
+import org.codehaus.jremoting.server.MethodInvoker;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Server;
@@ -153,26 +153,26 @@ public class StatefulServer implements Server {
      * @param objectName   The object Name.
      * @return The Method invocation handler
      */
-    public MethodInvocationHandler getMethodInvocationHandler(InvokeMethod invokeMethod, String objectName) {
-        return invocationHandlerDelegate.getMethodInvocationHandler(invokeMethod, objectName);
+    public MethodInvoker getMethodInvoker(InvokeMethod invokeMethod, String objectName) {
+        return invocationHandlerDelegate.getMethodInvoker(invokeMethod, objectName);
     }
 
     /**
-     * Get the MethodInvocationHandler for a particular published name.
+     * Get the MethodInvoker for a particular published name.
      *
      * @param service The published name.
      * @return The Method invocation handler
      */
-    public MethodInvocationHandler getMethodInvocationHandler(String service) {
-        return invocationHandlerDelegate.getMethodInvocationHandler(service);
+    public MethodInvoker getMethodInvoker(String service) {
+        return invocationHandlerDelegate.getMethodInvoker(service);
     }
 
     /**
-     * Get the Invocation Handler Adapter.
+     * Get the InvokerDelegate.
      *
      * @return the invocation handler adapter.
      */
-    public InvokerDelegate getInvocationHandlerDelegate() {
+    public InvokerDelegate getInvokerDelegate() {
         return invocationHandlerDelegate;
     }
 

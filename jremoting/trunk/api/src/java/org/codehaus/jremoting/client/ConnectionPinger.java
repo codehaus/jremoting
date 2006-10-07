@@ -27,9 +27,9 @@ package org.codehaus.jremoting.client;
 public interface ConnectionPinger {
 
     /**
-     * Method setInvocationHandler
+     * Method setInvoker
      */
-    void setInvocationHandler(ClientInvoker invoker);
+    void setInvoker(ClientInvoker invoker);
 
     /**
      * Method start

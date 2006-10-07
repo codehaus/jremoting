@@ -26,7 +26,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.JRemotingException;
-import org.codehaus.jremoting.RmiInvocationHandler;
+import org.codehaus.jremoting.RmiInvoker;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServerSideContextFactory;
@@ -70,7 +70,7 @@ public class RmiServer extends ConnectingServer {
 
             registry = LocateRegistry.createRegistry(port);
 
-            registry.rebind(RmiInvocationHandler.class.getName(), rmiInvocationAdapter);
+            registry.rebind(RmiInvoker.class.getName(), rmiInvocationAdapter);
             setState(STARTED);
         } catch (RemoteException re) {
             throw new JRemotingException("Some problem setting up RMI server", re);
@@ -84,7 +84,7 @@ public class RmiServer extends ConnectingServer {
         killAllConnections();
 
         try {
-            registry.unbind(RmiInvocationHandler.class.getName());
+            registry.unbind(RmiInvoker.class.getName());
         } catch (RemoteException re) {
             serverMonitor.stopServerError(this.getClass(), "RmiServer.stop(): Error stopping RMI server - RemoteException", re);
         } catch (NotBoundException nbe) {

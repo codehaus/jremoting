@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.RmiInvocationHandler;
+import org.codehaus.jremoting.RmiInvoker;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
@@ -54,7 +54,7 @@ import org.codehaus.jremoting.responses.TryLater;
  */
 public final class RmiClientInvoker extends StatefulClientInvoker {
 
-    private RmiInvocationHandler rmiInvocationHandler;
+    private RmiInvoker rmiInvoker;
     private String url;
     private long lastRealRequest = System.currentTimeMillis();
 
@@ -62,10 +62,10 @@ public final class RmiClientInvoker extends StatefulClientInvoker {
 
         super(clientMonitor, executorService, connectionPinger, RmiClientInvoker.class.getClassLoader());
 
-        url = "rmi://" + host + ":" + port + "/" + RmiInvocationHandler.class.getName();
+        url = "rmi://" + host + ":" + port + "/" + RmiInvoker.class.getName();
 
         try {
-            rmiInvocationHandler = (RmiInvocationHandler) Naming.lookup(url);
+            rmiInvoker = (RmiInvoker) Naming.lookup(url);
         } catch (NotBoundException nbe) {
             throw new ConnectionException("Cannot bind to the remote RMI service.  Either an IP or RMI issue.");
         } catch (MalformedURLException mfue) {
@@ -91,7 +91,7 @@ public final class RmiClientInvoker extends StatefulClientInvoker {
     protected boolean tryReconnect() {
 
         try {
-            rmiInvocationHandler = (RmiInvocationHandler) Naming.lookup(url);
+            rmiInvoker = (RmiInvoker) Naming.lookup(url);
 
             return true;
         } catch (Exception e) {
@@ -126,7 +126,7 @@ public final class RmiClientInvoker extends StatefulClientInvoker {
             again = false;
 
             try {
-                response = rmiInvocationHandler.handleInvocation(request);
+                response = rmiInvoker.handleInvocation(request);
 
                 if (response instanceof ProblemResponse) {
                     if (response instanceof TryLater) {
@@ -147,7 +147,7 @@ public final class RmiClientInvoker extends StatefulClientInvoker {
                 if (re instanceof ConnectException | re instanceof ConnectIOException) {
                     int retryConnectTries = 0;
 
-                    rmiInvocationHandler = null;
+                    rmiInvoker = null;
 
                     while (!tryReconnect()) {
                         clientMonitor.serviceAbend(this.getClass(), retryConnectTries, re);

@@ -21,12 +21,12 @@ import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.Response;
 
 /**
- * Class MethodInvocationHandler
+ * Class MethodInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public interface MethodInvocationHandler {
+public interface MethodInvoker {
 
     /**
      * Handle a method invocation.
