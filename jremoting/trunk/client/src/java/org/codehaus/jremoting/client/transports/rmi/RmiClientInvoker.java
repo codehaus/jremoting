@@ -126,7 +126,7 @@ public final class RmiClientInvoker extends StatefulClientInvoker {
             again = false;
 
             try {
-                response = rmiInvoker.handleInvocation(request);
+                response = rmiInvoker.invoke(request);
 
                 if (response instanceof ProblemResponse) {
                     if (response instanceof TryLater) {

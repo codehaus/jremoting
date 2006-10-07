@@ -52,7 +52,7 @@ public class RmiInvocationAdapter implements RmiInvoker {
      * @return a reply object
      * @throws RemoteException if a problem during processing
      */
-    public Response handleInvocation(Request request) throws RemoteException {
+    public Response invoke(Request request) throws RemoteException {
         return connectingServer.invoke(request, "RMI-TODO");
     }
 }

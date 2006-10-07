@@ -38,5 +38,5 @@ public interface RmiInvoker extends Remote {
      * @return the response got back from the server
      * @throws RemoteException in case there is outage.
      */
-    Response handleInvocation(Request request) throws RemoteException;
+    Response invoke(Request request) throws RemoteException;
 }

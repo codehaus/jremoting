@@ -48,7 +48,7 @@ public final class DirectMarshalledClientInvoker extends StatefulDirectClientInv
 
         try {
             byte[] serRequest = SerializationHelper.getBytesFromInstance(request);
-            byte[] serResponse = invoker.handleInvocation(serRequest, null);
+            byte[] serResponse = invoker.invoke(serRequest, null);
 
             Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serResponse, getFacadesClassLoader());
             return (Response) instanceFromBytes;

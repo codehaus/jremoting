@@ -67,7 +67,7 @@ public class MarshalledInvokerAdapter implements ServerMarshalledInvoker {
      * @param request The request
      * @return The reply
      */
-    public byte[] handleInvocation(byte[] request, Object connectionDetails) {
+    public byte[] invoke(byte[] request, Object connectionDetails) {
 
         try {
             Request ar = (Request) SerializationHelper.getInstanceFromBytes(request, facadesClassLoader);

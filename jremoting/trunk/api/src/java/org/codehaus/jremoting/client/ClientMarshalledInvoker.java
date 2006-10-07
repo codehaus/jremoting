@@ -31,5 +31,5 @@ public interface ClientMarshalledInvoker {
      * @param request a byte array representing a request
      * @return a byte array representing the response
      */
-    byte[] handleInvocation(byte[] request);
+    byte[] invoke(byte[] request);
 }

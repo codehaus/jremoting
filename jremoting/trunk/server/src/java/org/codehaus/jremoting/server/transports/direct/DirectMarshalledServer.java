@@ -56,8 +56,8 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
         this(serverMonitor, new InvokerDelegate(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideContextFactory()));
     }
 
-    public byte[] handleInvocation(byte[] request, Object connectionDetails) {
-        return marshalledInvokerAdapter.handleInvocation(request, connectionDetails);
+    public byte[] invoke(byte[] request, Object connectionDetails) {
+        return marshalledInvokerAdapter.invoke(request, connectionDetails);
     }
 
 }
