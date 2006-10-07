@@ -24,14 +24,11 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.concurrent.ScheduledExecutorService;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.util.SerializationHelper;
 import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.responses.SimpleMethodInvoked;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import com.thoughtworks.xstream.XStream;
@@ -83,7 +80,7 @@ public class ServerXStreamDriver extends AbstractServerStreamDriver {
 
         String xml = xStream.toXML(response);
 
-//        if (response instanceof SimpleMethodInvoked) {
+//        if (response instanceof MethodInvoked) {
 //            System.out.println("-->Resp " + xml);
 //        }
 

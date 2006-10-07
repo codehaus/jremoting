@@ -27,7 +27,7 @@ import java.io.Serializable;
  */
 public final class FacadeRefHolder implements Serializable {
     static final long serialVersionUID = 4517499953558154280L;
-
+                            
     private Long referenceID;
     private String objectName;
 

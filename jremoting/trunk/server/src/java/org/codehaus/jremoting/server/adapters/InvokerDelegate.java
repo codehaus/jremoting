@@ -51,7 +51,7 @@ import org.codehaus.jremoting.responses.RequestFailed;
 import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.responses.ServicesList;
 import org.codehaus.jremoting.responses.ServicesSuspended;
-import org.codehaus.jremoting.responses.SimpleMethodInvoked;
+import org.codehaus.jremoting.responses.MethodInvoked;
 import org.codehaus.jremoting.responses.StubClass;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.Authenticator;
@@ -194,8 +194,8 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             return response;
         } else if (response instanceof ProblemResponse) {
             return response;
-        } else if (response instanceof SimpleMethodInvoked) {
-            Object methodResponse = ((SimpleMethodInvoked) response).getResponseObject();
+        } else if (response instanceof MethodInvoked) {
+            Object methodResponse = ((MethodInvoked) response).getResponseObject();
 
             if (methodResponse == null) {
                 return new FacadeMethodInvoked(null, null);    // null passing
@@ -337,7 +337,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             methodInvoker.handleMethodInvocation(new InvokeMethod(methodRequest.getService(), methodRequest.getObjectName(), rawRequest.getMethodSignature(), rawRequest.getArgs(), methodRequest.getReferenceID(), methodRequest.getSessionID()), connectionDetails);
         }
 
-        return new SimpleMethodInvoked();
+        return new MethodInvoked();
 
     }
 

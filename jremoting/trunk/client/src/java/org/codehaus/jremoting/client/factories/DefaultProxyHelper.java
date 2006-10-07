@@ -36,7 +36,7 @@ import org.codehaus.jremoting.responses.GarbageCollected;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NoSuchSession;
-import org.codehaus.jremoting.responses.SimpleMethodInvoked;
+import org.codehaus.jremoting.responses.MethodInvoked;
 import org.codehaus.jremoting.ConnectionException;
 
 /**
@@ -182,8 +182,8 @@ public final class DefaultProxyHelper implements ProxyHelper {
             setContext(request);
             Response response = clientInvoker.invoke(request);
 
-            if (response instanceof SimpleMethodInvoked) {
-                SimpleMethodInvoked or = (SimpleMethodInvoked) response;
+            if (response instanceof MethodInvoked) {
+                MethodInvoked or = (MethodInvoked) response;
 
                 return or.getResponseObject();
             } else {
@@ -207,8 +207,8 @@ public final class DefaultProxyHelper implements ProxyHelper {
             setContext(request);
             Response response = clientInvoker.invoke(request);
 
-            if (response instanceof SimpleMethodInvoked) {
-                SimpleMethodInvoked or = (SimpleMethodInvoked) response;
+            if (response instanceof MethodInvoked) {
+                MethodInvoked or = (MethodInvoked) response;
 
                 return;
             } else {
@@ -243,8 +243,8 @@ public final class DefaultProxyHelper implements ProxyHelper {
                 setContext(request);
                 Response response = clientInvoker.invoke(request);
 
-                if (response instanceof SimpleMethodInvoked) {
-                    SimpleMethodInvoked or = (SimpleMethodInvoked) response;
+                if (response instanceof MethodInvoked) {
+                    MethodInvoked or = (MethodInvoked) response;
                     return;
                 } else {
                     throw makeUnexpectedResponseThrowable(response);

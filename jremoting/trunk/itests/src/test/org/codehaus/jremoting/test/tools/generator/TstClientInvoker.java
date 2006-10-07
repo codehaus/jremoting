@@ -23,7 +23,7 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.StatefulClientInvoker;
 import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.SimpleMethodInvoked;
+import org.codehaus.jremoting.responses.MethodInvoked;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.requests.Request;
@@ -66,11 +66,11 @@ public class TstClientInvoker extends StatefulClientInvoker implements ServerInv
                                 return new ExceptionThrown(new Exception(invokeMethod.getMethodSignature() + ": arguments not marshalled correctly \n expected[" + TstRemoteInterface.class.getField(methods[i].getName() + "_arg" + j).get(null) + "] received[" + _arguments[j] + "]"));
                             }
                         }
-                        SimpleMethodInvoked methodResponse = null;
+                        MethodInvoked methodResponse = null;
                         if (methods[i].getReturnType() != Void.TYPE) {
-                            methodResponse = new SimpleMethodInvoked(TstRemoteInterface.class.getField(methods[i].getName() + "_retValue").get(null));
+                            methodResponse = new MethodInvoked(TstRemoteInterface.class.getField(methods[i].getName() + "_retValue").get(null));
                         } else {
-                            methodResponse = new SimpleMethodInvoked();
+                            methodResponse = new MethodInvoked();
                         }
                         return methodResponse;
                     }
