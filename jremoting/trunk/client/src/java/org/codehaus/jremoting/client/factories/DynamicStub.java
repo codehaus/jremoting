@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.client.Proxy;
 import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.ProxyHelper;
+import org.codehaus.jremoting.client.StubHelper;
 
 /**
  * Implementation of Proxy(client stub) for dynamic invocation.
@@ -39,16 +39,16 @@ public class DynamicStub implements Proxy {
     /**
      * Proxy Helper
      */
-    private ProxyHelper proxyHelper;
+    private StubHelper stubHelper;
 
     //-------Constructor--------------//
     /**
      * Constructor
      */
-    public DynamicStub(String publishedName, String objectName, ProxyHelper proxyHelper) {
+    public DynamicStub(String publishedName, String objectName, StubHelper stubHelper) {
         this.service = publishedName;
         this.objectName = objectName;
-        this.proxyHelper = proxyHelper;
+        this.stubHelper = stubHelper;
     }
 
     //------Proxy override---------------------//
@@ -58,7 +58,7 @@ public class DynamicStub implements Proxy {
      */
 
     public Long codehausRemotingGetReferenceID(Object factoryThatIsAsking) {
-        return proxyHelper.getReferenceID(factoryThatIsAsking);
+        return stubHelper.getReferenceID(factoryThatIsAsking);
     }
 
     //--------Methods----------------//
@@ -76,7 +76,7 @@ public class DynamicStub implements Proxy {
      */
     public Object invoke(String methodSignature, Object[] args, Class[] argClasses) {
         try {
-            Object retVal = proxyHelper.processObjectRequest(methodSignature, args, argClasses);
+            Object retVal = stubHelper.processObjectRequest(methodSignature, args, argClasses);
             return retVal;
         } catch (Throwable t) {
             if (t instanceof RuntimeException) {

@@ -37,7 +37,6 @@ import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.responses.ServicesList;
 import org.codehaus.jremoting.util.FacadeRefHolder;
-import org.codehaus.jremoting.util.StubHelper;
 
 
 /**
@@ -49,13 +48,13 @@ import org.codehaus.jremoting.util.StubHelper;
  */
 public abstract class AbstractFactory implements Factory {
 
-    private static final int STUB_PREFIX_LENGTH = StubHelper.getStubPrefixLength();
+    private static final int STUB_PREFIX_LENGTH = org.codehaus.jremoting.util.StubHelper.getStubPrefixLength();
     protected final ClientInvoker clientInvoker;
     private final ContextFactory contextFactory;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
     private transient String textToSign;
     protected final Long sessionID;
-    private ProxyRegistry proxyRegistry;
+    private StubRegistry stubRegistry;
 
 
     public AbstractFactory(final ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
@@ -74,7 +73,7 @@ public abstract class AbstractFactory implements Factory {
             throw new ConnectionException("Setting of host context blocked for reasons of unknown, server-side response: (" + response.getClass().getName() + ")");
         }
 
-        proxyRegistry = new ProxyRegistry() {
+        stubRegistry = new StubRegistry() {
 
             public void registerReferenceObject(Object implBean, Long referenceID) {
                 synchronized (this) {
@@ -98,8 +97,8 @@ public abstract class AbstractFactory implements Factory {
                 return obj;
             }
 
-            public Object getInstance(String publishedServiceName, String objectName, ProxyHelper proxyHelper) throws ConnectionException {
-                return AbstractFactory.this.getInstance(publishedServiceName, objectName, proxyHelper);
+            public Object getInstance(String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
+                return AbstractFactory.this.getInstance(publishedServiceName, objectName, stubHelper);
             }
 
             public void marshallCorrection(String remoteObjectName, String methodSignature, Object[] args, Class[] argClasses) {
@@ -150,7 +149,7 @@ public abstract class AbstractFactory implements Factory {
         }
 
         Service lr = (Service) ar;
-        DefaultProxyHelper baseObj = new DefaultProxyHelper(proxyRegistry, clientInvoker,
+        DefaultStubHelper baseObj = new DefaultStubHelper(stubRegistry, clientInvoker,
                 contextFactory, publishedServiceName, "Main", lr.getReferenceID(), sessionID);
         Object retVal = getInstance(publishedServiceName, "Main", baseObj);
 
@@ -194,12 +193,12 @@ public abstract class AbstractFactory implements Factory {
     }
 
 
-    protected Object getInstance(String publishedServiceName, String objectName, ProxyHelper proxyHelper) throws ConnectionException {
+    protected Object getInstance(String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
 
         try {
             Class stubClass = getStubClass(publishedServiceName, objectName);
             Constructor[] constructors = stubClass.getConstructors();
-            return constructors[0].newInstance(new Object[]{proxyHelper});
+            return constructors[0].newInstance(new Object[]{stubHelper});
         } catch (InvocationTargetException ite) {
             throw new ConnectionException("Generated class not instantiated : " + ite.getTargetException().getMessage());
         } catch (ClassNotFoundException cnfe) {

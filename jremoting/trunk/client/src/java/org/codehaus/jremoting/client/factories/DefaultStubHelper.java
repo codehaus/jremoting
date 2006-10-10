@@ -40,15 +40,15 @@ import org.codehaus.jremoting.responses.MethodInvoked;
 import org.codehaus.jremoting.ConnectionException;
 
 /**
- * Class DefaultProxyHelper
+ * Class DefaultStubHelper
  *
  * @author Paul Hammant
  * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
  * @version $Revision: 1.3 $
  */
-public final class DefaultProxyHelper implements ProxyHelper {
+public final class DefaultStubHelper implements StubHelper {
 
-    private final transient ProxyRegistry proxyRegistry;
+    private final transient StubRegistry stubRegistry;
     private final transient ClientInvoker clientInvoker;
     private final transient String publishedServiceName;
     private final transient String objectName;
@@ -57,19 +57,19 @@ public final class DefaultProxyHelper implements ProxyHelper {
     private ContextFactory contextFactory;
     private ArrayList<GroupedMethodRequest> queuedAsyncRequests = new ArrayList<GroupedMethodRequest>();
 
-    public DefaultProxyHelper(ProxyRegistry proxyRegistry, ClientInvoker clientInvoker,
+    public DefaultStubHelper(StubRegistry stubRegistry, ClientInvoker clientInvoker,
                               ContextFactory contextFactory, String pubishedServiceName, String objectName,
                               Long referenceID, Long session) {
         this.contextFactory = contextFactory;
 
-        this.proxyRegistry = proxyRegistry;
+        this.stubRegistry = stubRegistry;
         this.clientInvoker = clientInvoker;
         publishedServiceName = pubishedServiceName;
         this.objectName = objectName;
         this.referenceID = referenceID;
         this.session = session;
-        if (proxyRegistry == null) {
-            throw new IllegalArgumentException("proxyRegistry cannot be null");
+        if (stubRegistry == null) {
+            throw new IllegalArgumentException("stubRegistry cannot be null");
         }
         if (clientInvoker == null) {
             throw new IllegalArgumentException("clientInvoker cannot be null");
@@ -78,7 +78,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
     }
 
     public void registerImplObject(Object implBean) {
-        proxyRegistry.registerReferenceObject(implBean, referenceID);
+        stubRegistry.registerReferenceObject(implBean, referenceID);
     }
 
     public Object processObjectRequestGettingFacade(Class returnClassType, String methodSignature, Object[] args, String objectName) throws Throwable {
@@ -122,17 +122,17 @@ public final class DefaultProxyHelper implements ProxyHelper {
             if (ref == null) {
                 implBeans[i] = null;
             } else {
-                Object o = proxyRegistry.getImplObj(ref);
+                Object o = stubRegistry.getImplObj(ref);
 
                 implBeans[i] = o;
 
                 if (implBeans[i] == null) {
-                    DefaultProxyHelper bo2 = new DefaultProxyHelper(proxyRegistry, clientInvoker,
+                    DefaultStubHelper bo2 = new DefaultStubHelper(stubRegistry, clientInvoker,
                             contextFactory, publishedServiceName, objectNames[i], refs[i], session);
                     Object retFacade = null;
 
                     try {
-                        retFacade = proxyRegistry.getInstance(publishedServiceName, objectNames[i], bo2);
+                        retFacade = stubRegistry.getInstance(publishedServiceName, objectNames[i], bo2);
                     } catch (Exception e) {
                         System.out.println("objNameWithoutArray=" + returnClassType.getName());
                         System.out.flush();
@@ -158,12 +158,12 @@ public final class DefaultProxyHelper implements ProxyHelper {
             return null;
         }
 
-        Object implBean = proxyRegistry.getImplObj(ref);
+        Object implBean = stubRegistry.getImplObj(ref);
 
         if (implBean == null) {
-            DefaultProxyHelper pHelper = new DefaultProxyHelper(proxyRegistry, clientInvoker,
+            DefaultStubHelper pHelper = new DefaultStubHelper(stubRegistry, clientInvoker,
                     contextFactory, publishedServiceName, mfr.getObjectName(), ref, session);
-            Object retFacade = proxyRegistry.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
+            Object retFacade = stubRegistry.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
 
             pHelper.registerImplObject(retFacade);
 
@@ -176,7 +176,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
     public Object processObjectRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
 
         try {
-            proxyRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
+            stubRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
             InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
             setContext(request);
@@ -199,7 +199,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
     public void processVoidRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
 
         try {
-            proxyRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
+            stubRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
             InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
 
@@ -341,7 +341,7 @@ public final class DefaultProxyHelper implements ProxyHelper {
 
     protected void finalize() throws Throwable {
 
-        synchronized (proxyRegistry) {
+        synchronized (stubRegistry) {
             Response response = clientInvoker.invoke(new CollectGarbage(publishedServiceName, objectName, session, referenceID));
             if (response instanceof ExceptionThrown) {
                 // This happens if the object can not be GCed on the remote server

@@ -96,7 +96,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     protected void generateProxyClass(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
         //Start creating class
         createNewClassDeclaration(generatedClassName, facadesToStubify);
-        //create constructor that takes ProxyHelper
+        //create constructor that takes StubHelper
         createConstructor(generatedClassName);
         //create fields
         createFields();
@@ -143,18 +143,18 @@ public class BcelStubGenerator extends AbstractStubGenerator {
 
     /**
      * Method createConstructor.
-     * This method adds a constructor that takes in a ProxyHelper Instance
+     * This method adds a constructor that takes in a StubHelper Instance
      *
      * @param generatedClassName the bean class name
      */
     protected void createConstructor(String generatedClassName) {
         InstructionList il = new InstructionList();
-        MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.VOID, new Type[]{new ObjectType("org.codehaus.jremoting.client.ProxyHelper")}, new String[]{"arg0"}, "<init>", generatedClassName, il, constantsPool);
+        MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.VOID, new Type[]{new ObjectType("org.codehaus.jremoting.client.StubHelper")}, new String[]{"arg0"}, "<init>", generatedClassName, il, constantsPool);
         il.append(factory.createLoad(Type.OBJECT, 0));
         il.append(factory.createInvoke("java.lang.Object", "<init>", Type.VOID, Type.NO_ARGS, Constants.INVOKESPECIAL));
         il.append(factory.createLoad(Type.OBJECT, 0));
         il.append(factory.createLoad(Type.OBJECT, 1));
-        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.PUTFIELD));
+        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.PUTFIELD));
         il.append(factory.createReturn(Type.VOID));
         method.setMaxStack();
         method.setMaxLocals();
@@ -165,12 +165,12 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     /**
      * Add method
      * <pre>
-     * private transient org.codehaus.jremoting.client.ProxyHelper proxyHelper;
+     * private transient org.codehaus.jremoting.client.StubHelper proxyHelper;
      * </pre>
      */
     protected void createFields() {
         FieldGen field;
-        field = new FieldGen(Constants.ACC_PRIVATE | Constants.ACC_TRANSIENT, new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), "proxyHelper", constantsPool);
+        field = new FieldGen(Constants.ACC_PRIVATE | Constants.ACC_TRANSIENT, new ObjectType("org.codehaus.jremoting.client.StubHelper"), "proxyHelper", constantsPool);
         classGen.addField(field.getField());
     }
 
@@ -187,9 +187,9 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         InstructionList il = new InstructionList();
         MethodGen method = new MethodGen(Constants.ACC_PUBLIC, new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, new String[]{"arg0"}, "codehausRemotingGetReferenceID", generatedClassName, il, constantsPool);
         il.append(factory.createLoad(Type.OBJECT, 0));
-        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
+        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
         il.append(factory.createLoad(Type.OBJECT, 1));
-        il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "getReferenceID", new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, Constants.INVOKEINTERFACE));
+        il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "getReferenceID", new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, Constants.INVOKEINTERFACE));
         il.append(factory.createReturn(Type.OBJECT));
         method.setMaxStack();
         method.setMaxLocals();
@@ -296,8 +296,8 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         InstructionHandle ih_tryEnd = null;
         if (interfaceToStubify.isRollback(mth)) {
             ih_rollback = il.append(factory.createLoad(Type.OBJECT, 0));
-            il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
-            il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "rollbackAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
+            il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
+            il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "rollbackAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
             gotoCall = factory.createBranchInstruction(Constants.GOTO, null);
             ih_tryEnd = il.append(gotoCall);
 
@@ -310,7 +310,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
 
 
         /* Within the stub put the
-         * Call processObjectRequest on the instance ProxyHelper held within the stub
+         * Call processObjectRequest on the instance StubHelper held within the stub
          * Thus,
          * Injecting the following
          * ================================================
@@ -346,7 +346,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
             method.addExceptionHandler(ih_rollback, ih_tryEnd, catchHandler, new ObjectType("java.lang.Throwable"));
         }
 
-        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
+        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
         // **** Check if the return type is facade ***
         Class returnClass = mth.getReturnType();
         if (returnClass.isArray()) {
@@ -372,7 +372,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
             gotoReturnClass.setTarget(ihPushSignature);
             il.append(factory.createLoad(Type.OBJECT, variableIndex - 1));
             il.append(new PUSH(constantsPool, MethodNameHelper.encodeClassName(getClassType(returnClass))));
-            il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "processObjectRequestGettingFacade", Type.OBJECT, new Type[]{new ObjectType("java.lang.Class"), Type.STRING, new ArrayType(Type.OBJECT, 1), Type.STRING}, Constants.INVOKEINTERFACE));
+            il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "processObjectRequestGettingFacade", Type.OBJECT, new Type[]{new ObjectType("java.lang.Class"), Type.STRING, new ArrayType(Type.OBJECT, 1), Type.STRING}, Constants.INVOKEINTERFACE));
         } else {
             //method signature = METHODNAME(arguments....)
             il.append(new PUSH(constantsPool, MethodNameHelper.getMethodSignature(mth)));
@@ -381,14 +381,14 @@ public class BcelStubGenerator extends AbstractStubGenerator {
             il.append(factory.createLoad(Type.OBJECT, ++variableIndex));
             //Check for async methods
             if (interfaceToStubify.isAsync(mth)) {
-                il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "queueAsyncRequest", Type.VOID, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
+                il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "queueAsyncRequest", Type.VOID, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
 
 
             } else {
                 if (getBCELPrimitiveType(mth.getReturnType().getName()) == Type.VOID) {
-                    il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "processVoidRequest", Type.VOID, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
+                    il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "processVoidRequest", Type.VOID, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
                 } else {
-                    il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "processObjectRequest", Type.OBJECT, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
+                    il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "processObjectRequest", Type.OBJECT, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
                     il.append(factory.createStore(Type.OBJECT, ++variableIndex));
                     il.append(factory.createLoad(Type.OBJECT, variableIndex));
 
@@ -457,9 +457,9 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         if (interfaceToStubify.isCommit(mth)) {
             InstructionHandle ih_commit = il.append(factory.createLoad(Type.OBJECT, 0));
             gotoCall.setTarget(ih_commit);
-            il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
+            il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
 
-            il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "commitAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
+            il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "commitAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
             InstructionHandle ih_return = il.append(factory.createReturn(Type.VOID));
             catchHandler = il.append(factory.createStore(Type.OBJECT, variableIndex));
             il.append(factory.createLoad(Type.OBJECT, variableIndex));
@@ -486,11 +486,11 @@ public class BcelStubGenerator extends AbstractStubGenerator {
 
         il.append(factory.createLoad(Type.OBJECT, 0));
 
-        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.ProxyHelper"), Constants.GETFIELD));
+        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
         il.append(factory.createLoad(Type.OBJECT, 0));
         il.append(factory.createLoad(Type.OBJECT, 1));
 
-        il.append(factory.createInvoke("org.codehaus.jremoting.client.ProxyHelper", "isEquals", Type.BOOLEAN, new Type[]{Type.OBJECT, Type.OBJECT}, Constants.INVOKEINTERFACE));
+        il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "isEquals", Type.BOOLEAN, new Type[]{Type.OBJECT, Type.OBJECT}, Constants.INVOKEINTERFACE));
         il.append(factory.createReturn(Type.INT));
         method.setMaxStack();
         method.setMaxLocals();

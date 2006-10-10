@@ -19,13 +19,13 @@ package org.codehaus.jremoting.client;
 
 
 /**
- * Interface ProxyHelper
+ * Interface StubHelper
  *
  * @author Paul Hammant
  * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
  * @version $Revision: 1.2 $
  */
-public interface ProxyHelper {
+public interface StubHelper {
 
     /**
      * Method processObjectRequestGettingFacade

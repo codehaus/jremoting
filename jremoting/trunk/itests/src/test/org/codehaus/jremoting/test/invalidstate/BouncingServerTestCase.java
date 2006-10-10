@@ -19,7 +19,7 @@ package org.codehaus.jremoting.test.invalidstate;
 
 import org.codehaus.jremoting.client.*;
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.factories.DefaultProxyHelper;
+import org.codehaus.jremoting.client.factories.DefaultStubHelper;
 import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -67,7 +67,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
 
             Mock clientMonitor = mock(ClientMonitor.class);
             clientMonitor.expects(once()).method("methodLogging").withNoArguments().will(returnValue(false));
-            clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(DefaultProxyHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
+            clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(DefaultStubHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
             )});
 
             factory = new ClientSideStubFactory(new SocketClientStreamInvoker((ClientMonitor) clientMonitor.proxy(),
