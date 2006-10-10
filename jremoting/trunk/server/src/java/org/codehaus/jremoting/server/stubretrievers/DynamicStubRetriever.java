@@ -55,29 +55,10 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         }
     }
 
-    /**
-     * Method generate
-     *
-     * @param service            the name to generate as
-     * @param primaryFacade the interfaces to expose.
-     * @param classLoader       the classloader to use during generation.
-     * @throws PublicationException if the generation failed.
-     */
     public void generate(String service, Class primaryFacade, ClassLoader classLoader) throws PublicationException {
-        generateProxy(service, new PublicationDescription(primaryFacade), classLoader, false);
+        generate(service, new PublicationDescription(primaryFacade), classLoader);
     }
 
-    /**
-     * Method generate
-     *
-     * @param service                 the name to generate as
-     * @param publicationDescription the description of the publication
-     * @param classLoader            the class loader to use.
-     * @throws PublicationException if the generation failed.
-     */
-    public void generate(String service, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException {
-        generateProxy(service, publicationDescription, classLoader, false);
-    }
 
     /**
      * Use this classpath during retrieval.
@@ -158,7 +139,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         return baos.toByteArray();
     }
 
-    private void generateProxy(String service, PublicationDescription publicationDescription, ClassLoader classLoader, boolean deferred) throws PublicationException {
+    public void generate(String service, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException {
 
         if (classLoader == null) {
             classLoader = this.getClass().getClassLoader();
@@ -186,30 +167,28 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         proxyGenerator.setPrimaryFacades(primaryFacades);
         proxyGenerator.setAdditionalFacades(additionalFacades);
 
-        if (!deferred) {
-            try {
-                //proxyGenerator.setClasspath(Request.class.getProtectionDomain().getCodeSource().getLocation().getFile());
-                proxyGenerator.generateClass(classLoader);
-            } catch (Throwable t) {
+        try {
+            //proxyGenerator.setClasspath(Request.class.getProtectionDomain().getCodeSource().getLocation().getFile());
+            proxyGenerator.generateClass(classLoader);
+        } catch (Throwable t) {
 
-                System.err.println("******");
-                System.err.println("** Exception while making String : ");
-                System.err.flush();
-                t.printStackTrace();
-                System.err.println("** ClassDir=" + classGenDir);
-                System.err.println("** Name=" + service);
-                System.err.println("** CLasspath=" + classpath);
-                System.err.println("** Classes/Facades to Expose..");
+            System.err.println("******");
+            System.err.println("** Exception while making String : ");
+            System.err.flush();
+            t.printStackTrace();
+            System.err.println("** ClassDir=" + classGenDir);
+            System.err.println("** Name=" + service);
+            System.err.println("** CLasspath=" + classpath);
+            System.err.println("** Classes/Facades to Expose..");
 
-                for (int i = 0; i < primaryFacades.length; i++) {
-                    String aString = primaryFacades[i].getFacadeClass().getName();
+            for (PublicationDescriptionItem primaryFacade : primaryFacades) {
+                String aString = primaryFacade.getFacadeClass().getName();
 
-                    System.err.println("** .." + aString);
-                }
-
-                System.err.println("******");
-                System.err.flush();
+                System.err.println("** .." + aString);
             }
+
+            System.err.println("******");
+            System.err.flush();
         }
     }
 }
