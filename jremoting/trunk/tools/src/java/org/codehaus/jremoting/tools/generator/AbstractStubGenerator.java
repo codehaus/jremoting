@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.tools.generator;
 
-import org.codehaus.jremoting.server.ProxyGenerator;
+import org.codehaus.jremoting.server.StubGenerator;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 
 import java.lang.reflect.Method;
@@ -31,7 +31,7 @@ import java.io.File;
  * @version $Revision: 1.2 $*
  */
 
-public abstract class AbstractProxyGenerator implements ProxyGenerator {
+public abstract class AbstractStubGenerator implements StubGenerator {
 
     private String classGenDir;
     private String genName;

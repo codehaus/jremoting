@@ -18,12 +18,12 @@
 package org.codehaus.jremoting.server;
 
 /**
- * Interface ProxyGenerator
+ * Interface StubGenerator
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public interface DynamicProxyGenerator {
+public interface DynamicStubGenerator {
 
     /**
      * Generate a proxy.

@@ -22,7 +22,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
-import org.codehaus.jremoting.server.ProxyGenerator;
+import org.codehaus.jremoting.server.StubGenerator;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 
 import java.io.File;
@@ -35,19 +35,19 @@ import java.util.Vector;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ProxyGeneratorTask extends Task {
+public class StubGeneratorTask extends Task {
 
     protected String[] primaryFacades;
     protected String[] additionalFacades;
     protected File classGenDir;
     protected String genName;
     protected Path classpath;
-    private String generatorClass = "org.codehaus.jremoting.tools.generator.BcelProxyGenerator";
+    private String generatorClass = "org.codehaus.jremoting.tools.generator.BcelStubGenerator";
 
     /**
-     * Constructor ProxyGeneratorTask
+     * Constructor StubGeneratorTask
      */
-    public ProxyGeneratorTask() {
+    public StubGeneratorTask() {
     }
 
     /**
@@ -173,11 +173,11 @@ public class ProxyGeneratorTask extends Task {
             throw new BuildException("Specify the name to use for lookup");
         }
 
-        ProxyGenerator proxyGenerator;
+        StubGenerator stubGenerator;
 
         try {
             Class proxyGenClass = Class.forName(generatorClass);
-            proxyGenerator = (ProxyGenerator) proxyGenClass.newInstance();
+            stubGenerator = (StubGenerator) proxyGenClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -185,9 +185,9 @@ public class ProxyGeneratorTask extends Task {
         }
 
         try {
-            proxyGenerator.setClassGenDir(classGenDir.getAbsolutePath());
-            proxyGenerator.setGenName(genName);
-            proxyGenerator.setClasspath(classpath.concatSystemClasspath("ignore").toString());
+            stubGenerator.setClassGenDir(classGenDir.getAbsolutePath());
+            stubGenerator.setGenName(genName);
+            stubGenerator.setClasspath(classpath.concatSystemClasspath("ignore").toString());
 
             PublicationDescriptionItem[] primaryFacades = new PublicationDescriptionItem[this.primaryFacades.length];
             ClassLoader classLoader = new AntClassLoader(getProject(), classpath);
@@ -197,7 +197,7 @@ public class ProxyGeneratorTask extends Task {
                 primaryFacades[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
             }
 
-            proxyGenerator.setPrimaryFacades(primaryFacades);
+            stubGenerator.setPrimaryFacades(primaryFacades);
 
             if (additionalFacades != null) {
                 PublicationDescriptionItem[] additionalFacades = new PublicationDescriptionItem[this.additionalFacades.length];
@@ -208,7 +208,7 @@ public class ProxyGeneratorTask extends Task {
                     additionalFacades[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
                 }
 
-                proxyGenerator.setAdditionalFacades(additionalFacades);
+                stubGenerator.setAdditionalFacades(additionalFacades);
             }
 
             ClassLoader classLoader2 = null;
@@ -219,8 +219,8 @@ public class ProxyGeneratorTask extends Task {
                 classLoader2 = this.getClass().getClassLoader();
             }
 
-            proxyGenerator.generateSrc(classLoader2);
-            proxyGenerator.generateClass(classLoader2);
+            stubGenerator.generateSrc(classLoader2);
+            stubGenerator.generateClass(classLoader2);
         } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
 

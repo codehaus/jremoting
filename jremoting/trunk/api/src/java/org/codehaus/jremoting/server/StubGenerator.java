@@ -19,12 +19,12 @@ package org.codehaus.jremoting.server;
 
 
 /**
- * Class ProxyGenerator
+ * Class StubGenerator
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public interface ProxyGenerator {
+public interface StubGenerator {
 
     /**
      * Set the primary facades.

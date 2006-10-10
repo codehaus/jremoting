@@ -22,8 +22,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.codehaus.jremoting.server.DynamicProxyGenerator;
-import org.codehaus.jremoting.server.ProxyGenerator;
+import org.codehaus.jremoting.server.DynamicStubGenerator;
+import org.codehaus.jremoting.server.StubGenerator;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.PublicationException;
@@ -37,7 +37,7 @@ import org.codehaus.jremoting.util.StubHelper;
  *
  * @author Paul Hammant
  */
-public class DynamicStubRetriever implements DynamicProxyGenerator, StubRetriever {
+public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever {
 
     private String classpath;
     private String classGenDir = ".";
@@ -182,14 +182,14 @@ public class DynamicStubRetriever implements DynamicProxyGenerator, StubRetrieve
         primaryFacades = publicationDescription.getPrimaryFacades();
         additionalFacades = publicationDescription.getAdditionalFacades();
 
-        org.codehaus.jremoting.server.ProxyGenerator proxyGenerator;
+        org.codehaus.jremoting.server.StubGenerator proxyGenerator;
 
         try {
-            proxyGenerator = (ProxyGenerator) generatorClass.newInstance();
+            proxyGenerator = (StubGenerator) generatorClass.newInstance();
         } catch (InstantiationException e) {
-            throw new RuntimeException("ProxyGenerator cannot be instantiated.");
+            throw new RuntimeException("StubGenerator cannot be instantiated.");
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("ProxyGenerator was illegally accessed");
+            throw new RuntimeException("StubGenerator was illegally accessed");
         }
 
         proxyGenerator.setClassGenDir(classGenDir);
@@ -252,14 +252,14 @@ public class DynamicStubRetriever implements DynamicProxyGenerator, StubRetrieve
      */
     public void generateDeferred(ClassLoader classLoader) {
 
-        org.codehaus.jremoting.server.ProxyGenerator proxyGenerator;
+        org.codehaus.jremoting.server.StubGenerator proxyGenerator;
 
         try {
-            proxyGenerator = (ProxyGenerator) generatorClass.newInstance();
+            proxyGenerator = (StubGenerator) generatorClass.newInstance();
         } catch (InstantiationException e) {
-            throw new RuntimeException("ProxyGenerator cannot be instantiated.");
+            throw new RuntimeException("StubGenerator cannot be instantiated.");
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("ProxyGenerator was illegally accessed");
+            throw new RuntimeException("StubGenerator was illegally accessed");
         }
         proxyGenerator.generateDeferredClasses();
     }

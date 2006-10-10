@@ -30,7 +30,7 @@ import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
-import org.codehaus.jremoting.tools.generator.BcelProxyGenerator;
+import org.codehaus.jremoting.tools.generator.BcelStubGenerator;
 import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
 import org.jmock.core.Constraint;
@@ -46,7 +46,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
     PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
 
     protected void setUp() throws Exception {
-        BcelProxyGenerator generator = new BcelProxyGenerator();
+        BcelStubGenerator generator = new BcelStubGenerator();
         String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
         generator.setClassGenDir(testClassesDir);
         generator.setPrimaryFacades(pd.getPrimaryFacades());

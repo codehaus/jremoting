@@ -4,7 +4,7 @@ package org.codehaus.jremoting.tools.generator;
 //import org.codehaus.jremoting.server.PublicationDescriptionItem;
 //import org.objectweb.asm.*;
 
-public class AsmProxyGenerator { // extends AbstractProxyGenerator implements Opcodes {
+public class AsmStubGenerator { // extends AbstractStubGenerator implements Opcodes {
 
 //    public void generateClass(ClassLoader classLoader) {
 //

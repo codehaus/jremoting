@@ -28,7 +28,7 @@ import java.util.List;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.jremoting.server.ProxyGenerator;
+import org.codehaus.jremoting.server.StubGenerator;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 
 
@@ -41,13 +41,13 @@ import org.codehaus.jremoting.server.PublicationDescriptionItem;
  * @phase compile
  * @requiresDependencyResolution test
  */
-public class ProxyGeneratorMojo
-    extends AbstractMojo
+public class StubGeneratorMojo
+        extends AbstractMojo
 {
 
     private static final String COMMA = ",";
 
-    private String generatorClass = "org.codehaus.jremoting.tools.generator.BcelProxyGenerator";
+    private String generatorClass = "org.codehaus.jremoting.tools.generator.BcelStubGenerator";
 
     /**
      * Test classpath.
@@ -107,32 +107,32 @@ public class ProxyGeneratorMojo
                     "Specify the directory to generate Java classes in");
         }
 
-        ProxyGenerator proxyGenerator;
+        StubGenerator stubGenerator;
 
         try {
-            proxyGenerator = (ProxyGenerator)Class.forName(generatorClass).newInstance();
+            stubGenerator = (StubGenerator)Class.forName(generatorClass).newInstance();
         } catch (Exception e) {
             throw new MojoExecutionException(
-                    "Failed to create ProxyGenerator "+generatorClass, e);
+                    "Failed to create StubGenerator "+generatorClass, e);
         }
 
         try {
-            proxyGenerator.setGenName(genName);
-            proxyGenerator.setClassGenDir(classGenDir.getAbsolutePath());
+            stubGenerator.setGenName(genName);
+            stubGenerator.setClassGenDir(classGenDir.getAbsolutePath());
             String classpath = toCSV(classpathElements);
-            proxyGenerator.setClasspath(classpath);
-            getLog().debug("ProxyGenerator classpath: " + classpath);
+            stubGenerator.setClasspath(classpath);
+            getLog().debug("StubGenerator classpath: " + classpath);
 
             ClassLoader classLoader = createClassLoader(classpathElements);
 
-            proxyGenerator.setPrimaryFacades(createPublicationDescriptionItems(fromCSV(interfaces), classLoader));
+            stubGenerator.setPrimaryFacades(createPublicationDescriptionItems(fromCSV(interfaces), classLoader));
 
             if (additionalFacades != null) {
-                proxyGenerator.setAdditionalFacades(createPublicationDescriptionItems(fromCSV(additionalFacades), classLoader));
+                stubGenerator.setAdditionalFacades(createPublicationDescriptionItems(fromCSV(additionalFacades), classLoader));
             }
 
-            proxyGenerator.generateSrc(classLoader);
-            proxyGenerator.generateClass(classLoader);
+            stubGenerator.generateSrc(classLoader);
+            stubGenerator.generateClass(classLoader);
         } catch (ClassNotFoundException e) {
             throw new MojoExecutionException("Class not found: "
                     + e.getMessage(), e);

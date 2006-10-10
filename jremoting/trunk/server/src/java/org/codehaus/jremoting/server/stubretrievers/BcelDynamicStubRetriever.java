@@ -26,11 +26,11 @@ package org.codehaus.jremoting.server.stubretrievers;
 public class BcelDynamicStubRetriever extends DynamicStubRetriever {
 
     public BcelDynamicStubRetriever(ClassLoader classLoader) {
-        super(classLoader, "org.codehaus.jremoting.tools.generator.BcelProxyGenerator");
+        super(classLoader, "org.codehaus.jremoting.tools.generator.BcelStubGenerator");
     }
 
 
     public BcelDynamicStubRetriever() {
-        super(BcelDynamicStubRetriever.class.getClassLoader(), "org.codehaus.jremoting.tools.generator.BcelProxyGenerator");
+        super(BcelDynamicStubRetriever.class.getClassLoader(), "org.codehaus.jremoting.tools.generator.BcelStubGenerator");
     }
 }

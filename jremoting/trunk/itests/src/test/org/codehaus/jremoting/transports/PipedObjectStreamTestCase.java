@@ -32,7 +32,7 @@ import org.codehaus.jremoting.test.TestInterface;
 import org.codehaus.jremoting.test.TestInterface2;
 import org.codehaus.jremoting.test.TestInterface3;
 import org.codehaus.jremoting.test.TestInterfaceImpl;
-import org.codehaus.jremoting.tools.generator.BcelProxyGenerator;
+import org.codehaus.jremoting.tools.generator.BcelStubGenerator;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -66,7 +66,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
 
 
-        BcelProxyGenerator generator = new BcelProxyGenerator();
+        BcelStubGenerator generator = new BcelStubGenerator();
         String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
         generator.setClassGenDir(testClassesDir);
         generator.setPrimaryFacades(pd.getPrimaryFacades());

@@ -55,7 +55,7 @@ import java.util.ArrayList;
  *
  * @author <a href="mailto:vinayc77@yahoo.com">Vinay Chandran</a>
  */
-public class BcelProxyGenerator extends AbstractProxyGenerator {
+public class BcelStubGenerator extends AbstractStubGenerator {
 
     //bcel    
     private InstructionFactory factory;
@@ -67,7 +67,7 @@ public class BcelProxyGenerator extends AbstractProxyGenerator {
      * Generate the class.
      *
      * @param classLoader the classloader to use during generation.
-     * @see org.codehaus.jremoting.server.ProxyGenerator#generateClass(ClassLoader)
+     * @see org.codehaus.jremoting.server.StubGenerator#generateClass(ClassLoader)
      */
     public void generateClass(ClassLoader classLoader) {
 
