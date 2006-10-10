@@ -62,23 +62,10 @@ public interface StubGenerator {
     void setGenName(String genName);
 
     /**
-     * Generate source
-     *
-     * @param facadesClassLoader the classloader active during generation of source.
-     */
-    void generateSrc(ClassLoader facadesClassLoader);
-
-    /**
      * Generate class
      *
      * @param facadesClassLoader the classloader active during compilation/generation.
      */
     void generateClass(ClassLoader facadesClassLoader);
-
-    /**
-     * Generate deferred classes
-     */
-    void generateDeferredClasses();
-
 
 }

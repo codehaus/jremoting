@@ -72,7 +72,6 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         generator.setPrimaryFacades(pd.getPrimaryFacades());
         generator.setAdditionalFacades(pd.getAdditionalFacades());
         generator.setGenName("Hello33");
-        generator.generateSrc(this.getClass().getClassLoader());
         generator.generateClass(this.getClass().getClassLoader());
 
 

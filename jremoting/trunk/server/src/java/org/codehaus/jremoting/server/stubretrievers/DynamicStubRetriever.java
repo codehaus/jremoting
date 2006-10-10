@@ -80,18 +80,6 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     }
 
     /**
-     * Method deferredGenerate
-     *
-     * @param service                 the name of the clas to generate
-     * @param publicationDescription the description of the publication
-     * @param classLoader            the class loader to use.
-     * @throws PublicationException if the generation failed.
-     */
-    public void deferredGenerate(String service, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException {
-        generateProxy(service, publicationDescription, classLoader, true);
-    }
-
-    /**
      * Use this classpath during retrieval.
      *
      * @param classpath the classpath
@@ -198,26 +186,6 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         proxyGenerator.setPrimaryFacades(primaryFacades);
         proxyGenerator.setAdditionalFacades(additionalFacades);
 
-        try {
-            proxyGenerator.generateSrc(classLoader);
-        } catch (Throwable t) {
-            System.err.println("******");
-            System.err.println("** Exception while making source : ");
-            System.err.flush();
-            t.printStackTrace();
-            System.err.println("** Name=" + service);
-            System.err.println("** Classes/Facades to Expose..");
-
-            for (int i = 0; i < primaryFacades.length; i++) {
-                String aString = primaryFacades[i].getFacadeClass().getName();
-
-                System.err.println("** .." + aString);
-            }
-
-            System.err.println("******");
-            System.err.flush();
-        }
-
         if (!deferred) {
             try {
                 //proxyGenerator.setClasspath(Request.class.getProtectionDomain().getCodeSource().getLocation().getFile());
@@ -243,24 +211,5 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
                 System.err.flush();
             }
         }
-    }
-
-    /**
-     * Method generateDeferred
-     *
-     * @param classLoader the classloader to use.
-     */
-    public void generateDeferred(ClassLoader classLoader) {
-
-        org.codehaus.jremoting.server.StubGenerator proxyGenerator;
-
-        try {
-            proxyGenerator = (StubGenerator) generatorClass.newInstance();
-        } catch (InstantiationException e) {
-            throw new RuntimeException("StubGenerator cannot be instantiated.");
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException("StubGenerator was illegally accessed");
-        }
-        proxyGenerator.generateDeferredClasses();
     }
 }

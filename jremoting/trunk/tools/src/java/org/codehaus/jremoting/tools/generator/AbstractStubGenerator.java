@@ -180,21 +180,6 @@ public abstract class AbstractStubGenerator implements StubGenerator {
         }
     }
 
-    /**
-     * Gernerate the source for the proxy class.
-     *
-     * @param classLoader the classloader to use while making the source.
-     */
-    public void generateSrc(ClassLoader classLoader) {
-        // default impl
-    }
-
-    /**
-     * Generate the deferred classes.
-     */
-    public void generateDeferredClasses() {
-        // default impl
-    }
 
     /**
      * @param publicationDescriptionItems

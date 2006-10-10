@@ -219,7 +219,6 @@ public class StubGeneratorTask extends Task {
                 classLoader2 = this.getClass().getClassLoader();
             }
 
-            stubGenerator.generateSrc(classLoader2);
             stubGenerator.generateClass(classLoader2);
         } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();

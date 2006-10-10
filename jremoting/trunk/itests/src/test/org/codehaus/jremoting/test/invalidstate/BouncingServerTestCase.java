@@ -51,7 +51,6 @@ public class BouncingServerTestCase extends MockObjectTestCase {
         generator.setClassGenDir(testClassesDir);
         generator.setPrimaryFacades(pd.getPrimaryFacades());
         generator.setGenName("Hello55");
-        generator.generateSrc(this.getClass().getClassLoader());
         generator.generateClass(this.getClass().getClassLoader());
     }
 

@@ -45,21 +45,5 @@ public interface DynamicStubGenerator {
      */
     void generate(String service, PublicationDescription publicationDescription, ClassLoader facadesClassLoader) throws PublicationException;
 
-    /**
-     * Generate a proxy.  Deferred till a later moment for performance reasons (most of
-     * use with javac generator)
-     *
-     * @param service                 the name of the generated proxy.  As used in lookup.
-     * @param publicationDescription a descriptor detailing complex cases.
-     * @param facadesClassLoader            - classloader containing all needed for proxy generation
-     * @throws PublicationException if there is a problem publishing
-     */
-    void deferredGenerate(String service, PublicationDescription publicationDescription, ClassLoader facadesClassLoader) throws PublicationException;
 
-    /**
-     * Generate the deferred proxies.
-     *
-     * @param facadesClassLoader the class loader.
-     */
-    void generateDeferred(ClassLoader facadesClassLoader);
 }

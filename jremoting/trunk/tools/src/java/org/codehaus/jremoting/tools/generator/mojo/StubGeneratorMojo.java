@@ -131,7 +131,6 @@ public class StubGeneratorMojo
                 stubGenerator.setAdditionalFacades(createPublicationDescriptionItems(fromCSV(additionalFacades), classLoader));
             }
 
-            stubGenerator.generateSrc(classLoader);
             stubGenerator.generateClass(classLoader);
         } catch (ClassNotFoundException e) {
             throw new MojoExecutionException("Class not found: "
