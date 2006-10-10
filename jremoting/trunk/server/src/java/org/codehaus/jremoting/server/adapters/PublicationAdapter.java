@@ -20,6 +20,7 @@ package org.codehaus.jremoting.server.adapters;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.server.MethodInvoker;
@@ -41,7 +42,7 @@ public class PublicationAdapter implements Publisher {
     /**
      * A map of published objects.
      */
-    protected HashMap services = new HashMap();
+    private Map<String, MethodInvoker> services = new HashMap<String, MethodInvoker>();
 
     /**
      * Is the service published
@@ -58,7 +59,7 @@ public class PublicationAdapter implements Publisher {
      *
      * @return The iterator
      */
-    public Iterator getIteratorOfServices() {
+    public Iterator<String> getIteratorOfServices() {
         return services.keySet().iterator();
     }
 
@@ -99,19 +100,19 @@ public class PublicationAdapter implements Publisher {
         }
 
         // add method maps for main lookup-able service.
-        HashMap mainMethodMap = new HashMap();
-        DefaultMethodInvoker mainMethodInvoker = new DefaultMethodInvoker(this, service + "_Main", mainMethodMap, publicationDescription);
+        Map<String, Method> mainMethodMap = new HashMap<String, Method>();
+        DefaultMethodInvoker mainMethodInvoker = new DefaultMethodInvoker(this, service + "_Main", mainMethodMap, publicationDescription, primaryFacades[0].getFacadeClass());
 
         mainMethodInvoker.addImplementationBean(new Long(0), impl);
 
-        for (int x = 0; x < primaryFacades.length; x++) {
-            Class clazz = primaryFacades[x].getFacadeClass();
+        for (PublicationDescriptionItem primaryFacade : primaryFacades) {
+            Class clazz = primaryFacade.getFacadeClass();
 
             Method methods[] = null;
             try {
                 Method ts = Object.class.getMethod("toString", new Class[0]);
                 Method hc = Object.class.getMethod("hashCode", new Class[0]);
-                Method eq = Object.class.getMethod("equals", new Class[]{Object.class});
+                Method eq = Object.class.getMethod("equals", Object.class);
                 Method[] interfaceMethods = clazz.getMethods();
                 methods = new Method[interfaceMethods.length + 3];
                 System.arraycopy(interfaceMethods, 0, methods, 0, interfaceMethods.length);
@@ -122,12 +123,11 @@ public class PublicationAdapter implements Publisher {
                 // never!
             }
 
-            for (int y = 0; y < methods.length; y++) {
-                Method method = methods[y];
+            for (Method method : methods) {
                 String methodSignature = MethodNameHelper.getMethodSignature(method);
 
-                if (!mainMethodMap.containsKey(methodSignature.toString())) {
-                    mainMethodMap.put(methodSignature.toString(), methods[y]);
+                if (!mainMethodMap.containsKey(methodSignature)) {
+                    mainMethodMap.put(methodSignature, method);
                 }
             }
         }
@@ -136,11 +136,12 @@ public class PublicationAdapter implements Publisher {
         services.put(StubHelper.formatServiceName(service), mainMethodInvoker);
 
         // add method maps for all the additional facades.
-        for (int x = 0; x < additionalFacades.length; x++) {
-            Class facadeClass = additionalFacades[x].getFacadeClass();
-            String encodedClassName = MethodNameHelper.encodeClassName(additionalFacades[x].getFacadeClass().getName());
-            HashMap methodMap = new HashMap();
-            MethodInvoker methodInvoker = new DefaultMethodInvoker(this, service + "_" + encodedClassName, methodMap, publicationDescription);
+        for (PublicationDescriptionItem additionalFacade : additionalFacades) {
+            Class facadeClass = additionalFacade.getFacadeClass();
+            String encodedClassName = MethodNameHelper.encodeClassName(additionalFacade.getFacadeClass().getName());
+            HashMap<String, Method> methodMap = new HashMap<String, Method>();
+            MethodInvoker methodInvoker = new DefaultMethodInvoker(this, service + "_" + encodedClassName, 
+                    methodMap, publicationDescription, facadeClass);
 
             Method methods[] = null;
             try {
@@ -158,12 +159,11 @@ public class PublicationAdapter implements Publisher {
             }
 
 
-            for (int y = 0; y < methods.length; y++) {
-                Method method = methods[y];
+            for (Method method : methods) {
                 String methodSignature = MethodNameHelper.getMethodSignature(method);
 
-                if (!methodMap.containsKey(methodSignature.toString())) {
-                    methodMap.put(methodSignature.toString(), methods[y]);
+                if (!methodMap.containsKey(methodSignature)) {
+                    methodMap.put(methodSignature, method);
                 }
             }
 
@@ -202,7 +202,7 @@ public class PublicationAdapter implements Publisher {
             throw new PublicationException("Service '" + service + "' not published");
         }
 
-        MethodInvoker asih = (MethodInvoker) services.get(serviceName);
+        MethodInvoker asih = services.get(serviceName);
 
         asih.replaceImplementationBean(oldImpl, withImpl);
     }
@@ -215,7 +215,11 @@ public class PublicationAdapter implements Publisher {
      * @return the method invoation handler
      */
     public MethodInvoker getMethodInvoker(InvokeMethod invokeMethod, String objectName) {
-        return (MethodInvoker) services.get(invokeMethod.getService() + "_" + objectName);
+        return services.get(invokeMethod.getService() + "_" + objectName);
+    }
+
+    public Class getFacadeClass(String publishedThing) {
+        return services.get(publishedThing).getFacadeClass();
     }
 
     /**
@@ -225,6 +229,6 @@ public class PublicationAdapter implements Publisher {
      * @return the method invoation handler
      */
     public MethodInvoker getMethodInvoker(String service) {
-        return (MethodInvoker) services.get(service);
+        return services.get(service);
     }
 }

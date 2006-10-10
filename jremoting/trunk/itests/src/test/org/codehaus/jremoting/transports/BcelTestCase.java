@@ -66,14 +66,14 @@ public class BcelTestCase extends AbstractHelloTestCase {
 
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
-        stubRetriever.generate("Hello", pd, this.getClass().getClassLoader());
-        server.publish(testServer, "Hello", pd);
+        stubRetriever.generate("Hello223", pd, this.getClass().getClassLoader());
+        server.publish(testServer, "Hello223", pd);
         server.start();
 
         // Client side setup
         factory = new ServerSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 10201));
-        testClient = (TestInterface) factory.lookupService("Hello");
+        testClient = (TestInterface) factory.lookupService("Hello223");
 
     }
 

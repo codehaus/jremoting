@@ -23,6 +23,7 @@ import java.io.InputStream;
 
 import org.codehaus.jremoting.server.StubRetrievalException;
 import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.server.Publisher;
 import org.codehaus.jremoting.util.StubHelper;
 
 /**
@@ -41,6 +42,10 @@ public class FromClassLoaderStubRetriever implements StubRetriever {
 
     public FromClassLoaderStubRetriever(ClassLoader classLoader) {
         this.classLoader = classLoader;
+    }
+
+
+    public void setPublisher(Publisher publisher) {
     }
 
     public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {

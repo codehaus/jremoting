@@ -58,7 +58,7 @@ public class ConnectingServer extends StatefulServer {
         super.start();
         pruner =  executorService.scheduleAtFixedRate(new Runnable() {
             public void run() {
-                invocationHandlerDelegate.pruneSessionsStaleForLongerThan(pruneStaleLongerThan);
+                invokerDelegate.pruneSessionsStaleForLongerThan(pruneStaleLongerThan);
             }
         }, pruneSessionInterval, pruneSessionInterval, TimeUnit.SECONDS);
     }

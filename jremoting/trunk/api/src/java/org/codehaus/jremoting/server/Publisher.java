@@ -77,6 +77,10 @@ public interface Publisher {
      */
     MethodInvoker getMethodInvoker(InvokeMethod invokeMethod, String objectName);
 
+
+    Class getFacadeClass(String publishedThing);
+
+
     /**
      * Get the MethodInvoker for a published lookup name. Used in special adapters.
      *
@@ -84,4 +88,12 @@ public interface Publisher {
      * @return a suitable MethodInvoker
      */
     MethodInvoker getMethodInvoker(String service);
+
+    /**
+     * Is a service published
+     * @param service the service
+     * @return it is or not
+     */
+    boolean isPublished(String service);
+
 }

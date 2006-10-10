@@ -19,6 +19,7 @@ package org.codehaus.jremoting.server.stubretrievers;
 
 import org.codehaus.jremoting.server.StubRetrievalException;
 import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.server.Publisher;
 
 /**
  * Class RefusingStubRetriever
@@ -30,5 +31,8 @@ public class RefusingStubRetriever implements StubRetriever {
 
     public byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
         throw new StubRetrievalException("This JRemoting server does not support class forwarding");
+    }
+
+    public void setPublisher(Publisher publisher) {
     }
 }

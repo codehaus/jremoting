@@ -22,8 +22,8 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.WeakHashMap;
+import java.util.Map;
 
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.Response;
@@ -52,17 +52,17 @@ public class DefaultMethodInvoker implements MethodInvoker {
     /**
      * Beans for references
      */
-    private WeakHashMap refBeans = new WeakHashMap();
+    private WeakHashMap<Long, WeakReference<Object>> refBeans = new WeakHashMap<Long, WeakReference<Object>>();
 
     /**
      * References for beans.
      */
-    private WeakHashMap beanRefs = new WeakHashMap();
+    private WeakHashMap<Object, Long> beanRefs = new WeakHashMap<Object, Long>();
 
     /**
      * Method map
      */
-    private HashMap methodMap;
+    private Map<String, Method> methodMap;
 
     /**
      * Next reference
@@ -88,6 +88,7 @@ public class DefaultMethodInvoker implements MethodInvoker {
      * The publication description.
      */
     private final PublicationDescription publicationDescription;
+    private final Class facadeClass;
     private MethodInvocationMonitor methodInvocationMonitor = new NullMethodInvocationMonitor();
 
     /**
@@ -98,13 +99,16 @@ public class DefaultMethodInvoker implements MethodInvoker {
      * @param methodMap              The method map
      * @param publicationDescription The publication description
      */
-    public DefaultMethodInvoker(Publisher publisher, String publishedThing, HashMap methodMap, PublicationDescription publicationDescription) {
+    public DefaultMethodInvoker(Publisher publisher, String publishedThing, Map<String, Method> methodMap,
+                                PublicationDescription publicationDescription, Class facadeClass) {
 
         this.publisher = publisher;
         this.publishedThing = publishedThing;
         this.methodMap = methodMap;
         this.publicationDescription = publicationDescription;
+        this.facadeClass = facadeClass;
     }
+
 
     /**
      * Method toString
@@ -139,7 +143,7 @@ public class DefaultMethodInvoker implements MethodInvoker {
      */
     public void replaceImplementationBean(Object implBean, Object withImplBean) {
 
-        Long ref = (Long) beanRefs.get(implBean);
+        Long ref = beanRefs.get(implBean);
 
         refBeans.put(ref, new WeakReference(withImplBean));
         beanRefs.remove(implBean);
@@ -158,7 +162,7 @@ public class DefaultMethodInvoker implements MethodInvoker {
      */
     public Long getOrMakeReferenceIDForBean(Object implBean) {
 
-        Long ref = (Long) beanRefs.get(implBean);
+        Long ref = beanRefs.get(implBean);
 
         if (ref == null) {
             ref = getNewReference();
@@ -184,12 +188,12 @@ public class DefaultMethodInvoker implements MethodInvoker {
             return new InvocationExceptionThrown("Method '" + methodSignature + "' not present in impl");
         }
 
-        Method method = (Method) methodMap.get(methodSignature);
+        Method method = methodMap.get(methodSignature);
 
         Object beanImpl = null;
 
         try {
-            WeakReference wr = (WeakReference) refBeans.get(request.getReferenceID());
+            WeakReference wr = refBeans.get(request.getReferenceID());
 
             if (wr == null) {
                 methodInvocationMonitor.invalidReference(methodSignature, connectionDetails);
@@ -240,7 +244,7 @@ public class DefaultMethodInvoker implements MethodInvoker {
                 FacadeRefHolder frh = (FacadeRefHolder) args[i];
                 // use abstraction ?
                 DefaultMethodInvoker methodInvoker = (DefaultMethodInvoker) publisher.getMethodInvoker(frh.getObjectName());
-                WeakReference wr = (WeakReference) methodInvoker.refBeans.get(frh.getReferenceID());
+                WeakReference wr = methodInvoker.refBeans.get(frh.getReferenceID());
 
                 args[i] = wr.get();
             }
@@ -256,6 +260,11 @@ public class DefaultMethodInvoker implements MethodInvoker {
     public Class getMostDerivedType(Object beanImpl) {
         return publicationDescription.getMostDerivedType(beanImpl);
     }
+
+    public Class getFacadeClass() {
+        return facadeClass;
+    }
+
 
     /**
      * Encode a class name

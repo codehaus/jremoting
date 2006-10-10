@@ -73,4 +73,8 @@ public interface MethodInvoker {
 
 
     String[] getListOfMethods();
+
+
+    Class getFacadeClass();
+
 }

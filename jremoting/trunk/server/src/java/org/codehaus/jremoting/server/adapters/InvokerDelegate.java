@@ -84,6 +84,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
     public InvokerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
                                     ServerSideContextFactory contextFactory) {
         this.stubRetriever = stubRetriever;
+        stubRetriever.setPublisher(this);
         this.authenticator = authenticator;
         this.serverMonitor = serverMonitor != null ? serverMonitor : new ConsoleServerMonitor();
         this.contextFactory = contextFactory != null ? contextFactory : new DefaultServerSideContextFactory();

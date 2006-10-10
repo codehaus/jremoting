@@ -29,6 +29,7 @@ import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.StubRetrievalException;
 import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.server.Publisher;
 import org.codehaus.jremoting.util.StubHelper;
 
 
@@ -42,12 +43,15 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     private String classpath;
     private String classGenDir = ".";
     private Class generatorClass;
+    private Publisher publisher;
+    private final ClassLoader classLoader;
 
     /**
      * @param classLoader        the classloader in which the proxy generater will be found.
      * @param generatorClassName the name of the proxy gen class
      */
     public DynamicStubRetriever(ClassLoader classLoader, String generatorClassName) {
+        this.classLoader = classLoader;
         try {
             generatorClass = classLoader.loadClass(generatorClassName);
         } catch (ClassNotFoundException e) {
@@ -95,7 +99,22 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
      * @throws StubRetrievalException if the class cannot be retrieved.
      */
     public final byte[] getStubClassBytes(String service) throws StubRetrievalException {
-        return getThingBytes(StubHelper.formatStubClassName(service));
+        String name = StubHelper.formatStubClassName(service);
+        try {
+            return getThingBytes(name);
+        } catch (StubRetrievalException e) {
+            Class facadeClass = publisher.getFacadeClass(name);
+            try {
+                generate(service, facadeClass, classLoader);
+                return getThingBytes(name);
+            } catch (PublicationException e1) {
+                throw new StubRetrievalException("unable to dynamically create stub: "+ e.getMessage());
+            }
+        }
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
     /**
@@ -118,10 +137,10 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
             throw new StubRetrievalException("Generated class not found in classloader specified : '" + e.getMessage() + "', current directory is '" + new File(".").getAbsolutePath() + "'");
         }
 
-        if (fis == null) {
-            throw new StubRetrievalException("Generated class not found in classloader specified.");
-        }
+        return getBytes(fis);
+    }
 
+    private byte[] getBytes(FileInputStream fis) throws StubRetrievalException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int i = 0;
 
@@ -135,7 +154,6 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
 
             throw new StubRetrievalException("Error retrieving generated class bytes : " + e.getMessage());
         }
-
         return baos.toByteArray();
     }
 
