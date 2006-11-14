@@ -15,22 +15,19 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests.classretrievers;
 
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import java.util.HashMap;
 
-/**
- * Test Non Proxy for comparison sake
- *
- * @author Paul Hammant
- */
-public class NonProxyTestCase extends AbstractHelloTestCase {
+public class TestImpl implements TestInterface {
+    HashMap map = new HashMap();
 
-    protected void setUp() throws Exception {
-
-        testServer = new TestInterfaceImpl();
-        testClient = testServer;
-
+    public Object getStoredState(String key) {
+        return map.get(key);
     }
 
+
+    public void method0() {
+        map.put("method0", "called");
+    }
 }

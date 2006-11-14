@@ -28,10 +28,10 @@ import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
 import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
 import org.codehaus.jremoting.server.transports.ServerObjectStreamDriverFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.test.TestInterface;
-import org.codehaus.jremoting.test.TestInterface2;
-import org.codehaus.jremoting.test.TestInterface3;
-import org.codehaus.jremoting.test.TestInterfaceImpl;
+import org.codehaus.jremoting.itests.TestInterface;
+import org.codehaus.jremoting.itests.TestInterface2;
+import org.codehaus.jremoting.itests.TestInterface3;
+import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.tools.generator.BcelStubGenerator;
 
 import java.io.PipedInputStream;

@@ -15,14 +15,17 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests.rmi;
 
-import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.transports.direct.DirectClientInvoker;
+import junit.framework.TestCase;
+import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
+import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
+import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
+import org.codehaus.jremoting.server.transports.rmi.RmiServer;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
@@ -30,46 +33,49 @@ import org.codehaus.jremoting.itests.TestInterfaceImpl;
 
 
 /**
- * Test Direct Marshalled Transport
+ * Test RMI transport
+ * <p/>
+ * This test only contains a single tesXXX() method because of
+ * http://developer.java.sun.com/developer/bugParade/bugs/4267864.html
  *
  * @author Paul Hammant
  */
-public class DirectMarshalledTestCase extends AbstractHelloTestCase {
+public class RmiTestCase extends TestCase {
+
+    private ConnectingServer server;
+    private TestInterfaceImpl testServer;
+    private TestInterface testClient;
 
     protected void setUp() throws Exception {
 
         // server side setup.
-        server = new DirectMarshalledServer(new ConsoleServerMonitor());
+        server = new RmiServer(new ConsoleServerMonitor(), 10003);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        factory = new ClientSideStubFactory(new DirectClientInvoker(new ConsoleClientMonitor(), (DirectMarshalledServer) server));
-
-        testClient = (TestInterface) factory.lookupService("Hello");
-
-    }
-
-    public void testHello2Call() throws Exception {
-        super.testHello2Call();
-    }
+        Factory af = new ClientSideStubFactory(new RmiClientInvoker(new ConsoleClientMonitor(), "127.0.0.1", 10003));
+        testClient = (TestInterface) af.lookupService("Hello");
 
 
-    public void testBytes() throws Exception {
-        super.testBytes(); 
     }
 
     protected void tearDown() throws Exception {
-        testClient = null;
-        System.gc();
-
-        factory.close();
-
         server.stop();
 
+        server = null;
+        testServer = null;
+        super.tearDown();
     }
 
+    public void testSpeed() throws Exception {
+
+        for (int i = 1; i < 10000; i++) {
+            testClient.testSpeed();
+        }
+
+    }
 
 }

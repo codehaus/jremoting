@@ -15,22 +15,13 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
 
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+
+package org.codehaus.jremoting.itests.clientcontext;
 
 /**
- * Test Non Proxy for comparison sake
- *
- * @author Paul Hammant
+ * @author Paul Hammant and Rune Johanessen (pairing for part)
+ * @version $Revision: 1.2 $
  */
-public class NonProxyTestCase extends AbstractHelloTestCase {
-
-    protected void setUp() throws Exception {
-
-        testServer = new TestInterfaceImpl();
-        testClient = testServer;
-
-    }
-
+public class CreditBarfed extends Exception {
 }

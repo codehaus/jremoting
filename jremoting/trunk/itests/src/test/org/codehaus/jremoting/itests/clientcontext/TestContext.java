@@ -15,22 +15,34 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests.clientcontext;
 
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.client.Context;
+
 
 /**
- * Test Non Proxy for comparison sake
- *
- * @author Paul Hammant
+ * @author Paul Hammant and Rune Johanessen (pairing for part)
+ * @version $Revision: 1.2 $
  */
-public class NonProxyTestCase extends AbstractHelloTestCase {
 
-    protected void setUp() throws Exception {
+public class TestContext implements Context {
 
-        testServer = new TestInterfaceImpl();
-        testClient = testServer;
+    private String ctx;
 
+    public TestContext() {
+        ctx = "TestCCF:" + System.identityHashCode(Thread.currentThread());
+    }
+
+    public int hashCode() {
+        return ctx.hashCode();
+    }
+
+    public String toString() {
+        return ctx;
+    }
+
+    public boolean equals(Object obj) {
+        return ctx.equals(((TestContext) obj).ctx);
     }
 
 }

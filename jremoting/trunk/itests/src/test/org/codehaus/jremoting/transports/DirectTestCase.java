@@ -23,10 +23,10 @@ import org.codehaus.jremoting.client.transports.direct.DirectClientInvoker;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.transports.direct.DirectServer;
-import org.codehaus.jremoting.test.TestInterface;
-import org.codehaus.jremoting.test.TestInterface2;
-import org.codehaus.jremoting.test.TestInterface3;
-import org.codehaus.jremoting.test.TestInterfaceImpl;
+import org.codehaus.jremoting.itests.TestInterface;
+import org.codehaus.jremoting.itests.TestInterface2;
+import org.codehaus.jremoting.itests.TestInterface3;
+import org.codehaus.jremoting.itests.TestInterfaceImpl;
 
 
 /**

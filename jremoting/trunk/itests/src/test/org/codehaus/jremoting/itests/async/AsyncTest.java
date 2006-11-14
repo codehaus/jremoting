@@ -15,22 +15,29 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests.async;
 
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.annotations.AsynchronousCommitMethod;
+import org.codehaus.jremoting.annotations.AsynchronousFacade;
+import org.codehaus.jremoting.annotations.AsynchronousMethod;
+import org.codehaus.jremoting.annotations.AsynchronousRollbackMethod;
 
-/**
- * Test Non Proxy for comparison sake
- *
- * @author Paul Hammant
- */
-public class NonProxyTestCase extends AbstractHelloTestCase {
+@AsynchronousFacade
+public interface AsyncTest {
 
-    protected void setUp() throws Exception {
+    @AsynchronousMethod
+    void setOne(String one);
 
-        testServer = new TestInterfaceImpl();
-        testClient = testServer;
+    @AsynchronousMethod
+    void setTwo(String two);
 
-    }
+    @AsynchronousMethod
+    void setThree(String three);
+
+    @AsynchronousCommitMethod
+    void fire();
+
+    @AsynchronousRollbackMethod
+    void whoa();
 
 }

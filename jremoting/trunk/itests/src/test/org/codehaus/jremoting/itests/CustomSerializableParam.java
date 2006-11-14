@@ -15,22 +15,14 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests;
 
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import java.io.Serializable;
 
 /**
- * Test Non Proxy for comparison sake
- *
- * @author Paul Hammant
+ * Serializable class for testing
  */
-public class NonProxyTestCase extends AbstractHelloTestCase {
-
-    protected void setUp() throws Exception {
-
-        testServer = new TestInterfaceImpl();
-        testClient = testServer;
-
-    }
-
+public class CustomSerializableParam implements Serializable {
+    //a serializable attribute
+    public String name;
 }

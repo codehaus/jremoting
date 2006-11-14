@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.transports;
 
-import org.codehaus.jremoting.test.TestInterfaceImpl;
-import org.codehaus.jremoting.test.proxies.CodedProxyTestInterfaceProxy;
+import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.itests.proxies.CodedProxyTestInterfaceProxy;
 
 /**
  * Test Hand Coded Proxy for comparison sake

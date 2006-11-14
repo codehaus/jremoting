@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.transports;
 
-import org.codehaus.jremoting.test.TestInterface;
-import org.codehaus.jremoting.test.TestInterfaceImpl;
+import org.codehaus.jremoting.itests.TestInterface;
+import org.codehaus.jremoting.itests.TestInterfaceImpl;
 
 import java.lang.reflect.Proxy;
 import java.lang.reflect.InvocationHandler;

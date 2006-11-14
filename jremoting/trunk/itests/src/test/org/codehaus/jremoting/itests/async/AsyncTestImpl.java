@@ -15,22 +15,34 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests.async;
 
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+public class AsyncTestImpl implements AsyncTest {
 
-/**
- * Test Non Proxy for comparison sake
- *
- * @author Paul Hammant
- */
-public class NonProxyTestCase extends AbstractHelloTestCase {
+    public String one;
+    public String two;
+    public String three;
+    public boolean fired;
+    public boolean whoa;
 
-    protected void setUp() throws Exception {
+    public void setOne(String one) {
+        this.one = one;
+    }
 
-        testServer = new TestInterfaceImpl();
-        testClient = testServer;
+    public void setTwo(String two) {
+        this.two = two;
+    }
 
+    public void setThree(String three) {
+        this.three = three;
+    }
+
+    public void fire() {
+        fired = true;
+    }
+
+    public void whoa() {
+        whoa = true;
     }
 
 }

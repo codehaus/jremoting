@@ -22,12 +22,12 @@ import java.io.IOException;
 
 import junit.framework.Assert;
 
-import org.codehaus.jremoting.test.AbstractJRemotingTestCase;
-import org.codehaus.jremoting.test.CustomSerializableParam;
-import org.codehaus.jremoting.test.TestInterface2;
-import org.codehaus.jremoting.test.TestInterface3;
-import org.codehaus.jremoting.test.TestInterfaceImpl;
-import org.codehaus.jremoting.test.TstObject;
+import org.codehaus.jremoting.itests.AbstractJRemotingTestCase;
+import org.codehaus.jremoting.itests.CustomSerializableParam;
+import org.codehaus.jremoting.itests.TestInterface2;
+import org.codehaus.jremoting.itests.TestInterface3;
+import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.itests.TstObject;
 
 /**
  * Extended by classes that name the transport.

@@ -15,22 +15,48 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests;
 
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import java.util.Date;
 
 /**
- * Test Non Proxy for comparison sake
+ * Class TstInterface3Impl
  *
- * @author Paul Hammant
+ * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
+ * @version * $Revision: 1.2 $
  */
-public class NonProxyTestCase extends AbstractHelloTestCase {
+public class TstInterface3Impl extends TstInterface2Impl implements TestInterface3 {
 
-    protected void setUp() throws Exception {
+    private Date mDob;
 
-        testServer = new TestInterfaceImpl();
-        testClient = testServer;
+    /**
+     * Constructor TstInterface3Impl
+     *
+     * @param name
+     */
+    public TstInterface3Impl(Date dob, String name) {
+        super(name);
+
+        mDob = dob;
+    }
+
+    /**
+     * Method setDOB
+     *
+     * @param dob
+     */
+    public void setDOB(Date dob) {
+
+        mDob = dob;
 
     }
 
+    /**
+     * Method getDob
+     *
+     * @return
+     */
+    public Date getDOB() {
+        return mDob;
+    }
 }

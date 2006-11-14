@@ -15,21 +15,16 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests.async;
 
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.server.stubretrievers.DynamicStubRetriever;
+import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 
-/**
- * Test Non Proxy for comparison sake
- *
- * @author Paul Hammant
- */
-public class NonProxyTestCase extends AbstractHelloTestCase {
 
-    protected void setUp() throws Exception {
+public class BcelSimpleAsyncTestCase extends AbstractSimpleAsyncTestCase {
 
-        testServer = new TestInterfaceImpl();
-        testClient = testServer;
+    protected DynamicStubRetriever getAbstractDynamicGeneratorClassRetriever(ClassLoader cl) {
+        return new BcelDynamicStubRetriever(cl);
 
     }
 
