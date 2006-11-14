@@ -15,29 +15,38 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
+import org.codehaus.jremoting.client.transports.piped.PipedClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
+import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
+import org.codehaus.jremoting.server.transports.ServerObjectStreamDriverFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.tools.generator.BcelStubGenerator;
 
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.util.concurrent.Executors;
 
 /**
- * Test Object Stream over sockets.
+ * Test Piped Trasnport (Object Stream)
  *
  * @author Paul Hammant
  */
-public class ObjectStreamTestCase extends AbstractHelloTestCase {
+public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
 
-    public ObjectStreamTestCase() {
+
+    public PipedObjectStreamTestCase() {
 
         // See http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
         // This bug prevents ObjectStream from functioning correctly when used
@@ -51,29 +60,39 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
     protected void setUp() throws Exception {
 
         // server side setup.
-        server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 10002, SelfContainedSocketStreamServer.OBJECTSTREAM);
-
+        server = new PipedStreamServer(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(),
+                Executors.newScheduledThreadPool(10) ,new DefaultServerSideContextFactory(), new ServerObjectStreamDriverFactory());
         testServer = new TestInterfaceImpl();
-
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
-        server.publish(testServer, "Hello", pd);
 
+
+        BcelStubGenerator generator = new BcelStubGenerator();
+        String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
+        generator.setClassGenDir(testClassesDir);
+        generator.setPrimaryFacades(pd.getPrimaryFacades());
+        generator.setAdditionalFacades(pd.getAdditionalFacades());
+        generator.setGenName("Hello33");
+        generator.generateClass(this.getClass().getClassLoader());
+
+
+        server.publish(testServer, "Hello33", pd);
         server.start();
 
-        // Client side setup
-        factory = new ClientSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
-                new ClientObjectStreamDriverFactory(),
-                "127.0.0.1", 10002));
-        testClient = (TestInterface) factory.lookupService("Hello");
+        // For piped, server and client can see each other
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out = new PipedOutputStream();
+        ((PipedStreamServer) server).makeNewConnection(in, out);
 
+        // Client side setup
+        factory = new ClientSideStubFactory(new PipedClientStreamInvoker(new ConsoleClientMonitor(),
+                new ClientObjectStreamDriverFactory(), in, out));
+        testClient = (TestInterface) factory.lookupService("Hello33");
 
     }
-
 
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-        Thread.sleep(300);
         factory.close();
         server.stop();
     }

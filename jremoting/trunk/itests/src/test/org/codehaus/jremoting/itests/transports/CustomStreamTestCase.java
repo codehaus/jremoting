@@ -15,14 +15,16 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests.transports;
+
 
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.factories.NullContextFactory;
-import org.codehaus.jremoting.client.transports.direct.DirectClientInvoker;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
+import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.transports.direct.DirectServer;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
@@ -30,34 +32,33 @@ import org.codehaus.jremoting.itests.TestInterfaceImpl;
 
 
 /**
- * Test Direct Transport
+ * Test Custom Stream over sockets.
  *
  * @author Paul Hammant
  */
-public class DirectTestCase extends AbstractHelloTestCase {
+public class CustomStreamTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
 
         // server side setup.
-        server = new DirectServer();
+        server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 10333);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        factory = new ClientSideStubFactory(new DirectClientInvoker(new ConsoleClientMonitor(), server), this.getClass().getClassLoader(), new NullContextFactory());
+        factory = new ClientSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+                new ClientCustomStreamDriverFactory(), "localhost", 10333));
         testClient = (TestInterface) factory.lookupService("Hello");
 
     }
 
-    public void testHelloCall() throws Exception {
-        super.testHelloCall();  
-    }
 
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
+        Thread.sleep(300);
         factory.close();
         server.stop();
     }

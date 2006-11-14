@@ -15,66 +15,51 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.transports.piped.PipedClientStreamInvoker;
-import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
+import org.codehaus.jremoting.client.factories.NullContextFactory;
+import org.codehaus.jremoting.client.transports.direct.DirectClientInvoker;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
-import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
-import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.transports.direct.DirectServer;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
 
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.util.concurrent.Executors;
 
 /**
- * Test Piped Trasnport (Custom Stream)
+ * Test Direct Transport
  *
  * @author Paul Hammant
  */
-public class PipedCustomStreamTestCase extends AbstractHelloTestCase {
-
+public class DirectTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
 
         // server side setup.
-        server = new PipedStreamServer(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(),
-                Executors.newScheduledThreadPool(10) ,new DefaultServerSideContextFactory(), new ServerCustomStreamDriverFactory());
+        server = new DirectServer();
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        // For piped, server and client can see each other
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out = new PipedOutputStream();
-        ((PipedStreamServer) server).makeNewConnection(in, out);
-
         // Client side setup
-        factory = new ClientSideStubFactory(new PipedClientStreamInvoker(new ConsoleClientMonitor(),
-                new ClientCustomStreamDriverFactory(), in, out));
+        factory = new ClientSideStubFactory(new DirectClientInvoker(new ConsoleClientMonitor(), server), this.getClass().getClassLoader(), new NullContextFactory());
         testClient = (TestInterface) factory.lookupService("Hello");
 
+    }
+
+    public void testHelloCall() throws Exception {
+        super.testHelloCall();  
     }
 
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-
         factory.close();
-
         server.stop();
-
     }
 
 

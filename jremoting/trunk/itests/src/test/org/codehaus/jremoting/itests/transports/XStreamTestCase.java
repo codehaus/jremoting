@@ -1,4 +1,4 @@
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests.transports;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;

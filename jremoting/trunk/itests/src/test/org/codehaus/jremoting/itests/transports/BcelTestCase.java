@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.transports;
+package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
