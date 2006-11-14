@@ -21,14 +21,15 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Vector;
 
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.server.MethodInvoker;
+import org.codehaus.jremoting.server.ServiceHandler;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Publisher;
-import org.codehaus.jremoting.server.transports.DefaultMethodInvoker;
+import org.codehaus.jremoting.server.transports.DefaultServiceHandler;
 import org.codehaus.jremoting.util.StubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
@@ -37,12 +38,19 @@ import org.codehaus.jremoting.util.MethodNameHelper;
  *
  * @author Paul Hammant
  */
-public class PublicationAdapter implements Publisher {
+public class PublicationAdapter implements ServiceHandlerAccessor {
+
+    private final Publisher publicationDelegate;
 
     /**
      * A map of published objects.
      */
-    private Map<String, MethodInvoker> services = new HashMap<String, MethodInvoker>();
+    private Map<String, ServiceHandler> services = new HashMap<String, ServiceHandler>();
+
+
+    public PublicationAdapter(Publisher delegate) {
+        this.publicationDelegate = delegate;
+    }
 
     /**
      * Is the service published
@@ -59,8 +67,23 @@ public class PublicationAdapter implements Publisher {
      *
      * @return The iterator
      */
-    public Iterator<String> getIteratorOfServices() {
-        return services.keySet().iterator();
+    public String[] getPublishedServices() {
+        Iterator iterator = services.keySet().iterator();
+        Vector<String> vecOfServices = new Vector<String>();
+
+        while (iterator.hasNext()) {
+            final String item = (String) iterator.next();
+
+            if (StubHelper.isService(item)) {
+                vecOfServices.add(StubHelper.getServiceName(item));
+            }
+        }
+
+        String[] listOfServices = new String[vecOfServices.size()];
+
+        System.arraycopy(vecOfServices.toArray(), 0, listOfServices, 0, vecOfServices.size());
+        return listOfServices;
+
     }
 
     /**
@@ -74,6 +97,9 @@ public class PublicationAdapter implements Publisher {
      */
     public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
         publish(impl, service, new PublicationDescription(primaryFacade));
+        if (publicationDelegate != null) {
+            publicationDelegate.publish(impl, service, primaryFacade);
+        }
     }
 
     /**
@@ -101,9 +127,9 @@ public class PublicationAdapter implements Publisher {
 
         // add method maps for main lookup-able service.
         Map<String, Method> mainMethodMap = new HashMap<String, Method>();
-        DefaultMethodInvoker mainMethodInvoker = new DefaultMethodInvoker(this, service + "_Main", mainMethodMap, publicationDescription, primaryFacades[0].getFacadeClass());
+        DefaultServiceHandler mainServiceHandler = new DefaultServiceHandler(this, service + "_Main", mainMethodMap, publicationDescription, primaryFacades[0].getFacadeClass());
 
-        mainMethodInvoker.addImplementationBean(new Long(0), impl);
+        mainServiceHandler.addInstance(new Long(0), impl);
 
         for (PublicationDescriptionItem primaryFacade : primaryFacades) {
             Class clazz = primaryFacade.getFacadeClass();
@@ -133,14 +159,14 @@ public class PublicationAdapter implements Publisher {
         }
 
         // as the main service is lookup-able, it has a prexisting impl.
-        services.put(StubHelper.formatServiceName(service), mainMethodInvoker);
+        services.put(StubHelper.formatServiceName(service), mainServiceHandler);
 
         // add method maps for all the additional facades.
         for (PublicationDescriptionItem additionalFacade : additionalFacades) {
             Class facadeClass = additionalFacade.getFacadeClass();
             String encodedClassName = MethodNameHelper.encodeClassName(additionalFacade.getFacadeClass().getName());
             HashMap<String, Method> methodMap = new HashMap<String, Method>();
-            MethodInvoker methodInvoker = new DefaultMethodInvoker(this, service + "_" + encodedClassName, 
+            ServiceHandler serviceHandler = new DefaultServiceHandler(this, service + "_" + encodedClassName,
                     methodMap, publicationDescription, facadeClass);
 
             Method methods[] = null;
@@ -167,8 +193,13 @@ public class PublicationAdapter implements Publisher {
                 }
             }
 
-            services.put(service + "_" + encodedClassName, methodInvoker);
+            services.put(service + "_" + encodedClassName, serviceHandler);
         }
+
+        if (publicationDelegate != null) {
+            publicationDelegate.publish(impl, service, publicationDescription);
+        }
+
     }
 
     /**
@@ -185,6 +216,9 @@ public class PublicationAdapter implements Publisher {
             throw new PublicationException("Service '" + service + "' not published");
         }
         services.remove(serviceName);
+        if (publicationDelegate != null) {
+            publicationDelegate.unPublish(impl, service);
+        }
     }
 
     /**
@@ -202,24 +236,23 @@ public class PublicationAdapter implements Publisher {
             throw new PublicationException("Service '" + service + "' not published");
         }
 
-        MethodInvoker asih = services.get(serviceName);
+        ServiceHandler serviceHandler = services.get(serviceName);
 
-        asih.replaceImplementationBean(oldImpl, withImpl);
+        serviceHandler.replaceInstance(oldImpl, withImpl);
+        if (publicationDelegate != null) {
+            publicationDelegate.replacePublished(oldImpl, service, withImpl);
+        }
     }
 
     /**
-     * Get a Server's  MethodInvoker
+     * Get a Server's  ServiceHandler
      *
      * @param invokeMethod The method Request.
      * @param objectName   The object name.
      * @return the method invoation handler
      */
-    public MethodInvoker getMethodInvoker(InvokeMethod invokeMethod, String objectName) {
+    public ServiceHandler getServiceHandler(InvokeMethod invokeMethod, String objectName) {
         return services.get(invokeMethod.getService() + "_" + objectName);
-    }
-
-    public Class getFacadeClass(String publishedThing) {
-        return services.get(publishedThing).getFacadeClass();
     }
 
     /**
@@ -228,7 +261,7 @@ public class PublicationAdapter implements Publisher {
      * @param service The name of a published object
      * @return the method invoation handler
      */
-    public MethodInvoker getMethodInvoker(String service) {
+    public ServiceHandler getServiceHandler(String service) {
         return services.get(service);
     }
 }

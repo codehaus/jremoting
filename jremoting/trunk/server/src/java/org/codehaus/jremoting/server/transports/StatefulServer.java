@@ -24,7 +24,7 @@ import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
-import org.codehaus.jremoting.server.MethodInvoker;
+import org.codehaus.jremoting.server.ServiceHandler;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Server;
@@ -150,11 +150,6 @@ public class StatefulServer implements Server {
         return invokerDelegate.isPublished(service);
     }
 
-
-    public Class getFacadeClass(String publishedThing) {
-        return invokerDelegate.getFacadeClass(publishedThing);  
-    }
-
     /**
      * Get the Method Invocation Handler for a particular request.
      *
@@ -162,18 +157,18 @@ public class StatefulServer implements Server {
      * @param objectName   The object Name.
      * @return The Method invocation handler
      */
-    public MethodInvoker getMethodInvoker(InvokeMethod invokeMethod, String objectName) {
-        return invokerDelegate.getMethodInvoker(invokeMethod, objectName);
+    public ServiceHandler getServiceHandler(InvokeMethod invokeMethod, String objectName) {
+        return invokerDelegate.getServiceHandler(invokeMethod, objectName);
     }
 
     /**
-     * Get the MethodInvoker for a particular published name.
+     * Get the ServiceHandler for a particular published name.
      *
      * @param service The published name.
      * @return The Method invocation handler
      */
-    public MethodInvoker getMethodInvoker(String service) {
-        return invokerDelegate.getMethodInvoker(service);
+    public ServiceHandler getServiceHandler(String service) {
+        return invokerDelegate.getServiceHandler(service);
     }
 
     /**

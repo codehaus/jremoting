@@ -38,5 +38,4 @@ public interface StubRetriever {
      */
     byte[] getStubClassBytes(String publishedName) throws StubRetrievalException;
 
-    void setPublisher(Publisher publisher);
 }

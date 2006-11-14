@@ -33,6 +33,4 @@ public class RefusingStubRetriever implements StubRetriever {
         throw new StubRetrievalException("This JRemoting server does not support class forwarding");
     }
 
-    public void setPublisher(Publisher publisher) {
-    }
 }

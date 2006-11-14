@@ -77,8 +77,8 @@ public final class DefaultStubHelper implements StubHelper {
 
     }
 
-    public void registerImplObject(Object implBean) {
-        stubRegistry.registerReferenceObject(implBean, referenceID);
+    public void registerInstance(Object instance) {
+        stubRegistry.registerReferenceObject(instance, referenceID);
     }
 
     public Object processObjectRequestGettingFacade(Class returnClassType, String methodSignature, Object[] args, String objectName) throws Throwable {
@@ -114,19 +114,19 @@ public final class DefaultStubHelper implements StubHelper {
         FacadeArrayMethodInvoked mfar = (FacadeArrayMethodInvoked) response;
         Long[] refs = mfar.getReferenceIDs();
         String[] objectNames = mfar.getObjectNames();
-        Object[] implBeans = (Object[]) Array.newInstance(returnClassType, refs.length);
+        Object[] instances = (Object[]) Array.newInstance(returnClassType, refs.length);
 
         for (int i = 0; i < refs.length; i++) {
             Long ref = refs[i];
 
             if (ref == null) {
-                implBeans[i] = null;
+                instances[i] = null;
             } else {
-                Object o = stubRegistry.getImplObj(ref);
+                Object o = stubRegistry.getInstance(ref);
 
-                implBeans[i] = o;
+                instances[i] = o;
 
-                if (implBeans[i] == null) {
+                if (instances[i] == null) {
                     DefaultStubHelper bo2 = new DefaultStubHelper(stubRegistry, clientInvoker,
                             contextFactory, publishedServiceName, objectNames[i], refs[i], session);
                     Object retFacade = null;
@@ -139,14 +139,14 @@ public final class DefaultStubHelper implements StubHelper {
                         e.printStackTrace();
                     }
 
-                    bo2.registerImplObject(retFacade);
+                    bo2.registerInstance(retFacade);
 
-                    implBeans[i] = retFacade;
+                    instances[i] = retFacade;
                 }
             }
         }
 
-        return implBeans;
+        return instances;
     }
 
     private Object facadeMethodInvoked(Response response) throws ConnectionException {
@@ -158,18 +158,18 @@ public final class DefaultStubHelper implements StubHelper {
             return null;
         }
 
-        Object implBean = stubRegistry.getImplObj(ref);
+        Object instance = stubRegistry.getInstance(ref);
 
-        if (implBean == null) {
+        if (instance == null) {
             DefaultStubHelper pHelper = new DefaultStubHelper(stubRegistry, clientInvoker,
                     contextFactory, publishedServiceName, mfr.getObjectName(), ref, session);
             Object retFacade = stubRegistry.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
 
-            pHelper.registerImplObject(retFacade);
+            pHelper.registerInstance(retFacade);
 
             return retFacade;
         } else {
-            return implBean;
+            return instance;
         }
     }
 

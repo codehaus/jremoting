@@ -51,9 +51,9 @@ public final class StubClass extends Response {
     }
 
     /**
-     * Get bean implementation byte array
+     * Get stub class byte array
      *
-     * @return a byte array of the serialized bean class
+     * @return a byte array of the serialized stub class
      */
     public byte[] getStubClassBytes() {
         return proxyClassBytes;

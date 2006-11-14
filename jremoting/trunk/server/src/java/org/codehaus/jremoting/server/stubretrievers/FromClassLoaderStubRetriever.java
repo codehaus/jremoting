@@ -44,10 +44,6 @@ public class FromClassLoaderStubRetriever implements StubRetriever {
         this.classLoader = classLoader;
     }
 
-
-    public void setPublisher(Publisher publisher) {
-    }
-
     public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
         String thingName = StubHelper.formatStubClassName(publishedName);
 

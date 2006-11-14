@@ -69,27 +69,6 @@ public interface Publisher {
     void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException;
 
     /**
-     * Get the MethodInvoker for this transport.  Used in special adapters.
-     *
-     * @param invokeMethod used as a hint for getting the right handler.
-     * @param objectName    the object name relating to the method request.
-     * @return a suitable MethodInvoker
-     */
-    MethodInvoker getMethodInvoker(InvokeMethod invokeMethod, String objectName);
-
-
-    Class getFacadeClass(String publishedThing);
-
-
-    /**
-     * Get the MethodInvoker for a published lookup name. Used in special adapters.
-     *
-     * @param service the published lookup name.
-     * @return a suitable MethodInvoker
-     */
-    MethodInvoker getMethodInvoker(String service);
-
-    /**
      * Is a service published
      * @param service the service
      * @return it is or not

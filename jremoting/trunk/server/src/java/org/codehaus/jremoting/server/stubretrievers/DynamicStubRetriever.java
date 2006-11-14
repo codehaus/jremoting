@@ -21,16 +21,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.*;
 
-import org.codehaus.jremoting.server.DynamicStubGenerator;
-import org.codehaus.jremoting.server.StubGenerator;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.PublicationDescriptionItem;
-import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.StubRetrievalException;
-import org.codehaus.jremoting.server.StubRetriever;
-import org.codehaus.jremoting.server.Publisher;
+import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.util.StubHelper;
+import org.codehaus.jremoting.requests.InvokeMethod;
 
 
 /**
@@ -38,13 +33,13 @@ import org.codehaus.jremoting.util.StubHelper;
  *
  * @author Paul Hammant
  */
-public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever {
+public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever, Publisher {
 
     private String classpath;
     private String classGenDir = ".";
-    private Class generatorClass;
-    private Publisher publisher;
+    private Class<?> generatorClass;
     private final ClassLoader classLoader;
+    private Map facadeClasses = new HashMap();
 
     /**
      * @param classLoader        the classloader in which the proxy generater will be found.
@@ -103,7 +98,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         try {
             return getThingBytes(name);
         } catch (StubRetrievalException e) {
-            Class facadeClass = publisher.getFacadeClass(name);
+            Class facadeClass = (Class) facadeClasses.get(name);
             try {
                 generate(service, facadeClass, classLoader);
                 return getThingBytes(name);
@@ -111,10 +106,6 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
                 throw new StubRetrievalException("unable to dynamically create stub: "+ e.getMessage());
             }
         }
-    }
-
-    public void setPublisher(Publisher publisher) {
-        this.publisher = publisher;
     }
 
     /**
@@ -208,5 +199,37 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
             System.err.println("******");
             System.err.flush();
         }
+    }
+
+    public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
+        facadeClasses.put(service, primaryFacade);
+    }
+
+    public void publish(Object impl, String service, PublicationDescription publicationDescription) throws PublicationException {
+        facadeClasses.put(service, publicationDescription.getPrimaryFacades()[0]);
+        PublicationDescriptionItem[] additionalFacades = publicationDescription.getAdditionalFacades();
+        for (int i = 0; i < additionalFacades.length; i++) {
+            PublicationDescriptionItem additionalFacade = additionalFacades[i];
+            facadeClasses.put(service + "_" + additionalFacade.getFacadeClass().getName(), additionalFacade.getFacadeClass());
+        }
+    }
+
+    public void unPublish(Object impl, String service) throws PublicationException {
+        facadeClasses.remove(service);
+        Set facades = facadeClasses.keySet();
+        for (Iterator iterator = facades.iterator(); iterator.hasNext();) {
+            String aService = (String) iterator.next();
+            if (aService.startsWith(service)) {
+                facadeClasses.remove(aService);
+            }
+
+        }
+    }
+
+    public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
+    }
+
+    public boolean isPublished(String service) {
+        return facadeClasses.containsKey(service);
     }
 }

@@ -75,13 +75,13 @@ public abstract class AbstractFactory implements Factory {
 
         stubRegistry = new StubRegistry() {
 
-            public void registerReferenceObject(Object implBean, Long referenceID) {
+            public void registerReferenceObject(Object instance, Long referenceID) {
                 synchronized (this) {
-                    refObjs.put(referenceID, new WeakReference<Object>(implBean));
+                    refObjs.put(referenceID, new WeakReference<Object>(instance));
                 }
             }
 
-            public Object getImplObj(Long referenceID) {
+            public Object getInstance(Long referenceID) {
                 WeakReference<Object> wr;
                 synchronized (this) {
                     wr = refObjs.get(referenceID);
@@ -153,7 +153,7 @@ public abstract class AbstractFactory implements Factory {
                 contextFactory, publishedServiceName, "Main", lr.getReferenceID(), sessionID);
         Object retVal = getInstance(publishedServiceName, "Main", baseObj);
 
-        baseObj.registerImplObject(retVal);
+        baseObj.registerInstance(retVal);
 
         return retVal;
     }

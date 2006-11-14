@@ -41,10 +41,6 @@ public class DynamicStub implements Proxy {
      */
     private StubHelper stubHelper;
 
-    //-------Constructor--------------//
-    /**
-     * Constructor
-     */
     public DynamicStub(String publishedName, String objectName, StubHelper stubHelper) {
         this.service = publishedName;
         this.objectName = objectName;

@@ -21,12 +21,12 @@ import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.Response;
 
 /**
- * Class MethodInvoker
+ * Class ServiceHandler
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public interface MethodInvoker {
+public interface ServiceHandler {
 
     /**
      * Handle a method invocation.
@@ -37,36 +37,36 @@ public interface MethodInvoker {
     Response handleMethodInvocation(InvokeMethod request, Object connectionDetails);
 
     /**
-     * Add an implementation bean
+     * Add an instance by reference ID
      *
-     * @param referenceID the ref id for the bean.
-     * @param beanImpl    the bean.
+     * @param referenceID the ref id for the instance.
+     * @param instance    the instance.
      */
-    void addImplementationBean(Long referenceID, Object beanImpl);
+    void addInstance(Long referenceID, Object instance);
 
     /**
-     * Replace an implementation bean
+     * Replace an instance
      *
-     * @param implBean     the implementation bean
-     * @param withImplBean the new implementation bean
+     * @param instance     the instance
+     * @param withInstance the new instance
      */
-    void replaceImplementationBean(Object implBean, Object withImplBean);
+    void replaceInstance(Object instance, Object withInstance);
 
     /**
-     * Get or make a reference ID for a bean.
+     * Get or make a reference ID for an instance.
      *
-     * @param implBean the implementation bean
+     * @param instance the instance
      * @return the reference ID
      */
-    Long getOrMakeReferenceIDForBean(Object implBean);
+    Long getOrMakeReferenceIDForInstance(Object instance);
 
     /**
-     * Get the most derived type for a bean
+     * Get the most derived type for an instance
      *
-     * @param beanImpl the implementation bean
+     * @param instance the instance
      * @return the most derived class type.
      */
-    Class getMostDerivedType(Object beanImpl);
+    Class getMostDerivedType(Object instance);
 
 
     void setMethodInvocationMonitor(MethodInvocationMonitor monitor);
@@ -76,5 +76,8 @@ public interface MethodInvoker {
 
 
     Class getFacadeClass();
+
+    Object getInstanceForReference(Long referenceID);
+
 
 }

@@ -29,7 +29,7 @@ public class Session {
 
     private Long session;
 
-    private HashMap<Long, Object> beansInUse = new HashMap<Long, Object>();
+    private HashMap<Long, Object> instancesInUse = new HashMap<Long, Object>();
     private long lastTouched;
 
     public Session(Long session) {
@@ -40,12 +40,12 @@ public class Session {
         return session;
     }
 
-    public void addBeanInUse(Long referenceID, Object bean) {
-        beansInUse.put(referenceID, bean);
+    public void addInstanceInUse(Long referenceID, Object instance) {
+        instancesInUse.put(referenceID, instance);
     }
 
-    public void removeBeanInUse(Long referenceID) {
-        beansInUse.remove(referenceID);
+    public void removeInstanceInUse(Long referenceID) {
+        instancesInUse.remove(referenceID);
     }
 
     public void refresh() {

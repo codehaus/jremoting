@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.MessageFormat;
 import java.util.WeakHashMap;
 import java.util.Map;
 
@@ -31,33 +30,31 @@ import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.responses.InvocationExceptionThrown;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.MethodInvoked;
-import org.codehaus.jremoting.server.MethodInvoker;
+import org.codehaus.jremoting.server.ServiceHandler;
 import org.codehaus.jremoting.server.MethodInvocationMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.Publisher;
+import org.codehaus.jremoting.server.adapters.ServiceHandlerAccessor;
 import org.codehaus.jremoting.server.monitors.NullMethodInvocationMonitor;
 import org.codehaus.jremoting.util.FacadeRefHolder;
 
 /**
- * Class DefaultMethodInvoker
+ * Class DefaultServiceHandler
  *
  * @author Paul Hammant
  * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
  * @version $Revision: 1.2 $
  */
-public class DefaultMethodInvoker implements MethodInvoker {
-
-    private MessageFormat messageFormat = new MessageFormat("");
+public class DefaultServiceHandler implements ServiceHandler {
 
     /**
-     * Beans for references
+     * Instances for references
      */
-    private WeakHashMap<Long, WeakReference<Object>> refBeans = new WeakHashMap<Long, WeakReference<Object>>();
+    private WeakHashMap<Long, WeakReference<Object>> instancesByRefID = new WeakHashMap<Long, WeakReference<Object>>();
 
     /**
-     * References for beans.
+     * References for instances.
      */
-    private WeakHashMap<Object, Long> beanRefs = new WeakHashMap<Object, Long>();
+    private WeakHashMap<Object, Long> ReferencesForInstances = new WeakHashMap<Object, Long>();
 
     /**
      * Method map
@@ -70,19 +67,14 @@ public class DefaultMethodInvoker implements MethodInvoker {
     private static int c_nextReference = 0;
 
     /**
-     * The publisher
-     */
-    private Publisher publisher;
-
-    /**
      * published thing
      */
     private String publishedThing;
 
     /**
-     * The bean implementation
+     * The main instance
      */
-    private Object beanImpl;
+    private Object mainInstance;
 
     /**
      * The publication description.
@@ -90,19 +82,24 @@ public class DefaultMethodInvoker implements MethodInvoker {
     private final PublicationDescription publicationDescription;
     private final Class facadeClass;
     private MethodInvocationMonitor methodInvocationMonitor = new NullMethodInvocationMonitor();
+    private ServiceHandlerAccessor serviceHandlerAccessor;
+
+    private final Long zero = new Long(0);
 
     /**
-     * Constructor DefaultMethodInvoker
+     * Constructor DefaultServiceHandler
      *
-     * @param publisher              The publisher
      * @param publishedThing         The published Thing
      * @param methodMap              The method map
      * @param publicationDescription The publication description
+     * @param serviceHandlerAccessor
+     * @param facadeClass
      */
-    public DefaultMethodInvoker(Publisher publisher, String publishedThing, Map<String, Method> methodMap,
+    public DefaultServiceHandler(ServiceHandlerAccessor serviceHandlerAccessor,
+            String publishedThing, Map<String, Method> methodMap,
                                 PublicationDescription publicationDescription, Class facadeClass) {
+        this.serviceHandlerAccessor = serviceHandlerAccessor;
 
-        this.publisher = publisher;
         this.publishedThing = publishedThing;
         this.methodMap = methodMap;
         this.publicationDescription = publicationDescription;
@@ -120,53 +117,53 @@ public class DefaultMethodInvoker implements MethodInvoker {
     }
 
     /**
-     * Add an Implementation Bean
+     * Add an Instance
      *
      * @param referenceID The reference ID
-     * @param beanImpl    The bean implementaion
+     * @param instance    The instance
      */
-    public void addImplementationBean(Long referenceID, Object beanImpl) {
+    public void addInstance(Long referenceID, Object instance) {
 
-        if (referenceID.equals(new Long(0))) {
-            this.beanImpl = beanImpl;
+        if (referenceID.equals(zero)) {
+            this.mainInstance = instance;
         }
 
-        refBeans.put(referenceID, new WeakReference(beanImpl));
-        beanRefs.put(beanImpl, referenceID);
+        instancesByRefID.put(referenceID, new WeakReference(instance));
+        ReferencesForInstances.put(instance, referenceID);
     }
 
     /**
-     * Method replaceImplementationBean
+     * Method replaceInstance
      *
-     * @param implBean     The bean implementaion
-     * @param withImplBean The new bean implementaion.
+     * @param oldInstance     The old instance
+     * @param withInstance The new instance.
      */
-    public void replaceImplementationBean(Object implBean, Object withImplBean) {
+    public void replaceInstance(Object oldInstance, Object withInstance) {
 
-        Long ref = beanRefs.get(implBean);
+        Long ref = ReferencesForInstances.get(oldInstance);
 
-        refBeans.put(ref, new WeakReference(withImplBean));
-        beanRefs.remove(implBean);
-        beanRefs.put(withImplBean, ref);
+        instancesByRefID.put(ref, new WeakReference<Object>(withInstance));
+        ReferencesForInstances.remove(oldInstance);
+        ReferencesForInstances.put(withInstance, ref);
 
-        if (beanImpl == implBean) {
-            beanImpl = withImplBean;
+        if (mainInstance == oldInstance) {
+            mainInstance = withInstance;
         }
     }
 
     /**
-     * Get or make a reference ID for a bean
+     * Get or make a reference ID for an instance
      *
-     * @param implBean The bean implementaion
+     * @param instance The instance
      * @return A reference ID
      */
-    public Long getOrMakeReferenceIDForBean(Object implBean) {
+    public Long getOrMakeReferenceIDForInstance(Object instance) {
 
-        Long ref = beanRefs.get(implBean);
+        Long ref = ReferencesForInstances.get(instance);
 
         if (ref == null) {
             ref = getNewReference();
-            addImplementationBean(ref, implBean);
+            addInstance(ref, instance);
         }
 
         return ref;
@@ -190,32 +187,30 @@ public class DefaultMethodInvoker implements MethodInvoker {
 
         Method method = methodMap.get(methodSignature);
 
-        Object beanImpl = null;
+        Object instance = null;
 
         try {
-            WeakReference wr = refBeans.get(request.getReferenceID());
+            WeakReference wr = instancesByRefID.get(request.getReferenceID());
 
             if (wr == null) {
                 methodInvocationMonitor.invalidReference(methodSignature, connectionDetails);
                 return new NoSuchReference(request.getReferenceID());
             }
 
-            beanImpl = wr.get();
+            instance = wr.get();
 
-            if (beanImpl == null) {
+            if (instance == null) {
                 methodInvocationMonitor.invalidReference(methodSignature, connectionDetails);
                 return new NoSuchReference(request.getReferenceID());
             }
 
-            Object[] args = request.getArgs();
-
-            correctArgs(request, args);
-            methodInvocationMonitor.methodInvoked(beanImpl.getClass(), methodSignature, connectionDetails);
-            return new MethodInvoked(method.invoke(beanImpl, request.getArgs()));
+            correctArgs(request.getArgs());
+            methodInvocationMonitor.methodInvoked(instance.getClass(), methodSignature, connectionDetails);
+            return new MethodInvoked(method.invoke(instance, request.getArgs()));
         } catch (InvocationTargetException ite) {
             Throwable t = ite.getTargetException();
 
-            methodInvocationMonitor.invocationTargetException(beanImpl.getClass(), methodSignature, ite, connectionDetails);
+            methodInvocationMonitor.invocationTargetException(instance.getClass(), methodSignature, ite, connectionDetails);
             if (t instanceof Serializable) {
 
                 // NOTE Sever side stack traces will appear on the client side
@@ -224,7 +219,7 @@ public class DefaultMethodInvoker implements MethodInvoker {
                 return new InvocationExceptionThrown("Exception was not serializable :" + t.getClass().getName());
             }
         } catch (Throwable t) {
-            methodInvocationMonitor.invocationException(beanImpl == null ? null : beanImpl.getClass(), methodSignature, t, connectionDetails);
+            methodInvocationMonitor.invocationException(instance == null ? null : instance.getClass(), methodSignature, t, connectionDetails);
             return new InvocationExceptionThrown("Some ServerSide exception problem :" + t.getMessage());
         }
     }
@@ -232,21 +227,17 @@ public class DefaultMethodInvoker implements MethodInvoker {
     /**
      * Correct the arguments for a request (seme are 'additional facades' and can;t be serialized).
      *
-     * @param invokeMethod The method request
      * @param args         The arguments to correct
      */
-    private void correctArgs(InvokeMethod invokeMethod, Object[] args) {
+    private void correctArgs(Object[] args) {
 
         for (int i = 0; i < args.length; i++) {
 
             // TODO find a faster way to do this....
             if (args[i] instanceof FacadeRefHolder) {
                 FacadeRefHolder frh = (FacadeRefHolder) args[i];
-                // use abstraction ?
-                DefaultMethodInvoker methodInvoker = (DefaultMethodInvoker) publisher.getMethodInvoker(frh.getObjectName());
-                WeakReference wr = methodInvoker.refBeans.get(frh.getReferenceID());
-
-                args[i] = wr.get();
+                ServiceHandler serviceHandler = serviceHandlerAccessor.getServiceHandler(frh.getObjectName());
+                args[i] = serviceHandler.getInstanceForReference(frh.getReferenceID());
             }
         }
     }
@@ -254,15 +245,19 @@ public class DefaultMethodInvoker implements MethodInvoker {
     /**
      * Get the most derived type.
      *
-     * @param beanImpl The bean implementaion
+     * @param instance The instance
      * @return The class
      */
-    public Class getMostDerivedType(Object beanImpl) {
-        return publicationDescription.getMostDerivedType(beanImpl);
+    public Class getMostDerivedType(Object instance) {
+        return publicationDescription.getMostDerivedType(instance);
     }
 
     public Class getFacadeClass() {
         return facadeClass;
+    }
+
+    public Object getInstanceForReference(Long referenceID) {
+        return instancesByRefID.get(referenceID).get();
     }
 
 

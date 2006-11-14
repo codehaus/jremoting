@@ -18,6 +18,7 @@
 package org.codehaus.jremoting.server.adapters;
 
 import org.codehaus.jremoting.server.Session;
+import org.codehaus.jremoting.server.Publisher;
 
 import java.util.HashMap;
 
@@ -28,12 +29,16 @@ public class SessionAdapter extends PublicationAdapter {
     private static long sessionId = 0;
     private final HashMap<Long, Session> sessions = new HashMap<Long, Session>();
 
+    public SessionAdapter(Publisher delegate) {
+        super(delegate);
+    }
+
     protected Session getSession(Long sessionID) {
         return sessions.get(sessionID);
     }
 
     private Long getNewSession() {
-        // approve everything and set session identifier.
+        // approve everything and setContext session identifier.
         return new Long((++sessionId << 16) + ((long) (Math.random() * 65536)));
     }
 

@@ -3,9 +3,9 @@ package org.codehaus.jremoting.client;
 import org.codehaus.jremoting.ConnectionException;
 
 public interface StubRegistry {
-    void registerReferenceObject(Object implBean, Long referenceID);
+    void registerReferenceObject(Object instance, Long referenceID);
 
-    Object getImplObj(Long referenceID);
+    Object getInstance(Long referenceID);
 
     Object getInstance(String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException;
 

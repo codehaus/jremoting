@@ -61,7 +61,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     private InstructionFactory factory;
     private ConstantPoolGen constantsPool;
     private ClassGen classGen;
-    private ArrayList internalFieldRepresentingClasses;
+    private ArrayList<String> internalFieldRepresentingClasses;
 
     /**
      * Generate the class.
@@ -72,13 +72,13 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     public void generateClass(ClassLoader classLoader) {
 
         //create the Main Stubs:
-        generateProxyClass(StubHelper.formatProxyClassName(getGenName()), getPrimaryFacades());
+        generateStubClass(StubHelper.formatProxyClassName(getGenName()), getPrimaryFacades());
 
         //Create the Additional Facades
         if (getAdditionalFacades() != null) {
             for (int i = 0; i < getAdditionalFacades().length; i++) {
                 String encodedClassName = MethodNameHelper.encodeClassName(getAdditionalFacades()[i].getFacadeClass());
-                generateProxyClass(StubHelper.formatProxyClassName(getGenName(), encodedClassName), new PublicationDescriptionItem[]{getAdditionalFacades()[i]});
+                generateStubClass(StubHelper.formatProxyClassName(getGenName(), encodedClassName), new PublicationDescriptionItem[]{getAdditionalFacades()[i]});
 
             }
         }
@@ -86,14 +86,14 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     }
 
     /**
-     * Method generateProxyClass.
+     * Method generateStubClass.
      * Create Proxy Implementation with all interface methods
      * Generating name of form: [STUB_PREFIX][genName]_[STUB_POSTFIX].class
      *
      * @param generatedClassName the name of the class to generate.
      * @param facadesToStubify the facades to stubify.
      */
-    protected void generateProxyClass(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
+    protected void generateStubClass(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
         //Start creating class
         createNewClassDeclaration(generatedClassName, facadesToStubify);
         //create constructor that takes StubHelper
@@ -122,7 +122,8 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * Method createAndInitializeClass.
      * This method starts creating the class.
      *
-     * @param generatedClassName the bean class name
+     * @param generatedClassName the stub class name
+     * @param facadesToStubify
      */
     protected void createNewClassDeclaration(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
 
@@ -137,7 +138,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         classGen = new ClassGen(generatedClassName, "java.lang.Object", generatedClassName + ".java", Constants.ACC_PUBLIC | Constants.ACC_SUPER | Constants.ACC_FINAL, facades);
         constantsPool = classGen.getConstantPool();
         factory = new InstructionFactory(classGen, constantsPool);
-        internalFieldRepresentingClasses = new ArrayList();
+        internalFieldRepresentingClasses = new ArrayList<String>();
 
     }
 
@@ -145,17 +146,17 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * Method createConstructor.
      * This method adds a constructor that takes in a StubHelper Instance
      *
-     * @param generatedClassName the bean class name
+     * @param generatedClassName the stub class name
      */
     protected void createConstructor(String generatedClassName) {
         InstructionList il = new InstructionList();
         MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.VOID, new Type[]{new ObjectType("org.codehaus.jremoting.client.StubHelper")}, new String[]{"arg0"}, "<init>", generatedClassName, il, constantsPool);
-        il.append(factory.createLoad(Type.OBJECT, 0));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
         il.append(factory.createInvoke("java.lang.Object", "<init>", Type.VOID, Type.NO_ARGS, Constants.INVOKESPECIAL));
-        il.append(factory.createLoad(Type.OBJECT, 0));
-        il.append(factory.createLoad(Type.OBJECT, 1));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, 1));
         il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.PUTFIELD));
-        il.append(factory.createReturn(Type.VOID));
+        il.append(InstructionFactory.createReturn(Type.VOID));
         method.setMaxStack();
         method.setMaxLocals();
         classGen.addMethod(method.getMethod());
@@ -186,11 +187,11 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     protected void createGetReferenceIDMethod(String generatedClassName) {
         InstructionList il = new InstructionList();
         MethodGen method = new MethodGen(Constants.ACC_PUBLIC, new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, new String[]{"arg0"}, "codehausRemotingGetReferenceID", generatedClassName, il, constantsPool);
-        il.append(factory.createLoad(Type.OBJECT, 0));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
         il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
-        il.append(factory.createLoad(Type.OBJECT, 1));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, 1));
         il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "getReferenceID", new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, Constants.INVOKEINTERFACE));
-        il.append(factory.createReturn(Type.OBJECT));
+        il.append(InstructionFactory.createReturn(Type.OBJECT));
         method.setMaxStack();
         method.setMaxLocals();
         classGen.addMethod(method.getMethod());
@@ -201,18 +202,18 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * Creates a method class$(String) which is used
      * during SomeClass.class instruction
      *
-     * @param generatedClassName the bean class name
+     * @param generatedClassName the instance class name
      */
     protected void createHelperMethodForDotClassCalls(String generatedClassName) {
         InstructionList il = new InstructionList();
         MethodGen method = new MethodGen(Constants.ACC_STATIC, new ObjectType("java.lang.Class"), new Type[]{Type.STRING}, new String[]{"arg0"}, "class$", generatedClassName, il, constantsPool);
-        InstructionHandle ih0 = il.append(factory.createLoad(Type.OBJECT, 0));
+        InstructionHandle ih0 = il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
         il.append(factory.createInvoke("java.lang.Class", "forName", new ObjectType("java.lang.Class"), new Type[]{Type.STRING}, Constants.INVOKESTATIC));
-        InstructionHandle ih4 = il.append(factory.createReturn(Type.OBJECT));
-        InstructionHandle ih5 = il.append(factory.createStore(Type.OBJECT, 1));
+        InstructionHandle ih4 = il.append(InstructionFactory.createReturn(Type.OBJECT));
+        InstructionHandle ih5 = il.append(InstructionFactory.createStore(Type.OBJECT, 1));
         il.append(factory.createNew("java.lang.NoClassDefFoundError"));
         il.append(InstructionConstants.DUP);
-        il.append(factory.createLoad(Type.OBJECT, 1));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, 1));
         il.append(factory.createInvoke("java.lang.Throwable", "getMessage", Type.STRING, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
         il.append(factory.createInvoke("java.lang.NoClassDefFoundError", "<init>", Type.VOID, new Type[]{Type.STRING}, Constants.INVOKESPECIAL));
         il.append(InstructionConstants.ATHROW);
@@ -248,10 +249,11 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     /**
      * Add the java.lang.reflect.Method wrapper into the stub
      *
-     * @param generatedClassName the bean class name
+     * @param generatedClassName the instance class name
      * @param mth                the method
+     * @param facadesToStubify
      */
-    protected void createInterfaceMethod(String generatedClassName, Method mth, PublicationDescriptionItem interfaceToStubify) {
+    protected void createInterfaceMethod(String generatedClassName, Method mth, PublicationDescriptionItem facadesToStubify) {
         InstructionList il = new InstructionList();
         MethodGen method = new MethodGen(Constants.ACC_PUBLIC, getReturnType(mth), getArguments(mth), getArgumentNames(mth), mth.getName(), generatedClassName, il, constantsPool);
 
@@ -275,10 +277,10 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         variableIndex = getFreeIndexToStart(paramTypes);
         il.append(new PUSH(constantsPool, numberOfArguments));
         il.append(factory.createNewArray(Type.OBJECT, (short) 1));
-        il.append(factory.createStore(Type.OBJECT, ++variableIndex));
+        il.append(InstructionFactory.createStore(Type.OBJECT, ++variableIndex));
         il.append(new PUSH(constantsPool, numberOfArguments));
         il.append(factory.createNewArray(new ObjectType("java.lang.Class"), (short) 1));
-        il.append(factory.createStore(Type.OBJECT, ++variableIndex));
+        il.append(InstructionFactory.createStore(Type.OBJECT, ++variableIndex));
 
         /*
          *  Assigning parameter into Object[] and Class[] Array
@@ -294,15 +296,15 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         InstructionHandle catchHandler = null;
         BranchInstruction gotoCall = null;
         InstructionHandle ih_tryEnd = null;
-        if (interfaceToStubify.isRollback(mth)) {
-            ih_rollback = il.append(factory.createLoad(Type.OBJECT, 0));
+        if (facadesToStubify.isRollback(mth)) {
+            ih_rollback = il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
             il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
             il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "rollbackAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
-            gotoCall = factory.createBranchInstruction(Constants.GOTO, null);
+            gotoCall = InstructionFactory.createBranchInstruction(Constants.GOTO, null);
             ih_tryEnd = il.append(gotoCall);
 
-            catchHandler = il.append(factory.createStore(Type.OBJECT, ++variableIndex));
-            il.append(factory.createLoad(Type.OBJECT, variableIndex));
+            catchHandler = il.append(InstructionFactory.createStore(Type.OBJECT, ++variableIndex));
+            il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
             injectCommonExceptionCatchBlock(il, method, variableIndex);
             --variableIndex;
             //createTestMethod(il,"after rollback");
@@ -339,9 +341,9 @@ public class BcelStubGenerator extends AbstractStubGenerator {
          *  }
          * ================================================
          */
-        InstructionHandle ihe1 = il.append(factory.createLoad(Type.OBJECT, 0));
+        InstructionHandle ihe1 = il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
 
-        if (interfaceToStubify.isRollback(mth)) {
+        if (facadesToStubify.isRollback(mth)) {
             gotoCall.setTarget(ihe1);
             method.addExceptionHandler(ih_rollback, ih_tryEnd, catchHandler, new ObjectType("java.lang.Throwable"));
         }
@@ -357,10 +359,10 @@ public class BcelStubGenerator extends AbstractStubGenerator {
             String encodedReturnClassName = "class$" + MethodNameHelper.encodeClassName(returnClass);
             addField(encodedReturnClassName);
             il.append(factory.createFieldAccess(generatedClassName, encodedReturnClassName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
-            BranchInstruction ifnullReturnClass = factory.createBranchInstruction(Constants.IFNULL, null);
+            BranchInstruction ifnullReturnClass = InstructionFactory.createBranchInstruction(Constants.IFNULL, null);
             il.append(ifnullReturnClass);
             il.append(factory.createFieldAccess(generatedClassName, encodedReturnClassName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
-            BranchInstruction gotoReturnClass = factory.createBranchInstruction(Constants.GOTO, null);
+            BranchInstruction gotoReturnClass = InstructionFactory.createBranchInstruction(Constants.GOTO, null);
             il.append(gotoReturnClass);
 
             InstructionHandle ihPushMethodName = il.append(new PUSH(constantsPool, returnClass.getName()));
@@ -370,17 +372,17 @@ public class BcelStubGenerator extends AbstractStubGenerator {
             il.append(factory.createFieldAccess(generatedClassName, encodedReturnClassName, new ObjectType("java.lang.Class"), Constants.PUTSTATIC));
             InstructionHandle ihPushSignature = il.append(new PUSH(constantsPool, MethodNameHelper.getMethodSignature(mth)));
             gotoReturnClass.setTarget(ihPushSignature);
-            il.append(factory.createLoad(Type.OBJECT, variableIndex - 1));
+            il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex - 1));
             il.append(new PUSH(constantsPool, MethodNameHelper.encodeClassName(getClassType(returnClass))));
             il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "processObjectRequestGettingFacade", Type.OBJECT, new Type[]{new ObjectType("java.lang.Class"), Type.STRING, new ArrayType(Type.OBJECT, 1), Type.STRING}, Constants.INVOKEINTERFACE));
         } else {
             //method signature = METHODNAME(arguments....)
             il.append(new PUSH(constantsPool, MethodNameHelper.getMethodSignature(mth)));
             variableIndex -= 2;
-            il.append(factory.createLoad(Type.OBJECT, ++variableIndex));
-            il.append(factory.createLoad(Type.OBJECT, ++variableIndex));
+            il.append(InstructionFactory.createLoad(Type.OBJECT, ++variableIndex));
+            il.append(InstructionFactory.createLoad(Type.OBJECT, ++variableIndex));
             //Check for async methods
-            if (interfaceToStubify.isAsync(mth)) {
+            if (facadesToStubify.isAsync(mth)) {
                 il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "queueAsyncRequest", Type.VOID, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
 
 
@@ -389,8 +391,8 @@ public class BcelStubGenerator extends AbstractStubGenerator {
                     il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "processVoidRequest", Type.VOID, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
                 } else {
                     il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "processObjectRequest", Type.OBJECT, new Type[]{Type.STRING, new ArrayType(Type.OBJECT, 1), new ArrayType(new ObjectType("java.lang.Class"), 1)}, Constants.INVOKEINTERFACE));
-                    il.append(factory.createStore(Type.OBJECT, ++variableIndex));
-                    il.append(factory.createLoad(Type.OBJECT, variableIndex));
+                    il.append(InstructionFactory.createStore(Type.OBJECT, ++variableIndex));
+                    il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
 
 
                 }
@@ -400,28 +402,28 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         //createTestMethod(il,"after remote call");
 
         InstructionHandle ihe2;
-        if (interfaceToStubify.isCommit(mth)) {
+        if (facadesToStubify.isCommit(mth)) {
 
-            gotoCall = factory.createBranchInstruction(Constants.GOTO, null);
+            gotoCall = InstructionFactory.createBranchInstruction(Constants.GOTO, null);
             ihe2 = il.append(gotoCall);
             variableIndex++;
 
         } else {
             if (mth.getReturnType().isPrimitive()) {
                 if (getBCELPrimitiveType(mth.getReturnType().getName()) == Type.VOID) {
-                    ihe2 = il.append(factory.createReturn(Type.VOID));
+                    ihe2 = il.append(InstructionFactory.createReturn(Type.VOID));
                 } else {
                     il.append(factory.createCheckCast(new ObjectType(getJavaWrapperClass(mth.getReturnType().getName()))));
                     il.append(factory.createInvoke(getJavaWrapperClass(mth.getReturnType().getName()), mth.getReturnType().getName() + "Value", getBCELPrimitiveType(mth.getReturnType().getName()), Type.NO_ARGS, Constants.INVOKEVIRTUAL));
-                    ihe2 = il.append(factory.createReturn(getBCELPrimitiveType(mth.getReturnType().getName())));
+                    ihe2 = il.append(InstructionFactory.createReturn(getBCELPrimitiveType(mth.getReturnType().getName())));
                 }
             } else {
                 il.append(factory.createCheckCast(new ObjectType(mth.getReturnType().getName())));
-                ihe2 = il.append(factory.createReturn(Type.OBJECT));
+                ihe2 = il.append(InstructionFactory.createReturn(Type.OBJECT));
             }
         }
 
-        InstructionHandle ihe3 = il.append(factory.createStore(Type.OBJECT, variableIndex));
+        InstructionHandle ihe3 = il.append(InstructionFactory.createStore(Type.OBJECT, variableIndex));
 
         //add custom exceptionHandling here
         Class[] exceptionClasses = mth.getExceptionTypes();
@@ -429,20 +431,20 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         BranchInstruction ifCustomExceptionBranch = null;
         for (int i = 0; i < exceptionClasses.length; i++) {
 
-            customHandler = il.append(factory.createLoad(Type.OBJECT, variableIndex));
+            customHandler = il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
             //create the series of custom exception handlers for the classes
             if (ifCustomExceptionBranch != null) {
                 ifCustomExceptionBranch.setTarget(customHandler);
             }
             il.append(new INSTANCEOF(constantsPool.addClass(new ObjectType(exceptionClasses[i].getName()))));
-            ifCustomExceptionBranch = factory.createBranchInstruction(Constants.IFEQ, null);
+            ifCustomExceptionBranch = InstructionFactory.createBranchInstruction(Constants.IFEQ, null);
             il.append(ifCustomExceptionBranch);
-            il.append(factory.createLoad(Type.OBJECT, variableIndex));
+            il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
             il.append(factory.createCheckCast(new ObjectType(exceptionClasses[i].getName())));
             il.append(InstructionConstants.ATHROW);
         }
 
-        InstructionHandle defaultExceptionHandler = il.append(factory.createLoad(Type.OBJECT, variableIndex));
+        InstructionHandle defaultExceptionHandler = il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
         if (customHandler != null) {
             ifCustomExceptionBranch.setTarget(defaultExceptionHandler);
         }
@@ -454,15 +456,15 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         method.addExceptionHandler(ihe1, ihe2, ihe3, new ObjectType("java.lang.Throwable"));
 
         //check if its a commit method
-        if (interfaceToStubify.isCommit(mth)) {
-            InstructionHandle ih_commit = il.append(factory.createLoad(Type.OBJECT, 0));
+        if (facadesToStubify.isCommit(mth)) {
+            InstructionHandle ih_commit = il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
             gotoCall.setTarget(ih_commit);
             il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
 
             il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "commitAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
-            InstructionHandle ih_return = il.append(factory.createReturn(Type.VOID));
-            catchHandler = il.append(factory.createStore(Type.OBJECT, variableIndex));
-            il.append(factory.createLoad(Type.OBJECT, variableIndex));
+            InstructionHandle ih_return = il.append(InstructionFactory.createReturn(Type.VOID));
+            catchHandler = il.append(InstructionFactory.createStore(Type.OBJECT, variableIndex));
+            il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
             injectCommonExceptionCatchBlock(il, method, variableIndex);
             method.addExceptionHandler(ih_commit, ih_return, catchHandler, new ObjectType("java.lang.Throwable"));
         }
@@ -484,14 +486,14 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         InstructionList il = new InstructionList();
         MethodGen method = new MethodGen(Constants.ACC_PUBLIC, Type.BOOLEAN, new Type[]{Type.OBJECT}, new String[]{"arg0"}, "equals", generatedClassName, il, constantsPool);
 
-        il.append(factory.createLoad(Type.OBJECT, 0));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
 
         il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
-        il.append(factory.createLoad(Type.OBJECT, 0));
-        il.append(factory.createLoad(Type.OBJECT, 1));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, 1));
 
         il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "isEquals", Type.BOOLEAN, new Type[]{Type.OBJECT, Type.OBJECT}, Constants.INVOKEINTERFACE));
-        il.append(factory.createReturn(Type.INT));
+        il.append(InstructionFactory.createReturn(Type.INT));
         method.setMaxStack();
         method.setMaxLocals();
         classGen.addMethod(method.getMethod());
@@ -512,7 +514,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         int loadIndex = 0;
         for (int i = 0; i < numberOfArguments; i++) {
             // assigning the obj ref's
-            il.append(factory.createLoad(Type.OBJECT, variableIndex - 1));
+            il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex - 1));
             il.append(new PUSH(constantsPool, i));
             String className = paramTypes[i].getName();
             //adjust for any previous wider datatype (double/long)
@@ -522,7 +524,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
             if (paramTypes[i].isPrimitive()) {
                 il.append(factory.createNew(getJavaWrapperClass(className)));
                 il.append(InstructionConstants.DUP);
-                il.append(factory.createLoad(getBCELPrimitiveType(className), ++loadIndex));
+                il.append(InstructionFactory.createLoad(getBCELPrimitiveType(className), ++loadIndex));
                 il.append(factory.createInvoke(getJavaWrapperClass(className), "<init>", Type.VOID, new Type[]{getBCELPrimitiveType(className)}, Constants.INVOKESPECIAL));
                 il.append(InstructionConstants.AASTORE);
             } else {
@@ -542,19 +544,19 @@ public class BcelStubGenerator extends AbstractStubGenerator {
 
                 addField(encodedFieldName);
                 // ******** TODO assign the obj reference
-                il.append(factory.createLoad(Type.OBJECT, variableIndex - 1));
+                il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex - 1));
                 il.append(new PUSH(constantsPool, i));
-                il.append(factory.createLoad(Type.OBJECT, ++loadIndex));
+                il.append(InstructionFactory.createLoad(Type.OBJECT, ++loadIndex));
                 il.append(InstructionConstants.AASTORE);
 
                 // *********TODO assign the class ref's
-                il.append(factory.createLoad(Type.OBJECT, variableIndex));
+                il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
                 il.append(new PUSH(constantsPool, i));
                 il.append(factory.createFieldAccess(generatedClassName, encodedFieldName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
-                BranchInstruction ifnull = factory.createBranchInstruction(Constants.IFNULL, null);
+                BranchInstruction ifnull = InstructionFactory.createBranchInstruction(Constants.IFNULL, null);
                 il.append(ifnull);
                 il.append(factory.createFieldAccess(generatedClassName, encodedFieldName, new ObjectType("java.lang.Class"), Constants.GETSTATIC));
-                BranchInstruction goHeadToStoreRef = factory.createBranchInstruction(Constants.GOTO, null);
+                BranchInstruction goHeadToStoreRef = InstructionFactory.createBranchInstruction(Constants.GOTO, null);
                 il.append(goHeadToStoreRef);
                 InstructionHandle ifnullStartHere = il.append(new PUSH(constantsPool, className));
 
@@ -576,19 +578,19 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      */
     public void injectCommonExceptionCatchBlock(InstructionList il, MethodGen method, int variableIndex) {
         il.append(new INSTANCEOF(constantsPool.addClass(new ObjectType("java.lang.RuntimeException"))));
-        BranchInstruction b1 = factory.createBranchInstruction(Constants.IFEQ, null);
+        BranchInstruction b1 = InstructionFactory.createBranchInstruction(Constants.IFEQ, null);
         il.append(b1);
-        il.append(factory.createLoad(Type.OBJECT, variableIndex));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
         il.append(factory.createCheckCast(new ObjectType("java.lang.RuntimeException")));
         il.append(InstructionConstants.ATHROW);
-        InstructionHandle ih1 = il.append(factory.createLoad(Type.OBJECT, variableIndex));
+        InstructionHandle ih1 = il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
         il.append(new INSTANCEOF(constantsPool.addClass(new ObjectType("java.lang.Error"))));
-        BranchInstruction b2 = factory.createBranchInstruction(Constants.IFEQ, null);
+        BranchInstruction b2 = InstructionFactory.createBranchInstruction(Constants.IFEQ, null);
         il.append(b2);
-        il.append(factory.createLoad(Type.OBJECT, variableIndex));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
         il.append(factory.createCheckCast(new ObjectType("java.lang.Error")));
         il.append(InstructionConstants.ATHROW);
-        InstructionHandle ih2 = il.append(factory.createLoad(Type.OBJECT, variableIndex));
+        InstructionHandle ih2 = il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
         il.append(factory.createInvoke("java.lang.Throwable", "printStackTrace", Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
         il.append(factory.createNew("org.codehaus.jremoting.client.InvocationException"));
         il.append(InstructionConstants.DUP);
@@ -596,7 +598,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         il.append(InstructionConstants.DUP);
         il.append(new PUSH(constantsPool, "Should never get here: "));
         il.append(factory.createInvoke("java.lang.StringBuffer", "<init>", Type.VOID, new Type[]{Type.STRING}, Constants.INVOKESPECIAL));
-        il.append(factory.createLoad(Type.OBJECT, variableIndex));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, variableIndex));
         il.append(factory.createInvoke("java.lang.Throwable", "getMessage", Type.STRING, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
         il.append(factory.createInvoke("java.lang.StringBuffer", "append", Type.STRINGBUFFER, new Type[]{Type.STRING}, Constants.INVOKEVIRTUAL));
         il.append(factory.createInvoke("java.lang.StringBuffer", "toString", Type.STRING, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
@@ -712,7 +714,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         switch (javaDataType.charAt(0)) {
 
             case 'b':
-                if (javaDataType.toString().charAt(1) == 'o') {
+                if (javaDataType.charAt(1) == 'o') {
                     return Type.BOOLEAN;
                 } else {
                     return Type.BYTE;

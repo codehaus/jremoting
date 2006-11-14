@@ -31,9 +31,9 @@ import java.util.Vector;
 public class PublicationDescriptionItem {
 
     private final Class facadeClass;
-    private final Vector asyncMethods = new Vector();
-    private final Vector commitMethods = new Vector();
-    private final Vector rollbackMethods = new Vector();
+    private final Vector<String> asyncMethods = new Vector<String>();
+    private final Vector<String> commitMethods = new Vector<String>();
+    private final Vector<String> rollbackMethods = new Vector<String>();
 
     public PublicationDescriptionItem(Class facadeClass) {
         this.facadeClass = facadeClass;
@@ -115,7 +115,7 @@ public class PublicationDescriptionItem {
     public boolean isCommit(Method method) {
         String mthSig = MethodNameHelper.getMethodSignature(method);
         for (int i = 0; i < commitMethods.size(); i++) {
-            String asyncMethod = (String) commitMethods.elementAt(i);
+            String asyncMethod = commitMethods.elementAt(i);
             if (asyncMethod.equals(mthSig)) {
                 return true;
             }
@@ -126,7 +126,7 @@ public class PublicationDescriptionItem {
     public boolean isRollback(Method method) {
         String mthSig = MethodNameHelper.getMethodSignature(method);
         for (int i = 0; i < rollbackMethods.size(); i++) {
-            String asyncMethod = (String) rollbackMethods.elementAt(i);
+            String asyncMethod = rollbackMethods.elementAt(i);
             if (asyncMethod.equals(mthSig)) {
                 return true;
             }
@@ -137,7 +137,7 @@ public class PublicationDescriptionItem {
     public boolean isAsync(Method method) {
         String mthSig = MethodNameHelper.getMethodSignature(method);
         for (int i = 0; i < asyncMethods.size(); i++) {
-            String asyncMethod = (String) asyncMethods.elementAt(i);
+            String asyncMethod = asyncMethods.elementAt(i);
             if (asyncMethod.equals(mthSig)) {
                 return true;
             }
