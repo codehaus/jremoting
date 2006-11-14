@@ -13,15 +13,6 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$M2_REPOSITORY$/org/apache/maven/maven-plugin-api/2.0.3/maven-plugin-api-2.0.3.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
           <root url="jar://$M2_REPOSITORY$/bcel/bcel/5.1/bcel-5.1.jar!/" />
         </CLASSES>
         <JAVADOC />
@@ -41,16 +32,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/clover-idea5.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../../Desktop/old/asm-3.0_RC1/lib/asm-3.0_RC1.jar!/" />
+          <root url="jar://$M2_REPOSITORY$/org/apache/maven/maven-plugin-api/2.0/maven-plugin-api-2.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
