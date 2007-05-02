@@ -37,17 +37,17 @@
 	</scm>	
 	<distributionManagement>
 		<repository>
-			<id>codehaus-jremoting-repository</id>
+			<id>codehaus.org</id>
 			<name>Codehaus JRemoting Repository</name>
 			<url>dav:https://dav.codehaus.org/repository/jremoting</url>
 		</repository>
 		<snapshotRepository>
-			<id>codehaus-jremoting-snapshot-repository</id>
+			<id>codehaus.org</id>
 			<name>Codehaus JRemoting Snapshot Repository</name>
 			<url>dav:https://dav.codehaus.org/snapshots.repository/jremoting</url>
 		</snapshotRepository>
 		<site>
-			<id>jremoting-site</id>
+			<id>codehaus.org</id>
 			<name>Codehaus JRemoting Site</name>
 			<url>dav:https://dav.codehaus.org/jremoting</url>
 		</site>
