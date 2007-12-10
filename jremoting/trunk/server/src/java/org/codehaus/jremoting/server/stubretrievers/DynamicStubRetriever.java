@@ -89,16 +89,16 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     /**
      * Method getProxyClassBytes
      *
-     * @param service the name to publish as
+     * @param publishedName the name to publish as
      * @return the byte array for the proxy class
      * @throws StubRetrievalException if the class cannot be retrieved.
      */
-    public final byte[] getStubClassBytes(String service) throws StubRetrievalException {
-        String name = StubHelper.formatStubClassName(service);
+    public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
+        String name = StubHelper.formatStubClassName(publishedName);
         try {
             return getThingBytes(name);
         } catch (StubRetrievalException e) {
-            String serviceName = StubHelper.getServiceName(service);
+            String serviceName = StubHelper.getServiceName(publishedName);
             Class facadeClass = (Class) facadeClasses.get(serviceName);
             if (facadeClass == null) {
                 throw new StubRetrievalException("unable to find facade class for service: "+ facadeClass);

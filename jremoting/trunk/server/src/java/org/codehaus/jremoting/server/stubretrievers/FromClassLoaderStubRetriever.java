@@ -17,14 +17,14 @@
  */
 package org.codehaus.jremoting.server.stubretrievers;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.codehaus.jremoting.server.StubRetrievalException;
 import org.codehaus.jremoting.server.StubRetriever;
-import org.codehaus.jremoting.server.Publisher;
 import org.codehaus.jremoting.util.StubHelper;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Class FromClassLoaderStubRetriever
@@ -49,7 +49,7 @@ public class FromClassLoaderStubRetriever implements StubRetriever {
 
         InputStream is = null;
 
-        thingName = thingName.replace('.', '\\') + ".class";
+        thingName = thingName.replace('.', File.separatorChar) + ".class";
 
         try {
             is = classLoader.getResourceAsStream(thingName);
