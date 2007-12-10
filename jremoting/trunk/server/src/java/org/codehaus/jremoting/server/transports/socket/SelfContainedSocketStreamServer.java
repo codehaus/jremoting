@@ -84,21 +84,26 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port) {
-        this(serverMonitor, port, Executors.newScheduledThreadPool(10));
+        this(serverMonitor, port, dftExecutor());
+    }
+
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, StubRetriever stubRetriever) {
+        this(serverMonitor, stubRetriever, dftAuthenticator(), dftDriverFactory(), dftExecutor(),
+                dftContextFactory(), port);
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService) {
-        this(serverMonitor, port, executorService, new ServerCustomStreamDriverFactory());
+        this(serverMonitor, port, executorService, dftDriverFactory());
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService,
                                            ServerStreamDriverFactory serverStreamDriverFactory) {
-        this(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), serverStreamDriverFactory, executorService,
-                new DefaultServerSideContextFactory(), SelfContainedSocketStreamServer.class.getClassLoader(), port);
+        this(serverMonitor, dftStubRetriever(), dftAuthenticator(), serverStreamDriverFactory, executorService,
+                dftContextFactory(), thisClassLoader(), port);
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, String streamType) {
-        this(serverMonitor, port, Executors.newScheduledThreadPool(10), streamType);
+        this(serverMonitor, port, dftExecutor(), streamType);
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService, String streamType) {
@@ -106,7 +111,7 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerStreamDriverFactory streamDriverFactory, ScheduledExecutorService executorService, ServerSideContextFactory serverSideContextFactory, int port) {
-        this(serverMonitor, stubRetriever, authenticator, streamDriverFactory, executorService, serverSideContextFactory, SelfContainedSocketStreamServer.class.getClassLoader(), port);
+        this(serverMonitor, stubRetriever, authenticator, streamDriverFactory, executorService, serverSideContextFactory, thisClassLoader(), port);
     }
 
     private static ServerStreamDriverFactory createServerStreamDriverFactory(String streamType) {
@@ -118,6 +123,30 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
             return new ServerXStreamDriverFactory();
         }
         throw new IllegalArgumentException("streamType can only be '"+CUSTOMSTREAM+"', '"+OBJECTSTREAM+"' or '"+XSTREAM+"' ");
+    }
+
+    private static ScheduledExecutorService dftExecutor() {
+        return Executors.newScheduledThreadPool(10);
+    }
+
+    private static ServerStreamDriverFactory dftDriverFactory() {
+        return new ServerCustomStreamDriverFactory();
+    }
+
+    private static ClassLoader thisClassLoader() {
+        return SelfContainedSocketStreamServer.class.getClassLoader();
+    }
+
+    private static StubRetriever dftStubRetriever() {
+        return new RefusingStubRetriever();
+    }
+
+    private static Authenticator dftAuthenticator() {
+        return new NullAuthenticator();
+    }
+
+    private static ServerSideContextFactory dftContextFactory() {
+        return new DefaultServerSideContextFactory();
     }
 
 
