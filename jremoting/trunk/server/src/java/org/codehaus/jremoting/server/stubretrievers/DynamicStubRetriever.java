@@ -45,7 +45,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
      * @param classLoader        the classloader in which the proxy generater will be found.
      * @param generatorClassName the name of the proxy gen class
      */
-    public DynamicStubRetriever(ClassLoader classLoader, String generatorClassName) {
+    public  DynamicStubRetriever(ClassLoader classLoader, String generatorClassName) {
         this.classLoader = classLoader;
         try {
             generatorClass = classLoader.loadClass(generatorClassName);
@@ -99,6 +99,9 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
             return getThingBytes(name);
         } catch (StubRetrievalException e) {
             Class facadeClass = (Class) facadeClasses.get(name);
+            if (facadeClass == null) {
+                throw new StubRetrievalException("unable to find facade class for service: "+ facadeClass);
+            }
             try {
                 generate(service, facadeClass, classLoader);
                 return getThingBytes(name);
@@ -116,12 +119,14 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
      */
     protected byte[] getThingBytes(String thingName) throws StubRetrievalException {
 
-        thingName = thingName.replace('.', '\\') + ".class";
+        thingName = thingName.replace('.', File.separatorChar) + ".class";
 
         FileInputStream fis;
 
         try {
-            fis = new FileInputStream(new File(classGenDir, thingName));
+            String cd = new File(classGenDir).getCanonicalPath();
+            String file = new File(cd, thingName).getAbsolutePath();
+            fis = new FileInputStream(file);
         } catch (Exception e) {
             e.printStackTrace();
 

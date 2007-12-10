@@ -107,7 +107,8 @@ public class BcelStubGenerator extends AbstractStubGenerator {
 
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(getClassGenDir() + "/" + generatedClassName + ".class");
+            String cd = new File(getClassGenDir()).getCanonicalPath();
+            fos = new FileOutputStream(cd + File.separator + generatedClassName + ".class");
             classGen.getJavaClass().dump(fos);
             fos.close();
         } catch (FileNotFoundException fnfe) {
