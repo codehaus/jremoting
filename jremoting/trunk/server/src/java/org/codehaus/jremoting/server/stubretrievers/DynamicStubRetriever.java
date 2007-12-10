@@ -98,12 +98,13 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         try {
             return getThingBytes(name);
         } catch (StubRetrievalException e) {
-            Class facadeClass = (Class) facadeClasses.get(name);
+            String serviceName = StubHelper.getServiceName(service);
+            Class facadeClass = (Class) facadeClasses.get(serviceName);
             if (facadeClass == null) {
                 throw new StubRetrievalException("unable to find facade class for service: "+ facadeClass);
             }
             try {
-                generate(service, facadeClass, classLoader);
+                generate(serviceName, facadeClass, classLoader);
                 return getThingBytes(name);
             } catch (PublicationException e1) {
                 throw new StubRetrievalException("unable to dynamically create stub: "+ e.getMessage());
@@ -128,9 +129,12 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
             String file = new File(cd, thingName).getAbsolutePath();
             fis = new FileInputStream(file);
         } catch (Exception e) {
-            e.printStackTrace();
-
-            throw new StubRetrievalException("Generated class not found in classloader specified : '" + e.getMessage() + "', current directory is '" + new File(".").getAbsolutePath() + "'");
+            String canonicalPath = null;
+            try {
+                canonicalPath = new File(".").getCanonicalPath();
+            } catch (IOException e1) {
+            }
+            throw new StubRetrievalException("Generated class not found in classloader specified : '" + e.getMessage() + "', current directory is '" + canonicalPath + "'");
         }
 
         return getBytes(fis);
