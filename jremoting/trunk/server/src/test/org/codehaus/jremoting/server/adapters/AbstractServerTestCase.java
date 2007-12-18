@@ -27,7 +27,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.jmock.MockObjectTestCase;
 
 public class AbstractServerTestCase extends MockObjectTestCase {
@@ -38,7 +38,7 @@ public class AbstractServerTestCase extends MockObjectTestCase {
 
     protected void setUp() throws Exception {
 
-        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideContextFactory());
+        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
         server = new ConnectingServer(new ConsoleServerMonitor(), iha, Executors.newScheduledThreadPool(10)) {
         };
 

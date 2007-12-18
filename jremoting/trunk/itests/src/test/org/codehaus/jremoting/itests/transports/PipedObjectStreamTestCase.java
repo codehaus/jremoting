@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
-import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
+import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.piped.PipedClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
@@ -25,7 +25,7 @@ import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
-import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.transports.ServerObjectStreamDriverFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.itests.TestInterface;
@@ -61,7 +61,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
 
         // server side setup.
         server = new PipedStreamServer(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(),
-                Executors.newScheduledThreadPool(10) ,new DefaultServerSideContextFactory(), new ServerObjectStreamDriverFactory());
+                Executors.newScheduledThreadPool(10) ,new ThreadLocalServerContextFactory(), new ServerObjectStreamDriverFactory());
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
 
@@ -84,7 +84,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         ((PipedStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        factory = new ClientSideStubFactory(new PipedClientStreamInvoker(new ConsoleClientMonitor(),
+        factory = new StubsOnClient(new PipedClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientObjectStreamDriverFactory(), in, out));
         testClient = (TestInterface) factory.lookupService("Hello33");
 

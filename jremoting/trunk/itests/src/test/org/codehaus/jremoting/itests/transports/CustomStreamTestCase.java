@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.itests.transports;
 
 
-import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
+import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
@@ -48,7 +48,7 @@ public class CustomStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ClientSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+        factory = new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), "localhost", 10333));
         testClient = (TestInterface) factory.lookupService("Hello");
 

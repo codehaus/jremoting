@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.clientcontext;
 
-import org.codehaus.jremoting.server.ServerSideContextFactory;
+import org.codehaus.jremoting.server.context.ServerContextFactory;
 
 import java.util.HashMap;
 
@@ -30,7 +30,7 @@ public class AccountManagerImpl implements AccountManager {
 
     private HashMap<String, Account> accounts = new HashMap<String, Account>();
 
-    public AccountManagerImpl(ServerSideContextFactory contextFactory, Account one, Account two) {
+    public AccountManagerImpl(ServerContextFactory contextFactory, Account one, Account two) {
         accounts.put(one.getID(), one);
         accounts.put(two.getID(), two);
     }

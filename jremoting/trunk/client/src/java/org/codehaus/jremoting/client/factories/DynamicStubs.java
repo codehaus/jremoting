@@ -23,21 +23,17 @@ import org.codehaus.jremoting.client.StubHelper;
 import org.codehaus.jremoting.client.ContextFactory;
 
 /**
- * DynamicStubFactory creates stubs(@see DynamicStub) for the given
+ * DynamicStubs creates stubs(@see DynamicStub) for the given
  * publishedName at the time of invocation.Using this factory removes the need
  * for any compiled stubs corresponding to the remote interface
  * to be present on the client side to invoke any remote method on the server.
  *
  * @author <a href="mailto:vinayc@apache.org">Vinay Chandran</a>
  */
-public class DynamicStubFactory extends AbstractFactory {
+public class DynamicStubs extends AbstractFactory {
 
-    public DynamicStubFactory(ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
+    public DynamicStubs(ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
         super(clientInvoker, contextFactory);
-    }
-
-    public DynamicStubFactory(ClientInvoker clientInvoker) throws ConnectionException {
-        super(clientInvoker, new NullContextFactory());
     }
 
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {

@@ -17,16 +17,16 @@
  */
 package org.codehaus.jremoting.itests;
 
-import junit.framework.TestCase;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.server.transports.StatefulServer;
+import org.jmock.MockObjectTestCase;
 
 /**
  * Extended by classes that name the transport.
  *
  * @author Paul Hammant
  */
-public abstract class AbstractJRemotingTestCase extends TestCase {
+public abstract class AbstractJRemotingTestCase extends MockObjectTestCase {
 
     protected StatefulServer server;
     protected TestInterfaceImpl testServer;

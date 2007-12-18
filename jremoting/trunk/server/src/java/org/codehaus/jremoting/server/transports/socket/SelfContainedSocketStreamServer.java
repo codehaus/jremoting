@@ -27,12 +27,12 @@ import java.util.concurrent.Future;
 import org.codehaus.jremoting.JRemotingException;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.ServerSideContextFactory;
+import org.codehaus.jremoting.server.context.ServerContextFactory;
 import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.ServerObjectStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.ServerStreamDriverFactory;
@@ -77,7 +77,7 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
                                            ServerStreamDriverFactory serverStreamDriverFactory, ScheduledExecutorService executorService,
-                                           ServerSideContextFactory contextFactory,
+                                           ServerContextFactory contextFactory,
                                            ClassLoader facadesClassLoader, int port) {
         this(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
                 serverStreamDriverFactory, executorService, facadesClassLoader, port);
@@ -110,8 +110,8 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
         this(serverMonitor, port, executorService, createServerStreamDriverFactory(streamType));
     }
 
-    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerStreamDriverFactory streamDriverFactory, ScheduledExecutorService executorService, ServerSideContextFactory serverSideContextFactory, int port) {
-        this(serverMonitor, stubRetriever, authenticator, streamDriverFactory, executorService, serverSideContextFactory, thisClassLoader(), port);
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerStreamDriverFactory streamDriverFactory, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, int port) {
+        this(serverMonitor, stubRetriever, authenticator, streamDriverFactory, executorService, serverContextFactory, thisClassLoader(), port);
     }
 
     private static ServerStreamDriverFactory createServerStreamDriverFactory(String streamType) {
@@ -145,8 +145,8 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
         return new NullAuthenticator();
     }
 
-    private static ServerSideContextFactory dftContextFactory() {
-        return new DefaultServerSideContextFactory();
+    private static ServerContextFactory dftContextFactory() {
+        return new ThreadLocalServerContextFactory();
     }
 
 

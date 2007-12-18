@@ -15,43 +15,42 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server.transports;
+package org.codehaus.jremoting.server.context;
 
 import org.codehaus.jremoting.client.Context;
 
-public class DefaultServerSideContext implements Context {
-    private Long session;
-    private Context context;
-    private int hashCode;
+public class ServerSideContext implements Context {
+    private final Long session;
+    private final Context context;
 
-    public DefaultServerSideContext(Long session, Context context) {
+    public ServerSideContext(Long session, Context context) {
         this.session = session;
         this.context = context;
-        if (session != null && context != null) {
-            hashCode = session.hashCode() + context.hashCode();
-        }
     }
+
 
     public int hashCode() {
-        return hashCode;
+        int result;
+        result = session.hashCode();
+        result = 31 * result + context.hashCode();
+        return result;
     }
 
-    public boolean equals(Object obj) {
-        if (obj instanceof DefaultServerSideContext) {
-            DefaultServerSideContext other = (DefaultServerSideContext) obj;
-            if (!session.equals(other.session)) {
-                return false;
-            }
-            if (context == null || !context.equals(other.context)) {
-                return false;
-            }
-            return true;
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ServerSideContext that = (ServerSideContext) o;
+
+        if (!context.equals(that.context)) return false;
+        if (!session.equals(that.session)) return false;
+
+        return true;
     }
+
 
     public String toString() {
-        return "DefaultServerSideContext[session=" + session + ", context=" + context + "]";
+        return "ServerSideContext[session=" + session + ", context=" + context + "]";
     }
 
 }

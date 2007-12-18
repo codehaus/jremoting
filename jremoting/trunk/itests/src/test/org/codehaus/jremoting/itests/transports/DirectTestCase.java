@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
-import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
+import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.factories.NullContextFactory;
 import org.codehaus.jremoting.client.transports.direct.DirectClientInvoker;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
@@ -46,7 +46,7 @@ public class DirectTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new ClientSideStubFactory(new DirectClientInvoker(new ConsoleClientMonitor(), server), this.getClass().getClassLoader(), new NullContextFactory());
+        factory = new StubsOnClient(new DirectClientInvoker(new ConsoleClientMonitor(), server), this.getClass().getClassLoader(), new NullContextFactory());
         testClient = (TestInterface) factory.lookupService("Hello");
 
     }

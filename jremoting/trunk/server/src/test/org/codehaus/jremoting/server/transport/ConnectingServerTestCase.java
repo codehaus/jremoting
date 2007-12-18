@@ -19,7 +19,7 @@
 package org.codehaus.jremoting.server.transport;
 
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -85,7 +85,7 @@ public class ConnectingServerTestCase extends TestCase {
     private static class MyInvokerDelegate extends InvokerDelegate {
         Long tstSession;
         public MyInvokerDelegate(ServerMonitor sm) {
-            super(sm, new RefusingStubRetriever(), new NullAuthenticator(), new DefaultServerSideContextFactory());
+            super(sm, new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
             tstSession = super.newSession();
         }
 

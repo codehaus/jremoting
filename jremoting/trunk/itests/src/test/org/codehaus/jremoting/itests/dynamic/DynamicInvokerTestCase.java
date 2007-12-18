@@ -18,21 +18,21 @@
 package org.codehaus.jremoting.itests.dynamic;
 
 import junit.framework.TestCase;
-
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
+import org.codehaus.jremoting.client.factories.NullContextFactory;
 import org.codehaus.jremoting.client.invokers.DynamicInvoker;
-import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
 /**
  * Test case for the stubless invoker of remote methods
@@ -65,7 +65,7 @@ public class DynamicInvokerTestCase extends TestCase {
         // Client side setup
         dynamicInvoker = new DynamicInvoker(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(),
-                "127.0.0.1", 10101));
+                "127.0.0.1", 10101), new NullContextFactory());
 
     }
 

@@ -17,41 +17,43 @@
  */
 package org.codehaus.jremoting.itests.clientcontext;
 
-import java.util.HashMap;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Executors;
-
-import junit.framework.TestCase;
-
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.client.ClientInvoker;
+import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ClientInvoker;
+import org.codehaus.jremoting.client.factories.StubsOnClient;
+import org.codehaus.jremoting.client.factories.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
-import org.codehaus.jremoting.client.factories.SimpleContextFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.ServerSideContextFactory;
+import org.codehaus.jremoting.server.context.ServerContextFactory;
+import org.codehaus.jremoting.server.context.ServerSideContext;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.DefaultServerSideContext;
-import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
+import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
+import org.jmock.core.Stub;
+import org.jmock.core.Invocation;
+
+import java.util.HashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
  * @version $Revision: 1.2 $
  */
 
-public class ClientContextTestCase extends TestCase {
+public class ClientContextTestCase extends MockObjectTestCase {
 
     public void testSimpleMathsWorks() {
 
@@ -60,7 +62,7 @@ public class ClientContextTestCase extends TestCase {
             }
         };
 
-        ServerSideContextFactory contextFactory = new DefaultServerSideContextFactory();
+        ServerContextFactory contextFactory = new ThreadLocalServerContextFactory();
 
         Account fredsAccount = new TalkativeAccountStartingWith123Dollars(contextFactory, "fredsAccount", nullAccountListener);
         Account wilmasAccount = new TalkativeAccountStartingWith123Dollars(contextFactory, "wilmasAccount", nullAccountListener);
@@ -88,7 +90,18 @@ public class ClientContextTestCase extends TestCase {
             }
         };
 
-        ServerSideContextFactory contextFactory = new TestContextFactory();
+        ServerContextFactory contextFactory = new ServerContextFactory() {
+            public ServerSideContext get() {
+                return new ServerSideContext(new Long(123), new TestContext());
+            }
+
+            public void set(ServerSideContext context) {
+            }
+
+            public boolean isSet() {
+                return false;
+            }
+        };
 
         Account fredsAccount = new TalkativeAccountStartingWith123Dollars(contextFactory, "fredsAccount", al);
         Account wilmasAccount = new TalkativeAccountStartingWith123Dollars(contextFactory, "wilmasAccount", al);
@@ -105,12 +118,16 @@ public class ClientContextTestCase extends TestCase {
         Context debit11Context = contextualEvents.get("fredsAccount:debited:11");
         Context credit11Context = contextualEvents.get("wilmasAccount:credited:11");
 
-        basicAsserts(debit11Context, credit11Context);
+        assertNotNull("Debit should have been registered on server side", debit11Context);
+        assertNotNull("Credit should have been registered on server side", credit11Context);
+        assertEquals("Debit Context and Credit Context should be .equals()", debit11Context, credit11Context);
 
         Context debit22Context = contextualEvents.get("fredsAccount:debited:22");
         Context credit22Context = contextualEvents.get("wilmasAccount:credited:22");
 
-        basicAsserts(debit22Context, credit22Context);
+        assertNotNull("Debit should have been registered on server side", debit22Context);
+        assertNotNull("Credit should have been registered on server side", credit22Context);
+        assertEquals("Debit Context and Credit Context should be .equals()", debit22Context, credit22Context);
 
         assertFalse(debit11Context == credit22Context);
 
@@ -126,7 +143,7 @@ public class ClientContextTestCase extends TestCase {
             }
         };
 
-        ServerSideContextFactory sscf = new DefaultServerSideContextFactory();
+        ServerContextFactory sscf = new ThreadLocalServerContextFactory();
 
         Account fredsAccount = new TalkativeAccountStartingWith123Dollars(sscf, "fredsAccount", al);
         Account wilmasAccount = new TalkativeAccountStartingWith123Dollars(sscf, "wilmasAccount", al);
@@ -147,8 +164,8 @@ public class ClientContextTestCase extends TestCase {
         ClientStreamDriverFactory factory0 = new ClientCustomStreamDriverFactory();
         ClientMonitor cm = new ConsoleClientMonitor();
         ClientInvoker handler = new SocketClientStreamInvoker(cm, factory0, "127.0.0.1", 19333);
-        SimpleContextFactory factory1 = new SimpleContextFactory();
-        Factory factory = new ClientSideStubFactory(handler, factory1);
+        ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();
+        Factory factory = new StubsOnClient(handler, factory1);
 
         final AccountManager clientSideAccountManager = (AccountManager) factory.lookupService("OurAccountManager");
 
@@ -163,24 +180,22 @@ public class ClientContextTestCase extends TestCase {
         Context credit11 = contextualEvents.get("wilmasAccount:credited:11");
 
 
-        basicAsserts(debit11, credit11);
+        assertNotNull("Debit should have been registered on server side", debit11);
+        assertNotNull("Credit should have been registered on server side", credit11);
+        assertEquals("Debit Context and Credit Context should be .equals()", debit11, credit11);
 
-        assertTrue("Wrong type of Context", credit11 instanceof DefaultServerSideContext);
+        assertTrue("Wrong type of Context", credit11 instanceof ServerSideContext);
 
         Context debit22 = contextualEvents.get("fredsAccount:debited:22");
         Context credit22 = contextualEvents.get("wilmasAccount:credited:22");
 
-        basicAsserts(debit22, credit22);
+        assertNotNull("Debit should have been registered on server side", debit22);
+        assertNotNull("Credit should have been registered on server side", credit22);
+        assertEquals("Debit Context and Credit Context should be .equals()", debit22, credit22);
 
         assertFalse(debit11 == credit22);
 
 
-    }
-
-    private void basicAsserts(Context debitContext, Context creditContext) {
-        assertNotNull("Debit should have been registered on server side", debitContext);
-        assertNotNull("Credit should have been registered on server side", creditContext);
-        assertEquals("Debit Context and Credit Context should be .equals()", debitContext, creditContext);
     }
 
     private Thread makeAmountTransferringThread(final AccountManager accountManager,

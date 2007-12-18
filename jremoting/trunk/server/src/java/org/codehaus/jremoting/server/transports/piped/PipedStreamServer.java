@@ -23,7 +23,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.ServerSideContextFactory;
+import org.codehaus.jremoting.server.context.ServerContextFactory;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.transports.*;
 
@@ -43,7 +43,7 @@ public class PipedStreamServer extends ConnectingServer {
     private final ClassLoader facadesClassLoader;
 
     public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
-                             ScheduledExecutorService executorService, ServerSideContextFactory contextFactory,
+                             ScheduledExecutorService executorService, ServerContextFactory contextFactory,
                              ServerStreamDriverFactory serverStreamDriverFactory,
                              ClassLoader facadesClassLoader) {
         super(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
@@ -60,8 +60,8 @@ public class PipedStreamServer extends ConnectingServer {
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerSideContextFactory serverSideContextFactory, ServerStreamDriverFactory serverStreamDriverFactory) {
-        this(serverMonitor, stubRetriever, authenticator, executorService, serverSideContextFactory, serverStreamDriverFactory, PipedStreamServer.class.getClassLoader());
+    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, ServerStreamDriverFactory serverStreamDriverFactory) {
+        this(serverMonitor, stubRetriever, authenticator, executorService, serverContextFactory, serverStreamDriverFactory, PipedStreamServer.class.getClassLoader());
     }
 
     /**

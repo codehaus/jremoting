@@ -25,7 +25,6 @@ import java.util.*;
 
 import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.util.StubHelper;
-import org.codehaus.jremoting.requests.InvokeMethod;
 
 
 /**
@@ -94,9 +93,10 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
      * @throws StubRetrievalException if the class cannot be retrieved.
      */
     public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
-        String name = StubHelper.formatStubClassName(publishedName);
+        String stubClassName = StubHelper.formatStubClassName(publishedName);
+
         try {
-            return getThingBytes(name);
+            return getBytes(stubClassName);
         } catch (StubRetrievalException e) {
             String serviceName = StubHelper.getServiceName(publishedName);
             Class facadeClass = (Class) facadeClasses.get(serviceName);
@@ -105,7 +105,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
             }
             try {
                 generate(serviceName, facadeClass, classLoader);
-                return getThingBytes(name);
+                return getBytes(stubClassName);
             } catch (PublicationException e1) {
                 throw new StubRetrievalException("unable to dynamically create stub: "+ e.getMessage());
             }
@@ -113,20 +113,20 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     }
 
     /**
-     * @param thingName the thing name
-     * @return the byte array of the thing.
+     * @param stubClassName the name of the stub class
+     * @return the byte array of bytecode for the stub class.
      * @throws org.codehaus.jremoting.server.StubRetrievalException
      *          if getting the bytes was a problem.
      */
-    protected byte[] getThingBytes(String thingName) throws StubRetrievalException {
+    protected byte[] getBytes(String stubClassName) throws StubRetrievalException {
 
-        thingName = thingName.replace('.', File.separatorChar) + ".class";
+        stubClassName = stubClassName.replace('.', File.separatorChar) + ".class";
 
         FileInputStream fis;
 
         try {
             String cd = new File(classGenDir).getCanonicalPath();
-            String file = new File(cd, thingName).getAbsolutePath();
+            String file = new File(cd, stubClassName).getAbsolutePath();
             fis = new FileInputStream(file);
         } catch (Exception e) {
             String canonicalPath = null;
@@ -150,8 +150,6 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
             }
             fis.close();
         } catch (IOException e) {
-            e.printStackTrace();
-
             throw new StubRetrievalException("Error retrieving generated class bytes : " + e.getMessage());
         }
         return baos.toByteArray();
@@ -163,8 +161,8 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
             classLoader = this.getClass().getClassLoader();
         }
 
-        PublicationDescriptionItem[] primaryFacades = new PublicationDescriptionItem[0];
-        PublicationDescriptionItem[] additionalFacades = new PublicationDescriptionItem[0];
+        PublicationDescriptionItem[] primaryFacades;
+        PublicationDescriptionItem[] additionalFacades;
 
         primaryFacades = publicationDescription.getPrimaryFacades();
         additionalFacades = publicationDescription.getAdditionalFacades();

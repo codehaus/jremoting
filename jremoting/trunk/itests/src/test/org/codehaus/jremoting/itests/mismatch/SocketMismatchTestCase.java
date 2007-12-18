@@ -20,7 +20,7 @@ package org.codehaus.jremoting.itests.mismatch;
 import junit.framework.TestCase;
 
 import org.codehaus.jremoting.BadConnectionException;
-import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
+import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
 import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
@@ -76,12 +76,12 @@ public class SocketMismatchTestCase extends TestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ClientSideStubFactory factory = null;
+        StubsOnClient factory = null;
         TestInterface testClient;
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+            factory = new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientObjectStreamDriverFactory(), "127.0.0.1", 12001));
             testClient = (TestInterface) factory.lookupService("Hello");
 
@@ -118,11 +118,11 @@ public class SocketMismatchTestCase extends TestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ClientSideStubFactory factory = null;
+        StubsOnClient factory = null;
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+            factory = new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 12002));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
@@ -156,11 +156,11 @@ public class SocketMismatchTestCase extends TestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ClientSideStubFactory factory = null;
+        StubsOnClient factory = null;
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new RmiClientInvoker(new ConsoleClientMonitor(), "127.0.0.1", 12003));
+            factory = new StubsOnClient(new RmiClientInvoker(new ConsoleClientMonitor(), "127.0.0.1", 12003));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
 
@@ -192,11 +192,11 @@ public class SocketMismatchTestCase extends TestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ClientSideStubFactory factory = null;
+        StubsOnClient factory = null;
         try {
 
             // Client side setup
-            factory = new ClientSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+            factory = new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientObjectStreamDriverFactory(), "127.0.0.1", 12004));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 

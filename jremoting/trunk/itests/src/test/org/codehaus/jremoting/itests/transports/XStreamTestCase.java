@@ -3,7 +3,7 @@ package org.codehaus.jremoting.itests.transports;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 
-import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
+import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientXStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
@@ -11,7 +11,7 @@ import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.itests.TestInterface;
@@ -32,14 +32,14 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         ConsoleServerMonitor serverMonitor = new ConsoleServerMonitor();
         server = new SelfContainedSocketStreamServer(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(),
-                new ServerXStreamDriverFactory(), executorService, new DefaultServerSideContextFactory(), 10099);
+                new ServerXStreamDriverFactory(), executorService, new ThreadLocalServerContextFactory(), 10099);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        factory = new ClientSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+        factory = new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientXStreamDriverFactory(), "localhost", 10099));
         testClient = (TestInterface) factory.lookupService("Hello");
 

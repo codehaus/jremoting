@@ -17,25 +17,27 @@
  */
 package org.codehaus.jremoting.itests.async;
 
-import junit.framework.TestCase;
+import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.Factory;
+import org.codehaus.jremoting.client.factories.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.factories.ServerSideStubFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
+import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.jmock.MockObjectTestCase;
+import org.jmock.Mock;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class SimpleAsync2TestCase extends TestCase {
+public class SimpleAsync2TestCase extends MockObjectTestCase {
 
     AsyncTestImpl asyncTestImpl;
     AsyncTest testClient;
@@ -61,7 +63,7 @@ public class SimpleAsync2TestCase extends TestCase {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
                 new ServerCustomStreamDriverFactory(), executorService,
-                new DefaultServerSideContextFactory(), 11009);
+                new ThreadLocalServerContextFactory(), 11009);
 
         asyncTestImpl = new AsyncTestImpl();
         // automatic determination of async elements.
@@ -71,8 +73,10 @@ public class SimpleAsync2TestCase extends TestCase {
         server.start();
 
         // Client side setup
-        factory = new ServerSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
-                new ClientCustomStreamDriverFactory(), "127.0.0.1", 11009));
+        Mock mock = mock(ContextFactory.class);
+        mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
+        factory = new StubsFromServer(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+                new ClientCustomStreamDriverFactory(), "127.0.0.1", 11009), (ContextFactory) mock.proxy());
         testClient = (AsyncTest) factory.lookupService("AsyncTestB");
 
     }

@@ -23,32 +23,33 @@ import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.util.StubHelper;
 
 /**
- * Class ClientSideStubFactory
+ * Class StubsOnClient
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ClientSideStubFactory extends AbstractFactory {
-    private ClassLoader classLoader;
+public class StubsOnClient extends AbstractFactory {
 
-    public ClientSideStubFactory(ClientInvoker clientInvoker) throws ConnectionException {
+    private ClassLoader stubsClasLoader;
+
+    public StubsOnClient(ClientInvoker clientInvoker) throws ConnectionException {
         this(clientInvoker, Thread.currentThread().getContextClassLoader(), new NullContextFactory());
     }
 
-    public ClientSideStubFactory(ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
+    public StubsOnClient(ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
         this(clientInvoker, Thread.currentThread().getContextClassLoader(), contextFactory);
     }
 
-    public ClientSideStubFactory(ClientInvoker clientInvoker, ClassLoader facadesClassLoader, ContextFactory contextFactory
+    public StubsOnClient(ClientInvoker clientInvoker, ClassLoader stubsClasLoader, ContextFactory contextFactory
     ) throws ConnectionException {
         super(clientInvoker, contextFactory);
-        this.classLoader = facadesClassLoader;
+        this.stubsClasLoader = stubsClasLoader;
     }
 
 
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
         String stubClassName = StubHelper.formatStubClassName(publishedServiceName, objectName);
-        return classLoader.loadClass(stubClassName);
+        return stubsClasLoader.loadClass(stubClassName);
     }
 
 }

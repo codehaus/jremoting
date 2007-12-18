@@ -52,8 +52,10 @@ import org.codehaus.jremoting.responses.MethodInvoked;
 import org.codehaus.jremoting.responses.StubClass;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.*;
+import org.codehaus.jremoting.server.context.ServerContextFactory;
+import org.codehaus.jremoting.server.context.ServerSideContext;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.DefaultServerSideContextFactory;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.util.StubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
@@ -69,15 +71,15 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
     private final Authenticator authenticator;
     private final ServerMonitor serverMonitor;
 
-    private final ServerSideContextFactory contextFactory;
+    private final ServerContextFactory contextFactory;
 
     public InvokerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever,
-                           Authenticator authenticator, ServerSideContextFactory contextFactory) {
+                           Authenticator authenticator, ServerContextFactory contextFactory) {
         super(stubRetriever instanceof Publisher ? (Publisher) stubRetriever : null);
         this.stubRetriever = stubRetriever;
         this.authenticator = authenticator;
         this.serverMonitor = serverMonitor != null ? serverMonitor : new ConsoleServerMonitor();
-        this.contextFactory = contextFactory != null ? contextFactory : new DefaultServerSideContextFactory();
+        this.contextFactory = contextFactory != null ? contextFactory : new ThreadLocalServerContextFactory();
     }
 
     public Response invoke(Request request, Object connectionDetails) {
@@ -147,7 +149,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         }
     }
 
-    protected synchronized ServerSideContextFactory getClientContextFactory() {
+    protected synchronized ServerContextFactory getServerContextFactory() {
         return contextFactory;
     }
 
@@ -156,7 +158,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         Context clientSideContext = request.getContext();
 
         // *always* happens before method invocations.
-        getClientContextFactory().set(session, clientSideContext);
+        getServerContextFactory().set(new ServerSideContext(session, clientSideContext));
 
     }
 

@@ -26,7 +26,7 @@ import org.codehaus.jremoting.client.SimpleContext;
  * @version $Revision: 1.2 $
  */
 
-public class SimpleContextFactory implements ContextFactory {
+public class ThreadLocalContextFactory implements ContextFactory {
 
     // The next serial number to be assigned
     private static long nextSerialNum = 1;

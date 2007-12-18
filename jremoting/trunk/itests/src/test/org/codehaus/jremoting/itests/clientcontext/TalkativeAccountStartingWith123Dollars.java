@@ -18,7 +18,8 @@
 package org.codehaus.jremoting.itests.clientcontext;
 
 import org.codehaus.jremoting.client.Context;
-import org.codehaus.jremoting.server.ServerSideContextFactory;
+import org.codehaus.jremoting.server.context.ServerContextFactory;
+import org.codehaus.jremoting.server.context.ServerSideContext;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
@@ -27,12 +28,12 @@ import org.codehaus.jremoting.server.ServerSideContextFactory;
 
 public class TalkativeAccountStartingWith123Dollars implements Account {
 
-    private ServerSideContextFactory contextFactory;
+    private ServerContextFactory contextFactory;
     private String id;
     private int balance = 123;
     private AccountListener accountListener;
 
-    public TalkativeAccountStartingWith123Dollars(ServerSideContextFactory contextFactory, String id, AccountListener accountListener) {
+    public TalkativeAccountStartingWith123Dollars(ServerContextFactory contextFactory, String id, AccountListener accountListener) {
         this.contextFactory = contextFactory;
         this.id = id;
         this.accountListener = accountListener;
@@ -47,7 +48,9 @@ public class TalkativeAccountStartingWith123Dollars implements Account {
     }
 
     public void debit(int amt) throws DebitBarfed {
-        Context cc = contextFactory.get();
+        System.out.println("-->" + contextFactory);
+        Object o = contextFactory.get();
+        Context cc = (Context) o;
         balance = balance - amt;
         accountListener.record(getID() + ":debited:" + amt, cc);
     }

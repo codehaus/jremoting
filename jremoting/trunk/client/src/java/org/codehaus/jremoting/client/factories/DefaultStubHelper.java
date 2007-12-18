@@ -368,7 +368,7 @@ public final class DefaultStubHelper implements StubHelper {
     private synchronized void setContext(Servicable request) {
 
         if (contextFactory == null) {
-            contextFactory = new SimpleContextFactory();
+            contextFactory = new ThreadLocalContextFactory();
         }
         request.setContext(contextFactory.getClientContext());
 

@@ -32,20 +32,16 @@ import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.util.StubHelper;
 
 /**
- * Class ServerSideStubFactory
+ * Class StubsFromServer
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ServerSideStubFactory extends AbstractFactory {
+public class StubsFromServer extends AbstractFactory {
 
     private final HashMap publishedServiceClassLoaders = new HashMap();
 
-    public ServerSideStubFactory(ClientInvoker clientInvoker) throws ConnectionException {
-        super(clientInvoker, new NullContextFactory());
-    }
-
-    public ServerSideStubFactory(ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
+    public StubsFromServer(ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
         super(clientInvoker, contextFactory);
     }
 

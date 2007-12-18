@@ -15,31 +15,21 @@
  * limitations under the License.
  *
  */
-
-package org.codehaus.jremoting.server.transports;
+package org.codehaus.jremoting.server.context;
 
 import org.codehaus.jremoting.client.Context;
-import org.codehaus.jremoting.server.ServerSideContextFactory;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
  * @version $Revision: 1.2 $
  */
 
-public class DefaultServerSideContextFactory implements ServerSideContextFactory {
+public interface ServerContextFactory {
 
-    private static ThreadLocal contexts = new ThreadLocal();
+    ServerSideContext get();
 
-    public Context get() {
-        return (Context) contexts.get();
-    }
+    void set(ServerSideContext context);
 
-    public void set(Long session, Context context) {
-        contexts.set(new DefaultServerSideContext(session, context));
-    }
-
-    public boolean isSet() {
-        return contexts.get() != null;
-    }
+    boolean isSet();
 
 }

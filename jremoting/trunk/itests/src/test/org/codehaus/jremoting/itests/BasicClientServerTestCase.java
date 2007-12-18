@@ -22,7 +22,7 @@ import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.factories.ClientSideStubFactory;
+import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
 import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
@@ -43,7 +43,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
     public void testNoServer() throws Exception {
         try {
-            new ClientSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+            new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 12345));
             fail("Should have have failed.");
         } catch (ConnectionRefusedException e) {
@@ -64,7 +64,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
 
-            ClientSideStubFactory cssf = new ClientSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+            StubsOnClient cssf = new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 12333));
             cssf.lookupService("foo");
 
@@ -96,7 +96,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
             SocketClientStreamInvoker invoker = new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                     new ClientObjectStreamDriverFactory(), "localhost", 12331);
-            ClientSideStubFactory cssf = new ClientSideStubFactory(invoker);
+            StubsOnClient cssf = new StubsOnClient(invoker);
             cssf.lookupService("Hello");
             invoker.invoke(new InvokeMethod("Hello", "Main", "ping()",new Object [0], (long) 44332, (long) 21));
 
@@ -127,7 +127,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // Client side setup
         try {
-            new ClientSideStubFactory(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+            new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 12347));
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
@@ -151,7 +151,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // Client side setup
         try {
-            new ClientSideStubFactory(new RmiClientInvoker(new ConsoleClientMonitor(), "127.0.0.1", 12348));
+            new StubsOnClient(new RmiClientInvoker(new ConsoleClientMonitor(), "127.0.0.1", 12348));
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {
