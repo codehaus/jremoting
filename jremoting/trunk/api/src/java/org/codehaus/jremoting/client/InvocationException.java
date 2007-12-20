@@ -17,6 +17,8 @@
  */
 package org.codehaus.jremoting.client;
 
+import org.codehaus.jremoting.JRemotingException;
+
 import java.io.Serializable;
 
 /**
@@ -25,7 +27,7 @@ import java.io.Serializable;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class InvocationException extends RuntimeException implements Serializable {
+public class InvocationException extends JRemotingException implements Serializable {
 
 
     /**

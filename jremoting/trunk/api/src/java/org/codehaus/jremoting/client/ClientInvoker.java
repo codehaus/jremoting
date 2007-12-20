@@ -18,10 +18,11 @@
 package org.codehaus.jremoting.client;
 
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.responses.Response;
 
 import java.util.concurrent.ScheduledExecutorService;
-import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.responses.Response;
 
 /**
  * Interface ClientInvoker
@@ -33,9 +34,9 @@ public interface ClientInvoker {
 
     Response invoke(Request request);
 
-    void initialize() throws ConnectionException;
+    ConnectionOpened openConnection() throws ConnectionException;
 
-    void close();
+    void closeConnection(Long sessionID);
 
     long getLastRealRequestTime();
 

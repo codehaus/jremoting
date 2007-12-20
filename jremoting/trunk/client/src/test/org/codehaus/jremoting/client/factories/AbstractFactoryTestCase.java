@@ -17,11 +17,11 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
     public void testOpenCloseSequence() throws ConnectionException {
 
         Mock ih = mock(ClientInvoker.class);
-        ih.expects(once()).method("initialize");
+        ih.expects(once()).method("openConnection");
         ih.expects(once()).method("invoke").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new Service((long) 321)));
         ih.expects(once()).method("invoke").with(isA(CloseConnection.class)).will(returnValue(new ConnectionClosed((long) 321)));
-        ih.expects(once()).method("close");
+        ih.expects(once()).method("closeConnection");
 
         Mock cf = mock(ContextFactory.class);
 
@@ -46,7 +46,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
     public void testNotPublishedResponseToLookup() throws ConnectionException {
 
         Mock ih = mock(ClientInvoker.class);
-        ih.expects(once()).method("initialize");
+        ih.expects(once()).method("openConnection");
         ih.expects(once()).method("invoke").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new NotPublished()));
 
@@ -70,7 +70,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
     public void testConnectionExceptionThrownResponseToLookup() throws ConnectionException {
 
         Mock ih = mock(ClientInvoker.class);
-        ih.expects(once()).method("initialize");
+        ih.expects(once()).method("openConnection");
         ih.expects(once()).method("invoke").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new ConnectionException("foo"))));
 
@@ -92,7 +92,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
     public void testRuntimeExceptionThrownResponseToLookup() throws ConnectionException {
 
         Mock ih = mock(ClientInvoker.class);
-        ih.expects(once()).method("initialize");
+        ih.expects(once()).method("openConnection");
         ih.expects(once()).method("invoke").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new RuntimeException("foo"))));
 
@@ -114,7 +114,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
     public void testErrorThrownResponseToLookup() throws ConnectionException {
 
         Mock ih = mock(ClientInvoker.class);
-        ih.expects(once()).method("initialize");
+        ih.expects(once()).method("openConnection");
         ih.expects(once()).method("invoke").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new Error("foo"))));
 
@@ -136,7 +136,7 @@ public class AbstractFactoryTestCase extends MockObjectTestCase {
     public void testLookupUpOfServices() throws ConnectionException {
 
         Mock ih = mock(ClientInvoker.class);
-        ih.expects(once()).method("initialize");
+        ih.expects(once()).method("openConnection");
         ih.expects(once()).method("invoke").with(isA(OpenConnection.class)).will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(ListServices.class)).will(returnValue(new ServicesList(new String[] {"1", "2"})));
 

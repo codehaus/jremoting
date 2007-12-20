@@ -51,11 +51,6 @@ public class StatefulServer implements Server {
         this.serverMonitor = serverMonitor;
     }
 
-
-    public synchronized ScheduledExecutorService getScheduledExecutorService() {
-        return executorService;
-    }
-
     /**
      * Handle an Invocation
      *
@@ -85,7 +80,7 @@ public class StatefulServer implements Server {
     }
 
     /**
-     * Method start
+     * Method openConnection
      */
     public void start() {
         setState(STARTED);

@@ -44,7 +44,7 @@ import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class SelfContainedSocketStreamServer extends SocketStreamServer implements Runnable {
+public class SelfContainedSocketStreamServer extends SocketStreamServer {
 
     /**
      * The server socket.
@@ -149,30 +149,8 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
         return new ThreadLocalServerContextFactory();
     }
 
-
     /**
-     * Method run
-     */
-    public void run() {
-
-        boolean accepting = false;
-        try {
-            while (getState().equals(STARTED)) {
-
-                accepting = true;
-                Socket sock = serverSocket.accept();
-                handleConnection(sock);
-
-            }
-        } catch (IOException ioe) {
-            handleIOE(accepting, ioe);
-        }
-    }
-
-
-
-    /**
-     * Method start
+     * Method openConnection
      */
     public void start() {
 
@@ -183,7 +161,23 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer implemen
             throw new JRemotingException("Could not bind to port '"+port+"'when setting up the server", ioe);
         }
         setState(STARTED);
-        future = getScheduledExecutorService().submit(this);
+        future = executorService.submit(new Runnable() {
+            public void run() {
+
+                boolean accepting = false;
+                try {
+                    while (getState().equals(STARTED)) {
+
+                        accepting = true;
+                        Socket sock = serverSocket.accept();
+                        handleConnection(sock);
+
+                    }
+                } catch (IOException ioe) {
+                    handleIOE(accepting, ioe);
+                }
+            }
+        });
     }
 
     /**

@@ -18,6 +18,7 @@
 package org.codehaus.jremoting.client;
 
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.JRemotingException;
 
 import java.io.IOException;
 
@@ -69,4 +70,6 @@ public interface ClientMonitor {
     void classNotFound(Class clazz, String msg, ClassNotFoundException cnfe);
 
     InvocationException unexpectedIOException(Class clazz, String msg, IOException ioe);
+
+    void pingFailure(Class clazz, JRemotingException jre);
 }

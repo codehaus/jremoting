@@ -77,9 +77,9 @@ public class DynamicInvokerTestCase extends TestCase {
         testClient = null;
         System.gc();
 
-        dynamicInvoker.close(); //close@client
+        dynamicInvoker.close(); //closeConnection@client
 
-        server.stop(); //close@server
+        server.stop(); //closeConnection@server
 
         server = null;
         testServer = null;

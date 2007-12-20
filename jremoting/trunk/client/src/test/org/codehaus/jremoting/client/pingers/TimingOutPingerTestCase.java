@@ -25,7 +25,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class PerpetualPingerTestCase extends MockObjectTestCase {
+public class TimingOutPingerTestCase extends MockObjectTestCase {
 
     public void testThatPinderSchedulesAndInvokesPingOncePerRun() throws InterruptedException {
 
@@ -33,6 +33,7 @@ public class PerpetualPingerTestCase extends MockObjectTestCase {
         Mock ses = mock(ScheduledExecutorService.class);
         Mock future = mock(ScheduledFuture.class);
         ci.expects(once()).method("getScheduledExecutorService").withNoArguments().will(returnValue(ses.proxy()));
+        long lastRequestTime = System.currentTimeMillis() - 10;
 
         final Runnable[] runnable = new Runnable[1];
 
@@ -47,22 +48,33 @@ public class PerpetualPingerTestCase extends MockObjectTestCase {
             }
         }, eq(1L), eq(1L), eq(TimeUnit.SECONDS)).will(returnValue(future.proxy()));
 
-        PerpetualPinger pcp = new PerpetualPinger(1);
+        TimingOutPinger pcp = new TimingOutPinger(1,2);
         pcp.start((ClientInvoker) ci.proxy());
 
         ci.expects(exactly(3)).method("ping").withNoArguments();
+        ci.expects(once()).method("getLastRealRequestTime").withNoArguments().will(returnValue(lastRequestTime++));
 
         runnable[0].run();
+        ci.expects(once()).method("getLastRealRequestTime").withNoArguments().will(returnValue(lastRequestTime++));
         runnable[0].run();
+        ci.expects(once()).method("getLastRealRequestTime").withNoArguments().will(returnValue(lastRequestTime++));
         runnable[0].run();
 
         ci.expects(once()).method("ping").withNoArguments().will(throwException(new RuntimeException("forced failure")));
+        ci.expects(once()).method("getLastRealRequestTime").withNoArguments().will(returnValue(lastRequestTime++));
 
         try {
             runnable[0].run();
         } catch (RuntimeException e) {
             assertEquals("forced failure", e.getMessage());
         }
+
+        Thread.sleep(2010);
+
+        ci.expects(once()).method("getLastRealRequestTime").withNoArguments().will(returnValue(lastRequestTime++));
+        future.expects(once()).method("cancel").with(eq(true)).will(returnValue(true));
+
+        runnable[0].run();
 
 
     }

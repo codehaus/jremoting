@@ -18,14 +18,19 @@
 package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.ConnectionException;
-
-import java.util.concurrent.ScheduledExecutorService;
+import org.codehaus.jremoting.JRemotingException;
 import org.codehaus.jremoting.client.ClientInvoker;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.requests.CloseConnection;
+import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.requests.Ping;
+import org.codehaus.jremoting.responses.ConnectionClosed;
+import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.responses.Response;
+
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Class StatefulClientInvoker
@@ -60,15 +65,19 @@ public abstract class StatefulClientInvoker implements ClientInvoker {
         return clientMonitor;
     }
 
-    public void initialize() throws ConnectionException {
-        connectionPinger.setInvoker(this);
-        connectionPinger.start();
+    public ConnectionOpened openConnection() throws ConnectionException {
+        Response resp = invoke(new OpenConnection());
+        connectionPinger.start(this);
+        if (!(resp instanceof ConnectionOpened)) {
+            throw new ConnectionException("Setting of host context blocked for reasons of unknown, server-side response: (" + resp.getClass().getName() + ")");
+        }
+        return (ConnectionOpened) resp;
     }
 
-    public void close() {
-
+    public void closeConnection(Long sessionID) {
+        ConnectionClosed closed = (ConnectionClosed) invoke(new CloseConnection(sessionID));
         connectionPinger.stop();
-
+        // TODO check closed ?
         stopped = true;
     }
 
@@ -78,7 +87,11 @@ public abstract class StatefulClientInvoker implements ClientInvoker {
             throw new ConnectionClosedException("Connection closed");
         }
 
-        Response ar = invoke(new Ping());
+        try {
+            invoke(new Ping());
+        } catch (JRemotingException e) {
+            clientMonitor.pingFailure(this.getClass(), e);
+        }
     }
 
     protected abstract boolean tryReconnect();

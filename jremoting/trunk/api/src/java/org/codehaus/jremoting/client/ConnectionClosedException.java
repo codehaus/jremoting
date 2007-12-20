@@ -17,13 +17,15 @@
  */
 package org.codehaus.jremoting.client;
 
+import org.codehaus.jremoting.JRemotingException;
+
 /**
  * Class ConnectionClosedException
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ConnectionClosedException extends RuntimeException {
+public class ConnectionClosedException extends JRemotingException {
 
     /**
      * Constructor ConnectionClosedException

@@ -21,6 +21,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.JRemotingException;
 
 import java.io.IOException;
 
@@ -61,6 +62,9 @@ public class NullClientMonitor implements ClientMonitor {
 
     public InvocationException unexpectedIOException(Class clazz, String msg, IOException ioe) {
         return new InvocationException("IO Exception during invocation to server :" + ioe.getMessage());
+    }
+
+    public void pingFailure(Class clazz, JRemotingException jre) {
     }
 
 }

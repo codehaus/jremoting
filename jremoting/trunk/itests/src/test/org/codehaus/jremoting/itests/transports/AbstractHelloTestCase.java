@@ -242,7 +242,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
             testClient.testSpeed();
         }
         long end = System.currentTimeMillis();
-        //System.out.println("--> ST " + this.getClass().getName() + " " + iterations + " " + ((end - start)/1000) );
+        //System.out.println("--> ST " + this.getClass().getName() + " " + iterations + " " + ((end - openConnection)/1000) );
 
 
     }

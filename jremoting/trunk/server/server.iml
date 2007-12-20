@@ -41,7 +41,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$M2_REPOSITORY$/jmock/jmock/1.0.1/jmock-1.0.1.jar!/" />
+          <root url="jar://$M2_REPOSITORY$/jmock/1.2.0/jmock-1.2.0jmock/1.2.0/jmock-1.2.01.0.1/jmock-1.0.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

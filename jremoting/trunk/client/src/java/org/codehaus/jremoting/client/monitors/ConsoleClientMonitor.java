@@ -4,6 +4,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.JRemotingException;
 
 import java.io.IOException;
 
@@ -75,6 +76,10 @@ public class ConsoleClientMonitor implements ClientMonitor {
         System.out.println("ConsoleClientMonitor: unexpectedIOException: for class'" + clazz.getName() + "' msg: '" + msg + "' IOException: '" + ioe.getMessage() + "'" );
         ioe.printStackTrace();
         return delegate.unexpectedIOException(clazz, msg, ioe);
+    }
+
+    public void pingFailure(Class clazz, JRemotingException jre) {
+        System.out.println("ConsoleClientMonitor: pingFailure: for class'" + clazz.getName() + "' JRemotingException: '" + jre.getMessage() + "'" );
     }
 
 }

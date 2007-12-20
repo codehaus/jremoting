@@ -613,7 +613,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
 
     /**
      * Method getFreeIndexToStart.
-     * Returns the index to start allocating the subsequent stack variables
+     * Returns the index to openConnection allocating the subsequent stack variables
      *
      * @param classes the classes
      * @return int the index

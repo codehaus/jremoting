@@ -18,6 +18,7 @@
 package org.codehaus.jremoting.client.transports.piped;
 
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.responses.ConnectionOpened;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
@@ -55,8 +56,7 @@ public class PipedClientStreamInvoker extends StreamClientInvoker {
      */
     public PipedClientStreamInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                         ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, ClientStreamDriverFactory clientStreamDriverFactory, PipedInputStream is,
-                                        PipedOutputStream os
-    ) {
+                                        PipedOutputStream os) {
 
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader, clientStreamDriverFactory);
 
@@ -73,13 +73,13 @@ public class PipedClientStreamInvoker extends StreamClientInvoker {
     }
 
     /**
-     * Method initialize
+     * Method openConnection
      *
      * @throws ConnectionException
      */
-    public void initialize() throws ConnectionException {
+    public ConnectionOpened openConnection() throws ConnectionException {
         setObjectDriver(streamDriverFactory.makeDriver(inputStream, outputStream, getFacadesClassLoader()));
-        super.initialize();
+        return super.openConnection();
     }
 
     protected boolean tryReconnect() {

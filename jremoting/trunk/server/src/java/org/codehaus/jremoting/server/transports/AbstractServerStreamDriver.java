@@ -59,13 +59,13 @@ public abstract class AbstractServerStreamDriver implements ServerStreamDriver {
         try {
             inputStream.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "AbstractServerStreamDriver.close(): Failed closing an JRemoting connection input stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractServerStreamDriver.closeConnection(): Failed closing an JRemoting connection input stream: ", e);
         }
 
         try {
             outputStream.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "AbstractServerStreamDriver.close(): Failed closing an JRemoting connection output stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractServerStreamDriver.closeConnection(): Failed closing an JRemoting connection output stream: ", e);
         }
     }
 

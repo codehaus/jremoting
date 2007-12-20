@@ -17,34 +17,13 @@
  */
 package org.codehaus.jremoting;
 
-/**
- * RumtimeException with cascade features.
- * Allows recording of nested exceptions.
- */
 public class JRemotingException extends RuntimeException {
-    private final Throwable throwable;
 
-    /**
-     * Construct a new <code>CascadingRuntimeException</code> instance.
-     *
-     * @param message   The detail message for this exception.
-     * @param throwable the root cause of the exception
-     */
     public JRemotingException(final String message, final Throwable throwable) {
-        super(message);
-        this.throwable = throwable;
+        super(message, throwable);
     }
 
     public JRemotingException(final String message) {
-        this(message, null);
-    }
-
-    /**
-     * Retrieve root cause of the exception.
-     *
-     * @return the root cause
-     */
-    public final Throwable getCause() {
-        return throwable;
+        super(message);
     }
 }

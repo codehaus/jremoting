@@ -4,6 +4,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.JRemotingException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
 
@@ -46,7 +47,7 @@ public class Log4JClientMonitor implements ClientMonitor {
     }
 
     public void serviceSuspended(Class clazz, final Request request, final int attempt, final int suggestedWaitMillis) {
-        getLog(clazz).debug("ConsoleClientMonitor: serviceSuspended:" + maybeWriteClass(clazz) + "' attempt: '" + attempt + "' waiting: '" + suggestedWaitMillis + "'");
+        getLog(clazz).debug("Log4JClientMonitor: serviceSuspended:" + maybeWriteClass(clazz) + "' attempt: '" + attempt + "' waiting: '" + suggestedWaitMillis + "'");
         delegate.serviceSuspended(clazz, request, attempt, suggestedWaitMillis);
     }
 
@@ -61,12 +62,12 @@ public class Log4JClientMonitor implements ClientMonitor {
     }
 
     public void serviceAbend(Class clazz, int attempt, IOException cause) {
-        getLog(clazz).debug("ConsoleClientMonitor: serviceAbend:" + maybeWriteClass(clazz) + "' attempt: '" + attempt + "' IOException: '" + cause.getMessage() + "'", cause );
+        getLog(clazz).debug("Log4JClientMonitor: serviceAbend:" + maybeWriteClass(clazz) + "' attempt: '" + attempt + "' IOException: '" + cause.getMessage() + "'", cause );
         delegate.serviceAbend(clazz, attempt, cause);
     }
 
     public void invocationFailure(Class clazz, String publishedServiceName, String objectName, String methodSignature, InvocationException ie) {
-        getLog(clazz).debug("ConsoleClientMonitor: invocationFailure:" + maybeWriteClass(clazz) + "' publishedServiceName: '" + publishedServiceName +
+        getLog(clazz).debug("Log4JClientMonitor: invocationFailure:" + maybeWriteClass(clazz) + "' publishedServiceName: '" + publishedServiceName +
                 "' objectName: '" + objectName +
                 "' methodSignature: '" + methodSignature +
                 "' InvocationException: '" + ie.getMessage() + "'", ie );
@@ -74,24 +75,28 @@ public class Log4JClientMonitor implements ClientMonitor {
     }
 
     public void unexpectedConnectionClosed(Class clazz, String name, ConnectionClosedException cce) {
-        getLog(clazz).debug("ConsoleClientMonitor: unexpectedClosedConnection:" + maybeWriteClass(clazz) + "' name: '" + name + "' ConnectionClosedException: '" + cce.getMessage() + "'", cce);
+        getLog(clazz).debug("Log4JClientMonitor: unexpectedClosedConnection:" + maybeWriteClass(clazz) + "' name: '" + name + "' ConnectionClosedException: '" + cce.getMessage() + "'", cce);
         delegate.unexpectedConnectionClosed(clazz, name, cce);
     }
 
     public void unexpectedInterruption(Class clazz, String name, InterruptedException ie) {
-        getLog(clazz).debug("ConsoleClientMonitor: unexpectedInterruption:" + maybeWriteClass(clazz) + "' name: '" + name + "'", ie);
+        getLog(clazz).debug("Log4JClientMonitor: unexpectedInterruption:" + maybeWriteClass(clazz) + "' name: '" + name + "'", ie);
         delegate.unexpectedInterruption(clazz, name, ie);
     }
 
     public void classNotFound(Class clazz, String msg, ClassNotFoundException cnfe) {
-        getLog(clazz).debug("ConsoleClientMonitor: classNotFound:" + maybeWriteClass(clazz) + "' msg: '" + msg + "' ClassNotFoundException: '" + cnfe.getMessage() + "'" , cnfe);
+        getLog(clazz).debug("Log4JClientMonitor: classNotFound:" + maybeWriteClass(clazz) + "' msg: '" + msg + "' ClassNotFoundException: '" + cnfe.getMessage() + "'" , cnfe);
         cnfe.printStackTrace();
         delegate.classNotFound(clazz, msg, cnfe);
     }
 
     public InvocationException unexpectedIOException(Class clazz, String msg, IOException ioe) {
-        getLog(clazz).debug("ConsoleClientMonitor: unexpectedIOException:" + maybeWriteClass(clazz) + "' msg: '" + msg + "' IOException: '" + ioe.getMessage() + "'" , ioe);
+        getLog(clazz).debug("Log4JClientMonitor: unexpectedIOException:" + maybeWriteClass(clazz) + "' msg: '" + msg + "' IOException: '" + ioe.getMessage() + "'" , ioe);
         return delegate.unexpectedIOException(clazz, msg, ioe);
+    }
+
+    public void pingFailure(Class clazz, JRemotingException jre) {
+        getLog(clazz).debug("Log4JClientMonitor: pingFailure:" + maybeWriteClass(clazz) + "' JRemotingException: '" + jre.getMessage() + "'");
     }
 
     protected String maybeWriteClass(Class clazz) {

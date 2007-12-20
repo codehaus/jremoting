@@ -21,6 +21,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.JRemotingException;
 
 import java.io.IOException;
 
@@ -154,6 +155,10 @@ public class SimpleRetryingClientMonitor implements ClientMonitor {
 
     public InvocationException unexpectedIOException(Class clazz, String msg, IOException ioe) {
         return delegate.unexpectedIOException(clazz, msg, ioe);
+    }
+
+    public void pingFailure(Class clazz, JRemotingException jre) {
+        delegate.pingFailure(clazz, jre);
     }
 
     void printMessage(String message) {

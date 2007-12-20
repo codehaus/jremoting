@@ -20,17 +20,43 @@ package org.codehaus.jremoting.client.pingers;
 import org.codehaus.jremoting.client.ClientInvoker;
 import org.codehaus.jremoting.client.ConnectionPinger;
 
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 /**
- * Interface NeverConnectionPinger
+ * PerpetualPinger pings forever.
+ * You are going to have to stop() it yourself
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public class NeverConnectionPinger implements ConnectionPinger {
+public class PerpetualPinger implements ConnectionPinger {
+
+    private Runnable runnable;
+
+    private ClientInvoker invoker;
+    private ScheduledFuture pingingFuture;
+    private int pingIntervalSeconds;
+
+    public PerpetualPinger(int pingIntervalSeconds) {
+        this.pingIntervalSeconds = pingIntervalSeconds;
+        runnable = new Runnable() {
+            public void run() {
+                invoker.ping();
+            }
+        };
+    }
+
+    public PerpetualPinger() {
+        this(10);
+    }
 
     public void start(ClientInvoker invoker) {
+        this.invoker = invoker;
+        pingingFuture = invoker.getScheduledExecutorService().scheduleAtFixedRate(runnable, pingIntervalSeconds, pingIntervalSeconds, TimeUnit.SECONDS);
     }
 
     public void stop() {
+        pingingFuture.cancel(true);
     }
 }

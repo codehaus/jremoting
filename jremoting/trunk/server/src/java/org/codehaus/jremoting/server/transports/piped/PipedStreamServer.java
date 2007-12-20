@@ -91,7 +91,7 @@ public class PipedStreamServer extends ConnectingServer {
 
             PipedStreamConnection pssc = new PipedStreamConnection(this, pIS, pOS, ssd, serverMonitor);
 
-            getScheduledExecutorService().execute(pssc);
+            executorService.execute(pssc);
 
         } catch (IOException pe) {
             throw new ConnectionException("Some problem setting up server : " + pe.getMessage());

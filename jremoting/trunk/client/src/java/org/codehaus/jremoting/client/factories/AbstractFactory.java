@@ -25,12 +25,9 @@ import java.util.HashMap;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.authentications.Authentication;
 import org.codehaus.jremoting.client.*;
-import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.ListServices;
 import org.codehaus.jremoting.requests.LookupService;
-import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.responses.NotPublished;
@@ -61,17 +58,10 @@ public abstract class AbstractFactory implements Factory {
         this.clientInvoker = clientInvoker;
         this.contextFactory = contextFactory;
 
-        clientInvoker.initialize();
+        ConnectionOpened response = clientInvoker.openConnection();
 
-        Response response = clientInvoker.invoke(new OpenConnection());
-
-        if (response instanceof ConnectionOpened) {
-            textToSign = ((ConnectionOpened) response).getTextToSign();
-            sessionID = ((ConnectionOpened) response).getSessionID();
-        } else {
-
-            throw new ConnectionException("Setting of host context blocked for reasons of unknown, server-side response: (" + response.getClass().getName() + ")");
-        }
+        textToSign = response.getTextToSign();
+        sessionID = response.getSessionID();
 
         stubRegistry = new StubRegistry() {
 
@@ -198,7 +188,7 @@ public abstract class AbstractFactory implements Factory {
         try {
             Class stubClass = getStubClass(publishedServiceName, objectName);
             Constructor[] constructors = stubClass.getConstructors();
-            return constructors[0].newInstance(new Object[]{stubHelper});
+            return constructors[0].newInstance(stubHelper);
         } catch (InvocationTargetException ite) {
             throw new ConnectionException("Generated class not instantiated : " + ite.getTargetException().getMessage());
         } catch (ClassNotFoundException cnfe) {
@@ -211,9 +201,7 @@ public abstract class AbstractFactory implements Factory {
     }
 
     public void close() {
-        CloseConnection request = new CloseConnection(sessionID);
-        ConnectionClosed closed = (ConnectionClosed) clientInvoker.invoke(request);
-        clientInvoker.close();
+        clientInvoker.closeConnection(sessionID);
     }
 
 
