@@ -17,18 +17,18 @@
  */
 package org.codehaus.jremoting.server.transports;
 
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.util.ClassLoaderObjectInputStream;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.util.concurrent.ScheduledExecutorService;
 
-import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.util.ClassLoaderObjectInputStream;
 
 /**
  * Class ServerObjectStreamDriver
@@ -39,7 +39,6 @@ import org.codehaus.jremoting.util.ClassLoaderObjectInputStream;
 public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
 
     private ObjectInputStream objectInputStream;
-
     private ObjectOutputStream objectOutputStream;
 
     public ServerObjectStreamDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,

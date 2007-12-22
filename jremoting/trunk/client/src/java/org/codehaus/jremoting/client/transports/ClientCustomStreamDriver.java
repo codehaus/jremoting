@@ -19,19 +19,13 @@ package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientStreamDriver;
-import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.requests.LookupService;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.util.SerializationHelper;
 
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * Class ClientCustomStreamDriver
@@ -45,20 +39,15 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
     private final DataOutputStream dataOutputStream;
     private final ClassLoader facadesClassLoader;
 
-    public ClientCustomStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
-
-        dataOutputStream = new DataOutputStream(new BufferedOutputStream(outputStream));
-        dataInputStream = new DataInputStream(inputStream);
+    public ClientCustomStreamDriver(DataInputStream dataInputStream, DataOutputStream dataOutputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+        this.dataInputStream = dataInputStream;
+        this.dataOutputStream = dataOutputStream;
         this.facadesClassLoader = facadesClassLoader;
     }
 
     public synchronized Response postRequest(Request request) throws IOException, ClassNotFoundException {
-
         writeRequest(request);
-
-        Response r = readResponse();
-
-        return r;
+        return readResponse();
     }
 
     private void writeRequest(Request request) throws IOException {
@@ -66,7 +55,7 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
         byte[] aBytes = SerializationHelper.getBytesFromInstance(request);
 
         dataOutputStream.writeInt(aBytes.length);
-        dataOutputStream.writeUTF(request instanceof LookupService ? ((Servicable) request).getService() : "");
+        dataOutputStream.writeInt(request.getRequestCode());
         dataOutputStream.write(aBytes);
         dataOutputStream.flush();
     }
@@ -79,7 +68,6 @@ public class ClientCustomStreamDriver implements ClientStreamDriver {
         while (pos < byteArraySize) {
             pos += dataInputStream.read(byteArray, pos, byteArraySize - pos);
         }
-        Object response = SerializationHelper.getInstanceFromBytes(byteArray, facadesClassLoader);
-        return (Response) response;
+        return (Response) SerializationHelper.getInstanceFromBytes(byteArray, facadesClassLoader);
     }
 }

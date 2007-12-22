@@ -17,20 +17,14 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.concurrent.ScheduledExecutorService;
-
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.util.SerializationHelper;
+
+import java.io.*;
 
 /**
  * Class ServerCustomStreamDriver
@@ -43,10 +37,12 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
 
-    public ServerCustomStreamDriver(ServerMonitor serverMonitor, InputStream inputStream,
-                                    OutputStream outputStream,
+    public ServerCustomStreamDriver(ServerMonitor serverMonitor, DataInputStream dataInputStream,
+                                    DataOutputStream dataOutputStream,
                                     ClassLoader facadesClassLoader, Object connectionDetails) {
-        super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
+        super(serverMonitor, dataInputStream, dataOutputStream, facadesClassLoader, connectionDetails);
+        this.dataInputStream = dataInputStream;
+        this.dataOutputStream = dataOutputStream;
     }
 
     /**
@@ -89,13 +85,11 @@ public class ServerCustomStreamDriver extends AbstractServerStreamDriver {
     }
 
     public void initialize() {
-        dataInputStream = new DataInputStream(getInputStream());
-        dataOutputStream = new DataOutputStream(new BufferedOutputStream(getOutputStream()));
     }
 
     private Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
         int byteArraySize = dataInputStream.readInt();
-        String lookupServiceName = dataInputStream.readUTF();
+        int requestCode = dataInputStream.readInt();
         if (byteArraySize < 0) {
             throw new BadConnectionException("Transport mismatch, Unable to " + "read packet of data from CustomStream.");
         }

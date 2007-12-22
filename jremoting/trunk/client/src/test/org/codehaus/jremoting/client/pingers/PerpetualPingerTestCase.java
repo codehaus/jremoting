@@ -64,6 +64,8 @@ public class PerpetualPingerTestCase extends MockObjectTestCase {
             assertEquals("forced failure", e.getMessage());
         }
 
+        future.expects(once()).method("cancel").with(eq(true)).will(returnValue(true));
+        pcp.stop();
 
     }
 }

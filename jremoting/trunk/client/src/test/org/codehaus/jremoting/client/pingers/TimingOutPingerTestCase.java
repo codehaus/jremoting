@@ -76,6 +76,8 @@ public class TimingOutPingerTestCase extends MockObjectTestCase {
 
         runnable[0].run();
 
+        future.expects(once()).method("cancel").with(eq(true)).will(returnValue(true));
+        pcp.stop();
 
     }
 }

@@ -2,10 +2,9 @@ package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.server.ServerMonitor;
 
-import java.util.concurrent.ScheduledExecutorService;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
 
 public class ServerObjectStreamDriverFactory implements ServerStreamDriverFactory {
 

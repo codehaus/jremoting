@@ -2,15 +2,14 @@ package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.server.ServerMonitor;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 public class ServerCustomStreamDriverFactory implements ServerStreamDriverFactory {
 
     public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
                                            InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
-        return new ServerCustomStreamDriver(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
+        return new ServerCustomStreamDriver(serverMonitor, new DataInputStream(inputStream),
+                new DataOutputStream(new BufferedOutputStream(outputStream)), facadesClassLoader, connectionDetails);
     }
 
 }
