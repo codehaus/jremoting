@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class ClientObjectStreamDriverFactory implements ClientStreamDriverFactory {
-    public ClientStreamDriver makeDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+    public ClientStreamDriver makeStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         return new ClientObjectStreamDriver(inputStream, outputStream, facadesClassLoader);
     }
 }

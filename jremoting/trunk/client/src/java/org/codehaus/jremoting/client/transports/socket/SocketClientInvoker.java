@@ -34,19 +34,19 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- * Class SocketClientStreamInvoker
+ * Class SocketClientInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class SocketClientStreamInvoker extends StreamClientInvoker {
+public class SocketClientInvoker extends StreamClientInvoker {
 
     private final String host;
     private final int port;
 
 
     /**
-     * SocketClientStreamInvoker
+     * SocketClientInvoker
      *
      * @param clientMonitor
      * @param executorService
@@ -55,7 +55,7 @@ public class SocketClientStreamInvoker extends StreamClientInvoker {
      * @param host                  The host to connect to
      * @param port                  The port to conenct to
      */
-    public SocketClientStreamInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public SocketClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                                                  ClientStreamDriverFactory streamDriverFactory,
                                                  String host, int port) throws ConnectionRefusedException, BadConnectionException {
@@ -66,7 +66,7 @@ public class SocketClientStreamInvoker extends StreamClientInvoker {
         try {
             Socket socket = new Socket(this.host, this.port);
             socket.setSoTimeout(60 * 1000);
-            setObjectDriver(streamDriverFactory.makeDriver(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
+            setStreamDriver(streamDriverFactory.makeStreamDriver(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
         } catch (IOException ioe) {
             if (ioe.getMessage().startsWith("Connection refused")) {
                 throw new ConnectionRefusedException("Connection to port " + port + " on host " + host + " refused.");
@@ -76,7 +76,7 @@ public class SocketClientStreamInvoker extends StreamClientInvoker {
     }
 
 
-    public SocketClientStreamInvoker(ClientMonitor clientMonitor, ClientStreamDriverFactory streamDriverFactory, String host, int port) throws ConnectionRefusedException, BadConnectionException {
+    public SocketClientInvoker(ClientMonitor clientMonitor, ClientStreamDriverFactory streamDriverFactory, String host, int port) throws ConnectionRefusedException, BadConnectionException {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
                 Thread.currentThread().getContextClassLoader(), streamDriverFactory, host, port);
     }
@@ -91,7 +91,7 @@ public class SocketClientStreamInvoker extends StreamClientInvoker {
         try {
             Socket socket = new Socket(host, port);
             socket.setSoTimeout(60 * 1000);
-            setObjectDriver(streamDriverFactory.makeDriver(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
+            setStreamDriver(streamDriverFactory.makeStreamDriver(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
             return true;
         } catch (ConnectionException ce) {
             // TODO log ?

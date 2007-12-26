@@ -4,7 +4,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.client.factories.StubsOnClient;
-import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
+import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.client.transports.ClientXStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -39,7 +39,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+        factory = new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
                 new ClientXStreamDriverFactory(), "localhost", 10099));
         testClient = (TestInterface) factory.lookupService("Hello");
 

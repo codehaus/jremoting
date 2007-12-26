@@ -27,7 +27,7 @@ import org.codehaus.jremoting.client.factories.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
+import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -39,10 +39,7 @@ import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
-import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
-import org.jmock.core.Stub;
-import org.jmock.core.Invocation;
 
 import java.util.HashMap;
 import java.util.concurrent.Executors;
@@ -163,7 +160,7 @@ public class ClientContextTestCase extends MockObjectTestCase {
 
         ClientStreamDriverFactory factory0 = new ClientCustomStreamDriverFactory();
         ClientMonitor cm = new ConsoleClientMonitor();
-        ClientInvoker handler = new SocketClientStreamInvoker(cm, factory0, "127.0.0.1", 19333);
+        ClientInvoker handler = new SocketClientInvoker(cm, factory0, "127.0.0.1", 19333);
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();
         Factory factory = new StubsOnClient(handler, factory1);
 

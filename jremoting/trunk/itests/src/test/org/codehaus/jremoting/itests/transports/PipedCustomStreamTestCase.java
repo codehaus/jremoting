@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.factories.StubsOnClient;
-import org.codehaus.jremoting.client.transports.piped.PipedClientStreamInvoker;
+import org.codehaus.jremoting.client.transports.piped.PipedClientInvoker;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -61,7 +61,7 @@ public class PipedCustomStreamTestCase extends AbstractHelloTestCase {
         ((PipedStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        factory = new StubsOnClient(new PipedClientStreamInvoker(new ConsoleClientMonitor(),
+        factory = new StubsOnClient(new PipedClientInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), in, out));
         testClient = (TestInterface) factory.lookupService("Hello");
 

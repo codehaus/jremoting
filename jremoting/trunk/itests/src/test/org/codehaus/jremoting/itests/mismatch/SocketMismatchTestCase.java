@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
-import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
+import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
@@ -81,7 +81,7 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+            factory = new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
                 new ClientObjectStreamDriverFactory(), "127.0.0.1", 12001));
             testClient = (TestInterface) factory.lookupService("Hello");
 
@@ -122,7 +122,7 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+            factory = new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), "127.0.0.1", 12002));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
@@ -196,7 +196,7 @@ public class SocketMismatchTestCase extends TestCase {
         try {
 
             // Client side setup
-            factory = new StubsOnClient(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+            factory = new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
                 new ClientObjectStreamDriverFactory(), "127.0.0.1", 12004));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 

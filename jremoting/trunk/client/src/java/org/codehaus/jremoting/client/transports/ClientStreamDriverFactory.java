@@ -24,6 +24,6 @@ import java.io.OutputStream;
 
 public interface ClientStreamDriverFactory {
 
-    ClientStreamDriver makeDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException;
+    ClientStreamDriver makeStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException;
 
 }

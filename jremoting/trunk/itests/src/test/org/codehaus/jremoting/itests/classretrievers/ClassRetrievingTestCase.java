@@ -19,11 +19,10 @@ package org.codehaus.jremoting.itests.classretrievers;
 
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.client.factories.NullContextFactory;
 import org.codehaus.jremoting.client.factories.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.piped.PipedClientStreamInvoker;
+import org.codehaus.jremoting.client.transports.piped.PipedClientInvoker;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
@@ -71,7 +70,7 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
         // Client side setup
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null)); 
-        Factory af = new StubsFromServer(new PipedClientStreamInvoker(new ConsoleClientMonitor(),
+        Factory af = new StubsFromServer(new PipedClientInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(), in, out), (ContextFactory) mock.proxy());
         testClient = (TestInterface) af.lookupService("Kewl");
 

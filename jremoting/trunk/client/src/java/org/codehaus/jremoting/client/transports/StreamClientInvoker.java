@@ -17,12 +17,6 @@
  */
 package org.codehaus.jremoting.client.transports;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.net.SocketException;
-import java.util.concurrent.ScheduledExecutorService;
-
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
@@ -30,12 +24,23 @@ import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.responses.*;
-import com.sun.corba.se.pept.transport.Connection;
+import org.codehaus.jremoting.requests.Servicable;
+import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.responses.NoSuchReference;
+import org.codehaus.jremoting.responses.NoSuchSession;
+import org.codehaus.jremoting.responses.NotPublished;
+import org.codehaus.jremoting.responses.ProblemResponse;
+import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.TryLater;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.SocketException;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Class StreamClientInvoker
@@ -45,7 +50,7 @@ import com.sun.corba.se.pept.transport.Connection;
  */
 public abstract class StreamClientInvoker extends StatefulClientInvoker {
 
-    private ClientStreamDriver objectDriver;
+    private ClientStreamDriver streamDriver;
     private boolean methodLogging = false;
     private long lastRealRequest = System.currentTimeMillis();
     protected final ClientStreamDriverFactory streamDriverFactory;
@@ -59,8 +64,8 @@ public abstract class StreamClientInvoker extends StatefulClientInvoker {
     }
 
 
-    protected void setObjectDriver(ClientStreamDriver objectDriver) {
-        this.objectDriver = objectDriver;
+    protected void setStreamDriver(ClientStreamDriver streamDriver) {
+        this.streamDriver = streamDriver;
     }
 
     protected void requestWritten() {
@@ -91,7 +96,7 @@ public abstract class StreamClientInvoker extends StatefulClientInvoker {
                     again = false;
 
                     try {
-                        response = objectDriver.postRequest(request);
+                        response = streamDriver.postRequest(request);
 
                         if (response instanceof ProblemResponse) {
 

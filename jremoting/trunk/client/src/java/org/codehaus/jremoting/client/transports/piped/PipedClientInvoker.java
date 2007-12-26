@@ -18,34 +18,32 @@
 package org.codehaus.jremoting.client.transports.piped;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.responses.ConnectionOpened;
-
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Executors;
-
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
-import org.codehaus.jremoting.client.transports.StreamClientInvoker;
 import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.StreamClientInvoker;
+import org.codehaus.jremoting.responses.ConnectionOpened;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Class PipedClientStreamInvoker
+ * Class PipedClientInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class PipedClientStreamInvoker extends StreamClientInvoker {
+public class PipedClientInvoker extends StreamClientInvoker {
 
     private PipedInputStream inputStream;
     private PipedOutputStream outputStream;
 
     /**
-     * Constructor PipedClientStreamInvoker
+     * Constructor PipedClientInvoker
      *
      * @param clientMonitor
      * @param executorService
@@ -54,7 +52,7 @@ public class PipedClientStreamInvoker extends StreamClientInvoker {
      * @param is
      * @param os
      */
-    public PipedClientStreamInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public PipedClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                         ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, ClientStreamDriverFactory clientStreamDriverFactory, PipedInputStream is,
                                         PipedOutputStream os) {
 
@@ -65,7 +63,7 @@ public class PipedClientStreamInvoker extends StreamClientInvoker {
     }
 
 
-    public PipedClientStreamInvoker(ClientMonitor clientMonitor,
+    public PipedClientInvoker(ClientMonitor clientMonitor,
                                         ClientStreamDriverFactory streamDriverFactory,
                                         PipedInputStream inputStream, PipedOutputStream outputStream) {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
@@ -78,7 +76,7 @@ public class PipedClientStreamInvoker extends StreamClientInvoker {
      * @throws ConnectionException
      */
     public ConnectionOpened openConnection() throws ConnectionException {
-        setObjectDriver(streamDriverFactory.makeDriver(inputStream, outputStream, getFacadesClassLoader()));
+        setStreamDriver(streamDriverFactory.makeStreamDriver(inputStream, outputStream, getFacadesClassLoader()));
         return super.openConnection();
     }
 

@@ -24,7 +24,7 @@ import org.codehaus.jremoting.client.factories.NullContextFactory;
 import org.codehaus.jremoting.client.invokers.DynamicInvoker;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientStreamInvoker;
+import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
@@ -63,7 +63,7 @@ public class DynamicInvokerTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        dynamicInvoker = new DynamicInvoker(new SocketClientStreamInvoker(new ConsoleClientMonitor(),
+        dynamicInvoker = new DynamicInvoker(new SocketClientInvoker(new ConsoleClientMonitor(),
                 new ClientCustomStreamDriverFactory(),
                 "127.0.0.1", 10101), new NullContextFactory());
 
