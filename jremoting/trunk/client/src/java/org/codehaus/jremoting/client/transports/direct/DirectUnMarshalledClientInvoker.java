@@ -33,7 +33,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class DirectUnMarshalledClientInvoker extends StatefulDirectClientInvoker {
+public final class DirectUnMarshalledClientInvoker extends DirectClientInvoker {
 
     private ServerInvoker invoker;
 

@@ -33,7 +33,7 @@ import org.codehaus.jremoting.util.SerializationHelper;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class DirectMarshalledClientInvoker extends StatefulDirectClientInvoker {
+public final class DirectMarshalledClientInvoker extends DirectClientInvoker {
 
     private ServerMarshalledInvoker invoker;
 

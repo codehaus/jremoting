@@ -17,37 +17,37 @@
  */
 package org.codehaus.jremoting.client.transports.direct;
 
-import java.util.concurrent.ScheduledExecutorService;
-
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.transports.StatefulClientInvoker;
-import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.ProblemResponse;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.TryLater;
 
+import java.util.concurrent.ScheduledExecutorService;
+
 /**
- * Class StatefulDirectClientInvoker
+ * Class DirectClientInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class StatefulDirectClientInvoker extends StatefulClientInvoker {
+public abstract class DirectClientInvoker extends StatefulClientInvoker {
 
     protected boolean methodLogging = false;
     protected long lastRealRequest = System.currentTimeMillis();
 
 
-    public StatefulDirectClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public DirectClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
     }
