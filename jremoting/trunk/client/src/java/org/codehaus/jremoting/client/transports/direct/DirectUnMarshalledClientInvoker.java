@@ -19,6 +19,7 @@ package org.codehaus.jremoting.client.transports.direct;
 
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.transports.StatefulClientInvoker;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
@@ -33,10 +34,9 @@ import java.util.concurrent.ScheduledExecutorService;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class DirectUnMarshalledClientInvoker extends DirectClientInvoker {
+public final class DirectUnMarshalledClientInvoker extends StatefulClientInvoker {
 
     private ServerInvoker invoker;
-
 
     public DirectUnMarshalledClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger,
                                    ServerInvoker invoker) {
@@ -47,6 +47,10 @@ public final class DirectUnMarshalledClientInvoker extends DirectClientInvoker {
     public DirectUnMarshalledClientInvoker(ClientMonitor clientMonitor, ServerInvoker invoker) {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), invoker);
         this.invoker = invoker;
+    }
+
+    protected boolean tryReconnect() {
+        return false;
     }
 
     protected Response performInvocation(Request request) {

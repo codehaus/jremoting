@@ -18,14 +18,15 @@
 package org.codehaus.jremoting.client.transports.direct;
 
 import org.codehaus.jremoting.JRemotingException;
-
-import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.transports.StatefulClientInvoker;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMarshalledInvoker;
 import org.codehaus.jremoting.util.SerializationHelper;
+
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Class DirectMarshalledClientInvoker
@@ -33,7 +34,7 @@ import org.codehaus.jremoting.util.SerializationHelper;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class DirectMarshalledClientInvoker extends DirectClientInvoker {
+public final class DirectMarshalledClientInvoker extends StatefulClientInvoker {
 
     private ServerMarshalledInvoker invoker;
 
@@ -42,6 +43,10 @@ public final class DirectMarshalledClientInvoker extends DirectClientInvoker {
                                              ClassLoader facadesClassLoader) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
         this.invoker = invoker;
+    }
+
+    protected boolean tryReconnect() {
+        return false;
     }
 
     protected Response performInvocation(Request request) {
