@@ -22,7 +22,7 @@ public class ClientCustomStreamDriverTestCase extends MockObjectTestCase {
 //
 //        ClientCustomStreamDriver d = new ClientCustomStreamDriver(inputStream, outputStream, this.getClass().getClassLoader());
 //
-//        Response resp = d.postRequest(new OpenConnection());
+//        Response resp = d.performInvocation(new OpenConnection());
 //
 //        assertNotNull(resp);
 //        assertTrue(resp instanceof ConnectionOpened);

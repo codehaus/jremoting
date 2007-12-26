@@ -20,26 +20,10 @@ package org.codehaus.jremoting.client.transports;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.NoSuchReferenceException;
-import org.codehaus.jremoting.client.NoSuchSessionException;
-import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.RequestConstants;
-import org.codehaus.jremoting.requests.Servicable;
-import org.codehaus.jremoting.responses.ConnectionOpened;
-import org.codehaus.jremoting.responses.NoSuchReference;
-import org.codehaus.jremoting.responses.NoSuchSession;
-import org.codehaus.jremoting.responses.NotPublished;
-import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.responses.TryLater;
 
-import java.io.EOFException;
 import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.net.SocketException;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
@@ -52,9 +36,7 @@ public abstract class StreamClientInvoker extends StatefulClientInvoker {
 
     private ClientStreamDriver streamDriver;
     private boolean methodLogging = false;
-    private long lastRealRequest = System.currentTimeMillis();
     protected final ClientStreamDriverFactory streamDriverFactory;
-    private Long session;
 
     public StreamClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
@@ -63,7 +45,6 @@ public abstract class StreamClientInvoker extends StatefulClientInvoker {
         this.streamDriverFactory = streamDriverFactory;
     }
 
-
     protected void setStreamDriver(ClientStreamDriver streamDriver) {
         this.streamDriver = streamDriver;
     }
@@ -71,97 +52,9 @@ public abstract class StreamClientInvoker extends StatefulClientInvoker {
     protected void requestWritten() {
     }
 
-    public synchronized Response invoke(Request request) {
-        if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
-            lastRealRequest = System.currentTimeMillis();
-
-        } else {
-            ((org.codehaus.jremoting.requests.Ping) request).setSession(session);
-        }
-
-        try {
-            while (true) {
-                boolean again = true;
-                Response response = null;
-                int tries = 0;
-                long start = 0;
-
-                if (methodLogging) {
-                    start = System.currentTimeMillis();
-                }
-
-                while (again) {
-                    tries++;
-
-                    again = false;
-
-                    try {
-                        response = streamDriver.postRequest(request);
-
-                        if (response instanceof ProblemResponse) {
-
-                            if (response instanceof TryLater) {
-                                int millis = ((TryLater) response).getSuggestedDelayMillis();
-
-                                clientMonitor.serviceSuspended(this.getClass(), request, tries, millis);
-
-                                again = true;
-                            } else if (response instanceof NoSuchReference) {
-                                throw new NoSuchReferenceException(((NoSuchReference) response).getReferenceID());
-                            } else if (response instanceof NoSuchSession) {
-                                throw new NoSuchSessionException(((NoSuchSession) response).getSessionID());
-                            } else if (response instanceof NotPublished) {
-                                Servicable pnr = (Servicable) request;
-
-                                throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
-                            }
-                        }
-                        if (response instanceof ConnectionOpened) {
-                            session = ((ConnectionOpened) response).getSessionID();
-                        }
-                    } catch (IOException ioe) {
-                        if (isSafeEnd(ioe)) {
-                            int retryConnectTries = 0;
-
-                            again = true;
-
-                            while (!tryReconnect()) {
-                                clientMonitor.serviceAbend(this.getClass(), retryConnectTries, ioe);
-
-                                retryConnectTries++;
-                            }
-                        } else {
-                            throw clientMonitor.unexpectedIOException(StatefulClientInvoker.class, "invoke()", ioe);
-                        }
-                    }
-                }
-                if (methodLogging) {
-                    if (request instanceof InvokeMethod) {
-                        clientMonitor.methodCalled(this.getClass(), ((InvokeMethod) request).getMethodSignature(), System.currentTimeMillis() - start, "");
-                    }
-                }
-
-                return response;
-            }
-        } catch (ClassNotFoundException e) {
-            throw new InvocationException("Class definition missing on Deserialization: " + e.getMessage(), e);
-        }
+    protected Response performInvocation(Request request) throws IOException, ClassNotFoundException {
+        return streamDriver.postRequest(request);
     }
 
-    private boolean isSafeEnd(IOException ioe) {
-        if (ioe instanceof SocketException | ioe instanceof EOFException | ioe instanceof InterruptedIOException) {
-            return true;
-        }
-        if (ioe.getMessage() != null) {
-            String msg = ioe.getMessage();
-            if (msg.equals("Read end dead") | msg.equals("Pipe closed")) {
-                return true;
-            }
-        }
-        return false;
-    }
 
-    public long getLastRealRequestTime() {
-        return lastRealRequest;
-    }
 }

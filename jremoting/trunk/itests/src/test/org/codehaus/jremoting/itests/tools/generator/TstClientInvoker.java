@@ -17,20 +17,21 @@
  */
 package org.codehaus.jremoting.itests.tools.generator;
 
-import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.StatefulClientInvoker;
-import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.MethodInvoked;
 import org.codehaus.jremoting.requests.OpenConnection;
-import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.responses.ExceptionThrown;
+import org.codehaus.jremoting.responses.MethodInvoked;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerInvoker;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * TstClientInvoker
@@ -45,7 +46,7 @@ public class TstClientInvoker extends StatefulClientInvoker implements ServerInv
         super(clientMonitor, executorService, connectionPinger, TstClientInvoker.class.getClassLoader());
     }
 
-    public Response invoke(Request request) {
+    protected Response performInvocation(Request request) throws IOException, ClassNotFoundException {
         return invoke(request, "test");
     }
 
