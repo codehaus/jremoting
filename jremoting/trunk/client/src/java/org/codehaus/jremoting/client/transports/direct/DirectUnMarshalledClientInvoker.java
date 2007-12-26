@@ -17,9 +17,6 @@
  */
 package org.codehaus.jremoting.client.transports.direct;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Executors;
-
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
@@ -27,24 +24,27 @@ import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerInvoker;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 /**
- * Class DirectClientInvoker
+ * Class DirectUnMarshalledClientInvoker
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class DirectClientInvoker extends StatefulDirectClientInvoker {
+public final class DirectUnMarshalledClientInvoker extends StatefulDirectClientInvoker {
 
     private ServerInvoker invoker;
 
 
-    public DirectClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger,
+    public DirectUnMarshalledClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger,
                                    ServerInvoker invoker) {
-        super(clientMonitor, executorService, connectionPinger, DirectClientInvoker.class.getClassLoader());
+        super(clientMonitor, executorService, connectionPinger, DirectUnMarshalledClientInvoker.class.getClassLoader());
         this.invoker = invoker;
     }
 
-    public DirectClientInvoker(ClientMonitor clientMonitor, ServerInvoker invoker) {
+    public DirectUnMarshalledClientInvoker(ClientMonitor clientMonitor, ServerInvoker invoker) {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), invoker);
         this.invoker = invoker;
     }
