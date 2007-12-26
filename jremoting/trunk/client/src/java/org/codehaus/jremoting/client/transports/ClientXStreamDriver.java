@@ -16,21 +16,26 @@
  */
 package org.codehaus.jremoting.client.transports;
 
-import java.io.*;
-
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.annotations.AnnotationProvider;
+import com.thoughtworks.xstream.annotations.AnnotationReflectionConverter;
+import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.core.JVM;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.util.SerializationHelper;
 import org.codehaus.jremoting.client.ClientStreamDriver;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.util.SerializationHelper;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.annotations.AnnotationReflectionConverter;
-import com.thoughtworks.xstream.annotations.AnnotationProvider;
-import com.thoughtworks.xstream.core.JVM;
-import com.thoughtworks.xstream.converters.ConversionException;
-import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 
 /**
  * Class ClientXStreamDriver

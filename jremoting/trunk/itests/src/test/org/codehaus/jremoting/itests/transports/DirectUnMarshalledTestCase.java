@@ -18,18 +18,15 @@
 package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.factories.StubsOnClient;
+import org.codehaus.jremoting.client.transports.direct.DirectUnMarshalledClientInvoker;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
-import org.codehaus.jremoting.client.transports.direct.DirectMarshalledClientInvoker;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
-
-import java.util.concurrent.Executors;
 
 
 /**
@@ -37,7 +34,7 @@ import java.util.concurrent.Executors;
  *
  * @author Paul Hammant
  */
-public class DirectMarshalledTestCase extends AbstractHelloTestCase {
+public class DirectUnMarshalledTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
 
@@ -49,7 +46,7 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new StubsOnClient(new DirectMarshalledClientInvoker(new ConsoleClientMonitor(), Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), (DirectMarshalledServer) server, this.getClass().getClassLoader()));
+        factory = new StubsOnClient(new DirectUnMarshalledClientInvoker(new ConsoleClientMonitor(), (DirectMarshalledServer) server));
 
         testClient = (TestInterface) factory.lookupService("Hello");
 
@@ -58,12 +55,8 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-
         factory.close();
-
         server.stop();
-
     }
-
 
 }

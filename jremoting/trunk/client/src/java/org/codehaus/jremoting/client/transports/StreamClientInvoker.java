@@ -35,7 +35,6 @@ import java.util.concurrent.ScheduledExecutorService;
 public abstract class StreamClientInvoker extends StatefulClientInvoker {
 
     private ClientStreamDriver streamDriver;
-    private boolean methodLogging = false;
     protected final ClientStreamDriverFactory streamDriverFactory;
 
     public StreamClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
@@ -47,9 +46,6 @@ public abstract class StreamClientInvoker extends StatefulClientInvoker {
 
     protected void setStreamDriver(ClientStreamDriver streamDriver) {
         this.streamDriver = streamDriver;
-    }
-
-    protected void requestWritten() {
     }
 
     protected Response performInvocation(Request request) throws IOException, ClassNotFoundException {
