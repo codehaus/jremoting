@@ -91,7 +91,7 @@ public class ServerByteStreamDriver extends AbstractServerStreamDriver {
         int byteArraySize = dataInputStream.readInt();
         int requestCode = dataInputStream.readInt();
         if (byteArraySize < 0) {
-            throw new BadConnectionException("Transport mismatch, Unable to " + "read packet of data from CustomStream.");
+            throw new BadConnectionException("Transport mismatch, Unable to " + "read packet of data from ByteStream.");
         }
         byte[] byteArray = new byte[byteArraySize];
         int pos = 0;

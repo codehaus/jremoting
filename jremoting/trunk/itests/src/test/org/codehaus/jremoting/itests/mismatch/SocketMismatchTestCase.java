@@ -49,7 +49,7 @@ public class SocketMismatchTestCase extends TestCase {
     private BadConnectionException x_bce;
 
 
-    public void testCustomStreamObjectStreamMismatchCanCauseTimeOut() throws Exception {
+    public void testByteStreamObjectStreamMismatchCanCauseTimeOut() throws Exception {
 
         ServerMonitor sm = new ServerMonitor() {
             public void closeError(Class clazz, String s, IOException e) {
@@ -88,7 +88,7 @@ public class SocketMismatchTestCase extends TestCase {
             testClient.hello("hello");
 
 
-            fail("CustomStreams and ObjectStreams cannot interoperate");
+            fail("ByteStreams and ObjectStreams cannot interoperate");
         } catch (BadConnectionException bce) {
 
             // expected
@@ -109,7 +109,7 @@ public class SocketMismatchTestCase extends TestCase {
         }
     }
 
-    public void dont_testObjectStreamCustomStreamMismatch() throws Exception {
+    public void dont_testObjectStreamByteStreamMismatch() throws Exception {
 
         // server side setup.
         SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12002, SelfContainedSocketStreamServer.OBJECTSTREAM);
@@ -128,7 +128,7 @@ public class SocketMismatchTestCase extends TestCase {
 
 
             testClient.hello("hello");
-            fail("CustomStreams and ObjectStreams cannot interoperate");
+            fail("ByteStreams and ObjectStreams cannot interoperate");
         } catch (BadConnectionException bce) {
             // expected.
         } finally {
@@ -147,7 +147,7 @@ public class SocketMismatchTestCase extends TestCase {
     }
 
 
-    public void dont_testCustomStreamRmiMismatch() throws Exception {
+    public void dont_testByteStreamRmiMismatch() throws Exception {
 
         // server side setup.
         SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12003);
@@ -165,7 +165,7 @@ public class SocketMismatchTestCase extends TestCase {
 
 
             testClient.hello("hello");
-            fail("CustomStreams and RMI trasnports cannot interoperate");
+            fail("ByteStreams and RMI trasnports cannot interoperate");
         } catch (BadConnectionException bce) {
             // expected.
         } finally {
@@ -183,7 +183,7 @@ public class SocketMismatchTestCase extends TestCase {
         }
     }
 
-    public void dont_testRmiCustomStreamMismatch() throws Exception {
+    public void dont_testRmiByteStreamMismatch() throws Exception {
 
         // server side setup.
         RmiServer server = new RmiServer(new ConsoleServerMonitor(), 12004);
@@ -202,7 +202,7 @@ public class SocketMismatchTestCase extends TestCase {
 
 
             testClient.hello("hello");
-            fail("CustomStreams and RMI trasnports cannot interoperate");
+            fail("ByteStreams and RMI trasnports cannot interoperate");
         } catch (BadConnectionException bce) {
             // expected.
         } finally {

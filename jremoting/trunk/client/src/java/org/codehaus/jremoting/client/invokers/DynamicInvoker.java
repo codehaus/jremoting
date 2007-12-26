@@ -40,7 +40,7 @@ import java.util.Map;
  * <code>
  * //create custom HostContext for the specific transport
  * HostContext arhc;
- * arhc = new SocketCustomStreamHostContext("127.0.0.1", 1235);
+ * arhc = new SocketByteStreamHostContext("127.0.0.1", 1235);
  * <p/>
  * //Initialize the dynamic invoker
  * DynamicInvoker invoker = new DynamicInvoker(arhc);
