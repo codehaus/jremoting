@@ -21,7 +21,7 @@ import org.codehaus.jremoting.client.*;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.factories.DefaultStubHelper;
 import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
-import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -70,7 +70,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             )});
 
             factory = new StubsOnClient(new SocketClientInvoker((ClientMonitor) clientMonitor.proxy(),
-                    new ClientCustomStreamDriverFactory(), "127.0.0.1", 12201));
+                    new ClientByteStreamDriverFactory(), "127.0.0.1", 12201));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello55");
 
 

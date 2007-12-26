@@ -33,7 +33,7 @@ import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.ServerByteStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.ServerObjectStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.ServerStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
@@ -116,7 +116,7 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
 
     private static ServerStreamDriverFactory createServerStreamDriverFactory(String streamType) {
         if (streamType.equals(CUSTOMSTREAM)) {
-            return new ServerCustomStreamDriverFactory();
+            return new ServerByteStreamDriverFactory();
         } else if (streamType.equals(OBJECTSTREAM)) {
             return new ServerObjectStreamDriverFactory();
         } else if (streamType.equals(XSTREAM)) {
@@ -130,7 +130,7 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
     }
 
     private static ServerStreamDriverFactory dftDriverFactory() {
-        return new ServerCustomStreamDriverFactory();
+        return new ServerByteStreamDriverFactory();
     }
 
     private static ClassLoader thisClassLoader() {

@@ -26,7 +26,7 @@ import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
 import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
@@ -44,7 +44,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     public void testNoServer() throws Exception {
         try {
             new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientCustomStreamDriverFactory(), "127.0.0.1", 12345));
+                new ClientByteStreamDriverFactory(), "127.0.0.1", 12345));
             fail("Should have have failed.");
         } catch (ConnectionRefusedException e) {
             // what we expetcted
@@ -65,7 +65,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         try {
 
             StubsOnClient cssf = new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientCustomStreamDriverFactory(), "127.0.0.1", 12333));
+                new ClientByteStreamDriverFactory(), "127.0.0.1", 12333));
             cssf.lookupService("foo");
 
             fail("should have barfed");
@@ -128,7 +128,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
             new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientCustomStreamDriverFactory(), "127.0.0.1", 12347));
+                new ClientByteStreamDriverFactory(), "127.0.0.1", 12347));
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {

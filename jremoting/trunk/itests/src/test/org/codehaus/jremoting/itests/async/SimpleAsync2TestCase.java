@@ -21,7 +21,7 @@ import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -29,7 +29,7 @@ import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
-import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.ServerByteStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
@@ -62,7 +62,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ServerCustomStreamDriverFactory(), executorService,
+                new ServerByteStreamDriverFactory(), executorService,
                 new ThreadLocalServerContextFactory(), 11009);
 
         asyncTestImpl = new AsyncTestImpl();
@@ -76,7 +76,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
         factory = new StubsFromServer(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientCustomStreamDriverFactory(), "127.0.0.1", 11009), (ContextFactory) mock.proxy());
+                new ClientByteStreamDriverFactory(), "127.0.0.1", 11009), (ContextFactory) mock.proxy());
         testClient = (AsyncTest) factory.lookupService("AsyncTestB");
 
     }

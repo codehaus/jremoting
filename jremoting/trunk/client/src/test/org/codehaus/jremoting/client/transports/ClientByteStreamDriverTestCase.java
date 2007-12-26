@@ -4,7 +4,7 @@ import org.jmock.MockObjectTestCase;
 
 import java.io.IOException;
 
-public class ClientCustomStreamDriverTestCase extends MockObjectTestCase {
+public class ClientByteStreamDriverTestCase extends MockObjectTestCase {
 
     public void testFoo() throws IOException, ClassNotFoundException {
 
@@ -20,7 +20,7 @@ public class ClientCustomStreamDriverTestCase extends MockObjectTestCase {
 //        ByteArrayInputStream inputStream = new ByteArrayInputStream(tmp.toByteArray());
 //        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 //
-//        ClientCustomStreamDriver d = new ClientCustomStreamDriver(inputStream, outputStream, this.getClass().getClassLoader());
+//        ClientByteStreamDriver d = new ClientByteStreamDriver(inputStream, outputStream, this.getClass().getClassLoader());
 //
 //        Response resp = d.performInvocation(new OpenConnection());
 //

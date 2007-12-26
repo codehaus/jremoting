@@ -23,7 +23,7 @@ import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
 import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
-import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -123,7 +123,7 @@ public class SocketMismatchTestCase extends TestCase {
 
             // Client side setup
             factory = new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientCustomStreamDriverFactory(), "127.0.0.1", 12002));
+                new ClientByteStreamDriverFactory(), "127.0.0.1", 12002));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
 

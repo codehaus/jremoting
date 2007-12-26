@@ -25,7 +25,7 @@ import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.factories.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ClientCustomStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -37,7 +37,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.server.transports.ServerCustomStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.ServerByteStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.jmock.MockObjectTestCase;
 
@@ -152,13 +152,13 @@ public class ClientContextTestCase extends MockObjectTestCase {
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ServerCustomStreamDriverFactory(), executorService, sscf, 19333);
+                new ServerByteStreamDriverFactory(), executorService, sscf, 19333);
 
         PublicationDescription pd = new PublicationDescription(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        ClientStreamDriverFactory factory0 = new ClientCustomStreamDriverFactory();
+        ClientStreamDriverFactory factory0 = new ClientByteStreamDriverFactory();
         ClientMonitor cm = new ConsoleClientMonitor();
         ClientInvoker handler = new SocketClientInvoker(cm, factory0, "127.0.0.1", 19333);
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();

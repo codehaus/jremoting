@@ -21,8 +21,8 @@ import org.codehaus.jremoting.ConnectionException;
 
 import java.io.*;
 
-public class ClientCustomStreamDriverFactory implements ClientStreamDriverFactory {
+public class ClientByteStreamDriverFactory implements ClientStreamDriverFactory {
     public ClientStreamDriver makeStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
-        return new ClientCustomStreamDriver(new DataInputStream(inputStream), new DataOutputStream(new BufferedOutputStream(outputStream)), facadesClassLoader);
+        return new ClientByteStreamDriver(new DataInputStream(inputStream), new DataOutputStream(new BufferedOutputStream(outputStream)), facadesClassLoader);
     }
 }
