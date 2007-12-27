@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.itests;
 
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.Factory;
+import org.codehaus.jremoting.client.ServiceResolver;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.StatefulServer;
 import org.jmock.Mock;
@@ -34,7 +34,7 @@ public abstract class AbstractJRemotingTestCase extends MockObjectTestCase {
     protected StatefulServer server;
     protected TestInterfaceImpl testServer;
     protected TestInterface testClient;
-    protected Factory factory;
+    protected ServiceResolver serviceResolver;
     protected boolean bugParadeBug4499841StillExists = true;
     protected Mock mockClientMonitor;
     protected Mock mockServerMonitor;

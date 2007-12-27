@@ -18,7 +18,8 @@
 package org.codehaus.jremoting.itests.classretrievers;
 
 import org.codehaus.jremoting.client.ContextFactory;
-import org.codehaus.jremoting.client.Factory;
+import org.codehaus.jremoting.client.ServiceResolver;
+import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.factories.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
@@ -70,8 +71,8 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
         // Client side setup
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null)); 
-        Factory af = new StubsFromServer(new PipedTransport(new ConsoleClientMonitor(),
-                new ByteStreamEncoding(), in, out), (ContextFactory) mock.proxy());
+        ServiceResolver af = new DefaultServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
+                new ByteStreamEncoding(), in, out), (ContextFactory) mock.proxy(), new StubsFromServer());
         testClient = (TestInterface) af.lookupService("Kewl");
 
     }

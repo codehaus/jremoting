@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.itests.transports;
 
 
-import org.codehaus.jremoting.client.factories.StubsOnClient;
+import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
@@ -49,8 +49,8 @@ public class ByteStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new StubsOnClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), "localhost", 10333));
-        testClient = (TestInterface) factory.lookupService("Hello");
+        serviceResolver = new DefaultServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), "localhost", 10333));
+        testClient = (TestInterface) serviceResolver.lookupService("Hello");
 
     }
 
@@ -59,7 +59,7 @@ public class ByteStreamTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        factory.close();
+        serviceResolver.close();
         server.stop();
     }
 

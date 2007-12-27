@@ -21,7 +21,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        DefaultServiceResolver factory = new DefaultServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -47,7 +47,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        DefaultServiceResolver factory = new DefaultServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -70,7 +70,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        DefaultServiceResolver factory = new DefaultServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -91,7 +91,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        DefaultServiceResolver factory = new DefaultServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -112,7 +112,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        DefaultServiceResolver factory = new DefaultServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) {
                 return null;
             }
@@ -133,7 +133,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        DefaultServiceResolver factory = new DefaultServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) {
                 return null;
             }

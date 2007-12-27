@@ -1,6 +1,5 @@
 /* ====================================================================
  * Copyright 2005-2006 JRemoting Committers
- * Portions copyright 2001 - 2004 Apache Software Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,25 +18,9 @@ package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.Transport;
-import org.codehaus.jremoting.util.StubHelper;
 
-/**
- * Class StubsOnClient
- *
- * @author Paul Hammant
- * @version $Revision: 1.2 $
- */
-public class StubsOnClient implements StubClassLoader {
+public interface StubClassLoader {
 
-    private ClassLoader stubsClasLoader;
-
-    public StubsOnClient(ClassLoader stubsClasLoader) throws ConnectionException {
-        this.stubsClasLoader = stubsClasLoader;
-    }
-
-    public Class getStubClass(String publishedServiceName, String objectName, Transport transport) throws ConnectionException, ClassNotFoundException {
-        String stubClassName = StubHelper.formatStubClassName(publishedServiceName, objectName);
-        return stubsClasLoader.loadClass(stubClassName);
-    }
+    Class getStubClass(String publishedServiceName, String objectName, Transport transport) throws ConnectionException, ClassNotFoundException;
 
 }

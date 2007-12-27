@@ -17,19 +17,18 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import java.util.HashMap;
-
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.Transport;
-import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.requests.RetrieveStub;
-import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.RequestFailed;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.StubClass;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.util.StubHelper;
+
+import java.util.HashMap;
 
 /**
  * Class StubsFromServer
@@ -37,19 +36,15 @@ import org.codehaus.jremoting.util.StubHelper;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class StubsFromServer extends AbstractFactory {
+public class StubsFromServer implements StubClassLoader {
 
     private final HashMap publishedServiceClassLoaders = new HashMap();
 
-    public StubsFromServer(Transport transport, ContextFactory contextFactory) throws ConnectionException {
-        super(transport, contextFactory);
-    }
-
-    protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
+    public Class getStubClass(String publishedServiceName, String objectName, Transport transport) throws ConnectionException, ClassNotFoundException {
 
         TransportedStubClassLoader tcl = null;
         String stubClassName = StubHelper.formatStubClassName(publishedServiceName, objectName);
-        
+
         if (publishedServiceClassLoaders.containsKey(stubClassName)) {
             tcl = (TransportedStubClassLoader) publishedServiceClassLoaders.get(stubClassName);
         } else {
@@ -83,5 +78,7 @@ public class StubsFromServer extends AbstractFactory {
 
         return tcl.loadClass(stubClassName);
     }
+
+
 
 }

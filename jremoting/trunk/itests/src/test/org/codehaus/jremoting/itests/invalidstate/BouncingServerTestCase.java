@@ -20,8 +20,8 @@ package org.codehaus.jremoting.itests.invalidstate;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
+import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.factories.DefaultStubHelper;
-import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestInterface;
@@ -63,7 +63,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
         // server side setup.
         SelfContainedSocketStreamServer server = startServer();
 
-        StubsOnClient factory = null;
+        DefaultServiceResolver factory = null;
         try {
 
             // Client side setup
@@ -73,7 +73,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(DefaultStubHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
             )});
 
-            factory = new StubsOnClient(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
+            factory = new DefaultServiceResolver(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
                     new ByteStreamEncoding(), "127.0.0.1", 12201));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello55");
 

@@ -18,11 +18,11 @@
 package org.codehaus.jremoting.itests.clientcontext;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.Context;
-import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.client.factories.StubsOnClient;
+import org.codehaus.jremoting.client.ServiceResolver;
+import org.codehaus.jremoting.client.Transport;
+import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.factories.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
@@ -31,12 +31,12 @@ import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ServerContextFactory;
 import org.codehaus.jremoting.server.context.ServerSideContext;
-import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.transports.ServerByteStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.jmock.MockObjectTestCase;
@@ -162,9 +162,9 @@ public class ClientContextTestCase extends MockObjectTestCase {
         ClientMonitor cm = new ConsoleClientMonitor();
         Transport handler = new SocketTransport(cm, factory0, "127.0.0.1", 19333);
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();
-        Factory factory = new StubsOnClient(handler, factory1);
+        ServiceResolver serviceResolver = new DefaultServiceResolver(handler, factory1);
 
-        final AccountManager clientSideAccountManager = (AccountManager) factory.lookupService("OurAccountManager");
+        final AccountManager clientSideAccountManager = (AccountManager) serviceResolver.lookupService("OurAccountManager");
 
         Thread threadOne = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 11);
         Thread threadTwo = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 22);

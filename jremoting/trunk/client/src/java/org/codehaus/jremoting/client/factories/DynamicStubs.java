@@ -30,7 +30,7 @@ import org.codehaus.jremoting.client.ContextFactory;
  *
  * @author <a href="mailto:vinayc@apache.org">Vinay Chandran</a>
  */
-public class DynamicStubs extends AbstractFactory {
+public class DynamicStubs extends DefaultServiceResolver {
 
     public DynamicStubs(Transport transport, ContextFactory contextFactory) throws ConnectionException {
         super(transport, contextFactory);

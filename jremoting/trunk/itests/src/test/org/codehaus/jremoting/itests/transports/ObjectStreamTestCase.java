@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
-import org.codehaus.jremoting.client.factories.StubsOnClient;
+import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
@@ -62,10 +62,10 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new StubsOnClient(new SocketTransport(new ConsoleClientMonitor(),
+        serviceResolver = new DefaultServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStreamEncoding(),
                 "127.0.0.1", 10002));
-        testClient = (TestInterface) factory.lookupService("Hello");
+        testClient = (TestInterface) serviceResolver.lookupService("Hello");
 
 
     }
@@ -75,7 +75,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        factory.close();
+        serviceResolver.close();
         server.stop();
     }
 

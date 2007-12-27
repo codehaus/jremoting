@@ -22,12 +22,12 @@ import org.codehaus.jremoting.authentications.Authentication;
 
 
 /**
- * Interface Factory
+ * Interface ServiceResolver
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public interface Factory {
+public interface ServiceResolver {
 
     /**
      * Lookup a name by which the remote service is

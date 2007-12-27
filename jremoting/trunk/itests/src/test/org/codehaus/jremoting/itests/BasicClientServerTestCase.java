@@ -21,7 +21,7 @@ import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.client.factories.StubsOnClient;
+import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.client.transports.ObjectStreamEncoding;
@@ -51,7 +51,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
     public void testNoServer() throws Exception {
         try {
-            new StubsOnClient(new SocketTransport(new ConsoleClientMonitor(),
+            new DefaultServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ByteStreamEncoding(), "127.0.0.1", 12345));
             fail("Should have have failed.");
         } catch (ConnectionRefusedException e) {
@@ -72,7 +72,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
 
-            StubsOnClient cssf = new StubsOnClient(new SocketTransport(new ConsoleClientMonitor(),
+            DefaultServiceResolver cssf = new DefaultServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ByteStreamEncoding(), "127.0.0.1", 12333));
             cssf.lookupService("foo");
 
@@ -104,7 +104,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
             SocketTransport invoker = new SocketTransport(new ConsoleClientMonitor(),
                     new ObjectStreamEncoding(), "localhost", 12331);
-            StubsOnClient cssf = new StubsOnClient(invoker);
+            DefaultServiceResolver cssf = new DefaultServiceResolver(invoker);
             cssf.lookupService("Hello");
             invoker.invoke(new InvokeMethod("Hello", "Main", "ping()",new Object [0], (long) 44332, (long) 21));
 
@@ -135,7 +135,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // Client side setup
         try {
-            new StubsOnClient(new SocketTransport(new ConsoleClientMonitor(),
+            new DefaultServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ByteStreamEncoding(), "127.0.0.1", 12347));
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
@@ -159,7 +159,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // Client side setup
         try {
-            new StubsOnClient(new RmiTransport(new ConsoleClientMonitor(), "127.0.0.1", 12348));
+            new DefaultServiceResolver(new RmiTransport(new ConsoleClientMonitor(), "127.0.0.1", 12348));
             fail("Expected mismatch exception");
         } catch (BadConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {

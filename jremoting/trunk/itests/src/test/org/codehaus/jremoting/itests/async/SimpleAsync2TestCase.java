@@ -18,7 +18,8 @@
 package org.codehaus.jremoting.itests.async;
 
 import org.codehaus.jremoting.client.ContextFactory;
-import org.codehaus.jremoting.client.Factory;
+import org.codehaus.jremoting.client.ServiceResolver;
+import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.factories.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
@@ -40,7 +41,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
 
     AsyncTestImpl asyncTestImpl;
     AsyncTest testClient;
-    Factory factory;
+    ServiceResolver serviceResolver;
     SelfContainedSocketStreamServer server;
     private Mock mockServerMonitor;
 
@@ -77,9 +78,9 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         // Client side setup
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
-        factory = new StubsFromServer(new SocketTransport(new ConsoleClientMonitor(),
-                new ByteStreamEncoding(), "127.0.0.1", 11009), (ContextFactory) mock.proxy());
-        testClient = (AsyncTest) factory.lookupService("AsyncTestB");
+        serviceResolver = new DefaultServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+                new ByteStreamEncoding(), "127.0.0.1", 11009), (ContextFactory) mock.proxy(), new StubsFromServer());
+        testClient = (AsyncTest) serviceResolver.lookupService("AsyncTestB");
 
     }
 
@@ -128,7 +129,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         testClient = null;
         System.gc();
 
-        factory.close();
+        serviceResolver.close();
 
         server.stop();
 

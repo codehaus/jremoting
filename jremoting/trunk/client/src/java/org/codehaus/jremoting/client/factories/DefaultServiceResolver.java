@@ -17,46 +17,64 @@
  */
 package org.codehaus.jremoting.client.factories;
 
+import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.authentications.Authentication;
+import org.codehaus.jremoting.client.ContextFactory;
+import org.codehaus.jremoting.client.Proxy;
+import org.codehaus.jremoting.client.ServiceResolver;
+import org.codehaus.jremoting.client.StubHelper;
+import org.codehaus.jremoting.client.StubRegistry;
+import org.codehaus.jremoting.client.Transport;
+import org.codehaus.jremoting.requests.ListServices;
+import org.codehaus.jremoting.requests.LookupService;
+import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.responses.ExceptionThrown;
+import org.codehaus.jremoting.responses.NotPublished;
+import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.Service;
+import org.codehaus.jremoting.responses.ServicesList;
+import org.codehaus.jremoting.util.FacadeRefHolder;
+
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.authentications.Authentication;
-import org.codehaus.jremoting.client.*;
-import org.codehaus.jremoting.requests.ListServices;
-import org.codehaus.jremoting.requests.LookupService;
-import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.responses.ConnectionOpened;
-import org.codehaus.jremoting.responses.ExceptionThrown;
-import org.codehaus.jremoting.responses.NotPublished;
-import org.codehaus.jremoting.responses.Service;
-import org.codehaus.jremoting.responses.ServicesList;
-import org.codehaus.jremoting.util.FacadeRefHolder;
-
 
 /**
- * Class AbstractFactory
+ * Class DefaultServiceResolver
  *
  * @author Paul Hammant
  * @author Peter Royal <a href="mailto:proyal@managingpartners.com">proyal@managingpartners.com</a>
  * @author Mauro Talevi
  */
-public abstract class AbstractFactory implements Factory {
+public class DefaultServiceResolver implements ServiceResolver {
 
     private static final int STUB_PREFIX_LENGTH = org.codehaus.jremoting.util.StubHelper.getStubPrefixLength();
     protected final Transport transport;
     private final ContextFactory contextFactory;
+    private final StubClassLoader stubClassLoader;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
     private transient String textToSign;
     protected final Long sessionID;
     private StubRegistry stubRegistry;
 
+    public DefaultServiceResolver(Transport transport) throws ConnectionException {
+        this(transport, new ThreadLocalContextFactory());
+    }
 
-    public AbstractFactory(final Transport transport, ContextFactory contextFactory) throws ConnectionException {
+    public DefaultServiceResolver(final Transport transport, ContextFactory contextFactory) throws ConnectionException {
+        this (transport, contextFactory, DefaultServiceResolver.class.getClassLoader());
+    }
+    
+    public DefaultServiceResolver(final Transport transport, ContextFactory contextFactory, ClassLoader classLoader) throws ConnectionException {
+        this (transport, contextFactory, new StubsOnClient(classLoader));
+    }
+
+    public DefaultServiceResolver(final Transport transport, ContextFactory contextFactory, StubClassLoader stubClassLoader) throws ConnectionException {
         this.transport = transport;
         this.contextFactory = contextFactory;
+        this.stubClassLoader = stubClassLoader;
 
         ConnectionOpened response = transport.openConnection();
 
@@ -88,7 +106,7 @@ public abstract class AbstractFactory implements Factory {
             }
 
             public Object getInstance(String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
-                return AbstractFactory.this.getInstance(publishedServiceName, objectName, stubHelper);
+                return DefaultServiceResolver.this.getInstance(publishedServiceName, objectName, stubHelper);
             }
 
             public void marshallCorrection(String remoteObjectName, String methodSignature, Object[] args, Class[] argClasses) {
@@ -148,8 +166,6 @@ public abstract class AbstractFactory implements Factory {
         return retVal;
     }
 
-    protected abstract Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException;
-
     public final Long getReferenceID(Proxy obj) {
         return obj.codehausRemotingGetReferenceID(this);
     }
@@ -186,7 +202,7 @@ public abstract class AbstractFactory implements Factory {
     protected Object getInstance(String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
 
         try {
-            Class stubClass = getStubClass(publishedServiceName, objectName);
+            Class stubClass = stubClassLoader.getStubClass(publishedServiceName, objectName, transport);
             Constructor[] constructors = stubClass.getConstructors();
             return constructors[0].newInstance(stubHelper);
         } catch (InvocationTargetException ite) {

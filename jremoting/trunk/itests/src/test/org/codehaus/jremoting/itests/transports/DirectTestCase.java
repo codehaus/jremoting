@@ -18,8 +18,8 @@
 package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.factories.NullContextFactory;
-import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.direct.DirectUnMarshalledTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
@@ -49,8 +49,9 @@ public class DirectTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
-        factory = new StubsOnClient(new DirectUnMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(), server), this.getClass().getClassLoader(), new NullContextFactory());
-        testClient = (TestInterface) factory.lookupService("Hello");
+        serviceResolver = new DefaultServiceResolver(
+                new DirectUnMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(), server), new NullContextFactory());
+        testClient = (TestInterface) serviceResolver.lookupService("Hello");
 
     }
 
@@ -61,7 +62,7 @@ public class DirectTestCase extends AbstractHelloTestCase {
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-        factory.close();
+        serviceResolver.close();
         server.stop();
     }
 

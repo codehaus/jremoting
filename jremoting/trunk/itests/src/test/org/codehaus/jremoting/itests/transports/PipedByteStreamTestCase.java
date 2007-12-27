@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
-import org.codehaus.jremoting.client.factories.StubsOnClient;
+import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.client.transports.piped.PipedTransport;
@@ -62,9 +62,9 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
         ((PipedStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        factory = new StubsOnClient(new PipedTransport(new ConsoleClientMonitor(),
+        serviceResolver = new DefaultServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
                 new ByteStreamEncoding(), in, out));
-        testClient = (TestInterface) factory.lookupService("Hello");
+        testClient = (TestInterface) serviceResolver.lookupService("Hello");
 
     }
 
@@ -72,7 +72,7 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
 
-        factory.close();
+        serviceResolver.close();
 
         server.stop();
 
