@@ -22,8 +22,8 @@ import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.factories.DefaultStubHelper;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
-import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
+import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
+import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
@@ -73,8 +73,8 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(DefaultStubHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
             )});
 
-            factory = new StubsOnClient(new SocketClientInvoker((ClientMonitor) clientMonitor.proxy(),
-                    new ClientByteStreamDriverFactory(), "127.0.0.1", 12201));
+            factory = new StubsOnClient(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
+                    new ByteStreamEncoding(), "127.0.0.1", 12201));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello55");
 
 

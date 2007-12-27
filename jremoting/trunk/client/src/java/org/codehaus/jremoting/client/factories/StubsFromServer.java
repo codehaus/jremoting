@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.client.ClientInvoker;
+import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.requests.RetrieveStub;
 import org.codehaus.jremoting.responses.Response;
@@ -41,8 +41,8 @@ public class StubsFromServer extends AbstractFactory {
 
     private final HashMap publishedServiceClassLoaders = new HashMap();
 
-    public StubsFromServer(ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
-        super(clientInvoker, contextFactory);
+    public StubsFromServer(Transport transport, ContextFactory contextFactory) throws ConnectionException {
+        super(transport, contextFactory);
     }
 
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
@@ -56,7 +56,7 @@ public class StubsFromServer extends AbstractFactory {
             StubClass cr = null;
 
             try {
-                Response ar = clientInvoker.invoke(new RetrieveStub(publishedServiceName, objectName));
+                Response ar = transport.invoke(new RetrieveStub(publishedServiceName, objectName));
 
                 if (ar instanceof ProblemResponse) {
                     if (ar instanceof RequestFailed) {
@@ -74,7 +74,7 @@ public class StubsFromServer extends AbstractFactory {
                 throw new ConnectionException("Service " + publishedServiceName + " not published on Server");
             }
 
-            tcl = new TransportedStubClassLoader(clientInvoker.getFacadesClassLoader());
+            tcl = new TransportedStubClassLoader(transport.getFacadesClassLoader());
 
             tcl.add(stubClassName, cr.getStubClassBytes());
 

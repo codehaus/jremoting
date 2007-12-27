@@ -1,7 +1,7 @@
 package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.ClientInvoker;
+import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.StubHelper;
 import org.codehaus.jremoting.requests.ListServices;
@@ -14,14 +14,14 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testOpenCloseSequence() throws ConnectionException {
 
-        Mock ih = mock(ClientInvoker.class);
+        Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new Service((long) 321)));
         ih.expects(once()).method("closeConnection").with(eq(123L));
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((ClientInvoker) ih.proxy(), (ContextFactory) cf.proxy()) {
+        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -41,13 +41,13 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testNotPublishedResponseToLookup() throws ConnectionException {
 
-        Mock ih = mock(ClientInvoker.class);
+        Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new NotPublished()));
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((ClientInvoker) ih.proxy(), (ContextFactory) cf.proxy()) {
+        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -64,13 +64,13 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testConnectionExceptionThrownResponseToLookup() throws ConnectionException {
 
-        Mock ih = mock(ClientInvoker.class);
+        Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new ConnectionException("foo"))));
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((ClientInvoker) ih.proxy(), (ContextFactory) cf.proxy()) {
+        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -85,13 +85,13 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testRuntimeExceptionThrownResponseToLookup() throws ConnectionException {
 
-        Mock ih = mock(ClientInvoker.class);
+        Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new RuntimeException("foo"))));
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((ClientInvoker) ih.proxy(), (ContextFactory) cf.proxy()) {
+        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -106,13 +106,13 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testErrorThrownResponseToLookup() throws ConnectionException {
 
-        Mock ih = mock(ClientInvoker.class);
+        Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new Error("foo"))));
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((ClientInvoker) ih.proxy(), (ContextFactory) cf.proxy()) {
+        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) {
                 return null;
             }
@@ -127,13 +127,13 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
     public void testLookupUpOfServices() throws ConnectionException {
 
-        Mock ih = mock(ClientInvoker.class);
+        Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
         ih.expects(once()).method("invoke").with(isA(ListServices.class)).will(returnValue(new ServicesList(new String[] {"1", "2"})));
 
         Mock cf = mock(ContextFactory.class);
 
-        AbstractFactory factory = new AbstractFactory((ClientInvoker) ih.proxy(), (ContextFactory) cf.proxy()) {
+        AbstractFactory factory = new AbstractFactory((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) {
                 return null;
             }

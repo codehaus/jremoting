@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.invokers;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.ClientInvoker;
+import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.factories.DynamicStub;
 import org.codehaus.jremoting.client.factories.DynamicStubs;
@@ -59,21 +59,21 @@ public class DynamicInvoker {
 
     private DynamicStubs factory;
 
-    private ClientInvoker clientInvoker;
+    private Transport transport;
 
     private Map stubs = new HashMap();
 
     /**
      * Constructor
      *
-     * @param clientInvoker
+     * @param transport
      * @param contextFactory
      * @throws Exception
      */
-    public DynamicInvoker(ClientInvoker clientInvoker, ContextFactory contextFactory) throws Exception {
+    public DynamicInvoker(Transport transport, ContextFactory contextFactory) throws Exception {
 
-        factory = new DynamicStubs(clientInvoker, contextFactory);
-        this.clientInvoker = clientInvoker;
+        factory = new DynamicStubs(transport, contextFactory);
+        this.transport = transport;
     }
 
     public void close() {
@@ -96,7 +96,7 @@ public class DynamicInvoker {
      */
 
     public String[] listOfMethods(String publishedName) {
-        Response ar = clientInvoker.invoke(new ListInvokableMethods(publishedName));
+        Response ar = transport.invoke(new ListInvokableMethods(publishedName));
         return ((InvokableMethods) ar).getListOfMethods();
     }
 

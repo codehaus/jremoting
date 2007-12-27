@@ -18,16 +18,16 @@
 package org.codehaus.jremoting.itests.clientcontext;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.ClientInvoker;
+import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.factories.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
+import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
+import org.codehaus.jremoting.client.transports.StreamEncoding;
+import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -158,9 +158,9 @@ public class ClientContextTestCase extends MockObjectTestCase {
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        ClientStreamDriverFactory factory0 = new ClientByteStreamDriverFactory();
+        StreamEncoding factory0 = new ByteStreamEncoding();
         ClientMonitor cm = new ConsoleClientMonitor();
-        ClientInvoker handler = new SocketClientInvoker(cm, factory0, "127.0.0.1", 19333);
+        Transport handler = new SocketTransport(cm, factory0, "127.0.0.1", 19333);
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();
         Factory factory = new StubsOnClient(handler, factory1);
 

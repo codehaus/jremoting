@@ -23,8 +23,8 @@ import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.factories.NullContextFactory;
 import org.codehaus.jremoting.client.invokers.DynamicInvoker;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
+import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
+import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
@@ -63,8 +63,8 @@ public class DynamicInvokerTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        dynamicInvoker = new DynamicInvoker(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientByteStreamDriverFactory(),
+        dynamicInvoker = new DynamicInvoker(new SocketTransport(new ConsoleClientMonitor(),
+                new ByteStreamEncoding(),
                 "127.0.0.1", 10101), new NullContextFactory());
 
     }

@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ClientStreamDriver;
+import org.codehaus.jremoting.client.StreamEncoder;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
@@ -27,29 +27,29 @@ import java.io.IOException;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Class StreamClientInvoker
+ * Class StreamTransport
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class StreamClientInvoker extends StatefulClientInvoker {
+public abstract class StreamTransport extends StatefulTransport {
 
-    private ClientStreamDriver streamDriver;
-    protected final ClientStreamDriverFactory streamDriverFactory;
+    private StreamEncoder streamEncoder;
+    protected final StreamEncoding streamEncoding;
 
-    public StreamClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public StreamTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
-                                                 ClientStreamDriverFactory streamDriverFactory) {
+                                                 StreamEncoding streamEncoding) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
-        this.streamDriverFactory = streamDriverFactory;
+        this.streamEncoding = streamEncoding;
     }
 
-    protected void setStreamDriver(ClientStreamDriver streamDriver) {
-        this.streamDriver = streamDriver;
+    protected void setStreamDriver(StreamEncoder streamEncoder) {
+        this.streamEncoder = streamEncoder;
     }
 
     protected Response performInvocation(Request request) throws IOException, ClassNotFoundException {
-        return streamDriver.postRequest(request);
+        return streamEncoder.postRequest(request);
     }
 
 

@@ -20,8 +20,8 @@ package org.codehaus.jremoting.itests.transports;
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.factories.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
+import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
+import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
@@ -74,8 +74,8 @@ public class BcelTestCase extends AbstractHelloTestCase {
         // Client side setup
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
-        factory = new StubsFromServer(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientByteStreamDriverFactory(), "127.0.0.1", 10201), (ContextFactory) mock.proxy());
+        factory = new StubsFromServer(new SocketTransport(new ConsoleClientMonitor(),
+                new ByteStreamEncoding(), "127.0.0.1", 10201), (ContextFactory) mock.proxy());
         testClient = (TestInterface) factory.lookupService("Hello223");
 
     }

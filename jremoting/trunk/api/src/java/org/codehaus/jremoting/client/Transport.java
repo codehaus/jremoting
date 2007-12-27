@@ -25,12 +25,12 @@ import org.codehaus.jremoting.responses.Response;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Interface ClientInvoker
+ * Interface Transport
  *
  * @author Paul Hammant
  * @version * $Revision: 1.3 $
  */
-public interface ClientInvoker {
+public interface Transport {
 
     Response invoke(Request request);
 

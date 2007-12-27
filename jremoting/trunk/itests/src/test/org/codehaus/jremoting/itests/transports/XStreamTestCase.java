@@ -2,8 +2,8 @@ package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ClientXStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
+import org.codehaus.jremoting.client.transports.XStreamEncoding;
+import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
@@ -39,8 +39,8 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientXStreamDriverFactory(), "localhost", 10099));
+        factory = new StubsOnClient(new SocketTransport(new ConsoleClientMonitor(),
+                new XStreamEncoding(), "localhost", 10099));
         testClient = (TestInterface) factory.lookupService("Hello");
 
     }

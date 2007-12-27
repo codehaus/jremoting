@@ -20,10 +20,10 @@ package org.codehaus.jremoting.itests.mismatch;
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
-import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
+import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
+import org.codehaus.jremoting.client.transports.ObjectStreamEncoding;
+import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
+import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
@@ -65,8 +65,8 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
         try {
 
             // Client side setup
-            factory = new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientObjectStreamDriverFactory(), "127.0.0.1", 12001));
+            factory = new StubsOnClient(new SocketTransport(new ConsoleClientMonitor(),
+                new ObjectStreamEncoding(), "127.0.0.1", 12001));
             testClient = (TestInterface) factory.lookupService("Hello");
 
             testClient.hello("hello");
@@ -106,8 +106,8 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
         try {
 
             // Client side setup
-            factory = new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientByteStreamDriverFactory(), "127.0.0.1", 12002));
+            factory = new StubsOnClient(new SocketTransport(new ConsoleClientMonitor(),
+                new ByteStreamEncoding(), "127.0.0.1", 12002));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
 
@@ -144,7 +144,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
         try {
 
             // Client side setup
-            factory = new StubsOnClient(new RmiClientInvoker(new ConsoleClientMonitor(), "127.0.0.1", 12003));
+            factory = new StubsOnClient(new RmiTransport(new ConsoleClientMonitor(), "127.0.0.1", 12003));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
 
@@ -180,8 +180,8 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
         try {
 
             // Client side setup
-            factory = new StubsOnClient(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientObjectStreamDriverFactory(), "127.0.0.1", 12004));
+            factory = new StubsOnClient(new SocketTransport(new ConsoleClientMonitor(),
+                new ObjectStreamEncoding(), "127.0.0.1", 12004));
             TestInterface testClient = (TestInterface) factory.lookupService("Hello");
 
 

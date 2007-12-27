@@ -16,7 +16,7 @@
  */
 package org.codehaus.jremoting.client.pingers;
 
-import org.codehaus.jremoting.client.ClientInvoker;
+import org.codehaus.jremoting.client.Transport;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 import org.jmock.core.Constraint;
@@ -29,7 +29,7 @@ public class PerpetualPingerTestCase extends MockObjectTestCase {
 
     public void testThatPinderSchedulesAndInvokesPingOncePerRun() throws InterruptedException {
 
-        Mock ci = mock(ClientInvoker.class);
+        Mock ci = mock(Transport.class);
         Mock ses = mock(ScheduledExecutorService.class);
         Mock future = mock(ScheduledFuture.class);
         ci.expects(once()).method("getScheduledExecutorService").withNoArguments().will(returnValue(ses.proxy()));
@@ -48,7 +48,7 @@ public class PerpetualPingerTestCase extends MockObjectTestCase {
         }, eq(1L), eq(1L), eq(TimeUnit.SECONDS)).will(returnValue(future.proxy()));
 
         PerpetualPinger pcp = new PerpetualPinger(1);
-        pcp.start((ClientInvoker) ci.proxy());
+        pcp.start((Transport) ci.proxy());
 
         ci.expects(exactly(3)).method("ping").withNoArguments();
 

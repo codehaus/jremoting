@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.JRemotingException;
-import org.codehaus.jremoting.client.ClientInvoker;
+import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.ConnectionPinger;
@@ -50,12 +50,12 @@ import java.io.InterruptedIOException;
 import java.net.SocketException;
 
 /**
- * Class StatefulClientInvoker
+ * Class StatefulTransport
  *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public abstract class StatefulClientInvoker implements ClientInvoker {
+public abstract class StatefulTransport implements Transport {
 
     protected final ConnectionPinger connectionPinger;
     protected final ClientMonitor clientMonitor;
@@ -66,7 +66,7 @@ public abstract class StatefulClientInvoker implements ClientInvoker {
     private Long session;
     private long lastRealRequest = System.currentTimeMillis();
 
-    public StatefulClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public StatefulTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
         this.executorService = executorService;
         this.clientMonitor = clientMonitor;
@@ -194,7 +194,7 @@ public abstract class StatefulClientInvoker implements ClientInvoker {
                                 retryConnectTries++;
                             }
                         } else {
-                            throw clientMonitor.unexpectedIOException(StatefulClientInvoker.class, "invoke()", ioe);
+                            throw clientMonitor.unexpectedIOException(StatefulTransport.class, "invoke()", ioe);
                         }
                     }
                 }

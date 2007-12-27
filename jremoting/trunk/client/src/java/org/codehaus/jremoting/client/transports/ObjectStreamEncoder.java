@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.transports;
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.util.ClassLoaderObjectInputStream;
-import org.codehaus.jremoting.client.ClientStreamDriver;
+import org.codehaus.jremoting.client.StreamEncoder;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
@@ -33,17 +33,17 @@ import java.io.OutputStream;
 import java.io.BufferedInputStream;
 
 /**
- * Class ClientObjectStreamDriver
+ * Class ObjectStreamEncoder
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ClientObjectStreamDriver implements ClientStreamDriver {
+public class ObjectStreamEncoder implements StreamEncoder {
 
     private final ObjectInputStream objectInputStream;
     private final ObjectOutputStream objectOutputStream;
 
-    public ClientObjectStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+    public ObjectStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         try {
             objectOutputStream = new ObjectOutputStream(outputStream);
             objectInputStream = new ClassLoaderObjectInputStream(facadesClassLoader, new BufferedInputStream(inputStream));

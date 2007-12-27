@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.transports.direct;
 import org.codehaus.jremoting.JRemotingException;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.transports.StatefulClientInvoker;
+import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMarshalledInvoker;
@@ -29,16 +29,16 @@ import org.codehaus.jremoting.util.SerializationHelper;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Class DirectMarshalledClientInvoker
+ * Class DirectMarshalledTransport
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class DirectMarshalledClientInvoker extends StatefulClientInvoker {
+public final class DirectMarshalledTransport extends StatefulTransport {
 
     private ServerMarshalledInvoker invoker;
 
-    public DirectMarshalledClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public DirectMarshalledTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                              ConnectionPinger connectionPinger, ServerMarshalledInvoker invoker,
                                              ClassLoader facadesClassLoader) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
@@ -59,7 +59,7 @@ public final class DirectMarshalledClientInvoker extends StatefulClientInvoker {
             return (Response) instanceFromBytes;
         } catch (ClassNotFoundException cnfe) {
             String msg = "Some ClassNotFoundException on client side";
-            clientMonitor.classNotFound(DirectMarshalledClientInvoker.class, msg, cnfe);
+            clientMonitor.classNotFound(DirectMarshalledTransport.class, msg, cnfe);
             throw new JRemotingException(msg, cnfe);
         }
     }

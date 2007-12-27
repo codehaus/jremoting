@@ -26,7 +26,7 @@ package org.codehaus.jremoting.client;
  */
 public interface ConnectionPinger {
 
-    void start(ClientInvoker invoker);
+    void start(Transport invoker);
 
     void stop();
 

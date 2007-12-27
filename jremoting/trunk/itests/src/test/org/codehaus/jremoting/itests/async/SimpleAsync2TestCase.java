@@ -21,8 +21,8 @@ import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
+import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
+import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
@@ -77,8 +77,8 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         // Client side setup
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
-        factory = new StubsFromServer(new SocketClientInvoker(new ConsoleClientMonitor(),
-                new ClientByteStreamDriverFactory(), "127.0.0.1", 11009), (ContextFactory) mock.proxy());
+        factory = new StubsFromServer(new SocketTransport(new ConsoleClientMonitor(),
+                new ByteStreamEncoding(), "127.0.0.1", 11009), (ContextFactory) mock.proxy());
         testClient = (AsyncTest) factory.lookupService("AsyncTestB");
 
     }

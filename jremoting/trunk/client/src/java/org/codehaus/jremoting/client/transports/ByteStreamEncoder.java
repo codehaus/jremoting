@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.ClientStreamDriver;
+import org.codehaus.jremoting.client.StreamEncoder;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.util.SerializationHelper;
@@ -26,18 +26,18 @@ import org.codehaus.jremoting.util.SerializationHelper;
 import java.io.*;
 
 /**
- * Class ClientByteStreamDriver
+ * Class ByteStreamEncoder
  *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public class ClientByteStreamDriver implements ClientStreamDriver {
+public class ByteStreamEncoder implements StreamEncoder {
 
     private final DataInputStream dataInputStream;
     private final DataOutputStream dataOutputStream;
     private final ClassLoader facadesClassLoader;
 
-    public ClientByteStreamDriver(DataInputStream dataInputStream, DataOutputStream dataOutputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+    public ByteStreamEncoder(DataInputStream dataInputStream, DataOutputStream dataOutputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         this.dataInputStream = dataInputStream;
         this.dataOutputStream = dataOutputStream;
         this.facadesClassLoader = facadesClassLoader;

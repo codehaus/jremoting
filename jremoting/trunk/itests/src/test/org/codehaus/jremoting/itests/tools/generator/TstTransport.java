@@ -19,7 +19,7 @@ package org.codehaus.jremoting.itests.tools.generator;
 
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.transports.StatefulClientInvoker;
+import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.requests.Request;
@@ -34,16 +34,16 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * TstClientInvoker
+ * TstTransport
  *
  * @author <a href="mailto:vinayc@apache">Vinay Chandrasekharan</a>
  * @version 1.0
  */
-public class TstClientInvoker extends StatefulClientInvoker implements ServerInvoker {
+public class TstTransport extends StatefulTransport implements ServerInvoker {
 
 
-    public TstClientInvoker(ScheduledExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
-        super(clientMonitor, executorService, connectionPinger, TstClientInvoker.class.getClassLoader());
+    public TstTransport(ScheduledExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {
+        super(clientMonitor, executorService, connectionPinger, TstTransport.class.getClassLoader());
     }
 
     protected Response performInvocation(Request request) throws IOException, ClassNotFoundException {
@@ -86,14 +86,14 @@ public class TstClientInvoker extends StatefulClientInvoker implements ServerInv
     }
 
     /*
-     * @see StatefulClientInvoker#tryReconnect()
+     * @see StatefulTransport#tryReconnect()
      */
     protected boolean tryReconnect() {
         return true;
     }
 
     /*
-     * @see ClientInvoker#getLastRealRequestTime()
+     * @see Transport#getLastRealRequestTime()
      */
     public long getLastRealRequestTime() {
         return 0;

@@ -22,8 +22,8 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
-import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.StreamClientInvoker;
+import org.codehaus.jremoting.client.transports.StreamEncoding;
+import org.codehaus.jremoting.client.transports.StreamTransport;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 
 import java.io.PipedInputStream;
@@ -32,18 +32,18 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Class PipedClientInvoker
+ * Class PipedTransport
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class PipedClientInvoker extends StreamClientInvoker {
+public class PipedTransport extends StreamTransport {
 
     private PipedInputStream inputStream;
     private PipedOutputStream outputStream;
 
     /**
-     * Constructor PipedClientInvoker
+     * Constructor PipedTransport
      *
      * @param clientMonitor
      * @param executorService
@@ -52,22 +52,22 @@ public class PipedClientInvoker extends StreamClientInvoker {
      * @param is
      * @param os
      */
-    public PipedClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
-                                        ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, ClientStreamDriverFactory clientStreamDriverFactory, PipedInputStream is,
+    public PipedTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+                                        ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, StreamEncoding streamEncoding, PipedInputStream is,
                                         PipedOutputStream os) {
 
-        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, clientStreamDriverFactory);
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding);
 
         inputStream = is;
         outputStream = os;
     }
 
 
-    public PipedClientInvoker(ClientMonitor clientMonitor,
-                                        ClientStreamDriverFactory streamDriverFactory,
+    public PipedTransport(ClientMonitor clientMonitor,
+                                        StreamEncoding streamEncoding,
                                         PipedInputStream inputStream, PipedOutputStream outputStream) {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
-                Thread.currentThread().getContextClassLoader(), streamDriverFactory, inputStream, outputStream);
+                Thread.currentThread().getContextClassLoader(), streamEncoding, inputStream, outputStream);
     }
 
     /**
@@ -76,7 +76,7 @@ public class PipedClientInvoker extends StreamClientInvoker {
      * @throws ConnectionException
      */
     public ConnectionOpened openConnection() throws ConnectionException {
-        setStreamDriver(streamDriverFactory.makeStreamDriver(inputStream, outputStream, getFacadesClassLoader()));
+        setStreamDriver(streamEncoding.makeStreamDriver(inputStream, outputStream, getFacadesClassLoader()));
         return super.openConnection();
     }
 

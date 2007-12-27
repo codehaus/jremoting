@@ -1,11 +1,12 @@
 /* ====================================================================
  * Copyright 2005-2006 JRemoting Committers
+ * Portions copyright 2001 - 2004 Apache Software Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.codehaus.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,16 +15,19 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.client.transports;
+package org.codehaus.jremoting.client;
 
-import org.codehaus.jremoting.client.ClientStreamDriver;
-import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.IOException;
 
-public interface ClientStreamDriverFactory {
-
-    ClientStreamDriver makeStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException;
-
+/**
+ * Class StreamEncoder
+ *
+ * @author Paul Hammant
+ * @version $Revision: 1.2 $
+ */
+public interface StreamEncoder {
+    Response postRequest(Request request) throws IOException, ClassNotFoundException;
 }

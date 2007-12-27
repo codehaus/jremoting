@@ -20,7 +20,7 @@ package org.codehaus.jremoting.itests.rmi;
 import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
+import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
@@ -61,7 +61,7 @@ public class RmiTestCase extends MockObjectTestCase {
         server.start();
 
         // Client side setup
-        Factory af = new StubsOnClient(new RmiClientInvoker(new ConsoleClientMonitor(), "127.0.0.1", 10003));
+        Factory af = new StubsOnClient(new RmiTransport(new ConsoleClientMonitor(), "127.0.0.1", 10003));
         testClient = (TestInterface) af.lookupService("Hello");
 
 

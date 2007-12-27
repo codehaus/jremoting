@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.ClientInvoker;
+import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.util.StubHelper;
 
@@ -32,17 +32,17 @@ public class StubsOnClient extends AbstractFactory {
 
     private ClassLoader stubsClasLoader;
 
-    public StubsOnClient(ClientInvoker clientInvoker) throws ConnectionException {
-        this(clientInvoker, Thread.currentThread().getContextClassLoader(), new NullContextFactory());
+    public StubsOnClient(Transport transport) throws ConnectionException {
+        this(transport, Thread.currentThread().getContextClassLoader(), new NullContextFactory());
     }
 
-    public StubsOnClient(ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
-        this(clientInvoker, Thread.currentThread().getContextClassLoader(), contextFactory);
+    public StubsOnClient(Transport transport, ContextFactory contextFactory) throws ConnectionException {
+        this(transport, Thread.currentThread().getContextClassLoader(), contextFactory);
     }
 
-    public StubsOnClient(ClientInvoker clientInvoker, ClassLoader stubsClasLoader, ContextFactory contextFactory
+    public StubsOnClient(Transport transport, ClassLoader stubsClasLoader, ContextFactory contextFactory
     ) throws ConnectionException {
-        super(clientInvoker, contextFactory);
+        super(transport, contextFactory);
         this.stubsClasLoader = stubsClasLoader;
     }
 

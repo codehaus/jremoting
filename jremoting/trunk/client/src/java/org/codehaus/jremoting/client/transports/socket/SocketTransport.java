@@ -27,26 +27,26 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
-import org.codehaus.jremoting.client.transports.StreamClientInvoker;
-import org.codehaus.jremoting.client.transports.ClientStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.StreamTransport;
+import org.codehaus.jremoting.client.transports.StreamEncoding;
 
 import java.io.IOException;
 import java.net.Socket;
 
 /**
- * Class SocketClientInvoker
+ * Class SocketTransport
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class SocketClientInvoker extends StreamClientInvoker {
+public class SocketTransport extends StreamTransport {
 
     private final String host;
     private final int port;
 
 
     /**
-     * SocketClientInvoker
+     * SocketTransport
      *
      * @param clientMonitor
      * @param executorService
@@ -55,18 +55,18 @@ public class SocketClientInvoker extends StreamClientInvoker {
      * @param host                  The host to connect to
      * @param port                  The port to conenct to
      */
-    public SocketClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+    public SocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
-                                                 ClientStreamDriverFactory streamDriverFactory,
+                                                 StreamEncoding streamEncoding,
                                                  String host, int port) throws ConnectionRefusedException, BadConnectionException {
-        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamDriverFactory);
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding);
         this.host = host;
         this.port = port;
 
         try {
             Socket socket = new Socket(this.host, this.port);
             socket.setSoTimeout(60 * 1000);
-            setStreamDriver(streamDriverFactory.makeStreamDriver(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
+            setStreamDriver(streamEncoding.makeStreamDriver(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
         } catch (IOException ioe) {
             if (ioe.getMessage().startsWith("Connection refused")) {
                 throw new ConnectionRefusedException("Connection to port " + port + " on host " + host + " refused.");
@@ -76,9 +76,9 @@ public class SocketClientInvoker extends StreamClientInvoker {
     }
 
 
-    public SocketClientInvoker(ClientMonitor clientMonitor, ClientStreamDriverFactory streamDriverFactory, String host, int port) throws ConnectionRefusedException, BadConnectionException {
+    public SocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, String host, int port) throws ConnectionRefusedException, BadConnectionException {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
-                Thread.currentThread().getContextClassLoader(), streamDriverFactory, host, port);
+                Thread.currentThread().getContextClassLoader(), streamEncoding, host, port);
     }
 
     /**
@@ -91,7 +91,7 @@ public class SocketClientInvoker extends StreamClientInvoker {
         try {
             Socket socket = new Socket(host, port);
             socket.setSoTimeout(60 * 1000);
-            setStreamDriver(streamDriverFactory.makeStreamDriver(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
+            setStreamDriver(streamEncoding.makeStreamDriver(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
             return true;
         } catch (ConnectionException ce) {
             // TODO log ?

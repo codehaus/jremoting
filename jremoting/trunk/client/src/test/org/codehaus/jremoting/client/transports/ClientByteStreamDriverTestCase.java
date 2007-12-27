@@ -20,7 +20,7 @@ public class ClientByteStreamDriverTestCase extends MockObjectTestCase {
 //        ByteArrayInputStream inputStream = new ByteArrayInputStream(tmp.toByteArray());
 //        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 //
-//        ClientByteStreamDriver d = new ClientByteStreamDriver(inputStream, outputStream, this.getClass().getClassLoader());
+//        ByteStreamEncoder d = new ByteStreamEncoder(inputStream, outputStream, this.getClass().getClassLoader());
 //
 //        Response resp = d.performInvocation(new OpenConnection());
 //

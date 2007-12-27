@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.ClientInvoker;
+import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.StubHelper;
 import org.codehaus.jremoting.client.ContextFactory;
 
@@ -32,8 +32,8 @@ import org.codehaus.jremoting.client.ContextFactory;
  */
 public class DynamicStubs extends AbstractFactory {
 
-    public DynamicStubs(ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
-        super(clientInvoker, contextFactory);
+    public DynamicStubs(Transport transport, ContextFactory contextFactory) throws ConnectionException {
+        super(transport, contextFactory);
     }
 
     protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {

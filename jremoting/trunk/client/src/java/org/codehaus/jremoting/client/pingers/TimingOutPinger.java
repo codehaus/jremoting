@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.client.pingers;
 
-import org.codehaus.jremoting.client.ClientInvoker;
+import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.ConnectionPinger;
 
 import java.util.concurrent.ScheduledFuture;
@@ -34,7 +34,7 @@ public class TimingOutPinger implements ConnectionPinger {
     private Runnable runnable;
 
     private final long giveUpIntervalSeconds;
-    private ClientInvoker invoker;
+    private Transport invoker;
     private ScheduledFuture pingingFuture;
     private int pingIntervalSeconds;
 
@@ -62,7 +62,7 @@ public class TimingOutPinger implements ConnectionPinger {
         this(10, 100);
     }
 
-    public void start(ClientInvoker invoker) {
+    public void start(Transport invoker) {
         this.invoker = invoker;
         pingingFuture = invoker.getScheduledExecutorService().scheduleAtFixedRate(runnable, pingIntervalSeconds, pingIntervalSeconds, TimeUnit.SECONDS);
 

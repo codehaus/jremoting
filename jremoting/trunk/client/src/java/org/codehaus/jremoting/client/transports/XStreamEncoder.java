@@ -23,7 +23,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.core.JVM;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.ClientStreamDriver;
+import org.codehaus.jremoting.client.StreamEncoder;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.util.SerializationHelper;
@@ -38,19 +38,19 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 /**
- * Class ClientXStreamDriver
+ * Class XStreamEncoder
  *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public class ClientXStreamDriver implements ClientStreamDriver {
+public class XStreamEncoder implements StreamEncoder {
 
     private final LineNumberReader lineNumberReader;
     private final PrintWriter printWriter;
     private final XStream xStream;
     private final BufferedOutputStream bufferedOutputStream;
 
-    public ClientXStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+    public XStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         bufferedOutputStream = new BufferedOutputStream(outputStream);
         printWriter = new PrintWriter(bufferedOutputStream);
         lineNumberReader = new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream)));

@@ -19,7 +19,7 @@ package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
-import org.codehaus.jremoting.client.transports.direct.DirectUnMarshalledClientInvoker;
+import org.codehaus.jremoting.client.transports.direct.DirectUnMarshalledTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
@@ -48,7 +48,7 @@ public class DirectUnMarshalledTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
-        factory = new StubsOnClient(new DirectUnMarshalledClientInvoker((ClientMonitor) mockClientMonitor.proxy(), server));
+        factory = new StubsOnClient(new DirectUnMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(), server));
 
         testClient = (TestInterface) factory.lookupService("Hello");
 

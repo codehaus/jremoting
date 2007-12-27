@@ -16,14 +16,14 @@
  */
 package org.codehaus.jremoting.client.transports;
 
-import org.codehaus.jremoting.client.ClientStreamDriver;
+import org.codehaus.jremoting.client.StreamEncoder;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class ClientXStreamDriverFactory implements ClientStreamDriverFactory {
-    public ClientStreamDriver makeStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
-        return new ClientXStreamDriver(inputStream, outputStream, facadesClassLoader);
-    }
+public interface StreamEncoding {
+
+    StreamEncoder makeStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException;
+
 }

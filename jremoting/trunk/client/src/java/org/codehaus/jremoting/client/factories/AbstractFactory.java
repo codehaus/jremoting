@@ -46,7 +46,7 @@ import org.codehaus.jremoting.util.FacadeRefHolder;
 public abstract class AbstractFactory implements Factory {
 
     private static final int STUB_PREFIX_LENGTH = org.codehaus.jremoting.util.StubHelper.getStubPrefixLength();
-    protected final ClientInvoker clientInvoker;
+    protected final Transport transport;
     private final ContextFactory contextFactory;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
     private transient String textToSign;
@@ -54,11 +54,11 @@ public abstract class AbstractFactory implements Factory {
     private StubRegistry stubRegistry;
 
 
-    public AbstractFactory(final ClientInvoker clientInvoker, ContextFactory contextFactory) throws ConnectionException {
-        this.clientInvoker = clientInvoker;
+    public AbstractFactory(final Transport transport, ContextFactory contextFactory) throws ConnectionException {
+        this.transport = transport;
         this.contextFactory = contextFactory;
 
-        ConnectionOpened response = clientInvoker.openConnection();
+        ConnectionOpened response = transport.openConnection();
 
         textToSign = response.getTextToSign();
         sessionID = response.getSessionID();
@@ -109,7 +109,7 @@ public abstract class AbstractFactory implements Factory {
                         }
                     } else // Let the specific Invokers be given the last chance to modify the arguments.
                     {
-                        args[i] = clientInvoker.resolveArgument(remoteObjectName, methodSignature, argClasses[i], args[i]);
+                        args[i] = transport.resolveArgument(remoteObjectName, methodSignature, argClasses[i], args[i]);
                     }
                 }
             }
@@ -119,7 +119,7 @@ public abstract class AbstractFactory implements Factory {
 
     public Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
-        Response ar = clientInvoker.invoke(new LookupService(publishedServiceName, authentication, sessionID));
+        Response ar = transport.invoke(new LookupService(publishedServiceName, authentication, sessionID));
 
         if (ar instanceof NotPublished) {
             throw new ConnectionException("Service '" + publishedServiceName + "' not published");
@@ -139,7 +139,7 @@ public abstract class AbstractFactory implements Factory {
         }
 
         Service lr = (Service) ar;
-        DefaultStubHelper baseObj = new DefaultStubHelper(stubRegistry, clientInvoker,
+        DefaultStubHelper baseObj = new DefaultStubHelper(stubRegistry, transport,
                 contextFactory, publishedServiceName, "Main", lr.getReferenceID(), sessionID);
         Object retVal = getInstance(publishedServiceName, "Main", baseObj);
 
@@ -163,7 +163,7 @@ public abstract class AbstractFactory implements Factory {
     }
 
     public String[] listServices() {
-        Response ar = clientInvoker.invoke(new ListServices());
+        Response ar = transport.invoke(new ListServices());
         return ((ServicesList) ar).getServices();
     }
 
@@ -201,7 +201,7 @@ public abstract class AbstractFactory implements Factory {
     }
 
     public void close() {
-        clientInvoker.closeConnection(sessionID);
+        transport.closeConnection(sessionID);
     }
 
 

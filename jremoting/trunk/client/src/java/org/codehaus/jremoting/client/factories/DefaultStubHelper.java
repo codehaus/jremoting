@@ -49,7 +49,7 @@ import org.codehaus.jremoting.ConnectionException;
 public final class DefaultStubHelper implements StubHelper {
 
     private final transient StubRegistry stubRegistry;
-    private final transient ClientInvoker clientInvoker;
+    private final transient Transport transport;
     private final transient String publishedServiceName;
     private final transient String objectName;
     private final transient Long referenceID;
@@ -57,13 +57,13 @@ public final class DefaultStubHelper implements StubHelper {
     private ContextFactory contextFactory;
     private ArrayList<GroupedMethodRequest> queuedAsyncRequests = new ArrayList<GroupedMethodRequest>();
 
-    public DefaultStubHelper(StubRegistry stubRegistry, ClientInvoker clientInvoker,
+    public DefaultStubHelper(StubRegistry stubRegistry, Transport transport,
                               ContextFactory contextFactory, String pubishedServiceName, String objectName,
                               Long referenceID, Long session) {
         this.contextFactory = contextFactory;
 
         this.stubRegistry = stubRegistry;
-        this.clientInvoker = clientInvoker;
+        this.transport = transport;
         publishedServiceName = pubishedServiceName;
         this.objectName = objectName;
         this.referenceID = referenceID;
@@ -71,8 +71,8 @@ public final class DefaultStubHelper implements StubHelper {
         if (stubRegistry == null) {
             throw new IllegalArgumentException("stubRegistry cannot be null");
         }
-        if (clientInvoker == null) {
-            throw new IllegalArgumentException("clientInvoker cannot be null");
+        if (transport == null) {
+            throw new IllegalArgumentException("transport cannot be null");
         }
 
     }
@@ -94,7 +94,7 @@ public final class DefaultStubHelper implements StubHelper {
             }
 
             setContext(request);
-            Response response = clientInvoker.invoke(request);
+            Response response = transport.invoke(request);
 
             if (response instanceof FacadeMethodInvoked) {
                 result = facadeMethodInvoked(response);
@@ -105,7 +105,7 @@ public final class DefaultStubHelper implements StubHelper {
             }
             return result;
         } catch (InvocationException ie) {
-            clientInvoker.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
+            transport.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
             throw ie;
         }
     }
@@ -127,7 +127,7 @@ public final class DefaultStubHelper implements StubHelper {
                 instances[i] = o;
 
                 if (instances[i] == null) {
-                    DefaultStubHelper bo2 = new DefaultStubHelper(stubRegistry, clientInvoker,
+                    DefaultStubHelper bo2 = new DefaultStubHelper(stubRegistry, transport,
                             contextFactory, publishedServiceName, objectNames[i], refs[i], session);
                     Object retFacade = null;
 
@@ -161,7 +161,7 @@ public final class DefaultStubHelper implements StubHelper {
         Object instance = stubRegistry.getInstance(ref);
 
         if (instance == null) {
-            DefaultStubHelper pHelper = new DefaultStubHelper(stubRegistry, clientInvoker,
+            DefaultStubHelper pHelper = new DefaultStubHelper(stubRegistry, transport,
                     contextFactory, publishedServiceName, mfr.getObjectName(), ref, session);
             Object retFacade = stubRegistry.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
 
@@ -180,7 +180,7 @@ public final class DefaultStubHelper implements StubHelper {
 
             InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
             setContext(request);
-            Response response = clientInvoker.invoke(request);
+            Response response = transport.invoke(request);
 
             if (response instanceof MethodInvoked) {
                 MethodInvoked or = (MethodInvoked) response;
@@ -190,7 +190,7 @@ public final class DefaultStubHelper implements StubHelper {
                 throw makeUnexpectedResponseThrowable(response);
             }
         } catch (InvocationException ie) {
-            clientInvoker.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
+            transport.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
             throw ie;
         }
     }
@@ -205,7 +205,7 @@ public final class DefaultStubHelper implements StubHelper {
 
             //debug(args);
             setContext(request);
-            Response response = clientInvoker.invoke(request);
+            Response response = transport.invoke(request);
 
             if (response instanceof MethodInvoked) {
                 MethodInvoked or = (MethodInvoked) response;
@@ -215,7 +215,7 @@ public final class DefaultStubHelper implements StubHelper {
                 throw makeUnexpectedResponseThrowable(response);
             }
         } catch (InvocationException ie) {
-            clientInvoker.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
+            transport.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
             throw ie;
         }
     }
@@ -241,7 +241,7 @@ public final class DefaultStubHelper implements StubHelper {
 
                 //debug(args);
                 setContext(request);
-                Response response = clientInvoker.invoke(request);
+                Response response = transport.invoke(request);
 
                 if (response instanceof MethodInvoked) {
                     MethodInvoked or = (MethodInvoked) response;
@@ -250,7 +250,7 @@ public final class DefaultStubHelper implements StubHelper {
                     throw makeUnexpectedResponseThrowable(response);
                 }
             } catch (InvocationException ie) {
-                clientInvoker.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, "<various-async-grouped>", ie);
+                transport.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, "<various-async-grouped>", ie);
                 throw ie;
             }
         }
@@ -342,7 +342,7 @@ public final class DefaultStubHelper implements StubHelper {
     protected void finalize() throws Throwable {
 
         synchronized (stubRegistry) {
-            Response response = clientInvoker.invoke(new CollectGarbage(publishedServiceName, objectName, session, referenceID));
+            Response response = transport.invoke(new CollectGarbage(publishedServiceName, objectName, session, referenceID));
             if (response instanceof ExceptionThrown) {
                 // This happens if the object can not be GCed on the remote server
                 //  for any reason.

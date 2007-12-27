@@ -23,7 +23,7 @@ import org.codehaus.jremoting.RmiInvoker;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
-import org.codehaus.jremoting.client.transports.StatefulClientInvoker;
+import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
@@ -37,19 +37,19 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Class RmiClientInvoker
+ * Class RmiTransport
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class RmiClientInvoker extends StatefulClientInvoker {
+public final class RmiTransport extends StatefulTransport {
 
     private RmiInvoker rmiInvoker;
     private String url;
 
-    public RmiClientInvoker(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
+    public RmiTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
 
-        super(clientMonitor, executorService, connectionPinger, RmiClientInvoker.class.getClassLoader());
+        super(clientMonitor, executorService, connectionPinger, RmiTransport.class.getClassLoader());
 
         url = "rmi://" + host + ":" + port + "/" + RmiInvoker.class.getName();
 
@@ -66,7 +66,7 @@ public final class RmiClientInvoker extends StatefulClientInvoker {
         }
     }
 
-    public RmiClientInvoker(ClientMonitor clientMonitor, String host, int port) throws ConnectionException {
+    public RmiTransport(ClientMonitor clientMonitor, String host, int port) throws ConnectionException {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), host, port);
 
     }
