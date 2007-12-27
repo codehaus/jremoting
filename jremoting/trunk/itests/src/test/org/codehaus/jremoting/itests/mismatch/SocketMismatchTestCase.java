@@ -17,59 +17,43 @@
  */
 package org.codehaus.jremoting.itests.mismatch;
 
-import junit.framework.TestCase;
-
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
-import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
-import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
-import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.rmi.RmiServer;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
+import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
-
-import java.io.IOException;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.transports.rmi.RmiServer;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 /**
  * Test Custom Stream over sockets.
  *
  * @author Paul Hammant
  */
-public class SocketMismatchTestCase extends TestCase {
+public class SocketMismatchTestCase extends MockObjectTestCase {
     private Class x_class;
     private String x_msg;
     private BadConnectionException x_bce;
+    private Mock mockServerMonitor;
 
+    protected void setUp() throws Exception {
+        super.setUp();
+        mockServerMonitor = mock(ServerMonitor.class);
+    }
 
     public void testByteStreamObjectStreamMismatchCanCauseTimeOut() throws Exception {
 
-        ServerMonitor sm = new ServerMonitor() {
-            public void closeError(Class clazz, String s, IOException e) {
-                fail();
-            }
-            public void badConnection(Class clazz, String s, BadConnectionException bce) {
-                fail();
-            }
-            public void classNotFound(Class clazz, ClassNotFoundException e) {
-                fail();
-            }
-            public void unexpectedException(Class clazz, String s, Exception e) {
-                fail();
-            }
-            public void stopServerError(Class clazz, String s, Exception e) {
-                fail();
-            }
-        };
-
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(sm, 12001);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12001);
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -112,7 +96,7 @@ public class SocketMismatchTestCase extends TestCase {
     public void dont_testObjectStreamByteStreamMismatch() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12002, SelfContainedSocketStreamServer.OBJECTSTREAM);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12002, SelfContainedSocketStreamServer.OBJECTSTREAM);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -150,7 +134,7 @@ public class SocketMismatchTestCase extends TestCase {
     public void dont_testByteStreamRmiMismatch() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12003);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12003);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -186,7 +170,7 @@ public class SocketMismatchTestCase extends TestCase {
     public void dont_testRmiByteStreamMismatch() throws Exception {
 
         // server side setup.
-        RmiServer server = new RmiServer(new ConsoleServerMonitor(), 12004);
+        RmiServer server = new RmiServer((ServerMonitor) mockServerMonitor.proxy(), 12004);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

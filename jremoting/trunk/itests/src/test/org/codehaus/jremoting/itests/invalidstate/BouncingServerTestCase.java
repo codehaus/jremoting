@@ -17,22 +17,24 @@
  */
 package org.codehaus.jremoting.itests.invalidstate;
 
-import org.codehaus.jremoting.client.*;
-import org.codehaus.jremoting.client.factories.StubsOnClient;
+import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.InvocationException;
+import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.factories.DefaultStubHelper;
-import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
+import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.PublicationException;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.tools.generator.BcelStubGenerator;
-import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 import org.jmock.core.Constraint;
 
 
@@ -44,6 +46,7 @@ import org.jmock.core.Constraint;
 public class BouncingServerTestCase extends MockObjectTestCase {
 
     PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
+    private Mock mockServerMonitor;
 
     protected void setUp() throws Exception {
         BcelStubGenerator generator = new BcelStubGenerator();
@@ -52,6 +55,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
         generator.setPrimaryFacades(pd.getPrimaryFacades());
         generator.setGenName("Hello55");
         generator.generateClass(this.getClass().getClassLoader());
+        mockServerMonitor = mock(ServerMonitor.class);
     }
 
     public void testBouncingOfServerCausesClientProblems() throws Exception {
@@ -102,7 +106,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
     }
 
     private SelfContainedSocketStreamServer startServer() throws PublicationException {
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12201,
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12201,
                 SelfContainedSocketStreamServer.CUSTOMSTREAM);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         server.publish(testServer, "Hello55", pd);
