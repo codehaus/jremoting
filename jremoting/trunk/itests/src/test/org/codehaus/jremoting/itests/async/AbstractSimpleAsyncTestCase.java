@@ -26,14 +26,13 @@ import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.DynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.ServerByteStreamDriverFactory;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
-import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -44,6 +43,7 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
     AsyncTest testClient;
     Factory factory;
     SelfContainedSocketStreamServer server;
+    private Mock mockServerMonitor;
 
     protected abstract DynamicStubRetriever getAbstractDynamicGeneratorClassRetriever(ClassLoader cl);
 
@@ -56,6 +56,9 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
     }
 
     protected void setUp() throws Exception {
+        super.setUp();
+
+        mockServerMonitor = mock(ServerMonitor.class);
 
         // server side setup.
         DynamicStubRetriever stubRetriever = getAbstractDynamicGeneratorClassRetriever(this.getClass().getClassLoader());
@@ -67,9 +70,8 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
 
         ThreadLocalServerContextFactory ccf = new ThreadLocalServerContextFactory();
 
-        ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
-        server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
+        server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(),
                 new ServerByteStreamDriverFactory(), executorService,
                 ccf, 11003);
 

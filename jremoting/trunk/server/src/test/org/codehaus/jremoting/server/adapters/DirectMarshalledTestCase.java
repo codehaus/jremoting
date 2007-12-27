@@ -1,5 +1,25 @@
 package org.codehaus.jremoting.server.adapters;
 
+import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.requests.ListServices;
+import org.codehaus.jremoting.requests.OpenConnection;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.RetrieveStub;
+import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.responses.NotPublished;
+import org.codehaus.jremoting.responses.RequestFailed;
+import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.ServicesList;
+import org.codehaus.jremoting.responses.ServicesSuspended;
+import org.codehaus.jremoting.responses.StubRetrievalFailed;
+import org.codehaus.jremoting.server.PublicationException;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
+import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
+import org.jmock.MockObjectTestCase;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,26 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.requests.ListServices;
-import org.codehaus.jremoting.requests.OpenConnection;
-import org.codehaus.jremoting.requests.RetrieveStub;
-import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.responses.ConnectionOpened;
-import org.codehaus.jremoting.responses.NotPublished;
-import org.codehaus.jremoting.responses.RequestFailed;
-import org.codehaus.jremoting.responses.ServicesList;
-import org.codehaus.jremoting.responses.ServicesSuspended;
-import org.codehaus.jremoting.responses.StubRetrievalFailed;
-import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
-import org.jmock.MockObjectTestCase;
-
 public class DirectMarshalledTestCase extends MockObjectTestCase {
 
     private InvokerDelegate iha;
@@ -37,7 +37,7 @@ public class DirectMarshalledTestCase extends MockObjectTestCase {
 
     protected void setUp() throws Exception {
         iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
-        server = new DirectMarshalledServer(new ConsoleServerMonitor(), iha, Executors.newScheduledThreadPool(10), new MarshalledInvokerAdapter(iha));
+        server = new DirectMarshalledServer(new ConsoleServerMonitor(), Executors.newScheduledThreadPool(10), iha);
     }
 
     public void testPublishAndUnpublish() throws PublicationException, IOException, ClassNotFoundException {

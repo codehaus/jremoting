@@ -26,7 +26,7 @@ import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
 
 import java.util.concurrent.Executors;
@@ -42,7 +42,7 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
     protected void setUp() throws Exception {
         super.setUp();        
         // server side setup.
-        server = new DirectMarshalledServer(new ConsoleServerMonitor());
+        server = new DirectMarshalledServer((ServerMonitor) mockServerMonitor.proxy());
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

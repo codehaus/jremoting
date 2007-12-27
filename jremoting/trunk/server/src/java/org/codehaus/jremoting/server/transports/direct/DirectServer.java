@@ -17,19 +17,18 @@
  */
 package org.codehaus.jremoting.server.transports.direct;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Executors;
-
 import org.codehaus.jremoting.server.Authenticator;
-import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.context.ServerContextFactory;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.context.ServerContextFactory;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.StatefulServer;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Class DirectServer
@@ -52,8 +51,8 @@ public class DirectServer extends StatefulServer {
         super(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
     }
 
-    public DirectServer() {
-        this(new RefusingStubRetriever(), new NullAuthenticator(), new NullServerMonitor(), Executors.newScheduledThreadPool(10), new ThreadLocalServerContextFactory());
+    public DirectServer(ServerMonitor monitor) {
+        this(new RefusingStubRetriever(), new NullAuthenticator(), monitor, Executors.newScheduledThreadPool(10), new ThreadLocalServerContextFactory());
     }
 
 }

@@ -19,16 +19,16 @@ package org.codehaus.jremoting.itests.transports;
 
 
 import org.codehaus.jremoting.client.factories.StubsOnClient;
-import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
-import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
 
 /**
@@ -39,9 +39,10 @@ import org.codehaus.jremoting.itests.TestInterfaceImpl;
 public class ByteStreamTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
+        super.setUp();
 
         // server side setup.
-        server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 10333);
+        server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 10333);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

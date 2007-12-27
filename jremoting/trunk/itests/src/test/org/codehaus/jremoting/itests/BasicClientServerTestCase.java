@@ -19,18 +19,19 @@ package org.codehaus.jremoting.itests;
 
 import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
-import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
-import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
+import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
+import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
 import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
 import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
-import org.codehaus.jremoting.client.transports.ClientObjectStreamDriverFactory;
-import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
 
@@ -40,6 +41,13 @@ import org.jmock.MockObjectTestCase;
  * @author Paul Hammant
  */
 public class BasicClientServerTestCase extends MockObjectTestCase {
+    private Mock mockServerMonitor;
+
+
+    protected void setUp() throws Exception {
+        mockServerMonitor = mock(ServerMonitor.class);
+        super.setUp();    //To change body of overridden methods use File | Settings | File Templates.
+    }
 
     public void testNoServer() throws Exception {
         try {
@@ -54,7 +62,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     public void testNotPublishedExceptionThrownWhenNeeded() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12333);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12333);
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -83,7 +91,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     public void testNoReferenceExceptionThrownWhenNeeded() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12331,
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12331,
                 SelfContainedSocketStreamServer.OBJECTSTREAM);
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
@@ -118,7 +126,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // server side setup.
         // Object
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12347, SelfContainedSocketStreamServer.OBJECTSTREAM);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12347, SelfContainedSocketStreamServer.OBJECTSTREAM);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -143,7 +151,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     public void donttestMismatch3() throws Exception {
 
         // server side setup.
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 12348);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12348);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

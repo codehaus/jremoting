@@ -17,19 +17,20 @@
  */
 package org.codehaus.jremoting.itests.rmi;
 
-import junit.framework.TestCase;
 import org.codehaus.jremoting.client.Factory;
-import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.rmi.RmiClientInvoker;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.rmi.RmiServer;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
+import org.codehaus.jremoting.server.transports.rmi.RmiServer;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 
 /**
@@ -40,16 +41,20 @@ import org.codehaus.jremoting.itests.TestInterfaceImpl;
  *
  * @author Paul Hammant
  */
-public class RmiTestCase extends TestCase {
+public class RmiTestCase extends MockObjectTestCase {
 
     private ConnectingServer server;
     private TestInterfaceImpl testServer;
     private TestInterface testClient;
+    private Mock mockServerMonitor;
 
     protected void setUp() throws Exception {
+        super.setUp();
+
+        mockServerMonitor = mock(ServerMonitor.class);
 
         // server side setup.
-        server = new RmiServer(new ConsoleServerMonitor(), 10003);
+        server = new RmiServer((ServerMonitor) mockServerMonitor.proxy(), 10003);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

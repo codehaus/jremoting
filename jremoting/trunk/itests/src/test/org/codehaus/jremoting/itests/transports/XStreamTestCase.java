@@ -1,23 +1,23 @@
 package org.codehaus.jremoting.itests.transports;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Executors;
-
 import org.codehaus.jremoting.client.factories.StubsOnClient;
-import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
-import org.codehaus.jremoting.client.transports.ClientXStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.client.transports.ClientXStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.socket.SocketClientInvoker;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
+import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Test XStream over sockets.
@@ -27,11 +27,11 @@ import org.codehaus.jremoting.itests.TestInterfaceImpl;
 public class XStreamTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
+        super.setUp();
 
         // server side setup.
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
-        ConsoleServerMonitor serverMonitor = new ConsoleServerMonitor();
-        server = new SelfContainedSocketStreamServer(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(),
+        server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
                 new ServerXStreamDriverFactory(), executorService, new ThreadLocalServerContextFactory(), 10099);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});

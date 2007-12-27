@@ -17,17 +17,20 @@
  */
 package org.codehaus.jremoting.server.transports.direct;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Executors;
-
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.server.ServerInvoker;
 import org.codehaus.jremoting.server.ServerMarshalledInvoker;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
-import org.codehaus.jremoting.server.adapters.MarshalledInvokerAdapter;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.StatefulServer;
+import org.codehaus.jremoting.util.SerializationHelper;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Class DirectMarshalledServer
@@ -37,19 +40,23 @@ import org.codehaus.jremoting.server.transports.StatefulServer;
  */
 public class DirectMarshalledServer extends StatefulServer implements ServerMarshalledInvoker {
 
-    private final MarshalledInvokerAdapter marshalledInvokerAdapter;
+    private final ServerMarshalledInvokerImpl marshalledInvokerAdapter;
 
-    public DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate, ScheduledExecutorService executorService, MarshalledInvokerAdapter marshalledInvokerAdapter) {
+    private DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate, ScheduledExecutorService executorService, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
         super(serverMonitor, invocationHandlerDelegate, executorService);
         this.marshalledInvokerAdapter = marshalledInvokerAdapter;
     }
 
-    public DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate, MarshalledInvokerAdapter marshalledInvokerAdapter) {
+    private DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
         this(serverMonitor, invocationHandlerDelegate, Executors.newScheduledThreadPool(10), marshalledInvokerAdapter);
     }
 
+    public DirectMarshalledServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, InvokerDelegate invocationHandlerDelegate) {
+        this(serverMonitor, invocationHandlerDelegate, executorService, new ServerMarshalledInvokerImpl(invocationHandlerDelegate));
+    }
+
     public DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate) {
-        this(serverMonitor, invocationHandlerDelegate, new MarshalledInvokerAdapter(invocationHandlerDelegate));
+        this(serverMonitor, invocationHandlerDelegate, new ServerMarshalledInvokerImpl(invocationHandlerDelegate));
     }
 
     public DirectMarshalledServer(ServerMonitor serverMonitor) {
@@ -59,5 +66,60 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
     public byte[] invoke(byte[] request, Object connectionDetails) {
         return marshalledInvokerAdapter.invoke(request, connectionDetails);
     }
+
+
+    private static class ServerMarshalledInvokerImpl implements ServerMarshalledInvoker {
+
+        /**
+         * The invocation hamdeler
+         */
+        private ServerInvoker invoker;
+        /**
+         * The class loader.
+         */
+        private ClassLoader facadesClassLoader;
+
+        /**
+         * Constructor ServerMarshalledInvokerImpl
+         *
+         * @param invoker The invocation handler
+         */
+        public ServerMarshalledInvokerImpl(ServerInvoker invoker) {
+            this.invoker = invoker;
+            facadesClassLoader = getClass().getClassLoader();
+        }
+
+        /**
+         * Constructor ServerMarshalledInvokerImpl
+         *
+         * @param invoker The invocation handler
+         * @param facadesClassLoader       The classloader
+         */
+        public ServerMarshalledInvokerImpl(ServerInvoker invoker, ClassLoader facadesClassLoader) {
+            this.invoker = invoker;
+            this.facadesClassLoader = facadesClassLoader;
+        }
+
+        /**
+         * Handle an Invocation
+         *
+         * @param request The request
+         * @return The reply
+         */
+        public byte[] invoke(byte[] request, Object connectionDetails) {
+
+            try {
+                Request ar = (Request) SerializationHelper.getInstanceFromBytes(request, facadesClassLoader);
+                Response response = invoker.invoke(ar, connectionDetails);
+
+                return SerializationHelper.getBytesFromInstance(response);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+
+                return null;
+            }
+        }
+    }
+
 
 }

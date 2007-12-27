@@ -18,20 +18,20 @@
 package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.factories.StubsOnClient;
-import org.codehaus.jremoting.client.transports.piped.PipedClientInvoker;
-import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.server.transports.ServerByteStreamDriverFactory;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.client.transports.ClientByteStreamDriverFactory;
+import org.codehaus.jremoting.client.transports.piped.PipedClientInvoker;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
+import org.codehaus.jremoting.server.transports.ServerByteStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -46,9 +46,10 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
 
 
     protected void setUp() throws Exception {
+        super.setUp();
 
         // server side setup.
-        server = new PipedStreamServer(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(),
+        server = new PipedStreamServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
                 Executors.newScheduledThreadPool(10) ,new ThreadLocalServerContextFactory(), new ServerByteStreamDriverFactory());
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});

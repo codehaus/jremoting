@@ -17,11 +17,12 @@
  */
 package org.codehaus.jremoting.itests;
 
-import org.codehaus.jremoting.client.Factory;
 import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.Factory;
+import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.StatefulServer;
-import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 /**
  * Extended by classes that name the transport.
@@ -36,9 +37,11 @@ public abstract class AbstractJRemotingTestCase extends MockObjectTestCase {
     protected Factory factory;
     protected boolean bugParadeBug4499841StillExists = true;
     protected Mock mockClientMonitor;
+    protected Mock mockServerMonitor;
 
     protected void setUp() throws Exception {
         mockClientMonitor = mock(ClientMonitor.class);
+        mockServerMonitor = mock(ServerMonitor.class);
     }
 
     public void testHelloCall() throws Exception {
