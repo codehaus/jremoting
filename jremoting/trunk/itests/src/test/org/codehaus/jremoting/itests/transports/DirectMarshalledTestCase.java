@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
+import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.factories.StubsOnClient;
-import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.direct.DirectMarshalledClientInvoker;
 import org.codehaus.jremoting.itests.TestInterface;
@@ -40,7 +40,7 @@ import java.util.concurrent.Executors;
 public class DirectMarshalledTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
-
+        super.setUp();        
         // server side setup.
         server = new DirectMarshalledServer(new ConsoleServerMonitor());
         testServer = new TestInterfaceImpl();
@@ -49,7 +49,8 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new StubsOnClient(new DirectMarshalledClientInvoker(new ConsoleClientMonitor(), Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), (DirectMarshalledServer) server, this.getClass().getClassLoader()));
+        mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
+        factory = new StubsOnClient(new DirectMarshalledClientInvoker((ClientMonitor) mockClientMonitor.proxy(), Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), (DirectMarshalledServer) server, this.getClass().getClassLoader()));
 
         testClient = (TestInterface) factory.lookupService("Hello");
 

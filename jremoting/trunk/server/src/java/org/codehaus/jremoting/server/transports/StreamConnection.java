@@ -22,7 +22,7 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.ConnectionKilled;
-import org.codehaus.jremoting.responses.InvocationExceptionThrown;
+import org.codehaus.jremoting.responses.BadServerSideEvent;
 import org.codehaus.jremoting.server.Connection;
 import org.codehaus.jremoting.server.ServerMonitor;
 
@@ -118,7 +118,7 @@ public abstract class StreamConnection implements Runnable, Connection {
                     }
                 } catch (NullPointerException npe) {
                     serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected NPE", npe);
-                    response = new InvocationExceptionThrown("NullPointerException on server: " + npe.getMessage());
+                    response = new BadServerSideEvent("NullPointerException on server: " + npe.getMessage());
                 }
             }
         } catch (IOException e) {

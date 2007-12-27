@@ -416,10 +416,13 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         Long sessionID = gcr.getSessionID();
         if (doesSessionExistAndRefreshItIfItDoes(sessionID)) {
             Session sess = getSession(sessionID);
-            if (gcr.getReferenceID() == null) {
-                System.err.println("DEBUG- GC on missing referenceID -" + gcr.getReferenceID());
-            } else {
-                sess.removeInstanceInUse(gcr.getReferenceID());
+            if (sess != null) {
+                // session may have been removed before GC kicks in.
+                if (gcr.getReferenceID() == null) {
+                    System.err.println("DEBUG- GC on missing referenceID -" + gcr.getReferenceID());
+                } else {
+                    sess.removeInstanceInUse(gcr.getReferenceID());
+                }
             }
         }
         return new GarbageCollected();

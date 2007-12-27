@@ -33,7 +33,7 @@ import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.responses.FacadeArrayMethodInvoked;
 import org.codehaus.jremoting.responses.FacadeMethodInvoked;
 import org.codehaus.jremoting.responses.GarbageCollected;
-import org.codehaus.jremoting.responses.InvocationExceptionThrown;
+import org.codehaus.jremoting.responses.BadServerSideEvent;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.responses.MethodInvoked;
@@ -293,8 +293,8 @@ public final class DefaultStubHelper implements StubHelper {
         else if (response instanceof NoSuchReference) {
             NoSuchReference nsrr = (NoSuchReference) response;
             return new NoSuchReferenceException(nsrr.getReferenceID());
-        } else if (response instanceof InvocationExceptionThrown) {
-            InvocationExceptionThrown ier = (InvocationExceptionThrown) response;
+        } else if (response instanceof BadServerSideEvent) {
+            BadServerSideEvent ier = (BadServerSideEvent) response;
             return new InvocationException(ier.getMessage());
         } else {
             return new InvocationException("Internal Error : Unknown response type :" + response.getClass().getName());

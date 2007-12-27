@@ -18,18 +18,19 @@
 
 package org.codehaus.jremoting.server.transports;
 
-import java.util.concurrent.ScheduledExecutorService;
-
-import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.CollectGarbage;
 import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.BadServerSideEvent;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.responses.InvocationExceptionThrown;
-import org.codehaus.jremoting.server.ServiceHandler;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Server;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.ServiceHandler;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
+
+import java.util.concurrent.ScheduledExecutorService;
 
 public class StatefulServer implements Server {
     /**
@@ -58,10 +59,10 @@ public class StatefulServer implements Server {
      * @return An suitable reply.
      */
     public Response invoke(Request request, Object connectionDetails) {
-        if (getState().equals(STARTED)) {
+        if (getState().equals(STARTED) || request instanceof CollectGarbage) {
             return invokerDelegate.invoke(request, connectionDetails);
         } else {
-            return new InvocationExceptionThrown("Service is not started");
+            return new BadServerSideEvent("Service is not started");
         }
     }
 

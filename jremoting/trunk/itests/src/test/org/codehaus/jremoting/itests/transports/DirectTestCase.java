@@ -17,16 +17,16 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
-import org.codehaus.jremoting.client.factories.StubsOnClient;
+import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.factories.NullContextFactory;
+import org.codehaus.jremoting.client.factories.StubsOnClient;
 import org.codehaus.jremoting.client.transports.direct.DirectUnMarshalledClientInvoker;
-import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.transports.direct.DirectServer;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.transports.direct.DirectServer;
 
 
 /**
@@ -37,6 +37,7 @@ import org.codehaus.jremoting.itests.TestInterfaceImpl;
 public class DirectTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
+        super.setUp();
 
         // server side setup.
         server = new DirectServer();
@@ -46,7 +47,8 @@ public class DirectTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        factory = new StubsOnClient(new DirectUnMarshalledClientInvoker(new ConsoleClientMonitor(), server), this.getClass().getClassLoader(), new NullContextFactory());
+        mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
+        factory = new StubsOnClient(new DirectUnMarshalledClientInvoker((ClientMonitor) mockClientMonitor.proxy(), server), this.getClass().getClassLoader(), new NullContextFactory());
         testClient = (TestInterface) factory.lookupService("Hello");
 
     }

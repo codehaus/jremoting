@@ -17,25 +17,25 @@
  */
 package org.codehaus.jremoting.server.transports;
 
+import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.responses.BadServerSideEvent;
+import org.codehaus.jremoting.responses.ExceptionThrown;
+import org.codehaus.jremoting.responses.MethodInvoked;
+import org.codehaus.jremoting.responses.NoSuchReference;
+import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.server.MethodInvocationMonitor;
+import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.ServiceHandler;
+import org.codehaus.jremoting.server.adapters.ServiceHandlerAccessor;
+import org.codehaus.jremoting.server.monitors.NullMethodInvocationMonitor;
+import org.codehaus.jremoting.util.FacadeRefHolder;
+
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.WeakHashMap;
 import java.util.Map;
-
-import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.responses.ExceptionThrown;
-import org.codehaus.jremoting.responses.InvocationExceptionThrown;
-import org.codehaus.jremoting.responses.NoSuchReference;
-import org.codehaus.jremoting.responses.MethodInvoked;
-import org.codehaus.jremoting.server.ServiceHandler;
-import org.codehaus.jremoting.server.MethodInvocationMonitor;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.adapters.ServiceHandlerAccessor;
-import org.codehaus.jremoting.server.monitors.NullMethodInvocationMonitor;
-import org.codehaus.jremoting.util.FacadeRefHolder;
+import java.util.WeakHashMap;
 
 /**
  * Class DefaultServiceHandler
@@ -182,7 +182,7 @@ public class DefaultServiceHandler implements ServiceHandler {
         if (!methodMap.containsKey(methodSignature)) {
 
             methodInvocationMonitor.missingMethod(methodSignature, connectionDetails);
-            return new InvocationExceptionThrown("Method '" + methodSignature + "' not present in impl");
+            return new BadServerSideEvent("Method '" + methodSignature + "' not present in impl");
         }
 
         Method method = methodMap.get(methodSignature);
@@ -216,11 +216,11 @@ public class DefaultServiceHandler implements ServiceHandler {
                 // NOTE Sever side stack traces will appear on the client side
                 return new ExceptionThrown(t);
             } else {
-                return new InvocationExceptionThrown("Exception was not serializable :" + t.getClass().getName());
+                return new BadServerSideEvent("Exception was not serializable :" + t.getClass().getName());
             }
         } catch (Throwable t) {
             methodInvocationMonitor.invocationException(instance == null ? null : instance.getClass(), methodSignature, t, connectionDetails);
-            return new InvocationExceptionThrown("Some ServerSide exception problem :" + t.getMessage());
+            return new BadServerSideEvent("Some ServerSide exception problem :" + t.getMessage());
         }
     }
 

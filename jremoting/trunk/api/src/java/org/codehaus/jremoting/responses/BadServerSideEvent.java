@@ -17,25 +17,23 @@
  */
 package org.codehaus.jremoting.responses;
 
-import org.codehaus.jremoting.responses.Response;
-
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * Class InvocationExceptionThrown
+ * Class BadServerSideEvent
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class InvocationExceptionThrown extends Response {
+public class BadServerSideEvent extends Response {
 
 //    static final long serialVersionUID = TODO;
 
     private String message;
 
-    public InvocationExceptionThrown(String message) {
+    public BadServerSideEvent(String message) {
         this.message = message;
     }
 
