@@ -39,29 +39,29 @@ import java.io.PipedOutputStream;
  */
 public class PipedStreamServer extends ConnectingServer {
 
-    private final ServerStreamDriverFactory serverStreamDriverFactory;
+    private final StreamEncoding streamEncoding;
     private final ClassLoader facadesClassLoader;
 
     public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
                              ScheduledExecutorService executorService, ServerContextFactory contextFactory,
-                             ServerStreamDriverFactory serverStreamDriverFactory,
+                             StreamEncoding streamEncoding,
                              ClassLoader facadesClassLoader) {
         super(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
-        this.serverStreamDriverFactory = serverStreamDriverFactory;
+        this.streamEncoding = streamEncoding;
         this.facadesClassLoader = facadesClassLoader;
     }
 
     public PipedStreamServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate,
                              ScheduledExecutorService executorService,
-                             ServerStreamDriverFactory serverStreamDriverFactory,
+                             StreamEncoding streamEncoding,
                              ClassLoader facadesClassLoader) {
         super(serverMonitor, invocationHandlerDelegate, executorService);
-        this.serverStreamDriverFactory = serverStreamDriverFactory;
+        this.streamEncoding = streamEncoding;
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, ServerStreamDriverFactory serverStreamDriverFactory) {
-        this(serverMonitor, stubRetriever, authenticator, executorService, serverContextFactory, serverStreamDriverFactory, PipedStreamServer.class.getClassLoader());
+    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, StreamEncoding streamEncoding) {
+        this(serverMonitor, stubRetriever, authenticator, executorService, serverContextFactory, streamEncoding, PipedStreamServer.class.getClassLoader());
     }
 
     /**
@@ -87,7 +87,7 @@ public class PipedStreamServer extends ConnectingServer {
             in.connect(pOS);
 
 
-            ServerStreamDriver ssd = serverStreamDriverFactory.createDriver(serverMonitor, facadesClassLoader, pIS, pOS, "piped");
+            StreamEncoder ssd = streamEncoding.createEncoder(serverMonitor, facadesClassLoader, pIS, pOS, "piped");
 
             PipedStreamConnection pssc = new PipedStreamConnection(this, pIS, pOS, ssd, serverMonitor);
 

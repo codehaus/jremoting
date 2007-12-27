@@ -4,11 +4,11 @@ import org.codehaus.jremoting.server.ServerMonitor;
 
 import java.io.*;
 
-public class ServerByteStreamDriverFactory implements ServerStreamDriverFactory {
+public class ByteStreamEncoding implements StreamEncoding {
 
-    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
+    public StreamEncoder createEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
                                            InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
-        return new ServerByteStreamDriver(serverMonitor, new DataInputStream(inputStream),
+        return new ByteStreamEncoder(serverMonitor, new DataInputStream(inputStream),
                 new DataOutputStream(new BufferedOutputStream(outputStream)), facadesClassLoader, connectionDetails);
     }
 

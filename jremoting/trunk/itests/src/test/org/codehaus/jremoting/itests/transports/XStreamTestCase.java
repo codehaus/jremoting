@@ -2,7 +2,6 @@ package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.XStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
@@ -13,7 +12,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.XStreamEncoding;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 
 import java.util.concurrent.Executors;
@@ -32,7 +31,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         // server side setup.
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
-                new ServerXStreamDriverFactory(), executorService, new ThreadLocalServerContextFactory(), 10099);
+                new XStreamEncoding(), executorService, new ThreadLocalServerContextFactory(), 10099);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
@@ -40,7 +39,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         serviceResolver = new DefaultServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
-                new XStreamEncoding(), "localhost", 10099));
+                new org.codehaus.jremoting.client.transports.XStreamEncoding(), "localhost", 10099));
         testClient = (TestInterface) serviceResolver.lookupService("Hello");
 
     }

@@ -31,17 +31,17 @@ import java.io.OutputStream;
 
 
 /**
- * Class ServerObjectStreamDriver
+ * Class ObjectStreamEncoder
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ServerObjectStreamDriver extends AbstractServerStreamDriver {
+public class ObjectStreamEncoder extends AbstractStreamEncoder {
 
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
 
-    public ServerObjectStreamDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
+    public ObjectStreamEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
                                     OutputStream outputStream, Object connectionDetails) {
         super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
     }

@@ -20,7 +20,7 @@ package org.codehaus.jremoting.server.transports.socket;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.StreamConnection;
-import org.codehaus.jremoting.server.transports.ServerStreamDriver;
+import org.codehaus.jremoting.server.transports.StreamEncoder;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -43,11 +43,11 @@ public class SocketStreamConnection extends StreamConnection {
      *
      * @param connectingServer The Abstract Server that will process invocations and requests
      * @param socket         The Socket
-     * @param driver         The driver for the transport type
+     * @param encoder         The encoder for the transport type
      */
-    public SocketStreamConnection(final ConnectingServer connectingServer, final Socket socket, ServerStreamDriver driver, ServerMonitor serverMonitor) {
+    public SocketStreamConnection(final ConnectingServer connectingServer, final Socket socket, StreamEncoder encoder, ServerMonitor serverMonitor) {
 
-        super(connectingServer, driver, serverMonitor);
+        super(connectingServer, encoder, serverMonitor);
         this.socket = socket;
     }
 

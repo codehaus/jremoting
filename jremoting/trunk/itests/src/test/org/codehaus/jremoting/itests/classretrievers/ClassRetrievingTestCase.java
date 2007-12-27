@@ -22,7 +22,6 @@ import org.codehaus.jremoting.client.ServiceResolver;
 import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.factories.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.client.transports.piped.PipedTransport;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
@@ -30,7 +29,7 @@ import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.stubretrievers.DynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.ServerByteStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
@@ -56,7 +55,7 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
         // server side setup.
         DynamicStubRetriever dyncgen = new BcelDynamicStubRetriever();
         server = new PipedStreamServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newScheduledThreadPool(10), new ThreadLocalServerContextFactory(),
-                new ServerByteStreamDriverFactory());
+                new ByteStreamEncoding());
         testServer = new TestImpl();
         server.publish(testServer, "Kewl", TestInterface.class);
         dyncgen.generate("Kewl", TestInterface.class, this.getClass().getClassLoader());
@@ -72,7 +71,7 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null)); 
         ServiceResolver af = new DefaultServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
-                new ByteStreamEncoding(), in, out), (ContextFactory) mock.proxy(), new StubsFromServer());
+                new org.codehaus.jremoting.client.transports.ByteStreamEncoding(), in, out), (ContextFactory) mock.proxy(), new StubsFromServer());
         testClient = (TestInterface) af.lookupService("Kewl");
 
     }

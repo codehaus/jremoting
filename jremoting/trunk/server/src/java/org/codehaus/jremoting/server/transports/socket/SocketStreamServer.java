@@ -22,8 +22,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.ServerStreamDriverFactory;
-import org.codehaus.jremoting.server.transports.ServerStreamDriver;
+import org.codehaus.jremoting.server.transports.StreamEncoding;
+import org.codehaus.jremoting.server.transports.StreamEncoder;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -33,7 +33,7 @@ import java.net.Socket;
  * @version $Revision: 1.2 $
  */
 public abstract class SocketStreamServer extends ConnectingServer {
-    private final ServerStreamDriverFactory serverStreamDriverFactory;
+    private final StreamEncoding streamEncoding;
     private final ClassLoader facadesClassLoader;
 
     protected boolean accepting = true;
@@ -44,9 +44,9 @@ public abstract class SocketStreamServer extends ConnectingServer {
      * @param invocationHandlerDelegate Use this invocation handler adapter.
      */
     public SocketStreamServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate, ScheduledExecutorService executorService,
-                              ServerStreamDriverFactory serverStreamDriverFactory, ClassLoader facadesClassLoader) {
+                              StreamEncoding streamEncoding, ClassLoader facadesClassLoader) {
         super(serverMonitor, invocationHandlerDelegate, executorService);
-        this.serverStreamDriverFactory = serverStreamDriverFactory;
+        this.streamEncoding = streamEncoding;
         this.facadesClassLoader = facadesClassLoader;
     }
 
@@ -61,7 +61,7 @@ public abstract class SocketStreamServer extends ConnectingServer {
         try {
             socket.setSoTimeout(60 * 1000);
             if (getState().equals(STARTED)) {
-                ServerStreamDriver ssd = serverStreamDriverFactory.createDriver(serverMonitor, facadesClassLoader,
+                StreamEncoder ssd = streamEncoding.createEncoder(serverMonitor, facadesClassLoader,
                         socket.getInputStream(), socket.getOutputStream(), socket);
                 SocketStreamConnection sssc = new SocketStreamConnection(this, socket, ssd, serverMonitor);
                 sssc.run();

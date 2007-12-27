@@ -27,17 +27,17 @@ import org.codehaus.jremoting.util.SerializationHelper;
 import java.io.*;
 
 /**
- * Class ServerByteStreamDriver
+ * Class ByteStreamEncoder
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ServerByteStreamDriver extends AbstractServerStreamDriver {
+public class ByteStreamEncoder extends AbstractStreamEncoder {
 
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
 
-    public ServerByteStreamDriver(ServerMonitor serverMonitor, DataInputStream dataInputStream,
+    public ByteStreamEncoder(ServerMonitor serverMonitor, DataInputStream dataInputStream,
                                     DataOutputStream dataOutputStream,
                                     ClassLoader facadesClassLoader, Object connectionDetails) {
         super(serverMonitor, dataInputStream, dataOutputStream, facadesClassLoader, connectionDetails);

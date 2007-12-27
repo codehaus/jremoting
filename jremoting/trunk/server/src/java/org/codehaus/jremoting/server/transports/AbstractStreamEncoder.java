@@ -25,12 +25,12 @@ import java.io.OutputStream;
 
 
 /**
- * Class AbstractServerStreamDriver
+ * Class AbstractStreamEncoder
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractServerStreamDriver implements ServerStreamDriver {
+public abstract class AbstractStreamEncoder implements StreamEncoder {
 
     private final InputStream inputStream;
     private final OutputStream outputStream;
@@ -38,7 +38,7 @@ public abstract class AbstractServerStreamDriver implements ServerStreamDriver {
     private final ClassLoader facadesClassLoader;
     private final Object connectionDetails;
 
-    public AbstractServerStreamDriver(ServerMonitor serverMonitor,
+    public AbstractStreamEncoder(ServerMonitor serverMonitor,
                                       InputStream inputStream, OutputStream outputStream,
                                       ClassLoader facadesClassLoader, Object connectionDetails) {
         this.serverMonitor = serverMonitor;
@@ -59,13 +59,13 @@ public abstract class AbstractServerStreamDriver implements ServerStreamDriver {
         try {
             inputStream.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "AbstractServerStreamDriver.closeConnection(): Failed closing an JRemoting connection input stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractStreamEncoder.closeConnection(): Failed closing an JRemoting connection input stream: ", e);
         }
 
         try {
             outputStream.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "AbstractServerStreamDriver.closeConnection(): Failed closing an JRemoting connection output stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractStreamEncoder.closeConnection(): Failed closing an JRemoting connection output stream: ", e);
         }
     }
 

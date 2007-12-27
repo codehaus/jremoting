@@ -52,7 +52,7 @@ public abstract class StreamConnection implements Runnable, Connection {
     /**
      * The Sever Stream Driver.
      */
-    private ServerStreamDriver driver;
+    private StreamEncoder encoder;
 
     protected final ServerMonitor serverMonitor;
 
@@ -60,11 +60,11 @@ public abstract class StreamConnection implements Runnable, Connection {
      * Construct a StreamConnection
      *
      * @param connectingServer The Abstract Server handling requests
-     * @param driver         The Driver.
+     * @param encoder         The Driver.
      */
-    public StreamConnection(ConnectingServer connectingServer, ServerStreamDriver driver, ServerMonitor serverMonitor) {
+    public StreamConnection(ConnectingServer connectingServer, StreamEncoder encoder, ServerMonitor serverMonitor) {
         this.connectingServer = connectingServer;
-        this.driver = driver;
+        this.encoder = encoder;
         this.serverMonitor = serverMonitor;
     }
 
@@ -78,7 +78,7 @@ public abstract class StreamConnection implements Runnable, Connection {
 
         try {
 
-            driver.initialize();
+            encoder.initialize();
 
             boolean more = true;
             Request request = null;
@@ -86,10 +86,10 @@ public abstract class StreamConnection implements Runnable, Connection {
             while (more) {
                 try {
                     if (request != null) {
-                        response = connectingServer.invoke(request, driver.getConnectionDetails());
+                        response = connectingServer.invoke(request, encoder.getConnectionDetails());
                     }
 
-                    request = driver.writeResponseAndGetRequest(response);
+                    request = encoder.writeResponseAndGetRequest(response);
                     //oOS.reset();
                     if (endConnection) {
                         response = new ConnectionKilled();
@@ -98,23 +98,23 @@ public abstract class StreamConnection implements Runnable, Connection {
                 } catch (BadConnectionException bce) {
                     more = false;
                     serverMonitor.badConnection(this.getClass(), "StreamConnection.run(): Bad connection #0", bce);
-                    driver.close();
+                    encoder.close();
                 } catch (ConnectionException ace) {
                     more = false;
                     serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected ConnectionException #0", ace);
-                    driver.close();
+                    encoder.close();
                 } catch (IOException ioe) {
                     more = false;
 
                     if (ioe instanceof EOFException) {
-                        driver.close();
+                        encoder.close();
                     } else if (isSafeEnd(ioe)) {
                         //ioe.printStackTrace();
                         // TODO implement implementation independant logger
-                        driver.close();
+                        encoder.close();
                     } else {
                         serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected IOE #1", ioe);
-                        driver.close();
+                        encoder.close();
                     }
                 } catch (NullPointerException npe) {
                     serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected NPE", npe);
@@ -150,7 +150,7 @@ public abstract class StreamConnection implements Runnable, Connection {
      */
     public void endConnection() {
         endConnection = true;
-        driver.close();
+        encoder.close();
     }
 
     /**

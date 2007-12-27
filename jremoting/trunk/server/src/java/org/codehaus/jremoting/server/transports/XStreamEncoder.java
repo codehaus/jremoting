@@ -38,19 +38,19 @@ import com.thoughtworks.xstream.annotations.AnnotationProvider;
 import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
- * Class ServerXStreamDriver
+ * Class XStreamEncoder
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ServerXStreamDriver extends AbstractServerStreamDriver {
+public class XStreamEncoder extends AbstractStreamEncoder {
 
     private LineNumberReader lineNumberReader;
     private PrintWriter printWriter;
     private XStream xStream;
     private BufferedOutputStream bufferedOutputStream;
 
-    public ServerXStreamDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
+    public XStreamEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
                                OutputStream outputStream, Object connectionDetails, XStream xStream) {
         super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
         this.xStream = xStream;

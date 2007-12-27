@@ -18,14 +18,13 @@ package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.server.ServerMonitor;
 
-import java.util.concurrent.ScheduledExecutorService;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 
-public interface ServerStreamDriverFactory {
+public interface StreamEncoding {
 
-    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
+    public StreamEncoder createEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
                                            InputStream inputStream, OutputStream outputStream, Object connectionDetails) throws IOException;
 
 }

@@ -17,26 +17,26 @@
  */
 package org.codehaus.jremoting.server.transports.socket;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import org.codehaus.jremoting.JRemotingException;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.context.ServerContextFactory;
 import org.codehaus.jremoting.server.StubRetriever;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.context.ServerContextFactory;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.ServerByteStreamDriverFactory;
-import org.codehaus.jremoting.server.transports.ServerObjectStreamDriverFactory;
-import org.codehaus.jremoting.server.transports.ServerStreamDriverFactory;
-import org.codehaus.jremoting.server.transports.ServerXStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.ByteStreamEncoding;
+import org.codehaus.jremoting.server.transports.ObjectStreamEncoding;
+import org.codehaus.jremoting.server.transports.StreamEncoding;
+import org.codehaus.jremoting.server.transports.XStreamEncoding;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Class SelfContainedSocketObjectStreamServer
@@ -68,19 +68,19 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
      * @param port                     The port to use
      */
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate,
-                                           ServerStreamDriverFactory serverStreamDriverFactory, ScheduledExecutorService executorService,
+                                           StreamEncoding streamEncoding, ScheduledExecutorService executorService,
                                            ClassLoader facadesClassLoader, int port) {
 
-        super(serverMonitor, invocationHandlerDelegate, executorService, serverStreamDriverFactory, facadesClassLoader);
+        super(serverMonitor, invocationHandlerDelegate, executorService, streamEncoding, facadesClassLoader);
         this.port = port;
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
-                                           ServerStreamDriverFactory serverStreamDriverFactory, ScheduledExecutorService executorService,
+                                           StreamEncoding streamEncoding, ScheduledExecutorService executorService,
                                            ServerContextFactory contextFactory,
                                            ClassLoader facadesClassLoader, int port) {
         this(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
-                serverStreamDriverFactory, executorService, facadesClassLoader, port);
+                streamEncoding, executorService, facadesClassLoader, port);
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port) {
@@ -97,9 +97,8 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService,
-                                           ServerStreamDriverFactory serverStreamDriverFactory) {
-        this(serverMonitor, dftStubRetriever(), dftAuthenticator(), serverStreamDriverFactory, executorService,
-                dftContextFactory(), thisClassLoader(), port);
+                                           StreamEncoding streamEncoding) {
+        this(serverMonitor, dftStubRetriever(), dftAuthenticator(), streamEncoding, executorService, dftContextFactory(), thisClassLoader(), port);
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, String streamType) {
@@ -110,17 +109,17 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
         this(serverMonitor, port, executorService, createServerStreamDriverFactory(streamType));
     }
 
-    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerStreamDriverFactory streamDriverFactory, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, int port) {
-        this(serverMonitor, stubRetriever, authenticator, streamDriverFactory, executorService, serverContextFactory, thisClassLoader(), port);
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, int port) {
+        this(serverMonitor, stubRetriever, authenticator, streamEncoding, executorService, serverContextFactory, thisClassLoader(), port);
     }
 
-    private static ServerStreamDriverFactory createServerStreamDriverFactory(String streamType) {
+    private static StreamEncoding createServerStreamDriverFactory(String streamType) {
         if (streamType.equals(CUSTOMSTREAM)) {
-            return new ServerByteStreamDriverFactory();
+            return new ByteStreamEncoding();
         } else if (streamType.equals(OBJECTSTREAM)) {
-            return new ServerObjectStreamDriverFactory();
+            return new ObjectStreamEncoding();
         } else if (streamType.equals(XSTREAM)) {
-            return new ServerXStreamDriverFactory();
+            return new XStreamEncoding();
         }
         throw new IllegalArgumentException("streamType can only be '"+CUSTOMSTREAM+"', '"+OBJECTSTREAM+"' or '"+XSTREAM+"' ");
     }
@@ -129,8 +128,8 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
         return Executors.newScheduledThreadPool(10);
     }
 
-    private static ServerStreamDriverFactory dftDriverFactory() {
-        return new ServerByteStreamDriverFactory();
+    private static StreamEncoding dftDriverFactory() {
+        return new ByteStreamEncoding();
     }
 
     private static ClassLoader thisClassLoader() {

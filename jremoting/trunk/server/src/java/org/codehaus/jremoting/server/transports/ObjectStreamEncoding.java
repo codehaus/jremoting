@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class ServerObjectStreamDriverFactory implements ServerStreamDriverFactory {
+public class ObjectStreamEncoding implements StreamEncoding {
 
-    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
+    public StreamEncoder createEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
                                            InputStream inputStream, OutputStream outputStream, Object connectionDetails) throws IOException {
-        return new ServerObjectStreamDriver(serverMonitor, facadesClassLoader, inputStream, outputStream, connectionDetails);
+        return new ObjectStreamEncoder(serverMonitor, facadesClassLoader, inputStream, outputStream, connectionDetails);
     }
 
 }

@@ -21,7 +21,6 @@ import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.factories.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
@@ -32,7 +31,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
-import org.codehaus.jremoting.server.transports.ServerByteStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.jmock.Mock;
 
@@ -64,7 +63,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         String class_gen_dir = getClassGenDir();
         stubRetriever.setClassGenDir(class_gen_dir);
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
-        server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(), new ServerByteStreamDriverFactory(), executorService, new ThreadLocalServerContextFactory(), 10201);
+        server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(), new ByteStreamEncoding(), executorService, new ThreadLocalServerContextFactory(), 10201);
 
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -76,7 +75,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
         serviceResolver = new DefaultServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
-                new ByteStreamEncoding(), "127.0.0.1", 10201), (ContextFactory) mock.proxy(), new StubsFromServer());
+                new org.codehaus.jremoting.client.transports.ByteStreamEncoding(), "127.0.0.1", 10201), (ContextFactory) mock.proxy(), new StubsFromServer());
         testClient = (TestInterface) serviceResolver.lookupService("Hello223");
 
     }

@@ -25,7 +25,6 @@ import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
 import org.codehaus.jremoting.client.factories.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.client.transports.StreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.server.PublicationDescription;
@@ -37,7 +36,7 @@ import org.codehaus.jremoting.server.context.ServerSideContext;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
-import org.codehaus.jremoting.server.transports.ServerByteStreamDriverFactory;
+import org.codehaus.jremoting.server.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
 import org.jmock.MockObjectTestCase;
 
@@ -152,13 +151,13 @@ public class ClientContextTestCase extends MockObjectTestCase {
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ServerByteStreamDriverFactory(), executorService, sscf, 19333);
+                new ByteStreamEncoding(), executorService, sscf, 19333);
 
         PublicationDescription pd = new PublicationDescription(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        StreamEncoding factory0 = new ByteStreamEncoding();
+        StreamEncoding factory0 = new org.codehaus.jremoting.client.transports.ByteStreamEncoding();
         ClientMonitor cm = new ConsoleClientMonitor();
         Transport handler = new SocketTransport(cm, factory0, "127.0.0.1", 19333);
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();

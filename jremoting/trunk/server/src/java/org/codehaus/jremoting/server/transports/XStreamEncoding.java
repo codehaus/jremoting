@@ -7,24 +7,24 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class ServerXStreamDriverFactory implements ServerStreamDriverFactory {
+public class XStreamEncoding implements StreamEncoding {
 
     private XStream xStream;
 
 
-    public ServerXStreamDriverFactory(XStream xstream) {
+    public XStreamEncoding(XStream xstream) {
         this.xStream = xstream;
     }
 
 
-    public ServerXStreamDriverFactory() {
+    public XStreamEncoding() {
         this (new XStream(new DomDriver()));
     }
 
-    public ServerStreamDriver createDriver(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
+    public StreamEncoder createEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
                                            InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
         
-        return new ServerXStreamDriver(serverMonitor, facadesClassLoader, inputStream, outputStream, connectionDetails, xStream);
+        return new XStreamEncoder(serverMonitor, facadesClassLoader, inputStream, outputStream, connectionDetails, xStream);
     }
 
 }
