@@ -200,7 +200,7 @@ public class SocketStreamServer extends ConnectingServer {
     }
 
     protected void handleIOE(boolean accepting, IOException ioe) {
-        // some JVM revisions report 'socket closed' , some 'Soclet closed'
+        // some JVM revisions report 'socket closed' , some 'Socket closed'
         if (accepting & ioe.getMessage().equalsIgnoreCase("socket closed")) {
             // do nothing, server shut down during accept();
         } else {
