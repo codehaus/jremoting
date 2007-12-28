@@ -27,7 +27,7 @@ import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
 
 
 /**
@@ -52,7 +52,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 10002, new org.codehaus.jremoting.server.transports.ObjectStreamEncoding());
+        server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 10002, new org.codehaus.jremoting.server.transports.ObjectStreamEncoding());
 
         testServer = new TestInterfaceImpl();
 

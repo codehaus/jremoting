@@ -32,7 +32,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.ByteStreamEncoding;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
 import org.jmock.Mock;
 
 import java.util.concurrent.Executors;
@@ -63,7 +63,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         String class_gen_dir = getClassGenDir();
         stubRetriever.setClassGenDir(class_gen_dir);
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
-        server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(), new ByteStreamEncoding(), executorService, new ThreadLocalServerContextFactory(), 10201);
+        server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(), new ByteStreamEncoding(), executorService, new ThreadLocalServerContextFactory(), 10201);
 
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});

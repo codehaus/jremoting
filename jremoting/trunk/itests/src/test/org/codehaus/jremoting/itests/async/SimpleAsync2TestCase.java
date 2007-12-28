@@ -29,7 +29,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.ByteStreamEncoding;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -41,7 +41,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
     AsyncTestImpl asyncTestImpl;
     AsyncTest testClient;
     ServiceResolver serviceResolver;
-    SelfContainedSocketStreamServer server;
+    SocketStreamServer server;
     private Mock mockServerMonitor;
 
     /**
@@ -63,7 +63,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         stubRetriever.setClassGenDir(class_gen_dir);
 
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
-        server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(),
+        server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(),
                 new ByteStreamEncoding(), executorService,
                 new ThreadLocalServerContextFactory(), 11009);
 

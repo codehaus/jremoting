@@ -32,7 +32,7 @@ import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.socket.SelfContainedSocketStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
 
 /**
  * Test case for the stubless invoker of remote methods
@@ -56,7 +56,7 @@ public class DynamicInvokerTestCase extends TestCase {
     protected void setUp() throws Exception {
 
         // server side setup.
-        server = new SelfContainedSocketStreamServer(new ConsoleServerMonitor(), 10101);
+        server = new SocketStreamServer(new ConsoleServerMonitor(), 10101);
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
