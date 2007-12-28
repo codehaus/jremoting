@@ -41,11 +41,11 @@ public abstract class SocketStreamServer extends ConnectingServer {
      * Construct a SocketStreamServer
      *
      * @param serverMonitor            The server Monitor
-     * @param invocationHandlerDelegate Use this invocation handler adapter.
+     * @param invokerDelegate Use this invocation handler adapter.
      */
-    public SocketStreamServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate, ScheduledExecutorService executorService,
+    public SocketStreamServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate, ScheduledExecutorService executorService,
                               StreamEncoding streamEncoding, ClassLoader facadesClassLoader) {
-        super(serverMonitor, invocationHandlerDelegate, executorService);
+        super(serverMonitor, invokerDelegate, executorService);
         this.streamEncoding = streamEncoding;
         this.facadesClassLoader = facadesClassLoader;
     }

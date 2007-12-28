@@ -46,9 +46,9 @@ public abstract class StatefulServer implements Server {
     protected final ScheduledExecutorService executorService;
 
 
-    public StatefulServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate,
+    public StatefulServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
                           ScheduledExecutorService executorService) {
-        this.invokerDelegate = invocationHandlerDelegate;
+        this.invokerDelegate = invokerDelegate;
         this.executorService = executorService;
         this.serverMonitor = serverMonitor;
     }

@@ -51,11 +51,11 @@ public class PipedStreamServer extends ConnectingServer {
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public PipedStreamServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate,
+    public PipedStreamServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
                              ScheduledExecutorService executorService,
                              StreamEncoding streamEncoding,
                              ClassLoader facadesClassLoader) {
-        super(serverMonitor, invocationHandlerDelegate, executorService);
+        super(serverMonitor, invokerDelegate, executorService);
         this.streamEncoding = streamEncoding;
         this.facadesClassLoader = facadesClassLoader;
     }

@@ -54,22 +54,19 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
      */
     private Future future;
     private int port;
-    public static final String OBJECTSTREAM = "objectstream";
-    public static final String CUSTOMSTREAM = "customstream";
-    public static final String XSTREAM = "xstream";
 
     /**
      * Construct a SelfContainedSocketStreamServer
      *
      * @param serverMonitor
-     * @param invocationHandlerDelegate The invocation handler adapter to use.
+     * @param invokerDelegate The invocation handler adapter to use.
      * @param port                     The port to use
      */
-    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate,
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
                                            StreamEncoding streamEncoding, ScheduledExecutorService executorService,
                                            ClassLoader facadesClassLoader, int port) {
 
-        super(serverMonitor, invocationHandlerDelegate, executorService, streamEncoding, facadesClassLoader);
+        super(serverMonitor, invokerDelegate, executorService, streamEncoding, facadesClassLoader);
         this.port = port;
     }
 
@@ -140,6 +137,7 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
         }
         super.starting();
     }
+
     public void started() {
         super.started();
         future = executorService.submit(new Runnable() {
@@ -172,5 +170,9 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
             future.cancel(true);
         }
         super.stopping();
+    }
+
+    public void stopped() {
+        super.stopped();
     }
 }

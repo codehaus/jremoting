@@ -48,8 +48,8 @@ public class RmiServer extends ConnectingServer {
     private int port;
     private Registry registry;
 
-    public RmiServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate, ScheduledExecutorService executorService, int port) {
-        super(serverMonitor, invocationHandlerDelegate, executorService);
+    public RmiServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate, ScheduledExecutorService executorService, int port) {
+        super(serverMonitor, invokerDelegate, executorService);
         this.port = port;
     }
 

@@ -42,21 +42,21 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
 
     private final ServerMarshalledInvokerImpl marshalledInvokerAdapter;
 
-    private DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate, ScheduledExecutorService executorService, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
-        super(serverMonitor, invocationHandlerDelegate, executorService);
+    private DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate, ScheduledExecutorService executorService, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
+        super(serverMonitor, invokerDelegate, executorService);
         this.marshalledInvokerAdapter = marshalledInvokerAdapter;
     }
 
-    private DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
-        this(serverMonitor, invocationHandlerDelegate, Executors.newScheduledThreadPool(10), marshalledInvokerAdapter);
+    private DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
+        this(serverMonitor, invokerDelegate, Executors.newScheduledThreadPool(10), marshalledInvokerAdapter);
     }
 
-    public DirectMarshalledServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, InvokerDelegate invocationHandlerDelegate) {
-        this(serverMonitor, invocationHandlerDelegate, executorService, new ServerMarshalledInvokerImpl(invocationHandlerDelegate));
+    public DirectMarshalledServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, InvokerDelegate invokerDelegate) {
+        this(serverMonitor, invokerDelegate, executorService, new ServerMarshalledInvokerImpl(invokerDelegate));
     }
 
-    public DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate) {
-        this(serverMonitor, invocationHandlerDelegate, new ServerMarshalledInvokerImpl(invocationHandlerDelegate));
+    public DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate) {
+        this(serverMonitor, invokerDelegate, new ServerMarshalledInvokerImpl(invokerDelegate));
     }
 
     public DirectMarshalledServer(ServerMonitor serverMonitor) {

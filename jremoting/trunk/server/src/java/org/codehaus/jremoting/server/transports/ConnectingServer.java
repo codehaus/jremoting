@@ -49,9 +49,9 @@ public class ConnectingServer extends StatefulServer {
         this.pruneSessionInterval = seconds;
     }
 
-    public ConnectingServer(ServerMonitor serverMonitor, InvokerDelegate invocationHandlerDelegate,
+    public ConnectingServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
                             ScheduledExecutorService executor) {
-        super(serverMonitor, invocationHandlerDelegate, executor);
+        super(serverMonitor, invokerDelegate, executor);
     }
 
     public void started() {
@@ -69,19 +69,28 @@ public class ConnectingServer extends StatefulServer {
         super.stopping();
     }
 
-
     protected void connectionStart(Connection connection) {
-        connections.add(connection);
+        if (connection == null) {
+            throw new RuntimeException("whoaa!");
+        }
+        synchronized (connections) {
+            connections.add(connection);
+        }
     }
 
     protected void connectionCompleted(Connection connection) {
-        connections.remove(connection);
+        synchronized (connections) {
+            connections.remove(connection);
+        }
     }
 
     protected void killAllConnections() {
         // Copy the connections into an array to avoid ConcurrentModificationExceptions
         //  as the connections are closed.
-        Connection[] connections = this.connections.toArray(new Connection[0]);
+        Connection[] connections;
+        synchronized (this.connections) {
+            connections = this.connections.toArray(new Connection[0]);
+        }
         for (Connection connection : connections) {
             connection.endConnection();
         }
