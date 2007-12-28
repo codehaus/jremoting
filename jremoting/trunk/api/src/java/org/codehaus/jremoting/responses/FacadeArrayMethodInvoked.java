@@ -31,18 +31,18 @@ import java.io.ObjectOutput;
  */
 public final class FacadeArrayMethodInvoked extends Response {
 
-    private Long[] referenceIDs;
+    private Long[] references;
     private String[] objectNames;
     private static final long serialVersionUID = 699888378143153743L;
 
     /**
      * Constructor FacadeMethodInvoked
      *
-     * @param referenceIDs an array of reference IDs
+     * @param references an array of reference IDs
      * @param objectNames  an array of object names
      */
-    public FacadeArrayMethodInvoked(Long[] referenceIDs, String[] objectNames) {
-        this.referenceIDs = referenceIDs;
+    public FacadeArrayMethodInvoked(Long[] references, String[] objectNames) {
+        this.references = references;
         this.objectNames = objectNames;
     }
 
@@ -57,8 +57,8 @@ public final class FacadeArrayMethodInvoked extends Response {
      *
      * @return the array of reference IDs
      */
-    public Long[] getReferenceIDs() {
-        return referenceIDs;
+    public Long[] getReferences() {
+        return references;
     }
 
     /**
@@ -85,7 +85,7 @@ public final class FacadeArrayMethodInvoked extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(referenceIDs);
+        out.writeObject(references);
         out.writeObject(objectNames);
     }
 
@@ -107,12 +107,12 @@ public final class FacadeArrayMethodInvoked extends Response {
         if (longz instanceof long[]) {
             // XStream deserializes differently
             long[] longs = (long[]) longz;
-            referenceIDs = new Long[longs.length];
+            references = new Long[longs.length];
             for (int i = 0; i < longs.length; i++) {
-                referenceIDs[i] = new Long(longs[i]);
+                references[i] = new Long(longs[i]);
             }
         } else {
-            referenceIDs = (Long[]) longz;
+            references = (Long[]) longz;
         }
     }
 }

@@ -44,6 +44,9 @@ public class XStreamTestCase extends AbstractHelloTestCase {
 
     }
 
+    public void testHelloCall() throws Exception {
+        super.testHelloCall();    
+    }
 
     public void testHello4Call() throws Exception {
         super.testHello4Call();    //To change body of overridden methods use File | Settings | File Templates.

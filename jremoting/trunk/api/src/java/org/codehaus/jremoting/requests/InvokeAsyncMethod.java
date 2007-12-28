@@ -34,7 +34,7 @@ import java.io.ObjectOutput;
 public class InvokeAsyncMethod extends Servicable implements Contextualizable {
 
     private GroupedMethodRequest[] groupedRequests;
-    private Long referenceID;
+    private Long reference;
     private Long session;
     private static final long serialVersionUID = 4194445392303710716L;
 
@@ -44,15 +44,15 @@ public class InvokeAsyncMethod extends Servicable implements Contextualizable {
      * @param publishedServiceName the published service name
      * @param objectName           the object Name
      * @param rawRequests          The raw requests
-     * @param referenceID          the reference ID
+     * @param reference          the reference ID
      * @param session              the session ID
      */
-    public InvokeAsyncMethod(String publishedServiceName, String objectName, GroupedMethodRequest[] rawRequests, Long referenceID, Long session) {
+    public InvokeAsyncMethod(String publishedServiceName, String objectName, GroupedMethodRequest[] rawRequests, Long reference, Long session) {
 
         super(publishedServiceName, objectName);
 
         groupedRequests = rawRequests;
-        this.referenceID = referenceID;
+        this.reference = reference;
         this.session = session;
     }
 
@@ -72,8 +72,8 @@ public class InvokeAsyncMethod extends Servicable implements Contextualizable {
      *
      * @return the reference ID
      */
-    public Long getReferenceID() {
-        return referenceID;
+    public Long getReference() {
+        return reference;
     }
 
     /**
@@ -114,7 +114,7 @@ public class InvokeAsyncMethod extends Servicable implements Contextualizable {
 
         super.writeExternal(out);
         out.writeObject(groupedRequests);
-        out.writeObject(referenceID);
+        out.writeObject(reference);
         out.writeObject(session);
     }
 
@@ -135,7 +135,7 @@ public class InvokeAsyncMethod extends Servicable implements Contextualizable {
         super.readExternal(in);
 
         groupedRequests = (GroupedMethodRequest[]) in.readObject();
-        referenceID = (Long) in.readObject();
+        reference = (Long) in.readObject();
         session = (Long) in.readObject();
     }
 }

@@ -54,7 +54,7 @@ public class DynamicStub implements Proxy {
      */
 
     public Long codehausRemotingGetReferenceID(Object factoryThatIsAsking) {
-        return stubHelper.getReferenceID(factoryThatIsAsking);
+        return stubHelper.getReference(factoryThatIsAsking);
     }
 
     //--------Methods----------------//

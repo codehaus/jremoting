@@ -31,16 +31,16 @@ import java.io.ObjectOutput;
  */
 public final class Service extends Response {
 
-    private Long referenceID;
+    private Long reference;
     private static final long serialVersionUID = 4596229621146585745L;
 
     /**
      * Constructor Service
      *
-     * @param referenceID the reference ID
+     * @param reference the reference ID
      */
-    public Service(Long referenceID) {
-        this.referenceID = referenceID;
+    public Service(Long reference) {
+        this.reference = reference;
     }
 
     /**
@@ -54,8 +54,8 @@ public final class Service extends Response {
      *
      * @return the reference ID
      */
-    public Long getReferenceID() {
-        return referenceID;
+    public Long getReference() {
+        return reference;
     }
 
     /**
@@ -73,7 +73,7 @@ public final class Service extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(referenceID);
+        out.writeObject(reference);
     }
 
     /**
@@ -89,6 +89,6 @@ public final class Service extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        referenceID = (Long) in.readObject();
+        reference = (Long) in.readObject();
     }
 }

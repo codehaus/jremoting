@@ -97,7 +97,7 @@ public class AsmStubGenerator { // extends AbstractStubGenerator implements Opco
 //            mv.visitVarInsn(ALOAD, 0);
 //            mv.visitFieldInsn(GETFIELD, "JRemotingGeneratedHello_Main", "proxyHelper", "Lorg/codehaus/jremoting/client/StubHelper;");
 //            mv.visitVarInsn(ALOAD, 1);
-//            mv.visitMethodInsn(INVOKEINTERFACE, "org/codehaus/jremoting/client/StubHelper", "getReferenceID", "(Ljava/lang/Object;)Ljava/lang/Long;");
+//            mv.visitMethodInsn(INVOKEINTERFACE, "org/codehaus/jremoting/client/StubHelper", "getReference", "(Ljava/lang/Object;)Ljava/lang/Long;");
 //            mv.visitInsn(ARETURN);
 //            mv.visitMaxs(2, 2);
 //            mv.visitEnd();

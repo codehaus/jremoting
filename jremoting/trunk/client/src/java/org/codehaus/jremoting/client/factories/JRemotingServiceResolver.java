@@ -158,7 +158,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
 
         Service lr = (Service) ar;
         DefaultStubHelper baseObj = new DefaultStubHelper(stubRegistry, transport,
-                contextFactory, publishedServiceName, "Main", lr.getReferenceID(), sessionID);
+                contextFactory, publishedServiceName, "Main", lr.getReference(), sessionID);
         Object retVal = getInstance(publishedServiceName, "Main", baseObj);
 
         baseObj.registerInstance(retVal);

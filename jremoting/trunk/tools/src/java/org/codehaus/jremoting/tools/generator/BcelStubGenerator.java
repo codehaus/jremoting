@@ -180,7 +180,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * Add method
      * <pre>
      * public Long codehausRemotingGetReferenceID(Object factoryThatIsAsking) {
-     * return proxyHelper.getReferenceID(factoryThatIsAsking);
+     * return proxyHelper.getReference(factoryThatIsAsking);
      * }
      * </pre>
      * @param generatedClassName the generated class name
@@ -191,7 +191,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
         il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
         il.append(InstructionFactory.createLoad(Type.OBJECT, 1));
-        il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "getReferenceID", new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, Constants.INVOKEINTERFACE));
+        il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "getReference", new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, Constants.INVOKEINTERFACE));
         il.append(InstructionFactory.createReturn(Type.OBJECT));
         method.setMaxStack();
         method.setMaxLocals();

@@ -40,12 +40,12 @@ public class Session {
         return session;
     }
 
-    public void addInstanceInUse(Long referenceID, Object instance) {
-        instancesInUse.put(referenceID, instance);
+    public void addInstanceInUse(Long reference, Object instance) {
+        instancesInUse.put(reference, instance);
     }
 
-    public void removeInstanceInUse(Long referenceID) {
-        instancesInUse.remove(referenceID);
+    public void removeInstanceInUse(Long reference) {
+        instancesInUse.remove(reference);
     }
 
     public void refresh() {

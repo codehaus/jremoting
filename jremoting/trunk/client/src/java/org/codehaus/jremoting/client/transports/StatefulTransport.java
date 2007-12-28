@@ -168,7 +168,7 @@ public abstract class StatefulTransport implements Transport {
 
                                 again = true;
                             } else if (response instanceof NoSuchReference) {
-                                throw new NoSuchReferenceException(((NoSuchReference) response).getReferenceID());
+                                throw new NoSuchReferenceException(((NoSuchReference) response).getReference());
                             } else if (response instanceof NoSuchSession) {
                                 throw new NoSuchSessionException(((NoSuchSession) response).getSessionID());
                             } else if (response instanceof NotPublished) {

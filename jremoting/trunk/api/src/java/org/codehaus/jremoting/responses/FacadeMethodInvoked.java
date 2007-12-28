@@ -31,18 +31,18 @@ import java.io.ObjectOutput;
  */
 public final class FacadeMethodInvoked extends Response {
 
-    private Long referenceID;
+    private Long reference;
     private String objectName;
     private static final long serialVersionUID = -453861019606859136L;
 
     /**
      * Constructor FacadeMethodInvoked
      *
-     * @param referenceID the reference ID
+     * @param reference the reference ID
      * @param objectName  the object Name
      */
-    public FacadeMethodInvoked(Long referenceID, String objectName) {
-        this.referenceID = referenceID;
+    public FacadeMethodInvoked(Long reference, String objectName) {
+        this.reference = reference;
         this.objectName = objectName;
     }
 
@@ -57,8 +57,8 @@ public final class FacadeMethodInvoked extends Response {
      *
      * @return the reference ID
      */
-    public Long getReferenceID() {
-        return referenceID;
+    public Long getReference() {
+        return reference;
     }
 
     /**
@@ -85,7 +85,7 @@ public final class FacadeMethodInvoked extends Response {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(referenceID);
+        out.writeObject(reference);
         out.writeObject(objectName);
     }
 
@@ -102,7 +102,7 @@ public final class FacadeMethodInvoked extends Response {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        referenceID = (Long) in.readObject();
+        reference = (Long) in.readObject();
         objectName = (String) in.readObject();
     }
 }

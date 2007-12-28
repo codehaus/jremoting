@@ -88,12 +88,12 @@ public interface StubHelper {
     void processVoidRequestWithRedirect(String methodSignature, Object[] args, Class[] argClasses) throws Throwable;
 
     /**
-     * Method getReferenceID
+     * Method getReference
      *
      * @param factory
      * @return
      */
-    Long getReferenceID(Object factory);
+    Long getReference(Object factory);
 
     boolean isEquals(Object o1, Object o2);
 

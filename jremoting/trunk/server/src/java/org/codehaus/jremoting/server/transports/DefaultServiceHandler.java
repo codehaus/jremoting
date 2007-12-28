@@ -190,18 +190,18 @@ public class DefaultServiceHandler implements ServiceHandler {
         Object instance = null;
 
         try {
-            WeakReference wr = instancesByRefID.get(request.getReferenceID());
+            WeakReference wr = instancesByRefID.get(request.getReference());
 
             if (wr == null) {
                 methodInvocationMonitor.invalidReference(methodSignature, connectionDetails);
-                return new NoSuchReference(request.getReferenceID());
+                return new NoSuchReference(request.getReference());
             }
 
             instance = wr.get();
 
             if (instance == null) {
                 methodInvocationMonitor.invalidReference(methodSignature, connectionDetails);
-                return new NoSuchReference(request.getReferenceID());
+                return new NoSuchReference(request.getReference());
             }
 
             correctArgs(request.getArgs());
@@ -237,7 +237,7 @@ public class DefaultServiceHandler implements ServiceHandler {
             if (args[i] instanceof FacadeRefHolder) {
                 FacadeRefHolder frh = (FacadeRefHolder) args[i];
                 ServiceHandler serviceHandler = serviceHandlerAccessor.getServiceHandler(frh.getObjectName());
-                args[i] = serviceHandler.getInstanceForReference(frh.getReferenceID());
+                args[i] = serviceHandler.getInstanceForReference(frh.getReference());
             }
         }
     }

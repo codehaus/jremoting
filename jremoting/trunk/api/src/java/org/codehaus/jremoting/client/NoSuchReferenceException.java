@@ -30,9 +30,9 @@ public class NoSuchReferenceException extends InvocationException {
     /**
      * Constructor NoSuchReferenceException
      *
-     * @param referenceID the reference id
+     * @param reference the reference id
      */
-    public NoSuchReferenceException(Long referenceID) {
-        super("There is no instance on the server mapped to referenceID " + referenceID);
+    public NoSuchReferenceException(Long reference) {
+        super("There is no instance on the server mapped to reference " + reference);
     }
 }

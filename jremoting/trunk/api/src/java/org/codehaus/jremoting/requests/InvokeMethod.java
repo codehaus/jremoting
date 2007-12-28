@@ -35,7 +35,7 @@ public class InvokeMethod extends Servicable implements Contextualizable {
 
     private String methodSignature;
     private Object[] args;
-    private Long referenceID;
+    private Long reference;
     private Long session;
     private static final long serialVersionUID = -587366278439065108L;
 
@@ -46,16 +46,16 @@ public class InvokeMethod extends Servicable implements Contextualizable {
      * @param objectName           the object Name
      * @param methodSignature      the method signature
      * @param args                 an array of args for the method invocation
-     * @param referenceID          the reference ID
+     * @param reference          the reference ID
      * @param sessionID              the sessionID ID
      */
-    public InvokeMethod(String service, String objectName, String methodSignature, Object[] args, Long referenceID, Long sessionID) {
+    public InvokeMethod(String service, String objectName, String methodSignature, Object[] args, Long reference, Long sessionID) {
 
         super(service, objectName);
 
         this.methodSignature = methodSignature;
         this.args = args;
-        this.referenceID = referenceID;
+        this.reference = reference;
         this.session = sessionID;
     }
 
@@ -88,8 +88,8 @@ public class InvokeMethod extends Servicable implements Contextualizable {
      *
      * @return the reference ID
      */
-    public Long getReferenceID() {
-        return referenceID;
+    public Long getReference() {
+        return reference;
     }
 
     /**
@@ -131,7 +131,7 @@ public class InvokeMethod extends Servicable implements Contextualizable {
         super.writeExternal(out);
         out.writeObject(methodSignature);
         out.writeObject(args);
-        out.writeObject(referenceID);
+        out.writeObject(reference);
         out.writeObject(session);
     }
 
@@ -153,7 +153,7 @@ public class InvokeMethod extends Servicable implements Contextualizable {
 
         methodSignature = (String) in.readObject();
         args = (Object[]) in.readObject();
-        referenceID = (Long) in.readObject();
+        reference = (Long) in.readObject();
         session = (Long) in.readObject();
     }
 }

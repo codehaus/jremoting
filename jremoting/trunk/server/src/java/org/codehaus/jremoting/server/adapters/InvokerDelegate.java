@@ -327,7 +327,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
 
         GroupedMethodRequest[] requests = methodRequest.getGroupedRequests();
         for (GroupedMethodRequest rawRequest : requests) {
-            serviceHandler.handleMethodInvocation(new InvokeMethod(methodRequest.getService(), methodRequest.getObjectName(), rawRequest.getMethodSignature(), rawRequest.getArgs(), methodRequest.getReferenceID(), methodRequest.getSessionID()), connectionDetails);
+            serviceHandler.handleMethodInvocation(new InvokeMethod(methodRequest.getService(), methodRequest.getObjectName(), rawRequest.getMethodSignature(), rawRequest.getArgs(), methodRequest.getReference(), methodRequest.getSessionID()), connectionDetails);
         }
 
         return new MethodInvoked();
@@ -418,10 +418,10 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             Session sess = getSession(sessionID);
             if (sess != null) {
                 // session may have been removed before GC kicks in.
-                if (gcr.getReferenceID() == null) {
-                    System.err.println("DEBUG- GC on missing referenceID -" + gcr.getReferenceID());
+                if (gcr.getReference() == null) {
+                    System.err.println("DEBUG- GC on missing referenceID -" + gcr.getReference());
                 } else {
-                    sess.removeInstanceInUse(gcr.getReferenceID());
+                    sess.removeInstanceInUse(gcr.getReference());
                 }
             }
         }

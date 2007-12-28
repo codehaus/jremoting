@@ -39,10 +39,10 @@ public interface ServiceHandler {
     /**
      * Add an instance by reference ID
      *
-     * @param referenceID the ref id for the instance.
+     * @param reference the ref id for the instance.
      * @param instance    the instance.
      */
-    void addInstance(Long referenceID, Object instance);
+    void addInstance(Long reference, Object instance);
 
     /**
      * Replace an instance
@@ -77,7 +77,7 @@ public interface ServiceHandler {
 
     Class getFacadeClass();
 
-    Object getInstanceForReference(Long referenceID);
+    Object getInstanceForReference(Long reference);
 
 
 }

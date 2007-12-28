@@ -29,7 +29,7 @@ import java.io.ObjectOutput;
  */
 public final class NoSuchReference extends NotPublished implements ProblemResponse{
 
-    private Long referenceID;
+    private Long reference;
     private static final long serialVersionUID = -4995378344000387511L;
 
     /**
@@ -41,10 +41,10 @@ public final class NoSuchReference extends NotPublished implements ProblemRespon
     /**
      * Constructor NoSuchReference
      *
-     * @param referenceID the reference identifier
+     * @param reference the reference identifier
      */
-    public NoSuchReference(Long referenceID) {
-        this.referenceID = referenceID;
+    public NoSuchReference(Long reference) {
+        this.reference = reference;
     }
 
     /**
@@ -52,8 +52,8 @@ public final class NoSuchReference extends NotPublished implements ProblemRespon
      *
      * @return the reference id
      */
-    public Long getReferenceID() {
-        return referenceID;
+    public Long getReference() {
+        return reference;
     }
 
     /**
@@ -72,7 +72,7 @@ public final class NoSuchReference extends NotPublished implements ProblemRespon
      */
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        out.writeObject(referenceID);
+        out.writeObject(reference);
     }
 
     /**
@@ -91,6 +91,6 @@ public final class NoSuchReference extends NotPublished implements ProblemRespon
 
         super.readExternal(in);
 
-        referenceID = (Long) in.readObject();
+        reference = (Long) in.readObject();
     }
 }

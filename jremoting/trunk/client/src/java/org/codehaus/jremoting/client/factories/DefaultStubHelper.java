@@ -119,7 +119,7 @@ public final class DefaultStubHelper implements StubHelper {
 
     private Object facadeArrayMethodInvoked(Response response, Class returnClassType) {
         FacadeArrayMethodInvoked mfar = (FacadeArrayMethodInvoked) response;
-        Long[] refs = mfar.getReferenceIDs();
+        Long[] refs = mfar.getReferences();
         String[] objectNames = mfar.getObjectNames();
         Object[] instances = (Object[]) Array.newInstance(returnClassType, refs.length);
 
@@ -158,7 +158,7 @@ public final class DefaultStubHelper implements StubHelper {
 
     private Object facadeMethodInvoked(Response response) throws ConnectionException {
         FacadeMethodInvoked mfr = (FacadeMethodInvoked) response;
-        Long ref = mfr.getReferenceID();
+        Long ref = mfr.getReference();
 
         // it might be that the return value was intended to be null.
         if (ref == null) {
@@ -299,7 +299,7 @@ public final class DefaultStubHelper implements StubHelper {
         //TODO remove some of these if clover indicates they are not used?
         else if (response instanceof NoSuchReference) {
             NoSuchReference nsrr = (NoSuchReference) response;
-            return new NoSuchReferenceException(nsrr.getReferenceID());
+            return new NoSuchReferenceException(nsrr.getReference());
         } else if (response instanceof BadServerSideEvent) {
             BadServerSideEvent ier = (BadServerSideEvent) response;
             return new InvocationException(ier.getMessage());
@@ -308,7 +308,7 @@ public final class DefaultStubHelper implements StubHelper {
         }
     }
 
-    public Long getReferenceID(Object proxyRegistry) {
+    public Long getReference(Object proxyRegistry) {
 
         // this checks the factory because reference IDs should not be
         // given out to any requester.  It should be privileged information.

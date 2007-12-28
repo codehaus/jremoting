@@ -27,35 +27,19 @@ import java.io.Serializable;
  */
 public final class FacadeRefHolder implements Serializable {
 
-    private Long referenceID;
+    private Long reference;
     private String objectName;
     private static final long serialVersionUID = -414097799836476155L;
 
-    /**
-     * Constructor FacadeRefHolder
-     *
-     * @param referenceID the reference ID
-     * @param objectName  the object name
-     */
-    public FacadeRefHolder(Long referenceID, String objectName) {
-        this.referenceID = referenceID;
+    public FacadeRefHolder(Long reference, String objectName) {
+        this.reference = reference;
         this.objectName = objectName;
     }
 
-    /**
-     * Get the reference ID
-     *
-     * @return the reference ID
-     */
-    public Long getReferenceID() {
-        return referenceID;
+    public Long getReference() {
+        return reference;
     }
 
-    /**
-     * Get the object name.
-     *
-     * @return the object name
-     */
     public String getObjectName() {
         return objectName;
     }

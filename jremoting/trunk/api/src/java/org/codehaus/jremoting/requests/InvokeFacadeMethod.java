@@ -42,13 +42,13 @@ public final class InvokeFacadeMethod extends InvokeMethod {
      * @param objectName                 the object Name
      * @param methodSignature            the method signature
      * @param args                       an array of args for the method invocation
-     * @param referenceID                the reference ID
+     * @param reference                the reference ID
      * @param baseReturnClassNameEncoded the encoded name of the base class
      * @param session                    the session ID
      */
-    public InvokeFacadeMethod(String publishedServiceName, String objectName, String methodSignature, Object[] args, Long referenceID, String baseReturnClassNameEncoded, Long session) {
+    public InvokeFacadeMethod(String publishedServiceName, String objectName, String methodSignature, Object[] args, Long reference, String baseReturnClassNameEncoded, Long session) {
 
-        super(publishedServiceName, objectName, methodSignature, args, referenceID, session);
+        super(publishedServiceName, objectName, methodSignature, args, reference, session);
 
         this.baseReturnClassNameEncoded = baseReturnClassNameEncoded;
     }
