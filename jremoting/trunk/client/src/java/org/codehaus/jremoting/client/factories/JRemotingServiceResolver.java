@@ -42,13 +42,13 @@ import java.util.HashMap;
 
 
 /**
- * Class DefaultServiceResolver
+ * Class JRemotingServiceResolver
  *
  * @author Paul Hammant
  * @author Peter Royal <a href="mailto:proyal@managingpartners.com">proyal@managingpartners.com</a>
  * @author Mauro Talevi
  */
-public class DefaultServiceResolver implements ServiceResolver {
+public class JRemotingServiceResolver implements ServiceResolver {
 
     private static final int STUB_PREFIX_LENGTH = org.codehaus.jremoting.util.StubHelper.getStubPrefixLength();
     protected final Transport transport;
@@ -59,19 +59,19 @@ public class DefaultServiceResolver implements ServiceResolver {
     protected final Long sessionID;
     private StubRegistry stubRegistry;
 
-    public DefaultServiceResolver(Transport transport) throws ConnectionException {
+    public JRemotingServiceResolver(Transport transport) throws ConnectionException {
         this(transport, new ThreadLocalContextFactory());
     }
 
-    public DefaultServiceResolver(final Transport transport, ContextFactory contextFactory) throws ConnectionException {
-        this (transport, contextFactory, DefaultServiceResolver.class.getClassLoader());
+    public JRemotingServiceResolver(final Transport transport, ContextFactory contextFactory) throws ConnectionException {
+        this (transport, contextFactory, JRemotingServiceResolver.class.getClassLoader());
     }
     
-    public DefaultServiceResolver(final Transport transport, ContextFactory contextFactory, ClassLoader classLoader) throws ConnectionException {
+    public JRemotingServiceResolver(final Transport transport, ContextFactory contextFactory, ClassLoader classLoader) throws ConnectionException {
         this (transport, contextFactory, new StubsOnClient(classLoader));
     }
 
-    public DefaultServiceResolver(final Transport transport, ContextFactory contextFactory, StubClassLoader stubClassLoader) throws ConnectionException {
+    public JRemotingServiceResolver(final Transport transport, ContextFactory contextFactory, StubClassLoader stubClassLoader) throws ConnectionException {
         this.transport = transport;
         this.contextFactory = contextFactory;
         this.stubClassLoader = stubClassLoader;
@@ -106,7 +106,7 @@ public class DefaultServiceResolver implements ServiceResolver {
             }
 
             public Object getInstance(String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
-                return DefaultServiceResolver.this.getInstance(publishedServiceName, objectName, stubHelper);
+                return JRemotingServiceResolver.this.getInstance(publishedServiceName, objectName, stubHelper);
             }
 
             public void marshallCorrection(String remoteObjectName, String methodSignature, Object[] args, Class[] argClasses) {

@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.itests.rmi;
 
 import org.codehaus.jremoting.client.ServiceResolver;
-import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
+import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
 import org.codehaus.jremoting.itests.TestInterface;
@@ -61,7 +61,7 @@ public class RmiTestCase extends MockObjectTestCase {
         server.start();
 
         // Client side setup
-        ServiceResolver af = new DefaultServiceResolver(new RmiTransport(new ConsoleClientMonitor(), "127.0.0.1", 10003));
+        ServiceResolver af = new JRemotingServiceResolver(new RmiTransport(new ConsoleClientMonitor(), "127.0.0.1", 10003));
         testClient = (TestInterface) af.lookupService("Hello");
 
 

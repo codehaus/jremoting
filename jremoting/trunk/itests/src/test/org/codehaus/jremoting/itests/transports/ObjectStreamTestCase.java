@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
-import org.codehaus.jremoting.client.factories.DefaultServiceResolver;
+import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
@@ -62,7 +62,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        serviceResolver = new DefaultServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+        serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStreamEncoding(),
                 "127.0.0.1", 10002));
         testClient = (TestInterface) serviceResolver.lookupService("Hello");

@@ -82,7 +82,7 @@ public class DynamicInvoker {
 
     /**
      * Retrieve the list of published services on the server.
-     * Re-uses the impl within DefaultServiceResolver.
+     * Re-uses the impl within JRemotingServiceResolver.
      */
     public String[] listServices() {
         return factory.listServices();
