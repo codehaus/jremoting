@@ -132,18 +132,16 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
         return new ThreadLocalServerContextFactory();
     }
 
-    /**
-     * Method openConnection
-     */
-    public void start() {
-
-        setState(STARTING);
+    public void starting() {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException ioe) {
             throw new JRemotingException("Could not bind to port '"+port+"'when setting up the server", ioe);
         }
-        setState(STARTED);
+        super.starting();
+    }
+    public void started() {
+        super.started();
         future = executorService.submit(new Runnable() {
             public void run() {
 
@@ -163,16 +161,7 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
         });
     }
 
-    /**
-     * Method stop
-     */
-    public void stop() {
-
-        if (!getState().equals(STARTED)) {
-            throw new JRemotingException("Server Not Started at time of stop");
-        }
-
-        setState(SHUTTINGDOWN);
+    public void stopping() {
         try {
             serverSocket.close();
         } catch (IOException ioe) {
@@ -182,7 +171,6 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
         if (future != null) {
             future.cancel(true);
         }
-
-        setState(STOPPED);
+        super.stopping();
     }
 }

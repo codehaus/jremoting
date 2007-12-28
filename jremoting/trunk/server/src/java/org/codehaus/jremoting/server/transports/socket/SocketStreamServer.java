@@ -61,9 +61,9 @@ public abstract class SocketStreamServer extends ConnectingServer {
         try {
             socket.setSoTimeout(60 * 1000);
             if (getState().equals(STARTED)) {
-                StreamEncoder ssd = streamEncoding.createEncoder(serverMonitor, facadesClassLoader,
+                StreamEncoder streamEncoder = streamEncoding.createEncoder(serverMonitor, facadesClassLoader,
                         socket.getInputStream(), socket.getOutputStream(), socket);
-                SocketStreamConnection ssc = new SocketStreamConnection(this, socket, ssd, serverMonitor);
+                SocketStreamConnection ssc = new SocketStreamConnection(this, socket, streamEncoder, serverMonitor);
                 ssc.run();
             }
         } catch (IOException ioe) {

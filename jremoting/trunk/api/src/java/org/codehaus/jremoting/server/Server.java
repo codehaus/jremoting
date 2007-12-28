@@ -29,7 +29,7 @@ public interface Server extends Publisher, ServerInvoker {
     /**
      * The state of the system while shutting down.
      */
-    String SHUTTINGDOWN = "SHUTTING_DOWN";
+    String STOPPING = "SHUTTING_DOWN";
 
     /**
      * The state of the starting system.

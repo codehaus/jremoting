@@ -63,7 +63,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
         // server side setup.
         SelfContainedSocketStreamServer server = startServer();
 
-        JRemotingServiceResolver factory = null;
+        JRemotingServiceResolver serviceResolver = null;
         try {
 
             // Client side setup
@@ -73,9 +73,9 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(DefaultStubHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
             )});
 
-            factory = new JRemotingServiceResolver(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
+            serviceResolver = new JRemotingServiceResolver(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
                     new ByteStreamEncoding(), "127.0.0.1", 12201));
-            TestInterface testClient = (TestInterface) factory.lookupService("Hello55");
+            TestInterface testClient = (TestInterface) serviceResolver.lookupService("Hello55");
 
 
             testClient.hello2(100);
@@ -96,7 +96,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             System.gc();
 
             try {
-                factory.close();
+                serviceResolver.close();
             } catch (NoSuchSessionException e) {
             }
 

@@ -17,15 +17,15 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.ScheduledFuture;
-
 import org.codehaus.jremoting.server.Connection;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class ConnectingServer
@@ -54,20 +54,19 @@ public class ConnectingServer extends StatefulServer {
         super(serverMonitor, invocationHandlerDelegate, executor);
     }
 
-    public void start() {
-        super.start();
+    public void started() {
         pruner =  executorService.scheduleAtFixedRate(new Runnable() {
             public void run() {
                 invokerDelegate.pruneSessionsStaleForLongerThan(pruneStaleLongerThan);
             }
         }, pruneSessionInterval, pruneSessionInterval, TimeUnit.SECONDS);
+        super.started();
     }
 
-    public void stop() {
-        setState(SHUTTINGDOWN);
+    public void stopping() {
         pruner.cancel(true);
         killAllConnections();
-        super.stop();
+        super.stopping();
     }
 
 

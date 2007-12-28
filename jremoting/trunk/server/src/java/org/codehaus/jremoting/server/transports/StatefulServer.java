@@ -29,10 +29,11 @@ import org.codehaus.jremoting.server.Server;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServiceHandler;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
+import org.codehaus.jremoting.JRemotingException;
 
 import java.util.concurrent.ScheduledExecutorService;
 
-public class StatefulServer implements Server {
+public abstract class StatefulServer implements Server {
     /**
      * The invocation handler
      */
@@ -83,16 +84,33 @@ public class StatefulServer implements Server {
     /**
      * Method openConnection
      */
-    public void start() {
-        setState(STARTED);
+    public final void start() {
+        this.state = STARTING;
+        starting();
+        this.state = STARTED;
+        started();
     }
+
+    public void starting() {}
+    public void started() {}
 
     /**
      * Method stop
      */
-    public void stop() {
-        setState(STOPPED);
+    public final void stop() {
+        if (!getState().equals(STARTED)) {
+            throw new JRemotingException("Server Not Started at time of stop");
+        }
+
+        this.state = STOPPING;
+        stopping();
+        this.state = STOPPED;
+        stopped();
     }
+
+    public void stopping() {}
+    public void stopped() {}
+
 
     /**
      * Publish an object via its interface
@@ -174,15 +192,6 @@ public class StatefulServer implements Server {
      */
     public InvokerDelegate getInvokerDelegate() {
         return invokerDelegate;
-    }
-
-    /**
-     * Set the state for the server
-     *
-     * @param state The state
-     */
-    protected void setState(String state) {
-        this.state = state;
     }
 
     /**

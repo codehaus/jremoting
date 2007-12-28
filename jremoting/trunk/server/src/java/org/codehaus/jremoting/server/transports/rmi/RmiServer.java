@@ -17,25 +17,25 @@
  */
 package org.codehaus.jremoting.server.transports.rmi;
 
+import org.codehaus.jremoting.JRemotingException;
+import org.codehaus.jremoting.RmiInvoker;
+import org.codehaus.jremoting.server.Authenticator;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.server.adapters.InvokerDelegate;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.context.ServerContextFactory;
+import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.stubretrievers.FromClassLoaderStubRetriever;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
-
-import org.codehaus.jremoting.JRemotingException;
-import org.codehaus.jremoting.RmiInvoker;
-import org.codehaus.jremoting.server.Authenticator;
-import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.context.ServerContextFactory;
-import org.codehaus.jremoting.server.StubRetriever;
-import org.codehaus.jremoting.server.stubretrievers.FromClassLoaderStubRetriever;
-import org.codehaus.jremoting.server.adapters.InvokerDelegate;
-import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Class RmiServer for serving of 'over RMI'
@@ -61,8 +61,7 @@ public class RmiServer extends ConnectingServer {
         this(serverMonitor, new FromClassLoaderStubRetriever(), new NullAuthenticator(), Executors.newScheduledThreadPool(10), new ThreadLocalServerContextFactory(), port);
     }
 
-    public void start() {
-        setState(STARTING);
+    public void starting() {
         try {
             RmiInvocationAdapter rmiInvocationAdapter = new RmiInvocationAdapter(this);
 
@@ -71,16 +70,13 @@ public class RmiServer extends ConnectingServer {
             registry = LocateRegistry.createRegistry(port);
 
             registry.rebind(RmiInvoker.class.getName(), rmiInvocationAdapter);
-            setState(STARTED);
         } catch (RemoteException re) {
             throw new JRemotingException("Some problem setting up RMI server", re);
         }
+        super.starting();
     }
 
-    public void stop() {
-
-        setState(SHUTTINGDOWN);
-
+    public void stopping() {
         killAllConnections();
 
         try {
@@ -90,7 +86,6 @@ public class RmiServer extends ConnectingServer {
         } catch (NotBoundException nbe) {
             serverMonitor.stopServerError(this.getClass(), "RmiServer.stop(): Error stopping RMI server - NotBoundException", nbe);
         }
-
-        setState(STOPPED);
+        super.stopping();
     }
 }

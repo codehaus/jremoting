@@ -75,7 +75,7 @@ public class PipedStreamServer extends ConnectingServer {
 
         if (getState().equals(UNSTARTED) | getState().equals(STARTING)) {
             throw new ConnectionException("Server not started yet");
-        } else if (getState().equals(SHUTTINGDOWN)) {
+        } else if (getState().equals(STOPPING)) {
             throw new ConnectionException("Server is Shutting down");
         }
 
