@@ -28,6 +28,8 @@ import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.server.transports.StreamEncoding;
+import org.codehaus.jremoting.server.transports.StreamEncoder;
+import org.codehaus.jremoting.server.transports.ConnectingServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -42,18 +44,16 @@ import java.util.concurrent.ScheduledExecutorService;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class SelfContainedSocketStreamServer extends SocketStreamServer {
+public class SelfContainedSocketStreamServer extends ConnectingServer {
 
-    /**
-     * The server socket.
-     */
     private ServerSocket serverSocket;
-
-    /**
-     * The thread handling the listening
-     */
     private Future future;
-    private int port;
+    private final int port;
+    private final StreamEncoding streamEncoding;
+    private final ClassLoader facadesClassLoader;
+
+    protected boolean accepting = true;
+
 
     /**
      * Construct a SelfContainedSocketStreamServer
@@ -66,7 +66,9 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
                                            StreamEncoding streamEncoding, ScheduledExecutorService executorService,
                                            ClassLoader facadesClassLoader, int port) {
 
-        super(serverMonitor, invokerDelegate, executorService, streamEncoding, facadesClassLoader);
+        super(serverMonitor, invokerDelegate, executorService);
+        this.streamEncoding = streamEncoding;
+        this.facadesClassLoader = facadesClassLoader;
         this.port = port;
     }
 
@@ -175,4 +177,36 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
     public void stopped() {
         super.stopped();
     }
+
+    /**
+     * Handle a connection.
+     *
+     * @param socket The socket for the connection
+     */
+    public void handleConnection(final Socket socket) {
+
+        // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
+        try {
+            socket.setSoTimeout(60 * 1000);
+            if (getState().equals(STARTED)) {
+                StreamEncoder streamEncoder = streamEncoding.createEncoder(serverMonitor, facadesClassLoader,
+                        socket.getInputStream(), socket.getOutputStream(), socket);
+                SocketStreamConnection ssc = new SocketStreamConnection(this, socket, streamEncoder, serverMonitor);
+                ssc.run();
+            }
+        } catch (IOException ioe) {
+            handleIOE(accepting, ioe);
+        }
+    }
+
+    protected void handleIOE(boolean accepting, IOException ioe) {
+        // some JVM revisions report 'socket closed' , some 'Soclet closed'
+        if (accepting & ioe.getMessage().equalsIgnoreCase("socket closed")) {
+            // do nothing, server shut down during accept();
+        } else {
+            serverMonitor.unexpectedException(this.getClass(), "SocketStreamServer: Some problem connecting client via sockets: " + ioe.getMessage(), ioe);
+        }
+    }
+
+
 }
