@@ -17,27 +17,34 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
-import org.codehaus.jremoting.client.*;
-import org.codehaus.jremoting.requests.Servicable;
+import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.client.ContextFactory;
+import org.codehaus.jremoting.client.InvocationException;
+import org.codehaus.jremoting.client.NoSuchReferenceException;
+import org.codehaus.jremoting.client.NoSuchSessionException;
+import org.codehaus.jremoting.client.Proxy;
+import org.codehaus.jremoting.client.StubHelper;
+import org.codehaus.jremoting.client.StubRegistry;
+import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.requests.CollectGarbage;
 import org.codehaus.jremoting.requests.GroupedMethodRequest;
 import org.codehaus.jremoting.requests.InvokeAsyncMethod;
 import org.codehaus.jremoting.requests.InvokeFacadeMethod;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.requests.Servicable;
+import org.codehaus.jremoting.responses.BadServerSideEvent;
 import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.responses.FacadeArrayMethodInvoked;
 import org.codehaus.jremoting.responses.FacadeMethodInvoked;
 import org.codehaus.jremoting.responses.GarbageCollected;
-import org.codehaus.jremoting.responses.BadServerSideEvent;
+import org.codehaus.jremoting.responses.MethodInvoked;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NoSuchSession;
-import org.codehaus.jremoting.responses.MethodInvoked;
-import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.responses.Response;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * Class DefaultStubHelper
@@ -94,7 +101,7 @@ public final class DefaultStubHelper implements StubHelper {
             }
 
             setContext(request);
-            Response response = transport.invoke(request);
+            Response response = transport.invoke(request, true);
 
             if (response instanceof FacadeMethodInvoked) {
                 result = facadeMethodInvoked(response);
@@ -180,7 +187,7 @@ public final class DefaultStubHelper implements StubHelper {
 
             InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
             setContext(request);
-            Response response = transport.invoke(request);
+            Response response = transport.invoke(request, true);
 
             if (response instanceof MethodInvoked) {
                 MethodInvoked or = (MethodInvoked) response;
@@ -205,7 +212,7 @@ public final class DefaultStubHelper implements StubHelper {
 
             //debug(args);
             setContext(request);
-            Response response = transport.invoke(request);
+            Response response = transport.invoke(request, true);
 
             if (response instanceof MethodInvoked) {
                 MethodInvoked or = (MethodInvoked) response;
@@ -241,7 +248,7 @@ public final class DefaultStubHelper implements StubHelper {
 
                 //debug(args);
                 setContext(request);
-                Response response = transport.invoke(request);
+                Response response = transport.invoke(request, true);
 
                 if (response instanceof MethodInvoked) {
                     MethodInvoked or = (MethodInvoked) response;
@@ -342,7 +349,7 @@ public final class DefaultStubHelper implements StubHelper {
     protected void finalize() throws Throwable {
 
         synchronized (stubRegistry) {
-            Response response = transport.invoke(new CollectGarbage(publishedServiceName, objectName, session, referenceID));
+            Response response = transport.invoke(new CollectGarbage(publishedServiceName, objectName, session, referenceID), false);
             if (response instanceof ExceptionThrown) {
                 // This happens if the object can not be GCed on the remote server
                 //  for any reason.

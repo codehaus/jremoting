@@ -51,7 +51,7 @@ public class StubsFromServer implements StubClassLoader {
             StubClass cr = null;
 
             try {
-                Response ar = transport.invoke(new RetrieveStub(publishedServiceName, objectName));
+                Response ar = transport.invoke(new RetrieveStub(publishedServiceName, objectName), true);
 
                 if (ar instanceof ProblemResponse) {
                     if (ar instanceof RequestFailed) {

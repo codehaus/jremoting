@@ -16,7 +16,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new Service((long) 321)));
+        ih.expects(once()).method("invoke").with(isA(LookupService.class), eq(true)).will(returnValue(new Service((long) 321)));
         ih.expects(once()).method("closeConnection").with(eq(123L));
 
         Mock cf = mock(ContextFactory.class);
@@ -43,7 +43,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new NotPublished()));
+        ih.expects(once()).method("invoke").with(isA(LookupService.class), eq(true)).will(returnValue(new NotPublished()));
 
         Mock cf = mock(ContextFactory.class);
 
@@ -66,7 +66,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new ConnectionException("foo"))));
+        ih.expects(once()).method("invoke").with(isA(LookupService.class), eq(true)).will(returnValue(new ExceptionThrown(new ConnectionException("foo"))));
 
         Mock cf = mock(ContextFactory.class);
 
@@ -87,7 +87,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new RuntimeException("foo"))));
+        ih.expects(once()).method("invoke").with(isA(LookupService.class), eq(true)).will(returnValue(new ExceptionThrown(new RuntimeException("foo"))));
 
         Mock cf = mock(ContextFactory.class);
 
@@ -108,7 +108,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("invoke").with(isA(LookupService.class)).will(returnValue(new ExceptionThrown(new Error("foo"))));
+        ih.expects(once()).method("invoke").with(isA(LookupService.class), eq(true)).will(returnValue(new ExceptionThrown(new Error("foo"))));
 
         Mock cf = mock(ContextFactory.class);
 
@@ -129,7 +129,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("invoke").with(isA(ListServices.class)).will(returnValue(new ServicesList(new String[] {"1", "2"})));
+        ih.expects(once()).method("invoke").with(isA(ListServices.class), eq(true)).will(returnValue(new ServicesList(new String[] {"1", "2"})));
 
         Mock cf = mock(ContextFactory.class);
 

@@ -106,7 +106,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
                     new ObjectStreamEncoding(), "localhost", 12331);
             JRemotingServiceResolver cssf = new JRemotingServiceResolver(invoker);
             cssf.lookupService("Hello");
-            invoker.invoke(new InvokeMethod("Hello", "Main", "ping()",new Object [0], (long) 44332, (long) 21));
+            invoker.invoke(new InvokeMethod("Hello", "Main", "ping()",new Object [0], (long) 44332, (long) 21), true);
 
             fail("should have barfed");
         } catch (NoSuchSessionException e) {

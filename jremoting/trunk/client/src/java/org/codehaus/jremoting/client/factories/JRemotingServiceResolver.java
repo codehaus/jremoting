@@ -137,7 +137,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
 
     public Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
-        Response ar = transport.invoke(new LookupService(publishedServiceName, authentication, sessionID));
+        Response ar = transport.invoke(new LookupService(publishedServiceName, authentication, sessionID), true);
 
         if (ar instanceof NotPublished) {
             throw new ConnectionException("Service '" + publishedServiceName + "' not published");
@@ -179,7 +179,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
     }
 
     public String[] listServices() {
-        Response ar = transport.invoke(new ListServices());
+        Response ar = transport.invoke(new ListServices(), true);
         return ((ServicesList) ar).getServices();
     }
 

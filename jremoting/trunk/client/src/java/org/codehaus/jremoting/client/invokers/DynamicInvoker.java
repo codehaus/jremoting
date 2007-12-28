@@ -96,7 +96,7 @@ public class DynamicInvoker {
      */
 
     public String[] listOfMethods(String publishedName) {
-        Response ar = transport.invoke(new ListInvokableMethods(publishedName));
+        Response ar = transport.invoke(new ListInvokableMethods(publishedName), true);
         return ((InvokableMethods) ar).getListOfMethods();
     }
 

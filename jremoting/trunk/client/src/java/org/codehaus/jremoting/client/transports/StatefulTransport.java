@@ -84,7 +84,7 @@ public abstract class StatefulTransport implements Transport {
     }
 
     public ConnectionOpened openConnection() throws ConnectionException {
-        Response resp = invoke(new OpenConnection());
+        Response resp = invoke(new OpenConnection(), true);
         connectionPinger.start(this);
         if (!(resp instanceof ConnectionOpened)) {
             throw new ConnectionException("Setting of host context blocked for reasons of unknown, server-side response: (" + resp.getClass().getName() + ")");
@@ -93,7 +93,7 @@ public abstract class StatefulTransport implements Transport {
     }
 
     public void closeConnection(Long sessionID) {
-        ConnectionClosed closed = (ConnectionClosed) invoke(new CloseConnection(sessionID));
+        ConnectionClosed closed = (ConnectionClosed) invoke(new CloseConnection(sessionID), true);
         connectionPinger.stop();
         // TODO check closed ?
         stopped = true;
@@ -106,7 +106,7 @@ public abstract class StatefulTransport implements Transport {
         }
 
         try {
-            invoke(new Ping());
+            invoke(new Ping(), true);
         } catch (JRemotingException e) {
             clientMonitor.pingFailure(this.getClass(), e);
         }
@@ -134,7 +134,7 @@ public abstract class StatefulTransport implements Transport {
         return obj;
     }
 
-    public synchronized Response invoke(Request request) {
+    public synchronized Response invoke(Request request, boolean retry) {
         if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
             lastRealRequest = System.currentTimeMillis();
 
@@ -188,7 +188,7 @@ public abstract class StatefulTransport implements Transport {
 
                             again = true;
 
-                            while (!tryReconnect()) {
+                            while (retry && !tryReconnect()) {
                                 clientMonitor.serviceAbend(this.getClass(), retryConnectTries, ioe);
 
                                 retryConnectTries++;

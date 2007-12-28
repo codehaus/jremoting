@@ -32,7 +32,7 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public interface Transport {
 
-    Response invoke(Request request);
+    Response invoke(Request request, boolean retry);
 
     ConnectionOpened openConnection() throws ConnectionException;
 
