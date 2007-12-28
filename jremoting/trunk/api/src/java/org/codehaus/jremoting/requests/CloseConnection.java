@@ -26,8 +26,9 @@ import java.io.ObjectOutput;
 public class CloseConnection extends Request implements Sessionable {
 
     private Long session;
+    private static final long serialVersionUID = -5200264680107806055L;
 
-   /**
+    /**
     * Constructor for Externalization
     */
     public CloseConnection() {

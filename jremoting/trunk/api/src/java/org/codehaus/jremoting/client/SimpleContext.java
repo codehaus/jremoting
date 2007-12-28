@@ -26,6 +26,7 @@ public class SimpleContext implements Context, Externalizable {
 
     private long contextSeq;
     private int hashCode;
+    private static final long serialVersionUID = 3979584504728387550L;
 
     public SimpleContext(long contextSeq) {
         this.contextSeq = contextSeq;

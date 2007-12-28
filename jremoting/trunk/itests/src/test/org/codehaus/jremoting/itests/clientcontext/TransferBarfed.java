@@ -25,4 +25,5 @@ package org.codehaus.jremoting.itests.clientcontext;
  */
 
 public class TransferBarfed extends Exception {
+    private static final long serialVersionUID = -5258113391165040671L;
 }

@@ -26,6 +26,7 @@ import org.codehaus.jremoting.JRemotingException;
  * @version $Revision: 1.2 $
  */
 public class ConnectionClosedException extends JRemotingException {
+    private static final long serialVersionUID = 3859465707788007282L;
 
     /**
      * Constructor ConnectionClosedException

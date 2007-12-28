@@ -28,7 +28,7 @@ import org.codehaus.jremoting.requests.RequestConstants;
  * @version $Revision: 1.2 $
  */
 public final class ListServices extends Request {
-    static final long serialVersionUID = -6048997904689623626L;
+    private static final long serialVersionUID = 8447620862650263282L;
 
     /**
      * Gets number that represents type for this class.

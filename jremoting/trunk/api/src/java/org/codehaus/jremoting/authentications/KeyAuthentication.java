@@ -29,10 +29,9 @@ import java.io.ObjectOutput;
  */
 public final class KeyAuthentication extends Authentication {
 
-    static final long serialVersionUID = -6587101868869375750L;
-
     private String publicKey;
     private String signedText;
+    private static final long serialVersionUID = 6679258994168355502L;
 
     /**
      * Constructor KeyAuthentication

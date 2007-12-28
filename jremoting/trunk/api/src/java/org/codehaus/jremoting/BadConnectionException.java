@@ -24,8 +24,7 @@ package org.codehaus.jremoting;
  * @version $Revision: 1.2 $
  */
 public class BadConnectionException extends ConnectionException {
-
-    static final long serialVersionUID = 4846126242567107752L;
+    private static final long serialVersionUID = -2520232583960263502L;
 
     /**
      * Constructor BadConnectionException

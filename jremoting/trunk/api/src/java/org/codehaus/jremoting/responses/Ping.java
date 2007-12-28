@@ -25,6 +25,6 @@ package org.codehaus.jremoting.responses;
  * @version $Revision: 1.2 $
  */
 public final class Ping extends NotPublished {
-    static final long serialVersionUID = 2290360065017766788L;
 
+    private static final long serialVersionUID = 921531156601022214L;
 }

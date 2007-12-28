@@ -31,9 +31,9 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public final class InvokeFacadeMethod extends InvokeMethod {
-    static final long serialVersionUID = -8622531707298373091L;
 
     private String baseReturnClassNameEncoded;
+    private static final long serialVersionUID = 6412918341011729041L;
 
     /**
      * Constructor InvokeFacadeMethod

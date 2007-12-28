@@ -30,9 +30,9 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public final class MethodInvoked extends Response {
-    static final long serialVersionUID = 5551617722014239119L;
 
     private Object responseObj;
+    private static final long serialVersionUID = 7281041934497934993L;
 
     public MethodInvoked(Object responseObj) {
         this.responseObj = responseObj;

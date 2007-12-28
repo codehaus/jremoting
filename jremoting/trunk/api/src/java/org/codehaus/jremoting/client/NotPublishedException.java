@@ -25,6 +25,7 @@ package org.codehaus.jremoting.client;
  * @version $Revision: 1.2 $
  */
 public class NotPublishedException extends InvocationException {
+    private static final long serialVersionUID = 6588599969944865333L;
 
     /**
      * Constructor NotPublishedException

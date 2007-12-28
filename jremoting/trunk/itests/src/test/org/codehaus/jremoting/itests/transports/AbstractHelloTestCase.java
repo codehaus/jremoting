@@ -17,17 +17,16 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
-import java.beans.PropertyVetoException;
-import java.io.IOException;
-
 import junit.framework.Assert;
-
 import org.codehaus.jremoting.itests.AbstractJRemotingTestCase;
 import org.codehaus.jremoting.itests.CustomSerializableParam;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.itests.TstObject;
+
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 
 /**
  * Extended by classes that name the transport.
@@ -242,7 +241,6 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
             testClient.testSpeed();
         }
         long end = System.currentTimeMillis();
-        //System.out.println("--> ST " + this.getClass().getName() + " " + iterations + " " + ((end - openConnection)/1000) );
 
 
     }

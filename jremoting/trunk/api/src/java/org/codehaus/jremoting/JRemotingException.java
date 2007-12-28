@@ -18,6 +18,7 @@
 package org.codehaus.jremoting;
 
 public class JRemotingException extends RuntimeException {
+    private static final long serialVersionUID = 5750568983494048675L;
 
     public JRemotingException(final String message, final Throwable throwable) {
         super(message, throwable);

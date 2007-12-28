@@ -24,6 +24,7 @@ package org.codehaus.jremoting.server;
  * @version $Revision: 1.2 $
  */
 public class PublicationException extends Exception {
+    private static final long serialVersionUID = 1837799299885106435L;
 
     /**
      * Construct a PublicationException with a message

@@ -28,6 +28,7 @@ import org.codehaus.jremoting.client.Context;
 public class TestContext implements Context {
 
     private String ctx;
+    private static final long serialVersionUID = 1684374969959580640L;
 
     public TestContext() {
         ctx = "TestCCF:" + System.identityHashCode(Thread.currentThread());

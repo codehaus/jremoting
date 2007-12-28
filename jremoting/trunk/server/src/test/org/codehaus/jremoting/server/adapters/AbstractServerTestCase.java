@@ -154,6 +154,8 @@ public class AbstractServerTestCase extends MockObjectTestCase {
     }
 
     private static class MyRequest extends Request {
+        private static final long serialVersionUID = -8376074179235205591L;
+
         public MyRequest() {
         }
 

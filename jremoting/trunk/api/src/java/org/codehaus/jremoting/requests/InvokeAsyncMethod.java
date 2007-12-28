@@ -32,11 +32,11 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public class InvokeAsyncMethod extends Servicable implements Contextualizable {
-    static final long serialVersionUID = -5928783250529633953L;
 
     private GroupedMethodRequest[] groupedRequests;
     private Long referenceID;
     private Long session;
+    private static final long serialVersionUID = 4194445392303710716L;
 
     /**
      * Constructor InvokeMethod

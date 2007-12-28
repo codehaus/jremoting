@@ -27,7 +27,7 @@ import org.codehaus.jremoting.responses.Response;
  * @version $Revision: 1.2 $
  */
 public final class ConnectionKilled extends Response {
-    static final long serialVersionUID = 1736963237954338757L;
+    private static final long serialVersionUID = -1397363385655206712L;
 
     /**
      * Constructor ConnectionKilled

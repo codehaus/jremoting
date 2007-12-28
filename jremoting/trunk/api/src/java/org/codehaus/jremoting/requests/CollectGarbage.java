@@ -32,10 +32,10 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public final class CollectGarbage extends Servicable implements Sessionable {
-    static final long serialVersionUID = -1588019075455361758L;
 
     private Long session;
     private Long referenceID;
+    private static final long serialVersionUID = -4528387241391551698L;
 
     /**
      * Constructor CollectGarbage

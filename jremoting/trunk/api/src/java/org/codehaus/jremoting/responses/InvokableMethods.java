@@ -30,9 +30,8 @@ import java.io.ObjectOutput;
  */
 public final class InvokableMethods extends Response {
 
-    static final long serialVersionUID = 420067307396614451L;
-
     private String[] listOfMethods;
+    private static final long serialVersionUID = 6868628062612818115L;
 
 
     /**

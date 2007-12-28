@@ -27,11 +27,10 @@ import java.io.IOException;
  */
 public class ConnectionException extends IOException {
 
-    static final long serialVersionUID = -2991328464962422036L;
-
     // For the time being, this is backwards compatible with 1.3. It could
     // just as easily use the 1.4 constructors for Exception.
     private Throwable throwableCause;
+    private static final long serialVersionUID = -2917930346241466338L;
 
     /**
      * Constructor ConnectionException

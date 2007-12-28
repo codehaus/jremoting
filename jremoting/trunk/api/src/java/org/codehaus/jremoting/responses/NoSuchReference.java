@@ -28,9 +28,9 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public final class NoSuchReference extends NotPublished implements ProblemResponse{
-    static final long serialVersionUID = 4027710660600938555L;
 
     private Long referenceID;
+    private static final long serialVersionUID = -4995378344000387511L;
 
     /**
      * Constructor NoSuchReference

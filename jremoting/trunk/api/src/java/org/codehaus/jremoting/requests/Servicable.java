@@ -30,11 +30,11 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public abstract class Servicable extends Request {
-    static final long serialVersionUID = 5995735372269955205L;
 
     private String service;
     private String objectName;
     private Context context;
+    private static final long serialVersionUID = -8640171002580706769L;
 
     /**
      * Constructor Servicable

@@ -25,6 +25,6 @@ package org.codehaus.jremoting.responses;
  * @version $Revision: 1.2 $
  */
 public final class ServicesSuspended extends TryLater {
-    static final long serialVersionUID = -5602483138541792903L;
 
+    private static final long serialVersionUID = -4302595924243139790L;
 }

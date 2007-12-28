@@ -31,9 +31,8 @@ import java.io.ObjectOutput;
  */
 public final class StubClass extends Response {
 
-    static final long serialVersionUID = -3849144476006325180L;
-
     private byte[] proxyClassBytes;
+    private static final long serialVersionUID = 2693110863015969961L;
 
     /**
      * Contruct a class response from byte arrays of classes.

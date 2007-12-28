@@ -32,12 +32,12 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public class InvokeMethod extends Servicable implements Contextualizable {
-    static final long serialVersionUID = -4850912985882914299L;
 
     private String methodSignature;
     private Object[] args;
     private Long referenceID;
     private Long session;
+    private static final long serialVersionUID = -587366278439065108L;
 
     /**
      * Constructor InvokeMethod

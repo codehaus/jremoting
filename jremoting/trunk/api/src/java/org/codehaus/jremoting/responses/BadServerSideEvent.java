@@ -29,9 +29,8 @@ import java.io.ObjectOutput;
  */
 public class BadServerSideEvent extends Response {
 
-//    static final long serialVersionUID = TODO;
-
     private String message;
+    private static final long serialVersionUID = -2483879009323117727L;
 
     public BadServerSideEvent(String message) {
         this.message = message;

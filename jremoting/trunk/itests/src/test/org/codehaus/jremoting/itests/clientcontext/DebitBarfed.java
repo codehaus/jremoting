@@ -25,4 +25,5 @@ package org.codehaus.jremoting.itests.clientcontext;
  */
 
 public class DebitBarfed extends Exception {
+    private static final long serialVersionUID = 6387068783298186461L;
 }

@@ -30,9 +30,9 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public final class Service extends Response {
-    static final long serialVersionUID = -3292232924211406705L;
 
     private Long referenceID;
+    private static final long serialVersionUID = 4596229621146585745L;
 
     /**
      * Constructor Service

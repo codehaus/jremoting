@@ -16,6 +16,17 @@
  */
 package org.codehaus.jremoting.server.transports;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.annotations.AnnotationProvider;
+import com.thoughtworks.xstream.annotations.AnnotationReflectionConverter;
+import com.thoughtworks.xstream.converters.ConversionException;
+import com.thoughtworks.xstream.core.JVM;
+import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.util.SerializationHelper;
+
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,18 +35,6 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-
-import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.util.SerializationHelper;
-import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.server.ServerMonitor;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.core.JVM;
-import com.thoughtworks.xstream.annotations.AnnotationReflectionConverter;
-import com.thoughtworks.xstream.annotations.AnnotationProvider;
-import com.thoughtworks.xstream.converters.ConversionException;
 
 /**
  * Class XStreamEncoder
@@ -80,10 +79,6 @@ public class XStreamEncoder extends AbstractStreamEncoder {
 
         String xml = xStream.toXML(response);
 
-//        if (response instanceof MethodInvoked) {
-//            System.out.println("-->Resp " + xml);
-//        }
-
         printWriter.write(xml + "\n");
         printWriter.flush();
         bufferedOutputStream.flush();
@@ -112,11 +107,6 @@ public class XStreamEncoder extends AbstractStreamEncoder {
         String xml = SerializationHelper.getXml(lineNumberReader);
         try {
             Object o = xStream.fromXML(xml);
-
-//            if (o instanceof InvokeMethod) {
-//              System.out.println("-->Req " + xml);
-//            }
-
             return (Request) o;
         } catch (ConversionException e) {
             Throwable cause = e.getCause();

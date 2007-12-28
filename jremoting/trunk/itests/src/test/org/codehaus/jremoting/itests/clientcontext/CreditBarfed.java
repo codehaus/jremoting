@@ -24,4 +24,5 @@ package org.codehaus.jremoting.itests.clientcontext;
  * @version $Revision: 1.2 $
  */
 public class CreditBarfed extends Exception {
+    private static final long serialVersionUID = 4939858224928857728L;
 }

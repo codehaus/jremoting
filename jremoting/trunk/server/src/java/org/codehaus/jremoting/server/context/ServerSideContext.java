@@ -22,6 +22,7 @@ import org.codehaus.jremoting.client.Context;
 public class ServerSideContext implements Context {
     private final Long session;
     private final Context context;
+    private static final long serialVersionUID = 2517644003152720983L;
 
     public ServerSideContext(Long session, Context context) {
         this.session = session;

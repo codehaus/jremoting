@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 
 public class AuthenticationFailed extends Response {
+    private static final long serialVersionUID = 5509815602766227625L;
 
     public AuthenticationFailed() {
     }

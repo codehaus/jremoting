@@ -28,10 +28,10 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public final class NamePasswordAuthentication extends Authentication {
-    static final long serialVersionUID = -1387784311223571160L;
 
     private String userID;
     private String password;
+    private static final long serialVersionUID = -4032239718039334178L;
 
     /**
      * Constructor NamePasswordAuthentication

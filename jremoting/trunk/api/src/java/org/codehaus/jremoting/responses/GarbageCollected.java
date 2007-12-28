@@ -30,7 +30,7 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public final class GarbageCollected extends Response {
-    static final long serialVersionUID = -6876914024095000894L;
+    private static final long serialVersionUID = 105402122319065117L;
 
     /**
      * Constructor GarbageCollected

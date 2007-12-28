@@ -28,6 +28,7 @@ import java.io.Serializable;
 public class TstObject implements Serializable {
 
     private String mName;
+    private static final long serialVersionUID = -3942117279584089420L;
 
     /**
      * Constructor TstObject

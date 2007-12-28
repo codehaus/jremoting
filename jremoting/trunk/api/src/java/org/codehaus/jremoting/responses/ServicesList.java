@@ -30,9 +30,9 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public final class ServicesList extends Response {
-    static final long serialVersionUID = -2491265577999411874L;
 
     private String[] services;
+    private static final long serialVersionUID = 2321095732949852265L;
 
     /**
      * Constructor ServicesList

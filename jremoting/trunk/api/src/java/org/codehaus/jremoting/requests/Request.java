@@ -21,6 +21,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 
 /**
  * Class Request
@@ -28,9 +29,8 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class Request implements Externalizable {
-
-    static final long serialVersionUID = 3003722657216604838L;
+public abstract class Request implements Externalizable, Serializable {
+    private static final long serialVersionUID = 402067040826754548L;
 
     /**
      * Gets number that represents type for this class.

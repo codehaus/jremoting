@@ -25,6 +25,7 @@ package org.codehaus.jremoting.client;
  * @version $Revision: 1.2 $
  */
 public class NoSuchReferenceException extends InvocationException {
+    private static final long serialVersionUID = -6749240818250851278L;
 
     /**
      * Constructor NoSuchReferenceException

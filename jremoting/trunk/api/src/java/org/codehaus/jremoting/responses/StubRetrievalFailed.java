@@ -30,9 +30,9 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public final class StubRetrievalFailed extends Response implements ProblemResponse{
-    static final long serialVersionUID = -8931777755294495428L;
 
     private String reason;
+    private static final long serialVersionUID = 2085021699922494212L;
 
     /**
      * Constructor RequestFailed for Externalizable

@@ -20,6 +20,7 @@ package org.codehaus.jremoting.requests;
 import java.io.ObjectOutput;
 import java.io.IOException;
 import java.io.ObjectInput;
+import java.io.Serializable;
 
 
 /**
@@ -28,9 +29,9 @@ import java.io.ObjectInput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class Ping extends Request {
-    static final long serialVersionUID = -7551156841939653959L;
+public final class Ping extends Request implements Serializable {
     private Long session;
+    private static final long serialVersionUID = -4110992956178784345L;
 
     /**
      * Gets number that represents type for this class.
@@ -45,7 +46,6 @@ public final class Ping extends Request {
 
     public void setSession(Long session) {
         this.session = session;
-        System.err.println("--> sess " + session);
     }
 
     public Long getSession() {

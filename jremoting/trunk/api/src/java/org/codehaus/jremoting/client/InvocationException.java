@@ -28,6 +28,7 @@ import java.io.Serializable;
  * @version $Revision: 1.2 $
  */
 public class InvocationException extends JRemotingException implements Serializable {
+    private static final long serialVersionUID = -2818485871482437040L;
 
 
     /**

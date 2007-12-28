@@ -30,9 +30,9 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public final class ExceptionThrown extends Response {
-    static final long serialVersionUID = -8571671364852090554L;
 
     private Throwable responseExcpt;
+    private static final long serialVersionUID = 7742781425253395715L;
 
     /**
      * Constructor ExceptionThrown

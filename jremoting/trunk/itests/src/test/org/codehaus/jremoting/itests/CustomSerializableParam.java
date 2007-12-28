@@ -25,4 +25,5 @@ import java.io.Serializable;
 public class CustomSerializableParam implements Serializable {
     //a serializable attribute
     public String name;
+    private static final long serialVersionUID = -7485906077204180656L;
 }

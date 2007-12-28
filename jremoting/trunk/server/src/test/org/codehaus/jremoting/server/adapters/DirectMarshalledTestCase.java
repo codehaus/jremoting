@@ -150,6 +150,8 @@ public class DirectMarshalledTestCase extends MockObjectTestCase {
     }
 
     private static class MyRequest extends Request {
+        private static final long serialVersionUID = 4012541139227639079L;
+
         public MyRequest() {
         }
 

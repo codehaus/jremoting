@@ -29,8 +29,7 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public abstract class Response implements Externalizable {
-
-    static final long serialVersionUID = -1604781598397036131L;
+    private static final long serialVersionUID = 6978853363408769332L;
 
     public void writeExternal(ObjectOutput out) throws IOException {
     }

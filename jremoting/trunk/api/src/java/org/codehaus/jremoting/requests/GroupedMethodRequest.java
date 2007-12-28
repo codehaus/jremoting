@@ -32,10 +32,9 @@ import java.io.ObjectOutput;
  */
 public class GroupedMethodRequest extends Request {
 
-    static final long serialVersionUID = 2433454402872395509L;
-
     private String methodSignature;
     private Object[] args;
+    private static final long serialVersionUID = -6998144434871691901L;
 
     public GroupedMethodRequest() {
     }

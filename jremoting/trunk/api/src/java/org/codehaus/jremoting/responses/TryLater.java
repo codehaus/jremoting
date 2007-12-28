@@ -28,9 +28,9 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public abstract class TryLater extends Response implements ProblemResponse {
-    static final long serialVersionUID = -3748772312349051164L;
 
     private int suggestedDelayMillis;
+    private static final long serialVersionUID = -2710449194787243296L;
 
     /**
      * Constructor TryLater

@@ -25,6 +25,7 @@ package org.codehaus.jremoting.client;
  * @version $Revision: 1.2 $
  */
 public class NoSuchSessionException extends InvocationException {
+    private static final long serialVersionUID = 1196918710216319726L;
 
     /**
      * Constructor NoSuchSessionException

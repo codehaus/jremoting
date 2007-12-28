@@ -19,35 +19,34 @@ package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.JRemotingException;
-import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
-import org.codehaus.jremoting.client.InvocationException;
+import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.requests.CloseConnection;
+import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.requests.Ping;
 import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.RequestConstants;
 import org.codehaus.jremoting.requests.Servicable;
-import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.ConnectionOpened;
-import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.responses.ProblemResponse;
-import org.codehaus.jremoting.responses.TryLater;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.responses.NotPublished;
+import org.codehaus.jremoting.responses.ProblemResponse;
+import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.responses.TryLater;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.io.IOException;
 import java.io.EOFException;
+import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.SocketException;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Class StatefulTransport
@@ -135,11 +134,10 @@ public abstract class StatefulTransport implements Transport {
     }
 
     public synchronized Response invoke(Request request, boolean retry) {
-        if (request.getRequestCode() != RequestConstants.PINGREQUEST) {
-            lastRealRequest = System.currentTimeMillis();
-
-        } else {
+        if (request instanceof Ping) {
             ((Ping) request).setSession(session);
+        } else {
+            lastRealRequest = System.currentTimeMillis();
         }
 
         try {

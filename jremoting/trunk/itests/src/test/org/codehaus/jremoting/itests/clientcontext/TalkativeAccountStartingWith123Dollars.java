@@ -19,7 +19,6 @@ package org.codehaus.jremoting.itests.clientcontext;
 
 import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.server.context.ServerContextFactory;
-import org.codehaus.jremoting.server.context.ServerSideContext;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
@@ -48,7 +47,6 @@ public class TalkativeAccountStartingWith123Dollars implements Account {
     }
 
     public void debit(int amt) throws DebitBarfed {
-        System.out.println("-->" + contextFactory);
         Object o = contextFactory.get();
         Context cc = (Context) o;
         balance = balance - amt;

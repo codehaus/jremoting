@@ -31,9 +31,9 @@ import java.io.ObjectOutput;
  */
 public final class FacadeMethodInvoked extends Response {
 
-    static final long serialVersionUID = -4708610846345954459L;
     private Long referenceID;
     private String objectName;
+    private static final long serialVersionUID = -453861019606859136L;
 
     /**
      * Constructor FacadeMethodInvoked

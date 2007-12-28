@@ -24,6 +24,7 @@ import java.io.ObjectInput;
 public class ConnectionClosed extends Response {
 
     private Long session;
+    private static final long serialVersionUID = 9166882028127088704L;
 
     public ConnectionClosed(Long session) {
         this.session = session;

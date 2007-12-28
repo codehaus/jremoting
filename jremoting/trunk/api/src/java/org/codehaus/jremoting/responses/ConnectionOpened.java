@@ -31,10 +31,10 @@ import java.io.ObjectOutput;
  * @version $Revision: 1.2 $
  */
 public final class ConnectionOpened extends Response implements Sessionable {
-    static final long serialVersionUID = -1011412213595049271L;
 
     private String textToSign;
     private Long session;
+    private static final long serialVersionUID = -3282349390753553565L;
 
     /**
      * Constructor ConnectionOpened

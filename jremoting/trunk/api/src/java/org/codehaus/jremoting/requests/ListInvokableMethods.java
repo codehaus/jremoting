@@ -31,11 +31,11 @@ import java.io.ObjectOutput;
  */
 public final class ListInvokableMethods extends Request {
 
-    static final long serialVersionUID = 466389099971742704L;
     /**
      * Name of the service whose remote methods is sought
      */
     private String service;
+    private static final long serialVersionUID = 2847045628663185514L;
 
 
     /**
