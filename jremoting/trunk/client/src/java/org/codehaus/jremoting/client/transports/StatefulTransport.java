@@ -91,8 +91,8 @@ public abstract class StatefulTransport implements Transport {
         return (ConnectionOpened) resp;
     }
 
-    public void closeConnection(Long sessionID) {
-        ConnectionClosed closed = (ConnectionClosed) invoke(new CloseConnection(sessionID), true);
+    public void closeConnection(Long session) {
+        ConnectionClosed closed = (ConnectionClosed) invoke(new CloseConnection(session), true);
         connectionPinger.stop();
         // TODO check closed ?
         stopped = true;

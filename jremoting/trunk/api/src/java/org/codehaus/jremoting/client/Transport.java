@@ -36,7 +36,7 @@ public interface Transport {
 
     ConnectionOpened openConnection() throws ConnectionException;
 
-    void closeConnection(Long sessionID);
+    void closeConnection(Long session);
 
     long getLastRealRequestTime();
 

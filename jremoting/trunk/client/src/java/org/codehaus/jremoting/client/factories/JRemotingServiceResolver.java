@@ -56,7 +56,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
     private final StubClassLoader stubClassLoader;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
     private transient String textToSign;
-    protected final Long sessionID;
+    protected final Long session;
     private StubRegistry stubRegistry;
 
     public JRemotingServiceResolver(Transport transport) throws ConnectionException {
@@ -79,20 +79,20 @@ public class JRemotingServiceResolver implements ServiceResolver {
         ConnectionOpened response = transport.openConnection();
 
         textToSign = response.getTextToSign();
-        sessionID = response.getSessionID();
+        session = response.getSessionID();
 
         stubRegistry = new StubRegistry() {
 
-            public void registerReferenceObject(Object instance, Long referenceID) {
+            public void registerReferenceObject(Object instance, Long reference) {
                 synchronized (this) {
-                    refObjs.put(referenceID, new WeakReference<Object>(instance));
+                    refObjs.put(reference, new WeakReference<Object>(instance));
                 }
             }
 
-            public Object getInstance(Long referenceID) {
+            public Object getInstance(Long reference) {
                 WeakReference<Object> wr;
                 synchronized (this) {
-                    wr = refObjs.get(referenceID);
+                    wr = refObjs.get(reference);
                 }
                 if (wr == null) {
                     return null;
@@ -100,7 +100,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
                 Object obj = wr.get();
 
                 if (obj == null) {
-                    refObjs.remove(referenceID);
+                    refObjs.remove(reference);
                 }
                 return obj;
             }
@@ -137,7 +137,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
 
     public Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
-        Response ar = transport.invoke(new LookupService(publishedServiceName, authentication, sessionID), true);
+        Response ar = transport.invoke(new LookupService(publishedServiceName, authentication, session), true);
 
         if (ar instanceof NotPublished) {
             throw new ConnectionException("Service '" + publishedServiceName + "' not published");
@@ -158,7 +158,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
 
         Service lr = (Service) ar;
         DefaultStubHelper baseObj = new DefaultStubHelper(stubRegistry, transport,
-                contextFactory, publishedServiceName, "Main", lr.getReference(), sessionID);
+                contextFactory, publishedServiceName, "Main", lr.getReference(), session);
         Object retVal = getInstance(publishedServiceName, "Main", baseObj);
 
         baseObj.registerInstance(retVal);
@@ -217,7 +217,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
     }
 
     public void close() {
-        transport.closeConnection(sessionID);
+        transport.closeConnection(session);
     }
 
 

@@ -47,16 +47,16 @@ public class InvokeMethod extends Servicable implements Contextualizable {
      * @param methodSignature      the method signature
      * @param args                 an array of args for the method invocation
      * @param reference          the reference ID
-     * @param sessionID              the sessionID ID
+     * @param session              the session ID
      */
-    public InvokeMethod(String service, String objectName, String methodSignature, Object[] args, Long reference, Long sessionID) {
+    public InvokeMethod(String service, String objectName, String methodSignature, Object[] args, Long reference, Long session) {
 
         super(service, objectName);
 
         this.methodSignature = methodSignature;
         this.args = args;
         this.reference = reference;
-        this.session = sessionID;
+        this.session = session;
     }
 
     /**

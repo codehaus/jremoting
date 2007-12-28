@@ -59,21 +59,21 @@ public final class DefaultStubHelper implements StubHelper {
     private final transient Transport transport;
     private final transient String publishedServiceName;
     private final transient String objectName;
-    private final transient Long referenceID;
+    private final transient Long reference;
     private final transient Long session;
     private ContextFactory contextFactory;
     private ArrayList<GroupedMethodRequest> queuedAsyncRequests = new ArrayList<GroupedMethodRequest>();
 
     public DefaultStubHelper(StubRegistry stubRegistry, Transport transport,
                               ContextFactory contextFactory, String pubishedServiceName, String objectName,
-                              Long referenceID, Long session) {
+                              Long reference, Long session) {
         this.contextFactory = contextFactory;
 
         this.stubRegistry = stubRegistry;
         this.transport = transport;
         publishedServiceName = pubishedServiceName;
         this.objectName = objectName;
-        this.referenceID = referenceID;
+        this.reference = reference;
         this.session = session;
         if (stubRegistry == null) {
             throw new IllegalArgumentException("stubRegistry cannot be null");
@@ -85,7 +85,7 @@ public final class DefaultStubHelper implements StubHelper {
     }
 
     public void registerInstance(Object instance) {
-        stubRegistry.registerReferenceObject(instance, referenceID);
+        stubRegistry.registerReferenceObject(instance, reference);
     }
 
     public Object processObjectRequestGettingFacade(Class returnClassType, String methodSignature, Object[] args, String objectName) throws Throwable {
@@ -95,9 +95,9 @@ public final class DefaultStubHelper implements StubHelper {
             InvokeFacadeMethod request;
 
             if (objectName.endsWith("[]")) {
-                request = new InvokeFacadeMethod(publishedServiceName, this.objectName, methodSignature, args, referenceID, objectName.substring(0, objectName.length() - 2), session);
+                request = new InvokeFacadeMethod(publishedServiceName, this.objectName, methodSignature, args, reference, objectName.substring(0, objectName.length() - 2), session);
             } else {
-                request = new InvokeFacadeMethod(publishedServiceName, this.objectName, methodSignature, args, referenceID, objectName, session);
+                request = new InvokeFacadeMethod(publishedServiceName, this.objectName, methodSignature, args, reference, objectName, session);
             }
 
             setContext(request);
@@ -185,7 +185,7 @@ public final class DefaultStubHelper implements StubHelper {
         try {
             stubRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
-            InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
+            InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, reference, session);
             setContext(request);
             Response response = transport.invoke(request, true);
 
@@ -208,7 +208,7 @@ public final class DefaultStubHelper implements StubHelper {
         try {
             stubRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
-            InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, referenceID, session);
+            InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, reference, session);
 
             //debug(args);
             setContext(request);
@@ -244,7 +244,7 @@ public final class DefaultStubHelper implements StubHelper {
             try {
                 GroupedMethodRequest[] rawRequests = new GroupedMethodRequest[queuedAsyncRequests.size()];
                 queuedAsyncRequests.toArray(rawRequests);
-                InvokeAsyncMethod request = new InvokeAsyncMethod(publishedServiceName, objectName, rawRequests, referenceID, session);
+                InvokeAsyncMethod request = new InvokeAsyncMethod(publishedServiceName, objectName, rawRequests, reference, session);
 
                 //debug(args);
                 setContext(request);
@@ -313,7 +313,7 @@ public final class DefaultStubHelper implements StubHelper {
         // this checks the factory because reference IDs should not be
         // given out to any requester.  It should be privileged information.
         if (proxyRegistry == proxyRegistry) {
-            return referenceID;
+            return reference;
         } else {
             return null;
         }
@@ -349,7 +349,7 @@ public final class DefaultStubHelper implements StubHelper {
     protected void finalize() throws Throwable {
 
         synchronized (stubRegistry) {
-            Response response = transport.invoke(new CollectGarbage(publishedServiceName, objectName, session, referenceID), false);
+            Response response = transport.invoke(new CollectGarbage(publishedServiceName, objectName, session, reference), false);
             if (response instanceof ExceptionThrown) {
                 // This happens if the object can not be GCed on the remote server
                 //  for any reason.

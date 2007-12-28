@@ -33,8 +33,8 @@ public class SessionAdapter extends PublicationAdapter {
         super(delegate);
     }
 
-    protected Session getSession(Long sessionID) {
-        return sessions.get(sessionID);
+    protected Session getSession(Long session) {
+        return sessions.get(session);
     }
 
     private Long getNewSession() {
@@ -53,8 +53,8 @@ public class SessionAdapter extends PublicationAdapter {
         return sessions.containsKey(session);
     }
 
-    protected void removeSession(Long sessionID) {
-        sessions.remove(sessionID);
+    protected void removeSession(Long session) {
+        sessions.remove(session);
     }
 
     public void pruneSessionsStaleForLongerThan(long millis) {

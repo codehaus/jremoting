@@ -119,17 +119,17 @@ public class DefaultServiceHandler implements ServiceHandler {
     /**
      * Add an Instance
      *
-     * @param referenceID The reference ID
+     * @param reference The reference ID
      * @param instance    The instance
      */
-    public void addInstance(Long referenceID, Object instance) {
+    public void addInstance(Long reference, Object instance) {
 
-        if (referenceID.equals(zero)) {
+        if (reference.equals(zero)) {
             this.mainInstance = instance;
         }
 
-        instancesByRefID.put(referenceID, new WeakReference(instance));
-        ReferencesForInstances.put(instance, referenceID);
+        instancesByRefID.put(reference, new WeakReference(instance));
+        ReferencesForInstances.put(instance, reference);
     }
 
     /**
@@ -256,8 +256,8 @@ public class DefaultServiceHandler implements ServiceHandler {
         return facadeClass;
     }
 
-    public Object getInstanceForReference(Long referenceID) {
-        return instancesByRefID.get(referenceID).get();
+    public Object getInstanceForReference(Long reference) {
+        return instancesByRefID.get(reference).get();
     }
 
 

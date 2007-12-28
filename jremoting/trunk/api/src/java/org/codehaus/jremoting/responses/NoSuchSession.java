@@ -29,7 +29,7 @@ import java.io.ObjectOutput;
  */
 public final class NoSuchSession extends NotPublished implements ProblemResponse{
 
-    private Long sessionID;
+    private Long session;
     private static final long serialVersionUID = 4366234682624306556L;
 
     /**
@@ -41,10 +41,10 @@ public final class NoSuchSession extends NotPublished implements ProblemResponse
     /**
      * Constructor NoSuchSession
      *
-     * @param sessionID the reference identifier
+     * @param session the reference identifier
      */
-    public NoSuchSession(Long sessionID) {
-        this.sessionID = sessionID;
+    public NoSuchSession(Long session) {
+        this.session = session;
     }
 
     /**
@@ -53,18 +53,18 @@ public final class NoSuchSession extends NotPublished implements ProblemResponse
      * @return the session id
      */
     public Long getSessionID() {
-        return sessionID;
+        return session;
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        out.writeObject(sessionID);
+        out.writeObject(session);
     }
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
         super.readExternal(in);
 
-        sessionID = (Long) in.readObject();
+        session = (Long) in.readObject();
     }
 }

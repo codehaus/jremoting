@@ -380,12 +380,12 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
     }
 
 
-    private Response doCloseConnectionRequest(Long sessionID) {
-        if (!sessionExists(sessionID)) {
-            return new NoSuchSession(sessionID);
+    private Response doCloseConnectionRequest(Long session) {
+        if (!sessionExists(session)) {
+            return new NoSuchSession(session);
         } else {
-            removeSession(sessionID);
-            return new ConnectionClosed(sessionID);
+            removeSession(session);
+            return new ConnectionClosed(session);
         }
     }
 
@@ -413,13 +413,13 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             return new NotPublished();
         }
 
-        Long sessionID = gcr.getSessionID();
-        if (doesSessionExistAndRefreshItIfItDoes(sessionID)) {
-            Session sess = getSession(sessionID);
+        Long session = gcr.getSessionID();
+        if (doesSessionExistAndRefreshItIfItDoes(session)) {
+            Session sess = getSession(session);
             if (sess != null) {
                 // session may have been removed before GC kicks in.
                 if (gcr.getReference() == null) {
-                    System.err.println("DEBUG- GC on missing referenceID -" + gcr.getReference());
+                    System.err.println("DEBUG- GC on missing reference -" + gcr.getReference());
                 } else {
                     sess.removeInstanceInUse(gcr.getReference());
                 }
