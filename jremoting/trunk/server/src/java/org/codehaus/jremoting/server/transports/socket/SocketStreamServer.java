@@ -18,15 +18,15 @@
 
 package org.codehaus.jremoting.server.transports.socket;
 
-import java.util.concurrent.ScheduledExecutorService;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.StreamEncoding;
 import org.codehaus.jremoting.server.transports.StreamEncoder;
+import org.codehaus.jremoting.server.transports.StreamEncoding;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * @author Peter Royal
@@ -63,8 +63,8 @@ public abstract class SocketStreamServer extends ConnectingServer {
             if (getState().equals(STARTED)) {
                 StreamEncoder ssd = streamEncoding.createEncoder(serverMonitor, facadesClassLoader,
                         socket.getInputStream(), socket.getOutputStream(), socket);
-                SocketStreamConnection sssc = new SocketStreamConnection(this, socket, ssd, serverMonitor);
-                sssc.run();
+                SocketStreamConnection ssc = new SocketStreamConnection(this, socket, ssd, serverMonitor);
+                ssc.run();
             }
         } catch (IOException ioe) {
             handleIOE(accepting, ioe);
@@ -79,9 +79,4 @@ public abstract class SocketStreamServer extends ConnectingServer {
             serverMonitor.unexpectedException(this.getClass(), "SocketStreamServer: Some problem connecting client via sockets: " + ioe.getMessage(), ioe);
         }
     }
-
-
-
-
-
 }

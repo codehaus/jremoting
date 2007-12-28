@@ -92,7 +92,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // server side setup.
         SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12331,
-                SelfContainedSocketStreamServer.OBJECTSTREAM);
+                new org.codehaus.jremoting.server.transports.ObjectStreamEncoding());
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -126,7 +126,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // server side setup.
         // Object
-        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12347, SelfContainedSocketStreamServer.OBJECTSTREAM);
+        SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12347, new org.codehaus.jremoting.server.transports.ObjectStreamEncoding());
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

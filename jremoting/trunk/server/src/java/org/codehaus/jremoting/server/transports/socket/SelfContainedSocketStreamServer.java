@@ -27,9 +27,7 @@ import org.codehaus.jremoting.server.context.ServerContextFactory;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.ByteStreamEncoding;
-import org.codehaus.jremoting.server.transports.ObjectStreamEncoding;
 import org.codehaus.jremoting.server.transports.StreamEncoding;
-import org.codehaus.jremoting.server.transports.XStreamEncoding;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -101,28 +99,14 @@ public class SelfContainedSocketStreamServer extends SocketStreamServer {
         this(serverMonitor, dftStubRetriever(), dftAuthenticator(), streamEncoding, executorService, dftContextFactory(), thisClassLoader(), port);
     }
 
-    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, String streamType) {
-        this(serverMonitor, port, dftExecutor(), streamType);
-    }
-
-    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService, String streamType) {
-        this(serverMonitor, port, executorService, createServerStreamDriverFactory(streamType));
+    public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, int port, StreamEncoding streamEncoding) {
+        this(serverMonitor, port, dftExecutor(), streamEncoding);
     }
 
     public SelfContainedSocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, int port) {
         this(serverMonitor, stubRetriever, authenticator, streamEncoding, executorService, serverContextFactory, thisClassLoader(), port);
     }
 
-    private static StreamEncoding createServerStreamDriverFactory(String streamType) {
-        if (streamType.equals(CUSTOMSTREAM)) {
-            return new ByteStreamEncoding();
-        } else if (streamType.equals(OBJECTSTREAM)) {
-            return new ObjectStreamEncoding();
-        } else if (streamType.equals(XSTREAM)) {
-            return new XStreamEncoding();
-        }
-        throw new IllegalArgumentException("streamType can only be '"+CUSTOMSTREAM+"', '"+OBJECTSTREAM+"' or '"+XSTREAM+"' ");
-    }
 
     private static ScheduledExecutorService dftExecutor() {
         return Executors.newScheduledThreadPool(10);

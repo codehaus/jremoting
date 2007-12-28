@@ -52,7 +52,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 10002, SelfContainedSocketStreamServer.OBJECTSTREAM);
+        server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 10002, new org.codehaus.jremoting.server.transports.ObjectStreamEncoding());
 
         testServer = new TestInterfaceImpl();
 

@@ -107,7 +107,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
 
     private SelfContainedSocketStreamServer startServer() throws PublicationException {
         SelfContainedSocketStreamServer server = new SelfContainedSocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12201,
-                SelfContainedSocketStreamServer.CUSTOMSTREAM);
+                new org.codehaus.jremoting.server.transports.ByteStreamEncoding());
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         server.publish(testServer, "Hello55", pd);
         server.start();
