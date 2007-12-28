@@ -50,10 +50,10 @@ public class DynamicStub implements Proxy {
     //------Proxy override---------------------//
 
     /**
-     * @see org.codehaus.jremoting.client.Proxy#codehausRemotingGetReferenceID(Object)
+     * @see org.codehaus.jremoting.client.Proxy#jRemotingGetReferenceID(Object)
      */
 
-    public Long codehausRemotingGetReferenceID(Object factoryThatIsAsking) {
+    public Long jRemotingGetReferenceID(Object factoryThatIsAsking) {
         return stubHelper.getReference(factoryThatIsAsking);
     }
 

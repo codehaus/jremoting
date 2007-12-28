@@ -26,10 +26,10 @@ package org.codehaus.jremoting.client;
 public interface Proxy {
 
     /**
-     * Method codehausRemotingGetReferenceID
+     * Method jRemotingGetReferenceID
      *
      * @param factoryThatIsAsking
      * @return
      */
-    Long codehausRemotingGetReferenceID(Object factoryThatIsAsking);
+    Long jRemotingGetReferenceID(Object factoryThatIsAsking);
 }

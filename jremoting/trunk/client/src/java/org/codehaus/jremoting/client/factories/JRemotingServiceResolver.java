@@ -167,7 +167,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
     }
 
     public final Long getReferenceID(Proxy obj) {
-        return obj.codehausRemotingGetReferenceID(this);
+        return obj.jRemotingGetReferenceID(this);
     }
 
     public final Object lookupService(String publishedServiceName) throws ConnectionException {
