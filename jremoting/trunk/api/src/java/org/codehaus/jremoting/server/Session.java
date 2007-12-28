@@ -27,12 +27,12 @@ import java.util.HashMap;
  */
 public class Session {
 
-    private Long session;
+    private long session;
 
     private HashMap<Long, Object> instancesInUse = new HashMap<Long, Object>();
     private long lastTouched;
 
-    public Session(Long session) {
+    public Session(long session) {
         this.session = session;
     }
 

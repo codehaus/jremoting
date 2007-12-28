@@ -30,7 +30,7 @@ import java.io.Serializable;
  * @version $Revision: 1.2 $
  */
 public final class Ping extends Request implements Serializable {
-    private Long session;
+    private long session;
     private static final long serialVersionUID = -4110992956178784345L;
 
     /**
@@ -44,7 +44,7 @@ public final class Ping extends Request implements Serializable {
         return RequestConstants.PINGREQUEST;
     }
 
-    public void setSession(Long session) {
+    public void setSession(long session) {
         this.session = session;
     }
 

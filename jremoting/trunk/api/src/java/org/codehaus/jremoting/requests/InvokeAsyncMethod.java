@@ -35,7 +35,7 @@ public class InvokeAsyncMethod extends Servicable implements Contextualizable {
 
     private GroupedMethodRequest[] groupedRequests;
     private Long reference;
-    private Long session;
+    private long session;
     private static final long serialVersionUID = 4194445392303710716L;
 
     /**
@@ -47,7 +47,7 @@ public class InvokeAsyncMethod extends Servicable implements Contextualizable {
      * @param reference          the reference ID
      * @param session              the session ID
      */
-    public InvokeAsyncMethod(String publishedServiceName, String objectName, GroupedMethodRequest[] rawRequests, Long reference, Long session) {
+    public InvokeAsyncMethod(String publishedServiceName, String objectName, GroupedMethodRequest[] rawRequests, Long reference, long session) {
 
         super(publishedServiceName, objectName);
 

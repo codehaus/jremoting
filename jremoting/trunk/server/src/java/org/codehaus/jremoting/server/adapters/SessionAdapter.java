@@ -33,7 +33,7 @@ public class SessionAdapter extends PublicationAdapter {
         super(delegate);
     }
 
-    protected Session getSession(Long session) {
+    protected Session getSession(long session) {
         return sessions.get(session);
     }
 
@@ -44,7 +44,7 @@ public class SessionAdapter extends PublicationAdapter {
 
 
     protected Long newSession() {
-        Long session = getNewSession();
+        long session = getNewSession();
         sessions.put(session, new Session(session));
         return session;
     }
@@ -53,7 +53,7 @@ public class SessionAdapter extends PublicationAdapter {
         return sessions.containsKey(session);
     }
 
-    protected void removeSession(Long session) {
+    protected void removeSession(long session) {
         sessions.remove(session);
     }
 
@@ -74,7 +74,7 @@ public class SessionAdapter extends PublicationAdapter {
      * @param session The session
      * @return true if it exists
      */
-    protected boolean doesSessionExistAndRefreshItIfItDoes(Long session) {
+    protected boolean doesSessionExistAndRefreshItIfItDoes(long session) {
 
         if (lastSessionID.equals(session)) {
 

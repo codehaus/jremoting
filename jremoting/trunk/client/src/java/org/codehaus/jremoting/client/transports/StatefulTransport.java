@@ -62,7 +62,7 @@ public abstract class StatefulTransport implements Transport {
     protected boolean stopped = false;
     protected final ScheduledExecutorService executorService;
     protected final boolean methodLogging;
-    private Long session;
+    private long session;
     private long lastRealRequest = System.currentTimeMillis();
 
     public StatefulTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
@@ -91,7 +91,7 @@ public abstract class StatefulTransport implements Transport {
         return (ConnectionOpened) resp;
     }
 
-    public void closeConnection(Long session) {
+    public void closeConnection(long session) {
         ConnectionClosed closed = (ConnectionClosed) invoke(new CloseConnection(session), true);
         connectionPinger.stop();
         // TODO check closed ?

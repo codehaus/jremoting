@@ -36,7 +36,7 @@ public class InvokeMethod extends Servicable implements Contextualizable {
     private String methodSignature;
     private Object[] args;
     private Long reference;
-    private Long session;
+    private long session;
     private static final long serialVersionUID = -587366278439065108L;
 
     /**
@@ -49,7 +49,7 @@ public class InvokeMethod extends Servicable implements Contextualizable {
      * @param reference          the reference ID
      * @param session              the session ID
      */
-    public InvokeMethod(String service, String objectName, String methodSignature, Object[] args, Long reference, Long session) {
+    public InvokeMethod(String service, String objectName, String methodSignature, Object[] args, Long reference, long session) {
 
         super(service, objectName);
 

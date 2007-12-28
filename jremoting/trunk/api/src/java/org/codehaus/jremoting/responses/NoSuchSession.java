@@ -29,7 +29,7 @@ import java.io.ObjectOutput;
  */
 public final class NoSuchSession extends NotPublished implements ProblemResponse{
 
-    private Long session;
+    private long session;
     private static final long serialVersionUID = 4366234682624306556L;
 
     /**
@@ -43,7 +43,7 @@ public final class NoSuchSession extends NotPublished implements ProblemResponse
      *
      * @param session the reference identifier
      */
-    public NoSuchSession(Long session) {
+    public NoSuchSession(long session) {
         this.session = session;
     }
 

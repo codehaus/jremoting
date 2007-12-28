@@ -33,7 +33,7 @@ import java.io.ObjectOutput;
  */
 public final class CollectGarbage extends Servicable implements Sessionable {
 
-    private Long session;
+    private long session;
     private Long reference;
     private static final long serialVersionUID = -4528387241391551698L;
 
@@ -45,7 +45,7 @@ public final class CollectGarbage extends Servicable implements Sessionable {
      * @param session              the session ID
      * @param reference          the reference ID
      */
-    public CollectGarbage(String publishedServiceName, String objectName, Long session, Long reference) {
+    public CollectGarbage(String publishedServiceName, String objectName, long session, Long reference) {
 
         super(publishedServiceName, objectName);
 

@@ -20,11 +20,11 @@ package org.codehaus.jremoting.server.context;
 import org.codehaus.jremoting.client.Context;
 
 public class ServerSideContext implements Context {
-    private final Long session;
+    private final long session;
     private final Context context;
     private static final long serialVersionUID = 2517644003152720983L;
 
-    public ServerSideContext(Long session, Context context) {
+    public ServerSideContext(long session, Context context) {
         this.session = session;
         this.context = context;
     }
@@ -32,8 +32,7 @@ public class ServerSideContext implements Context {
 
     public int hashCode() {
         int result;
-        result = session.hashCode();
-        result = 31 * result + context.hashCode();
+        result = (int) ((31 * session) + context.hashCode());
         return result;
     }
 
@@ -44,7 +43,7 @@ public class ServerSideContext implements Context {
         ServerSideContext that = (ServerSideContext) o;
 
         if (!context.equals(that.context)) return false;
-        if (!session.equals(that.session)) return false;
+        if (session != that.session) return false;
 
         return true;
     }

@@ -89,7 +89,7 @@ public class ConnectingServerTestCase extends TestCase {
             tstSession = super.newSession();
         }
 
-        public boolean doesSessionExistAndRefreshItIfItDoes(Long session) {
+        public boolean doesSessionExistAndRefreshItIfItDoes(long session) {
             return super.doesSessionExistAndRefreshItIfItDoes(session);
         }
         protected boolean sessionExists(long session) {

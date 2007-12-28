@@ -154,7 +154,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
     }
 
     private void setClientContext(Contextualizable request) {
-        Long session = request.getSessionID();
+        long session = request.getSessionID();
         Context clientSideContext = request.getContext();
 
         // *always* happens before method invocations.
@@ -308,7 +308,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
 
     private Response doMethodAsyncRequest(InvokeAsyncMethod methodRequest, Object connectionDetails) {
 
-        Long session = methodRequest.getSessionID();
+        long session = methodRequest.getSessionID();
         if (!doesSessionExistAndRefreshItIfItDoes(session)) {
             return new NoSuchSession(session);
         }
@@ -374,13 +374,13 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
      * @return The reply.
      */
     private Response doOpenConnectionRequest() {
-        Long session = newSession();
+        long session = newSession();
         String textToSign = authenticator == null ? "" : authenticator.getTextToSign();
         return new ConnectionOpened(textToSign, session);
     }
 
 
-    private Response doCloseConnectionRequest(Long session) {
+    private Response doCloseConnectionRequest(long session) {
         if (!sessionExists(session)) {
             return new NoSuchSession(session);
         } else {
@@ -413,7 +413,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             return new NotPublished();
         }
 
-        Long session = gcr.getSessionID();
+        long session = gcr.getSessionID();
         if (doesSessionExistAndRefreshItIfItDoes(session)) {
             Session sess = getSession(session);
             if (sess != null) {

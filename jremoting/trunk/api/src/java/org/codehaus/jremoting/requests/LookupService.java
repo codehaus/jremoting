@@ -35,7 +35,7 @@ import java.io.ObjectOutput;
 public final class LookupService extends Servicable implements Sessionable {
 
     private Authentication authentication;
-    private Long session;
+    private long session;
     private static final long serialVersionUID = 7081682703978843482L;
 
     /**
@@ -45,7 +45,7 @@ public final class LookupService extends Servicable implements Sessionable {
      * @param authentication       a plugable authenticator
      * @param session              the session ID
      */
-    public LookupService(String publishedService, Authentication authentication, Long session) {
+    public LookupService(String publishedService, Authentication authentication, long session) {
 
         super(publishedService, "Main");
 

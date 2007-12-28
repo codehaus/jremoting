@@ -32,7 +32,7 @@ public class NoSuchSessionException extends InvocationException {
      *
      * @param session the session id
      */
-    public NoSuchSessionException(Long session) {
+    public NoSuchSessionException(long session) {
         super("There is no instance on the server mapped to session " + session + ". The server may have been bounced since the client first did a lookup.");
     }
 }

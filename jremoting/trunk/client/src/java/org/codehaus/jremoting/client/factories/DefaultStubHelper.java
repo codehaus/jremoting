@@ -60,13 +60,13 @@ public final class DefaultStubHelper implements StubHelper {
     private final transient String publishedServiceName;
     private final transient String objectName;
     private final transient Long reference;
-    private final transient Long session;
+    private final transient long session;
     private ContextFactory contextFactory;
     private ArrayList<GroupedMethodRequest> queuedAsyncRequests = new ArrayList<GroupedMethodRequest>();
 
     public DefaultStubHelper(StubRegistry stubRegistry, Transport transport,
                               ContextFactory contextFactory, String pubishedServiceName, String objectName,
-                              Long reference, Long session) {
+                              Long reference, long session) {
         this.contextFactory = contextFactory;
 
         this.stubRegistry = stubRegistry;

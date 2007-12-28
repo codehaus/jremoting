@@ -56,7 +56,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
     private final StubClassLoader stubClassLoader;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
     private transient String textToSign;
-    protected final Long session;
+    protected final long session;
     private StubRegistry stubRegistry;
 
     public JRemotingServiceResolver(Transport transport) throws ConnectionException {

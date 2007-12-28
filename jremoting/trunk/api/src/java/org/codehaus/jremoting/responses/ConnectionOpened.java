@@ -33,7 +33,7 @@ import java.io.ObjectOutput;
 public final class ConnectionOpened extends Response implements Sessionable {
 
     private String textToSign;
-    private Long session;
+    private long session;
     private static final long serialVersionUID = -3282349390753553565L;
 
     /**
@@ -42,7 +42,7 @@ public final class ConnectionOpened extends Response implements Sessionable {
      * @param textToSign text to sign for authenicating connections
      * @param session    the session allocated by the server
      */
-    public ConnectionOpened(String textToSign, Long session) {
+    public ConnectionOpened(String textToSign, long session) {
         this.textToSign = textToSign;
         this.session = session;
     }
