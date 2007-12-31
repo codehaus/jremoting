@@ -19,6 +19,8 @@ package org.codehaus.jremoting.server.transports.rmi;
 
 import org.codehaus.jremoting.JRemotingException;
 import org.codehaus.jremoting.RmiInvoker;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.StubRetriever;
@@ -63,7 +65,8 @@ public class RmiServer extends ConnectingServer {
 
     public void starting() {
         try {
-            RmiInvocationAdapter rmiInvocationAdapter = new RmiInvocationAdapter(this);
+            final ConnectingServer connectingServer1 = this;
+            RmiInvoker rmiInvocationAdapter = new RmiInvokerImpl(connectingServer1);
 
             UnicastRemoteObject.exportObject(rmiInvocationAdapter);
 
@@ -87,5 +90,17 @@ public class RmiServer extends ConnectingServer {
             serverMonitor.stopServerError(this.getClass(), "RmiServer.stop(): Error stopping RMI server - NotBoundException", nbe);
         }
         super.stopping();
+    }
+
+    private static class RmiInvokerImpl implements RmiInvoker {
+        private ConnectingServer connectingServer;
+
+        public RmiInvokerImpl(ConnectingServer connectingServer) {
+            this.connectingServer = connectingServer;
+        }
+
+        public Response invoke(Request request) throws RemoteException {
+            return connectingServer.invoke(request, "RMI-TODO");
+        }
     }
 }

@@ -66,14 +66,7 @@ public class PipedStreamServer extends ConnectingServer {
         this(serverMonitor, stubRetriever, authenticator, executorService, serverContextFactory, streamEncoding, PipedStreamServer.class.getClassLoader());
     }
 
-    /**
-     * Method connect
-     *
-     * @param in
-     * @param out
-     * @throws ConnectionException
-     */
-    public void makeNewConnection(PipedInputStream in, PipedOutputStream out) throws ConnectionException {
+    public void makeNewConnection(final PipedInputStream in, final PipedOutputStream out) throws ConnectionException {
 
         if (getState().equals(UNSTARTED) | getState().equals(STARTING)) {
             throw new ConnectionException("Server not started yet");
@@ -82,18 +75,33 @@ public class PipedStreamServer extends ConnectingServer {
         }
 
         try {
-            PipedInputStream pIS = new PipedInputStream();
-            PipedOutputStream pOS = new PipedOutputStream();
+            final PipedInputStream pIS = new PipedInputStream();
+            final PipedOutputStream pOS = new PipedOutputStream();
 
             pIS.connect(out);
             in.connect(pOS);
 
+            StreamEncoder streamEncoder = streamEncoding.createEncoder(serverMonitor, facadesClassLoader, pIS, pOS, "piped");
 
-            StreamEncoder ssd = streamEncoding.createEncoder(serverMonitor, facadesClassLoader, pIS, pOS, "piped");
+            StreamConnection streamConnection = new StreamConnection(this, streamEncoder, serverMonitor) {
 
-            PipedStreamConnection pssc = new PipedStreamConnection(this, pIS, pOS, ssd, serverMonitor);
+                protected void killConnection() {
 
-            executorService.execute(pssc);
+                    try {
+                        pIS.close();
+                    } catch (IOException e) {
+                        serverMonitor.closeError(this.getClass(), "PipedStreamConnection.killConnection(): Some problem during closing of Input Stream", e);
+                    }
+
+                    try {
+                        pOS.close();
+                    } catch (IOException e) {
+                        serverMonitor.closeError(this.getClass(), "PipedStreamConnection.killConnection(): Some problem during closing of Output Stream", e);
+                    }
+                }
+            };
+
+            executorService.execute(streamConnection);
 
         } catch (IOException pe) {
             throw new ConnectionException("Some problem setting up server : " + pe.getMessage());
