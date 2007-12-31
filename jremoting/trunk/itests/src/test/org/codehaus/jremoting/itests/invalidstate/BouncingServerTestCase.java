@@ -22,7 +22,6 @@ import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
-import org.codehaus.jremoting.client.factories.DefaultStubHelper;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
@@ -70,7 +69,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
 
             Mock clientMonitor = mock(ClientMonitor.class);
             clientMonitor.expects(once()).method("methodLogging").withNoArguments().will(returnValue(false));
-            clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(DefaultStubHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
+            clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(JRemotingServiceResolver.DefaultStubHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
             )});
 
             serviceResolver = new JRemotingServiceResolver(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
