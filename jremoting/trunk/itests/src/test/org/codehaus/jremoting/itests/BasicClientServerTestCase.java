@@ -21,10 +21,10 @@ import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
+import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
-import org.codehaus.jremoting.client.transports.ObjectStreamEncoding;
+import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.requests.InvokeMethod;
@@ -92,7 +92,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // server side setup.
         SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12331,
-                new org.codehaus.jremoting.server.transports.ObjectStreamEncoding());
+                new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
@@ -126,7 +126,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // server side setup.
         // Object
-        SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12347, new org.codehaus.jremoting.server.transports.ObjectStreamEncoding());
+        SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12347, new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);

@@ -26,9 +26,9 @@ import java.util.concurrent.Executors;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
+import org.codehaus.jremoting.client.encoders.StreamEncoding;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.StreamTransport;
-import org.codehaus.jremoting.client.transports.StreamEncoding;
 
 import java.io.IOException;
 import java.net.Socket;

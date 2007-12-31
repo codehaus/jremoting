@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server.transports;
+package org.codehaus.jremoting.server.encoders;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.AnnotationProvider;

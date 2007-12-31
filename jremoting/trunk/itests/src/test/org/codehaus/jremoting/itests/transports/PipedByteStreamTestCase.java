@@ -26,10 +26,10 @@ import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
 
 import java.io.PipedInputStream;
@@ -62,7 +62,7 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         serviceResolver = new JRemotingServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.transports.ByteStreamEncoding(), in, out));
+                new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(), in, out));
         testClient = (TestInterface) serviceResolver.lookupService("Hello");
 
     }

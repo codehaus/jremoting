@@ -26,9 +26,9 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ServerContextFactory;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.ByteStreamEncoding;
-import org.codehaus.jremoting.server.transports.StreamEncoding;
-import org.codehaus.jremoting.server.transports.StreamEncoder;
+import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
+import org.codehaus.jremoting.server.encoders.StreamEncoder;
+import org.codehaus.jremoting.server.encoders.StreamEncoding;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 
 import java.io.IOException;

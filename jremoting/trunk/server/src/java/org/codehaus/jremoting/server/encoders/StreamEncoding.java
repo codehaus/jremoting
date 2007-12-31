@@ -14,16 +14,17 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.client.transports;
+package org.codehaus.jremoting.server.encoders;
 
-import org.codehaus.jremoting.client.StreamEncoder;
-import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.server.ServerMonitor;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.IOException;
 
 public interface StreamEncoding {
 
-    StreamEncoder makeStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException;
+    public StreamEncoder createEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
+                                           InputStream inputStream, OutputStream outputStream, Object connectionDetails) throws IOException;
 
 }

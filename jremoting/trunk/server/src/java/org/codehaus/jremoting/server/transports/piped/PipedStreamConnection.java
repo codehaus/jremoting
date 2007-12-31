@@ -18,9 +18,9 @@
 package org.codehaus.jremoting.server.transports.piped;
 
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.encoders.StreamEncoder;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.StreamConnection;
-import org.codehaus.jremoting.server.transports.StreamEncoder;
 
 import java.io.IOException;
 import java.io.PipedInputStream;

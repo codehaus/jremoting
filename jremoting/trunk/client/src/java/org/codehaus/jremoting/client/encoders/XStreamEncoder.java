@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.client.transports;
+package org.codehaus.jremoting.client.encoders;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.AnnotationProvider;
@@ -75,13 +75,7 @@ public class XStreamEncoder implements StreamEncoder {
     }
 
     private void writeRequest(Request request) throws IOException {
-        String xml = null;
-        try {
-            xml = xStream.toXML(request);
-        } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        printWriter.write(xml + "\n");
+        printWriter.write(xStream.toXML(request) + "\n");
         printWriter.flush();
         bufferedOutputStream.flush();
     }

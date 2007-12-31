@@ -12,7 +12,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.XStreamEncoding;
+import org.codehaus.jremoting.server.encoders.XStreamEncoding;
 import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
 
 import java.util.concurrent.Executors;
@@ -39,7 +39,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.transports.XStreamEncoding(), "localhost", 10099));
+                new org.codehaus.jremoting.client.encoders.XStreamEncoding(), "localhost", 10099));
         testClient = (TestInterface) serviceResolver.lookupService("Hello");
 
     }

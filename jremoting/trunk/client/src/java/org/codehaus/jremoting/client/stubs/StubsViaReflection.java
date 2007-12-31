@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.client.factories;
+package org.codehaus.jremoting.client.stubs;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.Transport;
@@ -26,8 +26,6 @@ import org.codehaus.jremoting.util.StubHelper;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Class StubsOnClient

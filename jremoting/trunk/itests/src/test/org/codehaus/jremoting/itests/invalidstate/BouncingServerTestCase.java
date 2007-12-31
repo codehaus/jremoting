@@ -20,9 +20,9 @@ package org.codehaus.jremoting.itests.invalidstate;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
+import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.factories.DefaultStubHelper;
-import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
@@ -107,7 +107,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
 
     private SocketStreamServer startServer() throws PublicationException {
         SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12201,
-                new org.codehaus.jremoting.server.transports.ByteStreamEncoding());
+                new org.codehaus.jremoting.server.encoders.ByteStreamEncoding());
         TestInterfaceImpl testServer = new TestInterfaceImpl();
         server.publish(testServer, "Hello55", pd);
         server.start();
