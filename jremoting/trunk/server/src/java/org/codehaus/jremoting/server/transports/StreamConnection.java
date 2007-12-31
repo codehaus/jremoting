@@ -50,7 +50,7 @@ public abstract class StreamConnection implements Runnable, Connection {
     private boolean endConnection = false;
 
     /**
-     * The Sever Stream Driver.
+     * The Sever stream encoder.
      */
     private StreamEncoder encoder;
 
@@ -60,7 +60,7 @@ public abstract class StreamConnection implements Runnable, Connection {
      * Construct a StreamConnection
      *
      * @param connectingServer The Abstract Server handling requests
-     * @param encoder         The Driver.
+     * @param encoder         The encoder.
      */
     public StreamConnection(ConnectingServer connectingServer, StreamEncoder encoder, ServerMonitor serverMonitor) {
         this.connectingServer = connectingServer;

@@ -85,12 +85,12 @@ public class SocketStreamServer extends ConnectingServer {
     }
 
     public SocketStreamServer(ServerMonitor serverMonitor, int port, StubRetriever stubRetriever) {
-        this(serverMonitor, stubRetriever, dftAuthenticator(), dftDriverFactory(), dftExecutor(),
+        this(serverMonitor, stubRetriever, dftAuthenticator(), dftStreamEncoding(), dftExecutor(),
                 dftContextFactory(), port);
     }
 
     public SocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService) {
-        this(serverMonitor, port, executorService, dftDriverFactory());
+        this(serverMonitor, port, executorService, dftStreamEncoding());
     }
 
     public SocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService,
@@ -111,7 +111,7 @@ public class SocketStreamServer extends ConnectingServer {
         return Executors.newScheduledThreadPool(10);
     }
 
-    private static StreamEncoding dftDriverFactory() {
+    private static StreamEncoding dftStreamEncoding() {
         return new ByteStreamEncoding();
     }
 
@@ -190,7 +190,7 @@ public class SocketStreamServer extends ConnectingServer {
             socket.setSoTimeout(60 * 1000);
             if (getState().equals(STARTED)) {
                 StreamEncoder streamEncoder = streamEncoding.createEncoder(serverMonitor, facadesClassLoader,
-                        socket.getInputStream(), socket.getOutputStream(), socket);
+                        socket.getInputStream(), socket.getOutputStream(), socket.getInetAddress());
                 SocketStreamConnection ssc = new SocketStreamConnection(this, socket, streamEncoder, serverMonitor);
                 ssc.run();
             }

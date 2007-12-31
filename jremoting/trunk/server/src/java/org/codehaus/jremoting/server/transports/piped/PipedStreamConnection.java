@@ -44,14 +44,6 @@ public class PipedStreamConnection extends StreamConnection {
      */
     private PipedOutputStream pipedOut;
 
-    /**
-     * Construct a PipedStreamConnection
-     *
-     * @param connectingServer The asbtract server than handles requests
-     * @param pipedIn        The piped Input Stream
-     * @param pipedOut       The piped Output Stream
-     * @param encoder         The Driver.
-     */
     public PipedStreamConnection(ConnectingServer connectingServer, PipedInputStream pipedIn, PipedOutputStream pipedOut, StreamEncoder encoder, ServerMonitor serverMonitor) {
 
         super(connectingServer, encoder, serverMonitor);

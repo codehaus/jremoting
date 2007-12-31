@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class ObjectStreamEncoding implements StreamEncoding {
-    public StreamEncoder makeStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+    public StreamEncoder makeStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         return new ObjectStreamEncoder(inputStream, outputStream, facadesClassLoader);
     }
 }

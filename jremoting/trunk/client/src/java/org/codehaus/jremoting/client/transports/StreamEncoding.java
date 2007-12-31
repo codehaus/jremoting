@@ -24,6 +24,6 @@ import java.io.OutputStream;
 
 public interface StreamEncoding {
 
-    StreamEncoder makeStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException;
+    StreamEncoder makeStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException;
 
 }

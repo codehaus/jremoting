@@ -22,7 +22,7 @@ import org.codehaus.jremoting.ConnectionException;
 import java.io.*;
 
 public class ByteStreamEncoding implements StreamEncoding {
-    public StreamEncoder makeStreamDriver(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+    public StreamEncoder makeStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         return new ByteStreamEncoder(new DataInputStream(inputStream), new DataOutputStream(new BufferedOutputStream(outputStream)), facadesClassLoader);
     }
 }

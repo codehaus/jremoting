@@ -44,7 +44,7 @@ public abstract class StreamTransport extends StatefulTransport {
         this.streamEncoding = streamEncoding;
     }
 
-    protected void setStreamDriver(StreamEncoder streamEncoder) {
+    protected void setStreamEncoder(StreamEncoder streamEncoder) {
         this.streamEncoder = streamEncoder;
     }
 

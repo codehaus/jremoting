@@ -66,7 +66,7 @@ public class SocketTransport extends StreamTransport {
         try {
             Socket socket = new Socket(this.host, this.port);
             socket.setSoTimeout(60 * 1000);
-            setStreamDriver(streamEncoding.makeStreamDriver(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
+            setStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
         } catch (IOException ioe) {
             if (ioe.getMessage().startsWith("Connection refused")) {
                 throw new ConnectionRefusedException("Connection to port " + port + " on host " + host + " refused.");
@@ -91,7 +91,7 @@ public class SocketTransport extends StreamTransport {
         try {
             Socket socket = new Socket(host, port);
             socket.setSoTimeout(60 * 1000);
-            setStreamDriver(streamEncoding.makeStreamDriver(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
+            setStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
             return true;
         } catch (ConnectionException ce) {
             // TODO log ?
