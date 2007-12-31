@@ -52,7 +52,7 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
         mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
         serviceResolver = new JRemotingServiceResolver(new DirectMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(), Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), (DirectMarshalledServer) server, this.getClass().getClassLoader()));
 
-        testClient = (TestInterface) serviceResolver.lookupService(TestInterface.class, "Hello");
+        testClient = (TestInterface) serviceResolver.lookupService("Hello");
 
     }
 

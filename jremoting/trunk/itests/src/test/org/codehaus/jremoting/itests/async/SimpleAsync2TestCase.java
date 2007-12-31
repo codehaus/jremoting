@@ -30,7 +30,6 @@ import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.ByteStreamEncoding;
 import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
-import org.codehaus.jremoting.itests.TestInterface;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -80,7 +79,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
         serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.transports.ByteStreamEncoding(), "127.0.0.1", 11009), (ContextFactory) mock.proxy(), new StubsFromServer());
-        testClient = (AsyncTest) serviceResolver.lookupService(TestInterface.class, "AsyncTestB");
+        testClient = (AsyncTest) serviceResolver.lookupService("AsyncTestB");
 
     }
 

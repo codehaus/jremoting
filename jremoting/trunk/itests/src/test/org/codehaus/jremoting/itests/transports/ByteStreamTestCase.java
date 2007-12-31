@@ -50,13 +50,8 @@ public class ByteStreamTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), "localhost", 10333));
-        testClient = (TestInterface) serviceResolver.lookupService(TestInterface.class, "Hello");
+        testClient = (TestInterface) serviceResolver.lookupService("Hello");
 
-    }
-
-
-    public void testAdditionalFacadeFunctionality() throws Exception {
-        super.testAdditionalFacadeFunctionality();    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     protected void tearDown() throws Exception {

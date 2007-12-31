@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.itests.clientcontext;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.itests.classretrievers.TestInterface;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.ServiceResolver;
@@ -164,7 +163,7 @@ public class ClientContextTestCase extends MockObjectTestCase {
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();
         ServiceResolver serviceResolver = new JRemotingServiceResolver(handler, factory1);
 
-        final AccountManager clientSideAccountManager = (AccountManager) serviceResolver.lookupService(TestInterface.class, "OurAccountManager");
+        final AccountManager clientSideAccountManager = (AccountManager) serviceResolver.lookupService("OurAccountManager");
 
         Thread threadOne = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 11);
         Thread threadTwo = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 22);

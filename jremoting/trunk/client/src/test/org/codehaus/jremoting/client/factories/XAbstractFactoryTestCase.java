@@ -34,7 +34,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
             }
         };
 
-        Object bar = factory.lookupService(Map.class, "foo");
+        Object bar = factory.lookupService("foo");
         factory.close();
         assertNotNull(bar);
         assertEquals("bar", bar);
@@ -57,7 +57,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
         };
 
         try {
-            factory.lookupService(Map.class, "foo");
+            factory.lookupService("foo");
         } catch (ConnectionException e) {
             assertEquals("Service 'foo' not published", e.getMessage());
         }
@@ -80,7 +80,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
         };
 
         try {
-            factory.lookupService(Map.class, "foo");
+            factory.lookupService("foo");
         } catch (ConnectionException e) {
             assertEquals("foo", e.getMessage());
         }
@@ -101,7 +101,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
         };
 
         try {
-            factory.lookupService(Map.class, "foo");
+            factory.lookupService("foo");
         } catch (RuntimeException e) {
             assertEquals("foo", e.getMessage());
         }
@@ -122,7 +122,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
         };
 
         try {
-            factory.lookupService(Map.class, "foo");
+            factory.lookupService("foo");
         } catch (Error e) {
             assertEquals("foo", e.getMessage());
         }

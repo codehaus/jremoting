@@ -138,7 +138,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
         };
     }
 
-    public Object lookupService(Class facadeClass, String publishedServiceName, Authentication authentication) throws ConnectionException {
+    public Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException {
 
         Response response = transport.invoke(new LookupService(publishedServiceName, authentication, session), true);
 
@@ -172,8 +172,8 @@ public class JRemotingServiceResolver implements ServiceResolver {
         return obj.jRemotingGetReferenceID(this);
     }
 
-    public final Object lookupService(Class facadeClass, String publishedServiceName) throws ConnectionException {
-        return lookupService(facadeClass, publishedServiceName, null);
+    public final Object lookupService(String publishedServiceName) throws ConnectionException {
+        return lookupService(publishedServiceName, null);
     }
 
     public String getTextToSignForAuthentication() {

@@ -52,7 +52,7 @@ public class XStreamAndReflectionsStubsTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new XStreamEncoding(), "localhost", 10333), new ThreadLocalContextFactory(), new StubsViaReflection(TestInterface.class, TestInterface2.class));
-        testClient = (TestInterface) serviceResolver.lookupService(TestInterface.class, "Hello");
+        testClient = (TestInterface) serviceResolver.lookupService("Hello");
 
     }
 

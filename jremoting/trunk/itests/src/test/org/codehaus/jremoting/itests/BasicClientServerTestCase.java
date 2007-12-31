@@ -74,7 +74,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
             JRemotingServiceResolver cssf = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ByteStreamEncoding(), "127.0.0.1", 12333));
-            cssf.lookupService(TestInterface.class, "foo");
+            cssf.lookupService("foo");
 
             fail("should have barfed");
         } catch (NotPublishedException e) {
@@ -105,7 +105,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
             SocketTransport invoker = new SocketTransport(new ConsoleClientMonitor(),
                     new ObjectStreamEncoding(), "localhost", 12331);
             JRemotingServiceResolver cssf = new JRemotingServiceResolver(invoker);
-            cssf.lookupService(TestInterface.class, "Hello");
+            cssf.lookupService("Hello");
             invoker.invoke(new InvokeMethod("Hello", "Main", "ping()",new Object [0], (long) 44332, (long) 21), true);
 
             fail("should have barfed");
