@@ -51,13 +51,13 @@ public class XStreamAndReflectionsStubsTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new XStreamEncoding(), "localhost", 10333), new ThreadLocalContextFactory(), new StubsViaReflection(TestInterface.class, TestInterface2.class));
+        serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new XStreamEncoding(), "localhost", 10333), new ThreadLocalContextFactory(), new StubsViaReflection());
         testClient = (TestInterface) serviceResolver.lookupService("Hello");
 
     }
 
     public void testAdditionalFacadeFunctionality() throws Exception {
-        super.testAdditionalFacadeFunctionality();    //To change body of overridden methods use File | Settings | File Templates.
+        super.testAdditionalFacadeFunctionality();   
     }
 
     protected void tearDown() throws Exception {

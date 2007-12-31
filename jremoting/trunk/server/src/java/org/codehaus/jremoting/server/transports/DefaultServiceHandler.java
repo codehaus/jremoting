@@ -99,7 +99,6 @@ public class DefaultServiceHandler implements ServiceHandler {
             String publishedThing, Map<String, Method> methodMap,
                                 PublicationDescription publicationDescription, Class facadeClass) {
         this.serviceHandlerAccessor = serviceHandlerAccessor;
-
         this.publishedThing = publishedThing;
         this.methodMap = methodMap;
         this.publicationDescription = publicationDescription;
@@ -113,7 +112,7 @@ public class DefaultServiceHandler implements ServiceHandler {
      * @return a string.
      */
     public String toString() {
-        return "DMIH:" + publishedThing;
+        return "DefaultServiceHandler:" + publishedThing;
     }
 
     /**
@@ -256,6 +255,11 @@ public class DefaultServiceHandler implements ServiceHandler {
     public Class getFacadeClass() {
         return facadeClass;
     }
+
+    public String[] getAdditionalFacades() {
+        return publicationDescription.getAdditionalFacadeNames();
+    }
+
 
     public Object getInstanceForReference(Long reference) {
         return instancesByRefID.get(reference).get();

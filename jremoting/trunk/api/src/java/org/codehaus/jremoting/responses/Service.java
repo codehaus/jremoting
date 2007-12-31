@@ -33,16 +33,13 @@ public final class Service extends Response {
 
     private Long reference;
     private String facadeName;
-    private static final long serialVersionUID = 3438191178503573497L;
+    private String[] additionalFacadeName;
+    private static final long serialVersionUID = 683682072541640086L;
 
-    /**
-     * Constructor Service
-     *
-     * @param reference the reference ID
-     */
-    public Service(Long reference, String facadeName) {
+    public Service(Long reference, String facadeName, String[] additionalFacadeName) {
         this.reference = reference;
         this.facadeName = facadeName;
+        this.additionalFacadeName = additionalFacadeName;
     }
 
     /**
@@ -53,6 +50,10 @@ public final class Service extends Response {
 
     public String getFacadeName() {
         return facadeName;
+    }
+
+    public String[] getAdditionalFacadeNames() {
+        return additionalFacadeName;
     }
 
     public Long getReference() {

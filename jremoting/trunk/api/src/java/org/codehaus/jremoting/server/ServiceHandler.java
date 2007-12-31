@@ -68,14 +68,13 @@ public interface ServiceHandler {
      */
     Class getMostDerivedType(Object instance);
 
-
     void setMethodInvocationMonitor(MethodInvocationMonitor monitor);
-
 
     String[] getListOfMethods();
 
-
     Class getFacadeClass();
+
+    String[] getAdditionalFacades();
 
     Object getInstanceForReference(Long reference);
 

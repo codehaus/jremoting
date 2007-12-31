@@ -348,7 +348,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         }
 
         //TODO a decent ref number for main?
-        return new Service((long) 0, getFacadeClass(service).getName());
+        return new Service((long) 0, getFacadeClass(service).getName(), getAdditionalFacades(service));
     }
 
 

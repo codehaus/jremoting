@@ -20,7 +20,6 @@ package org.codehaus.jremoting.client;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.authentications.Authentication;
 
-
 /**
  * Interface ServiceResolver
  *
@@ -34,8 +33,7 @@ public interface ServiceResolver {
      * published by the server.
      * Usage:
      * <code>
-     * InterfaceLookup lookupService= . . . . ;
-     * RemoteInterface remoteInterface = lookupService.lookup("Published-Name-Of-The-Remote-Server");
+     * RemoteInterface remoteInterface = (RemoteInterface) lookupService("Published-Name-On-The-Remote-Server");
      * </code>
      *
      * @param publishedServiceName @return proxy to the Remote service.

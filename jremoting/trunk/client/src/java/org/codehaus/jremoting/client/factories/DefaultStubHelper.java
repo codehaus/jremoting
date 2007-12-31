@@ -62,12 +62,13 @@ public final class DefaultStubHelper implements StubHelper {
     private final transient Long reference;
     private final transient long session;
     private final transient String facadeName;
+    private final transient String[] additionalFacadeNames;
     private ContextFactory contextFactory;
     private ArrayList<GroupedMethodRequest> queuedAsyncRequests = new ArrayList<GroupedMethodRequest>();
 
     public DefaultStubHelper(StubRegistry stubRegistry, Transport transport,
                              ContextFactory contextFactory, String pubishedServiceName, String objectName,
-                             Long reference, long session, String facadeName) {
+                             Long reference, long session, String facadeName, String[] additionalFacadeNames) {
         this.contextFactory = contextFactory;
 
         this.stubRegistry = stubRegistry;
@@ -77,6 +78,7 @@ public final class DefaultStubHelper implements StubHelper {
         this.reference = reference;
         this.session = session;
         this.facadeName = facadeName;
+        this.additionalFacadeNames = additionalFacadeNames;
         if (stubRegistry == null) {
             throw new IllegalArgumentException("stubRegistry cannot be null");
         }
@@ -137,7 +139,7 @@ public final class DefaultStubHelper implements StubHelper {
 
                 if (instances[i] == null) {
                     DefaultStubHelper bo2 = new DefaultStubHelper(stubRegistry, transport,
-                            contextFactory, publishedServiceName, objectNames[i], refs[i], session, "TODO");
+                            contextFactory, publishedServiceName, objectNames[i], refs[i], session, "TODO", new String[0]);
                     Object retFacade = null;
 
                     try {
@@ -170,7 +172,7 @@ public final class DefaultStubHelper implements StubHelper {
 
         if (instance == null) {
             String facadeClassName = mfr.getObjectName().replace('$', '.');
-            DefaultStubHelper stubHelper = new DefaultStubHelper(stubRegistry, transport, contextFactory, publishedServiceName, mfr.getObjectName(), ref, session, facadeClassName);
+            DefaultStubHelper stubHelper = new DefaultStubHelper(stubRegistry, transport, contextFactory, publishedServiceName, mfr.getObjectName(), ref, session, facadeClassName, new String[] {"TODO"});
             Object retFacade = stubRegistry.getInstance(facadeClassName, publishedServiceName, mfr.getObjectName(), stubHelper);
             stubHelper.registerInstance(retFacade);
             return retFacade;
@@ -346,6 +348,15 @@ public final class DefaultStubHelper implements StubHelper {
         }
 
 
+    }
+
+    public boolean isFacadeInterface(Class clazz) {
+        for (int i = 0; i < additionalFacadeNames.length; i++) {
+            if (clazz.getName().equals(additionalFacadeNames[i])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected void finalize() throws Throwable {

@@ -22,7 +22,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("invoke").with(isA(LookupService.class), eq(true)).will(returnValue(new Service((long) 321, Map.class.getName())));
+        ih.expects(once()).method("invoke").with(isA(LookupService.class), eq(true)).will(returnValue(new Service((long) 321, Map.class.getName(), new String[0])));
         ih.expects(once()).method("closeConnection").with(eq(123L));
 
         Mock cf = mock(ContextFactory.class);

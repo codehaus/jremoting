@@ -37,14 +37,6 @@ import java.util.Set;
  */
 public class StubsViaReflection implements StubClassLoader {
 
-    Set<Class> facadeClasses = new HashSet<Class>();
-
-    public StubsViaReflection(Class... facadeClasses) {
-        for (int i = 0; i < facadeClasses.length; i++) {
-            this.facadeClasses.add(facadeClasses[i]);
-        }
-    }
-
     public Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, final org.codehaus.jremoting.client.StubHelper stubHelper) throws ConnectionException {
 
         Class facadeClass = null;
@@ -90,7 +82,7 @@ public class StubsViaReflection implements StubClassLoader {
             if (args == null) {
                 args = new Object[0];
             }
-            if (facadeClasses.contains(rt)) {
+            if (stubHelper.isFacadeInterface(rt)) {
                 String name = MethodNameHelper.encodeClassName(method.getReturnType());
                 return stubHelper.processObjectRequestGettingFacade(rt, signature, args, name);
             } else if (rt.getName().equals("void")) {

@@ -237,8 +237,17 @@ public final class PublicationDescription {
         PublicationDescriptionItem[] items = new PublicationDescriptionItem[additionalFacades.size()];
         additionalFacades.toArray(items);
         return items;
-
     }
+
+    public String[] getAdditionalFacadeNames() {
+        String[] items = new String[additionalFacades.size()];
+        for (int i = 0; i < additionalFacades.size(); i++) {
+            PublicationDescriptionItem item = additionalFacades.get(i);
+            items[i] = item.getFacadeClass().getName();
+        }
+        return items;
+    }
+
 
 
     /**

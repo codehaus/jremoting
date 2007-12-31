@@ -98,5 +98,5 @@ public interface StubHelper {
     boolean isEquals(Object o1, Object o2);
 
 
-
+    boolean isFacadeInterface(Class clazz);
 }
