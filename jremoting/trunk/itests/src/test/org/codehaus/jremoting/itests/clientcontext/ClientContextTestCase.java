@@ -23,7 +23,7 @@ import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.ServiceResolver;
 import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
-import org.codehaus.jremoting.client.factories.ThreadLocalContextFactory;
+import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.encoders.StreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;

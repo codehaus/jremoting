@@ -20,7 +20,7 @@ package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.stubs.StubsViaReflection;
-import org.codehaus.jremoting.client.factories.ThreadLocalContextFactory;
+import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.encoders.XStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;

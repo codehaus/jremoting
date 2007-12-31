@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.client.factories;
+package org.codehaus.jremoting.client.context;
 
 import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.ContextFactory;

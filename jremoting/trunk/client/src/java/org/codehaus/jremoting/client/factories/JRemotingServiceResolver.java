@@ -25,6 +25,7 @@ import org.codehaus.jremoting.client.ServiceResolver;
 import org.codehaus.jremoting.client.StubHelper;
 import org.codehaus.jremoting.client.StubRegistry;
 import org.codehaus.jremoting.client.Transport;
+import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.stubs.StubClassLoader;
 import org.codehaus.jremoting.client.stubs.StubsOnClient;
 import org.codehaus.jremoting.client.stubs.StubsViaReflection;

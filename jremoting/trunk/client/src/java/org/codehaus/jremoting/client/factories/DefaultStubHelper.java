@@ -26,6 +26,7 @@ import org.codehaus.jremoting.client.Stub;
 import org.codehaus.jremoting.client.StubHelper;
 import org.codehaus.jremoting.client.StubRegistry;
 import org.codehaus.jremoting.client.Transport;
+import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.requests.CollectGarbage;
 import org.codehaus.jremoting.requests.GroupedMethodRequest;
 import org.codehaus.jremoting.requests.InvokeAsyncMethod;

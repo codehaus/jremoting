@@ -18,8 +18,8 @@
 package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.ClientMonitor;
+import org.codehaus.jremoting.client.context.NullContextFactory;
 import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
-import org.codehaus.jremoting.client.factories.NullContextFactory;
 import org.codehaus.jremoting.client.transports.direct.DirectUnMarshalledTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;

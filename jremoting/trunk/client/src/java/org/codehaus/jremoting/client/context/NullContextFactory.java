@@ -1,4 +1,4 @@
-package org.codehaus.jremoting.client.factories;
+package org.codehaus.jremoting.client.context;
 
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.Context;
