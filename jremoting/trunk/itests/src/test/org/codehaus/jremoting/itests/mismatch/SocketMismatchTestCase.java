@@ -67,7 +67,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
             // Client side setup
             factory = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStreamEncoding(), "127.0.0.1", 12001));
-            testClient = (TestInterface) factory.lookupService("Hello");
+            testClient = (TestInterface) factory.lookupService(TestInterface.class, "Hello");
 
             testClient.hello("hello");
 
@@ -108,7 +108,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
             // Client side setup
             factory = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ByteStreamEncoding(), "127.0.0.1", 12002));
-            TestInterface testClient = (TestInterface) factory.lookupService("Hello");
+            TestInterface testClient = (TestInterface) factory.lookupService(TestInterface.class, "Hello");
 
 
             testClient.hello("hello");
@@ -145,7 +145,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
             // Client side setup
             factory = new JRemotingServiceResolver(new RmiTransport(new ConsoleClientMonitor(), "127.0.0.1", 12003));
-            TestInterface testClient = (TestInterface) factory.lookupService("Hello");
+            TestInterface testClient = (TestInterface) factory.lookupService(TestInterface.class, "Hello");
 
 
             testClient.hello("hello");
@@ -182,7 +182,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
             // Client side setup
             factory = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStreamEncoding(), "127.0.0.1", 12004));
-            TestInterface testClient = (TestInterface) factory.lookupService("Hello");
+            TestInterface testClient = (TestInterface) factory.lookupService(TestInterface.class, "Hello");
 
 
             testClient.hello("hello");

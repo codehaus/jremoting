@@ -22,7 +22,7 @@ import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
-import org.codehaus.jremoting.client.Proxy;
+import org.codehaus.jremoting.client.Stub;
 import org.codehaus.jremoting.client.StubHelper;
 import org.codehaus.jremoting.client.StubRegistry;
 import org.codehaus.jremoting.client.Transport;
@@ -61,12 +61,13 @@ public final class DefaultStubHelper implements StubHelper {
     private final transient String objectName;
     private final transient Long reference;
     private final transient long session;
+    private final transient String facadeName;
     private ContextFactory contextFactory;
     private ArrayList<GroupedMethodRequest> queuedAsyncRequests = new ArrayList<GroupedMethodRequest>();
 
     public DefaultStubHelper(StubRegistry stubRegistry, Transport transport,
-                              ContextFactory contextFactory, String pubishedServiceName, String objectName,
-                              Long reference, long session) {
+                             ContextFactory contextFactory, String pubishedServiceName, String objectName,
+                             Long reference, long session, String facadeName) {
         this.contextFactory = contextFactory;
 
         this.stubRegistry = stubRegistry;
@@ -75,6 +76,7 @@ public final class DefaultStubHelper implements StubHelper {
         this.objectName = objectName;
         this.reference = reference;
         this.session = session;
+        this.facadeName = facadeName;
         if (stubRegistry == null) {
             throw new IllegalArgumentException("stubRegistry cannot be null");
         }
@@ -104,7 +106,7 @@ public final class DefaultStubHelper implements StubHelper {
             Response response = transport.invoke(request, true);
 
             if (response instanceof FacadeMethodInvoked) {
-                result = facadeMethodInvoked(response);
+                result = facadeMethodInvoked((FacadeMethodInvoked)response, returnClassType);
             } else if (response instanceof FacadeArrayMethodInvoked) {
                 result = facadeArrayMethodInvoked(response, returnClassType);
             } else {
@@ -135,11 +137,11 @@ public final class DefaultStubHelper implements StubHelper {
 
                 if (instances[i] == null) {
                     DefaultStubHelper bo2 = new DefaultStubHelper(stubRegistry, transport,
-                            contextFactory, publishedServiceName, objectNames[i], refs[i], session);
+                            contextFactory, publishedServiceName, objectNames[i], refs[i], session, "TODO");
                     Object retFacade = null;
 
                     try {
-                        retFacade = stubRegistry.getInstance(publishedServiceName, objectNames[i], bo2);
+                        retFacade = stubRegistry.getInstance(returnClassType.getName(), publishedServiceName, objectNames[i], bo2);
                     } catch (Exception e) {
                         System.out.println("objNameWithoutArray=" + returnClassType.getName());
                         System.out.flush();
@@ -147,7 +149,7 @@ public final class DefaultStubHelper implements StubHelper {
                     }
 
                     bo2.registerInstance(retFacade);
-
+                                                                                
                     instances[i] = retFacade;
                 }
             }
@@ -156,8 +158,7 @@ public final class DefaultStubHelper implements StubHelper {
         return instances;
     }
 
-    private Object facadeMethodInvoked(Response response) throws ConnectionException {
-        FacadeMethodInvoked mfr = (FacadeMethodInvoked) response;
+    private Object facadeMethodInvoked(FacadeMethodInvoked mfr, Class returnClassType) throws ConnectionException {
         Long ref = mfr.getReference();
 
         // it might be that the return value was intended to be null.
@@ -168,12 +169,10 @@ public final class DefaultStubHelper implements StubHelper {
         Object instance = stubRegistry.getInstance(ref);
 
         if (instance == null) {
-            DefaultStubHelper pHelper = new DefaultStubHelper(stubRegistry, transport,
-                    contextFactory, publishedServiceName, mfr.getObjectName(), ref, session);
-            Object retFacade = stubRegistry.getInstance(publishedServiceName, mfr.getObjectName(), pHelper);
-
-            pHelper.registerInstance(retFacade);
-
+            String facadeClassName = mfr.getObjectName().replace('$', '.');
+            DefaultStubHelper stubHelper = new DefaultStubHelper(stubRegistry, transport, contextFactory, publishedServiceName, mfr.getObjectName(), ref, session, facadeClassName);
+            Object retFacade = stubRegistry.getInstance(facadeClassName, publishedServiceName, mfr.getObjectName(), stubHelper);
+            stubHelper.registerInstance(retFacade);
             return retFacade;
         } else {
             return instance;
@@ -183,6 +182,9 @@ public final class DefaultStubHelper implements StubHelper {
     public Object processObjectRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
 
         try {
+            if (stubRegistry == null) {
+                System.out.println("");
+            }
             stubRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
 
             InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, reference, session);
@@ -275,7 +277,7 @@ public final class DefaultStubHelper implements StubHelper {
         Object[] newArgs = new Object[args.length];
 
         for (int i = 0; i < args.length; i++) {
-            if (args[i] instanceof Proxy) {
+            if (args[i] instanceof Stub) {
 
                 //TODO somehow get the reference details and put a redirect place holder here
             } else {

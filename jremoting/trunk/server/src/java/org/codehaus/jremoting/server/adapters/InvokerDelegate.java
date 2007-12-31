@@ -334,7 +334,6 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
 
     }
 
-
     private Response doLookupRequest(Request request) {
         LookupService lr = (LookupService) request;
         String publishedServiceName = lr.getService();
@@ -343,13 +342,15 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             return new AuthenticationFailed();
         }
 
-        if (!isPublished(StubHelper.formatServiceName(publishedServiceName))) {
+        String service = StubHelper.formatServiceName(publishedServiceName);
+        if (!isPublished(service)) {
             return new NotPublished();
         }
 
         //TODO a decent ref number for main?
-        return new Service((long) 0);
+        return new Service((long) 0, getFacadeClass(service).getName());
     }
+
 
     /**
      * Do a class request

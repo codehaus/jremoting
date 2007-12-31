@@ -220,7 +220,8 @@ public class DefaultServiceHandler implements ServiceHandler {
             }
         } catch (Throwable t) {
             methodInvocationMonitor.invocationException(instance == null ? null : instance.getClass(), methodSignature, t, connectionDetails);
-            return new BadServerSideEvent("Some ServerSide exception problem :" + t.getMessage());
+            t.printStackTrace();
+            return new BadServerSideEvent("Some ServerSide exception problem :" + t.getClass().getName() + " message:" + t.getMessage());
         }
     }
 

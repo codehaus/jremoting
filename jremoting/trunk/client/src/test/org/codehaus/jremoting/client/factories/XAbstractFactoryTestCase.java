@@ -1,14 +1,20 @@
 package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.StubHelper;
+import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.requests.ListServices;
 import org.codehaus.jremoting.requests.LookupService;
-import org.codehaus.jremoting.responses.*;
+import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.responses.ExceptionThrown;
+import org.codehaus.jremoting.responses.NotPublished;
+import org.codehaus.jremoting.responses.Service;
+import org.codehaus.jremoting.responses.ServicesList;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
+
+import java.util.Map;
 
 public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
@@ -16,22 +22,19 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock ih = mock(Transport.class);
         ih.expects(once()).method("openConnection").withNoArguments().will(returnValue(new ConnectionOpened("", (long) 123)));
-        ih.expects(once()).method("invoke").with(isA(LookupService.class), eq(true)).will(returnValue(new Service((long) 321)));
+        ih.expects(once()).method("invoke").with(isA(LookupService.class), eq(true)).will(returnValue(new Service((long) 321, Map.class.getName())));
         ih.expects(once()).method("closeConnection").with(eq(123L));
 
         Mock cf = mock(ContextFactory.class);
 
         JRemotingServiceResolver factory = new JRemotingServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
-            protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
-                return null;
-            }
-
-            protected Object getInstance(String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
+            @Override
+            protected Object getInstance(String facadeClassName, String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
                 return "bar";
             }
         };
 
-        Object bar = factory.lookupService("foo");
+        Object bar = factory.lookupService(Map.class, "foo");
         factory.close();
         assertNotNull(bar);
         assertEquals("bar", bar);
@@ -54,7 +57,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
         };
 
         try {
-            factory.lookupService("foo");
+            factory.lookupService(Map.class, "foo");
         } catch (ConnectionException e) {
             assertEquals("Service 'foo' not published", e.getMessage());
         }
@@ -77,7 +80,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
         };
 
         try {
-            factory.lookupService("foo");
+            factory.lookupService(Map.class, "foo");
         } catch (ConnectionException e) {
             assertEquals("foo", e.getMessage());
         }
@@ -98,7 +101,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
         };
 
         try {
-            factory.lookupService("foo");
+            factory.lookupService(Map.class, "foo");
         } catch (RuntimeException e) {
             assertEquals("foo", e.getMessage());
         }
@@ -119,7 +122,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
         };
 
         try {
-            factory.lookupService("foo");
+            factory.lookupService(Map.class, "foo");
         } catch (Error e) {
             assertEquals("foo", e.getMessage());
         }

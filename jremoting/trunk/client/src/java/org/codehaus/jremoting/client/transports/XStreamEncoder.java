@@ -75,7 +75,12 @@ public class XStreamEncoder implements StreamEncoder {
     }
 
     private void writeRequest(Request request) throws IOException {
-        String xml = xStream.toXML(request);
+        String xml = null;
+        try {
+            xml = xStream.toXML(request);
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         printWriter.write(xml + "\n");
         printWriter.flush();
         bufferedOutputStream.flush();

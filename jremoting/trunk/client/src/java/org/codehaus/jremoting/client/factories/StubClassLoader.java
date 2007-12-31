@@ -18,9 +18,10 @@ package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.Transport;
+import org.codehaus.jremoting.client.StubHelper;
 
 public interface StubClassLoader {
 
-    Class getStubClass(String publishedServiceName, String objectName, Transport transport) throws ConnectionException, ClassNotFoundException;
+    Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, StubHelper stubHelper) throws ConnectionException;
 
 }

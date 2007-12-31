@@ -86,7 +86,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         // Client side setup
         serviceResolver = new JRemotingServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.transports.ObjectStreamEncoding(), in, out));
-        testClient = (TestInterface) serviceResolver.lookupService("Hello33");
+        testClient = (TestInterface) serviceResolver.lookupService(TestInterface.class, "Hello33");
 
     }
 

@@ -18,12 +18,12 @@
 package org.codehaus.jremoting.client;
 
 /**
- * Interface Proxy
+ * Interface Stub
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public interface Proxy {
+public interface Stub {
 
     /**
      * Method jRemotingGetReferenceID

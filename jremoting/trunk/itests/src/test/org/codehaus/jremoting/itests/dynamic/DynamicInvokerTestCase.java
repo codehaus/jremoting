@@ -63,8 +63,7 @@ public class DynamicInvokerTestCase extends TestCase {
         server.start();
 
         // Client side setup
-        dynamicInvoker = new DynamicInvoker(new SocketTransport(new ConsoleClientMonitor(),
-                new ByteStreamEncoding(),
+        dynamicInvoker = new DynamicInvoker(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(),
                 "127.0.0.1", 10101), new NullContextFactory());
 
     }
@@ -93,17 +92,17 @@ public class DynamicInvokerTestCase extends TestCase {
     public void testInvocation() throws ConnectionException {
 
         // Invoking the methods returning void
-        dynamicInvoker.invoke("Hello", "hello(java.lang.String)", new Object[]{"Hello!?"}, new Class[]{String.class});
+        dynamicInvoker.invoke(TestInterface.class, "Hello", "hello(java.lang.String)", new Object[]{"Hello!?"}, new Class[]{String.class});
         // test the server has logged the message.
         assertEquals("Hello!?", ((TestInterfaceImpl) testServer).getStoredState("void:hello(String)"));
 
         //invoke a method returning primitive type
-        Integer ret = (Integer) dynamicInvoker.invoke("Hello", "hello2(int)", new Object[]{new Integer(11)}, new Class[]{Integer.TYPE});
+        Integer ret = (Integer) dynamicInvoker.invoke(TestInterface.class, "Hello", "hello2(int)", new Object[]{new Integer(11)}, new Class[]{Integer.TYPE});
         assertEquals(ret, new Integer(11));
 
         // Invoke on a  non-existent remote object
         try {
-            dynamicInvoker.invoke("Hellooo?", "some method", null, null);
+            dynamicInvoker.invoke(TestInterface.class, "Hellooo?", "some method", null, null);
             fail("Dynamic Invoker should have failed");
         } catch (NotPublishedException e) {
             // expected
@@ -144,10 +143,10 @@ public class DynamicInvokerTestCase extends TestCase {
          */
         //Here we test a case where the signature is developed liberally
 
-        StringBuffer buf = (StringBuffer) dynamicInvoker.invoke("Hello", "hello4(float,double)", new Object[]{new Float(10.12), new Double(10.13)}, new Class[]{Float.TYPE, Double.TYPE});
+        StringBuffer buf = (StringBuffer) dynamicInvoker.invoke(TestInterface.class, "Hello", "hello4(float,double)", new Object[]{new Float(10.12), new Double(10.13)}, new Class[]{Float.TYPE, Double.TYPE});
         assertEquals("10.12 10.13", buf.toString());
 
-        buf = (StringBuffer) dynamicInvoker.invoke("Hello", "  hello4  (  float    ,     double   )  ", new Object[]{new Float(10.15), new Double(10.17)}, new Class[]{Float.TYPE, Double.TYPE});
+        buf = (StringBuffer) dynamicInvoker.invoke(TestInterface.class, "Hello", "  hello4  (  float    ,     double   )  ", new Object[]{new Float(10.15), new Double(10.17)}, new Class[]{Float.TYPE, Double.TYPE});
         assertEquals("10.15 10.17", buf.toString());
     }
 }

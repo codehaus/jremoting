@@ -41,7 +41,7 @@ public class DynamicStubs extends JRemotingServiceResolver {
         return null;
     }
 
-    protected Object getInstance(String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
+    protected Object getInstance(Class facadeClass, String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
         return new DynamicStub(publishedServiceName, objectName, stubHelper);
     }
 

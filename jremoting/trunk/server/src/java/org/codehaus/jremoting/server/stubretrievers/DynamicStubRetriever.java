@@ -86,10 +86,10 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     }
 
     /**
-     * Method getProxyClassBytes
+     * Method getStubClassBytes
      *
      * @param publishedName the name to publish as
-     * @return the byte array for the proxy class
+     * @return the byte array for the stub class
      * @throws StubRetrievalException if the class cannot be retrieved.
      */
     public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {

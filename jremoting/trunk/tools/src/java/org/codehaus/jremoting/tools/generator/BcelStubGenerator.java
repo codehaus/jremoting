@@ -87,11 +87,11 @@ public class BcelStubGenerator extends AbstractStubGenerator {
 
     /**
      * Method generateStubClass.
-     * Create Proxy Implementation with all interface methods
+     * Create Stub Implementation with all interface methods
      * Generating name of form: [STUB_PREFIX][genName]_[STUB_POSTFIX].class
      *
      * @param generatedClassName the name of the class to generate.
-     * @param facadesToStubify the facades to stubify.
+     * @param facadesToStubify   the facades to stubify.
      */
     protected void generateStubClass(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
         //Start creating class
@@ -133,7 +133,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
             PublicationDescriptionItem publicationDescriptionItem = facadesToStubify[i];
             facades[i] = publicationDescriptionItem.getFacadeClass().getName();
         }
-        facades[facadesToStubify.length] = "org.codehaus.jremoting.client.Proxy";
+        facades[facadesToStubify.length] = "org.codehaus.jremoting.client.Stub";
 
 
         classGen = new ClassGen(generatedClassName, "java.lang.Object", generatedClassName + ".java", Constants.ACC_PUBLIC | Constants.ACC_SUPER | Constants.ACC_FINAL, facades);
@@ -156,7 +156,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         il.append(factory.createInvoke("java.lang.Object", "<init>", Type.VOID, Type.NO_ARGS, Constants.INVOKESPECIAL));
         il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
         il.append(InstructionFactory.createLoad(Type.OBJECT, 1));
-        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.PUTFIELD));
+        il.append(factory.createFieldAccess(generatedClassName, "stubHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.PUTFIELD));
         il.append(InstructionFactory.createReturn(Type.VOID));
         method.setMaxStack();
         method.setMaxLocals();
@@ -167,12 +167,12 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     /**
      * Add method
      * <pre>
-     * private transient org.codehaus.jremoting.client.StubHelper proxyHelper;
+     * private transient org.codehaus.jremoting.client.StubHelper stubHelper;
      * </pre>
      */
     protected void createFields() {
         FieldGen field;
-        field = new FieldGen(Constants.ACC_PRIVATE | Constants.ACC_TRANSIENT, new ObjectType("org.codehaus.jremoting.client.StubHelper"), "proxyHelper", constantsPool);
+        field = new FieldGen(Constants.ACC_PRIVATE | Constants.ACC_TRANSIENT, new ObjectType("org.codehaus.jremoting.client.StubHelper"), "stubHelper", constantsPool);
         classGen.addField(field.getField());
     }
 
@@ -180,16 +180,17 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * Add method
      * <pre>
      * public Long jRemotingGetReferenceID(Object factoryThatIsAsking) {
-     * return proxyHelper.getReference(factoryThatIsAsking);
+     * return stubHelper.getReference(factoryThatIsAsking);
      * }
      * </pre>
+     *
      * @param generatedClassName the generated class name
      */
     protected void createGetReferenceIDMethod(String generatedClassName) {
         InstructionList il = new InstructionList();
         MethodGen method = new MethodGen(Constants.ACC_PUBLIC, new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, new String[]{"arg0"}, "jRemotingGetReferenceID", generatedClassName, il, constantsPool);
         il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
-        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
+        il.append(factory.createFieldAccess(generatedClassName, "stubHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
         il.append(InstructionFactory.createLoad(Type.OBJECT, 1));
         il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "getReference", new ObjectType("java.lang.Long"), new Type[]{Type.OBJECT}, Constants.INVOKEINTERFACE));
         il.append(InstructionFactory.createReturn(Type.OBJECT));
@@ -230,8 +231,8 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * of the interface creating equivalent methods for the
      * stubs in the process.
      *
-     * @param generatedClassName  the generated class name
-     * @param facadesToStubify the facades to make stubs for.
+     * @param generatedClassName the generated class name
+     * @param facadesToStubify   the facades to make stubs for.
      */
     protected void createInterfaceMethods(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
         for (int x = 0; x < facadesToStubify.length; x++) {
@@ -257,7 +258,6 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     protected void createInterfaceMethod(String generatedClassName, Method mth, PublicationDescriptionItem facadesToStubify) {
         InstructionList il = new InstructionList();
         MethodGen method = new MethodGen(Constants.ACC_PUBLIC, getReturnType(mth), getArguments(mth), getArgumentNames(mth), mth.getName(), generatedClassName, il, constantsPool);
-
 
         //debug(getArguments(m));
 
@@ -299,7 +299,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         InstructionHandle ih_tryEnd = null;
         if (facadesToStubify.isRollback(mth)) {
             ih_rollback = il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
-            il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
+            il.append(factory.createFieldAccess(generatedClassName, "stubHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
             il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "rollbackAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
             gotoCall = InstructionFactory.createBranchInstruction(Constants.GOTO, null);
             ih_tryEnd = il.append(gotoCall);
@@ -311,37 +311,36 @@ public class BcelStubGenerator extends AbstractStubGenerator {
             //createTestMethod(il,"after rollback");
         }
 
-
         /* Within the stub put the
-         * Call processObjectRequest on the instance StubHelper held within the stub
-         * Thus,
-         * Injecting the following
-         * ================================================
-         * try
-         * {
-         *      Object retVal = proxyHelper.processObjectRequest("foo1(int,
-         *        float, java.lang.String, java.lang.Integer)",args,argClasses);
-         *      return (java.lang.String) retVal;
-         * }
-         *  catch (Throwable t)
-         *  {
-         *         if (t instanceof RuntimeException)
-         *         {
-         *           throw (RuntimeException) t;
-         *         }
-		 *         else if (t instanceof Error)
-         *         {
-         *                throw (Error) t;
-         *         }
-		 *         else
-         *         {
-         *                t.printStackTrace();
-         *                 throw new org.codehaus.jremoting.client.
-         *                      InvocationException("Should never get here:" +t.getMessage());
-         *         }
-         *  }
-         * ================================================
-         */
+        * Call processObjectRequest on the instance StubHelper held within the stub
+        * Thus,
+        * Injecting the following
+        * ================================================
+        * try
+        * {
+        *      Object retVal = stubHelper.processObjectRequest("foo1(int,
+        *        float, java.lang.String, java.lang.Integer)",args,argClasses);
+        *      return (java.lang.String) retVal;
+        * }
+        *  catch (Throwable t)
+        *  {
+        *         if (t instanceof RuntimeException)
+        *         {
+        *           throw (RuntimeException) t;
+        *         }
+        *         else if (t instanceof Error)
+        *         {
+        *                throw (Error) t;
+        *         }
+        *         else
+        *         {
+        *                t.printStackTrace();
+        *                 throw new org.codehaus.jremoting.client.
+        *                      InvocationException("Should never get here:" +t.getMessage());
+        *         }
+        *  }
+        * ================================================
+        */
         InstructionHandle ihe1 = il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
 
         if (facadesToStubify.isRollback(mth)) {
@@ -349,7 +348,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
             method.addExceptionHandler(ih_rollback, ih_tryEnd, catchHandler, new ObjectType("java.lang.Throwable"));
         }
 
-        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
+        il.append(factory.createFieldAccess(generatedClassName, "stubHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
         // **** Check if the return type is facade ***
         Class returnClass = mth.getReturnType();
         if (returnClass.isArray()) {
@@ -460,7 +459,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         if (facadesToStubify.isCommit(mth)) {
             InstructionHandle ih_commit = il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
             gotoCall.setTarget(ih_commit);
-            il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
+            il.append(factory.createFieldAccess(generatedClassName, "stubHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
 
             il.append(factory.createInvoke("org.codehaus.jremoting.client.StubHelper", "commitAsyncRequests", Type.VOID, Type.NO_ARGS, Constants.INVOKEINTERFACE));
             InstructionHandle ih_return = il.append(InstructionFactory.createReturn(Type.VOID));
@@ -480,7 +479,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     private void generateEqualsMethod(String generatedClassName) {
 
         /* public boolean equals(Object o) {
-         *   return proxyHelper.isEquals(this,o);
+         *   return stubHelper.isEquals(this,o);
          * }
          */
 
@@ -489,7 +488,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
 
         il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
 
-        il.append(factory.createFieldAccess(generatedClassName, "proxyHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
+        il.append(factory.createFieldAccess(generatedClassName, "stubHelper", new ObjectType("org.codehaus.jremoting.client.StubHelper"), Constants.GETFIELD));
         il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
         il.append(InstructionFactory.createLoad(Type.OBJECT, 1));
 
@@ -844,17 +843,17 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * @return the class
      */
     public Class getGeneratedClass(String generatedClassName) {
-        return getProxyClass(generatedClassName);
+        return getStubClass(generatedClassName);
     }
 
     /**
-     * Method getProxyClass.
+     * Method getStubClass.
      * This get the Class definition from the bytes
      *
      * @param className the clas name
      * @return Class the class
      */
-    protected Class getProxyClass(String className) {
+    protected Class getStubClass(String className) {
 
         /*
         FromJavaClassClassLoader fromJavaClassClassLoader =
@@ -865,7 +864,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         Class clazz = null;
 
         try {
-            URLClassLoader urlCL = new URLClassLoader(new URL[]{new File(getClassGenDir()).toURL()}, 
+            URLClassLoader urlCL = new URLClassLoader(new URL[]{new File(getClassGenDir()).toURL()},
                     this.getClass().getClassLoader());
             clazz = urlCL.loadClass(className);
         } catch (ClassNotFoundException e) {

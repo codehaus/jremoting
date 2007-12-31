@@ -75,7 +75,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
 
             serviceResolver = new JRemotingServiceResolver(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
                     new ByteStreamEncoding(), "127.0.0.1", 12201));
-            TestInterface testClient = (TestInterface) serviceResolver.lookupService("Hello55");
+            TestInterface testClient = (TestInterface) serviceResolver.lookupService(TestInterface.class, "Hello55");
 
 
             testClient.hello2(100);

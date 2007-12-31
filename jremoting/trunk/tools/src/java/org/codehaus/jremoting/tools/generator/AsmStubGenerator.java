@@ -48,7 +48,7 @@ public class AsmStubGenerator { // extends AbstractStubGenerator implements Opco
 //            retval[i] = item.getFacadeClass().getName().replace('.','/');
 //
 //        }
-//        retval[retval.length] = "org/codehaus/jremoting/client/Proxy";
+//        retval[retval.length] = "org/codehaus/jremoting/client/Stub";
 //        return retval;
 //    }
 
@@ -1522,7 +1522,7 @@ public class AsmStubGenerator { // extends AbstractStubGenerator implements Opco
 //
 //        return cw.toByteArray();
 
-      return null;
+        return null;
     }
 
 }

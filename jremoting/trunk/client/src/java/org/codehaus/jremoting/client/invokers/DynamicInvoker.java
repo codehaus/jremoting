@@ -115,11 +115,11 @@ public class DynamicInvoker {
      * @return Object the return value of the remote call
      * @throws ConnectionException If a problem
      */
-    public Object invoke(String publishedName, String methodName, Object[] args, Class[] argClasses) throws ConnectionException {
+    public Object invoke(Class facadeClass, String publishedName, String methodName, Object[] args, Class[] argClasses) throws ConnectionException {
         //check the stub cache
         DynamicStub stub = (DynamicStub) stubs.get(publishedName);
         if (stub == null) {
-            stub = (DynamicStub) factory.lookupService(publishedName);
+            stub = (DynamicStub) factory.lookupService(facadeClass, publishedName);
             stubs.put(publishedName, stub);
         }
         if (args == null) {
@@ -128,7 +128,7 @@ public class DynamicInvoker {
         if (argClasses == null) {
             argClasses = new Class[0];
         }
-        // Regenerate the methodSignature so that its conformant with whats expected
+        // Regenerate the methodSignature so that its conformant with what's expected
         // on the server side.
         //Right now the methodSignature that is passed to the server needs to
         // be formatted with arguments spaced by commas and a space.

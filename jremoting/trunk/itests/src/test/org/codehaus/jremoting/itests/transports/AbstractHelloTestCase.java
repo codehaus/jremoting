@@ -179,7 +179,8 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         // lookup worked ?
         assertNotNull(testClient);
 
-        TestInterface3 abc = (TestInterface3) testClient.makeTestInterface2("abc");
+        TestInterface2 testInterface2 = testClient.makeTestInterface2("abc");
+        TestInterface3 abc = (TestInterface3) testInterface2;
         TestInterface2 def = testClient.makeTestInterface2("def");
 
         testClient.morphName(abc);

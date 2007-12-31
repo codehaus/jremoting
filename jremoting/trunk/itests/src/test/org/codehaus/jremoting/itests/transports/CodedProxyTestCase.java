@@ -21,7 +21,7 @@ import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.itests.proxies.CodedProxyTestInterfaceProxy;
 
 /**
- * Test Hand Coded Proxy for comparison sake
+ * Test Hand Coded Stub for comparison sake
  *
  * @author Paul Hammant
  */

@@ -7,7 +7,7 @@ public interface StubRegistry {
 
     Object getInstance(Long reference);
 
-    Object getInstance(String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException;
+    Object getInstance(String facadeClassName, String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException;
 
     void marshallCorrection(String remoteObjectName, String methodSignature, Object[] args, Class[] argClasses);        
 }

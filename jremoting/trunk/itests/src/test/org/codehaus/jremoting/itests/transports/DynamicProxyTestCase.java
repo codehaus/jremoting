@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Test Dynamic Proxy (reflection) for comparison sake
+ * Test Dynamic Stub (reflection) for comparison sake
  *
  * @author Paul Hammant
  */

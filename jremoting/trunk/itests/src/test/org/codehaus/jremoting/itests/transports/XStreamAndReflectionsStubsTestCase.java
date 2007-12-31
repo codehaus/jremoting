@@ -19,8 +19,10 @@ package org.codehaus.jremoting.itests.transports;
 
 
 import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
+import org.codehaus.jremoting.client.factories.StubsViaReflection;
+import org.codehaus.jremoting.client.factories.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.ByteStreamEncoding;
+import org.codehaus.jremoting.client.transports.XStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
@@ -36,24 +38,23 @@ import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
  *
  * @author Paul Hammant
  */
-public class ByteStreamTestCase extends AbstractHelloTestCase {
+public class XStreamAndReflectionsStubsTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
 
         // server side setup.
-        server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 10333);
+        server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 10333, new org.codehaus.jremoting.server.transports.XStreamEncoding());
         testServer = new TestInterfaceImpl();
         PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), "localhost", 10333));
+        serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new XStreamEncoding(), "localhost", 10333), new ThreadLocalContextFactory(), new StubsViaReflection(TestInterface.class, TestInterface2.class));
         testClient = (TestInterface) serviceResolver.lookupService(TestInterface.class, "Hello");
 
     }
-
 
     public void testAdditionalFacadeFunctionality() throws Exception {
         super.testAdditionalFacadeFunctionality();    //To change body of overridden methods use File | Settings | File Templates.

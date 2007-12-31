@@ -62,7 +62,7 @@ public class RmiTestCase extends MockObjectTestCase {
 
         // Client side setup
         ServiceResolver af = new JRemotingServiceResolver(new RmiTransport(new ConsoleClientMonitor(), "127.0.0.1", 10003));
-        testClient = (TestInterface) af.lookupService("Hello");
+        testClient = (TestInterface) af.lookupService(TestInterface.class, "Hello");
 
 
     }

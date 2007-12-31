@@ -21,6 +21,9 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.util.StubHelper;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Class StubsOnClient
  *
@@ -35,9 +38,24 @@ public class StubsOnClient implements StubClassLoader {
         this.stubsClasLoader = stubsClasLoader;
     }
 
-    public Class getStubClass(String publishedServiceName, String objectName, Transport transport) throws ConnectionException, ClassNotFoundException {
-        String stubClassName = StubHelper.formatStubClassName(publishedServiceName, objectName);
-        return stubsClasLoader.loadClass(stubClassName);
+    public Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, org.codehaus.jremoting.client.StubHelper stubHelper) throws ConnectionException {
+        
+        try {
+            String stubClassName = StubHelper.formatStubClassName(publishedServiceName, objectName);
+            Class stubClass = stubsClasLoader.loadClass(stubClassName);
+            Constructor[] constructors = stubClass.getConstructors();
+            return constructors[0].newInstance(stubHelper);
+        } catch (InvocationTargetException ite) {
+            throw new ConnectionException("Generated class not instantiated : " + ite.getTargetException().getMessage());
+        } catch (ClassNotFoundException cnfe) {
+            throw new ConnectionException("Generated class not found during lookup : " + cnfe.getMessage());
+        } catch (InstantiationException ie) {
+            throw new ConnectionException("Generated class not instantiable during lookup : " + ie.getMessage());
+        } catch (IllegalAccessException iae) {
+            throw new ConnectionException("Illegal access to generated class during lookup : " + iae.getMessage());
+        }
+
+
     }
 
 }

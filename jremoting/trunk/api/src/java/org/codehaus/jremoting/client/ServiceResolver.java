@@ -38,23 +38,23 @@ public interface ServiceResolver {
      * RemoteInterface remoteInterface = lookupService.lookup("Published-Name-Of-The-Remote-Server");
      * </code>
      *
-     * @param publishedServiceName
-     * @return proxy to the Remote service.
+     * @param facadeClass
+     *@param publishedServiceName @return proxy to the Remote service.
      * @throws org.codehaus.jremoting.ConnectionException
      */
-    Object lookupService(String publishedServiceName) throws ConnectionException;
+    Object lookupService(Class facadeClass, String publishedServiceName) throws ConnectionException;
 
     /**
      * Lookup a name by which the remote service is
      * published by the server within the context of
      * the Authentication credentials supplied.
      *
-     * @param publishedServiceName
-     * @param authentication
-     * @return
+     * @param facadeClass
+     *@param publishedServiceName
+     * @param authentication @return
      * @throws ConnectionException
      */
-    Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException;
+    Object lookupService(Class facadeClass, String publishedServiceName, Authentication authentication) throws ConnectionException;
 
     String[] listServices();
 

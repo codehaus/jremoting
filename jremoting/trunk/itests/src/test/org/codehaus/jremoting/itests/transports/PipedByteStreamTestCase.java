@@ -63,7 +63,7 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
         // Client side setup
         serviceResolver = new JRemotingServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.transports.ByteStreamEncoding(), in, out));
-        testClient = (TestInterface) serviceResolver.lookupService("Hello");
+        testClient = (TestInterface) serviceResolver.lookupService(TestInterface.class, "Hello");
 
     }
 

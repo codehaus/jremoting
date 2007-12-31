@@ -40,16 +40,12 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         // Client side setup
         serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.transports.XStreamEncoding(), "localhost", 10099));
-        testClient = (TestInterface) serviceResolver.lookupService("Hello");
+        testClient = (TestInterface) serviceResolver.lookupService(TestInterface.class, "Hello");
 
     }
 
-    public void testHelloCall() throws Exception {
-        super.testHelloCall();    
-    }
-
-    public void testHello4Call() throws Exception {
-        super.testHello4Call();    //To change body of overridden methods use File | Settings | File Templates.
+    public void testBasicAdditionalFacade() throws Exception {
+        super.testBasicAdditionalFacade();   
     }
 
     protected void tearDown() throws Exception {

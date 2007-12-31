@@ -62,6 +62,11 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
         return this.services.containsKey(service);
     }
 
+    public Class getFacadeClass(String service) {
+        return this.services.get(service).getFacadeClass();
+    }
+
+
     /**
      * Get an iterator of published objects
      *

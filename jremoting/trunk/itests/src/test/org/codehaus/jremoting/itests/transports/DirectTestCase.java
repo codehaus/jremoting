@@ -51,7 +51,7 @@ public class DirectTestCase extends AbstractHelloTestCase {
         mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
         serviceResolver = new JRemotingServiceResolver(
                 new DirectUnMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(), server), new NullContextFactory());
-        testClient = (TestInterface) serviceResolver.lookupService("Hello");
+        testClient = (TestInterface) serviceResolver.lookupService(TestInterface.class, "Hello");
 
     }
 

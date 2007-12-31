@@ -17,16 +17,16 @@
  */
 package org.codehaus.jremoting.client.factories;
 
-import org.codehaus.jremoting.client.Proxy;
+import org.codehaus.jremoting.client.Stub;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.StubHelper;
 
 /**
- * Implementation of Proxy(client stub) for dynamic invocation.
+ * Implementation of Stub(client stub) for dynamic invocation.
  *
  * @author <a href="mailto:vinayc@apache.org">Vinay Chandran</a>
  */
-public class DynamicStub implements Proxy {
+public class DynamicStub implements Stub {
     //-------Variables-----------//
     /**
      * Name of the published obj for which this is a stub
@@ -37,7 +37,7 @@ public class DynamicStub implements Proxy {
      */
     private String objectName;
     /**
-     * Proxy Helper
+     * Stub Helper
      */
     private StubHelper stubHelper;
 
@@ -47,10 +47,10 @@ public class DynamicStub implements Proxy {
         this.stubHelper = stubHelper;
     }
 
-    //------Proxy override---------------------//
+    //------Stub override---------------------//
 
     /**
-     * @see org.codehaus.jremoting.client.Proxy#jRemotingGetReferenceID(Object)
+     * @see org.codehaus.jremoting.client.Stub#jRemotingGetReferenceID(Object)
      */
 
     public Long jRemotingGetReferenceID(Object factoryThatIsAsking) {

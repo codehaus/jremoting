@@ -20,7 +20,7 @@ package org.codehaus.jremoting.itests.transports;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
 
 /**
- * Test Non Proxy for comparison sake
+ * Test Non Stub for comparison sake
  *
  * @author Paul Hammant
  */

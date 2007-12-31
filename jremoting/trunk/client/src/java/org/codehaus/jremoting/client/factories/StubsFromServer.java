@@ -29,6 +29,8 @@ import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.util.StubHelper;
 
 import java.util.HashMap;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Class StubsFromServer
@@ -40,7 +42,7 @@ public class StubsFromServer implements StubClassLoader {
 
     private final HashMap publishedServiceClassLoaders = new HashMap();
 
-    public Class getStubClass(String publishedServiceName, String objectName, Transport transport) throws ConnectionException, ClassNotFoundException {
+    public Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, org.codehaus.jremoting.client.StubHelper stubHelper) throws ConnectionException {
 
         TransportedStubClassLoader tcl = null;
         String stubClassName = StubHelper.formatStubClassName(publishedServiceName, objectName);
@@ -76,7 +78,20 @@ public class StubsFromServer implements StubClassLoader {
             publishedServiceClassLoaders.put(stubClassName, tcl);
         }
 
-        return tcl.loadClass(stubClassName);
+        try {
+            Class stubClass = tcl.loadClass(stubClassName);
+            Constructor[] constructors = stubClass.getConstructors();
+            return constructors[0].newInstance(stubHelper);
+        } catch (InvocationTargetException ite) {
+            throw new ConnectionException("Generated class not instantiated : " + ite.getTargetException().getMessage());
+        } catch (ClassNotFoundException cnfe) {
+            throw new ConnectionException("Generated class not found during lookup : " + cnfe.getMessage());            
+        } catch (InstantiationException ie) {
+            throw new ConnectionException("Generated class not instantiable during lookup : " + ie.getMessage());
+        } catch (IllegalAccessException iae) {
+            throw new ConnectionException("Illegal access to generated class during lookup : " + iae.getMessage());
+        }
+
     }
 
 

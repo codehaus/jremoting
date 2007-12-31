@@ -42,8 +42,7 @@ import org.codehaus.jremoting.server.PublicationDescriptionItem;
  * @requiresDependencyResolution test
  */
 public class StubGeneratorMojo
-        extends AbstractMojo
-{
+        extends AbstractMojo {
 
     private static final String COMMA = ",";
 
@@ -60,6 +59,7 @@ public class StubGeneratorMojo
 
     /**
      * The name of the service used to generate stub class names
+     *
      * @parameter
      * @required
      */
@@ -67,6 +67,7 @@ public class StubGeneratorMojo
 
     /**
      * The principal facade that is being published
+     *
      * @parameter
      * @required
      */
@@ -74,6 +75,7 @@ public class StubGeneratorMojo
 
     /**
      * The directory to put generated classes into
+     *
      * @parameter
      * @required
      */
@@ -81,15 +83,15 @@ public class StubGeneratorMojo
 
     /**
      * Additional Facades. When encounted in an object tree, they are passed by ref not value to the client
+     *
      * @parameter
      */
     protected String additionalFacades;
 
 
     public void execute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        getLog().debug( "Generating JRemoting Stubs.");
+            throws MojoExecutionException, MojoFailureException {
+        getLog().debug("Generating JRemoting Stubs.");
 
 
         if (genName == null) {
@@ -110,10 +112,10 @@ public class StubGeneratorMojo
         StubGenerator stubGenerator;
 
         try {
-            stubGenerator = (StubGenerator)Class.forName(generatorClass).newInstance();
+            stubGenerator = (StubGenerator) Class.forName(generatorClass).newInstance();
         } catch (Exception e) {
             throw new MojoExecutionException(
-                    "Failed to create StubGenerator "+generatorClass, e);
+                    "Failed to create StubGenerator " + generatorClass, e);
         }
 
         try {
@@ -167,7 +169,7 @@ public class StubGeneratorMojo
     }
 
     private String[] fromCSV(String csv) {
-        if ( csv == null ) {
+        if (csv == null) {
             return new String[0];
         }
         return csv.split(COMMA);
@@ -175,10 +177,10 @@ public class StubGeneratorMojo
 
     private String toCSV(List classpathElements) {
         StringBuffer sb = new StringBuffer();
-        for (Iterator i = classpathElements.iterator(); i.hasNext(); ){
-            String path = (String)i.next();
+        for (Iterator i = classpathElements.iterator(); i.hasNext();) {
+            String path = (String) i.next();
             sb.append(path);
-            if ( i.hasNext() ){
+            if (i.hasNext()) {
                 sb.append(COMMA);
             }
         }

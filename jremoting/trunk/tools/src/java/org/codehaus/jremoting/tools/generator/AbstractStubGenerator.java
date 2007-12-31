@@ -25,7 +25,7 @@ import java.io.File;
 
 
 /**
- * Abstract parent for Proxy Generators
+ * Abstract parent for Stub Generators
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $*
@@ -87,7 +87,6 @@ public abstract class AbstractStubGenerator implements StubGenerator {
     public PublicationDescriptionItem[] getPrimaryFacades() {
         return primaryFacades;
     }
-
 
 
     /**
