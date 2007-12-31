@@ -51,7 +51,7 @@ public class StubsFromServer implements StubClassLoader {
         if (publishedServiceClassLoaders.containsKey(stubClassName)) {
             tcl = (TransportedStubClassLoader) publishedServiceClassLoaders.get(stubClassName);
         } else {
-            StubClass cr = null;
+            StubClass stubClass = null;
 
             try {
                 Response ar = transport.invoke(new RetrieveStub(publishedServiceName, objectName), true);
@@ -67,14 +67,14 @@ public class StubsFromServer implements StubClassLoader {
                     }
                 }
 
-                cr = (StubClass) ar;
+                stubClass = (StubClass) ar;
             } catch (NotPublishedException npe) {
                 throw new ConnectionException("Service " + publishedServiceName + " not published on Server");
             }
 
             tcl = new TransportedStubClassLoader(transport.getFacadesClassLoader());
 
-            tcl.add(stubClassName, cr.getStubClassBytes());
+            tcl.add(stubClassName, stubClass.getStubClassBytes());
 
             publishedServiceClassLoaders.put(stubClassName, tcl);
         }
@@ -93,6 +93,17 @@ public class StubsFromServer implements StubClassLoader {
             throw new ConnectionException("Illegal access to generated class during lookup : " + iae.getMessage());
         }
 
+    }
+
+    public final class TransportedStubClassLoader extends ClassLoader {
+
+        public TransportedStubClassLoader(ClassLoader parent) {
+            super(parent);
+        }
+
+        public void add(String className, byte[] stubBytes) {
+            this.defineClass(className, stubBytes, 0, stubBytes.length);
+        }
     }
 
 
