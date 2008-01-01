@@ -183,7 +183,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
         }
 
         Service service = (Service) response;
-        DefaultStubHelper stubHelper = new DefaultStubHelper(stubRegistry, transport, contextFactory, publishedServiceName, "Main", service.getReference(), session, service.getFacadeName(), service.getAdditionalFacadeNames());
+        DefaultStubHelper stubHelper = new DefaultStubHelper(contextFactory, publishedServiceName, "Main", service.getReference(), service.getFacadeName(), service.getAdditionalFacadeNames());
         Object retVal = getInstance(service.getFacadeName(), publishedServiceName, "Main", stubHelper);
 
         stubHelper.registerInstance(retVal);
@@ -234,28 +234,21 @@ public class JRemotingServiceResolver implements ServiceResolver {
 
     public final class DefaultStubHelper implements StubHelper {
 
-        private final transient StubRegistry stubRegistry;
-        private final transient Transport transport;
         private final transient String publishedServiceName;
         private final transient String objectName;
         private final transient Long reference;
-        private final transient long session;
         private final transient String facadeName;
         private final transient String[] additionalFacadeNames;
         private ContextFactory contextFactory;
         private ArrayList<GroupedMethodRequest> queuedAsyncRequests = new ArrayList<GroupedMethodRequest>();
 
-        public DefaultStubHelper(StubRegistry stubRegistry, Transport transport,
-                                 ContextFactory contextFactory, String pubishedServiceName, String objectName,
-                                 Long reference, long session, String facadeName, String[] additionalFacadeNames) {
+        public DefaultStubHelper(ContextFactory contextFactory, String pubishedServiceName, String objectName,
+                                 Long reference, String facadeName, String[] additionalFacadeNames) {
             this.contextFactory = contextFactory;
 
-            this.stubRegistry = stubRegistry;
-            this.transport = transport;
             publishedServiceName = pubishedServiceName;
             this.objectName = objectName;
             this.reference = reference;
-            this.session = session;
             this.facadeName = facadeName;
             this.additionalFacadeNames = additionalFacadeNames;
             if (stubRegistry == null) {
@@ -317,8 +310,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
                     instances[i] = o;
 
                     if (instances[i] == null) {
-                        DefaultStubHelper bo2 = new DefaultStubHelper(stubRegistry, transport,
-                                contextFactory, publishedServiceName, objectNames[i], refs[i], session, "TODO", new String[0]);
+                        DefaultStubHelper bo2 = new DefaultStubHelper(contextFactory, publishedServiceName, objectNames[i], refs[i], "TODO", new String[0]);
                         Object retFacade = null;
 
                         try {
@@ -351,7 +343,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
 
             if (instance == null) {
                 String facadeClassName = mfr.getObjectName().replace('$', '.');
-                DefaultStubHelper stubHelper = new DefaultStubHelper(stubRegistry, transport, contextFactory, publishedServiceName, mfr.getObjectName(), ref, session, facadeClassName, new String[] {"TODO"});
+                DefaultStubHelper stubHelper = new DefaultStubHelper(contextFactory, publishedServiceName, mfr.getObjectName(), ref, facadeClassName, new String[] {"TODO"});
                 Object retFacade = stubRegistry.getInstance(facadeClassName, publishedServiceName, mfr.getObjectName(), stubHelper);
                 stubHelper.registerInstance(retFacade);
                 return retFacade;
@@ -393,7 +385,6 @@ public class JRemotingServiceResolver implements ServiceResolver {
 
                 InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, reference, session);
 
-                //debug(args);
                 setContext(request);
                 Response response = transport.invoke(request, true);
 
@@ -428,8 +419,6 @@ public class JRemotingServiceResolver implements ServiceResolver {
                     GroupedMethodRequest[] rawRequests = new GroupedMethodRequest[queuedAsyncRequests.size()];
                     queuedAsyncRequests.toArray(rawRequests);
                     InvokeAsyncMethod request = new InvokeAsyncMethod(publishedServiceName, objectName, rawRequests, reference, session);
-
-                    //debug(args);
                     setContext(request);
                     Response response = transport.invoke(request, true);
 
