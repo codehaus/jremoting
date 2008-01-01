@@ -183,7 +183,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
         }
 
         Service service = (Service) response;
-        DefaultStubHelper stubHelper = new DefaultStubHelper(contextFactory, publishedServiceName, "Main", service.getReference(), service.getFacadeName(), service.getAdditionalFacadeNames());
+        DefaultStubHelper stubHelper = new DefaultStubHelper(contextFactory, publishedServiceName, "Main", service.getReference(), service);
         Object retVal = getInstance(service.getFacadeName(), publishedServiceName, "Main", stubHelper);
 
         stubHelper.registerInstance(retVal);
@@ -237,20 +237,18 @@ public class JRemotingServiceResolver implements ServiceResolver {
         private final transient String publishedServiceName;
         private final transient String objectName;
         private final transient Long reference;
-        private final transient String facadeName;
-        private final transient String[] additionalFacadeNames;
+        private final Service service;
         private ContextFactory contextFactory;
         private ArrayList<GroupedMethodRequest> queuedAsyncRequests = new ArrayList<GroupedMethodRequest>();
 
         public DefaultStubHelper(ContextFactory contextFactory, String pubishedServiceName, String objectName,
-                                 Long reference, String facadeName, String[] additionalFacadeNames) {
+                                 Long reference, Service service) {
             this.contextFactory = contextFactory;
 
             publishedServiceName = pubishedServiceName;
             this.objectName = objectName;
             this.reference = reference;
-            this.facadeName = facadeName;
-            this.additionalFacadeNames = additionalFacadeNames;
+            this.service = service;
             if (stubRegistry == null) {
                 throw new IllegalArgumentException("stubRegistry cannot be null");
             }
@@ -310,7 +308,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
                     instances[i] = o;
 
                     if (instances[i] == null) {
-                        DefaultStubHelper bo2 = new DefaultStubHelper(contextFactory, publishedServiceName, objectNames[i], refs[i], "TODO", new String[0]);
+                        DefaultStubHelper bo2 = new DefaultStubHelper(contextFactory, publishedServiceName, objectNames[i], refs[i], service);
                         Object retFacade = null;
 
                         try {
@@ -343,7 +341,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
 
             if (instance == null) {
                 String facadeClassName = mfr.getObjectName().replace('$', '.');
-                DefaultStubHelper stubHelper = new DefaultStubHelper(contextFactory, publishedServiceName, mfr.getObjectName(), ref, facadeClassName, new String[] {"TODO"});
+                DefaultStubHelper stubHelper = new DefaultStubHelper(contextFactory, publishedServiceName, mfr.getObjectName(), ref, service);
                 Object retFacade = stubRegistry.getInstance(facadeClassName, publishedServiceName, mfr.getObjectName(), stubHelper);
                 stubHelper.registerInstance(retFacade);
                 return retFacade;
@@ -519,8 +517,12 @@ public class JRemotingServiceResolver implements ServiceResolver {
         }
 
         public boolean isFacadeInterface(Class clazz) {
-            for (int i = 0; i < additionalFacadeNames.length; i++) {
-                if (clazz.getName().equals(additionalFacadeNames[i])) {
+            if (clazz.getName().equals(service.getFacadeName())) {
+                return true;
+            }
+            String[] facadeNames = service.getAdditionalFacadeNames();
+            for (int i = 0; i < facadeNames.length; i++) {
+                if (clazz.getName().equals(facadeNames[i])) {
                     return true;
                 }
             }
