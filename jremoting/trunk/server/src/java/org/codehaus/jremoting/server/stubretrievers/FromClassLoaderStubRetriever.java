@@ -19,7 +19,7 @@ package org.codehaus.jremoting.server.stubretrievers;
 
 import org.codehaus.jremoting.server.StubRetrievalException;
 import org.codehaus.jremoting.server.StubRetriever;
-import org.codehaus.jremoting.util.StubHelper;
+import org.codehaus.jremoting.util.StaticStubHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -45,7 +45,7 @@ public class FromClassLoaderStubRetriever implements StubRetriever {
     }
 
     public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
-        String thingName = StubHelper.formatStubClassName(publishedName);
+        String thingName = StaticStubHelper.formatStubClassName(publishedName);
 
         InputStream is = null;
 

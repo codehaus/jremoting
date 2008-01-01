@@ -56,7 +56,7 @@ import org.codehaus.jremoting.server.context.ServerContextFactory;
 import org.codehaus.jremoting.server.context.ServerSideContext;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.util.StubHelper;
+import org.codehaus.jremoting.util.StaticStubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
 /**
@@ -222,11 +222,11 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
 
         for (int i = 0; i < instances.length; i++) {
             Object impl = instances[i];
-            ServiceHandler mainServiceHandler = getServiceHandler(StubHelper.formatServiceName(invokeFacadeMethod.getService()));
+            ServiceHandler mainServiceHandler = getServiceHandler(StaticStubHelper.formatServiceName(invokeFacadeMethod.getService()));
 
             objectNames[i] = MethodNameHelper.encodeClassName(mainServiceHandler.getMostDerivedType(instances[i]).getName());
 
-            ServiceHandler serviceHandler2 = getServiceHandler(StubHelper.formatServiceName(invokeFacadeMethod.getService(), objectNames[i]));
+            ServiceHandler serviceHandler2 = getServiceHandler(StaticStubHelper.formatServiceName(invokeFacadeMethod.getService(), objectNames[i]));
 
             if (serviceHandler2 == null) {
                 return new NotPublished();
@@ -261,7 +261,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             return new NoSuchSession(invokeFacadeMethod.getSessionID());
         }
 
-        ServiceHandler mainServiceHandler = getServiceHandler(StubHelper.formatServiceName(invokeFacadeMethod.getService()));
+        ServiceHandler mainServiceHandler = getServiceHandler(StaticStubHelper.formatServiceName(invokeFacadeMethod.getService()));
 
         String objectName = MethodNameHelper.encodeClassName(mainServiceHandler.getMostDerivedType(instance).getName());
 
@@ -342,7 +342,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             return new AuthenticationFailed();
         }
 
-        String service = StubHelper.formatServiceName(publishedServiceName);
+        String service = StaticStubHelper.formatServiceName(publishedServiceName);
         if (!isPublished(service)) {
             return new NotPublished();
         }
@@ -443,7 +443,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
      */
     private Response doListMethodsRequest(Request request) {
         ListInvokableMethods lReq = (ListInvokableMethods) request;
-        String publishedThing = StubHelper.formatServiceName(lReq.getService());
+        String publishedThing = StaticStubHelper.formatServiceName(lReq.getService());
 
         if (!isPublished(publishedThing)) {
             //Should it throw an exception back?

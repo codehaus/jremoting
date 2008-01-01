@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.*;
 
 import org.codehaus.jremoting.server.*;
-import org.codehaus.jremoting.util.StubHelper;
+import org.codehaus.jremoting.util.StaticStubHelper;
 
 
 /**
@@ -93,12 +93,12 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
      * @throws StubRetrievalException if the class cannot be retrieved.
      */
     public final byte[] getStubClassBytes(String publishedName) throws StubRetrievalException {
-        String stubClassName = StubHelper.formatStubClassName(publishedName);
+        String stubClassName = StaticStubHelper.formatStubClassName(publishedName);
 
         try {
             return getBytes(stubClassName);
         } catch (StubRetrievalException e) {
-            String serviceName = StubHelper.getServiceName(publishedName);
+            String serviceName = StaticStubHelper.getServiceName(publishedName);
             Class facadeClass = (Class) facadeClasses.get(serviceName);
             if (facadeClass == null) {
                 throw new StubRetrievalException("unable to find facade class for service: "+ facadeClass);

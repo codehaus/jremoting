@@ -26,7 +26,7 @@ import org.codehaus.jremoting.responses.RequestFailed;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.StubClass;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
-import org.codehaus.jremoting.util.StubHelper;
+import org.codehaus.jremoting.util.StaticStubHelper;
 
 import java.util.HashMap;
 import java.lang.reflect.Constructor;
@@ -45,7 +45,7 @@ public class StubsFromServer implements StubClassLoader {
     public Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, org.codehaus.jremoting.client.StubHelper stubHelper) throws ConnectionException {
 
         TransportedStubClassLoader tcl = null;
-        String stubClassName = StubHelper.formatStubClassName(publishedServiceName, objectName);
+        String stubClassName = StaticStubHelper.formatStubClassName(publishedServiceName, objectName);
 
         if (publishedServiceClassLoaders.containsKey(stubClassName)) {
             tcl = (TransportedStubClassLoader) publishedServiceClassLoaders.get(stubClassName);

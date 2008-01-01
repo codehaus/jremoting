@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.stubs;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.Transport;
-import org.codehaus.jremoting.util.StubHelper;
+import org.codehaus.jremoting.util.StaticStubHelper;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -41,7 +41,7 @@ public class StubsOnClient implements StubClassLoader {
     public Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, org.codehaus.jremoting.client.StubHelper stubHelper) throws ConnectionException {
         
         try {
-            String stubClassName = StubHelper.formatStubClassName(publishedServiceName, objectName);
+            String stubClassName = StaticStubHelper.formatStubClassName(publishedServiceName, objectName);
             Class stubClass = stubsClasLoader.loadClass(stubClassName);
             Constructor[] constructors = stubClass.getConstructors();
             return constructors[0].newInstance(stubHelper);

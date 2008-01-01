@@ -21,7 +21,7 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.Stub;
 import org.codehaus.jremoting.util.MethodNameHelper;
-import org.codehaus.jremoting.util.StubHelper;
+import org.codehaus.jremoting.util.StaticStubHelper;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -72,7 +72,7 @@ public class StubsViaReflection implements StubClassLoader {
             if (method.getName().equals("jRemotingGetReferenceID")) {
                 return stubHelper.getReference(args[0]);
             } else if (method.getName().equals("jRemotingGetObjectName")) {
-                return StubHelper.formatServiceName(publishedServiceName, objectName);
+                return StaticStubHelper.formatServiceName(publishedServiceName, objectName);
             }
 
             String signature = MethodNameHelper.getMethodSignature(method);

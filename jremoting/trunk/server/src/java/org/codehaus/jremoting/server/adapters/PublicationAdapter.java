@@ -30,7 +30,7 @@ import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Publisher;
 import org.codehaus.jremoting.server.transports.DefaultServiceHandler;
-import org.codehaus.jremoting.util.StubHelper;
+import org.codehaus.jremoting.util.StaticStubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
 /**
@@ -82,8 +82,8 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
         while (iterator.hasNext()) {
             final String item = (String) iterator.next();
 
-            if (StubHelper.isService(item)) {
-                vecOfServices.add(StubHelper.getServiceName(item));
+            if (StaticStubHelper.isService(item)) {
+                vecOfServices.add(StaticStubHelper.getServiceName(item));
             }
         }
 
@@ -123,7 +123,7 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
         PublicationDescriptionItem[] primaryFacades = publicationDescription.getPrimaryFacades();
         PublicationDescriptionItem[] additionalFacades = publicationDescription.getAdditionalFacades();
 
-        if (services.containsKey(StubHelper.formatServiceName(service))) {
+        if (services.containsKey(StaticStubHelper.formatServiceName(service))) {
             throw new PublicationException("Service '" + service + "' already published");
         }
 
@@ -167,7 +167,7 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
         }
 
         // as the main service is lookup-able, it has a prexisting impl.
-        services.put(StubHelper.formatServiceName(service), mainServiceHandler);
+        services.put(StaticStubHelper.formatServiceName(service), mainServiceHandler);
 
         // add method maps for all the additional facades.
         for (PublicationDescriptionItem additionalFacade : additionalFacades) {
@@ -219,7 +219,7 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
      */
     public void unPublish(Object impl, String service) throws PublicationException {
 
-        String serviceName = StubHelper.formatServiceName(service);
+        String serviceName = StaticStubHelper.formatServiceName(service);
         if (!services.containsKey(serviceName)) {
             throw new PublicationException("Service '" + service + "' not published");
         }
@@ -239,7 +239,7 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
      */
     public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
 
-        String serviceName = StubHelper.formatServiceName(service);
+        String serviceName = StaticStubHelper.formatServiceName(service);
         if (!services.containsKey(serviceName)) {
             throw new PublicationException("Service '" + service + "' not published");
         }

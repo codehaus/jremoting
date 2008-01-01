@@ -55,6 +55,7 @@ import org.codehaus.jremoting.responses.BadServerSideEvent;
 import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.GarbageCollected;
 import org.codehaus.jremoting.util.FacadeRefHolder;
+import org.codehaus.jremoting.util.StaticStubHelper;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Array;
@@ -71,7 +72,7 @@ import java.util.ArrayList;
  */
 public class JRemotingServiceResolver implements ServiceResolver {
 
-    private static final int STUB_PREFIX_LENGTH = org.codehaus.jremoting.util.StubHelper.getStubPrefixLength();
+    private static final int STUB_PREFIX_LENGTH = StaticStubHelper.getStubPrefixLength();
     protected final Transport transport;
     private final ContextFactory contextFactory;
     private final StubClassLoader stubClassLoader;

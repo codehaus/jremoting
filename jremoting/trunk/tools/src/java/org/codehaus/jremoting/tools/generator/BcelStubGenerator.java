@@ -34,7 +34,7 @@ import org.apache.bcel.generic.PUSH;
 import org.apache.bcel.generic.Type;
 import org.codehaus.jremoting.server.PublicationDescriptionItem;
 import org.codehaus.jremoting.util.MethodNameHelper;
-import org.codehaus.jremoting.util.StubHelper;
+import org.codehaus.jremoting.util.StaticStubHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -72,13 +72,13 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     public void generateClass(ClassLoader classLoader) {
 
         //create the Main Stubs:
-        generateStubClass(StubHelper.formatProxyClassName(getGenName()), getPrimaryFacades());
+        generateStubClass(StaticStubHelper.formatProxyClassName(getGenName()), getPrimaryFacades());
 
         //Create the Additional Facades
         if (getAdditionalFacades() != null) {
             for (int i = 0; i < getAdditionalFacades().length; i++) {
                 String encodedClassName = MethodNameHelper.encodeClassName(getAdditionalFacades()[i].getFacadeClass());
-                generateStubClass(StubHelper.formatProxyClassName(getGenName(), encodedClassName), new PublicationDescriptionItem[]{getAdditionalFacades()[i]});
+                generateStubClass(StaticStubHelper.formatProxyClassName(getGenName(), encodedClassName), new PublicationDescriptionItem[]{getAdditionalFacades()[i]});
 
             }
         }

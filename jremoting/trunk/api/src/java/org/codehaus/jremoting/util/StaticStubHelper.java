@@ -22,7 +22,7 @@ package org.codehaus.jremoting.util;
  * 
  * @author Mauro Talevi
  */
-public class StubHelper {
+public class StaticStubHelper {
 
     private static final String STUB_PREFIX = "JRemotingGenerated";
     private static final String STUB_POSTFIX = "Main";
