@@ -238,13 +238,11 @@ public class JRemotingServiceResolver implements ServiceResolver {
         private final transient String objectName;
         private final transient Long reference;
         private final Service service;
-        private ContextFactory contextFactory;
+        //private ContextFactory contextFactory;
         private ArrayList<GroupedMethodRequest> queuedAsyncRequests = new ArrayList<GroupedMethodRequest>();
 
-        public DefaultStubHelper(ContextFactory contextFactory, String pubishedServiceName, String objectName,
-                                 Long reference, Service service) {
-            this.contextFactory = contextFactory;
-
+        public DefaultStubHelper(ContextFactory contextFactory, String pubishedServiceName, String objectName, Long reference, Service service) {
+            //this.contextFactory = contextFactory;
             publishedServiceName = pubishedServiceName;
             this.objectName = objectName;
             this.reference = reference;
@@ -556,10 +554,6 @@ public class JRemotingServiceResolver implements ServiceResolver {
         }
 
         private synchronized void setContext(Servicable request) {
-
-            if (contextFactory == null) {
-                contextFactory = new ThreadLocalContextFactory();
-            }
             request.setContext(contextFactory.getClientContext());
 
         }
