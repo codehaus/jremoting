@@ -36,7 +36,7 @@ public abstract class AbstractStubGenerator implements StubGenerator {
     private String classGenDir;
     private String genName;
     private String classpath;
-    private PublicationItem[] additionalFacades;
+    private PublicationItem[] secondaryFacades;
     private PublicationItem primaryFacades;
 
     /**
@@ -76,7 +76,7 @@ public abstract class AbstractStubGenerator implements StubGenerator {
      * @return the additional facades
      */
     public PublicationItem[] getAdditionalFacades() {
-        return additionalFacades;
+        return secondaryFacades;
     }
 
     /**
@@ -102,10 +102,10 @@ public abstract class AbstractStubGenerator implements StubGenerator {
     /**
      * Set the additional facades
      *
-     * @param additionalFacades the facades.
+     * @param secondaryFacades the facades.
      */
-    public void setAdditionalFacades(PublicationItem[] additionalFacades) {
-        this.additionalFacades = additionalFacades;
+    public void setAdditionalFacades(PublicationItem[] secondaryFacades) {
+        this.secondaryFacades = secondaryFacades;
     }
 
     /**
@@ -147,14 +147,14 @@ public abstract class AbstractStubGenerator implements StubGenerator {
      */
     protected boolean isAdditionalFacade(Class clazz) {
 
-        if (additionalFacades == null) {
+        if (secondaryFacades == null) {
             return false;
         }
 
-        for (PublicationItem additionalFacade : additionalFacades) {
-            if (clazz.getName().equals(additionalFacade.getFacadeClass().getName())) {
+        for (PublicationItem secondaryFacade : secondaryFacades) {
+            if (clazz.getName().equals(secondaryFacade.getFacadeClass().getName())) {
                 return true;
-            } else if (clazz.getName().equals("[L" + additionalFacade.getFacadeClass().getName() + ";")) {
+            } else if (clazz.getName().equals("[L" + secondaryFacade.getFacadeClass().getName() + ";")) {
                 return true;
             }
         }

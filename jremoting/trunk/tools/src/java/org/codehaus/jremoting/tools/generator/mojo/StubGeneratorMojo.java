@@ -86,7 +86,7 @@ public class StubGeneratorMojo
      *
      * @parameter
      */
-    protected String additionalFacades;
+    protected String secondaryFacades;
 
 
     public void execute()
@@ -129,8 +129,8 @@ public class StubGeneratorMojo
 
             stubGenerator.setPrimaryFacade(createPublicationDescriptionItem(facade, classLoader));
 
-            if (additionalFacades != null) {
-                stubGenerator.setAdditionalFacades(createPublicationDescriptionItems(fromCSV(additionalFacades), classLoader));
+            if (secondaryFacades != null) {
+                stubGenerator.setAdditionalFacades(createPublicationDescriptionItems(fromCSV(secondaryFacades), classLoader));
             }
 
             stubGenerator.generateClass(classLoader);

@@ -36,9 +36,9 @@ public interface StubGenerator {
     /**
      * Set the additional facades
      *
-     * @param additionalFacades additional facades to expose
+     * @param secondaryFacades additional facades to expose
      */
-    void setAdditionalFacades(PublicationItem[] additionalFacades);
+    void setAdditionalFacades(PublicationItem[] secondaryFacades);
 
     /**
      * Set the classpath

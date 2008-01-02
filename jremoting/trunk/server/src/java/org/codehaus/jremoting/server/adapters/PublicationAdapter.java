@@ -121,7 +121,7 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
     public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
 
         PublicationItem primaryFacade = publicationDescription.getPrimaryFacade();
-        PublicationItem[] additionalFacades = publicationDescription.getAdditionalFacades();
+        PublicationItem[] secondaryFacades = publicationDescription.getAdditionalFacades();
 
         if (services.containsKey(StaticStubHelper.formatServiceName(service))) {
             throw new PublicationException("Service '" + service + "' already published");
@@ -164,9 +164,9 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
         services.put(StaticStubHelper.formatServiceName(service), mainServiceHandler);
 
         // add method maps for all the additional facades.
-        for (PublicationItem additionalFacade : additionalFacades) {
-            Class facadeClass = additionalFacade.getFacadeClass();
-            String encodedClassName = MethodNameHelper.encodeClassName(additionalFacade.getFacadeClass().getName());
+        for (PublicationItem secondaryFacade : secondaryFacades) {
+            Class facadeClass = secondaryFacade.getFacadeClass();
+            String encodedClassName = MethodNameHelper.encodeClassName(secondaryFacade.getFacadeClass().getName());
             HashMap<String, Method> methodMap = new HashMap<String, Method>();
             ServiceHandler serviceHandler = new DefaultServiceHandler(this, service + "_" + encodedClassName,
                     methodMap, publicationDescription, facadeClass);

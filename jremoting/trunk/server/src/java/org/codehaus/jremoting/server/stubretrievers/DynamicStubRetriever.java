@@ -162,10 +162,10 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         }
 
         PublicationItem primaryFacade;
-        PublicationItem[] additionalFacades;
+        PublicationItem[] secondaryFacades;
 
         primaryFacade = publicationDescription.getPrimaryFacade();
-        additionalFacades = publicationDescription.getAdditionalFacades();
+        secondaryFacades = publicationDescription.getAdditionalFacades();
 
         org.codehaus.jremoting.server.StubGenerator proxyGenerator;
 
@@ -181,7 +181,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         proxyGenerator.setGenName(service);
         proxyGenerator.setClasspath(classpath);
         proxyGenerator.setPrimaryFacade(primaryFacade);
-        proxyGenerator.setAdditionalFacades(additionalFacades);
+        proxyGenerator.setAdditionalFacades(secondaryFacades);
 
         try {
             //proxyGenerator.setClasspath(Request.class.getProtectionDomain().getCodeSource().getLocation().getFile());
@@ -212,10 +212,10 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
 
     public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
         facadeClasses.put(service, publicationDescription.getPrimaryFacade());
-        PublicationItem[] additionalFacades = publicationDescription.getAdditionalFacades();
-        for (int i = 0; i < additionalFacades.length; i++) {
-            PublicationItem additionalFacade = additionalFacades[i];
-            facadeClasses.put(service + "_" + additionalFacade.getFacadeClass().getName(), additionalFacade.getFacadeClass());
+        PublicationItem[] secondaryFacades = publicationDescription.getAdditionalFacades();
+        for (int i = 0; i < secondaryFacades.length; i++) {
+            PublicationItem secondaryFacade = secondaryFacades[i];
+            facadeClasses.put(service + "_" + secondaryFacade.getFacadeClass().getName(), secondaryFacade.getFacadeClass());
         }
     }
 

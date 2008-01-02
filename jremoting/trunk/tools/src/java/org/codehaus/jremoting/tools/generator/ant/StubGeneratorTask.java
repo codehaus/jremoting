@@ -38,7 +38,7 @@ import java.util.Vector;
 public class StubGeneratorTask extends Task {
 
     protected String primaryFacade;
-    protected String[] additionalFacades;
+    protected String[] secondaryFacades;
     protected File classGenDir;
     protected String genName;
     protected Path classpath;
@@ -73,9 +73,9 @@ public class StubGeneratorTask extends Task {
             strings.add(st.nextToken().trim());
         }
 
-        additionalFacades = new String[strings.size()];
+        secondaryFacades = new String[strings.size()];
 
-        strings.copyInto(additionalFacades);
+        strings.copyInto(secondaryFacades);
     }
 
 
@@ -186,16 +186,16 @@ public class StubGeneratorTask extends Task {
 
             stubGenerator.setPrimaryFacade(primaryFacades);
 
-            if (additionalFacades != null) {
-                PublicationItem[] additionalFacades = new PublicationItem[this.additionalFacades.length];
+            if (secondaryFacades != null) {
+                PublicationItem[] secondaryFacades = new PublicationItem[this.secondaryFacades.length];
 
-                for (int i = 0; i < this.additionalFacades.length; i++) {
-                    String cn = this.additionalFacades[i];
+                for (int i = 0; i < this.secondaryFacades.length; i++) {
+                    String cn = this.secondaryFacades[i];
 
-                    additionalFacades[i] = new PublicationItem(classLoader.loadClass(cn));
+                    secondaryFacades[i] = new PublicationItem(classLoader.loadClass(cn));
                 }
 
-                stubGenerator.setAdditionalFacades(additionalFacades);
+                stubGenerator.setAdditionalFacades(secondaryFacades);
             }
 
             ClassLoader classLoader2 = null;

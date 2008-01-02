@@ -32,14 +32,14 @@ import java.io.ObjectOutput;
 public final class Service extends Response {
 
     private Long reference;
-    private String facadeName;
-    private String[] additionalFacadeName;
-    private static final long serialVersionUID = 683682072541640086L;
+    private String primaryFacadeName;
+    private String[] secondaryFacadeNames;
+    private static final long serialVersionUID = -4107445111455689127L;
 
-    public Service(Long reference, String facadeName, String[] additionalFacadeName) {
+    public Service(Long reference, String facadeName, String[] secondaryFacadeNames) {
         this.reference = reference;
-        this.facadeName = facadeName;
-        this.additionalFacadeName = additionalFacadeName;
+        this.primaryFacadeName = facadeName;
+        this.secondaryFacadeNames = secondaryFacadeNames;
     }
 
     /**
@@ -48,12 +48,12 @@ public final class Service extends Response {
     public Service() {
     }
 
-    public String getFacadeName() {
-        return facadeName;
+    public String getPrimaryFacadeName() {
+        return primaryFacadeName;
     }
 
     public String[] getAdditionalFacadeNames() {
-        return additionalFacadeName;
+        return secondaryFacadeNames;
     }
 
     public Long getReference() {

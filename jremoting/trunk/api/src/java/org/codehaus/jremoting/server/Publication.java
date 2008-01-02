@@ -29,7 +29,7 @@ public final class Publication {
 
     private PublicationItem primaryFacade;
 
-    private ArrayList<PublicationItem> additionalFacades = new ArrayList<PublicationItem>();
+    private ArrayList<PublicationItem> secondaryFacades = new ArrayList<PublicationItem>();
 
 
     public Publication(Class facade) {
@@ -59,7 +59,7 @@ public final class Publication {
             if (publicationDescriptionItem.getFacadeClass() == null) {
                 throw new RuntimeException("'Class' cannot be null");
             }
-            additionalFacades.add(publicationDescriptionItem);
+            secondaryFacades.add(publicationDescriptionItem);
         }
         return this;
     }
@@ -69,15 +69,15 @@ public final class Publication {
     }
 
     public PublicationItem[] getAdditionalFacades() {
-        PublicationItem[] items = new PublicationItem[additionalFacades.size()];
-        additionalFacades.toArray(items);
+        PublicationItem[] items = new PublicationItem[secondaryFacades.size()];
+        secondaryFacades.toArray(items);
         return items;
     }
 
     public String[] getAdditionalFacadeNames() {
-        String[] items = new String[additionalFacades.size()];
-        for (int i = 0; i < additionalFacades.size(); i++) {
-            PublicationItem item = additionalFacades.get(i);
+        String[] items = new String[secondaryFacades.size()];
+        for (int i = 0; i < secondaryFacades.size(); i++) {
+            PublicationItem item = secondaryFacades.get(i);
             items[i] = item.getFacadeClass().getName();
         }
         return items;
@@ -96,8 +96,8 @@ public final class Publication {
 
         Class facadeRetVal = null;
 
-        for (PublicationItem additionalFacade : additionalFacades) {
-            Class facadeClass = additionalFacade.getFacadeClass();
+        for (PublicationItem secondaryFacade : secondaryFacades) {
+            Class facadeClass = secondaryFacade.getFacadeClass();
 
             if (facadeClass.isAssignableFrom(instance.getClass())) {
                 if (facadeRetVal == null) {

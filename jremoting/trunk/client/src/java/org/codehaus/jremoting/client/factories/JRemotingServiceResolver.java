@@ -186,7 +186,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
 
         Service service = (Service) response;
         DefaultStubHelper stubHelper = new DefaultStubHelper(contextFactory, publishedServiceName, "Main", service.getReference(), service);
-        Object retVal = getInstance(service.getFacadeName(), publishedServiceName, "Main", stubHelper);
+        Object retVal = getInstance(service.getPrimaryFacadeName(), publishedServiceName, "Main", stubHelper);
 
         stubHelper.registerInstance(retVal);
 
@@ -517,7 +517,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
         }
 
         public boolean isFacadeInterface(Class clazz) {
-            if (clazz.getName().equals(service.getFacadeName())) {
+            if (clazz.getName().equals(service.getPrimaryFacadeName())) {
                 return true;
             }
             String[] facadeNames = service.getAdditionalFacadeNames();
