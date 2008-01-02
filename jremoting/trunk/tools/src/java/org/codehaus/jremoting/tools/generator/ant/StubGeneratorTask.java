@@ -37,7 +37,7 @@ import java.util.Vector;
  */
 public class StubGeneratorTask extends Task {
 
-    protected String[] primaryFacades;
+    protected String primaryFacade;
     protected String[] additionalFacades;
     protected File classGenDir;
     protected String genName;
@@ -51,22 +51,12 @@ public class StubGeneratorTask extends Task {
     }
 
     /**
-     * Method setInterfaces
+     * Method setPrimaryFacade
      *
      * @param primaryFacades
      */
-    public void setInterfaces(String primaryFacades) {
-
-        StringTokenizer st = new StringTokenizer(primaryFacades, ",");
-        Vector strings = new Vector();
-
-        while (st.hasMoreTokens()) {
-            strings.add(st.nextToken().trim());
-        }
-
-        this.primaryFacades = new String[strings.size()];
-
-        strings.copyInto(this.primaryFacades);
+    public void setPrimaryFacade(String primaryFacades) {
+        this.primaryFacade = primaryFacade;
     }
 
     /**
@@ -161,8 +151,8 @@ public class StubGeneratorTask extends Task {
      */
     public void execute() throws BuildException {
 
-        if (primaryFacades == null) {
-            throw new BuildException("Specify at least one interface to expose");
+        if (primaryFacade == null) {
+            throw new BuildException("Specify an facade to expose");
         }
 
         if (classGenDir == null) {
@@ -189,15 +179,12 @@ public class StubGeneratorTask extends Task {
             stubGenerator.setGenName(genName);
             stubGenerator.setClasspath(classpath.concatSystemClasspath("ignore").toString());
 
-            PublicationItem[] primaryFacades = new PublicationItem[this.primaryFacades.length];
+            PublicationItem primaryFacades;
             ClassLoader classLoader = new AntClassLoader(getProject(), classpath);
 
-            for (int i = 0; i < this.primaryFacades.length; i++) {
-                String cn = this.primaryFacades[i];
-                primaryFacades[i] = new PublicationItem(classLoader.loadClass(cn));
-            }
+            primaryFacades = new PublicationItem(classLoader.loadClass(this.primaryFacade));
 
-            stubGenerator.setPrimaryFacades(primaryFacades);
+            stubGenerator.setPrimaryFacade(primaryFacades);
 
             if (additionalFacades != null) {
                 PublicationItem[] additionalFacades = new PublicationItem[this.additionalFacades.length];

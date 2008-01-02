@@ -56,7 +56,7 @@ public class RmiTestCase extends MockObjectTestCase {
         // server side setup.
         server = new RmiServer((ServerMonitor) mockServerMonitor.proxy(), 10003);
         testServer = new TestInterfaceImpl();
-        Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 

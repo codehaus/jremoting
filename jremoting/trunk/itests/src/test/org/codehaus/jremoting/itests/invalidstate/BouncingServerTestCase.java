@@ -44,14 +44,14 @@ import org.jmock.core.Constraint;
  */
 public class BouncingServerTestCase extends MockObjectTestCase {
 
-    Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+    Publication pd = new Publication(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
     private Mock mockServerMonitor;
 
     protected void setUp() throws Exception {
         BcelStubGenerator generator = new BcelStubGenerator();
         String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
         generator.setClassGenDir(testClassesDir);
-        generator.setPrimaryFacades(pd.getPrimaryFacades());
+        generator.setPrimaryFacade(pd.getPrimaryFacade());
         generator.setGenName("Hello55");
         generator.generateClass(this.getClass().getClassLoader());
         mockServerMonitor = mock(ServerMonitor.class);

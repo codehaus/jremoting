@@ -33,7 +33,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
                 new XStreamEncoding(), executorService, new ThreadLocalServerContextFactory(), 10099);
         testServer = new TestInterfaceImpl();
-        Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 

@@ -71,7 +71,7 @@ public class StubGeneratorMojo
      * @parameter
      * @required
      */
-    protected String interfaces;
+    protected String facade;
 
     /**
      * The directory to put generated classes into
@@ -99,7 +99,7 @@ public class StubGeneratorMojo
                     "Specify the name to use for lookup");
         }
 
-        if (interfaces == null) {
+        if (facade == null) {
             throw new MojoExecutionException(
                     "Specify at least one interface to expose");
         }
@@ -127,7 +127,7 @@ public class StubGeneratorMojo
 
             ClassLoader classLoader = createClassLoader(classpathElements);
 
-            stubGenerator.setPrimaryFacades(createPublicationDescriptionItems(fromCSV(interfaces), classLoader));
+            stubGenerator.setPrimaryFacade(createPublicationDescriptionItem(facade, classLoader));
 
             if (additionalFacades != null) {
                 stubGenerator.setAdditionalFacades(createPublicationDescriptionItems(fromCSV(additionalFacades), classLoader));
@@ -142,6 +142,10 @@ public class StubGeneratorMojo
                     + e.getMessage(), e);
         }
     }
+
+    private PublicationItem createPublicationDescriptionItem(String className, ClassLoader classLoader) throws ClassNotFoundException {
+            return new PublicationItem(classLoader.loadClass(className));
+        }
 
     private PublicationItem[] createPublicationDescriptionItems(String[] classNames, ClassLoader classLoader) throws ClassNotFoundException {
         PublicationItem[] items = new PublicationItem[classNames.length];

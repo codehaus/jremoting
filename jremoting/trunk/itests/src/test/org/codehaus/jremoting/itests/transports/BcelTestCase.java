@@ -66,7 +66,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(), new ByteStreamEncoding(), executorService, new ThreadLocalServerContextFactory(), 10201);
 
         testServer = new TestInterfaceImpl();
-        Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
         stubRetriever.generate("Hello223", pd, this.getClass().getClassLoader());
         server.publish(testServer, "Hello223", pd);
         server.start();

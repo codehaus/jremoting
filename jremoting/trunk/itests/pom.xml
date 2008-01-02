@@ -67,7 +67,7 @@
 						</goals>
 						<configuration>
 							<genName>Hello</genName>
-							<interfaces>org.codehaus.jremoting.itests.TestInterface</interfaces>
+							<facade>org.codehaus.jremoting.itests.TestInterface</facade>
 							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
 							<additionalFacades>
                                 org.codehaus.jremoting.itests.TestInterface3,org.codehaus.jremoting.itests.TestInterface2
@@ -83,7 +83,7 @@
 						</goals>
 						<configuration>
 							<genName>OurAccountManager</genName>
-							<interfaces>org.codehaus.jremoting.itests.clientcontext.AccountManager</interfaces>
+							<facade>org.codehaus.jremoting.itests.clientcontext.AccountManager</facade>
 							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
 							<verbose>true</verbose>
 						</configuration>

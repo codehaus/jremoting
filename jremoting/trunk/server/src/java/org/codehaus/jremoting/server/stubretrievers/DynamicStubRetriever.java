@@ -54,7 +54,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     }
 
     public void generate(String service, Class primaryFacade, ClassLoader classLoader) throws PublicationException {
-        generate(service, new Publication().addPrimaryFacade(primaryFacade), classLoader);
+        generate(service, new Publication(primaryFacade), classLoader);
     }
 
 
@@ -161,10 +161,10 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
             classLoader = this.getClass().getClassLoader();
         }
 
-        PublicationItem[] primaryFacades;
+        PublicationItem primaryFacade;
         PublicationItem[] additionalFacades;
 
-        primaryFacades = publicationDescription.getPrimaryFacades();
+        primaryFacade = publicationDescription.getPrimaryFacade();
         additionalFacades = publicationDescription.getAdditionalFacades();
 
         org.codehaus.jremoting.server.StubGenerator proxyGenerator;
@@ -180,7 +180,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         proxyGenerator.setClassGenDir(classGenDir);
         proxyGenerator.setGenName(service);
         proxyGenerator.setClasspath(classpath);
-        proxyGenerator.setPrimaryFacades(primaryFacades);
+        proxyGenerator.setPrimaryFacade(primaryFacade);
         proxyGenerator.setAdditionalFacades(additionalFacades);
 
         try {
@@ -195,13 +195,11 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
             System.err.println("** ClassDir=" + classGenDir);
             System.err.println("** Name=" + service);
             System.err.println("** CLasspath=" + classpath);
-            System.err.println("** Classes/Facades to Expose..");
+            System.err.println("** Classe/Facade to Expose..");
 
-            for (PublicationItem primaryFacade : primaryFacades) {
-                String aString = primaryFacade.getFacadeClass().getName();
+            String aString = primaryFacade.getFacadeClass().getName();
 
-                System.err.println("** .." + aString);
-            }
+            System.err.println("** .." + aString);
 
             System.err.println("******");
             System.err.flush();
@@ -213,7 +211,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     }
 
     public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
-        facadeClasses.put(service, publicationDescription.getPrimaryFacades()[0]);
+        facadeClasses.put(service, publicationDescription.getPrimaryFacade());
         PublicationItem[] additionalFacades = publicationDescription.getAdditionalFacades();
         for (int i = 0; i < additionalFacades.length; i++) {
             PublicationItem additionalFacade = additionalFacades[i];

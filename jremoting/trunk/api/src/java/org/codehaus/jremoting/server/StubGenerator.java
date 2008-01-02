@@ -29,9 +29,9 @@ public interface StubGenerator {
     /**
      * Set the primary facades.
      *
-     * @param primaryFacades the facades to expose
+     * @param primaryFacade
      */
-    void setPrimaryFacades(PublicationItem[] primaryFacades);
+    void setPrimaryFacade(PublicationItem primaryFacade);
 
     /**
      * Set the additional facades

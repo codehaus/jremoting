@@ -46,7 +46,7 @@ public class XStreamAndReflectionsStubsTestCase extends AbstractHelloTestCase {
         // server side setup.
         server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 10333, new org.codehaus.jremoting.server.encoders.XStreamEncoding());
         testServer = new TestInterfaceImpl();
-        Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 

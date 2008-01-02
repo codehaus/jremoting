@@ -37,7 +37,7 @@ public abstract class AbstractStubGenerator implements StubGenerator {
     private String genName;
     private String classpath;
     private PublicationItem[] additionalFacades;
-    private PublicationItem[] primaryFacades;
+    private PublicationItem primaryFacades;
 
     /**
      * Get the directory name of the class generation directory.
@@ -84,7 +84,7 @@ public abstract class AbstractStubGenerator implements StubGenerator {
      *
      * @return the facades
      */
-    public PublicationItem[] getPrimaryFacades() {
+    public PublicationItem getPrimaryFacade() {
         return primaryFacades;
     }
 
@@ -92,10 +92,10 @@ public abstract class AbstractStubGenerator implements StubGenerator {
     /**
      * Set the facades to expose.
      *
-     * @param primaryFacades the facades.
+     * @param primaryFacade
      */
-    public void setPrimaryFacades(PublicationItem[] primaryFacades) {
-        this.primaryFacades = primaryFacades;
+    public void setPrimaryFacade(PublicationItem primaryFacade) {
+        this.primaryFacades = primaryFacade;
     }
 
 

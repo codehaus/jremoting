@@ -104,7 +104,7 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
      *          if a problem during publication.
      */
     public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
-        publish(impl, service, new Publication().addPrimaryFacade(primaryFacade));
+        publish(impl, service, new Publication(primaryFacade));
         if (publicationDelegate != null) {
             publicationDelegate.publish(impl, service, primaryFacade);
         }
@@ -120,49 +120,43 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
      */
     public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
 
-        PublicationItem[] primaryFacades = publicationDescription.getPrimaryFacades();
+        PublicationItem primaryFacade = publicationDescription.getPrimaryFacade();
         PublicationItem[] additionalFacades = publicationDescription.getAdditionalFacades();
 
         if (services.containsKey(StaticStubHelper.formatServiceName(service))) {
             throw new PublicationException("Service '" + service + "' already published");
         }
 
-        String[] interfaceNames = new String[primaryFacades.length];
-
-        for (int i = 0; i < primaryFacades.length; i++) {
-            interfaceNames[i] = primaryFacades[i].getFacadeClass().getName();
-        }
+        String interfaceName = primaryFacade.getFacadeClass().getName();
 
         // add method maps for main lookup-able service.
         Map<String, Method> mainMethodMap = new HashMap<String, Method>();
-        DefaultServiceHandler mainServiceHandler = new DefaultServiceHandler(this, service + "_Main", mainMethodMap, publicationDescription, primaryFacades[0].getFacadeClass());
+        DefaultServiceHandler mainServiceHandler = new DefaultServiceHandler(this, service + "_Main", mainMethodMap, publicationDescription, primaryFacade.getFacadeClass());
 
         mainServiceHandler.addInstance(new Long(0), impl);
 
-        for (PublicationItem primaryFacade : primaryFacades) {
-            Class clazz = primaryFacade.getFacadeClass();
+        Class clazz = primaryFacade.getFacadeClass();
 
-            Method methods[] = null;
-            try {
-                Method ts = Object.class.getMethod("toString", new Class[0]);
-                Method hc = Object.class.getMethod("hashCode", new Class[0]);
-                Method eq = Object.class.getMethod("equals", Object.class);
-                Method[] interfaceMethods = clazz.getMethods();
-                methods = new Method[interfaceMethods.length + 3];
-                System.arraycopy(interfaceMethods, 0, methods, 0, interfaceMethods.length);
-                methods[interfaceMethods.length] = ts;
-                methods[interfaceMethods.length + 1] = hc;
-                methods[interfaceMethods.length + 2] = eq;
-            } catch (NoSuchMethodException e) {
-                // never!
-            }
+        Method methods[] = null;
+        try {
+            Method ts = Object.class.getMethod("toString", new Class[0]);
+            Method hc = Object.class.getMethod("hashCode", new Class[0]);
+            Method eq = Object.class.getMethod("equals", Object.class);
+            Method[] interfaceMethods = clazz.getMethods();
+            methods = new Method[interfaceMethods.length + 3];
+            System.arraycopy(interfaceMethods, 0, methods, 0, interfaceMethods.length);
+            methods[interfaceMethods.length] = ts;
+            methods[interfaceMethods.length + 1] = hc;
+            methods[interfaceMethods.length + 2] = eq;
+        } catch (NoSuchMethodException e) {
+            // never!
+        }
 
-            for (Method method : methods) {
-                String methodSignature = MethodNameHelper.getMethodSignature(method);
+        for (Method method : methods) {
+            String methodSignature = MethodNameHelper.getMethodSignature(method);
 
-                if (!mainMethodMap.containsKey(methodSignature)) {
-                    mainMethodMap.put(methodSignature, method);
-                }
+            if (!mainMethodMap.containsKey(methodSignature)) {
+                mainMethodMap.put(methodSignature, method);
             }
         }
 
@@ -177,7 +171,7 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
             ServiceHandler serviceHandler = new DefaultServiceHandler(this, service + "_" + encodedClassName,
                     methodMap, publicationDescription, facadeClass);
 
-            Method methods[] = null;
+            methods = null;
             try {
                 Method ts = Object.class.getMethod("toString", new Class[0]);
                 Method hc = Object.class.getMethod("hashCode", new Class[0]);

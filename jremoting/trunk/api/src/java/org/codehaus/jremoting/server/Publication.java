@@ -27,46 +27,17 @@ import java.util.ArrayList;
  */
 public final class Publication {
 
-    /**
-     * An array of facades to expose.
-     */
-    private ArrayList<PublicationItem> primaryFacades = new ArrayList<PublicationItem>();
-    /**
-     * An array of additional facades.
-     */
+    private PublicationItem primaryFacade;
+
     private ArrayList<PublicationItem> additionalFacades = new ArrayList<PublicationItem>();
 
 
-    public Publication() {
+    public Publication(Class facade) {
+        primaryFacade = new PublicationItem(facade);
     }
 
-    public Publication addPrimaryFacade(Class facade) {
-        primaryFacades.add(new PublicationItem(facade));
-        return this;
-    }
-
-    public Publication addPrimaryFacades(Class... facades) {
-        for (Class facade : facades) {
-            addPrimaryFacade(new PublicationItem(facade));
-        }
-        return this;
-    }
-
-    public Publication addPrimaryFacade(PublicationItem publicationDescriptionItem) {
-        return addPrimaryFacades(new PublicationItem[]{publicationDescriptionItem});
-    }
-
-    public Publication addPrimaryFacades(PublicationItem... publicationDescriptionItems) {
-        for (PublicationItem publicationDescriptionItem : publicationDescriptionItems) {
-            if (publicationDescriptionItem == null) {
-                throw new RuntimeException("'PubDescItem' cannot be null");
-            }
-            if (publicationDescriptionItem.getFacadeClass() == null) {
-                throw new RuntimeException("'Class' cannot be null");
-            }
-            primaryFacades.add(publicationDescriptionItem);
-        }
-        return this;
+    public Publication(PublicationItem publicationItem) {
+        primaryFacade = publicationItem;
     }
 
     public Publication addAdditionalFacades(Class... facades) {
@@ -93,22 +64,10 @@ public final class Publication {
         return this;
     }
 
-    /**
-     * Get the principal facades to expose.
-     *
-     * @return an array of those interfaces.
-     */
-    public PublicationItem[] getPrimaryFacades() {
-        PublicationItem[] items = new PublicationItem[primaryFacades.size()];
-        primaryFacades.toArray(items);
-        return items;
+    public PublicationItem getPrimaryFacade() {
+        return primaryFacade;
     }
 
-    /**
-     * Get the additional facades.
-     *
-     * @return an array of those facades.
-     */
     public PublicationItem[] getAdditionalFacades() {
         PublicationItem[] items = new PublicationItem[additionalFacades.size()];
         additionalFacades.toArray(items);

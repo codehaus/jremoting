@@ -72,7 +72,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
     public void generateClass(ClassLoader classLoader) {
 
         //create the Main Stubs:
-        generateStubClass(StaticStubHelper.formatProxyClassName(getGenName()), getPrimaryFacades());
+        generateStubClass(StaticStubHelper.formatProxyClassName(getGenName()), new PublicationItem[] { getPrimaryFacade() });
 
         //Create the Additional Facades
         if (getAdditionalFacades() != null) {
@@ -91,7 +91,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * Generating name of form: [STUB_PREFIX][genName]_[STUB_POSTFIX].class
      *
      * @param generatedClassName the name of the class to generate.
-     * @param facadesToStubify   the facades to stubify.
+     * @param facadeToStubify
      */
     protected void generateStubClass(String generatedClassName, PublicationItem[] facadesToStubify) {
         //Start creating class
@@ -124,7 +124,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * This method starts creating the class.
      *
      * @param generatedClassName the stub class name
-     * @param facadesToStubify
+     * @param facadeToStubify
      */
     protected void createNewClassDeclaration(String generatedClassName, PublicationItem[] facadesToStubify) {
 

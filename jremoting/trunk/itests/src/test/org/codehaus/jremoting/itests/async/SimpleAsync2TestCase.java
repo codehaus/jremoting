@@ -69,7 +69,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
 
         asyncTestImpl = new AsyncTestImpl();
         // automatic determination of async elements.
-        Publication pd = new Publication().addPrimaryFacade(AsyncTest.class);
+        Publication pd = new Publication(AsyncTest.class);
         stubRetriever.generate("AsyncTestB", pd, this.getClass().getClassLoader());
         server.publish(asyncTestImpl, "AsyncTestB", pd);
         server.start();

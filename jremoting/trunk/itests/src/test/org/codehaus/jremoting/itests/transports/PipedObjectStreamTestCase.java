@@ -63,13 +63,13 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         server = new PipedStreamServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
                 Executors.newScheduledThreadPool(10) ,new ThreadLocalServerContextFactory(), new ObjectStreamEncoding());
         testServer = new TestInterfaceImpl();
-        Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
 
 
         BcelStubGenerator generator = new BcelStubGenerator();
         String testClassesDir = this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
         generator.setClassGenDir(testClassesDir);
-        generator.setPrimaryFacades(pd.getPrimaryFacades());
+        generator.setPrimaryFacade(pd.getPrimaryFacade());
         generator.setAdditionalFacades(pd.getAdditionalFacades());
         generator.setGenName("Hello33");
         generator.generateClass(this.getClass().getClassLoader());

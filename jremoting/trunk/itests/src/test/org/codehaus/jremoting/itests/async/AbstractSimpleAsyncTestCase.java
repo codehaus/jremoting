@@ -75,7 +75,7 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
                 ccf, 11003);
 
         asyncTestImpl = new AsyncTestImpl();
-        Publication pd = new Publication().addPrimaryFacade(AsyncTest.class);
+        Publication pd = new Publication(AsyncTest.class);
         stubRetriever.generate("AsyncTest", pd, this.getClass().getClassLoader());
         server.publish(asyncTestImpl, "AsyncTest", pd);
         server.start();
