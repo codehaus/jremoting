@@ -14,7 +14,7 @@ import org.codehaus.jremoting.responses.ServicesSuspended;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;

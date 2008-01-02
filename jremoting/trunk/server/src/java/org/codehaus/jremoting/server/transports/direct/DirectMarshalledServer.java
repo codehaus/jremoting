@@ -24,7 +24,7 @@ import org.codehaus.jremoting.server.ServerMarshalledInvoker;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.StatefulServer;
 import org.codehaus.jremoting.util.SerializationHelper;

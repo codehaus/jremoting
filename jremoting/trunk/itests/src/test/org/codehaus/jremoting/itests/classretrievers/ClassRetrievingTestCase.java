@@ -24,7 +24,7 @@ import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.piped.PipedTransport;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.stubretrievers.DynamicStubRetriever;

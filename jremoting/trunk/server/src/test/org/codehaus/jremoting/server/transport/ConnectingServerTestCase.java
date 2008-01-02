@@ -19,7 +19,7 @@
 package org.codehaus.jremoting.server.transport;
 
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.ServerMonitor;

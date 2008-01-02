@@ -29,7 +29,7 @@ import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.server.PublicationDescription;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;

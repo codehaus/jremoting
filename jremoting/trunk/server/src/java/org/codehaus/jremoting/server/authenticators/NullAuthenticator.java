@@ -18,6 +18,7 @@
 package org.codehaus.jremoting.server.authenticators;
 
 import org.codehaus.jremoting.authentications.Authentication;
+import org.codehaus.jremoting.server.AuthenticationChallenge;
 import org.codehaus.jremoting.server.Authenticator;
 
 /**
@@ -28,22 +29,11 @@ import org.codehaus.jremoting.server.Authenticator;
  */
 public class NullAuthenticator implements Authenticator {
 
-    /**
-     * Check the Authority of a client to a service.
-     *
-     * @param authentication   The Authentication object
-     * @param publishedService the publishes server to authenticate against
-     */
     public boolean checkAuthority(Authentication authentication, String publishedService) {
         return authentication == null;
     }
 
-    /**
-     * Get text to sign for a request.
-     *
-     * @return The text to sign.
-     */
-    public String getTextToSign() {
-        return "";
+    public AuthenticationChallenge getAuthenticationChallenge() {
+        return null;
     }
 }

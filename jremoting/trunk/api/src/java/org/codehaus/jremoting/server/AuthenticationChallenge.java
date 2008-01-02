@@ -1,6 +1,5 @@
 /* ====================================================================
  * Copyright 2005-2006 JRemoting Committers
- * Portions copyright 2001 - 2004 Apache Software Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,28 +16,5 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.authentications.Authentication;
-
-/**
- * Interface Authenticator
- *
- * @author Paul Hammant
- * @version * $Revision: 1.2 $
- */
-public interface Authenticator {
-
-    /**
-     * Check the authority of a particular 'user' to a service
-     *
-     * @param auth             the authenicatin that needs to be checked.
-     * @param publishedService the name of the published service.
-     */
-    boolean checkAuthority(Authentication auth, String publishedService);
-
-    /**
-     * Get the text to sign for PKI style autheticators
-     *
-     * @return the signed text.
-     */
-    AuthenticationChallenge getAuthenticationChallenge();
+public interface AuthenticationChallenge {
 }

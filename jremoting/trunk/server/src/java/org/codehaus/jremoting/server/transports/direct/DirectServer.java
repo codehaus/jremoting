@@ -23,7 +23,7 @@ import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ServerContextFactory;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.StatefulServer;
 

@@ -33,7 +33,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ServerContextFactory;
 import org.codehaus.jremoting.server.context.ServerSideContext;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;

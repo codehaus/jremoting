@@ -20,47 +20,48 @@ package org.codehaus.jremoting.client.factories;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.authentications.Authentication;
 import org.codehaus.jremoting.client.ContextFactory;
-import org.codehaus.jremoting.client.Stub;
+import org.codehaus.jremoting.client.InvocationException;
+import org.codehaus.jremoting.client.NoSuchReferenceException;
+import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.ServiceResolver;
+import org.codehaus.jremoting.client.Stub;
 import org.codehaus.jremoting.client.StubHelper;
 import org.codehaus.jremoting.client.StubRegistry;
 import org.codehaus.jremoting.client.Transport;
-import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.NoSuchSessionException;
-import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.stubs.StubClassLoader;
 import org.codehaus.jremoting.client.stubs.StubsOnClient;
 import org.codehaus.jremoting.client.stubs.StubsViaReflection;
-import org.codehaus.jremoting.requests.ListServices;
-import org.codehaus.jremoting.requests.LookupService;
+import org.codehaus.jremoting.requests.CollectGarbage;
 import org.codehaus.jremoting.requests.GroupedMethodRequest;
+import org.codehaus.jremoting.requests.InvokeAsyncMethod;
 import org.codehaus.jremoting.requests.InvokeFacadeMethod;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.requests.InvokeAsyncMethod;
-import org.codehaus.jremoting.requests.CollectGarbage;
+import org.codehaus.jremoting.requests.ListServices;
+import org.codehaus.jremoting.requests.LookupService;
 import org.codehaus.jremoting.requests.Servicable;
+import org.codehaus.jremoting.responses.BadServerSideEvent;
+import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.responses.ExceptionThrown;
+import org.codehaus.jremoting.responses.FacadeArrayMethodInvoked;
+import org.codehaus.jremoting.responses.FacadeMethodInvoked;
+import org.codehaus.jremoting.responses.GarbageCollected;
+import org.codehaus.jremoting.responses.MethodInvoked;
+import org.codehaus.jremoting.responses.NoSuchReference;
+import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.responses.ServicesList;
-import org.codehaus.jremoting.responses.FacadeMethodInvoked;
-import org.codehaus.jremoting.responses.FacadeArrayMethodInvoked;
-import org.codehaus.jremoting.responses.MethodInvoked;
-import org.codehaus.jremoting.responses.NoSuchSession;
-import org.codehaus.jremoting.responses.NoSuchReference;
-import org.codehaus.jremoting.responses.BadServerSideEvent;
-import org.codehaus.jremoting.responses.ConnectionClosed;
-import org.codehaus.jremoting.responses.GarbageCollected;
+import org.codehaus.jremoting.server.AuthenticationChallenge;
 import org.codehaus.jremoting.util.FacadeRefHolder;
 import org.codehaus.jremoting.util.StaticStubHelper;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Array;
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -77,7 +78,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
     private final ContextFactory contextFactory;
     private final StubClassLoader stubClassLoader;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
-    private transient String textToSign;
+    private transient AuthenticationChallenge authChallenge;
     protected final long session;
     private StubRegistry stubRegistry;
 
@@ -100,7 +101,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
 
         ConnectionOpened response = transport.openConnection();
 
-        textToSign = response.getTextToSign();
+        authChallenge = response.getAuthenticationChallenge();
         session = response.getSessionID();
 
         stubRegistry = new StubRegistry() {
@@ -200,8 +201,8 @@ public class JRemotingServiceResolver implements ServiceResolver {
         return lookupService(publishedServiceName, null);
     }
 
-    public String getTextToSignForAuthentication() {
-        return textToSign;
+    public AuthenticationChallenge getAuthenticationChallenge() {
+        return authChallenge;
     }
 
     public String[] listServices() {

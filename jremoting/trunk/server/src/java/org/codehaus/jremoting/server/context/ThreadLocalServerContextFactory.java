@@ -16,7 +16,7 @@
  *
  */
 
-package org.codehaus.jremoting.server.factories;
+package org.codehaus.jremoting.server.context;
 
 import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.server.context.ServerContextFactory;

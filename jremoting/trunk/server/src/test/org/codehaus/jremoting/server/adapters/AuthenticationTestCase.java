@@ -19,7 +19,7 @@ import org.codehaus.jremoting.responses.AuthenticationFailed;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.authenticators.SinglePasswordAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
@@ -54,15 +54,15 @@ public class AuthenticationTestCase extends MockObjectTestCase {
     }
 
     public void testWorkingPasswordAuthorizes() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new SinglePasswordAuthenticator("fred"), new ThreadLocalServerContextFactory());
+        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new SinglePasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
-        Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("FRED", "fred")));
+        Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("fred", "wilma")));
         assertTrue(resp instanceof Service);
     }
 
     public void testBogusPasswordBlocks() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new SinglePasswordAuthenticator("fred"), new ThreadLocalServerContextFactory());
+        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new SinglePasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
         Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("FRED", "wilma")));

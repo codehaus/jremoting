@@ -54,8 +54,8 @@ import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.context.ServerContextFactory;
 import org.codehaus.jremoting.server.context.ServerSideContext;
+import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.factories.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.util.StaticStubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
@@ -375,9 +375,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
      * @return The reply.
      */
     private Response doOpenConnectionRequest() {
-        long session = newSession();
-        String textToSign = authenticator == null ? "" : authenticator.getTextToSign();
-        return new ConnectionOpened(textToSign, session);
+        return new ConnectionOpened(authenticator.getAuthenticationChallenge(), newSession());
     }
 
 

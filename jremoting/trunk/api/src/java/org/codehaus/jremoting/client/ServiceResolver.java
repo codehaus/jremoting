@@ -18,6 +18,7 @@
 package org.codehaus.jremoting.client;
 
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.server.AuthenticationChallenge;
 import org.codehaus.jremoting.authentications.Authentication;
 
 /**
@@ -54,7 +55,7 @@ public interface ServiceResolver {
 
     String[] listServices();
 
-    String getTextToSignForAuthentication();
+    AuthenticationChallenge getAuthenticationChallenge();
 
     void close();
 

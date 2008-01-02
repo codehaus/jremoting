@@ -17,26 +17,27 @@
 
 package org.codehaus.jremoting.server.adapters;
 
-import org.codehaus.jremoting.requests.OpenConnection;
+import junit.framework.TestCase;
 import org.codehaus.jremoting.requests.CloseConnection;
-import org.codehaus.jremoting.responses.ConnectionOpened;
+import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.responses.ConnectionClosed;
+import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import junit.framework.TestCase;
 
 public class InvokerDelegateTestCase extends TestCase {
 
     public void testOpenConnection() {
-        InvokerDelegate invocationHandle = new InvokerDelegate(null, new RefusingStubRetriever(), null, null);
+        InvokerDelegate invocationHandle = new InvokerDelegate(null, new RefusingStubRetriever(), new NullAuthenticator(), null);
         ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.invoke(new OpenConnection(), new Object());
         assertNotNull(connectionOpened);
         assertNotNull(connectionOpened.getSessionID());
     }
 
     public void testCloseConnectionAfterOpenConnection() {
-        InvokerDelegate invocationHandle = new InvokerDelegate(null, new RefusingStubRetriever(), null, null);
+        InvokerDelegate invocationHandle = new InvokerDelegate(null, new RefusingStubRetriever(), new NullAuthenticator(), null);
         ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.invoke(new OpenConnection(), new Object());
         ConnectionClosed connectionClosed = (ConnectionClosed) invocationHandle.invoke(new CloseConnection(connectionOpened.getSessionID()), new Object());
         assertNotNull(connectionClosed);
@@ -46,7 +47,7 @@ public class InvokerDelegateTestCase extends TestCase {
     }
 
     public void testCloseConnectionErrorsOnBogusSession() {
-        InvokerDelegate invocationHandle = new InvokerDelegate(null, new RefusingStubRetriever(), null, null);
+        InvokerDelegate invocationHandle = new InvokerDelegate(null, new RefusingStubRetriever(), new NullAuthenticator(), null);
         Response response = invocationHandle.invoke(new CloseConnection((long) 123), new Object());
         assertTrue(response instanceof NoSuchSession);
         NoSuchSession noSuchSession = (NoSuchSession) response;
