@@ -32,7 +32,7 @@ import org.jmock.MockObjectTestCase;
 public abstract class AbstractJRemotingTestCase extends MockObjectTestCase {
 
     protected StatefulServer server;
-    protected TestInterfaceImpl testServer;
+    protected TestFacadeImpl testServer;
     protected TestFacade testClient;
     protected ServiceResolver serviceResolver;
     protected boolean bugParadeBug4499841StillExists = true;
@@ -52,7 +52,7 @@ public abstract class AbstractJRemotingTestCase extends MockObjectTestCase {
         testClient.hello("Hello!?");
 
         // test the server has logged the message.
-        assertEquals("Hello!?", ((TestInterfaceImpl) testServer).getStoredState("void:hello(String)"));
+        assertEquals("Hello!?", ((TestFacadeImpl) testServer).getStoredState("void:hello(String)"));
     }
 
 

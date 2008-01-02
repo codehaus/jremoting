@@ -24,8 +24,8 @@ import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
-import org.codehaus.jremoting.itests.TestInterface3;
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.itests.TestFacade3;
+import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
@@ -43,8 +43,8 @@ public class ByteStreamTestCase extends AbstractHelloTestCase {
 
         // server side setup.
         server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 10333);
-        testServer = new TestInterfaceImpl();
-        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestInterface3.class, TestFacade2.class);
+        testServer = new TestFacadeImpl();
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 

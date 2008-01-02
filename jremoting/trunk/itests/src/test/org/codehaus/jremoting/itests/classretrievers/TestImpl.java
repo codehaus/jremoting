@@ -19,7 +19,7 @@ package org.codehaus.jremoting.itests.classretrievers;
 
 import java.util.HashMap;
 
-public class TestImpl implements TestInterface {
+public class TestImpl implements TestFacade {
     HashMap map = new HashMap();
 
     public Object getStoredState(String key) {

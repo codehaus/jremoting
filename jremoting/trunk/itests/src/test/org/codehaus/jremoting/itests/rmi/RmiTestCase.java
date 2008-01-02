@@ -23,8 +23,8 @@ import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
-import org.codehaus.jremoting.itests.TestInterface3;
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.itests.TestFacade3;
+import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
@@ -44,7 +44,7 @@ import org.jmock.MockObjectTestCase;
 public class RmiTestCase extends MockObjectTestCase {
 
     private ConnectingServer server;
-    private TestInterfaceImpl testServer;
+    private TestFacadeImpl testServer;
     private TestFacade testClient;
     private Mock mockServerMonitor;
 
@@ -55,8 +55,8 @@ public class RmiTestCase extends MockObjectTestCase {
 
         // server side setup.
         server = new RmiServer((ServerMonitor) mockServerMonitor.proxy(), 10003);
-        testServer = new TestInterfaceImpl();
-        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestInterface3.class, TestFacade2.class);
+        testServer = new TestFacadeImpl();
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 

@@ -23,8 +23,8 @@ import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
-import org.codehaus.jremoting.itests.TestInterface3;
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.itests.TestFacade3;
+import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
@@ -54,9 +54,9 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         // server side setup.
         server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 10002, new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
 
-        testServer = new TestInterfaceImpl();
+        testServer = new TestFacadeImpl();
 
-        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestInterface3.class, TestFacade2.class);
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
 
         server.start();

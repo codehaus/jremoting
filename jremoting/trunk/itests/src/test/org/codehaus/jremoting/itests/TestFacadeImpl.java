@@ -24,13 +24,13 @@ import java.util.HashMap;
 import java.util.Vector;
 
 /**
- * Class TestInterfaceImpl
+ * Class TestFacadeImpl
  *
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  * @author Benjamin David Hall
  * @version $Revision: 1.3 $
  */
-public class TestInterfaceImpl implements TestFacade {
+public class TestFacadeImpl implements TestFacade {
 
     Vector ti2Holder = new Vector();
     TstObject[] testObjects;
@@ -72,12 +72,6 @@ public class TestInterfaceImpl implements TestFacade {
         // do nothing
     }
 
-    /**
-     * Method makeTestFacade2Or3
-     *
-     * @param thingName
-     * @return
-     */
     public TestFacade2 makeTestFacade2Or3(String thingName) {
 
         TestFacade2 ti2;
@@ -93,11 +87,6 @@ public class TestInterfaceImpl implements TestFacade {
         return ti2;
     }
 
-    /**
-     * Method morphName
-     *
-     * @param forThisImpl
-     */
     public void morphName(TestFacade2 forThisImpl) {
 
         String name = forThisImpl.getName();
@@ -111,13 +100,7 @@ public class TestInterfaceImpl implements TestFacade {
         forThisImpl.setName(sb.toString());
     }
 
-    /**
-     * Method findTestInterface2ByName
-     *
-     * @param nameToFind
-     * @return
-     */
-    public TestFacade2 findTestInterface2ByName(String nameToFind) {
+    public TestFacade2 findTestFacade2ByName(String nameToFind) {
 
         for (int i = 0; i < ti2Holder.size(); i++) {
             TestFacade2 ti2 = (TestFacade2) ti2Holder.elementAt(i);
@@ -130,12 +113,7 @@ public class TestInterfaceImpl implements TestFacade {
         return new TstInterface2Impl("Not Found");
     }
 
-    /**
-     * Method getTestInterfaces
-     *
-     * @return
-     */
-    public TestFacade2[] getTestInterface2s() {
+    public TestFacade2[] getTestFacade2s() {
 
         TestFacade2[] retVal = new TestFacade2[ti2Holder.size()];
 

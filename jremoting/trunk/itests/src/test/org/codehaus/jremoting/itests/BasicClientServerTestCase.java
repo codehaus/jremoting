@@ -64,8 +64,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // server side setup.
         SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12333);
 
-        TestInterfaceImpl testServer = new TestInterfaceImpl();
-        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestInterface3.class, TestFacade2.class);
+        TestFacadeImpl testServer = new TestFacadeImpl();
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 
@@ -94,8 +94,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12331,
                 new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
 
-        TestInterfaceImpl testServer = new TestInterfaceImpl();
-        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestInterface3.class, TestFacade2.class);
+        TestFacadeImpl testServer = new TestFacadeImpl();
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 
@@ -127,8 +127,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // server side setup.
         // Object
         SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12347, new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
-        TestInterfaceImpl testServer = new TestInterfaceImpl();
-        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestInterface3.class, TestFacade2.class);
+        TestFacadeImpl testServer = new TestFacadeImpl();
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 
@@ -152,8 +152,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // server side setup.
         SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12348);
-        TestInterfaceImpl testServer = new TestInterfaceImpl();
-        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestInterface3.class, TestFacade2.class);
+        TestFacadeImpl testServer = new TestFacadeImpl();
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 

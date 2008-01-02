@@ -47,7 +47,7 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
 
     protected ConnectingServer server;
     protected TestImpl testServer;
-    protected TestInterface testClient;
+    protected TestFacade testClient;
 
 
     protected void setUp() throws Exception {
@@ -57,8 +57,8 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
         server = new PipedStreamServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newScheduledThreadPool(10), new ThreadLocalServerContextFactory(),
                 new ByteStreamEncoding());
         testServer = new TestImpl();
-        server.publish(testServer, "Kewl", TestInterface.class);
-        dyncgen.generate("Kewl", TestInterface.class, this.getClass().getClassLoader());
+        server.publish(testServer, "Kewl", TestFacade.class);
+        dyncgen.generate("Kewl", TestFacade.class, this.getClass().getClassLoader());
 
         server.start();
 
@@ -72,7 +72,7 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null)); 
         ServiceResolver af = new JRemotingServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(), in, out), (ContextFactory) mock.proxy(), new StubsFromServer());
-        testClient = (TestInterface) af.lookupService("Kewl");
+        testClient = (TestFacade) af.lookupService("Kewl");
 
     }
 

@@ -22,8 +22,8 @@ import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.transports.direct.DirectTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
-import org.codehaus.jremoting.itests.TestInterface3;
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.itests.TestFacade3;
+import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.direct.DirectServer;
@@ -41,8 +41,8 @@ public class DirectUnMarshalledTestCase extends AbstractHelloTestCase {
 
         // server side setup.
         server = new DirectServer((ServerMonitor) mockServerMonitor.proxy());
-        testServer = new TestInterfaceImpl();
-        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestInterface3.class, TestFacade2.class);
+        testServer = new TestFacadeImpl();
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 

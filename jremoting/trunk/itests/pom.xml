@@ -70,7 +70,7 @@
 							<facade>org.codehaus.jremoting.itests.TestFacade</facade>
 							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
 							<secondaryFacades>
-                                org.codehaus.jremoting.itests.TestInterface3,org.codehaus.jremoting.itests.TestFacade2
+                                org.codehaus.jremoting.itests.TestFacade3,org.codehaus.jremoting.itests.TestFacade2
                             </secondaryFacades>
 							<verbose>true</verbose>
 						</configuration>

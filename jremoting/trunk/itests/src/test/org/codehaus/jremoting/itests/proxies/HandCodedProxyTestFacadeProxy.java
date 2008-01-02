@@ -26,133 +26,64 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 /**
- * Class CodedProxyTestInterfaceProxy
+ * Class HandCodedProxyTestFacadeProxy
  *
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  * @author Benjamin David Hall
  * @version $Revision: 1.3 $
  */
-public class CodedProxyTestInterfaceProxy implements TestFacade {
+public class HandCodedProxyTestFacadeProxy implements TestFacade {
 
     private TestFacade actualImpl;
 
-    /**
-     * Constructor CodedProxyTestInterfaceProxy
-     *
-     * @param actualImpl
-     */
-    public CodedProxyTestInterfaceProxy(TestFacade actualImpl) {
+    public HandCodedProxyTestFacadeProxy(TestFacade actualImpl) {
         this.actualImpl = actualImpl;
     }
 
-    /**
-     * Method hello
-     *
-     * @param greeting
-     */
     public void hello(String greeting) {
         actualImpl.hello(greeting);
     }
 
-    /**
-     * Method intParamReturningInt
-     *
-     * @param greeting
-     */
     public int intParamReturningInt(int greeting) {
         return actualImpl.intParamReturningInt(greeting);
     }
 
-    /**
-     * Method shortParamThatMayReturnBoolOrThrow
-     *
-     * @param greeting
-     * @return
-     * @throws IOException
-     * @throws PropertyVetoException
-     */
     public boolean shortParamThatMayReturnBoolOrThrow(short greeting) throws PropertyVetoException, IOException {
         return actualImpl.shortParamThatMayReturnBoolOrThrow(greeting);
     }
 
-    /**
-     * Method floatAndDoubleParamsReturningStrungBuffer
-     *
-     * @param greeting1
-     * @param greeting2
-     * @return
-     */
     public StringBuffer floatAndDoubleParamsReturningStrungBuffer(float greeting1, double greeting2) {
         return actualImpl.floatAndDoubleParamsReturningStrungBuffer(greeting1, greeting2);
     }
 
-    /**
-     * Method testSpeed
-     */
     public void testSpeed() {
         actualImpl.testSpeed();
     }
 
-    /**
-     * Method makeTestFacade2Or3
-     *
-     * @param thingName
-     * @return
-     */
     public TestFacade2 makeTestFacade2Or3(String thingName) {
         return actualImpl.makeTestFacade2Or3(thingName);
     }
 
-    /**
-     * Method morphName
-     *
-     * @param forThisImpl
-     */
     public void morphName(TestFacade2 forThisImpl) {
         actualImpl.morphName(forThisImpl);
     }
 
-    /**
-     * Method findTestInterface2ByName
-     *
-     * @param nameToFind
-     * @return
-     */
-    public TestFacade2 findTestInterface2ByName(String nameToFind) {
-        return actualImpl.findTestInterface2ByName(nameToFind);
+    public TestFacade2 findTestFacade2ByName(String nameToFind) {
+        return actualImpl.findTestFacade2ByName(nameToFind);
     }
 
-    /**
-     * Method getTestInterface2s
-     *
-     * @return
-     */
-    public TestFacade2[] getTestInterface2s() {
-        return actualImpl.getTestInterface2s();
+    public TestFacade2[] getTestFacade2s() {
+        return actualImpl.getTestFacade2s();
     }
 
-    /**
-     * Method getTestObjects
-     * Helps ilustrate the bug http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
-     *
-     * @return
-     */
     public TstObject[] getTestObjects() {
         return actualImpl.getTestObjects();
     }
 
-    /**
-     * Method changeTestObjectNames
-     * Helps ilustrate the bug http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
-     */
     public void changeTestObjectNames() {
         actualImpl.changeTestObjectNames();
     }
 
-    /**
-     * Method makeNewTestObjectNames
-     * Helps ilustrate the bug http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
-     */
     public void makeNewTestObjectNames() {
         actualImpl.makeNewTestObjectNames();
     }

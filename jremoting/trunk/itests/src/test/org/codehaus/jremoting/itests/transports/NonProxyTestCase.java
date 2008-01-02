@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.itests.TestFacadeImpl;
 
 /**
  * Test Non Stub for comparison sake
@@ -28,7 +28,7 @@ public class NonProxyTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
 
-        testServer = new TestInterfaceImpl();
+        testServer = new TestFacadeImpl();
         testClient = testServer;
 
     }

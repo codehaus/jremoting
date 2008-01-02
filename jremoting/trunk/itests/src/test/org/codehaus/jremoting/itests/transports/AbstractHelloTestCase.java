@@ -21,8 +21,8 @@ import junit.framework.Assert;
 import org.codehaus.jremoting.itests.AbstractJRemotingTestCase;
 import org.codehaus.jremoting.itests.CustomSerializableParam;
 import org.codehaus.jremoting.itests.TestFacade2;
-import org.codehaus.jremoting.itests.TestInterface3;
-import org.codehaus.jremoting.itests.TestInterfaceImpl;
+import org.codehaus.jremoting.itests.TestFacade3;
+import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.itests.TstObject;
 
 import java.beans.PropertyVetoException;
@@ -47,7 +47,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         assertEquals(11, retVal);
 
         // test the server has logged the message.
-        Assert.assertEquals("11", ((TestInterfaceImpl) testServer).getStoredState("int:intParamReturningInt(int)"));
+        Assert.assertEquals("11", ((TestFacadeImpl) testServer).getStoredState("int:intParamReturningInt(int)"));
     }
 
     public void testByteArrayParamReturningByte() throws Exception {
@@ -61,7 +61,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         assertEquals(13, retVal);
 
         // test the server has logged the message.
-        assertEquals("5", ((TestInterfaceImpl) testServer).getStoredState("byte:byteArrayParamReturningByte(byte, byte[]#1)"));
+        assertEquals("5", ((TestFacadeImpl) testServer).getStoredState("byte:byteArrayParamReturningByte(byte, byte[]#1)"));
     }
 
     /**
@@ -101,7 +101,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         assertTrue(retVal);
 
         // test the server has logged the message.
-        assertEquals("22", ((TestInterfaceImpl) testServer).getStoredState("boolean:shortParamThatMayReturnBoolOrThrow(short)"));
+        assertEquals("22", ((TestFacadeImpl) testServer).getStoredState("boolean:shortParamThatMayReturnBoolOrThrow(short)"));
     }
 
 
@@ -120,7 +120,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
             fail("Wrong exception throw for hardcoded test 90");
         }
         // test the server has logged the message.
-        assertEquals("90", ((TestInterfaceImpl) testServer).getStoredState("boolean:shortParamThatMayReturnBoolOrThrow(short)"));
+        assertEquals("90", ((TestFacadeImpl) testServer).getStoredState("boolean:shortParamThatMayReturnBoolOrThrow(short)"));
 
         try {
             // 91 for this method causes IOException
@@ -132,7 +132,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
             // expected
         }
         // test the server has logged the message.
-        assertEquals("91", ((TestInterfaceImpl) testServer).getStoredState("boolean:shortParamThatMayReturnBoolOrThrow(short)"));
+        assertEquals("91", ((TestFacadeImpl) testServer).getStoredState("boolean:shortParamThatMayReturnBoolOrThrow(short)"));
 
     }
 
@@ -142,7 +142,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
 
         // Invoke a method over rpc.
         StringBuffer sb = testClient.floatAndDoubleParamsReturningStrungBuffer((float) 10.2, (double) 11.9);
-        StringBuffer sb2 = (StringBuffer) ((TestInterfaceImpl) testServer).getStoredState("StringBuffer:floatAndDoubleParamsReturningStrungBuffer(float,double)");
+        StringBuffer sb2 = (StringBuffer) ((TestFacadeImpl) testServer).getStoredState("StringBuffer:floatAndDoubleParamsReturningStrungBuffer(float,double)");
 
         // test the server has logged the message.
         assertEquals("10.2 11.9", sb2.toString());
@@ -170,19 +170,19 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         assertNotNull(testClient);
 
         TestFacade2 testInterface2 = testClient.makeTestFacade2Or3("abc");
-        TestInterface3 abc = (TestInterface3) testInterface2;
+        TestFacade3 abc = (TestFacade3) testInterface2;
         TestFacade2 def = testClient.makeTestFacade2Or3("def");
 
         testClient.morphName(abc);
 
         assertEquals("A_B_C_", abc.getName());
 
-        TestFacade2 def2 = testClient.findTestInterface2ByName("def");
+        TestFacade2 def2 = testClient.findTestFacade2ByName("def");
 
         assertNotNull(def2);
         assertTrue(def == def2);
 
-        TestFacade2[] ti2s = testClient.getTestInterface2s();
+        TestFacade2[] ti2s = testClient.getTestFacade2s();
 
         assertNotNull(ti2s);
 
@@ -233,7 +233,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         }
         long end = System.currentTimeMillis();
 
-        System.out.println("[testSpeed] " + this.getClass().getName() + " " + (end-start));
+        System.err.println("[testSpeed] " + this.getClass().getName() + " " + (end-start));
 
     }
 

@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.itests;
 
 /**
- * Interface TestInterface2
+ * Interface TestFacade2
  *
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  * @version * $Revision: 1.2 $

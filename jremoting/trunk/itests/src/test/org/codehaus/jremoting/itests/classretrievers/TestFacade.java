@@ -15,29 +15,8 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.itests;
+package org.codehaus.jremoting.itests.classretrievers;
 
-import java.util.Date;
-
-/**
- * Interface TestInterface3
- *
- * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
- * @version * $Revision: 1.2 $
- */
-public interface TestInterface3 extends TestFacade2 {
-
-    /**
-     * Method setDOB
-     *
-     * @param dob
-     */
-    void setDOB(Date dob);
-
-    /**
-     * Method getDOB
-     *
-     * @return
-     */
-    Date getDOB();
+public interface TestFacade {
+    void method0();
 }

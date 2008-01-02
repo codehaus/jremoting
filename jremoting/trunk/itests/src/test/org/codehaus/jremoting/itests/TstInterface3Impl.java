@@ -25,7 +25,7 @@ import java.util.Date;
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  * @version * $Revision: 1.2 $
  */
-public class TstInterface3Impl extends TstInterface2Impl implements TestInterface3 {
+public class TstInterface3Impl extends TstInterface2Impl implements TestFacade3 {
 
     private Date mDob;
 

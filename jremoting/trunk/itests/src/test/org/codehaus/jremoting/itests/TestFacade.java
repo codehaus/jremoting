@@ -21,7 +21,7 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 
 /**
- * Interface TestInterface
+ * Interface TestFacade
  *
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  * @author Benjamin David Hall
@@ -84,19 +84,19 @@ public interface TestFacade {
     void morphName(TestFacade2 forThisImpl);
 
     /**
-     * Method findTestInterface2ByName
+     * Method findTestFacade2ByName
      *
      * @param nameToFind
      * @return
      */
-    TestFacade2 findTestInterface2ByName(String nameToFind);
+    TestFacade2 findTestFacade2ByName(String nameToFind);
 
     /**
-     * Method getTestInterface2s
+     * Method getTestFacade2s
      *
      * @return
      */
-    TestFacade2[] getTestInterface2s();
+    TestFacade2[] getTestFacade2s();
 
     /**
      * Method getTestObjects
