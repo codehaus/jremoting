@@ -26,5 +26,5 @@ import java.lang.annotation.Retention;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AsynchronousRollbackMethod {
+public @interface Asynchronous {
 }

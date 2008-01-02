@@ -17,26 +17,26 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.annotations.AsynchronousCommitMethod;
-import org.codehaus.jremoting.annotations.AsynchronousMethod;
-import org.codehaus.jremoting.annotations.AsynchronousRollbackMethod;
+import org.codehaus.jremoting.annotations.Commit;
+import org.codehaus.jremoting.annotations.Asynchronous;
+import org.codehaus.jremoting.annotations.Rollback;
 
 import java.lang.reflect.Method;
 
 public class AttributeHelper {
 
     protected boolean isMethodAsync(Method method) {
-        boolean annotationPresent = method.isAnnotationPresent(AsynchronousMethod.class);
+        boolean annotationPresent = method.isAnnotationPresent(Asynchronous.class);
         return annotationPresent;
     }
 
     protected boolean isMethodAsyncCommit(Method method) {
-        boolean annotationPresent = method.isAnnotationPresent(AsynchronousCommitMethod.class);
+        boolean annotationPresent = method.isAnnotationPresent(Commit.class);
         return annotationPresent;
     }
 
     protected boolean isMethodAsyncRollback(Method method) {
-        boolean annotationPresent = method.isAnnotationPresent(AsynchronousRollbackMethod.class);
+        boolean annotationPresent = method.isAnnotationPresent(Rollback.class);
         return annotationPresent;
     }
 
