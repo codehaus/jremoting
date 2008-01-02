@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
-import org.codehaus.jremoting.itests.TestInterface;
+import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
 
 import java.lang.reflect.Proxy;
@@ -35,7 +35,7 @@ public class DynamicProxyTestCase extends AbstractHelloTestCase {
     protected void setUp() throws Exception {
 
         testServer = new TestInterfaceImpl();
-        final Class[] interfaces = new Class[]{TestInterface.class};
+        final Class[] interfaces = new Class[]{TestFacade.class};
 
         final ClassLoader classLoader = testServer.getClass().getClassLoader();
 
@@ -50,7 +50,7 @@ public class DynamicProxyTestCase extends AbstractHelloTestCase {
             }
         };
 
-        testClient = (TestInterface) Proxy.newProxyInstance(classLoader, interfaces, proxy);
+        testClient = (TestFacade) Proxy.newProxyInstance(classLoader, interfaces, proxy);
 
     }
 

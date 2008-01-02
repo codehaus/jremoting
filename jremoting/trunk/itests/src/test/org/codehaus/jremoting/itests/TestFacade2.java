@@ -23,7 +23,7 @@ package org.codehaus.jremoting.itests;
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  * @version * $Revision: 1.2 $
  */
-public interface TestInterface2 {
+public interface TestFacade2 {
 
     /**
      * Method setName

@@ -23,8 +23,8 @@ import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
-import org.codehaus.jremoting.itests.TestInterface;
-import org.codehaus.jremoting.itests.TestInterface2;
+import org.codehaus.jremoting.itests.TestFacade;
+import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.server.Publication;
@@ -44,7 +44,7 @@ import org.jmock.core.Constraint;
  */
 public class BouncingServerTestCase extends MockObjectTestCase {
 
-    Publication pd = new Publication(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+    Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestInterface3.class, TestFacade2.class);
     private Mock mockServerMonitor;
 
     protected void setUp() throws Exception {
@@ -74,17 +74,17 @@ public class BouncingServerTestCase extends MockObjectTestCase {
 
             serviceResolver = new JRemotingServiceResolver(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
                     new ByteStreamEncoding(), "127.0.0.1", 12201));
-            TestInterface testClient = (TestInterface) serviceResolver.lookupService("Hello55");
+            TestFacade testClient = (TestFacade) serviceResolver.lookupService("Hello55");
 
 
-            testClient.hello2(100);
+            testClient.intParamReturningInt(100);
 
             // Stop server and restarting (essentially binning sessions).
             server.stop();
             server = startServer();
 
             try {
-                testClient.hello2(123);
+                testClient.intParamReturningInt(123);
                 fail("Should have barfed with NoSuchSessionException");
             } catch (NoSuchSessionException e) {
                 // expected

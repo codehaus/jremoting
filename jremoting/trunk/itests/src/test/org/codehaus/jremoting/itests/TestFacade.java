@@ -27,7 +27,7 @@ import java.io.IOException;
  * @author Benjamin David Hall
  * @version * $Revision: 1.3 $
  */
-public interface TestInterface {
+public interface TestFacade {
 
     /**
      * Method hello
@@ -37,30 +37,30 @@ public interface TestInterface {
     void hello(String greeting);
 
     /**
-     * Method hello2
+     * Method intParamReturningInt
      *
      * @param greeting
      */
-    int hello2(int greeting);
+    int intParamReturningInt(int greeting);
 
     /**
-     * Method hello3
+     * Method shortParamThatMayReturnBoolOrThrow
      *
      * @param greeting
      * @return
      * @throws IOException
      * @throws PropertyVetoException
      */
-    boolean hello3(short greeting) throws PropertyVetoException, IOException;
+    boolean shortParamThatMayReturnBoolOrThrow(short greeting) throws PropertyVetoException, IOException;
 
     /**
-     * Method hello4
+     * Method floatAndDoubleParamsReturningStrungBuffer
      *
      * @param greeting1
      * @param greeting2
      * @return
      */
-    StringBuffer hello4(float greeting1, double greeting2);
+    StringBuffer floatAndDoubleParamsReturningStrungBuffer(float greeting1, double greeting2);
 
     /**
      * Method testSpeed
@@ -69,19 +69,19 @@ public interface TestInterface {
 
 
     /**
-     * Method makeTestInterface2
+     * Method makeTestFacade2Or3
      *
      * @param thingName
      * @return
      */
-    TestInterface2 makeTestInterface2(String thingName);
+    TestFacade2 makeTestFacade2Or3(String thingName);
 
     /**
      * Method morphName
      *
      * @param forThisImpl
      */
-    void morphName(TestInterface2 forThisImpl);
+    void morphName(TestFacade2 forThisImpl);
 
     /**
      * Method findTestInterface2ByName
@@ -89,14 +89,14 @@ public interface TestInterface {
      * @param nameToFind
      * @return
      */
-    TestInterface2 findTestInterface2ByName(String nameToFind);
+    TestFacade2 findTestInterface2ByName(String nameToFind);
 
     /**
      * Method getTestInterface2s
      *
      * @return
      */
-    TestInterface2[] getTestInterface2s();
+    TestFacade2[] getTestInterface2s();
 
     /**
      * Method getTestObjects
@@ -129,7 +129,7 @@ public interface TestInterface {
      * @return the value of the first parameter multiplied by 2 plus the sum of the elements of the
      *         second parameter, the array
      */
-    byte bytes(byte b, byte[] array);
+    byte byteArrayParamReturningByte(byte b, byte[] array);
 
     void throwSpecialException(int i);
 

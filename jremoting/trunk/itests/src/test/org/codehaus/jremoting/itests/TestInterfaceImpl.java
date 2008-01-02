@@ -30,7 +30,7 @@ import java.util.Vector;
  * @author Benjamin David Hall
  * @version $Revision: 1.3 $
  */
-public class TestInterfaceImpl implements TestInterface {
+public class TestInterfaceImpl implements TestFacade {
 
     Vector ti2Holder = new Vector();
     TstObject[] testObjects;
@@ -46,13 +46,13 @@ public class TestInterfaceImpl implements TestInterface {
         storedState.put("void:hello(String)", greeting);
     }
 
-    public int hello2(int greeting) {
-        storedState.put("int:hello2(int)", "" + greeting);
+    public int intParamReturningInt(int greeting) {
+        storedState.put("int:intParamReturningInt(int)", "" + greeting);
         return greeting;
     }
 
-    public boolean hello3(short greeting) throws PropertyVetoException, IOException {
-        storedState.put("boolean:hello3(short)", "" + greeting);
+    public boolean shortParamThatMayReturnBoolOrThrow(short greeting) throws PropertyVetoException, IOException {
+        storedState.put("boolean:shortParamThatMayReturnBoolOrThrow(short)", "" + greeting);
         switch (greeting) {
             case 90:
                 throw new PropertyVetoException("Forced Exception Test", null);
@@ -62,9 +62,9 @@ public class TestInterfaceImpl implements TestInterface {
         return true;
     }
 
-    public StringBuffer hello4(float greeting1, double greeting2) {
+    public StringBuffer floatAndDoubleParamsReturningStrungBuffer(float greeting1, double greeting2) {
         StringBuffer sb = new StringBuffer("" + greeting1 + " " + greeting2);
-        storedState.put("StringBuffer:hello4(float,double)", sb);
+        storedState.put("StringBuffer:floatAndDoubleParamsReturningStrungBuffer(float,double)", sb);
         return sb;
     }
 
@@ -73,14 +73,14 @@ public class TestInterfaceImpl implements TestInterface {
     }
 
     /**
-     * Method makeTestInterface2
+     * Method makeTestFacade2Or3
      *
      * @param thingName
      * @return
      */
-    public TestInterface2 makeTestInterface2(String thingName) {
+    public TestFacade2 makeTestFacade2Or3(String thingName) {
 
-        TestInterface2 ti2;
+        TestFacade2 ti2;
         if (thingName.equals("abc")) {
             // even calls only
             ti2 = new TstInterface3Impl(new Date(), thingName);
@@ -98,7 +98,7 @@ public class TestInterfaceImpl implements TestInterface {
      *
      * @param forThisImpl
      */
-    public void morphName(TestInterface2 forThisImpl) {
+    public void morphName(TestFacade2 forThisImpl) {
 
         String name = forThisImpl.getName();
         StringBuffer sb = new StringBuffer();
@@ -117,10 +117,10 @@ public class TestInterfaceImpl implements TestInterface {
      * @param nameToFind
      * @return
      */
-    public TestInterface2 findTestInterface2ByName(String nameToFind) {
+    public TestFacade2 findTestInterface2ByName(String nameToFind) {
 
         for (int i = 0; i < ti2Holder.size(); i++) {
-            TestInterface2 ti2 = (TestInterface2) ti2Holder.elementAt(i);
+            TestFacade2 ti2 = (TestFacade2) ti2Holder.elementAt(i);
 
             if (ti2.getName().equals(nameToFind)) {
                 return ti2;
@@ -135,12 +135,12 @@ public class TestInterfaceImpl implements TestInterface {
      *
      * @return
      */
-    public TestInterface2[] getTestInterface2s() {
+    public TestFacade2[] getTestInterface2s() {
 
-        TestInterface2[] retVal = new TestInterface2[ti2Holder.size()];
+        TestFacade2[] retVal = new TestFacade2[ti2Holder.size()];
 
         for (int i = 0; i < ti2Holder.size(); i++) {
-            TestInterface2 interface2 = (TestInterface2) ti2Holder.elementAt(i);
+            TestFacade2 interface2 = (TestFacade2) ti2Holder.elementAt(i);
 
             retVal[i] = interface2;
         }
@@ -197,9 +197,9 @@ public class TestInterfaceImpl implements TestInterface {
     public void ping() {
     }
 
-    public byte bytes(byte b, byte[] array) {
-        storedState.put("byte:bytes(byte, byte[]#1)", "" + b);
-        storedState.put("byte:bytes(byte, byte[]#2)", array);
+    public byte byteArrayParamReturningByte(byte b, byte[] array) {
+        storedState.put("byte:byteArrayParamReturningByte(byte, byte[]#1)", "" + b);
+        storedState.put("byte:byteArrayParamReturningByte(byte, byte[]#2)", array);
         byte val = 0;
         for (int i = 0; i < array.length; i++) {
             val += array[i];

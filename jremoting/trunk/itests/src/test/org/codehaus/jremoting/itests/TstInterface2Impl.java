@@ -23,7 +23,7 @@ package org.codehaus.jremoting.itests;
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public class TstInterface2Impl implements TestInterface2 {
+public class TstInterface2Impl implements TestFacade2 {
 
     private String mName;
 
@@ -58,7 +58,7 @@ public class TstInterface2Impl implements TestInterface2 {
 
         // This is a bit unusual, but it is for the AbstractHelloTestCase testEquals method
 
-        TestInterface2 other = (TestInterface2) obj;
+        TestFacade2 other = (TestFacade2) obj;
 
         if (mName.equals("equals-test-one") && other.getName().equals("equals-test-two")) {
             return true;

@@ -20,8 +20,8 @@ package org.codehaus.jremoting.itests.transports;
 import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.piped.PipedTransport;
-import org.codehaus.jremoting.itests.TestInterface;
-import org.codehaus.jremoting.itests.TestInterface2;
+import org.codehaus.jremoting.itests.TestFacade;
+import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.server.Publication;
@@ -51,7 +51,7 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
         server = new PipedStreamServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
                 Executors.newScheduledThreadPool(10) ,new ThreadLocalServerContextFactory(), new ByteStreamEncoding());
         testServer = new TestInterfaceImpl();
-        Publication pd = new Publication(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestInterface3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 
@@ -63,7 +63,7 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
         // Client side setup
         serviceResolver = new JRemotingServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(), in, out));
-        testClient = (TestInterface) serviceResolver.lookupService("Hello");
+        testClient = (TestFacade) serviceResolver.lookupService("Hello");
 
     }
 

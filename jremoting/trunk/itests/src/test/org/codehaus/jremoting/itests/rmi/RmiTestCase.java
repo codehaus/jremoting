@@ -21,8 +21,8 @@ import org.codehaus.jremoting.client.ServiceResolver;
 import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
-import org.codehaus.jremoting.itests.TestInterface;
-import org.codehaus.jremoting.itests.TestInterface2;
+import org.codehaus.jremoting.itests.TestFacade;
+import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.server.Publication;
@@ -45,7 +45,7 @@ public class RmiTestCase extends MockObjectTestCase {
 
     private ConnectingServer server;
     private TestInterfaceImpl testServer;
-    private TestInterface testClient;
+    private TestFacade testClient;
     private Mock mockServerMonitor;
 
     protected void setUp() throws Exception {
@@ -56,13 +56,13 @@ public class RmiTestCase extends MockObjectTestCase {
         // server side setup.
         server = new RmiServer((ServerMonitor) mockServerMonitor.proxy(), 10003);
         testServer = new TestInterfaceImpl();
-        Publication pd = new Publication(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestInterface3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
         ServiceResolver af = new JRemotingServiceResolver(new RmiTransport(new ConsoleClientMonitor(), "127.0.0.1", 10003));
-        testClient = (TestInterface) af.lookupService("Hello");
+        testClient = (TestFacade) af.lookupService("Hello");
 
 
     }

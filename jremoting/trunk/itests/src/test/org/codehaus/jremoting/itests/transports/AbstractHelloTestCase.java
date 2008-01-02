@@ -20,7 +20,7 @@ package org.codehaus.jremoting.itests.transports;
 import junit.framework.Assert;
 import org.codehaus.jremoting.itests.AbstractJRemotingTestCase;
 import org.codehaus.jremoting.itests.CustomSerializableParam;
-import org.codehaus.jremoting.itests.TestInterface2;
+import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
 import org.codehaus.jremoting.itests.TstObject;
@@ -36,37 +36,32 @@ import java.io.IOException;
  */
 public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
 
-    public void testHello2Call() throws Exception {
+    public void testIntParamReturningInt() throws Exception {
         // lookup worked ?
         assertNotNull(testClient);
 
         // Invoke a method over rpc.
-        int retVal = testClient.hello2(11);
+        int retVal = testClient.intParamReturningInt(11);
 
         // test our returned result
         assertEquals(11, retVal);
 
         // test the server has logged the message.
-        Assert.assertEquals("11", ((TestInterfaceImpl) testServer).getStoredState("int:hello2(int)"));
+        Assert.assertEquals("11", ((TestInterfaceImpl) testServer).getStoredState("int:intParamReturningInt(int)"));
     }
 
-    /**
-     * Test the bytes method on the TestInterface.
-     *
-     * @throws Exception
-     */
-    public void testBytes() throws Exception {
+    public void testByteArrayParamReturningByte() throws Exception {
         // lookup worked ?
         assertNotNull(testClient);
 
         // Invoke a method over rpc.
-        byte retVal = testClient.bytes((byte) 5, new byte[]{1, 2});
+        byte retVal = testClient.byteArrayParamReturningByte((byte) 5, new byte[]{1, 2});
 
         // test our returned result
         assertEquals(13, retVal);
 
         // test the server has logged the message.
-        assertEquals("5", ((TestInterfaceImpl) testServer).getStoredState("byte:bytes(byte, byte[]#1)"));
+        assertEquals("5", ((TestInterfaceImpl) testServer).getStoredState("byte:byteArrayParamReturningByte(byte, byte[]#1)"));
     }
 
     /**
@@ -74,12 +69,12 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
      *
      * @throws Exception
      */
-    public void testThrowSpecialException() throws Exception {
+    public void testThrowOfUncheckedExceptionAndError() throws Exception {
         // lookup worked ?
         assertNotNull(testClient);
 
         try {
-            // Invoke a method over rpc.
+            // 0 for this method causes RuntimeException 'hello' as message
             testClient.throwSpecialException(0);
             fail();
         } catch (RuntimeException e) {
@@ -87,7 +82,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         }
 
         try {
-            // Invoke a method over rpc.
+            // 1 for this method causes Error with 'world' as message
             testClient.throwSpecialException(1);
             fail();
         } catch (Error e) {
@@ -95,64 +90,59 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         }
     }
 
-    public void testHello3CallPart1() throws Exception {
+    public void testShortParamReturningBoolean() throws Exception {
         // lookup worked ?
         assertNotNull(testClient);
 
         // Invoke a method over rpc.
-        boolean retVal = testClient.hello3((short) 22);
+        boolean retVal = testClient.shortParamThatMayReturnBoolOrThrow((short) 22);
 
         // test our returned result
         assertTrue(retVal);
 
         // test the server has logged the message.
-        assertEquals("22", ((TestInterfaceImpl) testServer).getStoredState("boolean:hello3(short)"));
+        assertEquals("22", ((TestInterfaceImpl) testServer).getStoredState("boolean:shortParamThatMayReturnBoolOrThrow(short)"));
     }
 
 
-    public void testHello3CallPart2() throws Exception {
+    public void testConditionalThrowsOfCheckedException() throws Exception {
         // lookup worked ?
         assertNotNull(testClient);
 
         // Invoke a method over rpc.
         try {
-            testClient.hello3((short) 90);
+            // 90 for this method causes PropertyVetoException
+            testClient.shortParamThatMayReturnBoolOrThrow((short) 90);
             fail("Expected a Excaption to be throw for hardcoded test 90");
         } catch (PropertyVetoException e) {
             // expected
         } catch (IOException e) {
             fail("Wrong exception throw for hardcoded test 90");
         }
-
         // test the server has logged the message.
-        assertEquals("90", ((TestInterfaceImpl) testServer).getStoredState("boolean:hello3(short)"));
-    }
+        assertEquals("90", ((TestInterfaceImpl) testServer).getStoredState("boolean:shortParamThatMayReturnBoolOrThrow(short)"));
 
-    public void testHello3CallPart3() throws Exception {
-        // lookup worked ?
-        assertNotNull(testClient);
-
-        // Invoke a method over rpc.
         try {
-            testClient.hello3((short) 91);
+            // 91 for this method causes IOException
+            testClient.shortParamThatMayReturnBoolOrThrow((short) 91);
             fail("Expected a Exception to be throw for hardcoded test 91");
         } catch (PropertyVetoException e) {
             fail("Wrong exception throw for hardcoded test 91");
         } catch (IOException e) {
             // expected
         }
-
         // test the server has logged the message.
-        assertEquals("91", ((TestInterfaceImpl) testServer).getStoredState("boolean:hello3(short)"));
+        assertEquals("91", ((TestInterfaceImpl) testServer).getStoredState("boolean:shortParamThatMayReturnBoolOrThrow(short)"));
+
     }
 
-    public void testHello4Call() throws Exception {
+    public void testFloatAndDoubleParamsReturningStrungBuffer() throws Exception {
         // lookup worked ?
         assertNotNull(testClient);
 
         // Invoke a method over rpc.
-        StringBuffer sb = testClient.hello4((float) 10.2, (double) 11.9);
-        StringBuffer sb2 = (StringBuffer) ((TestInterfaceImpl) testServer).getStoredState("StringBuffer:hello4(float,double)");
+        StringBuffer sb = testClient.floatAndDoubleParamsReturningStrungBuffer((float) 10.2, (double) 11.9);
+        StringBuffer sb2 = (StringBuffer) ((TestInterfaceImpl) testServer).getStoredState("StringBuffer:floatAndDoubleParamsReturningStrungBuffer(float,double)");
 
         // test the server has logged the message.
         assertEquals("10.2 11.9", sb2.toString());
@@ -160,11 +150,11 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         //assertEquals(sb, sb2);
     }
 
-    public void testBasicAdditionalFacade() throws Exception {
+    public void testBasicSecondryFacade() throws Exception {
         // lookup worked ?
         assertNotNull(testClient);
 
-        TestInterface2 xyz = testClient.makeTestInterface2("XYZ");
+        TestFacade2 xyz = testClient.makeTestFacade2Or3("XYZ");
 
         assertEquals("XYZ", xyz.getName());
 
@@ -175,31 +165,31 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
 
     }
 
-    public void testAdditionalFacadeFunctionality() throws Exception {
+    public void testSecondaryFacadeCanBeMoreDerivedThanDeclaration() throws Exception {
         // lookup worked ?
         assertNotNull(testClient);
 
-        TestInterface2 testInterface2 = testClient.makeTestInterface2("abc");
+        TestFacade2 testInterface2 = testClient.makeTestFacade2Or3("abc");
         TestInterface3 abc = (TestInterface3) testInterface2;
-        TestInterface2 def = testClient.makeTestInterface2("def");
+        TestFacade2 def = testClient.makeTestFacade2Or3("def");
 
         testClient.morphName(abc);
 
         assertEquals("A_B_C_", abc.getName());
 
-        TestInterface2 def2 = testClient.findTestInterface2ByName("def");
+        TestFacade2 def2 = testClient.findTestInterface2ByName("def");
 
         assertNotNull(def2);
         assertTrue(def == def2);
 
-        TestInterface2[] ti2s = testClient.getTestInterface2s();
+        TestFacade2[] ti2s = testClient.getTestInterface2s();
 
         assertNotNull(ti2s);
 
         assertEquals("Array of returned testInterface2s should be two", 2, ti2s.length);
 
         for (int i = 0; i < ti2s.length; i++) {
-            TestInterface2 ti2 = ti2s[i];
+            TestFacade2 ti2 = ti2s[i];
             assertNotNull(ti2);
         }
 
@@ -227,7 +217,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
 
     public void testSpeed() throws Exception {
 
-        int iterations = 1; // default
+        int iterations = 10000; // default
         String iterationsStr = "@SPEEDTEST-ITERATIONS@";
         try {
             iterations = Integer.parseInt(iterationsStr);
@@ -243,6 +233,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         }
         long end = System.currentTimeMillis();
 
+        System.out.println("[testSpeed] " + this.getClass().getName() + " " + (end-start));
 
     }
 
@@ -263,8 +254,8 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         assertTrue(!testClient.equals(null));
         assertTrue(!testClient.equals("ha!"));
 
-        TestInterface2 one = testClient.makeTestInterface2("equals-test-one");
-        TestInterface2 two = testClient.makeTestInterface2("equals-test-two");
+        TestFacade2 one = testClient.makeTestFacade2Or3("equals-test-one");
+        TestFacade2 two = testClient.makeTestFacade2Or3("equals-test-two");
 
         // These seem to contradict at first glance, but it is what we want.
         assertFalse(one == two);

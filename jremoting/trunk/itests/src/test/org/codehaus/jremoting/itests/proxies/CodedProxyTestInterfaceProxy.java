@@ -18,8 +18,8 @@
 package org.codehaus.jremoting.itests.proxies;
 
 import org.codehaus.jremoting.itests.CustomSerializableParam;
-import org.codehaus.jremoting.itests.TestInterface;
-import org.codehaus.jremoting.itests.TestInterface2;
+import org.codehaus.jremoting.itests.TestFacade;
+import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TstObject;
 
 import java.beans.PropertyVetoException;
@@ -32,16 +32,16 @@ import java.io.IOException;
  * @author Benjamin David Hall
  * @version $Revision: 1.3 $
  */
-public class CodedProxyTestInterfaceProxy implements TestInterface {
+public class CodedProxyTestInterfaceProxy implements TestFacade {
 
-    private TestInterface actualImpl;
+    private TestFacade actualImpl;
 
     /**
      * Constructor CodedProxyTestInterfaceProxy
      *
      * @param actualImpl
      */
-    public CodedProxyTestInterfaceProxy(TestInterface actualImpl) {
+    public CodedProxyTestInterfaceProxy(TestFacade actualImpl) {
         this.actualImpl = actualImpl;
     }
 
@@ -55,35 +55,35 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
     }
 
     /**
-     * Method hello2
+     * Method intParamReturningInt
      *
      * @param greeting
      */
-    public int hello2(int greeting) {
-        return actualImpl.hello2(greeting);
+    public int intParamReturningInt(int greeting) {
+        return actualImpl.intParamReturningInt(greeting);
     }
 
     /**
-     * Method hello3
+     * Method shortParamThatMayReturnBoolOrThrow
      *
      * @param greeting
      * @return
      * @throws IOException
      * @throws PropertyVetoException
      */
-    public boolean hello3(short greeting) throws PropertyVetoException, IOException {
-        return actualImpl.hello3(greeting);
+    public boolean shortParamThatMayReturnBoolOrThrow(short greeting) throws PropertyVetoException, IOException {
+        return actualImpl.shortParamThatMayReturnBoolOrThrow(greeting);
     }
 
     /**
-     * Method hello4
+     * Method floatAndDoubleParamsReturningStrungBuffer
      *
      * @param greeting1
      * @param greeting2
      * @return
      */
-    public StringBuffer hello4(float greeting1, double greeting2) {
-        return actualImpl.hello4(greeting1, greeting2);
+    public StringBuffer floatAndDoubleParamsReturningStrungBuffer(float greeting1, double greeting2) {
+        return actualImpl.floatAndDoubleParamsReturningStrungBuffer(greeting1, greeting2);
     }
 
     /**
@@ -94,13 +94,13 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
     }
 
     /**
-     * Method makeTestInterface2
+     * Method makeTestFacade2Or3
      *
      * @param thingName
      * @return
      */
-    public TestInterface2 makeTestInterface2(String thingName) {
-        return actualImpl.makeTestInterface2(thingName);
+    public TestFacade2 makeTestFacade2Or3(String thingName) {
+        return actualImpl.makeTestFacade2Or3(thingName);
     }
 
     /**
@@ -108,7 +108,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      *
      * @param forThisImpl
      */
-    public void morphName(TestInterface2 forThisImpl) {
+    public void morphName(TestFacade2 forThisImpl) {
         actualImpl.morphName(forThisImpl);
     }
 
@@ -118,7 +118,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      * @param nameToFind
      * @return
      */
-    public TestInterface2 findTestInterface2ByName(String nameToFind) {
+    public TestFacade2 findTestInterface2ByName(String nameToFind) {
         return actualImpl.findTestInterface2ByName(nameToFind);
     }
 
@@ -127,7 +127,7 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
      *
      * @return
      */
-    public TestInterface2[] getTestInterface2s() {
+    public TestFacade2[] getTestInterface2s() {
         return actualImpl.getTestInterface2s();
     }
 
@@ -161,8 +161,8 @@ public class CodedProxyTestInterfaceProxy implements TestInterface {
         actualImpl.ping();
     }
 
-    public byte bytes(byte b, byte[] array) {
-        return actualImpl.bytes(b, array);
+    public byte byteArrayParamReturningByte(byte b, byte[] array) {
+        return actualImpl.byteArrayParamReturningByte(b, array);
     }
 
     public void throwSpecialException(int i) {

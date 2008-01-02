@@ -67,10 +67,10 @@
 						</goals>
 						<configuration>
 							<genName>Hello</genName>
-							<facade>org.codehaus.jremoting.itests.TestInterface</facade>
+							<facade>org.codehaus.jremoting.itests.TestFacade</facade>
 							<classGenDir>${project.build.testOutputDirectory}</classGenDir>
 							<secondaryFacades>
-                                org.codehaus.jremoting.itests.TestInterface3,org.codehaus.jremoting.itests.TestInterface2
+                                org.codehaus.jremoting.itests.TestInterface3,org.codehaus.jremoting.itests.TestFacade2
                             </secondaryFacades>
 							<verbose>true</verbose>
 						</configuration>
