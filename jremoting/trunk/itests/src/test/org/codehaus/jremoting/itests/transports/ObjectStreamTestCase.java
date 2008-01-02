@@ -56,7 +56,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
 
         testServer = new TestInterfaceImpl();
 
-        PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
+        PublicationDescription pd = new PublicationDescription().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
         server.publish(testServer, "Hello", pd);
 
         server.start();

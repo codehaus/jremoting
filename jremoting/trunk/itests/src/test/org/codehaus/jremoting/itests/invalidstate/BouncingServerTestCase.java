@@ -44,7 +44,7 @@ import org.jmock.core.Constraint;
  */
 public class BouncingServerTestCase extends MockObjectTestCase {
 
-    PublicationDescription pd = new PublicationDescription(TestInterface.class, new Class[]{TestInterface3.class, TestInterface2.class});
+    PublicationDescription pd = new PublicationDescription().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
     private Mock mockServerMonitor;
 
     protected void setUp() throws Exception {

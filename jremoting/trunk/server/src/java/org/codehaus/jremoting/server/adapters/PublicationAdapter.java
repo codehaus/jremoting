@@ -104,7 +104,7 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
      *          if a problem during publication.
      */
     public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
-        publish(impl, service, new PublicationDescription(primaryFacade));
+        publish(impl, service, new PublicationDescription().addPrimaryFacade(primaryFacade));
         if (publicationDelegate != null) {
             publicationDelegate.publish(impl, service, primaryFacade);
         }

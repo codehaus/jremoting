@@ -153,7 +153,7 @@ public class ClientContextTestCase extends MockObjectTestCase {
         SocketStreamServer server = new SocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
                 new ByteStreamEncoding(), executorService, sscf, 19333);
 
-        PublicationDescription pd = new PublicationDescription(AccountManager.class);
+        PublicationDescription pd = new PublicationDescription().addPrimaryFacade(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 

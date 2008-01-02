@@ -36,153 +36,27 @@ public final class PublicationDescription {
      */
     private ArrayList<PublicationDescriptionItem> additionalFacades = new ArrayList<PublicationDescriptionItem>();
 
-    /**
-     * Construct a publication description.
-     *
-     * @param primaryFacade the principal interface implemented by the lookupable instance.
-     */
-    public PublicationDescription(Class primaryFacade) {
-        this(new Class[]{primaryFacade}, new Class[0]);
-    }
-
-    /**
-     * Construct a publication description.
-     *
-     * @param primaryFacade the principal interface implemented by the lookupable instance.
-     * @param additionalFacade  additional facade implemented by other instance that
-     *                          would otherwise be serialized and treated as pass-by-value objects.
-     */
-    public PublicationDescription(Class primaryFacade, Class additionalFacade) {
-        this(new Class[]{primaryFacade}, new Class[]{additionalFacade});
-    }
-
-    /**
-     * Construct a publication description.
-     *
-     * @param primaryFacade the principal interface implemented by the lookupable instance.
-     * @param additionalFacades additional facades implemented by other instance that
-     *                          would otherwise be serialized and treated as pass-by-value objects.
-     */
-    public PublicationDescription(Class primaryFacade, Class[] additionalFacades) {
-        this(new Class[]{primaryFacade}, additionalFacades);
-    }
-
-    /**
-     * Construct a publication description.
-     *
-     * @param primaryFacades the principal interfaces implemented by the lookupable instance.
-     */
-    public PublicationDescription(Class[] primaryFacades) {
-        this(primaryFacades, new Class[0]);
-    }
-
-    /**
-     * Construct a publication description.
-     *
-     * @param primaryFacades the principal interfaces implemented by the lookupable instance.
-     * @param additionalFacades  assitional facades implemented by other instance that
-     *                           would otherwise be serialized and treated as pass-by-value objects.
-     */
-    public PublicationDescription(Class[] primaryFacades, Class[] additionalFacades) {
-        addPrimaryFacades(primaryFacades);
-        addAdditionalFacadesToExpose(additionalFacades);
-
-    }
-
-    /**
-     * Construct a publication description.
-     *
-     * @param primaryFacade the principal interface implemented by the lookupable instance.
-     * @param facadesClassLoader       the classloader containing the classdefs (special cases)
-     * @throws PublicationException if there is a problem publishing
-     */
-    public PublicationDescription(String primaryFacade, ClassLoader facadesClassLoader) throws PublicationException {
-        this(makeClasses(new String[]{primaryFacade}, facadesClassLoader), new Class[0]);
-    }
-
-    /**
-     * Construct a publication description.
-     *
-     * @param primaryFacade the principal interface implemented by the lookupable instance.
-     * @param additionalFacade  assitional facade implemented by other instance that
-     *                          would otherwise be serialized and treated as pass-by-value objects.
-     * @param facadesClassLoader       the classloader containing the classdefs (special cases)
-     * @throws PublicationException if there is a problem publishing
-     */
-    public PublicationDescription(String primaryFacade, String additionalFacade, ClassLoader facadesClassLoader) throws PublicationException {
-        this(makeClasses(new String[]{primaryFacade}, facadesClassLoader), makeClasses(new String[]{additionalFacade}, facadesClassLoader));
-    }
-
-    /**
-     * Construct a publication description.
-     *
-     * @param primaryFacade the principal interface implemented by the lookupable instance.
-     * @param additionalFacades assitional facades implemented by other instance that
-     *                          would otherwise be serialized and treated as pass-by-value objects.
-     * @param facadesClassLoader       the classloader containing the classdefs (special cases)
-     * @throws PublicationException if there is a problem publishing
-     */
-    public PublicationDescription(String primaryFacade, String[] additionalFacades, ClassLoader facadesClassLoader) throws PublicationException {
-        this(makeClasses(new String[]{primaryFacade}, facadesClassLoader), makeClasses(additionalFacades, facadesClassLoader));
-    }
-
-    /**
-     * Construct a publication description.
-     *
-     * @param primaryFacades the principal interfaces implemented by the lookupable instance.
-     * @param facadesClassLoader        the classloader containing the classdefs (special cases)
-     * @throws PublicationException if there is a problem publishing
-     */
-    public PublicationDescription(String[] primaryFacades, ClassLoader facadesClassLoader) throws PublicationException {
-        this(makeClasses(primaryFacades, facadesClassLoader), new Class[0]);
-    }
-
-    /**
-     * Construct a publication description.
-     *
-     * @param primaryFacades the principal interfaces implemented by the lookupable instance.
-     * @param additionalFacades  assitional facades implemented by other instances that
-     *                           would otherwise be serialized and treated as pass-by-value objects.
-     * @param facadesClassLoader        the classloader containing the classdefs (special cases)
-     * @throws PublicationException if there is a problem publishing
-     */
-    public PublicationDescription(String[] primaryFacades, String[] additionalFacades, ClassLoader facadesClassLoader) throws PublicationException {
-        this(makeClasses(primaryFacades, facadesClassLoader), makeClasses(additionalFacades, facadesClassLoader));
-    }
 
     public PublicationDescription() {
     }
 
-    private static Class[] makeClasses(String[] classNames, ClassLoader facadesClassLoader) throws PublicationException {
+    public PublicationDescription addPrimaryFacade(Class facade) {
+        primaryFacades.add(new PublicationDescriptionItem(facade));
+        return this;
+    }
 
-        try {
-            Class[] classes = new Class[classNames.length];
-
-            for (int i = 0; i < classNames.length; i++) {
-                String clsNam = classNames[i];
-
-                classes[i] = facadesClassLoader.loadClass(clsNam);
-            }
-
-            return classes;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-
-            throw new PublicationException("Class not found during publication:" + e.getMessage() + " " + e.getException().getMessage());
+    public PublicationDescription addPrimaryFacades(Class... facades) {
+        for (Class facade : facades) {
+            addPrimaryFacade(new PublicationDescriptionItem(facade));
         }
+        return this;
     }
 
-    public void addPrimaryFacades(Class[] primaryFacades) {
-        for (Class primaryFacade : primaryFacades) {
-            addPrimaryFacade(new PublicationDescriptionItem(primaryFacade));
-        }
+    public PublicationDescription addPrimaryFacade(PublicationDescriptionItem publicationDescriptionItem) {
+        return addPrimaryFacades(new PublicationDescriptionItem[]{publicationDescriptionItem});
     }
 
-    public void addPrimaryFacade(PublicationDescriptionItem publicationDescriptionItem) {
-        addPrimaryFacades(new PublicationDescriptionItem[]{publicationDescriptionItem});
-    }
-
-    public void addPrimaryFacades(PublicationDescriptionItem[] publicationDescriptionItems) {
+    public PublicationDescription addPrimaryFacades(PublicationDescriptionItem... publicationDescriptionItems) {
         for (PublicationDescriptionItem publicationDescriptionItem : publicationDescriptionItems) {
             if (publicationDescriptionItem == null) {
                 throw new RuntimeException("'PubDescItem' cannot be null");
@@ -192,19 +66,21 @@ public final class PublicationDescription {
             }
             primaryFacades.add(publicationDescriptionItem);
         }
+        return this;
     }
 
-    public void addAdditionalFacadesToExpose(Class[] additionalFacades) {
-        for (Class additionalFacade : additionalFacades) {
-            addAdditionalFacadeToExpose(new PublicationDescriptionItem(additionalFacade));
+    public PublicationDescription addAdditionalFacades(Class... facades) {
+        for (Class facade : facades) {
+            addAdditionalFacade(new PublicationDescriptionItem(facade));
         }
+        return this;
     }
 
-    public void addAdditionalFacadeToExpose(PublicationDescriptionItem publicationDescriptionItem) {
-        addAdditionalFacadesToExpose(new PublicationDescriptionItem[]{publicationDescriptionItem});
+    public PublicationDescription addAdditionalFacade(PublicationDescriptionItem publicationDescriptionItem) {
+        return addAdditionalFacade(new PublicationDescriptionItem[]{publicationDescriptionItem});
     }
 
-    public void addAdditionalFacadesToExpose(PublicationDescriptionItem[] publicationDescriptionItems) {
+    public PublicationDescription addAdditionalFacade(PublicationDescriptionItem... publicationDescriptionItems) {
         for (PublicationDescriptionItem publicationDescriptionItem : publicationDescriptionItems) {
             if (publicationDescriptionItem == null) {
                 throw new RuntimeException("'PubDescItem' cannot be null");
@@ -214,8 +90,8 @@ public final class PublicationDescription {
             }
             additionalFacades.add(publicationDescriptionItem);
         }
+        return this;
     }
-
 
     /**
      * Get the principal facades to expose.
@@ -276,4 +152,5 @@ public final class PublicationDescription {
 
         return facadeRetVal;
     }
+
 }

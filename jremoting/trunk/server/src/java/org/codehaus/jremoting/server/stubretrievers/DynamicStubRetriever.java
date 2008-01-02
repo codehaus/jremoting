@@ -54,7 +54,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     }
 
     public void generate(String service, Class primaryFacade, ClassLoader classLoader) throws PublicationException {
-        generate(service, new PublicationDescription(primaryFacade), classLoader);
+        generate(service, new PublicationDescription().addPrimaryFacade(primaryFacade), classLoader);
     }
 
 
