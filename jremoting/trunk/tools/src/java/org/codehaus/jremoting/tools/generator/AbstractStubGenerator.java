@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.tools.generator;
 
 import org.codehaus.jremoting.server.StubGenerator;
-import org.codehaus.jremoting.server.PublicationDescriptionItem;
+import org.codehaus.jremoting.server.PublicationItem;
 
 import java.lang.reflect.Method;
 import java.io.File;
@@ -36,8 +36,8 @@ public abstract class AbstractStubGenerator implements StubGenerator {
     private String classGenDir;
     private String genName;
     private String classpath;
-    private PublicationDescriptionItem[] additionalFacades;
-    private PublicationDescriptionItem[] primaryFacades;
+    private PublicationItem[] additionalFacades;
+    private PublicationItem[] primaryFacades;
 
     /**
      * Get the directory name of the class generation directory.
@@ -75,7 +75,7 @@ public abstract class AbstractStubGenerator implements StubGenerator {
      *
      * @return the additional facades
      */
-    public PublicationDescriptionItem[] getAdditionalFacades() {
+    public PublicationItem[] getAdditionalFacades() {
         return additionalFacades;
     }
 
@@ -84,7 +84,7 @@ public abstract class AbstractStubGenerator implements StubGenerator {
      *
      * @return the facades
      */
-    public PublicationDescriptionItem[] getPrimaryFacades() {
+    public PublicationItem[] getPrimaryFacades() {
         return primaryFacades;
     }
 
@@ -94,7 +94,7 @@ public abstract class AbstractStubGenerator implements StubGenerator {
      *
      * @param primaryFacades the facades.
      */
-    public void setPrimaryFacades(PublicationDescriptionItem[] primaryFacades) {
+    public void setPrimaryFacades(PublicationItem[] primaryFacades) {
         this.primaryFacades = primaryFacades;
     }
 
@@ -104,7 +104,7 @@ public abstract class AbstractStubGenerator implements StubGenerator {
      *
      * @param additionalFacades the facades.
      */
-    public void setAdditionalFacades(PublicationDescriptionItem[] additionalFacades) {
+    public void setAdditionalFacades(PublicationItem[] additionalFacades) {
         this.additionalFacades = additionalFacades;
     }
 
@@ -151,7 +151,7 @@ public abstract class AbstractStubGenerator implements StubGenerator {
             return false;
         }
 
-        for (PublicationDescriptionItem additionalFacade : additionalFacades) {
+        for (PublicationItem additionalFacade : additionalFacades) {
             if (clazz.getName().equals(additionalFacade.getFacadeClass().getName())) {
                 return true;
             } else if (clazz.getName().equals("[L" + additionalFacade.getFacadeClass().getName() + ";")) {
@@ -184,8 +184,8 @@ public abstract class AbstractStubGenerator implements StubGenerator {
      * @param publicationDescriptionItems
      * @return needs asyn behavior
      */
-    protected boolean needsAsyncBehavior(PublicationDescriptionItem[] publicationDescriptionItems) {
-        for (PublicationDescriptionItem publicationDescriptionItem : publicationDescriptionItems) {
+    protected boolean needsAsyncBehavior(PublicationItem[] publicationDescriptionItems) {
+        for (PublicationItem publicationDescriptionItem : publicationDescriptionItems) {
             if (publicationDescriptionItem.hasAsyncBehavior()) {
                 return true;
             }

@@ -23,7 +23,7 @@ import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.stubs.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
-import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
@@ -69,7 +69,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
 
         asyncTestImpl = new AsyncTestImpl();
         // automatic determination of async elements.
-        PublicationDescription pd = new PublicationDescription().addPrimaryFacade(AsyncTest.class);
+        Publication pd = new Publication().addPrimaryFacade(AsyncTest.class);
         stubRetriever.generate("AsyncTestB", pd, this.getClass().getClassLoader());
         server.publish(asyncTestImpl, "AsyncTestB", pd);
         server.start();

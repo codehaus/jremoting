@@ -43,7 +43,7 @@ public interface DynamicStubGenerator {
      * @param facadesClassLoader            - classloader containing all needed for proxy generation
      * @throws PublicationException if there is a problem publishing
      */
-    void generate(String service, PublicationDescription publicationDescription, ClassLoader facadesClassLoader) throws PublicationException;
+    void generate(String service, Publication publicationDescription, ClassLoader facadesClassLoader) throws PublicationException;
 
 
 }

@@ -28,7 +28,7 @@ import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
 import org.jmock.Mock;
@@ -65,7 +65,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12333);
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
-        PublicationDescription pd = new PublicationDescription().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 
@@ -95,7 +95,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
                 new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
 
         TestInterfaceImpl testServer = new TestInterfaceImpl();
-        PublicationDescription pd = new PublicationDescription().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 
@@ -128,7 +128,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Object
         SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12347, new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
         TestInterfaceImpl testServer = new TestInterfaceImpl();
-        PublicationDescription pd = new PublicationDescription().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 
@@ -153,7 +153,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // server side setup.
         SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12348);
         TestInterfaceImpl testServer = new TestInterfaceImpl();
-        PublicationDescription pd = new PublicationDescription().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 

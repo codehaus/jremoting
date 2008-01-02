@@ -23,7 +23,7 @@ import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.BadServerSideEvent;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Server;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -133,7 +133,7 @@ public abstract class StatefulServer implements Server {
      * @param publicationDescription The publication description.
      * @throws org.codehaus.jremoting.server.PublicationException if an error during publication.
      */
-    public void publish(Object impl, String service, PublicationDescription publicationDescription) throws PublicationException {
+    public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
         invokerDelegate.publish(impl, service, publicationDescription);
     }
 

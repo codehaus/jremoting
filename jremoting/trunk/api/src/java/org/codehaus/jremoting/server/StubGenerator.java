@@ -31,14 +31,14 @@ public interface StubGenerator {
      *
      * @param primaryFacades the facades to expose
      */
-    void setPrimaryFacades(PublicationDescriptionItem[] primaryFacades);
+    void setPrimaryFacades(PublicationItem[] primaryFacades);
 
     /**
      * Set the additional facades
      *
      * @param additionalFacades additional facades to expose
      */
-    void setAdditionalFacades(PublicationDescriptionItem[] additionalFacades);
+    void setAdditionalFacades(PublicationItem[] additionalFacades);
 
     /**
      * Set the classpath

@@ -23,7 +23,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 import org.codehaus.jremoting.server.StubGenerator;
-import org.codehaus.jremoting.server.PublicationDescriptionItem;
+import org.codehaus.jremoting.server.PublicationItem;
 
 import java.io.File;
 import java.util.StringTokenizer;
@@ -189,23 +189,23 @@ public class StubGeneratorTask extends Task {
             stubGenerator.setGenName(genName);
             stubGenerator.setClasspath(classpath.concatSystemClasspath("ignore").toString());
 
-            PublicationDescriptionItem[] primaryFacades = new PublicationDescriptionItem[this.primaryFacades.length];
+            PublicationItem[] primaryFacades = new PublicationItem[this.primaryFacades.length];
             ClassLoader classLoader = new AntClassLoader(getProject(), classpath);
 
             for (int i = 0; i < this.primaryFacades.length; i++) {
                 String cn = this.primaryFacades[i];
-                primaryFacades[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
+                primaryFacades[i] = new PublicationItem(classLoader.loadClass(cn));
             }
 
             stubGenerator.setPrimaryFacades(primaryFacades);
 
             if (additionalFacades != null) {
-                PublicationDescriptionItem[] additionalFacades = new PublicationDescriptionItem[this.additionalFacades.length];
+                PublicationItem[] additionalFacades = new PublicationItem[this.additionalFacades.length];
 
                 for (int i = 0; i < this.additionalFacades.length; i++) {
                     String cn = this.additionalFacades[i];
 
-                    additionalFacades[i] = new PublicationDescriptionItem(classLoader.loadClass(cn));
+                    additionalFacades[i] = new PublicationItem(classLoader.loadClass(cn));
                 }
 
                 stubGenerator.setAdditionalFacades(additionalFacades);

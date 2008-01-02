@@ -28,7 +28,7 @@ import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
-import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
 
@@ -46,7 +46,7 @@ public class XStreamAndReflectionsStubsTestCase extends AbstractHelloTestCase {
         // server side setup.
         server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 10333, new org.codehaus.jremoting.server.encoders.XStreamEncoding());
         testServer = new TestInterfaceImpl();
-        PublicationDescription pd = new PublicationDescription().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 

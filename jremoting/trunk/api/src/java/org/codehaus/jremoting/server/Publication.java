@@ -20,44 +20,44 @@ package org.codehaus.jremoting.server;
 import java.util.ArrayList;
 
 /**
- * Class PublicationDescription
+ * Class Publication
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public final class PublicationDescription {
+public final class Publication {
 
     /**
      * An array of facades to expose.
      */
-    private ArrayList<PublicationDescriptionItem> primaryFacades = new ArrayList<PublicationDescriptionItem>();
+    private ArrayList<PublicationItem> primaryFacades = new ArrayList<PublicationItem>();
     /**
      * An array of additional facades.
      */
-    private ArrayList<PublicationDescriptionItem> additionalFacades = new ArrayList<PublicationDescriptionItem>();
+    private ArrayList<PublicationItem> additionalFacades = new ArrayList<PublicationItem>();
 
 
-    public PublicationDescription() {
+    public Publication() {
     }
 
-    public PublicationDescription addPrimaryFacade(Class facade) {
-        primaryFacades.add(new PublicationDescriptionItem(facade));
+    public Publication addPrimaryFacade(Class facade) {
+        primaryFacades.add(new PublicationItem(facade));
         return this;
     }
 
-    public PublicationDescription addPrimaryFacades(Class... facades) {
+    public Publication addPrimaryFacades(Class... facades) {
         for (Class facade : facades) {
-            addPrimaryFacade(new PublicationDescriptionItem(facade));
+            addPrimaryFacade(new PublicationItem(facade));
         }
         return this;
     }
 
-    public PublicationDescription addPrimaryFacade(PublicationDescriptionItem publicationDescriptionItem) {
-        return addPrimaryFacades(new PublicationDescriptionItem[]{publicationDescriptionItem});
+    public Publication addPrimaryFacade(PublicationItem publicationDescriptionItem) {
+        return addPrimaryFacades(new PublicationItem[]{publicationDescriptionItem});
     }
 
-    public PublicationDescription addPrimaryFacades(PublicationDescriptionItem... publicationDescriptionItems) {
-        for (PublicationDescriptionItem publicationDescriptionItem : publicationDescriptionItems) {
+    public Publication addPrimaryFacades(PublicationItem... publicationDescriptionItems) {
+        for (PublicationItem publicationDescriptionItem : publicationDescriptionItems) {
             if (publicationDescriptionItem == null) {
                 throw new RuntimeException("'PubDescItem' cannot be null");
             }
@@ -69,19 +69,19 @@ public final class PublicationDescription {
         return this;
     }
 
-    public PublicationDescription addAdditionalFacades(Class... facades) {
+    public Publication addAdditionalFacades(Class... facades) {
         for (Class facade : facades) {
-            addAdditionalFacade(new PublicationDescriptionItem(facade));
+            addAdditionalFacade(new PublicationItem(facade));
         }
         return this;
     }
 
-    public PublicationDescription addAdditionalFacade(PublicationDescriptionItem publicationDescriptionItem) {
-        return addAdditionalFacade(new PublicationDescriptionItem[]{publicationDescriptionItem});
+    public Publication addAdditionalFacade(PublicationItem publicationDescriptionItem) {
+        return addAdditionalFacade(new PublicationItem[]{publicationDescriptionItem});
     }
 
-    public PublicationDescription addAdditionalFacade(PublicationDescriptionItem... publicationDescriptionItems) {
-        for (PublicationDescriptionItem publicationDescriptionItem : publicationDescriptionItems) {
+    public Publication addAdditionalFacade(PublicationItem... publicationDescriptionItems) {
+        for (PublicationItem publicationDescriptionItem : publicationDescriptionItems) {
             if (publicationDescriptionItem == null) {
                 throw new RuntimeException("'PubDescItem' cannot be null");
             }
@@ -98,8 +98,8 @@ public final class PublicationDescription {
      *
      * @return an array of those interfaces.
      */
-    public PublicationDescriptionItem[] getPrimaryFacades() {
-        PublicationDescriptionItem[] items = new PublicationDescriptionItem[primaryFacades.size()];
+    public PublicationItem[] getPrimaryFacades() {
+        PublicationItem[] items = new PublicationItem[primaryFacades.size()];
         primaryFacades.toArray(items);
         return items;
     }
@@ -109,8 +109,8 @@ public final class PublicationDescription {
      *
      * @return an array of those facades.
      */
-    public PublicationDescriptionItem[] getAdditionalFacades() {
-        PublicationDescriptionItem[] items = new PublicationDescriptionItem[additionalFacades.size()];
+    public PublicationItem[] getAdditionalFacades() {
+        PublicationItem[] items = new PublicationItem[additionalFacades.size()];
         additionalFacades.toArray(items);
         return items;
     }
@@ -118,12 +118,11 @@ public final class PublicationDescription {
     public String[] getAdditionalFacadeNames() {
         String[] items = new String[additionalFacades.size()];
         for (int i = 0; i < additionalFacades.size(); i++) {
-            PublicationDescriptionItem item = additionalFacades.get(i);
+            PublicationItem item = additionalFacades.get(i);
             items[i] = item.getFacadeClass().getName();
         }
         return items;
     }
-
 
 
     /**
@@ -138,7 +137,7 @@ public final class PublicationDescription {
 
         Class facadeRetVal = null;
 
-        for (PublicationDescriptionItem additionalFacade : additionalFacades) {
+        for (PublicationItem additionalFacade : additionalFacades) {
             Class facadeClass = additionalFacade.getFacadeClass();
 
             if (facadeClass.isAssignableFrom(instance.getClass())) {

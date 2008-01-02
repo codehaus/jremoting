@@ -24,7 +24,7 @@ import org.codehaus.jremoting.itests.TestInterface;
 import org.codehaus.jremoting.itests.TestInterface2;
 import org.codehaus.jremoting.itests.TestInterface3;
 import org.codehaus.jremoting.itests.TestInterfaceImpl;
-import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.encoders.ObjectStreamEncoding;
@@ -63,7 +63,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         server = new PipedStreamServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
                 Executors.newScheduledThreadPool(10) ,new ThreadLocalServerContextFactory(), new ObjectStreamEncoding());
         testServer = new TestInterfaceImpl();
-        PublicationDescription pd = new PublicationDescription().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
+        Publication pd = new Publication().addPrimaryFacade(TestInterface.class).addAdditionalFacades(TestInterface3.class, TestInterface2.class);
 
 
         BcelStubGenerator generator = new BcelStubGenerator();

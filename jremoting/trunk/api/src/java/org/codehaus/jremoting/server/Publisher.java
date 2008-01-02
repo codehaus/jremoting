@@ -17,8 +17,6 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.requests.InvokeMethod;
-
 /**
  * Interface Server
  *
@@ -46,7 +44,7 @@ public interface Publisher {
      * @param publicationDescription describing complex publishing cases.
      * @throws PublicationException if there is a problem publishing
      */
-    void publish(Object impl, String service, PublicationDescription publicationDescription) throws PublicationException;
+    void publish(Object impl, String service, Publication publicationDescription) throws PublicationException;
 
     /**
      * UnPublish a previously published object.

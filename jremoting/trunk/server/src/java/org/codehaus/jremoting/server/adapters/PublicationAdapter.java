@@ -25,8 +25,8 @@ import java.util.Vector;
 
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.server.ServiceHandler;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.PublicationDescriptionItem;
+import org.codehaus.jremoting.server.Publication;
+import org.codehaus.jremoting.server.PublicationItem;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Publisher;
 import org.codehaus.jremoting.server.transports.DefaultServiceHandler;
@@ -104,7 +104,7 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
      *          if a problem during publication.
      */
     public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
-        publish(impl, service, new PublicationDescription().addPrimaryFacade(primaryFacade));
+        publish(impl, service, new Publication().addPrimaryFacade(primaryFacade));
         if (publicationDelegate != null) {
             publicationDelegate.publish(impl, service, primaryFacade);
         }
@@ -118,10 +118,10 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
      * @param publicationDescription a description of the publication.
      * @throws PublicationException if a problem during publication.
      */
-    public void publish(Object impl, String service, PublicationDescription publicationDescription) throws PublicationException {
+    public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
 
-        PublicationDescriptionItem[] primaryFacades = publicationDescription.getPrimaryFacades();
-        PublicationDescriptionItem[] additionalFacades = publicationDescription.getAdditionalFacades();
+        PublicationItem[] primaryFacades = publicationDescription.getPrimaryFacades();
+        PublicationItem[] additionalFacades = publicationDescription.getAdditionalFacades();
 
         if (services.containsKey(StaticStubHelper.formatServiceName(service))) {
             throw new PublicationException("Service '" + service + "' already published");
@@ -139,7 +139,7 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
 
         mainServiceHandler.addInstance(new Long(0), impl);
 
-        for (PublicationDescriptionItem primaryFacade : primaryFacades) {
+        for (PublicationItem primaryFacade : primaryFacades) {
             Class clazz = primaryFacade.getFacadeClass();
 
             Method methods[] = null;
@@ -170,7 +170,7 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
         services.put(StaticStubHelper.formatServiceName(service), mainServiceHandler);
 
         // add method maps for all the additional facades.
-        for (PublicationDescriptionItem additionalFacade : additionalFacades) {
+        for (PublicationItem additionalFacade : additionalFacades) {
             Class facadeClass = additionalFacade.getFacadeClass();
             String encodedClassName = MethodNameHelper.encodeClassName(additionalFacade.getFacadeClass().getName());
             HashMap<String, Method> methodMap = new HashMap<String, Method>();

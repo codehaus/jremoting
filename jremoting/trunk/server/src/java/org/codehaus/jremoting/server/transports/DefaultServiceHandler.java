@@ -24,7 +24,7 @@ import org.codehaus.jremoting.responses.MethodInvoked;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.MethodInvocationMonitor;
-import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServiceHandler;
 import org.codehaus.jremoting.server.adapters.ServiceHandlerAccessor;
 import org.codehaus.jremoting.server.monitors.NullMethodInvocationMonitor;
@@ -79,7 +79,7 @@ public class DefaultServiceHandler implements ServiceHandler {
     /**
      * The publication description.
      */
-    private final PublicationDescription publicationDescription;
+    private final Publication publicationDescription;
     private final Class facadeClass;
     private MethodInvocationMonitor methodInvocationMonitor = new NullMethodInvocationMonitor();
     private ServiceHandlerAccessor serviceHandlerAccessor;
@@ -97,7 +97,7 @@ public class DefaultServiceHandler implements ServiceHandler {
      */
     public DefaultServiceHandler(ServiceHandlerAccessor serviceHandlerAccessor,
             String publishedThing, Map<String, Method> methodMap,
-                                PublicationDescription publicationDescription, Class facadeClass) {
+                                Publication publicationDescription, Class facadeClass) {
         this.serviceHandlerAccessor = serviceHandlerAccessor;
         this.publishedThing = publishedThing;
         this.methodMap = methodMap;

@@ -27,7 +27,7 @@ import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.encoders.StreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
-import org.codehaus.jremoting.server.PublicationDescription;
+import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
@@ -153,7 +153,7 @@ public class ClientContextTestCase extends MockObjectTestCase {
         SocketStreamServer server = new SocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
                 new ByteStreamEncoding(), executorService, sscf, 19333);
 
-        PublicationDescription pd = new PublicationDescription().addPrimaryFacade(AccountManager.class);
+        Publication pd = new Publication().addPrimaryFacade(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 

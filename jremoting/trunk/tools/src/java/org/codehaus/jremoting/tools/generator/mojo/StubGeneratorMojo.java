@@ -29,7 +29,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.jremoting.server.StubGenerator;
-import org.codehaus.jremoting.server.PublicationDescriptionItem;
+import org.codehaus.jremoting.server.PublicationItem;
 
 
 /**
@@ -143,10 +143,10 @@ public class StubGeneratorMojo
         }
     }
 
-    private PublicationDescriptionItem[] createPublicationDescriptionItems(String[] classNames, ClassLoader classLoader) throws ClassNotFoundException {
-        PublicationDescriptionItem[] items = new PublicationDescriptionItem[classNames.length];
+    private PublicationItem[] createPublicationDescriptionItems(String[] classNames, ClassLoader classLoader) throws ClassNotFoundException {
+        PublicationItem[] items = new PublicationItem[classNames.length];
         for (int i = 0; i < classNames.length; i++) {
-            items[i] = new PublicationDescriptionItem(
+            items[i] = new PublicationItem(
                     classLoader.loadClass(classNames[i]));
         }
         return items;

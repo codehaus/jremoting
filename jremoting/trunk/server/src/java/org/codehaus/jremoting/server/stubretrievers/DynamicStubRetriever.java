@@ -54,7 +54,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     }
 
     public void generate(String service, Class primaryFacade, ClassLoader classLoader) throws PublicationException {
-        generate(service, new PublicationDescription().addPrimaryFacade(primaryFacade), classLoader);
+        generate(service, new Publication().addPrimaryFacade(primaryFacade), classLoader);
     }
 
 
@@ -155,14 +155,14 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         return baos.toByteArray();
     }
 
-    public void generate(String service, PublicationDescription publicationDescription, ClassLoader classLoader) throws PublicationException {
+    public void generate(String service, Publication publicationDescription, ClassLoader classLoader) throws PublicationException {
 
         if (classLoader == null) {
             classLoader = this.getClass().getClassLoader();
         }
 
-        PublicationDescriptionItem[] primaryFacades;
-        PublicationDescriptionItem[] additionalFacades;
+        PublicationItem[] primaryFacades;
+        PublicationItem[] additionalFacades;
 
         primaryFacades = publicationDescription.getPrimaryFacades();
         additionalFacades = publicationDescription.getAdditionalFacades();
@@ -197,7 +197,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
             System.err.println("** CLasspath=" + classpath);
             System.err.println("** Classes/Facades to Expose..");
 
-            for (PublicationDescriptionItem primaryFacade : primaryFacades) {
+            for (PublicationItem primaryFacade : primaryFacades) {
                 String aString = primaryFacade.getFacadeClass().getName();
 
                 System.err.println("** .." + aString);
@@ -212,11 +212,11 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         facadeClasses.put(service, primaryFacade);
     }
 
-    public void publish(Object impl, String service, PublicationDescription publicationDescription) throws PublicationException {
+    public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
         facadeClasses.put(service, publicationDescription.getPrimaryFacades()[0]);
-        PublicationDescriptionItem[] additionalFacades = publicationDescription.getAdditionalFacades();
+        PublicationItem[] additionalFacades = publicationDescription.getAdditionalFacades();
         for (int i = 0; i < additionalFacades.length; i++) {
-            PublicationDescriptionItem additionalFacade = additionalFacades[i];
+            PublicationItem additionalFacade = additionalFacades[i];
             facadeClasses.put(service + "_" + additionalFacade.getFacadeClass().getName(), additionalFacade.getFacadeClass());
         }
     }

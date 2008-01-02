@@ -32,7 +32,7 @@ import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.PUSH;
 import org.apache.bcel.generic.Type;
-import org.codehaus.jremoting.server.PublicationDescriptionItem;
+import org.codehaus.jremoting.server.PublicationItem;
 import org.codehaus.jremoting.util.MethodNameHelper;
 import org.codehaus.jremoting.util.StaticStubHelper;
 
@@ -78,7 +78,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
         if (getAdditionalFacades() != null) {
             for (int i = 0; i < getAdditionalFacades().length; i++) {
                 String encodedClassName = MethodNameHelper.encodeClassName(getAdditionalFacades()[i].getFacadeClass());
-                generateStubClass(StaticStubHelper.formatProxyClassName(getGenName(), encodedClassName), new PublicationDescriptionItem[]{getAdditionalFacades()[i]});
+                generateStubClass(StaticStubHelper.formatProxyClassName(getGenName(), encodedClassName), new PublicationItem[]{getAdditionalFacades()[i]});
 
             }
         }
@@ -93,7 +93,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * @param generatedClassName the name of the class to generate.
      * @param facadesToStubify   the facades to stubify.
      */
-    protected void generateStubClass(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
+    protected void generateStubClass(String generatedClassName, PublicationItem[] facadesToStubify) {
         //Start creating class
         createNewClassDeclaration(generatedClassName, facadesToStubify);
         //create constructor that takes StubHelper
@@ -126,11 +126,11 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * @param generatedClassName the stub class name
      * @param facadesToStubify
      */
-    protected void createNewClassDeclaration(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
+    protected void createNewClassDeclaration(String generatedClassName, PublicationItem[] facadesToStubify) {
 
         String[] facades = new String[facadesToStubify.length + 1];
         for (int i = 0; i < facadesToStubify.length; i++) {
-            PublicationDescriptionItem publicationDescriptionItem = facadesToStubify[i];
+            PublicationItem publicationDescriptionItem = facadesToStubify[i];
             facades[i] = publicationDescriptionItem.getFacadeClass().getName();
         }
         facades[facadesToStubify.length] = "org.codehaus.jremoting.client.Stub";
@@ -234,7 +234,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * @param generatedClassName the generated class name
      * @param facadesToStubify   the facades to make stubs for.
      */
-    protected void createInterfaceMethods(String generatedClassName, PublicationDescriptionItem[] facadesToStubify) {
+    protected void createInterfaceMethods(String generatedClassName, PublicationItem[] facadesToStubify) {
         for (int x = 0; x < facadesToStubify.length; x++) {
             Class clazz = facadesToStubify[x].getFacadeClass();
 
@@ -255,7 +255,7 @@ public class BcelStubGenerator extends AbstractStubGenerator {
      * @param mth                the method
      * @param facadesToStubify
      */
-    protected void createInterfaceMethod(String generatedClassName, Method mth, PublicationDescriptionItem facadesToStubify) {
+    protected void createInterfaceMethod(String generatedClassName, Method mth, PublicationItem facadesToStubify) {
         InstructionList il = new InstructionList();
         MethodGen method = new MethodGen(Constants.ACC_PUBLIC, getReturnType(mth), getArguments(mth), getArgumentNames(mth), mth.getName(), generatedClassName, il, constantsPool);
 

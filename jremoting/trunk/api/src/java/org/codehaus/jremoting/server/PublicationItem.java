@@ -17,38 +17,43 @@
  */
 package org.codehaus.jremoting.server;
 
+import org.codehaus.jremoting.annotations.Asynchronous;
+import org.codehaus.jremoting.annotations.Commit;
+import org.codehaus.jremoting.annotations.Rollback;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
 import java.lang.reflect.Method;
 import java.util.Vector;
 
 /**
- * Class PublicationDescriptionItem
+ * Class PublicationItem
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public class PublicationDescriptionItem {
+public class PublicationItem {
 
     private final Class facadeClass;
     private final Vector<String> asyncMethods = new Vector<String>();
     private final Vector<String> commitMethods = new Vector<String>();
     private final Vector<String> rollbackMethods = new Vector<String>();
 
-    public PublicationDescriptionItem(Class facadeClass) {
-        this.facadeClass = facadeClass;
-        Method[] methods = facadeClass.getDeclaredMethods();
+    public PublicationItem(Class facade) {
+        this.facadeClass = facade;
+        Method[] methods = facade.getDeclaredMethods();
         try {
-            AttributeHelper attributeHelper = new AttributeHelper();
             for (int i = 0; i < methods.length; i++) {
                 Method method = methods[i];
-                if (attributeHelper.isMethodAsync(method)) {
+                if (method.isAnnotationPresent(Asynchronous.class)) {
+                    checkReturnType(method);
                     asyncMethods.add(MethodNameHelper.getMethodSignature(method));
                 }
-                if (attributeHelper.isMethodAsyncCommit(method)) {
+                if (method.isAnnotationPresent(Commit.class)) {
+                    checkReturnType(method);
                     commitMethods.add(MethodNameHelper.getMethodSignature(method));
                 }
-                if (attributeHelper.isMethodAsyncRollback(method)) {
+                if (method.isAnnotationPresent(Rollback.class)) {
+                    checkReturnType(method);
                     rollbackMethods.add(MethodNameHelper.getMethodSignature(method));
                 }
             }
@@ -65,48 +70,11 @@ public class PublicationDescriptionItem {
         }
     }
 
-    public PublicationDescriptionItem(Class facadeClass, String[] asyncMethods, String[] commitMethods, String[] rollbackMethods) throws PublicationException {
-        this.facadeClass = facadeClass;
-        if (facadeClass == null) {
-            throw new RuntimeException("Facade class nust not be null");
-        }
-
-        for (int i = 0; i < asyncMethods.length; i++) {
-            String asyncMethod = asyncMethods[i];
-            testAsyncMethodType(facadeClass.getMethods(), asyncMethod);
-            this.asyncMethods.add(asyncMethod);
-        }
-
-        for (int i = 0; i < commitMethods.length; i++) {
-            String commitMethod = commitMethods[i];
-            testAsyncMethodType(facadeClass.getMethods(), commitMethod);
-            this.commitMethods.add(commitMethod);
-        }
-
-        for (int i = 0; i < rollbackMethods.length; i++) {
-            String rollbackMethod = rollbackMethods[i];
-            testAsyncMethodType(facadeClass.getMethods(), rollbackMethod);
-            this.rollbackMethods.add(rollbackMethod);
+    private void checkReturnType(Method method) {
+        if (!method.getReturnType().getName().equals("void")) {
+            throw new PublicationException("Only 'void' returning methods are eligible as asynchronous/commit/rollback methods.");
         }
     }
-
-    private void testAsyncMethodType(Method[] methods, String methodSignature) throws PublicationException {
-        for (int i = 0; i < methods.length; i++) {
-            Method method = methods[i];
-            if (MethodNameHelper.getMethodSignature(method).equals(methodSignature)) {
-                if (method.getReturnType().toString().equals("void") != true) {
-                    throw new PublicationException("Only 'void' returning methods are " + "eligible for asynchronous methods.");
-                }
-
-                Class[] exceptions = method.getExceptionTypes();
-
-                if (exceptions.length != 0) {
-                    throw new PublicationException("Only methods without exceptions " + "are eligible for asynchronous behavior ");
-                }
-            }
-        }
-    }
-
 
     public Class getFacadeClass() {
         return facadeClass;
@@ -115,8 +83,8 @@ public class PublicationDescriptionItem {
     public boolean isCommit(Method method) {
         String mthSig = MethodNameHelper.getMethodSignature(method);
         for (int i = 0; i < commitMethods.size(); i++) {
-            String asyncMethod = commitMethods.elementAt(i);
-            if (asyncMethod.equals(mthSig)) {
+            String commitMethod = commitMethods.elementAt(i);
+            if (commitMethod.equals(mthSig)) {
                 return true;
             }
         }
@@ -126,8 +94,8 @@ public class PublicationDescriptionItem {
     public boolean isRollback(Method method) {
         String mthSig = MethodNameHelper.getMethodSignature(method);
         for (int i = 0; i < rollbackMethods.size(); i++) {
-            String asyncMethod = rollbackMethods.elementAt(i);
-            if (asyncMethod.equals(mthSig)) {
+            String rollbackMethod = rollbackMethods.elementAt(i);
+            if (rollbackMethod.equals(mthSig)) {
                 return true;
             }
         }

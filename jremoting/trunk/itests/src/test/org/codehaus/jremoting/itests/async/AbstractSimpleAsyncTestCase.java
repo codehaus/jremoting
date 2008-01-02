@@ -23,8 +23,7 @@ import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
 import org.codehaus.jremoting.client.stubs.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
-import org.codehaus.jremoting.server.PublicationDescription;
-import org.codehaus.jremoting.server.PublicationDescriptionItem;
+import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
@@ -76,7 +75,7 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
                 ccf, 11003);
 
         asyncTestImpl = new AsyncTestImpl();
-        PublicationDescription pd = new PublicationDescription().addPrimaryFacade(AsyncTest.class);
+        Publication pd = new Publication().addPrimaryFacade(AsyncTest.class);
         stubRetriever.generate("AsyncTest", pd, this.getClass().getClassLoader());
         server.publish(asyncTestImpl, "AsyncTest", pd);
         server.start();
