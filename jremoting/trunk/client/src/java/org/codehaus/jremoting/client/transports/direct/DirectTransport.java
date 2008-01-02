@@ -29,22 +29,22 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Class DirectUnMarshalledTransport
+ * Class DirectTransport
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class DirectUnMarshalledTransport extends StatefulTransport {
+public final class DirectTransport extends StatefulTransport {
 
     private ServerInvoker invoker;
 
-    public DirectUnMarshalledTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger,
+    public DirectTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger,
                                    ServerInvoker invoker) {
-        super(clientMonitor, executorService, connectionPinger, DirectUnMarshalledTransport.class.getClassLoader());
+        super(clientMonitor, executorService, connectionPinger, DirectTransport.class.getClassLoader());
         this.invoker = invoker;
     }
 
-    public DirectUnMarshalledTransport(ClientMonitor clientMonitor, ServerInvoker invoker) {
+    public DirectTransport(ClientMonitor clientMonitor, ServerInvoker invoker) {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), invoker);
         this.invoker = invoker;
     }
