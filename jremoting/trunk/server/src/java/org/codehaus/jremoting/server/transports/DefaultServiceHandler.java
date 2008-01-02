@@ -77,7 +77,7 @@ public class DefaultServiceHandler implements ServiceHandler {
     private Object mainInstance;
 
     /**
-     * The publication description.
+     * The publication.
      */
     private final Publication publicationDescription;
     private final Class facadeClass;
@@ -86,15 +86,6 @@ public class DefaultServiceHandler implements ServiceHandler {
 
     private final Long zero = new Long(0);
 
-    /**
-     * Constructor DefaultServiceHandler
-     *
-     * @param publishedThing         The published Thing
-     * @param methodMap              The method map
-     * @param publicationDescription The publication description
-     * @param serviceHandlerAccessor
-     * @param facadeClass
-     */
     public DefaultServiceHandler(ServiceHandlerAccessor serviceHandlerAccessor,
             String publishedThing, Map<String, Method> methodMap,
                                 Publication publicationDescription, Class facadeClass) {
@@ -106,21 +97,10 @@ public class DefaultServiceHandler implements ServiceHandler {
     }
 
 
-    /**
-     * Method toString
-     *
-     * @return a string.
-     */
     public String toString() {
         return "DefaultServiceHandler:" + publishedThing;
     }
 
-    /**
-     * Add an Instance
-     *
-     * @param reference The reference ID
-     * @param instance    The instance
-     */
     public void addInstance(Long reference, Object instance) {
 
         if (reference.equals(zero)) {
@@ -131,12 +111,6 @@ public class DefaultServiceHandler implements ServiceHandler {
         ReferencesForInstances.put(instance, reference);
     }
 
-    /**
-     * Method replaceInstance
-     *
-     * @param oldInstance     The old instance
-     * @param withInstance The new instance.
-     */
     public void replaceInstance(Object oldInstance, Object withInstance) {
 
         Long ref = ReferencesForInstances.get(oldInstance);
@@ -150,12 +124,6 @@ public class DefaultServiceHandler implements ServiceHandler {
         }
     }
 
-    /**
-     * Get or make a reference ID for an instance
-     *
-     * @param instance The instance
-     * @return A reference ID
-     */
     public Long getOrMakeReferenceIDForInstance(Object instance) {
 
         Long ref = ReferencesForInstances.get(instance);
@@ -168,12 +136,6 @@ public class DefaultServiceHandler implements ServiceHandler {
         return ref;
     }
 
-    /**
-     * Handle a method invocation
-     *
-     * @param request The emthod request
-     * @return The reply.
-     */
     public Response handleMethodInvocation(InvokeMethod request, Object connectionDetails) {
 
         String methodSignature = request.getMethodSignature();
@@ -203,7 +165,7 @@ public class DefaultServiceHandler implements ServiceHandler {
                 return new NoSuchReference(request.getReference());
             }
 
-            correctArgs(request.getArgs());
+            replaceSecondaryFacadesInArgList(request.getArgs());
             methodInvocationMonitor.methodInvoked(instance.getClass(), methodSignature, connectionDetails);
             return new MethodInvoked(method.invoke(instance, request.getArgs()));
         } catch (InvocationTargetException ite) {
@@ -224,12 +186,7 @@ public class DefaultServiceHandler implements ServiceHandler {
         }
     }
 
-    /**
-     * Correct the arguments for a request (seme are 'additional facades' and can;t be serialized).
-     *
-     * @param args         The arguments to correct
-     */
-    private void correctArgs(Object[] args) {
+    private void replaceSecondaryFacadesInArgList(Object[] args) {
 
         for (int i = 0; i < args.length; i++) {
 
@@ -242,12 +199,6 @@ public class DefaultServiceHandler implements ServiceHandler {
         }
     }
 
-    /**
-     * Get the most derived type.
-     *
-     * @param instance The instance
-     * @return The class
-     */
     public Class getMostDerivedType(Object instance) {
         return publicationDescription.getMostDerivedType(instance);
     }
@@ -266,29 +217,15 @@ public class DefaultServiceHandler implements ServiceHandler {
     }
 
 
-    /**
-     * Encode a class name
-     *
-     * @param className The class name
-     * @return the enoded class name.
-     */
     public String encodeClassName(String className) {
         return className.replace('.', '$');
     }
 
-    /**
-     * Get the list of remote method names
-     */
     public String[] getListOfMethods() {
         String[] methodNames = (String[]) methodMap.keySet().toArray(new String[0]);
         return methodNames;
     }
 
-    /**
-     * Get a new reference ID
-     *
-     * @return The reference
-     */
     private Long getNewReference() {
         // approve everything and set session identifier.
         return new Long((++c_nextReference << 16) + ((long) (Math.random() * 65536)));

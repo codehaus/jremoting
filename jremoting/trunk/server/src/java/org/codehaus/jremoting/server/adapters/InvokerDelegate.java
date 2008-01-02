@@ -27,7 +27,6 @@ import org.codehaus.jremoting.requests.GroupedMethodRequest;
 import org.codehaus.jremoting.requests.InvokeAsyncMethod;
 import org.codehaus.jremoting.requests.InvokeFacadeMethod;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.requests.ListInvokableMethods;
 import org.codehaus.jremoting.requests.LookupService;
 import org.codehaus.jremoting.requests.RequestConstants;
 import org.codehaus.jremoting.requests.RetrieveStub;
@@ -39,7 +38,6 @@ import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.responses.FacadeArrayMethodInvoked;
 import org.codehaus.jremoting.responses.FacadeMethodInvoked;
 import org.codehaus.jremoting.responses.GarbageCollected;
-import org.codehaus.jremoting.responses.InvokableMethods;
 import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.Ping;
@@ -129,9 +127,6 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
 
             } else if (request.getRequestCode() == RequestConstants.LISTSERVICESREQUEST) {
                 return doServiceListRequest();
-
-            } else if (request.getRequestCode() == RequestConstants.LISTMETHODSREQUEST) {
-                return doListMethodsRequest(request);
 
             } else {
                 return new RequestFailed("Unknown Request Type: " + request.getClass().getName());
@@ -431,24 +426,6 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         org.codehaus.jremoting.requests.Ping ping = (org.codehaus.jremoting.requests.Ping) request;
         super.doesSessionExistAndRefreshItIfItDoes(ping.getSession());
         return new Ping();
-    }
-
-    /**
-     * Do a ListMethods Request
-     *
-     * @param request The request
-     * @return The reply
-     */
-    private Response doListMethodsRequest(Request request) {
-        ListInvokableMethods lReq = (ListInvokableMethods) request;
-        String publishedThing = StaticStubHelper.formatServiceName(lReq.getService());
-
-        if (!isPublished(publishedThing)) {
-            //Should it throw an exception back?
-            return new InvokableMethods(new String[0]);
-        }
-
-        return new InvokableMethods(getServiceHandler(publishedThing).getListOfMethods());
     }
 
 

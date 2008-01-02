@@ -70,8 +70,6 @@ public interface ServiceHandler {
 
     void setMethodInvocationMonitor(MethodInvocationMonitor monitor);
 
-    String[] getListOfMethods();
-
     Class getFacadeClass();
 
     String[] getAdditionalFacades();
