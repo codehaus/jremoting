@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
-import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
+import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.piped.PipedTransport;
 import org.codehaus.jremoting.itests.TestFacade;
@@ -84,16 +84,16 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         ((PipedStreamServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        serviceResolver = new JRemotingServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
+        jremotinClient = new JRemotingClient(new PipedTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.encoders.ObjectStreamEncoding(), in, out));
-        testClient = (TestFacade) serviceResolver.lookupService("Hello33");
+        testClient = (TestFacade) jremotinClient.lookupService("Hello33");
 
     }
 
     protected void tearDown() throws Exception {
         testClient = null;
         System.gc();
-        serviceResolver.close();
+        jremotinClient.close();
         server.stop();
     }
 

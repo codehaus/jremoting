@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.ContextFactory;
-import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
+import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.stubs.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
@@ -74,9 +74,9 @@ public class BcelTestCase extends AbstractHelloTestCase {
         // Client side setup
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
-        serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(), "127.0.0.1", 10201), (ContextFactory) mock.proxy(), new StubsFromServer());
-        testClient = (TestFacade) serviceResolver.lookupService("Hello223");
+        testClient = (TestFacade) jremotinClient.lookupService("Hello223");
 
     }
 
@@ -88,7 +88,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        serviceResolver.close();
+        jremotinClient.close();
         server.stop();
     }
 

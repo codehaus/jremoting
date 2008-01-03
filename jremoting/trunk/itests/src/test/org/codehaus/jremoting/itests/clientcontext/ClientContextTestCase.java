@@ -20,9 +20,8 @@ package org.codehaus.jremoting.itests.clientcontext;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.Context;
-import org.codehaus.jremoting.client.ServiceResolver;
 import org.codehaus.jremoting.client.Transport;
-import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
+import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.encoders.StreamEncoding;
@@ -161,9 +160,9 @@ public class ClientContextTestCase extends MockObjectTestCase {
         ClientMonitor cm = new ConsoleClientMonitor();
         Transport handler = new SocketTransport(cm, factory0, "127.0.0.1", 19333);
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();
-        ServiceResolver serviceResolver = new JRemotingServiceResolver(handler, factory1);
+        JRemotingClient jc = new JRemotingClient(handler, factory1);
 
-        final AccountManager clientSideAccountManager = (AccountManager) serviceResolver.lookupService("OurAccountManager");
+        final AccountManager clientSideAccountManager = (AccountManager) jc.lookupService("OurAccountManager");
 
         Thread threadOne = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 11);
         Thread threadTwo = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 22);

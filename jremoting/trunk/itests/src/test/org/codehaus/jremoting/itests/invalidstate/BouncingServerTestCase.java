@@ -21,7 +21,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
-import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
+import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
@@ -62,19 +62,19 @@ public class BouncingServerTestCase extends MockObjectTestCase {
         // server side setup.
         SocketStreamServer server = startServer();
 
-        JRemotingServiceResolver serviceResolver = null;
+        JRemotingClient jRemotingClient = null;
         try {
 
             // Client side setup
 
             Mock clientMonitor = mock(ClientMonitor.class);
             clientMonitor.expects(once()).method("methodLogging").withNoArguments().will(returnValue(false));
-            clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(JRemotingServiceResolver.DefaultStubHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
+            clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(JRemotingClient.DefaultStubHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
             )});
 
-            serviceResolver = new JRemotingServiceResolver(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
+            jRemotingClient = new JRemotingClient(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
                     new ByteStreamEncoding(), "127.0.0.1", 12201));
-            TestFacade testClient = (TestFacade) serviceResolver.lookupService("Hello55");
+            TestFacade testClient = (TestFacade) jRemotingClient.lookupService("Hello55");
 
 
             testClient.intParamReturningInt(100);
@@ -95,7 +95,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             System.gc();
 
             try {
-                serviceResolver.close();
+                jRemotingClient.close();
             } catch (NoSuchSessionException e) {
             }
 

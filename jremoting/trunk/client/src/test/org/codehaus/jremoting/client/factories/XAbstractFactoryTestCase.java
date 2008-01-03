@@ -27,7 +27,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingServiceResolver factory = new JRemotingServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             @Override
             protected Object getInstance(String facadeClassName, String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
                 return "bar";
@@ -50,7 +50,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingServiceResolver factory = new JRemotingServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -73,7 +73,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingServiceResolver factory = new JRemotingServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -94,7 +94,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingServiceResolver factory = new JRemotingServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
@@ -115,7 +115,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingServiceResolver factory = new JRemotingServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) {
                 return null;
             }
@@ -136,13 +136,13 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingServiceResolver factory = new JRemotingServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) {
                 return null;
             }
         };
 
-        String[] services = factory.listServices();
+        String[] services = factory.getServiceNames();
         assertEquals(2, services.length);
         assertEquals("1", services[0]);
         assertEquals("2", services[1]);

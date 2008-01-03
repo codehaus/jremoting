@@ -23,7 +23,6 @@ import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
-import org.codehaus.jremoting.client.ServiceResolver;
 import org.codehaus.jremoting.client.Stub;
 import org.codehaus.jremoting.client.StubHelper;
 import org.codehaus.jremoting.client.StubRegistry;
@@ -54,7 +53,6 @@ import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.responses.ServicesList;
-import org.codehaus.jremoting.server.AuthenticationChallenge;
 import org.codehaus.jremoting.util.FacadeRefHolder;
 import org.codehaus.jremoting.util.StaticStubHelper;
 
@@ -65,43 +63,41 @@ import java.util.HashMap;
 
 
 /**
- * Class JRemotingServiceResolver
+ * Class JRemotingClient
  *
  * @author Paul Hammant
  * @author Peter Royal <a href="mailto:proyal@managingpartners.com">proyal@managingpartners.com</a>
  * @author Mauro Talevi
  */
-public class JRemotingServiceResolver implements ServiceResolver {
+public class JRemotingClient {
 
     private static final int STUB_PREFIX_LENGTH = StaticStubHelper.getStubPrefixLength();
     protected final Transport transport;
     private final ContextFactory contextFactory;
     private final StubClassLoader stubClassLoader;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
-    private transient AuthenticationChallenge authChallenge;
     protected final long session;
     private StubRegistry stubRegistry;
 
-    public JRemotingServiceResolver(Transport transport) throws ConnectionException {
+    public JRemotingClient(Transport transport) throws ConnectionException {
         this(transport, new ThreadLocalContextFactory());
     }
 
-    public JRemotingServiceResolver(final Transport transport, ContextFactory contextFactory) throws ConnectionException {
-        this (transport, contextFactory, JRemotingServiceResolver.class.getClassLoader());
+    public JRemotingClient(final Transport transport, ContextFactory contextFactory) throws ConnectionException {
+        this (transport, contextFactory, JRemotingClient.class.getClassLoader());
     }
     
-    public JRemotingServiceResolver(final Transport transport, ContextFactory contextFactory, ClassLoader classLoader) throws ConnectionException {
+    public JRemotingClient(final Transport transport, ContextFactory contextFactory, ClassLoader classLoader) throws ConnectionException {
         this (transport, contextFactory, new StubsOnClient(classLoader));
     }
 
-    public JRemotingServiceResolver(final Transport transport, ContextFactory contextFactory, StubClassLoader stubClassLoader) throws ConnectionException {
+    public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubClassLoader stubClassLoader) throws ConnectionException {
         this.transport = transport;
         this.contextFactory = contextFactory;
         this.stubClassLoader = stubClassLoader;
 
         ConnectionOpened response = transport.openConnection();
 
-        authChallenge = response.getAuthenticationChallenge();
         session = response.getSessionID();
 
         stubRegistry = new StubRegistry() {
@@ -129,7 +125,7 @@ public class JRemotingServiceResolver implements ServiceResolver {
             }
 
             public Object getInstance(String facadeClassName, String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
-                return JRemotingServiceResolver.this.getInstance(facadeClassName, publishedServiceName, objectName, stubHelper);
+                return JRemotingClient.this.getInstance(facadeClassName, publishedServiceName, objectName, stubHelper);
             }
 
             public void marshallCorrection(String remoteObjectName, String methodSignature, Object[] args, Class[] argClasses) {
@@ -201,17 +197,13 @@ public class JRemotingServiceResolver implements ServiceResolver {
         return lookupService(publishedServiceName, null);
     }
 
-    public AuthenticationChallenge getAuthenticationChallenge() {
-        return authChallenge;
-    }
-
-    public String[] listServices() {
+    public String[] getServiceNames() {
         Response ar = transport.invoke(new ListServices(), true);
         return ((ServicesList) ar).getServices();
     }
 
     public boolean hasService(String publishedServiceName) {
-        final String[] services = listServices();
+        final String[] services = getServiceNames();
         for (String service : services) {
             if (service.equals(publishedServiceName)) {
                 return true;

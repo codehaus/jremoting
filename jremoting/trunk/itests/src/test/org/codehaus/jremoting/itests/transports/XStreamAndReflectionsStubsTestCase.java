@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.itests.transports;
 
 
-import org.codehaus.jremoting.client.factories.JRemotingServiceResolver;
+import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.stubs.StubsViaReflection;
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
@@ -51,8 +51,8 @@ public class XStreamAndReflectionsStubsTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        serviceResolver = new JRemotingServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new XStreamEncoding(), "localhost", 10333), new ThreadLocalContextFactory(), new StubsViaReflection());
-        testClient = (TestFacade) serviceResolver.lookupService("Hello");
+        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new XStreamEncoding(), "localhost", 10333), new ThreadLocalContextFactory(), new StubsViaReflection());
+        testClient = (TestFacade) jremotinClient.lookupService("Hello");
 
     }
 
@@ -60,7 +60,7 @@ public class XStreamAndReflectionsStubsTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        serviceResolver.close();
+        jremotinClient.close();
         server.stop();
     }
 
