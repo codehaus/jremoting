@@ -1,6 +1,5 @@
 /* ====================================================================
  * Copyright 2005-2006 JRemoting Committers
- * Portions copyright 2001 - 2004 Apache Software Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +14,16 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server.context;
+package org.codehaus.jremoting.client;
 
-import org.codehaus.jremoting.client.Context;
+import org.codehaus.jremoting.client.StreamEncoder;
+import org.codehaus.jremoting.ConnectionException;
 
-/**
- * @author Paul Hammant and Rune Johanessen (pairing for part)
- * @version $Revision: 1.2 $
- */
+import java.io.InputStream;
+import java.io.OutputStream;
 
-public interface ServerContextFactory {
+public interface StreamEncoding {
 
-    ServerSideContext get();
-
-    void set(ServerSideContext context);
-
-    boolean isSet();
+    StreamEncoder makeStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException;
 
 }

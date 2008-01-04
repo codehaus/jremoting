@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.clientcontext;
 
-import org.codehaus.jremoting.server.context.ServerContextFactory;
+import org.codehaus.jremoting.server.ServerContextFactory;
 
 import java.util.HashMap;
 

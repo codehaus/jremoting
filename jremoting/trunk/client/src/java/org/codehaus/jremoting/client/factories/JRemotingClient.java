@@ -29,7 +29,7 @@ import org.codehaus.jremoting.client.StubRegistry;
 import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.authentication.NullAuthenticator;
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
-import org.codehaus.jremoting.client.stubs.StubClassLoader;
+import org.codehaus.jremoting.client.StubClassLoader;
 import org.codehaus.jremoting.client.stubs.StubsOnClient;
 import org.codehaus.jremoting.client.stubs.StubsViaReflection;
 import org.codehaus.jremoting.requests.CollectGarbage;
@@ -55,7 +55,7 @@ import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.responses.ServicesList;
-import org.codehaus.jremoting.server.AuthenticationChallenge;
+import org.codehaus.jremoting.authentication.AuthenticationChallenge;
 import org.codehaus.jremoting.util.FacadeRefHolder;
 import org.codehaus.jremoting.util.StaticStubHelper;
 

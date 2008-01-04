@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.codehaus.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,12 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server.encoders;
+package org.codehaus.jremoting.client;
 
-import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.ConnectionException;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.IOException;
+public interface StubClassLoader {
 
-public interface StreamEncoding {
-
-    public StreamEncoder createEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
-                                           InputStream inputStream, OutputStream outputStream, Object connectionDetails) throws IOException;
+    Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, StubHelper stubHelper) throws ConnectionException;
 
 }

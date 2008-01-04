@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.itests.clientcontext;
 
 import org.codehaus.jremoting.client.Context;
-import org.codehaus.jremoting.server.context.ServerContextFactory;
+import org.codehaus.jremoting.server.ServerContextFactory;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)

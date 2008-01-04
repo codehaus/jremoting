@@ -1,5 +1,6 @@
 /* ====================================================================
  * Copyright 2005-2006 JRemoting Committers
+ * Portions copyright 2001 - 2004 Apache Software Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,5 +17,19 @@
  */
 package org.codehaus.jremoting.server;
 
-public interface AuthenticationChallenge {
+import org.codehaus.jremoting.client.Context;
+
+/**
+ * @author Paul Hammant and Rune Johanessen (pairing for part)
+ * @version $Revision: 1.2 $
+ */
+
+public interface ServerContextFactory {
+
+    ServerSideContext get();
+
+    void set(ServerSideContext context);
+
+    boolean isSet();
+
 }

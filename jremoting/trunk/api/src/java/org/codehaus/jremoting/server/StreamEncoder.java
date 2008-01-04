@@ -1,4 +1,4 @@
-package org.codehaus.jremoting.server.encoders;
+package org.codehaus.jremoting.server;
 
 import java.io.IOException;
 

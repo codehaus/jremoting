@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server.context;
+package org.codehaus.jremoting.server;
 
 import org.codehaus.jremoting.client.Context;
 

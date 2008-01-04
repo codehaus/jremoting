@@ -17,6 +17,7 @@
 package org.codehaus.jremoting.client.encoders;
 
 import org.codehaus.jremoting.client.StreamEncoder;
+import org.codehaus.jremoting.client.StreamEncoding;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.io.InputStream;

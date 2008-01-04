@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.transports;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.StreamEncoder;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.encoders.StreamEncoding;
+import org.codehaus.jremoting.client.StreamEncoding;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 

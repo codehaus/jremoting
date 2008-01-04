@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.responses;
 
 import org.codehaus.jremoting.Sessionable;
-import org.codehaus.jremoting.server.AuthenticationChallenge;
+import org.codehaus.jremoting.authentication.AuthenticationChallenge;
 
 import java.io.IOException;
 import java.io.ObjectInput;

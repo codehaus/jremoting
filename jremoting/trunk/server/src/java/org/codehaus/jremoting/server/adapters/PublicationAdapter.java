@@ -29,6 +29,7 @@ import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.PublicationItem;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Publisher;
+import org.codehaus.jremoting.server.ServiceHandlerAccessor;
 import org.codehaus.jremoting.server.transports.DefaultServiceHandler;
 import org.codehaus.jremoting.util.StaticStubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;

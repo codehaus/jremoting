@@ -21,7 +21,7 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.encoders.StreamEncoding;
+import org.codehaus.jremoting.client.StreamEncoding;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.StreamTransport;
 import org.codehaus.jremoting.responses.ConnectionOpened;

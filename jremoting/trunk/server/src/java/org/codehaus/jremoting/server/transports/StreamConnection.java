@@ -24,7 +24,7 @@ import org.codehaus.jremoting.responses.ConnectionKilled;
 import org.codehaus.jremoting.responses.BadServerSideEvent;
 import org.codehaus.jremoting.server.Connection;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.encoders.StreamEncoder;
+import org.codehaus.jremoting.server.StreamEncoder;
 
 import java.io.EOFException;
 import java.io.IOException;

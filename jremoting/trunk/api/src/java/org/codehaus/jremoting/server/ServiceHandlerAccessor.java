@@ -1,4 +1,4 @@
-package org.codehaus.jremoting.server.adapters;
+package org.codehaus.jremoting.server;
 
 import org.codehaus.jremoting.server.ServiceHandler;
 import org.codehaus.jremoting.server.Publisher;

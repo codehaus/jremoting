@@ -1,6 +1,8 @@
 package org.codehaus.jremoting.server.encoders;
 
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.StreamEncoding;
+import org.codehaus.jremoting.server.StreamEncoder;
 
 import java.io.IOException;
 import java.io.InputStream;

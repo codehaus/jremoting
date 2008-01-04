@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.server.transports.socket;
 
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.encoders.StreamEncoder;
+import org.codehaus.jremoting.server.StreamEncoder;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.StreamConnection;
 

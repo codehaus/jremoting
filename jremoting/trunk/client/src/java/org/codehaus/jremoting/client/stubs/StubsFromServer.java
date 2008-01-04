@@ -20,6 +20,7 @@ package org.codehaus.jremoting.client.stubs;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.Transport;
+import org.codehaus.jremoting.client.StubClassLoader;
 import org.codehaus.jremoting.requests.RetrieveStub;
 import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.RequestFailed;

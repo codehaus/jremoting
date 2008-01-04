@@ -21,14 +21,14 @@ import org.codehaus.jremoting.JRemotingException;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.server.StreamEncoding;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.context.ServerContextFactory;
+import org.codehaus.jremoting.server.ServerContextFactory;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
-import org.codehaus.jremoting.server.encoders.StreamEncoder;
-import org.codehaus.jremoting.server.encoders.StreamEncoding;
+import org.codehaus.jremoting.server.StreamEncoder;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 
 import java.io.IOException;

@@ -19,6 +19,7 @@ package org.codehaus.jremoting.client.stubs;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.Transport;
+import org.codehaus.jremoting.client.StubClassLoader;
 import org.codehaus.jremoting.util.StaticStubHelper;
 
 import java.lang.reflect.Constructor;

@@ -26,7 +26,7 @@ import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.MethodInvocationMonitor;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServiceHandler;
-import org.codehaus.jremoting.server.adapters.ServiceHandlerAccessor;
+import org.codehaus.jremoting.server.ServiceHandlerAccessor;
 import org.codehaus.jremoting.server.monitors.NullMethodInvocationMonitor;
 import org.codehaus.jremoting.util.FacadeRefHolder;
 

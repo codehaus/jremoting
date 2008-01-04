@@ -3,7 +3,7 @@ package org.codehaus.jremoting.server.authenticators;
 import org.codehaus.jremoting.authentication.Authentication;
 import org.codehaus.jremoting.authentication.NameAndPasswordAuthentication;
 import org.codehaus.jremoting.server.Authenticator;
-import org.codehaus.jremoting.server.AuthenticationChallenge;
+import org.codehaus.jremoting.authentication.AuthenticationChallenge;
 
 public class NameAndPasswordAuthenticator implements Authenticator {
 

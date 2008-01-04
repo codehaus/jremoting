@@ -18,9 +18,8 @@
 
 package org.codehaus.jremoting.server.context;
 
-import org.codehaus.jremoting.client.Context;
-import org.codehaus.jremoting.server.context.ServerContextFactory;
-import org.codehaus.jremoting.server.context.ServerSideContext;
+import org.codehaus.jremoting.server.ServerContextFactory;
+import org.codehaus.jremoting.server.ServerSideContext;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
