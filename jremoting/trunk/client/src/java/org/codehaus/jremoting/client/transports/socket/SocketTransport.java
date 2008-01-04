@@ -43,21 +43,10 @@ public class SocketTransport extends StreamTransport {
     private final String host;
     private final int port;
 
-
-    /**
-     * SocketTransport
-     *
-     * @param clientMonitor
-     * @param executorService
-     * @param connectionPinger
-     * @param facadesClassLoader The class loader
-     * @param host                  The host to connect to
-     * @param port                  The port to conenct to
-     */
     public SocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
-                                                 ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
-                                                 StreamEncoding streamEncoding,
-                                                 String host, int port) throws ConnectionRefusedException, ConnectionException {
+                           ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
+                           StreamEncoding streamEncoding,
+                           String host, int port) throws ConnectionRefusedException, ConnectionException {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding);
         this.host = host;
         this.port = port;
@@ -80,11 +69,6 @@ public class SocketTransport extends StreamTransport {
                 Thread.currentThread().getContextClassLoader(), streamEncoding, host, port);
     }
 
-    /**
-     * Method tryReconnect
-     *
-     * @return connected or not.
-     */
     protected boolean tryReconnect() {
 
         try {
@@ -92,12 +76,7 @@ public class SocketTransport extends StreamTransport {
             socket.setSoTimeout(60 * 1000);
             setStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
             return true;
-        } catch (ConnectionException ce) {
-            // TODO log ?
-            return false;
         } catch (IOException ce) {
-
-            // TODO log ?
             return false;
         }
     }

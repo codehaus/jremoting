@@ -17,7 +17,7 @@ public interface StreamEncoder {
      * @throws ConnectionException    if a problem during write & read.
      * @throws ClassNotFoundException If a Class is not found during serialization.
      */
-    Request writeResponseAndGetRequest(Response response) throws IOException, ConnectionException, ClassNotFoundException;
+    Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException;
 
     Object getConnectionDetails();
 

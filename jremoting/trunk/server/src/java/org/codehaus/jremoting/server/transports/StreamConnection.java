@@ -101,12 +101,9 @@ public abstract class StreamConnection implements Runnable, Connection {
                     encoder.close();
                 } catch (IOException ioe) {
                     more = false;
-
                     if (ioe instanceof EOFException) {
                         encoder.close();
                     } else if (isSafeEnd(ioe)) {
-                        //ioe.printStackTrace();
-                        // TODO implement implementation independant logger
                         encoder.close();
                     } else {
                         serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected IOE #1", ioe);

@@ -64,13 +64,10 @@ public class XStreamEncoder extends AbstractStreamEncoder {
 
     }
 
-    //TODO - review IOE and ConnExcept in the throws list. one extends the other.
-    public synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException, ConnectionException {
-
+    public synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException {
         if (response != null) {
             writeResponse(response);
         }
-
         return readRequest();
     }
 

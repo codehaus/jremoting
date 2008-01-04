@@ -53,7 +53,7 @@ public class ByteStreamEncoder extends AbstractStreamEncoder {
      * @throws ConnectionException    In an IO Exception
      * @throws ClassNotFoundException If a class not found during deserialization.
      */
-    public synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException, ConnectionException {
+    public synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException {
 
         if (response != null) {
             writeResponse(response);
