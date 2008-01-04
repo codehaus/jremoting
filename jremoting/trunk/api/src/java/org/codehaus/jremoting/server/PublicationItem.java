@@ -41,31 +41,19 @@ public class PublicationItem {
     public PublicationItem(Class facade) {
         this.facadeClass = facade;
         Method[] methods = facade.getDeclaredMethods();
-        try {
-            for (int i = 0; i < methods.length; i++) {
-                Method method = methods[i];
-                if (method.isAnnotationPresent(Asynchronous.class)) {
-                    checkReturnType(method);
-                    asyncMethods.add(MethodNameHelper.getMethodSignature(method));
-                }
-                if (method.isAnnotationPresent(Commit.class)) {
-                    checkReturnType(method);
-                    commitMethods.add(MethodNameHelper.getMethodSignature(method));
-                }
-                if (method.isAnnotationPresent(Rollback.class)) {
-                    checkReturnType(method);
-                    rollbackMethods.add(MethodNameHelper.getMethodSignature(method));
-                }
+        for (int i = 0; i < methods.length; i++) {
+            Method method = methods[i];
+            if (method.isAnnotationPresent(Asynchronous.class)) {
+                checkReturnType(method);
+                asyncMethods.add(MethodNameHelper.getMethodSignature(method));
             }
-        } catch (NoClassDefFoundError ncdfe) {
-            // TODO a soft check for Atributes / CommonsLogger missing?
-            //System.out.println("--> ncdfe " + ncdfe.getMessage());
-            //ncdfe.printStackTrace();
-            // attribute jars are missing.
-            // This allowed for when there is no Async functionality.
-        } catch (RuntimeException re) {
-            if (!re.getClass().getName().equals("org.apache.commons.attributes.AttributesException")) {
-                throw re;
+            if (method.isAnnotationPresent(Commit.class)) {
+                checkReturnType(method);
+                commitMethods.add(MethodNameHelper.getMethodSignature(method));
+            }
+            if (method.isAnnotationPresent(Rollback.class)) {
+                checkReturnType(method);
+                rollbackMethods.add(MethodNameHelper.getMethodSignature(method));
             }
         }
     }
