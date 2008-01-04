@@ -62,9 +62,13 @@ public final class Service extends Response {
 
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(reference);
+        out.writeObject(primaryFacadeName);
+        out.writeObject(secondaryFacadeNames);
     }
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         reference = (Long) in.readObject();
+        primaryFacadeName = (String) in.readObject();
+        secondaryFacadeNames = (String[]) in.readObject();
     }
 }

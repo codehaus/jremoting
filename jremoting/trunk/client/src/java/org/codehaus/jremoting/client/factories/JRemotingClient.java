@@ -18,18 +18,19 @@
 package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.authentication.AuthenticationChallenge;
 import org.codehaus.jremoting.client.Authenticator;
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.Stub;
+import org.codehaus.jremoting.client.StubFactory;
 import org.codehaus.jremoting.client.StubHelper;
 import org.codehaus.jremoting.client.StubRegistry;
 import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.authentication.NullAuthenticator;
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
-import org.codehaus.jremoting.client.StubClassLoader;
 import org.codehaus.jremoting.client.stubs.StubsOnClient;
 import org.codehaus.jremoting.client.stubs.StubsViaReflection;
 import org.codehaus.jremoting.requests.CollectGarbage;
@@ -55,7 +56,6 @@ import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.responses.ServicesList;
-import org.codehaus.jremoting.authentication.AuthenticationChallenge;
 import org.codehaus.jremoting.util.FacadeRefHolder;
 import org.codehaus.jremoting.util.StaticStubHelper;
 
@@ -77,7 +77,7 @@ public class JRemotingClient {
     private static final int STUB_PREFIX_LENGTH = StaticStubHelper.getStubPrefixLength();
     protected final Transport transport;
     private final ContextFactory contextFactory;
-    private final StubClassLoader stubClassLoader;
+    private final StubFactory stubClassLoader;
     private final Authenticator authenticator;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
     protected final long session;
@@ -89,18 +89,14 @@ public class JRemotingClient {
     }
 
     public JRemotingClient(final Transport transport, ContextFactory contextFactory) throws ConnectionException {
-        this(transport, contextFactory, JRemotingClient.class.getClassLoader());
-    }
-    
-    public JRemotingClient(final Transport transport, ContextFactory contextFactory, ClassLoader classLoader) throws ConnectionException {
-        this(transport, contextFactory, new StubsOnClient(classLoader), new NullAuthenticator());
+        this(transport, contextFactory, defaultStubFactory());
     }
 
-    public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubClassLoader stubClassLoader) throws ConnectionException {
-        this(transport, contextFactory, stubClassLoader, new NullAuthenticator());
+    public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubFactory stubClassLoader) throws ConnectionException {
+        this(transport, contextFactory, stubClassLoader, defaultAuthenticator());
     }
 
-    public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubClassLoader stubClassLoader, Authenticator authenticator) throws ConnectionException {
+    public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubFactory stubClassLoader, Authenticator authenticator) throws ConnectionException {
         this.transport = transport;
         this.contextFactory = contextFactory;
         this.stubClassLoader = stubClassLoader;
@@ -168,6 +164,14 @@ public class JRemotingClient {
                 }
             }
         };
+    }
+
+    private static Authenticator defaultAuthenticator() {
+        return new NullAuthenticator();
+    }
+
+    private static StubFactory defaultStubFactory() {
+        return new StubsOnClient();
     }
 
     public final Long getReferenceID(Stub obj) {

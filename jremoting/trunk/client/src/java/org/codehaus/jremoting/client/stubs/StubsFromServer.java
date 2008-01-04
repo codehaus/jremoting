@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.stubs;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.Transport;
-import org.codehaus.jremoting.client.StubClassLoader;
+import org.codehaus.jremoting.client.StubFactory;
 import org.codehaus.jremoting.requests.RetrieveStub;
 import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.RequestFailed;
@@ -39,7 +39,7 @@ import java.lang.reflect.InvocationTargetException;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class StubsFromServer implements StubClassLoader {
+public class StubsFromServer implements StubFactory {
 
     private final HashMap publishedServiceClassLoaders = new HashMap();
 

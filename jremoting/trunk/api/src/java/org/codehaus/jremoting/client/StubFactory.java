@@ -18,7 +18,7 @@ package org.codehaus.jremoting.client;
 
 import org.codehaus.jremoting.ConnectionException;
 
-public interface StubClassLoader {
+public interface StubFactory {
 
     Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, StubHelper stubHelper) throws ConnectionException;
 

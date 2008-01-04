@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.stubs;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.Transport;
-import org.codehaus.jremoting.client.StubClassLoader;
+import org.codehaus.jremoting.client.StubFactory;
 import org.codehaus.jremoting.util.StaticStubHelper;
 
 import java.lang.reflect.Constructor;
@@ -31,14 +31,14 @@ import java.lang.reflect.InvocationTargetException;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class StubsOnClient implements StubClassLoader {
+public class StubsOnClient implements StubFactory {
 
     private ClassLoader stubsClasLoader;
 
-    public StubsOnClient(ClassLoader stubsClasLoader) throws ConnectionException {
+    public StubsOnClient(ClassLoader stubsClasLoader) {
         this.stubsClasLoader = stubsClasLoader;
     }
-    public StubsOnClient() throws ConnectionException {
+    public StubsOnClient() {
         this(StubsOnClient.class.getClassLoader());
     }
 
