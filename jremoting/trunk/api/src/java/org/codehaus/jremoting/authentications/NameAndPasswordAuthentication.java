@@ -27,27 +27,27 @@ import java.io.ObjectOutput;
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public final class NamePasswordAuthentication extends Authentication {
+public final class NameAndPasswordAuthentication extends Authentication {
 
-    private String userID;
+    private String name;
     private String password;
     private static final long serialVersionUID = -4032239718039334178L;
 
     /**
      * Constructor NamePasswordAuthentication
      *
-     * @param userID   the user ID
+     * @param name   the user ID
      * @param password the password
      */
-    public NamePasswordAuthentication(String userID, String password) {
-        this.userID = userID;
+    public NameAndPasswordAuthentication(String name, String password) {
+        this.name = name;
         this.password = password;
     }
 
     /**
      * Constructor NamePasswordAuthentication for Externalization
      */
-    public NamePasswordAuthentication() {
+    public NameAndPasswordAuthentication() {
     }
 
     /**
@@ -55,8 +55,8 @@ public final class NamePasswordAuthentication extends Authentication {
      *
      * @return the user ID
      */
-    public String getUserID() {
-        return userID;
+    public String getName() {
+        return name;
     }
 
     /**
@@ -83,7 +83,7 @@ public final class NamePasswordAuthentication extends Authentication {
      * method of this Externalizable class.
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(userID);
+        out.writeObject(name);
         out.writeObject(password);
     }
 
@@ -100,7 +100,7 @@ public final class NamePasswordAuthentication extends Authentication {
      *                                restored cannot be found.
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        userID = (String) in.readObject();
+        name = (String) in.readObject();
         password = (String) in.readObject();
     }
 }

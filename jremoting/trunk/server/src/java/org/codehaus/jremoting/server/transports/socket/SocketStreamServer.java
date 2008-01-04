@@ -84,6 +84,11 @@ public class SocketStreamServer extends ConnectingServer {
         this(serverMonitor, port, dftExecutor());
     }
 
+    public SocketStreamServer(ServerMonitor serverMonitor, Authenticator authenticator, int port) {
+        this(serverMonitor, port, dftExecutor(), authenticator);
+    }
+
+
     public SocketStreamServer(ServerMonitor serverMonitor, int port, StubRetriever stubRetriever) {
         this(serverMonitor, stubRetriever, dftAuthenticator(), dftStreamEncoding(), dftExecutor(),
                 dftContextFactory(), port);
@@ -104,6 +109,10 @@ public class SocketStreamServer extends ConnectingServer {
 
     public SocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, int port) {
         this(serverMonitor, stubRetriever, authenticator, streamEncoding, executorService, serverContextFactory, thisClassLoader(), port);
+    }
+
+    public SocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService, Authenticator authenticator) {
+        this(serverMonitor, dftStubRetriever(), authenticator, dftStreamEncoding(), executorService, dftContextFactory(), port);
     }
 
 

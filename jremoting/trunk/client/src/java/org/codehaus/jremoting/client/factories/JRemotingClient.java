@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.authentications.Authentication;
+import org.codehaus.jremoting.client.Authenticator;
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchReferenceException;
@@ -27,6 +27,7 @@ import org.codehaus.jremoting.client.Stub;
 import org.codehaus.jremoting.client.StubHelper;
 import org.codehaus.jremoting.client.StubRegistry;
 import org.codehaus.jremoting.client.Transport;
+import org.codehaus.jremoting.client.authentication.NullAuthenticator;
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.stubs.StubClassLoader;
 import org.codehaus.jremoting.client.stubs.StubsOnClient;
@@ -39,6 +40,7 @@ import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.ListServices;
 import org.codehaus.jremoting.requests.LookupService;
 import org.codehaus.jremoting.requests.Servicable;
+import org.codehaus.jremoting.responses.AuthenticationFailed;
 import org.codehaus.jremoting.responses.BadServerSideEvent;
 import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.ConnectionOpened;
@@ -53,6 +55,7 @@ import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.responses.ServicesList;
+import org.codehaus.jremoting.server.AuthenticationChallenge;
 import org.codehaus.jremoting.util.FacadeRefHolder;
 import org.codehaus.jremoting.util.StaticStubHelper;
 
@@ -75,30 +78,38 @@ public class JRemotingClient {
     protected final Transport transport;
     private final ContextFactory contextFactory;
     private final StubClassLoader stubClassLoader;
+    private final Authenticator authenticator;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
     protected final long session;
     private StubRegistry stubRegistry;
+    private AuthenticationChallenge authChallenge;
 
     public JRemotingClient(Transport transport) throws ConnectionException {
         this(transport, new ThreadLocalContextFactory());
     }
 
     public JRemotingClient(final Transport transport, ContextFactory contextFactory) throws ConnectionException {
-        this (transport, contextFactory, JRemotingClient.class.getClassLoader());
+        this(transport, contextFactory, JRemotingClient.class.getClassLoader());
     }
     
     public JRemotingClient(final Transport transport, ContextFactory contextFactory, ClassLoader classLoader) throws ConnectionException {
-        this (transport, contextFactory, new StubsOnClient(classLoader));
+        this(transport, contextFactory, new StubsOnClient(classLoader), new NullAuthenticator());
     }
 
     public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubClassLoader stubClassLoader) throws ConnectionException {
+        this(transport, contextFactory, stubClassLoader, new NullAuthenticator());
+    }
+
+    public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubClassLoader stubClassLoader, Authenticator authenticator) throws ConnectionException {
         this.transport = transport;
         this.contextFactory = contextFactory;
         this.stubClassLoader = stubClassLoader;
+        this.authenticator = authenticator;
 
         ConnectionOpened response = transport.openConnection();
 
         session = response.getSessionID();
+        authChallenge = response.getAuthenticationChallenge();
 
         stubRegistry = new StubRegistry() {
 
@@ -159,12 +170,17 @@ public class JRemotingClient {
         };
     }
 
-    public Object lookupService(String publishedServiceName, Authentication authentication) throws ConnectionException {
+    public final Long getReferenceID(Stub obj) {
+        return obj.jRemotingGetReferenceID(this);
+    }
 
-        Response response = transport.invoke(new LookupService(publishedServiceName, authentication, session), true);
+    public final Object lookupService(String publishedServiceName) throws ConnectionException {
+        Response response = transport.invoke(new LookupService(publishedServiceName, authenticator.authenticate(authChallenge), session), true);
 
         if (response instanceof NotPublished) {
             throw new ConnectionException("Service '" + publishedServiceName + "' not published");
+        } else if (response instanceof AuthenticationFailed) {
+            throw new ConnectionException("Authentication Failed");
         } else if (response instanceof ExceptionThrown) {
             ExceptionThrown er = (ExceptionThrown) response;
             Throwable t = er.getResponseException();
@@ -187,14 +203,7 @@ public class JRemotingClient {
         stubHelper.registerInstance(retVal);
 
         return retVal;
-    }
 
-    public final Long getReferenceID(Stub obj) {
-        return obj.jRemotingGetReferenceID(this);
-    }
-
-    public final Object lookupService(String publishedServiceName) throws ConnectionException {
-        return lookupService(publishedServiceName, null);
     }
 
     public String[] getServiceNames() {

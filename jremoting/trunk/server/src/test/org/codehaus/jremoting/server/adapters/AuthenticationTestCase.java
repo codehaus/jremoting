@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 
 import org.codehaus.jremoting.authentications.Authentication;
-import org.codehaus.jremoting.authentications.NamePasswordAuthentication;
+import org.codehaus.jremoting.authentications.NameAndPasswordAuthentication;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.LookupService;
 import org.codehaus.jremoting.requests.OpenConnection;
@@ -21,7 +21,7 @@ import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.authenticators.SinglePasswordAuthenticator;
+import org.codehaus.jremoting.server.authenticators.NameAndPasswordAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
@@ -49,23 +49,23 @@ public class AuthenticationTestCase extends MockObjectTestCase {
         iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
-        Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("", "")));
+        Response resp = serDeSerResponse(putTestEntry(new NameAndPasswordAuthentication("", "")));
         assertTrue(resp instanceof AuthenticationFailed);
     }
 
     public void testWorkingPasswordAuthorizes() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new SinglePasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
+        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NameAndPasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
-        Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("fred", "wilma")));
+        Response resp = serDeSerResponse(putTestEntry(new NameAndPasswordAuthentication("fred", "wilma")));
         assertTrue(resp instanceof Service);
     }
 
     public void testBogusPasswordBlocks() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new SinglePasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
+        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NameAndPasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
-        Response resp = serDeSerResponse(putTestEntry(new NamePasswordAuthentication("FRED", "wilma")));
+        Response resp = serDeSerResponse(putTestEntry(new NameAndPasswordAuthentication("FRED", "wilma")));
         assertTrue(resp instanceof AuthenticationFailed);
     }
 

@@ -37,6 +37,9 @@ public class StubsOnClient implements StubClassLoader {
     public StubsOnClient(ClassLoader stubsClasLoader) throws ConnectionException {
         this.stubsClasLoader = stubsClasLoader;
     }
+    public StubsOnClient() throws ConnectionException {
+        this(StubsOnClient.class.getClassLoader());
+    }
 
     public Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, org.codehaus.jremoting.client.StubHelper stubHelper) throws ConnectionException {
         
