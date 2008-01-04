@@ -32,7 +32,7 @@ import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NameAndPasswordAuthenticator;
-import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.codehaus.jremoting.ConnectionException;
 
 
@@ -47,7 +47,7 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
         super.setUp();
 
         // server side setup.
-        server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), new NameAndPasswordAuthenticator("fred", "wilma"), 10333);
+        server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new NameAndPasswordAuthenticator("fred", "wilma"), 10333);
         testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);

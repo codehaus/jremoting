@@ -36,7 +36,7 @@ import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
-import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.jmock.MockObjectTestCase;
 
 import java.util.HashMap;
@@ -149,7 +149,7 @@ public class ClientContextTestCase extends MockObjectTestCase {
 
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
-        SocketStreamServer server = new SocketStreamServer(serverMonitor, stubRetriever, new NullAuthenticator(),
+        SocketServer server = new SocketServer(serverMonitor, stubRetriever, new NullAuthenticator(),
                 new ByteStreamEncoding(), executorService, sscf, 19333);
 
         Publication pd = new Publication(AccountManager.class);

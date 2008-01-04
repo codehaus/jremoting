@@ -31,7 +31,7 @@ import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.rmi.RmiServer;
-import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -53,7 +53,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
     public void testByteStreamObjectStreamMismatchCanCauseTimeOut() throws Exception {
 
-        SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12001);
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), 12001);
 
         TestFacadeImpl testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
@@ -96,7 +96,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
     public void dont_testObjectStreamByteStreamMismatch() throws Exception {
 
         // server side setup.
-        SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12002, new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), 12002, new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
         TestFacadeImpl testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
@@ -134,7 +134,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
     public void dont_testByteStreamRmiMismatch() throws Exception {
 
         // server side setup.
-        SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12003);
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), 12003);
         TestFacadeImpl testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);

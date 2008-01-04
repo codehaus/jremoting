@@ -30,7 +30,7 @@ import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.codehaus.jremoting.tools.generator.BcelStubGenerator;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
@@ -60,7 +60,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
     public void testBouncingOfServerCausesClientProblems() throws Exception {
 
         // server side setup.
-        SocketStreamServer server = startServer();
+        SocketServer server = startServer();
 
         JRemotingClient jRemotingClient = null;
         try {
@@ -104,8 +104,8 @@ public class BouncingServerTestCase extends MockObjectTestCase {
         }
     }
 
-    private SocketStreamServer startServer() throws PublicationException {
-        SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12201,
+    private SocketServer startServer() throws PublicationException {
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), 12201,
                 new org.codehaus.jremoting.server.encoders.ByteStreamEncoding());
         TestFacadeImpl testServer = new TestFacadeImpl();
         server.publish(testServer, "Hello55", pd);

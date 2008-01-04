@@ -30,7 +30,7 @@ import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.encoders.ObjectStreamEncoding;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
+import org.codehaus.jremoting.server.transports.piped.PipedServer;
 import org.codehaus.jremoting.tools.generator.BcelStubGenerator;
 
 import java.io.PipedInputStream;
@@ -60,7 +60,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new PipedStreamServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
+        server = new PipedServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
                 Executors.newScheduledThreadPool(10) ,new ThreadLocalServerContextFactory(), new ObjectStreamEncoding());
         testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
@@ -81,7 +81,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         // For piped, server and client can see each other
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out = new PipedOutputStream();
-        ((PipedStreamServer) server).makeNewConnection(in, out);
+        ((PipedServer) server).makeNewConnection(in, out);
 
         // Client side setup
         jremotinClient = new JRemotingClient(new PipedTransport(new ConsoleClientMonitor(),

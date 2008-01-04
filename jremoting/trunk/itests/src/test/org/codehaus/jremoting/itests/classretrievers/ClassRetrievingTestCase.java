@@ -29,7 +29,7 @@ import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.stubretrievers.DynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
-import org.codehaus.jremoting.server.transports.piped.PipedStreamServer;
+import org.codehaus.jremoting.server.transports.piped.PipedServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -53,7 +53,7 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
 
         // server side setup.
         DynamicStubRetriever dyncgen = new BcelDynamicStubRetriever();
-        server = new PipedStreamServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newScheduledThreadPool(10), new ThreadLocalServerContextFactory(),
+        server = new PipedServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newScheduledThreadPool(10), new ThreadLocalServerContextFactory(),
                 new ByteStreamEncoding());
         testServer = new TestImpl();
         server.publish(testServer, "Kewl", TestFacade.class);
@@ -64,7 +64,7 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
         // For piped, server and client can see each other
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out = new PipedOutputStream();
-        ((PipedStreamServer) server).makeNewConnection(in, out);
+        ((PipedServer) server).makeNewConnection(in, out);
 
         // Client side setup
         Mock mock = mock(ContextFactory.class);

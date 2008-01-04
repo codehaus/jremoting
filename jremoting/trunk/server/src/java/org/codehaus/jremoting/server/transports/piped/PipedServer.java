@@ -34,17 +34,17 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
 /**
- * Class PipedStreamServer
+ * Class PipedServer
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class PipedStreamServer extends ConnectingServer {
+public class PipedServer extends ConnectingServer {
 
     private final StreamEncoding streamEncoding;
     private final ClassLoader facadesClassLoader;
 
-    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
+    public PipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
                              ScheduledExecutorService executorService, ServerContextFactory contextFactory,
                              StreamEncoding streamEncoding,
                              ClassLoader facadesClassLoader) {
@@ -53,7 +53,7 @@ public class PipedStreamServer extends ConnectingServer {
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public PipedStreamServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
+    public PipedServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
                              ScheduledExecutorService executorService,
                              StreamEncoding streamEncoding,
                              ClassLoader facadesClassLoader) {
@@ -62,8 +62,8 @@ public class PipedStreamServer extends ConnectingServer {
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public PipedStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, StreamEncoding streamEncoding) {
-        this(serverMonitor, stubRetriever, authenticator, executorService, serverContextFactory, streamEncoding, PipedStreamServer.class.getClassLoader());
+    public PipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, StreamEncoding streamEncoding) {
+        this(serverMonitor, stubRetriever, authenticator, executorService, serverContextFactory, streamEncoding, PipedServer.class.getClassLoader());
     }
 
     public void makeNewConnection(final PipedInputStream in, final PipedOutputStream out) throws ConnectionException {

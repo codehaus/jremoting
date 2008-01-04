@@ -39,12 +39,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * Class SocketStreamServer
+ * Class SocketServer
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class SocketStreamServer extends ConnectingServer {
+public class SocketServer extends ConnectingServer {
 
     private ServerSocket serverSocket;
     private Future future;
@@ -62,7 +62,7 @@ public class SocketStreamServer extends ConnectingServer {
      * @param invokerDelegate The invocation handler adapter to use.
      * @param port                     The port to use
      */
-    public SocketStreamServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
+    public SocketServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
                                            StreamEncoding streamEncoding, ScheduledExecutorService executorService,
                                            ClassLoader facadesClassLoader, int port) {
 
@@ -72,7 +72,7 @@ public class SocketStreamServer extends ConnectingServer {
         this.port = port;
     }
 
-    public SocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
+    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
                                            StreamEncoding streamEncoding, ScheduledExecutorService executorService,
                                            ServerContextFactory contextFactory,
                                            ClassLoader facadesClassLoader, int port) {
@@ -80,38 +80,38 @@ public class SocketStreamServer extends ConnectingServer {
                 streamEncoding, executorService, facadesClassLoader, port);
     }
 
-    public SocketStreamServer(ServerMonitor serverMonitor, int port) {
+    public SocketServer(ServerMonitor serverMonitor, int port) {
         this(serverMonitor, port, dftExecutor());
     }
 
-    public SocketStreamServer(ServerMonitor serverMonitor, Authenticator authenticator, int port) {
+    public SocketServer(ServerMonitor serverMonitor, Authenticator authenticator, int port) {
         this(serverMonitor, port, dftExecutor(), authenticator);
     }
 
 
-    public SocketStreamServer(ServerMonitor serverMonitor, int port, StubRetriever stubRetriever) {
+    public SocketServer(ServerMonitor serverMonitor, int port, StubRetriever stubRetriever) {
         this(serverMonitor, stubRetriever, dftAuthenticator(), dftStreamEncoding(), dftExecutor(),
                 dftContextFactory(), port);
     }
 
-    public SocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService) {
+    public SocketServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService) {
         this(serverMonitor, port, executorService, dftStreamEncoding());
     }
 
-    public SocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService,
+    public SocketServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService,
                                            StreamEncoding streamEncoding) {
         this(serverMonitor, dftStubRetriever(), dftAuthenticator(), streamEncoding, executorService, dftContextFactory(), thisClassLoader(), port);
     }
 
-    public SocketStreamServer(ServerMonitor serverMonitor, int port, StreamEncoding streamEncoding) {
+    public SocketServer(ServerMonitor serverMonitor, int port, StreamEncoding streamEncoding) {
         this(serverMonitor, port, dftExecutor(), streamEncoding);
     }
 
-    public SocketStreamServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, int port) {
+    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, int port) {
         this(serverMonitor, stubRetriever, authenticator, streamEncoding, executorService, serverContextFactory, thisClassLoader(), port);
     }
 
-    public SocketStreamServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService, Authenticator authenticator) {
+    public SocketServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService, Authenticator authenticator) {
         this(serverMonitor, dftStubRetriever(), authenticator, dftStreamEncoding(), executorService, dftContextFactory(), port);
     }
 
@@ -125,7 +125,7 @@ public class SocketStreamServer extends ConnectingServer {
     }
 
     private static ClassLoader thisClassLoader() {
-        return SocketStreamServer.class.getClassLoader();
+        return SocketServer.class.getClassLoader();
     }
 
     private static StubRetriever dftStubRetriever() {

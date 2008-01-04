@@ -30,7 +30,7 @@ import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.transports.socket.SocketStreamServer;
+import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -62,7 +62,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     public void testNotPublishedExceptionThrownWhenNeeded() throws Exception {
 
         // server side setup.
-        SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12333);
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), 12333);
 
         TestFacadeImpl testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
@@ -91,7 +91,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     public void testNoReferenceExceptionThrownWhenNeeded() throws Exception {
 
         // server side setup.
-        SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12331,
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), 12331,
                 new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
 
         TestFacadeImpl testServer = new TestFacadeImpl();
@@ -126,7 +126,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // server side setup.
         // Object
-        SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12347, new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), 12347, new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
         TestFacadeImpl testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
@@ -151,7 +151,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     public void donttestMismatch3() throws Exception {
 
         // server side setup.
-        SocketStreamServer server = new SocketStreamServer((ServerMonitor) mockServerMonitor.proxy(), 12348);
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), 12348);
         TestFacadeImpl testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
