@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-import org.codehaus.jremoting.authentications.Authentication;
-import org.codehaus.jremoting.authentications.NameAndPasswordAuthentication;
+import org.codehaus.jremoting.authentication.Authentication;
+import org.codehaus.jremoting.authentication.NameAndPasswordAuthentication;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.requests.LookupService;
 import org.codehaus.jremoting.requests.OpenConnection;

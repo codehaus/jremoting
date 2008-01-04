@@ -17,7 +17,7 @@
 package org.codehaus.jremoting.client;
 
 import org.codehaus.jremoting.server.AuthenticationChallenge;
-import org.codehaus.jremoting.authentications.Authentication;
+import org.codehaus.jremoting.authentication.Authentication;
 
 public interface Authenticator {
     Authentication authenticate(AuthenticationChallenge authChallenge);

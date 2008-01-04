@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.authentications.Authentication;
+import org.codehaus.jremoting.authentication.Authentication;
 
 /**
  * Interface Authenticator

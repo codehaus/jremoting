@@ -16,8 +16,8 @@
  */
 package org.codehaus.jremoting.client.authentication;
 
-import org.codehaus.jremoting.authentications.Authentication;
-import org.codehaus.jremoting.authentications.NameAndPasswordAuthentication;
+import org.codehaus.jremoting.authentication.Authentication;
+import org.codehaus.jremoting.authentication.NameAndPasswordAuthentication;
 import org.codehaus.jremoting.client.Authenticator;
 import org.codehaus.jremoting.server.AuthenticationChallenge;
 
