@@ -17,14 +17,14 @@
  */
 package org.codehaus.jremoting.itests;
 
-import org.codehaus.jremoting.BadConnectionException;
+import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
+import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.requests.InvokeMethod;
@@ -138,7 +138,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
             new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
                 new ByteStreamEncoding(), "127.0.0.1", 12347));
             fail("Expected mismatch exception");
-        } catch (BadConnectionException e) {
+        } catch (ConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {
                 throw e;
             }
@@ -161,7 +161,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         try {
             new JRemotingClient(new RmiTransport(new ConsoleClientMonitor(), "127.0.0.1", 12348));
             fail("Expected mismatch exception");
-        } catch (BadConnectionException e) {
+        } catch (ConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {
                 throw e;
             }

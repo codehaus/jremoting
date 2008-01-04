@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.client.encoders;
 
-import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.util.ClassLoaderObjectInputStream;
 import org.codehaus.jremoting.client.StreamEncoder;
@@ -48,7 +47,7 @@ public class ObjectStreamEncoder implements StreamEncoder {
             objectOutputStream = new ObjectOutputStream(outputStream);
             objectInputStream = new ClassLoaderObjectInputStream(facadesClassLoader, new BufferedInputStream(inputStream));
         } catch (EOFException eofe) {
-            throw new BadConnectionException("Cannot connect to remote JRemoting server. Have we a mismatch on transports?");
+            throw new ConnectionException("Cannot connect to remote JRemoting server. Have we a mismatch on transports?");
         } catch (IOException ioe) {
             throw new ConnectionException("Some problem instantiating ObjectStream classes: " + ioe.getMessage());
         }

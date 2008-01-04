@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server.monitors;
 
-import org.codehaus.jremoting.BadConnectionException;
+import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.server.ServerMonitor;
 
 import java.io.IOException;
@@ -46,12 +46,6 @@ public class JavaLoggingServerMonitor implements ServerMonitor {
         Logger logger = Logger.getLogger(clazz.getName());
         logger.log(Level.INFO, "<closeError>" + s, e);
         delegate.closeError(clazz, s, e);
-    }
-
-    public void badConnection(Class clazz, String s, BadConnectionException bce) {
-        Logger logger = Logger.getLogger(clazz.getName());
-        logger.log(Level.INFO, "<badConnection>" + s, bce);
-        delegate.badConnection(clazz, s, bce);
     }
 
     public void classNotFound(Class clazz, ClassNotFoundException e) {

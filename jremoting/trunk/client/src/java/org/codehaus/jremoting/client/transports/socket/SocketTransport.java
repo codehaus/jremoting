@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.client.transports.socket;
 
-import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -58,7 +57,7 @@ public class SocketTransport extends StreamTransport {
     public SocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                                                  StreamEncoding streamEncoding,
-                                                 String host, int port) throws ConnectionRefusedException, BadConnectionException {
+                                                 String host, int port) throws ConnectionRefusedException, ConnectionException {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding);
         this.host = host;
         this.port = port;
@@ -71,12 +70,12 @@ public class SocketTransport extends StreamTransport {
             if (ioe.getMessage().startsWith("Connection refused")) {
                 throw new ConnectionRefusedException("Connection to port " + port + " on host " + host + " refused.");
             }
-            throw new BadConnectionException("Cannot open Stream(s) for socket: " + ioe.getMessage());
+            throw new ConnectionException("Cannot open Stream(s) for socket: " + ioe.getMessage());
         }
     }
 
 
-    public SocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, String host, int port) throws ConnectionRefusedException, BadConnectionException {
+    public SocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, String host, int port) throws ConnectionRefusedException, ConnectionException {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
                 Thread.currentThread().getContextClassLoader(), streamEncoding, host, port);
     }

@@ -17,11 +17,11 @@
  */
 package org.codehaus.jremoting.itests.mismatch;
 
-import org.codehaus.jremoting.BadConnectionException;
-import org.codehaus.jremoting.client.factories.JRemotingClient;
-import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
+import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
+import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestFacade;
@@ -43,7 +43,7 @@ import org.jmock.MockObjectTestCase;
 public class SocketMismatchTestCase extends MockObjectTestCase {
     private Class x_class;
     private String x_msg;
-    private BadConnectionException x_bce;
+    private ConnectionException x_bce;
     private Mock mockServerMonitor;
 
     protected void setUp() throws Exception {
@@ -73,7 +73,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
 
             fail("ByteStreams and ObjectStreams cannot interoperate");
-        } catch (BadConnectionException bce) {
+        } catch (ConnectionException bce) {
 
             // expected
 
@@ -113,7 +113,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
             testClient.hello("hello");
             fail("ByteStreams and ObjectStreams cannot interoperate");
-        } catch (BadConnectionException bce) {
+        } catch (ConnectionException bce) {
             // expected.
         } finally {
 
@@ -150,7 +150,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
             testClient.hello("hello");
             fail("ByteStreams and RMI trasnports cannot interoperate");
-        } catch (BadConnectionException bce) {
+        } catch (ConnectionException bce) {
             // expected.
         } finally {
 
@@ -187,7 +187,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
             testClient.hello("hello");
             fail("ByteStreams and RMI trasnports cannot interoperate");
-        } catch (BadConnectionException bce) {
+        } catch (ConnectionException bce) {
             // expected.
         } finally {
 

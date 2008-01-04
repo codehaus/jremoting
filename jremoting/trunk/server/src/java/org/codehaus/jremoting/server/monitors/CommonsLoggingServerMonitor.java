@@ -19,8 +19,8 @@ package org.codehaus.jremoting.server.monitors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.ConnectionException;
 
 import java.io.IOException;
 
@@ -49,15 +49,6 @@ public class CommonsLoggingServerMonitor implements ServerMonitor {
             log.debug("<closeError>" + s, e);
         }
         delegate.closeError(clazz, s, e);
-
-    }
-
-    public void badConnection(Class clazz, String s, BadConnectionException bce) {
-        Log log = LogFactory.getLog(clazz);
-        if (log.isDebugEnabled()) {
-            log.debug("<badConnection>" + s, bce);
-        }
-        delegate.badConnection(clazz, s, bce);
 
     }
 

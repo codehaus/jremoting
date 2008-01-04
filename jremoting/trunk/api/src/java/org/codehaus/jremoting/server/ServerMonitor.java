@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.BadConnectionException;
+import org.codehaus.jremoting.ConnectionException;
 
 import java.io.IOException;
 
@@ -30,8 +30,6 @@ import java.io.IOException;
 public interface ServerMonitor {
 
     void closeError(Class clazz, String s, IOException e);
-
-    void badConnection(Class clazz, String s, BadConnectionException bce);
 
     void classNotFound(Class clazz, ClassNotFoundException e);
 

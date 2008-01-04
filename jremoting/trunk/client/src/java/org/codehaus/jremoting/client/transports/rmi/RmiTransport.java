@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.client.transports.rmi;
 
-import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.RmiInvoker;
 import org.codehaus.jremoting.client.ClientMonitor;
@@ -60,7 +59,7 @@ public final class RmiTransport extends StatefulTransport {
         } catch (MalformedURLException mfue) {
             throw new ConnectionException("Malformed URL, host/port (" + host + "/" + port + ") must be wrong: " + mfue.getMessage());
         } catch (ConnectIOException cioe) {
-            throw new BadConnectionException("Cannot connect to remote RMI server. " + "It is possible that transport mismatch");
+            throw new ConnectionException("Cannot connect to remote RMI server. " + "It is possible that transport mismatch");
         } catch (RemoteException re) {
             throw new ConnectionException("Unknown Remote Exception : " + re.getMessage());
         }

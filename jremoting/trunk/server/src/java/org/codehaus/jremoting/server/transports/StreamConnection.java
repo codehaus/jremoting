@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
@@ -96,10 +95,6 @@ public abstract class StreamConnection implements Runnable, Connection {
                         response = new ConnectionKilled();
                         more = false;
                     }
-                } catch (BadConnectionException bce) {
-                    more = false;
-                    serverMonitor.badConnection(this.getClass(), "StreamConnection.run(): Bad connection #0", bce);
-                    encoder.close();
                 } catch (ConnectionException ace) {
                     more = false;
                     serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected ConnectionException #0", ace);

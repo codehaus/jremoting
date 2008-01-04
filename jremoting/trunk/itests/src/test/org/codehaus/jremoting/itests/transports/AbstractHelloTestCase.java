@@ -217,7 +217,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
 
     public void testSpeed() throws Exception {
 
-        int iterations = 10000; // default
+        int iterations = 1; // default
         String iterationsStr = "@SPEEDTEST-ITERATIONS@";
         try {
             iterations = Integer.parseInt(iterationsStr);

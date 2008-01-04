@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.server.encoders;
 
-import org.codehaus.jremoting.BadConnectionException;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
@@ -91,7 +90,7 @@ public class ByteStreamEncoder extends AbstractStreamEncoder {
         int byteArraySize = dataInputStream.readInt();
         int requestCode = dataInputStream.readInt();
         if (byteArraySize < 0) {
-            throw new BadConnectionException("Transport mismatch, Unable to " + "read packet of data from ByteStream.");
+            throw new ConnectionException("Transport mismatch, Unable to " + "read packet of data from ByteStream.");
         }
         byte[] byteArray = new byte[byteArraySize];
         int pos = 0;
