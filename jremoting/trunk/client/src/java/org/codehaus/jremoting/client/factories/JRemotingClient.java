@@ -85,15 +85,27 @@ public class JRemotingClient {
     private AuthenticationChallenge authChallenge;
 
     public JRemotingClient(Transport transport) throws ConnectionException {
-        this(transport, new ThreadLocalContextFactory());
+        this(transport, defaultContextFactory());
     }
 
     public JRemotingClient(final Transport transport, ContextFactory contextFactory) throws ConnectionException {
         this(transport, contextFactory, defaultStubFactory());
     }
 
+    public JRemotingClient(final Transport transport, StubFactory stubClassLoader) throws ConnectionException {
+        this(transport, defaultContextFactory(), stubClassLoader, defaultAuthenticator());
+    }
+
+    public JRemotingClient(final Transport transport, Authenticator authenticator) throws ConnectionException {
+        this(transport, defaultContextFactory(), defaultStubFactory(), authenticator);
+    }
+
     public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubFactory stubClassLoader) throws ConnectionException {
         this(transport, contextFactory, stubClassLoader, defaultAuthenticator());
+    }
+
+    public JRemotingClient(final Transport transport, StubFactory stubClassLoader, Authenticator authenticator) throws ConnectionException {
+        this(transport, defaultContextFactory(), stubClassLoader, authenticator);
     }
 
     public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubFactory stubClassLoader, Authenticator authenticator) throws ConnectionException {
@@ -173,6 +185,11 @@ public class JRemotingClient {
     private static StubFactory defaultStubFactory() {
         return new StubsViaReflection();
     }
+
+    private static ContextFactory defaultContextFactory() {
+        return new ThreadLocalContextFactory();
+    }
+
 
     public final Long getReferenceID(Stub obj) {
         return obj.jRemotingGetReferenceID(this);
