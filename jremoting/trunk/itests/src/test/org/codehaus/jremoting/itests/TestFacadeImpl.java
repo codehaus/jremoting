@@ -80,9 +80,9 @@ public class TestFacadeImpl implements TestFacade, Externalizable {
         TestFacade2 ti2;
         if (thingName.equals("abc")) {
             // even calls only
-            ti2 = new TstInterface3Impl(new Date(), thingName);
+            ti2 = new TstFacade3Impl(new Date(), thingName);
         } else {
-            ti2 = new TstInterface2Impl(thingName);
+            ti2 = new TstFacade2Impl(thingName);
         }
 
         ti2Holder.add(ti2);
@@ -113,7 +113,7 @@ public class TestFacadeImpl implements TestFacade, Externalizable {
             }
         }
 
-        return new TstInterface2Impl("Not Found");
+        return new TstFacade2Impl("Not Found");
     }
 
     public TestFacade2[] getTestFacade2s() {

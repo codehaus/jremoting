@@ -21,56 +21,32 @@ import java.io.Externalizable;
 import java.io.ObjectOutput;
 import java.io.IOException;
 import java.io.ObjectInput;
+import java.util.Date;
 
 /**
- * Class TstInterface2Impl
+ * Class TstInterface3Impl
  *
- * @author Paul Hammant
+ * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  * @version * $Revision: 1.2 $
  */
-public class TstInterface2Impl implements TestFacade2, Externalizable {
+public class TstFacade3Impl extends TstFacade2Impl implements TestFacade3, Externalizable {
 
-    private String mName;
+    private Date dob;
 
-    /**
-     * Constructor TstInterface2Impl
-     *
-     * @param name
-     */
-    public TstInterface2Impl(String name) {
-        mName = name;
+    public TstFacade3Impl(Date dob, String name) {
+        super(name);
+
+        this.dob = dob;
     }
 
-    /**
-     * Method setName
-     *
-     * @param newThingName
-     */
-    public void setName(String newThingName) {
-        mName = newThingName;
+    public void setDOB(Date dob) {
+
+        this.dob = dob;
+
     }
 
-    /**
-     * Method getName
-     *
-     * @return
-     */
-    public String getName() {
-        return mName;
-    }
-
-    public boolean equals(Object obj) {
-
-        // This is a bit unusual, but it is for the AbstractHelloTestCase testEquals method
-
-        TestFacade2 other = (TestFacade2) obj;
-
-        if (mName.equals("equals-test-one") && other.getName().equals("equals-test-two")) {
-            return true;
-        }
-
-        return false;
-
+    public Date getDOB() {
+        return dob;
     }
 
     public void writeExternal(ObjectOutput out) throws IOException {
@@ -80,5 +56,4 @@ public class TstInterface2Impl implements TestFacade2, Externalizable {
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         throw new RuntimeException("not allowed");
     }
-
 }
