@@ -17,6 +17,10 @@
  */
 package org.codehaus.jremoting.itests;
 
+import java.io.Externalizable;
+import java.io.ObjectOutput;
+import java.io.IOException;
+import java.io.ObjectInput;
 import java.util.Date;
 
 /**
@@ -25,7 +29,7 @@ import java.util.Date;
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
  * @version * $Revision: 1.2 $
  */
-public class TstInterface3Impl extends TstInterface2Impl implements TestFacade3 {
+public class TstInterface3Impl extends TstInterface2Impl implements TestFacade3, Externalizable {
 
     private Date mDob;
 
@@ -58,5 +62,13 @@ public class TstInterface3Impl extends TstInterface2Impl implements TestFacade3 
      */
     public Date getDOB() {
         return mDob;
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+        throw new RuntimeException("not allowed");
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        throw new RuntimeException("not allowed");
     }
 }

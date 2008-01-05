@@ -18,7 +18,10 @@
 package org.codehaus.jremoting.itests;
 
 import java.beans.PropertyVetoException;
+import java.io.Externalizable;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
@@ -30,7 +33,7 @@ import java.util.Vector;
  * @author Benjamin David Hall
  * @version $Revision: 1.3 $
  */
-public class TestFacadeImpl implements TestFacade {
+public class TestFacadeImpl implements TestFacade, Externalizable {
 
     Vector ti2Holder = new Vector();
     TstObject[] testObjects;
@@ -202,6 +205,14 @@ public class TestFacadeImpl implements TestFacade {
 
     public CustomSerializableParam testCustomSerializableParameter(CustomSerializableParam param) {
         return param;
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+        throw new RuntimeException("not allowed");
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        throw new RuntimeException("not allowed");
     }
 
 }

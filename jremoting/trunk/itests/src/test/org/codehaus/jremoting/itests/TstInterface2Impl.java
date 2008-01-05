@@ -17,13 +17,18 @@
  */
 package org.codehaus.jremoting.itests;
 
+import java.io.Externalizable;
+import java.io.ObjectOutput;
+import java.io.IOException;
+import java.io.ObjectInput;
+
 /**
  * Class TstInterface2Impl
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public class TstInterface2Impl implements TestFacade2 {
+public class TstInterface2Impl implements TestFacade2, Externalizable {
 
     private String mName;
 
@@ -66,6 +71,14 @@ public class TstInterface2Impl implements TestFacade2 {
 
         return false;
 
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+        throw new RuntimeException("not allowed");
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        throw new RuntimeException("not allowed");
     }
 
 }

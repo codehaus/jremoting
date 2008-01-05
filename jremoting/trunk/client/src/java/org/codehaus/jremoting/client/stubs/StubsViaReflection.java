@@ -77,13 +77,24 @@ public class StubsViaReflection implements StubFactory {
             }
 
             String signature = MethodNameHelper.getMethodSignature(method);
-            Class<?> rt = method.getReturnType();
+            Class rt = method.getReturnType();
             if (args == null) {
                 args = new Object[0];
             }
-            if (stubHelper.isFacadeInterface(rt)) {
-                String name = MethodNameHelper.encodeClassName(method.getReturnType());
-                return stubHelper.processObjectRequestGettingFacade(rt, signature, args, name);
+            
+            boolean isFacade;
+            if (rt.isArray()) {
+                isFacade = stubHelper.isFacadeInterface(rt.getComponentType());
+            } else {
+                isFacade = stubHelper.isFacadeInterface(rt);
+            }
+
+            if (isFacade) {
+                if (rt.isArray()) {
+                    return stubHelper.processObjectRequestGettingFacade(rt.getComponentType(), signature, args, MethodNameHelper.encodeClassName(rt.getComponentType()) + "[]");
+                } else {
+                    return stubHelper.processObjectRequestGettingFacade(rt, signature, args, MethodNameHelper.encodeClassName(rt));
+                }
             } else if (rt.getName().equals("void")) {
                 Class<?>[] argTypes = method.getParameterTypes();
                 stubHelper.processVoidRequest(signature, args, argTypes);

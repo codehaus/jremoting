@@ -18,9 +18,11 @@
 package org.codehaus.jremoting.itests.transports;
 
 
+import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
+import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
+import org.codehaus.jremoting.client.stubs.StubsViaReflection;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
@@ -44,12 +46,13 @@ public class ByteStreamTestCase extends AbstractHelloTestCase {
         // server side setup.
         server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), 10333);
         testServer = new TestFacadeImpl();
-        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade2.class, TestFacade3.class);
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), "localhost", 10333));
+        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), "localhost", 10333),
+                new ThreadLocalContextFactory(), new StubsViaReflection());
         testClient = (TestFacade) jremotinClient.lookupService("Hello");
 
     }

@@ -171,7 +171,7 @@ public class JRemotingClient {
     }
 
     private static StubFactory defaultStubFactory() {
-        return new StubsOnClient();
+        return new StubsViaReflection();
     }
 
     public final Long getReferenceID(Stub obj) {

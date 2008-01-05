@@ -72,10 +72,12 @@ public class SocketServer extends ConnectingServer {
         this.port = port;
     }
 
-    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
-                                           StreamEncoding streamEncoding, ScheduledExecutorService executorService,
-                                           ServerContextFactory contextFactory,
-                                           ClassLoader facadesClassLoader, int port) {
+    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever,
+                        Authenticator authenticator,
+                        StreamEncoding streamEncoding,
+                        ScheduledExecutorService executorService,
+                        ServerContextFactory contextFactory,
+                        ClassLoader facadesClassLoader, int port) {
         this(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
                 streamEncoding, executorService, facadesClassLoader, port);
     }
