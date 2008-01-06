@@ -31,9 +31,9 @@
     <!-- TODO add people who have contributed to AltRMI and after -->
     <contributors/>
 	<scm>
-		<connection>scm:svn:https://svn.codehaus.org/jremoting/trunk</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/jremoting/trunk</developerConnection>
-		<url>https://svn.codehaus.org/jremoting/trunk</url>		
+		<connection>scm:svn:https://svn.codehaus.org/jremoting/jremoting/trunk</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/jremoting/jremoting/trunk</developerConnection>
+		<url>https://svn.codehaus.org/jremoting/jremoting/trunk</url>		
 	</scm>	
 	<distributionManagement>
 		<repository>
@@ -154,8 +154,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
+				<version>2.0-beta-5</version>
 				<configuration>
-					<tagBase>https://svn.codehaus.org/jremoting/tags</tagBase>
+					<tagBase>https://svn.codehaus.org/jremoting/jremoting/tags</tagBase>
 				</configuration>
 			</plugin>
 		</plugins>
