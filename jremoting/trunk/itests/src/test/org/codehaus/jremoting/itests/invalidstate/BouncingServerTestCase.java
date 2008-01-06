@@ -36,6 +36,8 @@ import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 import org.jmock.core.Constraint;
 
+import java.net.InetSocketAddress;
+
 
 /**
  * Tests concerning the bouncing of a server.
@@ -105,7 +107,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
     }
 
     private SocketServer startServer() throws PublicationException {
-        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), 12201,
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new InetSocketAddress(12201),
                 new org.codehaus.jremoting.server.encoders.ByteStreamEncoding());
         TestFacadeImpl testServer = new TestFacadeImpl();
         server.publish(testServer, "Hello55", pd);

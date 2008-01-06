@@ -17,6 +17,7 @@ import org.codehaus.jremoting.server.transports.socket.SocketServer;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.net.InetSocketAddress;
 
 /**
  * Test XStream over sockets.
@@ -31,7 +32,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
         // server side setup.
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
-                new XStreamEncoding(), executorService, new ThreadLocalServerContextFactory(), 10099);
+                new XStreamEncoding(), executorService, new ThreadLocalServerContextFactory(), new InetSocketAddress(10099));
         testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);

@@ -37,6 +37,7 @@ import org.jmock.Mock;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.net.InetSocketAddress;
 
 /**
  * Test case which tests the proxies generated using BCEL generator
@@ -63,7 +64,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         String class_gen_dir = getClassGenDir();
         stubRetriever.setClassGenDir(class_gen_dir);
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
-        server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(), new ByteStreamEncoding(), executorService, new ThreadLocalServerContextFactory(), 10201);
+        server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(), new ByteStreamEncoding(), executorService, new ThreadLocalServerContextFactory(), new InetSocketAddress(10201));
 
         testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);

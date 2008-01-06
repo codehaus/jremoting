@@ -42,6 +42,7 @@ import org.jmock.MockObjectTestCase;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.net.InetSocketAddress;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
@@ -150,7 +151,7 @@ public class ClientContextTestCase extends MockObjectTestCase {
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         SocketServer server = new SocketServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ByteStreamEncoding(), executorService, sscf, 19333);
+                new ByteStreamEncoding(), executorService, sscf, new InetSocketAddress(19333));
 
         Publication pd = new Publication(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);

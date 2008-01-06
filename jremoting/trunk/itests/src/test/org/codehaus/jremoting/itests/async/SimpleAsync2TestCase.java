@@ -34,6 +34,7 @@ import org.jmock.MockObjectTestCase;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.net.InetSocketAddress;
 
 public class SimpleAsync2TestCase extends MockObjectTestCase {
 
@@ -64,7 +65,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(),
                 new ByteStreamEncoding(), executorService,
-                new ThreadLocalServerContextFactory(), 11009);
+                new ThreadLocalServerContextFactory(), new InetSocketAddress(11009));
 
         asyncTestImpl = new AsyncTestImpl();
         // automatic determination of async elements.

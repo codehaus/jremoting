@@ -34,6 +34,7 @@ import org.jmock.MockObjectTestCase;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.net.InetSocketAddress;
 
 public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
 
@@ -71,7 +72,7 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(),
                 new ByteStreamEncoding(), executorService,
-                ccf, 11003);
+                ccf, new InetSocketAddress(11003));
 
         asyncTestImpl = new AsyncTestImpl();
         Publication pd = new Publication(AsyncTest.class);

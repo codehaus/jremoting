@@ -19,19 +19,20 @@ package org.codehaus.jremoting.server.transports.socket;
 
 import org.codehaus.jremoting.JRemotingException;
 import org.codehaus.jremoting.server.Authenticator;
+import org.codehaus.jremoting.server.ServerContextFactory;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.server.StreamEncoder;
 import org.codehaus.jremoting.server.StreamEncoding;
+import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.adapters.InvokerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.ServerContextFactory;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
-import org.codehaus.jremoting.server.StreamEncoder;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Executors;
@@ -48,7 +49,7 @@ public class SocketServer extends ConnectingServer {
 
     private ServerSocket serverSocket;
     private Future future;
-    private final int port;
+    private final InetSocketAddress addr;
     private final StreamEncoding streamEncoding;
     private final ClassLoader facadesClassLoader;
 
@@ -64,12 +65,12 @@ public class SocketServer extends ConnectingServer {
      */
     public SocketServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
                                            StreamEncoding streamEncoding, ScheduledExecutorService executorService,
-                                           ClassLoader facadesClassLoader, int port) {
+                                           ClassLoader facadesClassLoader, InetSocketAddress addr) {
 
         super(serverMonitor, invokerDelegate, executorService);
         this.streamEncoding = streamEncoding;
         this.facadesClassLoader = facadesClassLoader;
-        this.port = port;
+        this.addr = addr;
     }
 
     public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever,
@@ -77,44 +78,44 @@ public class SocketServer extends ConnectingServer {
                         StreamEncoding streamEncoding,
                         ScheduledExecutorService executorService,
                         ServerContextFactory contextFactory,
-                        ClassLoader facadesClassLoader, int port) {
+                        ClassLoader facadesClassLoader, InetSocketAddress addr) {
         this(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
-                streamEncoding, executorService, facadesClassLoader, port);
+                streamEncoding, executorService, facadesClassLoader, addr);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, int port) {
-        this(serverMonitor, port, dftExecutor());
+    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr) {
+        this(serverMonitor, addr, dftExecutor());
     }
 
-    public SocketServer(ServerMonitor serverMonitor, Authenticator authenticator, int port) {
-        this(serverMonitor, port, dftExecutor(), authenticator);
+    public SocketServer(ServerMonitor serverMonitor, Authenticator authenticator, InetSocketAddress addr) {
+        this(serverMonitor, addr, dftExecutor(), authenticator);
     }
 
 
-    public SocketServer(ServerMonitor serverMonitor, int port, StubRetriever stubRetriever) {
+    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, StubRetriever stubRetriever) {
         this(serverMonitor, stubRetriever, dftAuthenticator(), dftStreamEncoding(), dftExecutor(),
-                dftContextFactory(), port);
+                dftContextFactory(), addr);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService) {
-        this(serverMonitor, port, executorService, dftStreamEncoding());
+    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, ScheduledExecutorService executorService) {
+        this(serverMonitor, addr, executorService, dftStreamEncoding());
     }
 
-    public SocketServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService,
+    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, ScheduledExecutorService executorService,
                                            StreamEncoding streamEncoding) {
-        this(serverMonitor, dftStubRetriever(), dftAuthenticator(), streamEncoding, executorService, dftContextFactory(), thisClassLoader(), port);
+        this(serverMonitor, dftStubRetriever(), dftAuthenticator(), streamEncoding, executorService, dftContextFactory(), thisClassLoader(), addr);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, int port, StreamEncoding streamEncoding) {
+    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress port, StreamEncoding streamEncoding) {
         this(serverMonitor, port, dftExecutor(), streamEncoding);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, int port) {
-        this(serverMonitor, stubRetriever, authenticator, streamEncoding, executorService, serverContextFactory, thisClassLoader(), port);
+    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, InetSocketAddress addr) {
+        this(serverMonitor, stubRetriever, authenticator, streamEncoding, executorService, serverContextFactory, thisClassLoader(), addr);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, int port, ScheduledExecutorService executorService, Authenticator authenticator) {
-        this(serverMonitor, dftStubRetriever(), authenticator, dftStreamEncoding(), executorService, dftContextFactory(), port);
+    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, ScheduledExecutorService executorService, Authenticator authenticator) {
+        this(serverMonitor, dftStubRetriever(), authenticator, dftStreamEncoding(), executorService, dftContextFactory(), addr);
     }
 
 
@@ -144,9 +145,9 @@ public class SocketServer extends ConnectingServer {
 
     public void starting() {
         try {
-            serverSocket = new ServerSocket(port);
+            serverSocket = new ServerSocket(addr.getPort(),50,addr.getAddress());
         } catch (IOException ioe) {
-            throw new JRemotingException("Could not bind to port '"+port+"'when setting up the server", ioe);
+            throw new JRemotingException("Could not bind to port '"+addr.getPort()+"', address '"+addr.getAddress()+"'when setting up the server", ioe);
         }
         super.starting();
     }
@@ -218,6 +219,5 @@ public class SocketServer extends ConnectingServer {
             serverMonitor.unexpectedException(this.getClass(), "SocketStreamServer: Some problem connecting client via sockets: " + ioe.getMessage(), ioe);
         }
     }
-
 
 }
