@@ -54,7 +54,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new InetSocketAddress(10002), new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
+        server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding(), new InetSocketAddress(10002));
 
         testServer = new TestFacadeImpl();
 

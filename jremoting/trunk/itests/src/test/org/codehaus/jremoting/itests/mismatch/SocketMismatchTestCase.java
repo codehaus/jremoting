@@ -98,7 +98,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
     public void dont_testObjectStreamByteStreamMismatch() throws Exception {
 
         // server side setup.
-        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new InetSocketAddress(12002), new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding());
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding(), new InetSocketAddress(12002));
         TestFacadeImpl testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);

@@ -55,22 +55,39 @@ public class SocketServer extends ConnectingServer {
 
     protected boolean accepting = true;
 
+    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr) {
+        this(serverMonitor, defaultExecutor(), addr);
+    }
 
-    /**
-     * Construct a SocketStreamServer
-     *
-     * @param serverMonitor
-     * @param invokerDelegate The invocation handler adapter to use.
-     * @param port                     The port to use
-     */
-    public SocketServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
-                                           StreamEncoding streamEncoding, ScheduledExecutorService executorService,
-                                           ClassLoader facadesClassLoader, InetSocketAddress addr) {
+    public SocketServer(ServerMonitor serverMonitor, Authenticator authenticator, InetSocketAddress addr) {
+        this(serverMonitor, addr, defaultExecutor(), authenticator);
+    }
 
-        super(serverMonitor, invokerDelegate, executorService);
-        this.streamEncoding = streamEncoding;
-        this.facadesClassLoader = facadesClassLoader;
-        this.addr = addr;
+
+    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, InetSocketAddress addr) {
+        this(serverMonitor, stubRetriever, defaultAuthenticator(), defaultStreamEncoding(), defaultExecutor(),
+                defaultContextFactory(), addr);
+    }
+
+  public SocketServer(ServerMonitor serverMonitor, StreamEncoding streamEncoding, InetSocketAddress port) {
+        this(serverMonitor, defaultExecutor(), streamEncoding, port);
+    }
+
+    public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, InetSocketAddress addr) {
+        this(serverMonitor, executorService, defaultStreamEncoding(), addr);
+    }
+
+    public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, StreamEncoding streamEncoding, InetSocketAddress addr
+    ) {
+        this(serverMonitor, defaultStubRetriever(), defaultAuthenticator(), streamEncoding, executorService, defaultContextFactory(), defaultClassLoader(), addr);
+    }
+
+    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, InetSocketAddress addr) {
+        this(serverMonitor, stubRetriever, authenticator, streamEncoding, executorService, serverContextFactory, defaultClassLoader(), addr);
+    }
+
+    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, ScheduledExecutorService executorService, Authenticator authenticator) {
+        this(serverMonitor, defaultStubRetriever(), authenticator, defaultStreamEncoding(), executorService, defaultContextFactory(), addr);
     }
 
     public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever,
@@ -81,65 +98,40 @@ public class SocketServer extends ConnectingServer {
                         ClassLoader facadesClassLoader, InetSocketAddress addr) {
         this(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
                 streamEncoding, executorService, facadesClassLoader, addr);
-    }
+    }    
 
-    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr) {
-        this(serverMonitor, addr, dftExecutor());
-    }
+    public SocketServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
+                                           StreamEncoding streamEncoding, ScheduledExecutorService executorService,
+                                           ClassLoader facadesClassLoader, InetSocketAddress addr) {
 
-    public SocketServer(ServerMonitor serverMonitor, Authenticator authenticator, InetSocketAddress addr) {
-        this(serverMonitor, addr, dftExecutor(), authenticator);
-    }
-
-
-    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, StubRetriever stubRetriever) {
-        this(serverMonitor, stubRetriever, dftAuthenticator(), dftStreamEncoding(), dftExecutor(),
-                dftContextFactory(), addr);
-    }
-
-    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, ScheduledExecutorService executorService) {
-        this(serverMonitor, addr, executorService, dftStreamEncoding());
-    }
-
-    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, ScheduledExecutorService executorService,
-                                           StreamEncoding streamEncoding) {
-        this(serverMonitor, dftStubRetriever(), dftAuthenticator(), streamEncoding, executorService, dftContextFactory(), thisClassLoader(), addr);
-    }
-
-    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress port, StreamEncoding streamEncoding) {
-        this(serverMonitor, port, dftExecutor(), streamEncoding);
-    }
-
-    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, InetSocketAddress addr) {
-        this(serverMonitor, stubRetriever, authenticator, streamEncoding, executorService, serverContextFactory, thisClassLoader(), addr);
-    }
-
-    public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, ScheduledExecutorService executorService, Authenticator authenticator) {
-        this(serverMonitor, dftStubRetriever(), authenticator, dftStreamEncoding(), executorService, dftContextFactory(), addr);
+        super(serverMonitor, invokerDelegate, executorService);
+        this.streamEncoding = streamEncoding;
+        this.facadesClassLoader = facadesClassLoader;
+        this.addr = addr;
     }
 
 
-    private static ScheduledExecutorService dftExecutor() {
+    public static ScheduledExecutorService defaultExecutor() {
         return Executors.newScheduledThreadPool(10);
     }
 
-    private static StreamEncoding dftStreamEncoding() {
+    public static StreamEncoding defaultStreamEncoding() {
         return new ByteStreamEncoding();
     }
 
-    private static ClassLoader thisClassLoader() {
+    public static ClassLoader defaultClassLoader() {
         return SocketServer.class.getClassLoader();
     }
 
-    private static StubRetriever dftStubRetriever() {
+    public static StubRetriever defaultStubRetriever() {
         return new RefusingStubRetriever();
     }
 
-    private static Authenticator dftAuthenticator() {
+    public static Authenticator defaultAuthenticator() {
         return new NullAuthenticator();
     }
 
-    private static ServerContextFactory dftContextFactory() {
+    public static ServerContextFactory defaultContextFactory() {
         return new ThreadLocalServerContextFactory();
     }
 

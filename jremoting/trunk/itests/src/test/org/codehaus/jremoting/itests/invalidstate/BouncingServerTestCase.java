@@ -107,8 +107,8 @@ public class BouncingServerTestCase extends MockObjectTestCase {
     }
 
     private SocketServer startServer() throws PublicationException {
-        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new InetSocketAddress(12201),
-                new org.codehaus.jremoting.server.encoders.ByteStreamEncoding());
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.encoders.ByteStreamEncoding(), new InetSocketAddress(12201)
+        );
         TestFacadeImpl testServer = new TestFacadeImpl();
         server.publish(testServer, "Hello55", pd);
         server.start();
