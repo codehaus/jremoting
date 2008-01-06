@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
  * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
  * @version $Revision: 1.2 $
  */
-public class ConnectingServer extends StatefulServer {
+public abstract class ConnectingServer extends StatefulServer {
 
     private List<Connection> connections = new ArrayList<Connection>();
     private ScheduledFuture pruner;

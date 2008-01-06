@@ -36,7 +36,7 @@ public class ConnectingServerTestCase extends TestCase {
     public void testSessionsCanBePruned() throws InterruptedException {
         ServerMonitor sm = new ConsoleServerMonitor();
         MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
-        ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10));
+        ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10)){};
         assertTrue(ihd.sessionExists(ihd.tstSession));
         cs.setPruneSessionsInterval(1);
         cs.setPruneStaleLongerThan(1000);
@@ -49,7 +49,7 @@ public class ConnectingServerTestCase extends TestCase {
     public void testSessionsAreNotPrunedIfTheServerIsStopped() throws InterruptedException {
         ServerMonitor sm = new ConsoleServerMonitor();
         MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
-        ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10));
+        ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10)){};
         assertTrue(ihd.sessionExists(ihd.tstSession));
         cs.setPruneSessionsInterval(1);
         cs.setPruneStaleLongerThan(1000);
@@ -62,7 +62,7 @@ public class ConnectingServerTestCase extends TestCase {
     public void testSessionsCannotBePrunedIfRefreshed() throws InterruptedException {
         ServerMonitor sm = new ConsoleServerMonitor();
         MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
-        ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10));
+        ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10)){};
         assertTrue(ihd.sessionExists(ihd.tstSession));
         cs.setPruneSessionsInterval(1);
         cs.setPruneStaleLongerThan(1000);
@@ -100,7 +100,7 @@ public class ConnectingServerTestCase extends TestCase {
     public void testSessionIsKeptAliveByPing() throws InterruptedException {
         ServerMonitor sm = new ConsoleServerMonitor();
         MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
-        ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10));
+        ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10)){};
         assertTrue(ihd.sessionExists(ihd.tstSession));
         cs.setPruneSessionsInterval(1);
         cs.setPruneStaleLongerThan(1000);
