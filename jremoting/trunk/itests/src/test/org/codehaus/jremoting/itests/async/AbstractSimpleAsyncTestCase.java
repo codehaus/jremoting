@@ -84,7 +84,7 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
         jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(),"127.0.0.1", 11003), (ContextFactory) mock.proxy(), new StubsFromServer());
+                new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(),new InetSocketAddress("127.0.0.1", 11003)), (ContextFactory) mock.proxy(), new StubsFromServer());
         testClient = (AsyncTest) jremotingClient.lookupService("AsyncTest");
 
     }

@@ -75,7 +75,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             )});
 
             jRemotingClient = new JRemotingClient(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
-                    new ByteStreamEncoding(), "127.0.0.1", 12201));
+                    new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12201)));
             TestFacade testClient = (TestFacade) jRemotingClient.lookupService("Hello55");
 
 

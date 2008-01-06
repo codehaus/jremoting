@@ -53,7 +53,7 @@ public class XStreamAndReflectionsStubsTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new XStreamEncoding(), "localhost", 10333),
+        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new XStreamEncoding(),  new InetSocketAddress("127.0.0.1", 10333)),
                 new ThreadLocalContextFactory(), new StubsViaReflection());
         
         testClient = (TestFacade) jremotinClient.lookupService("Hello");

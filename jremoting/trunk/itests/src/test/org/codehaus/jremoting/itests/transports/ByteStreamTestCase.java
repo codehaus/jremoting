@@ -53,7 +53,7 @@ public class ByteStreamTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), "localhost", 10333),
+        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("localhost", 10333)),
                 new ThreadLocalContextFactory(), new StubsViaReflection());
         testClient = (TestFacade) jremotinClient.lookupService("Hello");
 

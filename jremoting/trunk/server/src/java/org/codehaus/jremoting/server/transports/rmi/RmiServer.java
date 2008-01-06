@@ -38,6 +38,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.net.InetSocketAddress;
 
 /**
  * Class RmiServer for serving of 'over RMI'
@@ -47,20 +48,20 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public class RmiServer extends ConnectingServer {
 
-    private int port;
+    private InetSocketAddress addr;
     private Registry registry;
 
-    public RmiServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate, ScheduledExecutorService executorService, int port) {
+    public RmiServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate, ScheduledExecutorService executorService, InetSocketAddress addr) {
         super(serverMonitor, invokerDelegate, executorService);
-        this.port = port;
+        this.addr = addr;
     }
 
-    public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory contextFactory, int port) {
-        this(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService, port);
+    public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory contextFactory, InetSocketAddress addr) {
+        this(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService, addr);
     }
 
-    public RmiServer(ServerMonitor serverMonitor, int port) {
-        this(serverMonitor, new FromClassLoaderStubRetriever(), new NullAuthenticator(), Executors.newScheduledThreadPool(10), new ThreadLocalServerContextFactory(), port);
+    public RmiServer(ServerMonitor serverMonitor, InetSocketAddress addr) {
+        this(serverMonitor, new FromClassLoaderStubRetriever(), new NullAuthenticator(), Executors.newScheduledThreadPool(10), new ThreadLocalServerContextFactory(), addr);
     }
 
     public void starting() {
@@ -70,7 +71,7 @@ public class RmiServer extends ConnectingServer {
 
             UnicastRemoteObject.exportObject(rmiInvocationAdapter);
 
-            registry = LocateRegistry.createRegistry(port);
+            registry = LocateRegistry.createRegistry(addr.getPort());
 
             registry.rebind(RmiInvoker.class.getName(), rmiInvocationAdapter);
         } catch (RemoteException re) {

@@ -40,7 +40,7 @@ public class XStreamTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.encoders.XStreamEncoding(), "localhost", 10099));
+                new org.codehaus.jremoting.client.encoders.XStreamEncoding(), new InetSocketAddress("127.0.0.1", 10099)));
         testClient = (TestFacade) jremotinClient.lookupService("Hello");
 
     }

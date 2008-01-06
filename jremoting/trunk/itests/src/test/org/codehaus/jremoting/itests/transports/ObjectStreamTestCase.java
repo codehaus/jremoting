@@ -66,7 +66,7 @@ public class ObjectStreamTestCase extends AbstractHelloTestCase {
         // Client side setup
         jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStreamEncoding(),
-                "127.0.0.1", 10002));
+                new InetSocketAddress("127.0.0.1", 10002)));
         testClient = (TestFacade) jremotinClient.lookupService("Hello");
 
 

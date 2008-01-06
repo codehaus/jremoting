@@ -159,7 +159,7 @@ public class ClientContextTestCase extends MockObjectTestCase {
 
         StreamEncoding factory0 = new org.codehaus.jremoting.client.encoders.ByteStreamEncoding();
         ClientMonitor cm = new ConsoleClientMonitor();
-        Transport handler = new SocketTransport(cm, factory0, "127.0.0.1", 19333);
+        Transport handler = new SocketTransport(cm, factory0, new InetSocketAddress("127.0.0.1", 19333));
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();
         JRemotingClient jc = new JRemotingClient(handler, factory1);
 

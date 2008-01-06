@@ -28,6 +28,7 @@ import org.codehaus.jremoting.responses.Response;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.InetSocketAddress;
 import java.rmi.ConnectIOException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -46,18 +47,18 @@ public final class RmiTransport extends StatefulTransport {
     private RmiInvoker rmiInvoker;
     private String url;
 
-    public RmiTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, String host, int port) throws ConnectionException {
+    public RmiTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, InetSocketAddress addr) throws ConnectionException {
 
         super(clientMonitor, executorService, connectionPinger, RmiTransport.class.getClassLoader());
 
-        url = "rmi://" + host + ":" + port + "/" + RmiInvoker.class.getName();
+        url = "rmi://" + addr.getHostName() + ":" + addr.getPort() + "/" + RmiInvoker.class.getName();
 
         try {
             rmiInvoker = (RmiInvoker) Naming.lookup(url);
         } catch (NotBoundException nbe) {
             throw new ConnectionException("Cannot bind to the remote RMI service.  Either an IP or RMI issue.");
         } catch (MalformedURLException mfue) {
-            throw new ConnectionException("Malformed URL, host/port (" + host + "/" + port + ") must be wrong: " + mfue.getMessage());
+            throw new ConnectionException("Malformed URL, host/port (" + addr.getHostName() + "/" + addr.getPort() + ") must be wrong: " + mfue.getMessage());
         } catch (ConnectIOException cioe) {
             throw new ConnectionException("Cannot connect to remote RMI server. " + "It is possible that transport mismatch");
         } catch (RemoteException re) {
@@ -65,8 +66,8 @@ public final class RmiTransport extends StatefulTransport {
         }
     }
 
-    public RmiTransport(ClientMonitor clientMonitor, String host, int port) throws ConnectionException {
-        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), host, port);
+    public RmiTransport(ClientMonitor clientMonitor, InetSocketAddress addr) throws ConnectionException {
+        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), addr);
 
     }
 

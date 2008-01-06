@@ -31,6 +31,8 @@ import org.codehaus.jremoting.server.transports.rmi.RmiServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
+import java.net.InetSocketAddress;
+
 
 /**
  * Test RMI transport
@@ -53,14 +55,14 @@ public class RmiTestCase extends MockObjectTestCase {
         mockServerMonitor = mock(ServerMonitor.class);
 
         // server side setup.
-        server = new RmiServer((ServerMonitor) mockServerMonitor.proxy(), 10003);
+        server = new RmiServer((ServerMonitor) mockServerMonitor.proxy(), new InetSocketAddress("127.0.0.1", 10003));
         testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        JRemotingClient jc = new JRemotingClient(new RmiTransport(new ConsoleClientMonitor(), "127.0.0.1", 10003));
+        JRemotingClient jc = new JRemotingClient(new RmiTransport(new ConsoleClientMonitor(), new InetSocketAddress("127.0.0.1", 10003)));
         testClient = (TestFacade) jc.lookupService("Hello");
 
 
