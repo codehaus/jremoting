@@ -52,6 +52,11 @@ public class SocketServer extends ConnectingServer {
     private final InetSocketAddress addr;
     private final StreamEncoding streamEncoding;
     private final ClassLoader facadesClassLoader;
+    private int socketTimeout = 60 * 1000;
+
+    public void setSocketTimeout(int millis) {
+        this.socketTimeout = millis;
+    }
 
     protected boolean accepting = true;
 
@@ -69,7 +74,7 @@ public class SocketServer extends ConnectingServer {
                 defaultContextFactory(), addr);
     }
 
-  public SocketServer(ServerMonitor serverMonitor, StreamEncoding streamEncoding, InetSocketAddress port) {
+    public SocketServer(ServerMonitor serverMonitor, StreamEncoding streamEncoding, InetSocketAddress port) {
         this(serverMonitor, defaultExecutor(), streamEncoding, port);
     }
 
@@ -191,7 +196,7 @@ public class SocketServer extends ConnectingServer {
 
         // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
         try {
-            socket.setSoTimeout(60 * 1000);
+            socket.setSoTimeout(socketTimeout);
             if (getState().equals(STARTED)) {
                 StreamEncoder streamEncoder = streamEncoding.createEncoder(serverMonitor, facadesClassLoader,
                         socket.getInputStream(), socket.getOutputStream(), socket.getInetAddress());

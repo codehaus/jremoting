@@ -153,8 +153,8 @@ public class SimpleRetryingClientMonitor implements ClientMonitor {
         delegate.classNotFound(clazz, msg, cnfe);
     }
 
-    public InvocationException unexpectedIOException(Class clazz, String msg, IOException ioe) {
-        return delegate.unexpectedIOException(clazz, msg, ioe);
+    public void unexpectedIOException(Class clazz, String msg, IOException ioe) {
+        delegate.unexpectedIOException(clazz, msg, ioe);
     }
 
     public void pingFailure(Class clazz, JRemotingException jre) {

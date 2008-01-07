@@ -90,9 +90,9 @@ public class Log4JClientMonitor implements ClientMonitor {
         delegate.classNotFound(clazz, msg, cnfe);
     }
 
-    public InvocationException unexpectedIOException(Class clazz, String msg, IOException ioe) {
+    public void unexpectedIOException(Class clazz, String msg, IOException ioe) {
         getLog(clazz).debug("Log4JClientMonitor: unexpectedIOException:" + maybeWriteClass(clazz) + "' msg: '" + msg + "' IOException: '" + ioe.getMessage() + "'" , ioe);
-        return delegate.unexpectedIOException(clazz, msg, ioe);
+        delegate.unexpectedIOException(clazz, msg, ioe);
     }
 
     public void pingFailure(Class clazz, JRemotingException jre) {

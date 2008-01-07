@@ -193,7 +193,8 @@ public abstract class StatefulTransport implements Transport {
                                 retryConnectTries++;
                             }
                         } else {
-                            throw clientMonitor.unexpectedIOException(StatefulTransport.class, "invoke()", ioe);
+                            clientMonitor.unexpectedIOException(StatefulTransport.class, "invoke(), request:'" + request.getClass().getName() + "'", ioe);
+                            throw new InvocationException("unexpected IOException", ioe);
                         }
                     }
                 }

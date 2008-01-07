@@ -19,9 +19,9 @@ package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.responses.ConnectionKilled;
 import org.codehaus.jremoting.responses.BadServerSideEvent;
+import org.codehaus.jremoting.responses.ConnectionKilled;
+import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.Connection;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.StreamEncoder;
@@ -29,7 +29,9 @@ import org.codehaus.jremoting.server.StreamEncoder;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
+import java.io.StreamCorruptedException;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 /**
  * Class StreamConnection
@@ -114,8 +116,10 @@ public abstract class StreamConnection implements Runnable, Connection {
                     response = new BadServerSideEvent("NullPointerException on server: " + npe.getMessage());
                 }
             }
+        } catch (StreamCorruptedException e) {
+            serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected IOE #2 (possible transport mismatch?)", e);
         } catch (IOException e) {
-            serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected IOE #2", e);
+            serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected IOE #3", e);
         } catch (ClassNotFoundException e) {
             serverMonitor.classNotFound(this.getClass(), e);
         }
@@ -124,7 +128,7 @@ public abstract class StreamConnection implements Runnable, Connection {
     }
 
     private boolean isSafeEnd(IOException ioe) {
-        if ((ioe instanceof SocketException) || ioe.getClass().getName().equals("java.net.SocketTimeoutException") // 1.3 safe
+        if ((ioe instanceof SocketException) || ioe instanceof SocketTimeoutException
                 || (ioe instanceof InterruptedIOException)) {
             return true;
         }

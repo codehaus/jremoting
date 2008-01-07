@@ -28,6 +28,7 @@ import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
+import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.requests.InvokeMethod;
@@ -37,6 +38,7 @@ import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 
@@ -146,6 +148,62 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         }
     }
 
+    public void testObjectStreamServerCanRecogniseNonObjectStreamTraffic() throws Exception {
+
+        // server side setup.
+        // JMock 1.2.0 not working in thos scenario for some reason.
+        final boolean[] didIt = new boolean[] {false};
+        final boolean[] mismatch = new boolean[] {false};
+        final boolean[] wrong = new boolean[] {false};
+        ServerMonitor sm = new ServerMonitor() {
+            public void closeError(Class clazz, String s, IOException e) {
+                wrong[0] = true;
+            }
+
+            public void classNotFound(Class clazz, ClassNotFoundException e) {
+                wrong[0] = true;
+            }
+
+            public void unexpectedException(Class clazz, String s, Exception e) {
+                mismatch[0] = s.contains("mismatch");
+                didIt[0] = true;
+            }
+
+            public void stopServerError(Class clazz, String s, Exception e) {
+                wrong[0] = true;
+            }
+        };
+        SocketServer server = new SocketServer(sm, new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding(), new InetSocketAddress(12347));
+        server.setSocketTimeout(10);
+        TestFacadeImpl testServer = new TestFacadeImpl();
+        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
+        server.publish(testServer, "Hello", pd);
+        server.start();
+
+        mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(true));
+        mockClientMonitor.expects(atLeastOnce()).method("unexpectedIOException").with(isA(Class.class), isA(String.class), isA(SocketTimeoutException.class));
+
+
+        // Client side setup
+        try {
+            new JRemotingClient(new SocketTransport((ClientMonitor) mockClientMonitor.proxy(),
+                new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12347),  100));
+            fail("Expected mismatch exception");
+        } catch (InvocationException e) {
+            assertTrue(e.getCause() instanceof SocketTimeoutException);
+            SocketTimeoutException ste = (SocketTimeoutException) e.getCause();
+            assertEquals(0, ste.bytesTransferred);
+        } finally {
+            server.stop();
+            Thread.sleep(100);
+        }
+
+        assertTrue(didIt[0]);
+        assertTrue(mismatch[0]);
+        assertFalse(wrong[0]);
+
+    }
+
     public void testMismatch3() throws Exception {
 
         // server side setup.
@@ -168,5 +226,4 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
             server.stop();
         }
     }
-
 }

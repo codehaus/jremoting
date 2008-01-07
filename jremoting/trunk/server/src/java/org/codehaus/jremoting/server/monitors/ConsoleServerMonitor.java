@@ -40,6 +40,7 @@ public class ConsoleServerMonitor implements ServerMonitor {
 
     public void unexpectedException(Class clazz, String s, Exception e) {
         System.out.println("[unexpectedException] " + s + " : " + e.getMessage());
+        e.printStackTrace();
     }
 
     public void stopServerError(Class clazz, String s, Exception e) {

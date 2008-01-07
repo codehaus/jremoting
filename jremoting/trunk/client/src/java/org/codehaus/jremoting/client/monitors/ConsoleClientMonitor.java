@@ -72,10 +72,10 @@ public class ConsoleClientMonitor implements ClientMonitor {
         delegate.classNotFound(clazz, msg, cnfe);
     }
 
-    public InvocationException unexpectedIOException(Class clazz, String msg, IOException ioe) {
+    public void unexpectedIOException(Class clazz, String msg, IOException ioe) {
         System.out.println("ConsoleClientMonitor: unexpectedIOException: for class'" + clazz.getName() + "' msg: '" + msg + "' IOException: '" + ioe.getMessage() + "'" );
         ioe.printStackTrace();
-        return delegate.unexpectedIOException(clazz, msg, ioe);
+        delegate.unexpectedIOException(clazz, msg, ioe);
     }
 
     public void pingFailure(Class clazz, JRemotingException jre) {
