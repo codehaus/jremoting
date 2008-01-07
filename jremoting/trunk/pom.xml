@@ -156,6 +156,8 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.0-beta-5</version>
 				<configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <preparationGoals>clean install</preparationGoals>
 					<tagBase>https://svn.codehaus.org/jremoting/jremoting/tags</tagBase>
 				</configuration>
 			</plugin>
