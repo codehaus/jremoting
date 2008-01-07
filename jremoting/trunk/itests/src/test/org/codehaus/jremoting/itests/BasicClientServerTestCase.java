@@ -18,13 +18,16 @@
 package org.codehaus.jremoting.itests;
 
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
+import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
+import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.requests.InvokeMethod;
@@ -35,6 +38,7 @@ import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
 import java.net.InetSocketAddress;
+import java.net.SocketTimeoutException;
 
 
 /**
@@ -44,10 +48,12 @@ import java.net.InetSocketAddress;
  */
 public class BasicClientServerTestCase extends MockObjectTestCase {
     private Mock mockServerMonitor;
+    private Mock mockClientMonitor;
 
 
     protected void setUp() throws Exception {
         mockServerMonitor = mock(ServerMonitor.class);
+        mockClientMonitor = mock(ClientMonitor.class);
         super.setUp();    //To change body of overridden methods use File | Settings | File Templates.
     }
 
@@ -124,7 +130,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
 
 
-    public void donttestMismatch2() throws Exception {
+    public void testMismatch2() throws Exception {
 
         // server side setup.
         // Object
@@ -134,23 +140,21 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-
         // Client side setup
         try {
-            new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
+            new JRemotingClient(new SocketTransport(new NullClientMonitor(),
                 new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12347)));
             fail("Expected mismatch exception");
-        } catch (ConnectionException e) {
-            if (e.getMessage().indexOf("mismatch") < 0) {
-                throw e;
-            }
-
+        } catch (InvocationException e) {
+            assertTrue(e.getCause() instanceof SocketTimeoutException);
+            SocketTimeoutException ste = (SocketTimeoutException) e.getCause();
+            assertEquals(0, ste.bytesTransferred);
         } finally {
             server.stop();
         }
     }
 
-    public void donttestMismatch3() throws Exception {
+    public void testMismatch3() throws Exception {
 
         // server side setup.
         SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new InetSocketAddress(12348));

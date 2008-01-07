@@ -61,11 +61,15 @@ public class ObjectStreamEncoder extends AbstractStreamEncoder {
 
     public void close() {
         try {
-            objectInputStream.close();
+            if (objectInputStream != null) {
+                objectInputStream.close();
+            }
         } catch (IOException e) {
         }
         try {
-            objectOutputStream.close();
+            if (objectOutputStream != null) {
+                objectOutputStream.close();
+            }
         } catch (IOException e) {
         }
         super.close();

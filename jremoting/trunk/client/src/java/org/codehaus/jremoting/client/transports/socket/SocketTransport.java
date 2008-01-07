@@ -50,7 +50,7 @@ public class SocketTransport extends StreamTransport {
 
         try {
             Socket socket = new Socket(addr.getHostName(), addr.getPort());
-            socket.setSoTimeout(60 * 1000);
+            socket.setSoTimeout(500);
             setStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
         } catch (IOException ioe) {
             if (ioe.getMessage().startsWith("Connection refused")) {

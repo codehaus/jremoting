@@ -30,12 +30,6 @@ import java.io.Serializable;
 public class InvocationException extends JRemotingException implements Serializable {
     private static final long serialVersionUID = -2818485871482437040L;
 
-
-    /**
-     * Constructor InvocationException
-     *
-     * @param msg the message that is the root cause.
-     */
     public InvocationException(String msg) {
         super(msg);
     }

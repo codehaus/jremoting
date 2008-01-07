@@ -46,6 +46,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
@@ -181,7 +182,7 @@ public abstract class StatefulTransport implements Transport {
                             session = ((ConnectionOpened) response).getSessionID();
                         }
                     } catch (IOException ioe) {
-                        if (isSafeEnd(ioe)) {
+                        if (isSafeEnd(ioe) && !(ioe instanceof SocketTimeoutException && request instanceof OpenConnection)) {
                             int retryConnectTries = 0;
 
                             again = true;

@@ -61,7 +61,7 @@ public class NullClientMonitor implements ClientMonitor {
     }
 
     public InvocationException unexpectedIOException(Class clazz, String msg, IOException ioe) {
-        return new InvocationException("IO Exception during invocation to server :" + ioe.getMessage());
+        return new InvocationException("IO Exception during invocation to server :" + ioe.getMessage(), ioe);
     }
 
     public void pingFailure(Class clazz, JRemotingException jre) {
