@@ -44,13 +44,20 @@ public class SocketTransport extends StreamTransport {
     public SocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                            StreamEncoding streamEncoding,
-                           InetSocketAddress addr) throws ConnectionRefusedException, ConnectionException {
+                           InetSocketAddress addr) throws ConnectionException {
+        this(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding, addr, defaultSocketTimeout());
+    }
+
+    public SocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
+                           ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
+                           StreamEncoding streamEncoding,
+                           InetSocketAddress addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding);
         this.addr = addr;
 
         try {
             Socket socket = new Socket(addr.getHostName(), addr.getPort());
-            socket.setSoTimeout(500);
+            socket.setSoTimeout(socketTimeout);
             setStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
         } catch (IOException ioe) {
             if (ioe.getMessage().startsWith("Connection refused")) {
@@ -65,6 +72,17 @@ public class SocketTransport extends StreamTransport {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
                 Thread.currentThread().getContextClassLoader(), streamEncoding, addr);
     }
+
+
+    public SocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, InetSocketAddress addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
+        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
+                Thread.currentThread().getContextClassLoader(), streamEncoding, addr, socketTimeout);
+    }
+
+    private static int defaultSocketTimeout() {
+        return 45*1000;
+    }
+
 
     protected boolean tryReconnect() {
 

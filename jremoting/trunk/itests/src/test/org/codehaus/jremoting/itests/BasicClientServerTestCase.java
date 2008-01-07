@@ -90,9 +90,6 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         } finally {
             server.stop();
         }
-
-
-
     }
 
 
@@ -123,12 +120,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
             server.stop();
         }
 
-
-
     }
-
-
-
 
     public void testMismatch2() throws Exception {
 
@@ -143,7 +135,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
             new JRemotingClient(new SocketTransport(new NullClientMonitor(),
-                new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12347)));
+                new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12347), 500));
             fail("Expected mismatch exception");
         } catch (InvocationException e) {
             assertTrue(e.getCause() instanceof SocketTimeoutException);
