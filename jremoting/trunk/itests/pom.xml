@@ -42,7 +42,10 @@
             <groupId>jmock</groupId>
             <artifactId>jmock</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>xpp3</groupId>
+            <artifactId>xpp3_min</artifactId>
+        </dependency>
     </dependencies>
 	<build>
 		<plugins>

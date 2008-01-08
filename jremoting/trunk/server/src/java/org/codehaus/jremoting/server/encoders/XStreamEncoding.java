@@ -13,11 +13,9 @@ public class XStreamEncoding implements StreamEncoding {
 
     private XStream xStream;
 
-
     public XStreamEncoding(XStream xstream) {
         this.xStream = xstream;
     }
-
 
     public XStreamEncoding() {
         this (new XStream(new DomDriver()));
