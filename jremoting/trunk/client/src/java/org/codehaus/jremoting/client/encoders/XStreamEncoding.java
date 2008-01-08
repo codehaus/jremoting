@@ -23,8 +23,21 @@ import org.codehaus.jremoting.ConnectionException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.thoughtworks.xstream.XStream;
+
 public class XStreamEncoding implements StreamEncoding {
+
+    private final XStream xStream;
+
+    public XStreamEncoding(XStream xStream) {
+        this.xStream = xStream;
+    }
+
+    public XStreamEncoding() {
+        this(new XStream());
+    }
+
     public StreamEncoder makeStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
-        return new XStreamEncoder(inputStream, outputStream, facadesClassLoader);
+        return new XStreamEncoder(inputStream, outputStream, facadesClassLoader, xStream);
     }
 }

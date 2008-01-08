@@ -50,11 +50,11 @@ public class XStreamEncoder implements StreamEncoder {
     private final XStream xStream;
     private final BufferedOutputStream bufferedOutputStream;
 
-    public XStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+    public XStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader, XStream xStream) throws ConnectionException {
         bufferedOutputStream = new BufferedOutputStream(outputStream);
         printWriter = new PrintWriter(bufferedOutputStream);
         lineNumberReader = new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream)));
-        xStream = new XStream(new DomDriver());
+        this.xStream = xStream;
         xStream.setClassLoader(facadesClassLoader);
 
         xStream.registerConverter(new AnnotationReflectionConverter(
