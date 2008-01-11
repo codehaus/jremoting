@@ -77,7 +77,7 @@ public class JRemotingClient {
     private static final int STUB_PREFIX_LENGTH = StaticStubHelper.getStubPrefixLength();
     protected final Transport transport;
     private final ContextFactory contextFactory;
-    private final StubFactory stubClassLoader;
+    private final StubFactory stubFactory;
     private final Authenticator authenticator;
     protected final HashMap<Long,WeakReference<Object>> refObjs = new HashMap<Long, WeakReference<Object>>();
     protected final long session;
@@ -92,26 +92,26 @@ public class JRemotingClient {
         this(transport, contextFactory, defaultStubFactory());
     }
 
-    public JRemotingClient(final Transport transport, StubFactory stubClassLoader) throws ConnectionException {
-        this(transport, defaultContextFactory(), stubClassLoader, defaultAuthenticator());
+    public JRemotingClient(final Transport transport, StubFactory stubFactory) throws ConnectionException {
+        this(transport, defaultContextFactory(), stubFactory, defaultAuthenticator());
     }
 
     public JRemotingClient(final Transport transport, Authenticator authenticator) throws ConnectionException {
         this(transport, defaultContextFactory(), defaultStubFactory(), authenticator);
     }
 
-    public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubFactory stubClassLoader) throws ConnectionException {
-        this(transport, contextFactory, stubClassLoader, defaultAuthenticator());
+    public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubFactory stubFactory) throws ConnectionException {
+        this(transport, contextFactory, stubFactory, defaultAuthenticator());
     }
 
-    public JRemotingClient(final Transport transport, StubFactory stubClassLoader, Authenticator authenticator) throws ConnectionException {
-        this(transport, defaultContextFactory(), stubClassLoader, authenticator);
+    public JRemotingClient(final Transport transport, StubFactory stubFactory, Authenticator authenticator) throws ConnectionException {
+        this(transport, defaultContextFactory(), stubFactory, authenticator);
     }
 
-    public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubFactory stubClassLoader, Authenticator authenticator) throws ConnectionException {
+    public JRemotingClient(final Transport transport, ContextFactory contextFactory, StubFactory stubFactory, Authenticator authenticator) throws ConnectionException {
         this.transport = transport;
         this.contextFactory = contextFactory;
-        this.stubClassLoader = stubClassLoader;
+        this.stubFactory = stubFactory;
         this.authenticator = authenticator;
 
         ConnectionOpened response = transport.openConnection();
@@ -249,7 +249,7 @@ public class JRemotingClient {
 
 
     protected Object getInstance(String facadeClassName, String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
-            return stubClassLoader.instantiateStub(facadeClassName, publishedServiceName, objectName, transport, stubHelper);
+            return stubFactory.instantiateStub(facadeClassName, publishedServiceName, objectName, transport, stubHelper);
     }
 
     public void close() {
