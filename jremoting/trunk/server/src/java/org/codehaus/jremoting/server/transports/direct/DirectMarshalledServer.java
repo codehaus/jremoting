@@ -70,42 +70,19 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
 
     private static class ServerMarshalledInvokerImpl implements ServerMarshalledInvoker {
 
-        /**
-         * The invocation hamdeler
-         */
         private ServerInvoker invoker;
-        /**
-         * The class loader.
-         */
         private ClassLoader facadesClassLoader;
 
-        /**
-         * Constructor ServerMarshalledInvokerImpl
-         *
-         * @param invoker The invocation handler
-         */
         public ServerMarshalledInvokerImpl(ServerInvoker invoker) {
             this.invoker = invoker;
             facadesClassLoader = getClass().getClassLoader();
         }
 
-        /**
-         * Constructor ServerMarshalledInvokerImpl
-         *
-         * @param invoker The invocation handler
-         * @param facadesClassLoader       The classloader
-         */
         public ServerMarshalledInvokerImpl(ServerInvoker invoker, ClassLoader facadesClassLoader) {
             this.invoker = invoker;
             this.facadesClassLoader = facadesClassLoader;
         }
 
-        /**
-         * Handle an Invocation
-         *
-         * @param request The request
-         * @return The reply
-         */
         public byte[] invoke(byte[] request, Object connectionDetails) {
 
             try {
