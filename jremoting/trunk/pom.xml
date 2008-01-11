@@ -168,11 +168,6 @@
         <version>1.0-beta-2</version>
       </extension>
     </extensions>
-    <resources>
-      <resource>
-        <directory>${basedir}/src/java</directory>
-      </resource>
-    </resources>
     <testResources>
       <testResource>
         <directory>${basedir}/src/test</directory>
