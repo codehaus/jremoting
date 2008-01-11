@@ -104,6 +104,10 @@ public class JRemotingClient {
         this(transport, contextFactory, stubFactory, defaultAuthenticator());
     }
 
+    public JRemotingClient(final Transport transport, ContextFactory contextFactory, Authenticator authenticator) throws ConnectionException {
+        this(transport, contextFactory, defaultStubFactory(), authenticator);
+    }
+
     public JRemotingClient(final Transport transport, StubFactory stubFactory, Authenticator authenticator) throws ConnectionException {
         this(transport, defaultContextFactory(), stubFactory, authenticator);
     }
