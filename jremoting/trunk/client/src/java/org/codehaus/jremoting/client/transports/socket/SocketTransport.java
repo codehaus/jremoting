@@ -87,13 +87,17 @@ public class SocketTransport extends StreamTransport {
     protected boolean tryReconnect() {
 
         try {
-            Socket socket = new Socket(addr.getHostName(), addr.getPort());
+            Socket socket = makeSocket(addr);
             socket.setSoTimeout(60 * 1000);
             setStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
             return true;
         } catch (IOException ce) {
             return false;
         }
+    }
+
+    protected Socket makeSocket(InetSocketAddress addr) throws IOException {
+        return new Socket(addr.getHostName(), addr.getPort());
     }
 
 }
