@@ -31,6 +31,7 @@ import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 
+import javax.net.ServerSocketFactory;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -82,8 +83,7 @@ public class SocketServer extends ConnectingServer {
         this(serverMonitor, executorService, defaultStreamEncoding(), addr);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, StreamEncoding streamEncoding, InetSocketAddress addr
-    ) {
+    public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, StreamEncoding streamEncoding, InetSocketAddress addr) {
         this(serverMonitor, defaultStubRetriever(), defaultAuthenticator(), streamEncoding, executorService, defaultContextFactory(), defaultClassLoader(), addr);
     }
 
@@ -142,11 +142,15 @@ public class SocketServer extends ConnectingServer {
 
     public void starting() {
         try {
-            serverSocket = new ServerSocket(addr.getPort(),50,addr.getAddress());
+            serverSocket = makeServerSocket(addr);
         } catch (IOException ioe) {
             throw new JRemotingException("Could not bind to port '"+addr.getPort()+"', address '"+addr.getAddress()+"'when setting up the server", ioe);
         }
         super.starting();
+    }
+
+    protected ServerSocket makeServerSocket(InetSocketAddress addr) throws IOException {
+        return new ServerSocket(addr.getPort(),50, addr.getAddress());
     }
 
     public void started() {
