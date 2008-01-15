@@ -56,7 +56,7 @@ public class SocketTransport extends StreamTransport {
         this.addr = addr;
 
         try {
-            Socket socket = new Socket(addr.getHostName(), addr.getPort());
+            Socket socket = makeSocket(addr);
             socket.setSoTimeout(socketTimeout);
             setStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
         } catch (IOException ioe) {

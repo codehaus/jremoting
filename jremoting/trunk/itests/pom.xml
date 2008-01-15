@@ -55,6 +55,26 @@
 				<configuration>
 					<forkMode>pertest</forkMode>
 					<printSummary>true</printSummary>
+			        <systemProperties>
+   				      <argLine>-Xmx1024m</argLine> 
+   				      <argLine>-Xms512m</argLine> 
+			          <property>
+			            <name>javax.net.ssl.keyStore</name>
+			            <value>keyStoreForUnitTestingOnly</value>
+			          </property>
+			          <property>
+			            <name>javax.net.ssl.keyStorePassword</name>
+			            <value>123456</value>
+			          </property>
+			          <property>
+			            <name>java.protocol.handler.pkgs</name>
+			            <value>com.sun.net.ssl.internal.www.protocol</value>
+			          </property>
+			          <property>
+			            <name>javax.net.debug</name>
+			            <value>ssl</value>
+			          </property>
+			        </systemProperties>
 				</configuration>
 			</plugin>
 			<plugin>
