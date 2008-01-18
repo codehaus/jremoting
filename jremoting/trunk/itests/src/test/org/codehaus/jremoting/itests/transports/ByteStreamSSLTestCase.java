@@ -56,8 +56,6 @@ public class ByteStreamSSLTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
 
-        System.out.println("--> " + new File(System.getProperty("javax.net.ssl.keyStore")).getCanonicalPath());
-
         assertNotNull(System.getProperty("javax.net.ssl.keyStore"));
         assertNotNull(new File(System.getProperty("javax.net.ssl.keyStore")).exists());
 

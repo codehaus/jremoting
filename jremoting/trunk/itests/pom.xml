@@ -70,10 +70,10 @@
 			            <name>java.protocol.handler.pkgs</name>
 			            <value>com.sun.net.ssl.internal.www.protocol</value>
 			          </property>
-			          <property>
-			            <name>javax.net.debug</name>
-			            <value>ssl</value>
-			          </property>
+			          <!--<property>-->
+			            <!--<name>javax.net.debug</name>-->
+			            <!--<value>ssl</value>-->
+			          <!--</property>-->
 			        </systemProperties>
 				</configuration>
 			</plugin>

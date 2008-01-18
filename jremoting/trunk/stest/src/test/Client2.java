@@ -1,11 +1,8 @@
-import org.codehaus.jremoting.client.factories.JRemotingClient;
-import org.codehaus.jremoting.client.transports.socket.SocketTransport;
-import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
-import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
-import org.codehaus.jremoting.client.stubs.StubsViaReflection;
-import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
+import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.monitors.Log4JClientMonitor;
+import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 
 import java.net.InetSocketAddress;
 
@@ -16,7 +13,7 @@ public class Client2 {
             new Thread() {
                 public void run() {
                     try {
-                        mathLoop((Addition) new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("localhost", 10333))).lookupService("Addition"));
+                        mathLoop((Addition) new JRemotingClient(new SocketTransport(new Log4JClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("localhost", 10333))).lookupService("Addition"));
                     } catch (ConnectionException e) {
                         e.printStackTrace();
                     }
