@@ -63,6 +63,10 @@
 			            <value>keyStoreForUnitTestingOnly</value>
 			          </property>
 			          <property>
+			            <name>javax.net.ssl.trustStore</name>
+			            <value>keyStoreForUnitTestingOnly</value>
+			          </property>			
+			          <property>
 			            <name>javax.net.ssl.keyStorePassword</name>
 			            <value>123456</value>
 			          </property>
