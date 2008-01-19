@@ -19,7 +19,6 @@
 package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.requests.CollectGarbage;
-import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.BadServerSideEvent;
 import org.codehaus.jremoting.responses.Response;
@@ -27,7 +26,6 @@ import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Server;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.ServiceHandler;
 import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
 import org.codehaus.jremoting.JRemotingException;
 

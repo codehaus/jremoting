@@ -25,8 +25,6 @@ import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.MethodInvocationMonitor;
 import org.codehaus.jremoting.server.Publication;
-import org.codehaus.jremoting.server.ServiceHandler;
-import org.codehaus.jremoting.server.ServiceHandlerAccessor;
 import org.codehaus.jremoting.server.adapters.PublicationAdapter;
 import org.codehaus.jremoting.server.monitors.NullMethodInvocationMonitor;
 import org.codehaus.jremoting.util.FacadeRefHolder;
@@ -39,13 +37,13 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * Class DefaultServiceHandler
+ * Class ServiceHandler
  *
  * @author Paul Hammant
  * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
  * @version $Revision: 1.2 $
  */
-public class DefaultServiceHandler implements ServiceHandler {
+public class ServiceHandler {
 
     private WeakHashMap<Long, WeakReference<Object>> instancesByRefID = new WeakHashMap<Long, WeakReference<Object>>();
     private WeakHashMap<Object, Long> ReferencesForInstances = new WeakHashMap<Object, Long>();
@@ -60,7 +58,7 @@ public class DefaultServiceHandler implements ServiceHandler {
 
     private final Long zero = new Long(0);
 
-    public DefaultServiceHandler(PublicationAdapter publicationAdapter,
+    public ServiceHandler(PublicationAdapter publicationAdapter,
             String publishedThing, Map<String, Method> methodMap,
                                 Publication publicationDescription, Class facadeClass) {
         this.publicationAdapter = publicationAdapter;

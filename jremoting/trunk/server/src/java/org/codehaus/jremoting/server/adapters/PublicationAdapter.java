@@ -23,14 +23,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
-import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.server.ServiceHandler;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.PublicationItem;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Publisher;
-import org.codehaus.jremoting.server.ServiceHandlerAccessor;
-import org.codehaus.jremoting.server.transports.DefaultServiceHandler;
+import org.codehaus.jremoting.server.transports.ServiceHandler;
 import org.codehaus.jremoting.util.StaticStubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
@@ -132,7 +129,7 @@ public class PublicationAdapter implements Publisher {
 
         // add method maps for main lookup-able service.
         Map<String, Method> mainMethodMap = new HashMap<String, Method>();
-        DefaultServiceHandler mainServiceHandler = new DefaultServiceHandler(this, service + "_Main", mainMethodMap, publicationDescription, primaryFacade.getFacadeClass());
+        ServiceHandler mainServiceHandler = new ServiceHandler(this, service + "_Main", mainMethodMap, publicationDescription, primaryFacade.getFacadeClass());
 
         mainServiceHandler.addInstance(new Long(0), impl);
 
@@ -169,8 +166,7 @@ public class PublicationAdapter implements Publisher {
             Class facadeClass = secondaryFacade.getFacadeClass();
             String encodedClassName = MethodNameHelper.encodeClassName(secondaryFacade.getFacadeClass().getName());
             HashMap<String, Method> methodMap = new HashMap<String, Method>();
-            ServiceHandler serviceHandler = new DefaultServiceHandler(this, service + "_" + encodedClassName,
-                    methodMap, publicationDescription, facadeClass);
+            ServiceHandler serviceHandler = new ServiceHandler(this, service + "_" + encodedClassName, methodMap, publicationDescription, facadeClass);
 
             methods = null;
             try {
