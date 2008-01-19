@@ -403,18 +403,14 @@ public class JRemotingClient {
 
 
         public void processVoidRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
-
             try {
                 stubRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
-
                 InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, reference, session);
-
                 setContext(request);
                 Response response = transport.invoke(request, true);
 
                 if (response instanceof MethodInvoked) {
                     MethodInvoked or = (MethodInvoked) response;
-
                     return;
                 } else {
                     throw makeUnexpectedResponseThrowable(response);
@@ -426,19 +422,14 @@ public class JRemotingClient {
         }
 
         public void queueAsyncRequest(String methodSignature, Object[] args, Class[] argClasses) {
-
             synchronized (queuedAsyncRequests) {
-
                 GroupedMethodRequest request = new GroupedMethodRequest(methodSignature, args);
                 queuedAsyncRequests.add(request);
             }
-
         }
 
         public void commitAsyncRequests() throws Throwable {
-
             synchronized (queuedAsyncRequests) {
-
                 try {
                     GroupedMethodRequest[] rawRequests = new GroupedMethodRequest[queuedAsyncRequests.size()];
                     queuedAsyncRequests.toArray(rawRequests);
@@ -467,33 +458,26 @@ public class JRemotingClient {
 
 
         public void processVoidRequestWithRedirect(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
-
             Object[] newArgs = new Object[args.length];
-
             for (int i = 0; i < args.length; i++) {
                 if (args[i] instanceof Stub) {
-
                     //TODO somehow get the reference details and put a redirect place holder here
                 } else {
                     newArgs[i] = args[i];
                 }
             }
-
             processVoidRequest(methodSignature, newArgs, argClasses);
         }
 
 
         private Throwable makeUnexpectedResponseThrowable(Response response) {
-
             if (response instanceof ExceptionThrown) {
                 ExceptionThrown er = (ExceptionThrown) response;
                 return er.getResponseException();
             } else if (response instanceof NoSuchSession) {
                 NoSuchSession nssr = (NoSuchSession) response;
                 return new NoSuchSessionException(nssr.getSessionID());
-            }
-            //TODO remove some of these if clover indicates they are not used?
-            else if (response instanceof NoSuchReference) {
+            } else if (response instanceof NoSuchReference) {
                 NoSuchReference nsrr = (NoSuchReference) response;
                 return new NoSuchReferenceException(nsrr.getReference());
             } else if (response instanceof BadServerSideEvent) {

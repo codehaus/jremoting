@@ -172,12 +172,6 @@ public class DefaultInvocationHandler extends SessionAdapter implements Invocati
             return new NotPublished();
         }
 
-        //if( !doesSessionExistAndRefreshItIfItDoes( facadeRequest.getSession() ) )
-        //{
-        //    return new ExceptionThrown(
-        //        new InvocationException( "TODO - you dirty rat/hacker" ) );
-        //}
-
         ServiceHandler serviceHandler = getServiceHandler(publishedThing);
         Response response = serviceHandler.handleMethodInvocation(facadeRequest, connectionDetails);
 
@@ -223,7 +217,6 @@ public class DefaultInvocationHandler extends SessionAdapter implements Invocati
                 return new NotPublished();
             }
 
-            //TODO a decent ref number for main?
             if (instances[i] == null) {
                 refs[i] = null;
             } else {
@@ -254,13 +247,6 @@ public class DefaultInvocationHandler extends SessionAdapter implements Invocati
             return new NotPublished();
         }
 
-        //if( !doesSessionExistAndRefreshItIfItDoes( invokeFacadeMethod.getSession() ) )
-        //{
-        //    return new ExceptionThrown(
-        //        new InvocationException( "TODO - you dirty rat/hacker" ) );
-        //}
-
-        //TODO a decent ref number for main?
         Long newRef = serviceHandler.getOrMakeReferenceIDForInstance(instance);
 
         // make sure the instance is not garbage collected.
