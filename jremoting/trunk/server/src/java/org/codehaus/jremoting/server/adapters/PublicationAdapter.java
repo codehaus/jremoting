@@ -248,17 +248,6 @@ public class PublicationAdapter implements ServiceHandlerAccessor {
     }
 
     /**
-     * Get a Server's  ServiceHandler
-     *
-     * @param invokeMethod The method Request.
-     * @param objectName   The object name.
-     * @return the method invoation handler
-     */
-    public ServiceHandler getServiceHandler(InvokeMethod invokeMethod, String objectName) {
-        return services.get(invokeMethod.getService() + "_" + objectName);
-    }
-
-    /**
      * Get a method's InvocationHandler
      *
      * @param service The name of a published object
