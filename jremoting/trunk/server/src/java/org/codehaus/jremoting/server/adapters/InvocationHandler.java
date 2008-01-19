@@ -62,7 +62,7 @@ import org.codehaus.jremoting.util.MethodNameHelper;
  *
  * @author Paul Hammant
  */
-public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
+public class InvocationHandler extends SessionAdapter implements ServerInvoker {
 
     private boolean suspended = false;
     private final StubRetriever stubRetriever;
@@ -71,9 +71,9 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
 
     private final ServerContextFactory contextFactory;
 
-    public InvokerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever,
+    public InvocationHandler(ServerMonitor serverMonitor, StubRetriever stubRetriever,
                            Authenticator authenticator, ServerContextFactory contextFactory) {
-        super(stubRetriever instanceof Publisher ? (Publisher) stubRetriever : null);
+        super(stubRetriever instanceof Publisher ? (Publisher) stubRetriever : null, serverMonitor);
         this.stubRetriever = stubRetriever;
         this.authenticator = authenticator;
         this.serverMonitor = serverMonitor != null ? serverMonitor : new ConsoleServerMonitor();
@@ -116,7 +116,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
                 return doClassRequest(request);
 
             } else if (request.getRequestCode() == RequestConstants.OPENCONNECTIONREQUEST) {
-                return doOpenConnectionRequest();
+                return doOpenConnectionRequest(connectionDetails);
 
             } else if (request.getRequestCode() == RequestConstants.CLOSECONNECTIONREQUEST) {
                 CloseConnection closeConnection = (CloseConnection) request;
@@ -135,17 +135,13 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
             npe.printStackTrace();
             if (request instanceof InvokeMethod) {
                 String methd = ((InvokeMethod) request).getMethodSignature();
-                getServerMonitor().unexpectedException(InvokerDelegate.class, "InvokerDelegate.invoke() NPE processing method " + methd, npe);
+                serverMonitor.unexpectedException(InvocationHandler.class, "InvokerDelegate.invoke() NPE processing method " + methd, npe);
                 throw new NullPointerException("Null pointer exception, processing method " + methd);
             } else {
-                getServerMonitor().unexpectedException(InvokerDelegate.class, "InvokerDelegate.invoke() NPE", npe);
+                serverMonitor.unexpectedException(InvocationHandler.class, "InvokerDelegate.invoke() NPE", npe);
                 throw npe;
             }
         }
-    }
-
-    protected synchronized ServerContextFactory getServerContextFactory() {
-        return contextFactory;
     }
 
     private void setClientContext(Contextualizable request) {
@@ -153,7 +149,7 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         Context clientSideContext = request.getContext();
 
         // *always* happens before method invocations.
-        getServerContextFactory().set(new ServerSideContext(session, clientSideContext));
+        contextFactory.set(new ServerSideContext(session, clientSideContext));
 
     }
 
@@ -199,13 +195,6 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         }
     }
 
-    /**
-     * Do a method facade request, returning an array
-     *
-     * @param methodResponse     The array to process.
-     * @param invokeFacadeMethod The request
-     * @return The reply
-     */
     private Response doMethodFacadeRequestArray(Object methodResponse, InvokeFacadeMethod invokeFacadeMethod) {
         Object[] instances = (Object[]) methodResponse;
         Long[] refs = new Long[instances.length];
@@ -242,14 +231,6 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         return new FacadeArrayMethodInvoked(refs, objectNames);
     }
 
-
-    /**
-     * Do a method facade request, returning things other that an array
-     *
-     * @param instance           The returned object to process.
-     * @param invokeFacadeMethod The request
-     * @return The reply
-     */
     private Response doMethodFacadeRequestNonArray(Object instance, InvokeFacadeMethod invokeFacadeMethod) {
 
         if (!doesSessionExistAndRefreshItIfItDoes(invokeFacadeMethod.getSessionID())) {
@@ -346,13 +327,6 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         return new Service((long) 0, getFacadeClass(service).getName(), getAdditionalFacades(service));
     }
 
-
-    /**
-     * Do a class request
-     *
-     * @param request The request
-     * @return The reply
-     */
     private Response doClassRequest(Request request) {
         RetrieveStub cr = (RetrieveStub) request;
         String publishedThing = cr.getService() + "_" + cr.getObjectName();
@@ -364,15 +338,9 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         }
     }
 
-    /**
-     * Do an OpenConnection request
-     *
-     * @return The reply.
-     */
-    private Response doOpenConnectionRequest() {
-        return new ConnectionOpened(authenticator.getAuthenticationChallenge(), newSession());
+    private Response doOpenConnectionRequest(Object connectionDetails) {
+        return new ConnectionOpened(authenticator.getAuthenticationChallenge(), newSession(connectionDetails));
     }
-
 
     private Response doCloseConnectionRequest(long session) {
         if (!sessionExists(session)) {
@@ -383,22 +351,10 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
         }
     }
 
-
-    /**
-     * Do a ListServices
-     *
-     * @return The reply
-     */
     private Response doServiceListRequest() {
         return new ServicesList(getPublishedServices());
     }
 
-    /**
-     * Do a GarbageCollection Request
-     *
-     * @param request The request
-     * @return The reply
-     */
     private Response doGarbageCollectionRequest(Request request) {
         CollectGarbage gcr = (CollectGarbage) request;
         String publishedThing = gcr.getService() + "_" + gcr.getObjectName();
@@ -429,22 +385,12 @@ public class InvokerDelegate extends SessionAdapter implements ServerInvoker {
     }
 
 
-    /**
-     * Suspend an service
-     */
     public void suspend() {
         suspended = true;
     }
 
-    /**
-     * Resume an service
-     */
     public void resume() {
         suspended = false;
-    }
-
-    public synchronized ServerMonitor getServerMonitor() {
-        return serverMonitor;
     }
 
 }

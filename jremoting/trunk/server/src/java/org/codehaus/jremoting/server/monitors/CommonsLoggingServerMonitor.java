@@ -20,6 +20,7 @@ package org.codehaus.jremoting.server.monitors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.Session;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.io.IOException;
@@ -77,4 +78,27 @@ public class CommonsLoggingServerMonitor implements ServerMonitor {
         delegate.stopServerError(clazz, s, e);
     }
 
+    public void newSession(Session session) {
+        Log log = LogFactory.getLog(this.getClass());
+        if (log.isErrorEnabled()) {
+            log.error("<newSession>" + session.getSession());
+        }
+        delegate.newSession(session);        
+    }
+
+    public void removeSession(Session session) {
+        Log log = LogFactory.getLog(this.getClass());
+        if (log.isErrorEnabled()) {
+            log.error("<removeSession>" + session.getSession());
+        }
+        delegate.removeSession(session);
+    }
+
+    public void staleSession(Session session) {
+        Log log = LogFactory.getLog(this.getClass());
+        if (log.isErrorEnabled()) {
+            log.error("<staleSession>" + session.getSession());
+        }
+        delegate.staleSession(session);
+    }
 }

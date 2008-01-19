@@ -68,6 +68,7 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
     }
 
     protected void tearDown() throws Exception {
+        super.tearDown();
         testClient = null;
         System.gc();
 

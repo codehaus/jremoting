@@ -31,13 +31,13 @@ import java.util.concurrent.Executors;
 
 public class DirectMarshalledTestCase extends MockObjectTestCase {
 
-    private InvokerDelegate iha;
+    private InvocationHandler invocationHandler;
     private DirectMarshalledServer server;
     HashMap impl = new HashMap();
 
     protected void setUp() throws Exception {
-        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
-        server = new DirectMarshalledServer(new ConsoleServerMonitor(), Executors.newScheduledThreadPool(10), iha);
+        invocationHandler = new InvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
+        server = new DirectMarshalledServer(new ConsoleServerMonitor(), Executors.newScheduledThreadPool(10), invocationHandler);
     }
 
     public void testPublishAndUnpublish() throws PublicationException, IOException, ClassNotFoundException {
@@ -86,9 +86,9 @@ public class DirectMarshalledTestCase extends MockObjectTestCase {
     }
 
     private Response putTestEntry() throws IOException, ClassNotFoundException {
-        ConnectionOpened co = (ConnectionOpened) iha.invoke(new OpenConnection(), new Object());
+        ConnectionOpened co = (ConnectionOpened) invocationHandler.invoke(new OpenConnection(), new Object());
         Request request = new InvokeMethod("foo", "Main", "put(java.lang.Object, java.lang.Object)", new Object[]{"1", "2"}, (long) 0, co.getSessionID());
-        return iha.invoke(serDeSerRequest(request), new Object());
+        return invocationHandler.invoke(serDeSerRequest(request), new Object());
     }
 
     private Request serDeSerRequest(Request request) throws IOException, ClassNotFoundException {
@@ -112,39 +112,39 @@ public class DirectMarshalledTestCase extends MockObjectTestCase {
     public void testPublishAndSuspendBlocksOperations() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
         server.suspend();
-        assertTrue(serDeSerResponse(iha.invoke(serDeSerRequest(new OpenConnection()), new Object())) instanceof ServicesSuspended);
+        assertTrue(serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new OpenConnection()), new Object())) instanceof ServicesSuspended);
     }
 
     public void testPublishAndSuspendAndResumeDoesNotBlockOperation() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
         server.suspend();
         server.resume();
-        assertTrue(serDeSerResponse(iha.invoke(serDeSerRequest(new OpenConnection()), new Object())) instanceof ConnectionOpened);
+        assertTrue(serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new OpenConnection()), new Object())) instanceof ConnectionOpened);
     }
 
     public void testStubRetrievalFailsWhenItsAppropriate() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        Response response = serDeSerResponse(iha.invoke(serDeSerRequest(new RetrieveStub("foo", "Main")), new Object()));
+        Response response = serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new RetrieveStub("foo", "Main")), new Object()));
         assertTrue(response instanceof StubRetrievalFailed);
     }
 
     public void testRequestFailsOnUnknownRequestType() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        Response response = serDeSerResponse(iha.invoke(serDeSerRequest(new DirectMarshalledTestCase.MyRequest()), new Object()));
+        Response response = serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new DirectMarshalledTestCase.MyRequest()), new Object()));
         assertTrue(response instanceof RequestFailed);
         assertEquals("Unknown Request Type: org.codehaus.jremoting.server.adapters.DirectMarshalledTestCase$MyRequest", ((RequestFailed) response).getFailureReason());
     }
 
     public void testListServicesRespondsAppropriately() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        Response response = iha.invoke(serDeSerRequest(new ListServices()), new Object());
+        Response response = invocationHandler.invoke(serDeSerRequest(new ListServices()), new Object());
         assertTrue(serDeSerResponse(response) instanceof ServicesList);
         assertEquals(1, ((ServicesList ) response).getServices().length);
         assertEquals("foo", ((ServicesList ) response).getServices()[0]);
     }
 
     public void testListServicesRespondsAppropriatelyWhenThereAreNone() throws PublicationException, IOException, ClassNotFoundException {
-        Response response = iha.invoke(serDeSerRequest(new ListServices()), new Object());
+        Response response = invocationHandler.invoke(serDeSerRequest(new ListServices()), new Object());
         assertTrue(serDeSerResponse(response) instanceof ServicesList);
         assertEquals(0, ((ServicesList ) response).getServices().length);
     }

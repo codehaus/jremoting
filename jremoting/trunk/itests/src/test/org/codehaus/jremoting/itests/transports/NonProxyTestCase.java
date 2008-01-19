@@ -33,4 +33,6 @@ public class NonProxyTestCase extends AbstractHelloTestCase {
 
     }
 
+    protected void tearDown() throws Exception {
+    }
 }

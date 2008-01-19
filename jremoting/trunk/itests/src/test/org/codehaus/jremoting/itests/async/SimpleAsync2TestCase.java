@@ -19,22 +19,23 @@ package org.codehaus.jremoting.itests.async;
 
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
-import org.codehaus.jremoting.client.stubs.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
+import org.codehaus.jremoting.client.stubs.StubsFromServer;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.net.InetSocketAddress;
 
 public class SimpleAsync2TestCase extends MockObjectTestCase {
 
@@ -55,6 +56,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
     protected void setUp() throws Exception {
 
         mockServerMonitor = mock(ServerMonitor.class);
+        mockServerMonitor.expects(once()).method("newSession").withAnyArguments();
 
 
         // server side setup.
@@ -125,6 +127,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
 
 
     protected void tearDown() throws Exception {
+        mockServerMonitor.expects(once()).method("removeSession").withAnyArguments();
         testClient = null;
         System.gc();
 

@@ -34,6 +34,7 @@ import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.Session;
 import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
@@ -56,7 +57,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     protected void setUp() throws Exception {
         mockServerMonitor = mock(ServerMonitor.class);
         mockClientMonitor = mock(ClientMonitor.class);
-        super.setUp();    //To change body of overridden methods use File | Settings | File Templates.
+
+        super.setUp(); 
     }
 
     public void testNoServer() throws Exception {
@@ -70,7 +72,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     }
 
     public void testNotPublishedExceptionThrownWhenNeeded() throws Exception {
-
+        mockServerMonitor.expects(once()).method("newSession").withAnyArguments();
         // server side setup.
         SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new InetSocketAddress(12333));
 
@@ -96,6 +98,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
 
     public void testNoReferenceExceptionThrownWhenNeeded() throws Exception {
+
+        mockServerMonitor.expects(once()).method("newSession").withAnyArguments();
 
         // server side setup.
         SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding(), new InetSocketAddress(12331)
@@ -171,6 +175,15 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
             public void stopServerError(Class clazz, String s, Exception e) {
                 wrong[0] = true;
+            }
+
+            public void newSession(Session session) {
+            }
+
+            public void removeSession(Session session) {
+            }
+
+            public void staleSession(Session session) {
             }
         };
         SocketServer server = new SocketServer(sm, new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding(), new InetSocketAddress(12347));

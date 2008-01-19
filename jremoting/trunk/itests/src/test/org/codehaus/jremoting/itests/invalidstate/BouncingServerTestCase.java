@@ -57,6 +57,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
         generator.setGenName("Hello55");
         generator.generateClass(this.getClass().getClassLoader());
         mockServerMonitor = mock(ServerMonitor.class);
+        mockServerMonitor.expects(once()).method("newSession").withAnyArguments();
     }
 
     public void testBouncingOfServerCausesClientProblems() throws Exception {

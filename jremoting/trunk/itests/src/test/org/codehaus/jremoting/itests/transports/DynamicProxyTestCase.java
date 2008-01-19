@@ -54,4 +54,6 @@ public class DynamicProxyTestCase extends AbstractHelloTestCase {
 
     }
 
+    protected void tearDown() throws Exception {
+    }
 }

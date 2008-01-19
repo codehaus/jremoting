@@ -29,16 +29,16 @@ import org.jmock.MockObjectTestCase;
 
 public class AuthenticationTestCase extends MockObjectTestCase {
 
-    private InvokerDelegate iha;
+    private InvocationHandler invocationHandler;
     private ConnectingServer server;
     HashMap impl = new HashMap();
 
     private void makeServer() {
-        server = new ConnectingServer(new ConsoleServerMonitor(), iha, Executors.newScheduledThreadPool(10)){};
+        server = new ConnectingServer(new ConsoleServerMonitor(), invocationHandler, Executors.newScheduledThreadPool(10)){};
     }
 
     public void testNullAuthenticationAuthorizes() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
+        invocationHandler = new InvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
         Response resp = serDeSerResponse(putTestEntry(null));
@@ -46,7 +46,7 @@ public class AuthenticationTestCase extends MockObjectTestCase {
     }
 
     public void testNullAuthenticationBlocksIfMismatchedAuthentication() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
+        invocationHandler = new InvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
         Response resp = serDeSerResponse(putTestEntry(new NameAndPasswordAuthentication("", "")));
@@ -54,7 +54,7 @@ public class AuthenticationTestCase extends MockObjectTestCase {
     }
 
     public void testWorkingPasswordAuthorizes() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NameAndPasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
+        invocationHandler = new InvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NameAndPasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
         Response resp = serDeSerResponse(putTestEntry(new NameAndPasswordAuthentication("fred", "wilma")));
@@ -62,7 +62,7 @@ public class AuthenticationTestCase extends MockObjectTestCase {
     }
 
     public void testBogusPasswordBlocks() throws PublicationException, IOException, ClassNotFoundException {
-        iha = new InvokerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NameAndPasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
+        invocationHandler = new InvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NameAndPasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
         makeServer();
         server.publish(impl, "foo", Map.class);
         Response resp = serDeSerResponse(putTestEntry(new NameAndPasswordAuthentication("FRED", "wilma")));
@@ -70,8 +70,8 @@ public class AuthenticationTestCase extends MockObjectTestCase {
     }
 
     private Response putTestEntry(Authentication auth)  {
-        ConnectionOpened co = (ConnectionOpened) iha.invoke(new OpenConnection(), new Object());
-        return iha.invoke(new LookupService("foo", auth, co.getSessionID()), new Object());
+        ConnectionOpened co = (ConnectionOpened) invocationHandler.invoke(new OpenConnection(), new Object());
+        return invocationHandler.invoke(new LookupService("foo", auth, co.getSessionID()), new Object());
     }
 
     private Request serDeSerRequest(Request request) throws IOException, ClassNotFoundException {

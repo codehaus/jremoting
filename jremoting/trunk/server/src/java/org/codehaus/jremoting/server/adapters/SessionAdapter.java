@@ -17,8 +17,9 @@
  */
 package org.codehaus.jremoting.server.adapters;
 
-import org.codehaus.jremoting.server.Session;
 import org.codehaus.jremoting.server.Publisher;
+import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.Session;
 
 import java.util.HashMap;
 
@@ -28,25 +29,29 @@ public class SessionAdapter extends PublicationAdapter {
     private Session lastSession;
     private static long sessionId = 0;
     private final HashMap<Long, Session> sessions = new HashMap<Long, Session>();
+    private final ServerMonitor serverMonitor;
 
-    public SessionAdapter(Publisher delegate) {
+    public SessionAdapter(Publisher delegate, ServerMonitor serverMonitor) {
         super(delegate);
+        this.serverMonitor = serverMonitor;
     }
 
     protected Session getSession(long session) {
         return sessions.get(session);
     }
 
-    private Long getNewSession() {
+    private Long getNewSessionNum() {
         // approve everything and setContext session identifier.
         return new Long((++sessionId << 16) + ((long) (Math.random() * 65536)));
     }
 
-
-    protected Long newSession() {
-        long session = getNewSession();
-        sessions.put(session, new Session(session));
-        return session;
+    protected Long newSession(Object connectionDetails) {
+        long sessionNum = getNewSessionNum();
+        Session session = new Session(sessionNum);
+        session.setConnectionDetails(connectionDetails);
+        sessions.put(sessionNum, session);
+        serverMonitor.newSession(session);
+        return sessionNum;
     }
 
     protected boolean sessionExists(long session) {
@@ -54,7 +59,8 @@ public class SessionAdapter extends PublicationAdapter {
     }
 
     protected void removeSession(long session) {
-        sessions.remove(session);
+        Session sess = sessions.remove(session);
+        serverMonitor.removeSession(sess);
     }
 
     public void pruneSessionsStaleForLongerThan(long millis) {
@@ -63,7 +69,8 @@ public class SessionAdapter extends PublicationAdapter {
             Session s = (Session) sessionObj;
             long now = System.currentTimeMillis();
             if (s.getLastTouched() + millis < now) {
-                sessions.remove(s.getSession());
+                Session sess = sessions.remove(s.getSession());
+                serverMonitor.staleSession(sess);
             }
         }
     }

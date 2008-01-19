@@ -27,7 +27,10 @@ import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.Session;
 import org.codehaus.jremoting.server.transports.direct.DirectServer;
+
+import java.io.IOException;
 
 
 /**
@@ -52,14 +55,14 @@ public class DirectTestCase extends AbstractHelloTestCase {
         jremotinClient = new JRemotingClient(
                 new DirectTransport((ClientMonitor) mockClientMonitor.proxy(), server), new NullContextFactory());
         testClient = (TestFacade) jremotinClient.lookupService("Hello");
-
     }
 
     public void testHelloCall() throws Exception {
-        super.testHelloCall();  
+        super.testHelloCall();
     }
 
     protected void tearDown() throws Exception {
+        super.tearDown();
         testClient = null;
         System.gc();
         jremotinClient.close();

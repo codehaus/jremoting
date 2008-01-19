@@ -19,22 +19,22 @@ package org.codehaus.jremoting.itests.async;
 
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
-import org.codehaus.jremoting.client.stubs.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
+import org.codehaus.jremoting.client.stubs.StubsFromServer;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.server.Publication;
-import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
-import org.codehaus.jremoting.server.stubretrievers.DynamicStubRetriever;
+import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
+import org.codehaus.jremoting.server.monitors.NullServerMonitor;
+import org.codehaus.jremoting.server.stubretrievers.DynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.net.InetSocketAddress;
 
 public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
 
@@ -42,7 +42,6 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
     AsyncTest testClient;
     JRemotingClient jremotingClient;
     SocketServer server;
-    private Mock mockServerMonitor;
 
     protected abstract DynamicStubRetriever getAbstractDynamicGeneratorClassRetriever(ClassLoader cl);
 
@@ -57,7 +56,6 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        mockServerMonitor = mock(ServerMonitor.class);
 
         // server side setup.
         DynamicStubRetriever stubRetriever = getAbstractDynamicGeneratorClassRetriever(this.getClass().getClassLoader());
@@ -70,7 +68,7 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
         ThreadLocalServerContextFactory ccf = new ThreadLocalServerContextFactory();
 
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
-        server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(),
+        server = new SocketServer(new NullServerMonitor(), stubRetriever, new NullAuthenticator(),
                 new ByteStreamEncoding(), executorService,
                 ccf, new InetSocketAddress(11003));
 

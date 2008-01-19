@@ -36,4 +36,10 @@ public interface ServerMonitor {
     void unexpectedException(Class clazz, String s, Exception e);
 
     void stopServerError(Class clazz, String s, Exception e);
+
+    void newSession(Session session);
+
+    void removeSession(Session session);
+
+    void staleSession(Session session);
 }

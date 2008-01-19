@@ -28,10 +28,10 @@ import org.codehaus.jremoting.itests.proxies.HandCodedProxyTestFacadeProxy;
 public class CodedProxyTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
-
         testServer = new TestFacadeImpl();
         testClient = new HandCodedProxyTestFacadeProxy(testServer);
-
     }
 
+    protected void tearDown() throws Exception {
+    }
 }

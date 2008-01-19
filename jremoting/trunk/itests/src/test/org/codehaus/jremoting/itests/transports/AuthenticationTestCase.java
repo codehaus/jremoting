@@ -83,6 +83,7 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
     }
 
     protected void tearDown() throws Exception {
+        super.tearDown();
         testClient = null;
         System.gc();
         Thread.sleep(300);

@@ -21,7 +21,7 @@ package org.codehaus.jremoting.server.transport;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.adapters.InvokerDelegate;
+import org.codehaus.jremoting.server.adapters.InvocationHandler;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
@@ -82,11 +82,11 @@ public class ConnectingServerTestCase extends TestCase {
 
     }
 
-    private static class MyInvokerDelegate extends InvokerDelegate {
+    private static class MyInvokerDelegate extends InvocationHandler {
         Long tstSession;
         public MyInvokerDelegate(ServerMonitor sm) {
             super(sm, new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
-            tstSession = super.newSession();
+            tstSession = super.newSession("blah");
         }
 
         public boolean doesSessionExistAndRefreshItIfItDoes(long session) {

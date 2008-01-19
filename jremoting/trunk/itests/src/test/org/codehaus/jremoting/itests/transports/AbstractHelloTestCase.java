@@ -36,6 +36,7 @@ import java.io.IOException;
  */
 public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
 
+
     public void testIntParamReturningInt() throws Exception {
         // lookup worked ?
         assertNotNull(testClient);

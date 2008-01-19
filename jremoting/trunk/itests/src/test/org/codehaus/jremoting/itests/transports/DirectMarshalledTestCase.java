@@ -57,6 +57,7 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
     }
 
     protected void tearDown() throws Exception {
+        super.tearDown();
         testClient = null;
         System.gc();
 

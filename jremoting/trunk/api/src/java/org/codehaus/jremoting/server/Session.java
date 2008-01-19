@@ -31,6 +31,7 @@ public class Session {
 
     private HashMap<Long, Object> instancesInUse = new HashMap<Long, Object>();
     private long lastTouched;
+    private Object connectionDetails;
 
     public Session(long session) {
         this.session = session;
@@ -54,5 +55,13 @@ public class Session {
 
     public long getLastTouched() {
         return lastTouched;
+    }
+
+    public void setConnectionDetails(Object connectionDetails) {
+        this.connectionDetails = connectionDetails;
+    }
+
+    public Object getConnectionDetails() {
+        return connectionDetails;
     }
 }

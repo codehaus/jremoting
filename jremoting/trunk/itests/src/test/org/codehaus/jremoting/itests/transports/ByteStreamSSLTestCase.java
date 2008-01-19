@@ -80,6 +80,7 @@ public class ByteStreamSSLTestCase extends AbstractHelloTestCase {
     }
 
     protected void tearDown() throws Exception {
+        super.tearDown();
         testClient = null;
         System.gc();
         Thread.sleep(300);

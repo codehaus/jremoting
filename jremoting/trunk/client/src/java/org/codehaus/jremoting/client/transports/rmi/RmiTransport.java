@@ -33,6 +33,7 @@ import java.rmi.ConnectIOException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.ServerNotActiveException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -82,6 +83,10 @@ public final class RmiTransport extends StatefulTransport {
 
 
     protected Response performInvocation(Request request) throws IOException, ClassNotFoundException {
-        return rmiInvoker.invoke(request);
+        try {
+            return rmiInvoker.invoke(request);
+        } catch (ServerNotActiveException e) {
+            throw new ConnectionException("Rmi:ServerNotActiveException:" + e.getMessage(),e); 
+        }
     }
 }

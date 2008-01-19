@@ -54,7 +54,7 @@ public final class DirectTransport extends StatefulTransport {
     }
 
     protected Response performInvocation(Request request) {
-        return invoker.invoke(request, "");
+        return invoker.invoke(request, "direct");
     }
 
 }

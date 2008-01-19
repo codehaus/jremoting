@@ -24,14 +24,13 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.StreamEncoder;
 import org.codehaus.jremoting.server.StreamEncoding;
 import org.codehaus.jremoting.server.StubRetriever;
-import org.codehaus.jremoting.server.adapters.InvokerDelegate;
+import org.codehaus.jremoting.server.adapters.InvocationHandler;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 
-import javax.net.ServerSocketFactory;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -101,15 +100,15 @@ public class SocketServer extends ConnectingServer {
                         ScheduledExecutorService executorService,
                         ServerContextFactory contextFactory,
                         ClassLoader facadesClassLoader, InetSocketAddress addr) {
-        this(serverMonitor, new InvokerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
+        this(serverMonitor, new InvocationHandler(serverMonitor, stubRetriever, authenticator, contextFactory),
                 streamEncoding, executorService, facadesClassLoader, addr);
     }    
 
-    public SocketServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
+    public SocketServer(ServerMonitor serverMonitor, InvocationHandler invocationHandler,
                                            StreamEncoding streamEncoding, ScheduledExecutorService executorService,
                                            ClassLoader facadesClassLoader, InetSocketAddress addr) {
 
-        super(serverMonitor, invokerDelegate, executorService);
+        super(serverMonitor, invocationHandler, executorService);
         this.streamEncoding = streamEncoding;
         this.facadesClassLoader = facadesClassLoader;
         this.addr = addr;
@@ -203,7 +202,7 @@ public class SocketServer extends ConnectingServer {
             socket.setSoTimeout(socketTimeout);
             if (getState().equals(STARTED)) {
                 StreamEncoder streamEncoder = streamEncoding.createEncoder(serverMonitor, facadesClassLoader,
-                        socket.getInputStream(), socket.getOutputStream(), socket.getInetAddress());
+                        socket.getInputStream(), socket.getOutputStream(), socket.getInetAddress().toString());
                 SocketStreamConnection ssc = new SocketStreamConnection(this, socket, streamEncoder, serverMonitor);
                 ssc.run();
             }

@@ -28,62 +28,41 @@ import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Server;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServiceHandler;
-import org.codehaus.jremoting.server.adapters.InvokerDelegate;
+import org.codehaus.jremoting.server.adapters.InvocationHandler;
 import org.codehaus.jremoting.JRemotingException;
 
 import java.util.concurrent.ScheduledExecutorService;
 
 public abstract class StatefulServer implements Server {
-    /**
-     * The invocation handler
-     */
-    protected InvokerDelegate invokerDelegate;
-    /**
-     * The state of the system.
-     */
+
+    protected InvocationHandler invocationHandler;
     private String state = UNSTARTED;
     protected final ServerMonitor serverMonitor;
     protected final ScheduledExecutorService executorService;
 
-
-    public StatefulServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate,
+    public StatefulServer(ServerMonitor serverMonitor, InvocationHandler invocationHandler,
                           ScheduledExecutorService executorService) {
-        this.invokerDelegate = invokerDelegate;
+        this.invocationHandler = invocationHandler;
         this.executorService = executorService;
         this.serverMonitor = serverMonitor;
     }
 
-    /**
-     * Handle an Invocation
-     *
-     * @param request The request of the invocation.
-     * @return An suitable reply.
-     */
     public Response invoke(Request request, Object connectionDetails) {
         if (getState().equals(STARTED) || request instanceof CollectGarbage) {
-            return invokerDelegate.invoke(request, connectionDetails);
+            return invocationHandler.invoke(request, connectionDetails);
         } else {
             return new BadServerSideEvent("Service is not started");
         }
     }
 
-    /**
-     * Suspend the server with open connections.
-     */
     public void suspend() {
-        invokerDelegate.suspend();
+        invocationHandler.suspend();
     }
 
-    /**
-     * Resume a server with open connections.
-     */
     public void resume() {
-        invokerDelegate.resume();
+        invocationHandler.resume();
     }
 
-    /**
-     * Method openConnection
-     */
     public final void start() {
         this.state = STARTING;
         starting();
@@ -94,9 +73,6 @@ public abstract class StatefulServer implements Server {
     public void starting() {}
     public void started() {}
 
-    /**
-     * Method stop
-     */
     public final void stop() {
         if (!getState().equals(STARTED)) {
             throw new JRemotingException("Server Not Started at time of stop");
@@ -112,93 +88,38 @@ public abstract class StatefulServer implements Server {
     public void stopped() {}
 
 
-    /**
-     * Publish an object via its interface
-     *
-     * @param impl              The implementation
-     * @param service            as this name.
-     * @param primaryFacade The interface to expose.
-     * @throws org.codehaus.jremoting.server.PublicationException
-     *          if an error during publication.
-     */
     public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
-        invokerDelegate.publish(impl, service, primaryFacade);
+        invocationHandler.publish(impl, service, primaryFacade);
     }
 
-    /**
-     * Publish an object via its publication description
-     *
-     * @param impl                   The implementation
-     * @param service                 as this name.
-     * @param publicationDescription The publication description.
-     * @throws org.codehaus.jremoting.server.PublicationException if an error during publication.
-     */
     public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
-        invokerDelegate.publish(impl, service, publicationDescription);
+        invocationHandler.publish(impl, service, publicationDescription);
     }
 
-    /**
-     * UnPublish an object.
-     *
-     * @param impl   The implementation
-     * @param service as this name.
-     * @throws org.codehaus.jremoting.server.PublicationException if an error during publication.
-     */
     public void unPublish(Object impl, String service) throws PublicationException {
-        invokerDelegate.unPublish(impl, service);
+        invocationHandler.unPublish(impl, service);
     }
 
-    /**
-     * Replace the server side instance of a service
-     *
-     * @param oldImpl       The previous implementation.
-     * @param service The name it is published as.
-     * @param withImpl      The impl to superceed.
-     * @throws org.codehaus.jremoting.server.PublicationException if an error during publication.
-     */
     public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
-        invokerDelegate.replacePublished(oldImpl, service, withImpl);
+        invocationHandler.replacePublished(oldImpl, service, withImpl);
     }
 
     public boolean isPublished(String service) {
-        return invokerDelegate.isPublished(service);
+        return invocationHandler.isPublished(service);
     }
 
-    /**
-     * Get the Method Invocation Handler for a particular request.
-     *
-     * @param invokeMethod The method request
-     * @param objectName   The object Name.
-     * @return The Method invocation handler
-     */
     public ServiceHandler getServiceHandler(InvokeMethod invokeMethod, String objectName) {
-        return invokerDelegate.getServiceHandler(invokeMethod, objectName);
+        return invocationHandler.getServiceHandler(invokeMethod, objectName);
     }
 
-    /**
-     * Get the ServiceHandler for a particular published name.
-     *
-     * @param service The published name.
-     * @return The Method invocation handler
-     */
     public ServiceHandler getServiceHandler(String service) {
-        return invokerDelegate.getServiceHandler(service);
+        return invocationHandler.getServiceHandler(service);
     }
 
-    /**
-     * Get the InvokerDelegate.
-     *
-     * @return the invocation handler adapter.
-     */
-    public InvokerDelegate getInvokerDelegate() {
-        return invokerDelegate;
+    public InvocationHandler getInvocationHandler() {
+        return invocationHandler;
     }
 
-    /**
-     * Get the state for teh server.
-     *
-     * @return the state.
-     */
     public String getState() {
         return state;
     }

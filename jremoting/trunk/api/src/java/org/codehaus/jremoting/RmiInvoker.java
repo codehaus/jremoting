@@ -22,6 +22,7 @@ import org.codehaus.jremoting.responses.Response;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.server.ServerNotActiveException;
 
 /**
  * Interface RmiInvoker
@@ -38,5 +39,5 @@ public interface RmiInvoker extends Remote {
      * @return the response got back from the server
      * @throws RemoteException in case there is outage.
      */
-    Response invoke(Request request) throws RemoteException;
+    Response invoke(Request request) throws RemoteException, ServerNotActiveException;
 }

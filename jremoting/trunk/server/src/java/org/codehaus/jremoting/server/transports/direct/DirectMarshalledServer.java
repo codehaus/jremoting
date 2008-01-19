@@ -22,7 +22,7 @@ import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerInvoker;
 import org.codehaus.jremoting.server.ServerMarshalledInvoker;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.adapters.InvokerDelegate;
+import org.codehaus.jremoting.server.adapters.InvocationHandler;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
@@ -42,25 +42,25 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
 
     private final ServerMarshalledInvokerImpl marshalledInvokerAdapter;
 
-    private DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate, ScheduledExecutorService executorService, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
-        super(serverMonitor, invokerDelegate, executorService);
+    private DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandler invocationHandler, ScheduledExecutorService executorService, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
+        super(serverMonitor, invocationHandler, executorService);
         this.marshalledInvokerAdapter = marshalledInvokerAdapter;
     }
 
-    private DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
-        this(serverMonitor, invokerDelegate, Executors.newScheduledThreadPool(10), marshalledInvokerAdapter);
+    private DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandler invocationHandler, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
+        this(serverMonitor, invocationHandler, Executors.newScheduledThreadPool(10), marshalledInvokerAdapter);
     }
 
-    public DirectMarshalledServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, InvokerDelegate invokerDelegate) {
-        this(serverMonitor, invokerDelegate, executorService, new ServerMarshalledInvokerImpl(invokerDelegate));
+    public DirectMarshalledServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, InvocationHandler invocationHandler) {
+        this(serverMonitor, invocationHandler, executorService, new ServerMarshalledInvokerImpl(invocationHandler));
     }
 
-    public DirectMarshalledServer(ServerMonitor serverMonitor, InvokerDelegate invokerDelegate) {
-        this(serverMonitor, invokerDelegate, new ServerMarshalledInvokerImpl(invokerDelegate));
+    public DirectMarshalledServer(ServerMonitor serverMonitor, InvocationHandler invocationHandler) {
+        this(serverMonitor, invocationHandler, new ServerMarshalledInvokerImpl(invocationHandler));
     }
 
     public DirectMarshalledServer(ServerMonitor serverMonitor) {
-        this(serverMonitor, new InvokerDelegate(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory()));
+        this(serverMonitor, new InvocationHandler(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory()));
     }
 
     public byte[] invoke(byte[] request, Object connectionDetails) {

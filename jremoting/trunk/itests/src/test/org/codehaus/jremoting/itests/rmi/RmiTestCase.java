@@ -54,6 +54,7 @@ public class RmiTestCase extends MockObjectTestCase {
 
         mockServerMonitor = mock(ServerMonitor.class);
 
+        mockServerMonitor.expects(once()).method("newSession").withAnyArguments();
         // server side setup.
         server = new RmiServer((ServerMonitor) mockServerMonitor.proxy(), new InetSocketAddress("127.0.0.1", 10003));
         testServer = new TestFacadeImpl();
@@ -69,6 +70,7 @@ public class RmiTestCase extends MockObjectTestCase {
     }
 
     protected void tearDown() throws Exception {
+        super.tearDown();
         server.stop();
 
         server = null;

@@ -42,6 +42,11 @@ public abstract class AbstractJRemotingTestCase extends MockObjectTestCase {
     protected void setUp() throws Exception {
         mockClientMonitor = mock(ClientMonitor.class);
         mockServerMonitor = mock(ServerMonitor.class);
+        mockServerMonitor.expects(once()).method("newSession").withAnyArguments();
+    }
+
+    protected void tearDown() throws Exception {
+        mockServerMonitor.expects(once()).method("removeSession").withAnyArguments();
     }
 
     public void testHelloCall() throws Exception {
@@ -53,6 +58,7 @@ public abstract class AbstractJRemotingTestCase extends MockObjectTestCase {
 
         // test the server has logged the message.
         assertEquals("Hello!?", ((TestFacadeImpl) testServer).getStoredState("void:hello(String)"));
+        System.out.println("");
     }
 
 
