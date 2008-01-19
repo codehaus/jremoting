@@ -25,7 +25,7 @@ import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ServerContextFactory;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.StubRetriever;
-import org.codehaus.jremoting.server.adapters.InvocationHandler;
+import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.FromClassLoaderStubRetriever;
@@ -52,13 +52,13 @@ public class RmiServer extends ConnectingServer {
     private InetSocketAddress addr;
     private Registry registry;
 
-    public RmiServer(ServerMonitor serverMonitor, InvocationHandler invocationHandler, ScheduledExecutorService executorService, InetSocketAddress addr) {
+    public RmiServer(ServerMonitor serverMonitor, DefaultInvocationHandler invocationHandler, ScheduledExecutorService executorService, InetSocketAddress addr) {
         super(serverMonitor, invocationHandler, executorService);
         this.addr = addr;
     }
 
     public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory contextFactory, InetSocketAddress addr) {
-        this(serverMonitor, new InvocationHandler(serverMonitor, stubRetriever, authenticator, contextFactory), executorService, addr);
+        this(serverMonitor, new DefaultInvocationHandler(serverMonitor, stubRetriever, authenticator, contextFactory), executorService, addr);
     }
 
     public RmiServer(ServerMonitor serverMonitor, InetSocketAddress addr) {

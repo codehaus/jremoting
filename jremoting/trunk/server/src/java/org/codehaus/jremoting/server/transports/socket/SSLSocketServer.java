@@ -21,7 +21,7 @@ import org.codehaus.jremoting.server.ServerContextFactory;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.StreamEncoding;
 import org.codehaus.jremoting.server.StubRetriever;
-import org.codehaus.jremoting.server.adapters.InvocationHandler;
+import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
 
 import javax.net.ssl.SSLServerSocketFactory;
 import java.io.IOException;
@@ -69,7 +69,7 @@ public class SSLSocketServer extends SocketServer {
         super(serverMonitor, stubRetriever, authenticator, streamEncoding, executorService, contextFactory, facadesClassLoader, addr);
     }
 
-    public SSLSocketServer(ServerMonitor serverMonitor, InvocationHandler invocationHandler, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ClassLoader facadesClassLoader, InetSocketAddress addr) {
+    public SSLSocketServer(ServerMonitor serverMonitor, DefaultInvocationHandler invocationHandler, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ClassLoader facadesClassLoader, InetSocketAddress addr) {
         super(serverMonitor, invocationHandler, streamEncoding, executorService, facadesClassLoader, addr);
     }
 

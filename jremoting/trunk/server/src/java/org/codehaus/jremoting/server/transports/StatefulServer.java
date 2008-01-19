@@ -28,19 +28,19 @@ import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Server;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.ServiceHandler;
-import org.codehaus.jremoting.server.adapters.InvocationHandler;
+import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
 import org.codehaus.jremoting.JRemotingException;
 
 import java.util.concurrent.ScheduledExecutorService;
 
 public abstract class StatefulServer implements Server {
 
-    protected InvocationHandler invocationHandler;
+    protected DefaultInvocationHandler invocationHandler;
     private String state = UNSTARTED;
     protected final ServerMonitor serverMonitor;
     protected final ScheduledExecutorService executorService;
 
-    public StatefulServer(ServerMonitor serverMonitor, InvocationHandler invocationHandler,
+    public StatefulServer(ServerMonitor serverMonitor, DefaultInvocationHandler invocationHandler,
                           ScheduledExecutorService executorService) {
         this.invocationHandler = invocationHandler;
         this.executorService = executorService;
@@ -116,7 +116,7 @@ public abstract class StatefulServer implements Server {
         return invocationHandler.getServiceHandler(service);
     }
 
-    public InvocationHandler getInvocationHandler() {
+    public DefaultInvocationHandler getInvocationHandler() {
         return invocationHandler;
     }
 

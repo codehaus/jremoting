@@ -31,14 +31,14 @@ import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 public class InvokerDelegateTestCase extends TestCase {
 
     public void testOpenConnection() {
-        InvocationHandler invocationHandle = new InvocationHandler(new NullServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), null);
+        DefaultInvocationHandler invocationHandle = new DefaultInvocationHandler(new NullServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), null);
         ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.invoke(new OpenConnection(), new Object());
         assertNotNull(connectionOpened);
         assertNotNull(connectionOpened.getSessionID());
     }
 
     public void testCloseConnectionAfterOpenConnection() {
-        InvocationHandler invocationHandle = new InvocationHandler(new NullServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), null);
+        DefaultInvocationHandler invocationHandle = new DefaultInvocationHandler(new NullServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), null);
         ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.invoke(new OpenConnection(), new Object());
         ConnectionClosed connectionClosed = (ConnectionClosed) invocationHandle.invoke(new CloseConnection(connectionOpened.getSessionID()), new Object());
         assertNotNull(connectionClosed);
@@ -48,7 +48,7 @@ public class InvokerDelegateTestCase extends TestCase {
     }
 
     public void testCloseConnectionErrorsOnBogusSession() {
-        InvocationHandler invocationHandle = new InvocationHandler(null, new RefusingStubRetriever(), new NullAuthenticator(), null);
+        DefaultInvocationHandler invocationHandle = new DefaultInvocationHandler(null, new RefusingStubRetriever(), new NullAuthenticator(), null);
         Response response = invocationHandle.invoke(new CloseConnection((long) 123), new Object());
         assertTrue(response instanceof NoSuchSession);
         NoSuchSession noSuchSession = (NoSuchSession) response;

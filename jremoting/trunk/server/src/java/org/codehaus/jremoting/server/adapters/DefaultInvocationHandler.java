@@ -58,11 +58,11 @@ import org.codehaus.jremoting.util.StaticStubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
 /**
- * Class InvocationHandler
+ * Class DefaultInvocationHandler
  *
  * @author Paul Hammant
  */
-public class InvocationHandler extends SessionAdapter implements ServerInvoker {
+public class DefaultInvocationHandler extends SessionAdapter implements ServerInvoker {
 
     private boolean suspended = false;
     private final StubRetriever stubRetriever;
@@ -71,7 +71,7 @@ public class InvocationHandler extends SessionAdapter implements ServerInvoker {
 
     private final ServerContextFactory contextFactory;
 
-    public InvocationHandler(ServerMonitor serverMonitor, StubRetriever stubRetriever,
+    public DefaultInvocationHandler(ServerMonitor serverMonitor, StubRetriever stubRetriever,
                            Authenticator authenticator, ServerContextFactory contextFactory) {
         super(stubRetriever instanceof Publisher ? (Publisher) stubRetriever : null, serverMonitor);
         this.stubRetriever = stubRetriever;
@@ -135,10 +135,10 @@ public class InvocationHandler extends SessionAdapter implements ServerInvoker {
             npe.printStackTrace();
             if (request instanceof InvokeMethod) {
                 String methd = ((InvokeMethod) request).getMethodSignature();
-                serverMonitor.unexpectedException(InvocationHandler.class, "InvokerDelegate.invoke() NPE processing method " + methd, npe);
+                serverMonitor.unexpectedException(DefaultInvocationHandler.class, "InvokerDelegate.invoke() NPE processing method " + methd, npe);
                 throw new NullPointerException("Null pointer exception, processing method " + methd);
             } else {
-                serverMonitor.unexpectedException(InvocationHandler.class, "InvokerDelegate.invoke() NPE", npe);
+                serverMonitor.unexpectedException(DefaultInvocationHandler.class, "InvokerDelegate.invoke() NPE", npe);
                 throw npe;
             }
         }

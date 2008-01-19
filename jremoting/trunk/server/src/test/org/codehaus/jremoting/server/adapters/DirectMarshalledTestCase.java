@@ -31,12 +31,12 @@ import java.util.concurrent.Executors;
 
 public class DirectMarshalledTestCase extends MockObjectTestCase {
 
-    private InvocationHandler invocationHandler;
+    private DefaultInvocationHandler invocationHandler;
     private DirectMarshalledServer server;
     HashMap impl = new HashMap();
 
     protected void setUp() throws Exception {
-        invocationHandler = new InvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
+        invocationHandler = new DefaultInvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
         server = new DirectMarshalledServer(new ConsoleServerMonitor(), Executors.newScheduledThreadPool(10), invocationHandler);
     }
 

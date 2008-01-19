@@ -22,7 +22,7 @@ import org.codehaus.jremoting.responses.ServicesList;
 import org.codehaus.jremoting.responses.ServicesSuspended;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.adapters.InvocationHandler;
+import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -32,13 +32,13 @@ import org.jmock.MockObjectTestCase;
 
 public class AbstractServerTestCase extends MockObjectTestCase {
 
-    private InvocationHandler invocationHandler;
+    private DefaultInvocationHandler invocationHandler;
     private ConnectingServer server;
     HashMap impl = new HashMap();
 
     protected void setUp() throws Exception {
 
-        invocationHandler = new InvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
+        invocationHandler = new DefaultInvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
         server = new ConnectingServer(new ConsoleServerMonitor(), invocationHandler, Executors.newScheduledThreadPool(10)) {
         };
 

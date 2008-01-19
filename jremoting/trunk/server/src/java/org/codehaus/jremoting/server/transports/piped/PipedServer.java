@@ -26,7 +26,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.StreamEncoding;
 import org.codehaus.jremoting.server.StreamEncoder;
 import org.codehaus.jremoting.server.ServerContextFactory;
-import org.codehaus.jremoting.server.adapters.InvocationHandler;
+import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
 import org.codehaus.jremoting.server.transports.*;
 
 import java.io.IOException;
@@ -48,12 +48,12 @@ public class PipedServer extends ConnectingServer {
                              ScheduledExecutorService executorService, ServerContextFactory contextFactory,
                              StreamEncoding streamEncoding,
                              ClassLoader facadesClassLoader) {
-        super(serverMonitor, new InvocationHandler(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
+        super(serverMonitor, new DefaultInvocationHandler(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
         this.streamEncoding = streamEncoding;
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public PipedServer(ServerMonitor serverMonitor, InvocationHandler invocationHandler,
+    public PipedServer(ServerMonitor serverMonitor, DefaultInvocationHandler invocationHandler,
                              ScheduledExecutorService executorService,
                              StreamEncoding streamEncoding,
                              ClassLoader facadesClassLoader) {
