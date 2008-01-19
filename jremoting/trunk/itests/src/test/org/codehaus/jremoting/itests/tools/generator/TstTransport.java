@@ -27,7 +27,7 @@ import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.responses.ExceptionThrown;
 import org.codehaus.jremoting.responses.MethodInvoked;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.server.ServerInvoker;
+import org.codehaus.jremoting.server.InvocationHandler;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -39,7 +39,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * @author <a href="mailto:vinayc@apache">Vinay Chandrasekharan</a>
  * @version 1.0
  */
-public class TstTransport extends StatefulTransport implements ServerInvoker {
+public class TstTransport extends StatefulTransport implements InvocationHandler {
 
 
     public TstTransport(ScheduledExecutorService executorService, ClientMonitor clientMonitor, ConnectionPinger connectionPinger) {

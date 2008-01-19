@@ -62,7 +62,7 @@ import org.codehaus.jremoting.util.MethodNameHelper;
  *
  * @author Paul Hammant
  */
-public class DefaultInvocationHandler extends SessionAdapter implements ServerInvoker {
+public class DefaultInvocationHandler extends SessionAdapter implements InvocationHandler {
 
     private boolean suspended = false;
     private final StubRetriever stubRetriever;

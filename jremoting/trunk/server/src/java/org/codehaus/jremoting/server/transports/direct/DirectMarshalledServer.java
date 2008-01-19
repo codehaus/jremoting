@@ -19,7 +19,7 @@ package org.codehaus.jremoting.server.transports.direct;
 
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.server.ServerInvoker;
+import org.codehaus.jremoting.server.InvocationHandler;
 import org.codehaus.jremoting.server.ServerMarshalledInvoker;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
@@ -70,15 +70,15 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
 
     private static class ServerMarshalledInvokerImpl implements ServerMarshalledInvoker {
 
-        private ServerInvoker invoker;
+        private InvocationHandler invoker;
         private ClassLoader facadesClassLoader;
 
-        public ServerMarshalledInvokerImpl(ServerInvoker invoker) {
+        public ServerMarshalledInvokerImpl(InvocationHandler invoker) {
             this.invoker = invoker;
             facadesClassLoader = getClass().getClassLoader();
         }
 
-        public ServerMarshalledInvokerImpl(ServerInvoker invoker, ClassLoader facadesClassLoader) {
+        public ServerMarshalledInvokerImpl(InvocationHandler invoker, ClassLoader facadesClassLoader) {
             this.invoker = invoker;
             this.facadesClassLoader = facadesClassLoader;
         }

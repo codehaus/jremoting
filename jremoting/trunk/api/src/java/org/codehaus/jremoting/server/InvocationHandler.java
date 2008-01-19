@@ -21,12 +21,12 @@ import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
 /**
- * Interface ServerInvoker
+ * Interface InvocationHandler
  *
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public interface ServerInvoker {
+public interface InvocationHandler {
 
     /**
      * Handle a method invocation
