@@ -48,7 +48,7 @@ import java.util.concurrent.ScheduledExecutorService;
 public class SocketServer extends ConnectingServer {
 
     private ServerSocket serverSocket;
-    private Future future;
+    private Future daemon;
     private final InetSocketAddress addr;
     private final StreamEncoding streamEncoding;
     private final ClassLoader facadesClassLoader;
@@ -154,23 +154,22 @@ public class SocketServer extends ConnectingServer {
 
     public void started() {
         super.started();
-        future = executorService.submit(new Runnable() {
+        daemon = executorService.submit(new Runnable() {
             public void run() {
-
                 boolean accepting = false;
                 try {
                     while (getState().equals(STARTED)) {
 
                         accepting = true;
                         Socket sock = serverSocket.accept();
-                        handleConnection(sock);
-
+                        executorService.submit(new SocketConnection(sock));
                     }
                 } catch (IOException ioe) {
                     handleIOE(accepting, ioe);
                 }
             }
         });
+
     }
 
     public void stopping() {
@@ -180,8 +179,8 @@ public class SocketServer extends ConnectingServer {
             throw new JRemotingException("Error stopping Complete Socket server", ioe);
         }
         killAllConnections();
-        if (future != null) {
-            future.cancel(true);
+        if (daemon != null) {
+            daemon.cancel(true);
         }
         super.stopping();
     }
@@ -190,26 +189,29 @@ public class SocketServer extends ConnectingServer {
         super.stopped();
     }
 
-    /**
-     * Handle a connection.
-     *
-     * @param socket The socket for the connection
-     */
-    public void handleConnection(final Socket socket) {
+    private class SocketConnection implements Runnable {
+        Socket socket;
 
-        // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
-        try {
-            socket.setSoTimeout(socketTimeout);
-            if (getState().equals(STARTED)) {
-                StreamEncoder streamEncoder = streamEncoding.createEncoder(serverMonitor, facadesClassLoader,
-                        socket.getInputStream(), socket.getOutputStream(), socket.getInetAddress().toString());
-                SocketStreamConnection ssc = new SocketStreamConnection(this, socket, streamEncoder, serverMonitor);
-                ssc.run();
+        private SocketConnection(Socket socket) {
+            this.socket = socket;
+        }
+
+        public void run() {
+            // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
+            try {
+                socket.setSoTimeout(socketTimeout);
+                if (getState().equals(STARTED)) {
+                    StreamEncoder streamEncoder = streamEncoding.createEncoder(serverMonitor, facadesClassLoader,
+                            socket.getInputStream(), socket.getOutputStream(), socket.getInetAddress().toString());
+                    SocketStreamConnection ssc = new SocketStreamConnection(SocketServer.this, socket, streamEncoder, serverMonitor);
+                    ssc.run();
+                }
+            } catch (IOException ioe) {
+                handleIOE(accepting, ioe);
             }
-        } catch (IOException ioe) {
-            handleIOE(accepting, ioe);
         }
     }
+
 
     protected void handleIOE(boolean accepting, IOException ioe) {
         // some JVM revisions report 'socket closed' , some 'Socket closed'

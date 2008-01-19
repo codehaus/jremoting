@@ -12,9 +12,11 @@ public class Client2 {
         for (int i = 0; i < 10; i++) {
             new Thread() {
                 public void run() {
+                    System.out.println("Client Starting ...");
                     try {
                         mathLoop((Addition) new JRemotingClient(new SocketTransport(new Log4JClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("localhost", 10333))).lookupService("Addition"));
-                    } catch (ConnectionException e) {
+                    } catch (Throwable e) {
+                        System.out.println("Client Quitting ...");
                         e.printStackTrace();
                     }
                 }

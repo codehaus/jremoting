@@ -46,7 +46,6 @@ public class SocketStreamConnection extends StreamConnection {
      * @param encoder         The encoder for the transport type
      */
     public SocketStreamConnection(final ConnectingServer connectingServer, final Socket socket, StreamEncoder encoder, ServerMonitor serverMonitor) {
-
         super(connectingServer, encoder, serverMonitor);
         this.socket = socket;
     }
