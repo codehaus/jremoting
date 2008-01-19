@@ -47,39 +47,12 @@ import java.util.WeakHashMap;
  */
 public class DefaultServiceHandler implements ServiceHandler {
 
-    /**
-     * Instances for references
-     */
     private WeakHashMap<Long, WeakReference<Object>> instancesByRefID = new WeakHashMap<Long, WeakReference<Object>>();
-
-    /**
-     * References for instances.
-     */
     private WeakHashMap<Object, Long> ReferencesForInstances = new WeakHashMap<Object, Long>();
-
-    /**
-     * Method map
-     */
     private Map<String, Method> methodMap;
-
-    /**
-     * Next reference
-     */
     private static int c_nextReference = 0;
-
-    /**
-     * published thing
-     */
     private String publishedThing;
-
-    /**
-     * The main instance
-     */
     private Object mainInstance;
-
-    /**
-     * The publication.
-     */
     private final Publication publicationDescription;
     private final Class facadeClass;
     private MethodInvocationMonitor methodInvocationMonitor = new NullMethodInvocationMonitor();
