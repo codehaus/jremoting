@@ -39,7 +39,7 @@ import org.codehaus.jremoting.util.MethodNameHelper;
  *
  * @author Paul Hammant
  */
-public class PublicationAdapter implements ServiceHandlerAccessor {
+public class PublicationAdapter implements Publisher {
 
     private final Publisher publicationDelegate;
 

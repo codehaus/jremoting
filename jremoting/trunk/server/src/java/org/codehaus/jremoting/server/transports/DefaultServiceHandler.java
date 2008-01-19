@@ -27,6 +27,7 @@ import org.codehaus.jremoting.server.MethodInvocationMonitor;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServiceHandler;
 import org.codehaus.jremoting.server.ServiceHandlerAccessor;
+import org.codehaus.jremoting.server.adapters.PublicationAdapter;
 import org.codehaus.jremoting.server.monitors.NullMethodInvocationMonitor;
 import org.codehaus.jremoting.util.FacadeRefHolder;
 
@@ -82,14 +83,14 @@ public class DefaultServiceHandler implements ServiceHandler {
     private final Publication publicationDescription;
     private final Class facadeClass;
     private MethodInvocationMonitor methodInvocationMonitor = new NullMethodInvocationMonitor();
-    private ServiceHandlerAccessor serviceHandlerAccessor;
+    private PublicationAdapter publicationAdapter;
 
     private final Long zero = new Long(0);
 
-    public DefaultServiceHandler(ServiceHandlerAccessor serviceHandlerAccessor,
+    public DefaultServiceHandler(PublicationAdapter publicationAdapter,
             String publishedThing, Map<String, Method> methodMap,
                                 Publication publicationDescription, Class facadeClass) {
-        this.serviceHandlerAccessor = serviceHandlerAccessor;
+        this.publicationAdapter = publicationAdapter;
         this.publishedThing = publishedThing;
         this.methodMap = methodMap;
         this.publicationDescription = publicationDescription;
@@ -193,7 +194,7 @@ public class DefaultServiceHandler implements ServiceHandler {
             // TODO find a faster way to do this....
             if (args[i] instanceof FacadeRefHolder) {
                 FacadeRefHolder frh = (FacadeRefHolder) args[i];
-                ServiceHandler serviceHandler = serviceHandlerAccessor.getServiceHandler(frh.getObjectName());
+                ServiceHandler serviceHandler = publicationAdapter.getServiceHandler(frh.getObjectName());
                 args[i] = serviceHandler.getInstanceForReference(frh.getReference());
             }
         }
