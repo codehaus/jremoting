@@ -108,18 +108,6 @@ public abstract class StatefulServer implements Server {
         return invocationHandler.isPublished(service);
     }
 
-    public ServiceHandler getServiceHandler(InvokeMethod invokeMethod, String objectName) {
-        return invocationHandler.getServiceHandler(invokeMethod, objectName);
-    }
-
-    public ServiceHandler getServiceHandler(String service) {
-        return invocationHandler.getServiceHandler(service);
-    }
-
-    public DefaultInvocationHandler getInvocationHandler() {
-        return invocationHandler;
-    }
-
     public String getState() {
         return state;
     }
