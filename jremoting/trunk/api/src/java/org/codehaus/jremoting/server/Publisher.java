@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.server;
 
 /**
- * Interface Server
+ * Interface Publisher
  *
  * @author Paul Hammant
  * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
