@@ -58,7 +58,7 @@ import org.codehaus.jremoting.util.StaticStubHelper;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
 /**
- * Class InvokerDelegate
+ * Class InvocationHandler
  *
  * @author Paul Hammant
  */
@@ -383,7 +383,6 @@ public class InvocationHandler extends SessionAdapter implements ServerInvoker {
         super.doesSessionExistAndRefreshItIfItDoes(ping.getSession());
         return new Ping();
     }
-
 
     public void suspend() {
         suspended = true;
