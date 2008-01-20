@@ -23,18 +23,14 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.requests.Ping;
 import org.codehaus.jremoting.requests.Request;
-import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.ConnectionOpened;
-import org.codehaus.jremoting.responses.NoSuchReference;
-import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.TryLater;
@@ -151,48 +147,15 @@ public abstract class StatefulTransport implements Transport {
 
                 while (again) {
                     tries++;
-
                     again = false;
-
                     try {
                         response = performInvocation(request);
-
-                        if (response instanceof ProblemResponse) {
-
-                            if (response instanceof TryLater) {
-                                int millis = ((TryLater) response).getSuggestedDelayMillis();
-
-                                clientMonitor.serviceSuspended(this.getClass(), request, tries, millis);
-
-                                again = true;
-//                            } else if (response instanceof NoSuchReference) {
-//                                throw new NoSuchReferenceException(((NoSuchReference) response).getReference());
-//                            } else if (response instanceof NoSuchSession) {
-//                                throw new NoSuchSessionException(((NoSuchSession) response).getSessionID());
-//                            } else if (response instanceof NotPublished) {
-//                                Servicable pnr = (Servicable) request;
-//
-//                                throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
-                            }
-                        }
+                        again = retryIfProblemResponse(request, again, response, tries);
                         if (response instanceof ConnectionOpened) {
                             session = ((ConnectionOpened) response).getSessionID();
                         }
                     } catch (IOException ioe) {
-                        if (isSafeEnd(ioe) && !(ioe instanceof SocketTimeoutException && request instanceof OpenConnection)) {
-                            int retryConnectTries = 0;
-
-                            again = true;
-
-                            while (retry && !tryReconnect()) {
-                                clientMonitor.serviceAbend(this.getClass(), retryConnectTries, ioe);
-
-                                retryConnectTries++;
-                            }
-                        } else {
-                            clientMonitor.unexpectedIOException(StatefulTransport.class, "invoke(), request:'" + request.getClass().getName() + "'", ioe);
-                            throw new InvocationException("unexpected IOException", ioe);
-                        }
+                        again = retryOrThrowAfterIoException(request, retry, ioe);
                     }
                 }
                 if (methodLogging) {
@@ -206,6 +169,36 @@ public abstract class StatefulTransport implements Transport {
         } catch (ClassNotFoundException e) {
             throw new InvocationException("Class definition missing on Deserialization: " + e.getMessage(), e);
         }
+    }
+
+    private boolean retryIfProblemResponse(Request request, boolean again, Response response, int tries) {
+        if (response instanceof ProblemResponse) {
+            if (response instanceof TryLater) {
+                int millis = ((TryLater) response).getSuggestedDelayMillis();
+                clientMonitor.serviceSuspended(this.getClass(), request, tries, millis);
+                again = true;
+            }
+        }
+        return again;
+    }
+
+    private boolean retryOrThrowAfterIoException(Request request, boolean retry, IOException ioe) {
+        boolean again;
+        if (isSafeEnd(ioe) && !(ioe instanceof SocketTimeoutException && request instanceof OpenConnection)) {
+            int retryConnectTries = 0;
+
+            again = true;
+
+            while (retry && !tryReconnect()) {
+                clientMonitor.serviceAbend(this.getClass(), retryConnectTries, ioe);
+
+                retryConnectTries++;
+            }
+        } else {
+            clientMonitor.unexpectedIOException(StatefulTransport.class, "invoke(), request:'" + request.getClass().getName() + "'", ioe);
+            throw new InvocationException("unexpected IOException", ioe);
+        }
+        return again;
     }
 
     protected abstract Response performInvocation(Request request) throws IOException, ClassNotFoundException;
