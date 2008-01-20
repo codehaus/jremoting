@@ -46,7 +46,7 @@ public class StubsViaReflection implements StubFactory {
         }
 
         return Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] {facadeClass, Stub2.class},
-                new MyInvocationHandler(stubHelper, publishedServiceName, objectName));
+                new ReflectionInvocationHandler(stubHelper, publishedServiceName, objectName));
 
     }
 
@@ -56,12 +56,12 @@ public class StubsViaReflection implements StubFactory {
 
     }
 
-    private class MyInvocationHandler implements InvocationHandler {
+    private class ReflectionInvocationHandler implements InvocationHandler {
         private final org.codehaus.jremoting.client.StubHelper stubHelper;
         private String publishedServiceName;
         private final String objectName;
 
-        public MyInvocationHandler(org.codehaus.jremoting.client.StubHelper stubHelper, String publishedServiceName, String objectName) {
+        public ReflectionInvocationHandler(org.codehaus.jremoting.client.StubHelper stubHelper, String publishedServiceName, String objectName) {
             this.stubHelper = stubHelper;
             this.publishedServiceName = publishedServiceName;
             this.objectName = objectName;

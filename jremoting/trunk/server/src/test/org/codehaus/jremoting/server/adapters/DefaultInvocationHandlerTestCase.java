@@ -29,7 +29,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 
-public class InvokerDelegateTestCase extends TestCase {
+public class DefaultInvocationHandlerTestCase extends TestCase {
 
     public void testOpenConnection() {
         DefaultInvocationHandler invocationHandle = new DefaultInvocationHandler(new NullServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), null);

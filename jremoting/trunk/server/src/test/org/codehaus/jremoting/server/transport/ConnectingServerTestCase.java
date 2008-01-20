@@ -35,7 +35,7 @@ public class ConnectingServerTestCase extends TestCase {
 
     public void testSessionsCanBePruned() throws InterruptedException {
         ServerMonitor sm = new ConsoleServerMonitor();
-        MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
+        TstInvocationHandler ihd = new TstInvocationHandler(sm);
         ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10)){};
         assertTrue(ihd.sessionExists(ihd.tstSession));
         cs.setPruneSessionsInterval(1);
@@ -48,7 +48,7 @@ public class ConnectingServerTestCase extends TestCase {
 
     public void testSessionsAreNotPrunedIfTheServerIsStopped() throws InterruptedException {
         ServerMonitor sm = new ConsoleServerMonitor();
-        MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
+        TstInvocationHandler ihd = new TstInvocationHandler(sm);
         ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10)){};
         assertTrue(ihd.sessionExists(ihd.tstSession));
         cs.setPruneSessionsInterval(1);
@@ -61,7 +61,7 @@ public class ConnectingServerTestCase extends TestCase {
 
     public void testSessionsCannotBePrunedIfRefreshed() throws InterruptedException {
         ServerMonitor sm = new ConsoleServerMonitor();
-        MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
+        TstInvocationHandler ihd = new TstInvocationHandler(sm);
         ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10)){};
         assertTrue(ihd.sessionExists(ihd.tstSession));
         cs.setPruneSessionsInterval(1);
@@ -82,9 +82,9 @@ public class ConnectingServerTestCase extends TestCase {
 
     }
 
-    private static class MyInvokerDelegate extends DefaultInvocationHandler {
+    private static class TstInvocationHandler extends DefaultInvocationHandler {
         Long tstSession;
-        public MyInvokerDelegate(ServerMonitor sm) {
+        public TstInvocationHandler(ServerMonitor sm) {
             super(sm, new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
             tstSession = super.newSession("blah");
         }
@@ -99,7 +99,7 @@ public class ConnectingServerTestCase extends TestCase {
 
     public void testSessionIsKeptAliveByPing() throws InterruptedException {
         ServerMonitor sm = new ConsoleServerMonitor();
-        MyInvokerDelegate ihd = new MyInvokerDelegate(sm);
+        TstInvocationHandler ihd = new TstInvocationHandler(sm);
         ConnectingServer cs = new ConnectingServer(sm, ihd, Executors.newScheduledThreadPool(10)){};
         assertTrue(ihd.sessionExists(ihd.tstSession));
         cs.setPruneSessionsInterval(1);
