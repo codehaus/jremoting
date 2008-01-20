@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.server.monitors;
 
-import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.Session;
 
@@ -43,12 +42,12 @@ public class NullServerMonitor implements ServerMonitor {
     public void stopServerError(Class clazz, String s, Exception e) {
     }
 
-    public void newSession(Session session) {
+    public void newSession(Session session, int newSize) {
     }
 
-    public void removeSession(Session session) {
+    public void removeSession(Session session, int newSize) {
     }
 
-    public void staleSession(Session session) {
+    public void staleSession(Session session, int newSize) {
     }
 }

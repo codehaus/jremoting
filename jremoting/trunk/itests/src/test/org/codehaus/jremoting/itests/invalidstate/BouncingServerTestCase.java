@@ -17,11 +17,11 @@
  */
 package org.codehaus.jremoting.itests.invalidstate;
 
-import org.codehaus.jremoting.client.ClientMonitor;
+import junit.framework.AssertionFailedError;
 import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
@@ -29,14 +29,17 @@ import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
+import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
+import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.codehaus.jremoting.tools.generator.BcelStubGenerator;
-import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
-import org.jmock.core.Constraint;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -47,7 +50,6 @@ import java.net.InetSocketAddress;
 public class BouncingServerTestCase extends MockObjectTestCase {
 
     Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
-    private Mock mockServerMonitor;
 
     protected void setUp() throws Exception {
         BcelStubGenerator generator = new BcelStubGenerator();
@@ -56,8 +58,6 @@ public class BouncingServerTestCase extends MockObjectTestCase {
         generator.setPrimaryFacade(pd.getPrimaryFacade());
         generator.setGenName("Hello55");
         generator.generateClass(this.getClass().getClassLoader());
-        mockServerMonitor = mock(ServerMonitor.class);
-        mockServerMonitor.expects(once()).method("newSession").withAnyArguments();
     }
 
     public void testBouncingOfServerCausesClientProblems() throws Exception {
@@ -69,47 +69,50 @@ public class BouncingServerTestCase extends MockObjectTestCase {
         try {
 
             // Client side setup
-
-            Mock clientMonitor = mock(ClientMonitor.class);
-            clientMonitor.expects(once()).method("methodLogging").withNoArguments().will(returnValue(false));
-            clientMonitor.expects(once()).method("invocationFailure").with(new Constraint[] { eq(JRemotingClient.DefaultStubHelper.class), isA(String.class), isA(String.class), isA(String.class), isA(InvocationException.class
-            )});
-
-            jRemotingClient = new JRemotingClient(new SocketTransport((ClientMonitor) clientMonitor.proxy(),
+            jRemotingClient = new JRemotingClient(new SocketTransport(new NullClientMonitor(),
                     new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12201)));
             TestFacade testClient = (TestFacade) jRemotingClient.lookupService("Hello55");
-
-
             testClient.intParamReturningInt(100);
-
-            // Stop server and restarting (essentially binning sessions).
-            server.stop();
-            server = startServer();
 
             try {
                 testClient.intParamReturningInt(123);
-                fail("Should have barfed with NoSuchSessionException");
-            } catch (NoSuchSessionException e) {
+                fail("Should have barfed with no such session exception");
+            } catch (InvocationException e) {
+                assertTrue(e.getMessage().contains("no session on the server"));
                 // expected
             }
 
-
-        } finally {
+        } catch(AssertionFailedError afe) {
             System.gc();
-
             try {
                 jRemotingClient.close();
-            } catch (NoSuchSessionException e) {
+            } catch (InvocationException e) {
             }
-
-            server.stop();
+            try {
+                server.stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            throw afe;
 
         }
     }
 
     private SocketServer startServer() throws PublicationException {
-        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.encoders.ByteStreamEncoding(), new InetSocketAddress(12201)
-        );
+        //SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.encoders.ByteStreamEncoding(), new InetSocketAddress(12201));
+        SocketServer server = new SocketServer(new ConsoleServerMonitor(),
+                new DefaultInvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory() ) {
+                    int ct =0;
+                    protected boolean doesSessionExistAndRefreshItIfItDoes(long session) {
+                        ct++;
+                        if (ct==2) {
+                            return false;
+                        }
+                        return super.doesSessionExistAndRefreshItIfItDoes(session);
+                    }
+                },
+            new org.codehaus.jremoting.server.encoders.ByteStreamEncoding(),
+                Executors.newScheduledThreadPool(10), this.getClass().getClassLoader(), new InetSocketAddress(12201));
         TestFacadeImpl testServer = new TestFacadeImpl();
         server.publish(testServer, "Hello55", pd);
         server.start();

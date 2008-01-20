@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.server.monitors;
 
-import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.Session;
 
@@ -48,15 +47,15 @@ public class ConsoleServerMonitor implements ServerMonitor {
         System.out.println("[stopServerError] " + s + " : " + e.getMessage());
     }
 
-    public void newSession(Session session) {
-        System.out.println("[newSession] " + session.getSession());
+    public void newSession(Session session, int newSize) {
+        System.out.println("[newSession] " + session.getSession() + " , sessions: " + newSize);
     }
 
-    public void removeSession(Session session) {
-        System.out.println("[removeSession] " + session.getSession());
+    public void removeSession(Session session, int newSize) {
+        System.out.println("[removeSession] " + session.getSession() + " , sessions: " + newSize);
     }
 
-    public void staleSession(Session session) {
-        System.out.println("[staleSession] " + session.getSession());
+    public void staleSession(Session session, int newSize) {
+        System.out.println("[staleSession] " + session.getSession() + " , sessions: " + newSize);
     }
 }

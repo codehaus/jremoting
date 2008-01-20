@@ -19,11 +19,14 @@ package org.codehaus.jremoting.server.encoders;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.util.SerializationHelper;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * Class ByteStreamEncoder
@@ -72,6 +75,10 @@ public class ByteStreamEncoder extends AbstractStreamEncoder {
     }
 
     public void close() {
+        try {
+            writeResponse(new ConnectionClosed());
+        } catch (IOException e) {
+        }
         try {
             dataInputStream.close();
         } catch (IOException e) {

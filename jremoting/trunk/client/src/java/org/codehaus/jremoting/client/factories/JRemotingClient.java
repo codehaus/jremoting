@@ -22,8 +22,6 @@ import org.codehaus.jremoting.authentication.AuthenticationChallenge;
 import org.codehaus.jremoting.client.Authenticator;
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.NoSuchReferenceException;
-import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.Stub;
 import org.codehaus.jremoting.client.StubFactory;
 import org.codehaus.jremoting.client.StubHelper;
@@ -31,7 +29,6 @@ import org.codehaus.jremoting.client.StubRegistry;
 import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.authentication.NullAuthenticator;
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
-import org.codehaus.jremoting.client.stubs.StubsOnClient;
 import org.codehaus.jremoting.client.stubs.StubsViaReflection;
 import org.codehaus.jremoting.requests.CollectGarbage;
 import org.codehaus.jremoting.requests.GroupedMethodRequest;
@@ -390,7 +387,6 @@ public class JRemotingClient {
 
                 if (response instanceof MethodInvoked) {
                     MethodInvoked or = (MethodInvoked) response;
-
                     return or.getResponseObject();
                 } else {
                     throw makeUnexpectedResponseThrowable(response);
@@ -476,13 +472,16 @@ public class JRemotingClient {
                 return er.getResponseException();
             } else if (response instanceof NoSuchSession) {
                 NoSuchSession nssr = (NoSuchSession) response;
-                return new NoSuchSessionException(nssr.getSessionID());
+                return new InvocationException("There is no session on the server with id " + nssr.getSessionID()
+                        + ". The server may have been bounced since the client first did a lookup.");
             } else if (response instanceof NoSuchReference) {
                 NoSuchReference nsrr = (NoSuchReference) response;
-                return new NoSuchReferenceException(nsrr.getReference());
+                return new InvocationException("There is no instance on the server mapped to reference " + reference);
             } else if (response instanceof BadServerSideEvent) {
                 BadServerSideEvent ier = (BadServerSideEvent) response;
                 return new InvocationException(ier.getMessage());
+            } else if (response instanceof ConnectionClosed) {
+                throw new InvocationException("Connection closed by Server");
             } else {
                 return new InvocationException("Internal Error : Unknown response type :" + response.getClass().getName());
             }

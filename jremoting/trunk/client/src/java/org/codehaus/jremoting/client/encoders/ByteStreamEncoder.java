@@ -44,6 +44,10 @@ public class ByteStreamEncoder implements StreamEncoder {
     }
 
     public synchronized Response postRequest(Request request) throws IOException, ClassNotFoundException {
+
+        if (dataInputStream.available() != 0) {
+            return readResponse();
+        }
         writeRequest(request);
         return readResponse();
     }

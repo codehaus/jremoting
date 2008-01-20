@@ -21,17 +21,15 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.NoSuchSessionException;
-import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
-import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
 import org.codehaus.jremoting.requests.InvokeMethod;
+import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.Session;
@@ -89,8 +87,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
             cssf.lookupService("foo");
 
             fail("should have barfed");
-        } catch (NotPublishedException e) {
-            //expected 
+        } catch (ConnectionException e) {
+            assertTrue(e.getMessage().contains("Service 'foo' not published"));
         } finally {
             server.stop();
         }
@@ -111,20 +109,16 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         server.start();
 
         // Client side setup
-        try {
 
-            SocketTransport invoker = new SocketTransport(new ConsoleClientMonitor(),
-                    new ObjectStreamEncoding(), new InetSocketAddress("127.0.0.1", 12331));
-            JRemotingClient cssf = new JRemotingClient(invoker);
-            cssf.lookupService("Hello");
-            invoker.invoke(new InvokeMethod("Hello", "Main", "ping()",new Object [0], (long) 44332, (long) 21), true);
+        SocketTransport invoker = new SocketTransport(new ConsoleClientMonitor(),
+                new ObjectStreamEncoding(), new InetSocketAddress("127.0.0.1", 12331));
+        JRemotingClient cssf = new JRemotingClient(invoker);
+        cssf.lookupService("Hello");
+        Object result = invoker.invoke(new InvokeMethod("Hello", "Main", "ping()", new Object[0], (long) 44332, (long) 21), true);
 
-            fail("should have barfed");
-        } catch (NoSuchSessionException e) {
-            //expected
-        } finally {
-            server.stop();
-        }
+        assertTrue(result instanceof NoSuchSession);
+
+        server.stop();
 
     }
 
@@ -177,13 +171,13 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
                 wrong[0] = true;
             }
 
-            public void newSession(Session session) {
+            public void newSession(Session session, int size) {
             }
 
-            public void removeSession(Session session) {
+            public void removeSession(Session session, int newSize) {
             }
 
-            public void staleSession(Session session) {
+            public void staleSession(Session session, int newSize) {
             }
         };
         SocketServer server = new SocketServer(sm, new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding(), new InetSocketAddress(12347));

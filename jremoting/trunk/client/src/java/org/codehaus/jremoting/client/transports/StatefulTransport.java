@@ -23,8 +23,6 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionClosedException;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.NoSuchReferenceException;
-import org.codehaus.jremoting.client.NoSuchSessionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.requests.CloseConnection;
@@ -36,7 +34,6 @@ import org.codehaus.jremoting.requests.Servicable;
 import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 import org.codehaus.jremoting.responses.NoSuchReference;
-import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.Response;
@@ -168,14 +165,14 @@ public abstract class StatefulTransport implements Transport {
                                 clientMonitor.serviceSuspended(this.getClass(), request, tries, millis);
 
                                 again = true;
-                            } else if (response instanceof NoSuchReference) {
-                                throw new NoSuchReferenceException(((NoSuchReference) response).getReference());
-                            } else if (response instanceof NoSuchSession) {
-                                throw new NoSuchSessionException(((NoSuchSession) response).getSessionID());
-                            } else if (response instanceof NotPublished) {
-                                Servicable pnr = (Servicable) request;
-
-                                throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
+//                            } else if (response instanceof NoSuchReference) {
+//                                throw new NoSuchReferenceException(((NoSuchReference) response).getReference());
+//                            } else if (response instanceof NoSuchSession) {
+//                                throw new NoSuchSessionException(((NoSuchSession) response).getSessionID());
+//                            } else if (response instanceof NotPublished) {
+//                                Servicable pnr = (Servicable) request;
+//
+//                                throw new NotPublishedException(pnr.getService(), pnr.getObjectName());
                             }
                         }
                         if (response instanceof ConnectionOpened) {

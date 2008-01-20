@@ -18,7 +18,6 @@
 package org.codehaus.jremoting.server.monitors;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.Session;
 
@@ -73,21 +72,21 @@ public class Log4JServerMonitor implements ServerMonitor {
         delegate.stopServerError(clazz, s, e);
     }
 
-    public void newSession(Session session) {
+    public void newSession(Session session, int newSize) {
         Logger logger = Logger.getLogger(this.getClass());
         logger.error("<newSession>" + session.getSession());
-        delegate.newSession(session);
+        delegate.newSession(session, newSize);
     }
 
-    public void removeSession(Session session) {
+    public void removeSession(Session session, int newSize) {
         Logger logger = Logger.getLogger(this.getClass());
         logger.error("<removeSession>" + session.getSession());
-        delegate.removeSession(session);
+        delegate.removeSession(session, newSize);
     }
 
-    public void staleSession(Session session) {
+    public void staleSession(Session session, int newSize) {
         Logger logger = Logger.getLogger(this.getClass());
         logger.error("<staleSession>" + session.getSession());
-        delegate.staleSession(session);
+        delegate.staleSession(session, newSize);
     }
 }

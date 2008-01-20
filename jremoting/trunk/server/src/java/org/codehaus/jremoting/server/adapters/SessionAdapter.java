@@ -50,7 +50,7 @@ public class SessionAdapter extends PublicationAdapter {
         Session session = new Session(sessionNum);
         session.setConnectionDetails(connectionDetails);
         sessions.put(sessionNum, session);
-        serverMonitor.newSession(session);
+        serverMonitor.newSession(session, sessions.size());
         return sessionNum;
     }
 
@@ -60,7 +60,7 @@ public class SessionAdapter extends PublicationAdapter {
 
     protected void removeSession(long session) {
         Session sess = sessions.remove(session);
-        serverMonitor.removeSession(sess);
+        serverMonitor.removeSession(sess, sessions.size());
     }
 
     public void pruneSessionsStaleForLongerThan(long millis) {
@@ -70,7 +70,7 @@ public class SessionAdapter extends PublicationAdapter {
             long now = System.currentTimeMillis();
             if (s.getLastTouched() + millis < now) {
                 Session sess = sessions.remove(s.getSession());
-                serverMonitor.staleSession(sess);
+                serverMonitor.staleSession(sess, sessions.size());
             }
         }
     }

@@ -30,35 +30,12 @@ import java.io.IOException;
  */
 public interface ClientMonitor {
 
-    /**
-     * Method methodCalled
-     *
-     * @param methodSignature
-     * @param duration
-     */
     void methodCalled(Class clazz, String methodSignature, long duration, String annotation);
 
-    /**
-     * Method methodLogging tests if the implementing class intends to do method logging.
-     *
-     * @return
-     */
     boolean methodLogging();
 
-    /**
-     * Method serviceSuspended
-     *
-     * @param request
-     * @param attempt
-     * @param suggestedWaitMillis
-     */
     void serviceSuspended(Class clazz, Request request, int attempt, int suggestedWaitMillis);
 
-    /**
-     * Method serviceAbend
-     *
-     * @param attempt
-     */
     void serviceAbend(Class clazz, int attempt, IOException cause);
 
     void invocationFailure(Class clazz, String publishedServiceName, String objectName, String methodSignature, InvocationException ie);

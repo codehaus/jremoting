@@ -18,6 +18,7 @@
 package org.codehaus.jremoting.server.adapters;
 
 import junit.framework.TestCase;
+import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.requests.OpenConnection;
 import org.codehaus.jremoting.responses.ConnectionClosed;
