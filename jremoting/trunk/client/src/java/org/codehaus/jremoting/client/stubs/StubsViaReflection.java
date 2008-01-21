@@ -45,12 +45,12 @@ public class StubsViaReflection implements StubFactory {
             e.printStackTrace();
         }
 
-        return Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] {facadeClass, Stub2.class},
+        return Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] {facadeClass, ReflectionStub.class},
                 new ReflectionInvocationHandler(stubHelper, publishedServiceName, objectName));
 
     }
 
-    public interface Stub2 extends Stub {
+    public interface ReflectionStub extends Stub {
         
         public String jRemotingGetObjectName();
 
