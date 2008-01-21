@@ -47,7 +47,7 @@ public class ConsoleServerMonitor implements ServerMonitor {
         System.out.println("[stopServerError] " + s + " : " + e.getMessage());
     }
 
-    public void newSession(Session session, int newSize) {
+    public void newSession(Session session, int newSize, Object connectionDetails) {
         System.out.println("[newSession] " + session.getSession() + " , sessions: " + newSize);
     }
 

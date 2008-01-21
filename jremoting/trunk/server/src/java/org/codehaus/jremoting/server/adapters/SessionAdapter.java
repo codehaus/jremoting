@@ -50,7 +50,7 @@ public class SessionAdapter extends PublicationAdapter {
         Session session = new Session(sessionNum);
         session.setConnectionDetails(connectionDetails);
         sessions.put(sessionNum, session);
-        serverMonitor.newSession(session, sessions.size());
+        serverMonitor.newSession(session, sessions.size(), connectionDetails);
         return sessionNum;
     }
 

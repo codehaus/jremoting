@@ -171,7 +171,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
                 wrong[0] = true;
             }
 
-            public void newSession(Session session, int size) {
+            public void newSession(Session session, int size, Object connectionDetails) {
             }
 
             public void removeSession(Session session, int newSize) {

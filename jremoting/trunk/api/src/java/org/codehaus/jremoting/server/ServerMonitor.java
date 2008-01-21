@@ -37,7 +37,7 @@ public interface ServerMonitor {
 
     void stopServerError(Class clazz, String s, Exception e);
 
-    void newSession(Session session, int newSize);
+    void newSession(Session session, int newSize, Object connectionDetails);
 
     void removeSession(Session session, int newSize);
 

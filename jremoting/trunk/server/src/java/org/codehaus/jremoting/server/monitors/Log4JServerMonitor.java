@@ -72,10 +72,10 @@ public class Log4JServerMonitor implements ServerMonitor {
         delegate.stopServerError(clazz, s, e);
     }
 
-    public void newSession(Session session, int newSize) {
+    public void newSession(Session session, int newSize, Object connectionDetails) {
         Logger logger = Logger.getLogger(this.getClass());
         logger.error("<newSession>" + session.getSession());
-        delegate.newSession(session, newSize);
+        delegate.newSession(session, newSize, connectionDetails);
     }
 
     public void removeSession(Session session, int newSize) {
