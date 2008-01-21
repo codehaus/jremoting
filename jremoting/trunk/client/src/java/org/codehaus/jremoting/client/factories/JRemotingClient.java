@@ -18,6 +18,7 @@
 package org.codehaus.jremoting.client.factories;
 
 import org.codehaus.jremoting.ConnectionException;
+import org.codehaus.jremoting.RedirectedException;
 import org.codehaus.jremoting.authentication.AuthenticationChallenge;
 import org.codehaus.jremoting.client.Authenticator;
 import org.codehaus.jremoting.client.ContextFactory;
@@ -50,6 +51,7 @@ import org.codehaus.jremoting.responses.MethodInvoked;
 import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.responses.NotPublished;
+import org.codehaus.jremoting.responses.Redirected;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.Service;
 import org.codehaus.jremoting.responses.ServicesList;
@@ -196,11 +198,13 @@ public class JRemotingClient {
         return obj.jRemotingGetReferenceID(this);
     }
 
-    public final Object lookupService(String publishedServiceName) throws ConnectionException {
+    public final Object lookupService(String publishedServiceName) throws ConnectionException, RedirectedException {
         Response response = transport.invoke(new LookupService(publishedServiceName, authenticator.authenticate(authChallenge), session), true);
 
         if (response instanceof NotPublished) {
             throw new ConnectionException("Service '" + publishedServiceName + "' not published");
+        } else if (response instanceof Redirected) {
+            throw new RedirectedException(((Redirected) response).getRedirectedTo());
         } else if (response instanceof AuthenticationFailed) {
             throw new ConnectionException("Authentication Failed");
         } else if (response instanceof ExceptionThrown) {

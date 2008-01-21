@@ -20,30 +20,23 @@ package org.codehaus.jremoting;
 import java.io.IOException;
 
 /**
- * Class ConnectionException
+ * Class RedirectedException
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ConnectionException extends IOException {
+public class RedirectedException extends ConnectionException {
 
     private Throwable throwableCause;
     private static final long serialVersionUID = -2917930346241466338L;
+    private final String to;
 
-    public ConnectionException(String msg) {
-        super(msg);
+    public RedirectedException(String to) {
+        super("redirected to: " + to);
+        this.to = to;
     }
 
-    public ConnectionException(String message, Throwable cause) {
-        super(message);
-        throwableCause = cause;
-    }
-
-    public Throwable getCause() {
-        return throwableCause;
-    }
-
-    public String getMessage() {
-        return super.getMessage() + (throwableCause != null ? " : " + throwableCause.getMessage() : "");
+    public String getTo() {
+        return to;
     }
 }

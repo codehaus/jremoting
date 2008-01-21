@@ -92,7 +92,6 @@ public abstract class StreamConnection implements Runnable, Connection {
                     }
 
                     request = encoder.writeResponseAndGetRequest(response);
-                    //oOS.reset();
                     if (endConnection) {
                         response = new ConnectionKilled();
                         more = false;

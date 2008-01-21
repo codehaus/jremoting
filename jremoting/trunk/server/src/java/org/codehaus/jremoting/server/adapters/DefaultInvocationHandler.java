@@ -42,6 +42,7 @@ import org.codehaus.jremoting.responses.NoSuchSession;
 import org.codehaus.jremoting.responses.NotPublished;
 import org.codehaus.jremoting.responses.Ping;
 import org.codehaus.jremoting.responses.ProblemResponse;
+import org.codehaus.jremoting.responses.Redirected;
 import org.codehaus.jremoting.responses.RequestFailed;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.responses.Service;
@@ -312,6 +313,11 @@ public class DefaultInvocationHandler extends SessionAdapter implements Invocati
         }
 
         String service = StaticStubHelper.formatServiceName(publishedServiceName);
+
+        if (isRedirected(publishedServiceName)) {
+            return new Redirected(getRedirectedTo(publishedServiceName));
+        }
+
         if (!isPublished(service)) {
             return new NotPublished();
         }

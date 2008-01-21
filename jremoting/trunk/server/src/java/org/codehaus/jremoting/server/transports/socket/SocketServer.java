@@ -189,6 +189,10 @@ public class SocketServer extends ConnectingServer {
         super.stopped();
     }
 
+    public void redirect(String serviceName, String host, int port) {
+        super.redirect(serviceName, host + ":" + port);
+    }
+
     private class SocketConnection implements Runnable {
         Socket socket;
 
@@ -221,5 +225,8 @@ public class SocketServer extends ConnectingServer {
             serverMonitor.unexpectedException(this.getClass(), "SocketStreamServer: Some problem connecting client via sockets: " + ioe.getMessage(), ioe);
         }
     }
+
+    
+
 
 }

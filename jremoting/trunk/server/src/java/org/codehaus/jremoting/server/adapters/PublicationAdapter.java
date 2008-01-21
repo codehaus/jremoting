@@ -40,22 +40,14 @@ public class PublicationAdapter implements Publisher {
 
     private final Publisher publicationDelegate;
 
-    /**
-     * A map of published objects.
-     */
     private Map<String, ServiceHandler> services = new HashMap<String, ServiceHandler>();
+    private Map<String, String> redirected = new HashMap<String, String>();
 
 
     public PublicationAdapter(Publisher delegate) {
         this.publicationDelegate = delegate;
     }
 
-    /**
-     * Is the service published
-     *
-     * @param service The service name
-     * @return true if published.
-     */
     public boolean isPublished(String service) {
         return this.services.containsKey(service);
     }
@@ -68,11 +60,6 @@ public class PublicationAdapter implements Publisher {
         return this.services.get(service).getAdditionalFacades();
     }
 
-    /**
-     * Get an iterator of published objects
-     *
-     * @return The iterator
-     */
     public String[] getPublishedServices() {
         Iterator iterator = services.keySet().iterator();
         Vector<String> vecOfServices = new Vector<String>();
@@ -92,15 +79,6 @@ public class PublicationAdapter implements Publisher {
 
     }
 
-    /**
-     * Publish an Object
-     *
-     * @param impl              The implementaion to publish
-     * @param service            as this name.
-     * @param primaryFacade The interface to expose.
-     * @throws org.codehaus.jremoting.server.PublicationException
-     *          if a problem during publication.
-     */
     public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
         publish(impl, service, new Publication(primaryFacade));
         if (publicationDelegate != null) {
@@ -108,14 +86,6 @@ public class PublicationAdapter implements Publisher {
         }
     }
 
-    /**
-     * Publish an object
-     *
-     * @param impl                   The implementaion to publish
-     * @param service                 as this name.
-     * @param publicationDescription a description of the publication.
-     * @throws PublicationException if a problem during publication.
-     */
     public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
 
         PublicationItem primaryFacade = publicationDescription.getPrimaryFacade();
@@ -201,13 +171,20 @@ public class PublicationAdapter implements Publisher {
 
     }
 
-    /**
-     * UnPublish an object
-     *
-     * @param impl          the object to unpublish
-     * @param service The name it was published as
-     * @throws PublicationException if a problem during publication.
-     */
+    public void redirect(String serviceName, String to) {
+        redirected.put(serviceName,  to);
+    }
+
+    public String getRedirectedTo(String service) {
+        return redirected.get(service);  
+
+    }
+
+    public boolean isRedirected(String service) {
+        return redirected.containsKey(service);
+    }
+
+
     public void unPublish(Object impl, String service) throws PublicationException {
 
         String serviceName = StaticStubHelper.formatServiceName(service);
@@ -220,14 +197,6 @@ public class PublicationAdapter implements Publisher {
         }
     }
 
-    /**
-     * Replace a published impl
-     *
-     * @param oldImpl       the old published object
-     * @param service The name it was published as
-     * @param withImpl      The new published impl
-     * @throws PublicationException if a problem during publication.
-     */
     public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
 
         String serviceName = StaticStubHelper.formatServiceName(service);
@@ -243,12 +212,6 @@ public class PublicationAdapter implements Publisher {
         }
     }
 
-    /**
-     * Get a method's InvocationHandler
-     *
-     * @param service The name of a published object
-     * @return the method invoation handler
-     */
     public ServiceHandler getServiceHandler(String service) {
         return services.get(service);
     }

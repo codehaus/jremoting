@@ -30,6 +30,7 @@ import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
 import org.codehaus.jremoting.JRemotingException;
 
 import java.util.concurrent.ScheduledExecutorService;
+import java.net.InetSocketAddress;
 
 public abstract class StatefulServer implements Server {
 
@@ -93,6 +94,11 @@ public abstract class StatefulServer implements Server {
     public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
         invocationHandler.publish(impl, service, publicationDescription);
     }
+
+    public void redirect(String serviceName, String to) {
+        invocationHandler.redirect(serviceName, to);        
+    }
+
 
     public void unPublish(Object impl, String service) throws PublicationException {
         invocationHandler.unPublish(impl, service);
