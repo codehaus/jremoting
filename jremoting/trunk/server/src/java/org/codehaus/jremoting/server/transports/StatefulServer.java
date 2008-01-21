@@ -95,6 +95,10 @@ public abstract class StatefulServer implements Server {
         invocationHandler.publish(impl, service, publicationDescription);
     }
 
+    public void publish(Object impl, String service, Class facadeClass, Class... additionalFacades) {
+        invocationHandler.publish(impl, service, new Publication(facadeClass).addAdditionalFacades(additionalFacades));
+    }
+
     public void redirect(String serviceName, String to) {
         invocationHandler.redirect(serviceName, to);        
     }
@@ -115,4 +119,5 @@ public abstract class StatefulServer implements Server {
     public String getState() {
         return state;
     }
+
 }

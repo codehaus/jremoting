@@ -48,8 +48,7 @@ public class ByteStreamTestCase extends AbstractHelloTestCase {
         // server side setup.
         server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new InetSocketAddress(10333));
         testServer = new TestFacadeImpl();
-        Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
-        server.publish(testServer, "Hello", pd);
+        server.publish(testServer, "Hello", TestFacade.class, TestFacade3.class, TestFacade2.class);
         server.start();
 
         // Client side setup
