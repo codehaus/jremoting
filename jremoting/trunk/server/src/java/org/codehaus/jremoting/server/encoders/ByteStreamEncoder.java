@@ -41,7 +41,7 @@ public class ByteStreamEncoder extends AbstractStreamEncoder {
 
     public ByteStreamEncoder(ServerMonitor serverMonitor, DataInputStream dataInputStream,
                                     DataOutputStream dataOutputStream,
-                                    ClassLoader facadesClassLoader, Object connectionDetails) {
+                                    ClassLoader facadesClassLoader, String connectionDetails) {
         super(serverMonitor, dataInputStream, dataOutputStream, facadesClassLoader, connectionDetails);
         this.dataInputStream = dataInputStream;
         this.dataOutputStream = dataOutputStream;

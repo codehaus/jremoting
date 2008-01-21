@@ -19,7 +19,7 @@ public interface StreamEncoder {
      */
     Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException;
 
-    Object getConnectionDetails();
+    String getConnectionDetails();
 
     void close();
 

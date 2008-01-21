@@ -11,7 +11,7 @@ import java.io.OutputStream;
 public class ObjectStreamEncoding implements StreamEncoding {
 
     public StreamEncoder createEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
-                                           InputStream inputStream, OutputStream outputStream, Object connectionDetails) throws IOException {
+                                           InputStream inputStream, OutputStream outputStream, String connectionDetails) throws IOException {
         return new ObjectStreamEncoder(serverMonitor, facadesClassLoader, inputStream, outputStream, connectionDetails);
     }
 

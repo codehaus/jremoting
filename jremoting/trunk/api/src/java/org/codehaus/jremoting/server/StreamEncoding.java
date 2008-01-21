@@ -25,6 +25,6 @@ import java.io.IOException;
 public interface StreamEncoding {
 
     public StreamEncoder createEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
-                                           InputStream inputStream, OutputStream outputStream, Object connectionDetails) throws IOException;
+                                           InputStream inputStream, OutputStream outputStream, String connectionDetails) throws IOException;
 
 }

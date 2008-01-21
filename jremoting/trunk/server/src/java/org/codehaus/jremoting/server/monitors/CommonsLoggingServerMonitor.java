@@ -77,7 +77,7 @@ public class CommonsLoggingServerMonitor implements ServerMonitor {
         delegate.stopServerError(clazz, s, e);
     }
 
-    public void newSession(Session session, int newSize, Object connectionDetails) {
+    public void newSession(Session session, int newSize, String connectionDetails) {
         Log log = LogFactory.getLog(this.getClass());
         if (log.isErrorEnabled()) {
             log.error("<newSession>" + session.getSession());

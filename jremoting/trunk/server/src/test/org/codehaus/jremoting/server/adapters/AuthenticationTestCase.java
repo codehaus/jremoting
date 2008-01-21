@@ -70,8 +70,8 @@ public class AuthenticationTestCase extends MockObjectTestCase {
     }
 
     private Response putTestEntry(Authentication auth)  {
-        ConnectionOpened co = (ConnectionOpened) invocationHandler.invoke(new OpenConnection(), new Object());
-        return invocationHandler.invoke(new LookupService("foo", auth, co.getSessionID()), new Object());
+        ConnectionOpened co = (ConnectionOpened) invocationHandler.invoke(new OpenConnection(), "");
+        return invocationHandler.invoke(new LookupService("foo", auth, co.getSessionID()), "");
     }
 
     private Request serDeSerRequest(Request request) throws IOException, ClassNotFoundException {

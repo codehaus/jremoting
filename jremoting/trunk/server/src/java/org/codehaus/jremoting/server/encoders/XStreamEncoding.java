@@ -22,7 +22,7 @@ public class XStreamEncoding implements StreamEncoding {
     }
 
     public StreamEncoder createEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
-                                           InputStream inputStream, OutputStream outputStream, Object connectionDetails) {
+                                           InputStream inputStream, OutputStream outputStream, String connectionDetails) {
         
         return new XStreamEncoder(serverMonitor, facadesClassLoader, inputStream, outputStream, connectionDetails, xStream);
     }

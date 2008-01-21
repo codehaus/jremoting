@@ -108,13 +108,13 @@ public class ConnectingServerTestCase extends TestCase {
         Thread.sleep(300);
         Ping ping = new Ping();
         ping.setSession(ihd.tstSession);
-        ihd.invoke(ping, new Object());
+        ihd.invoke(ping, "");
         Thread.sleep(300);
-        ihd.invoke(ping, new Object());
+        ihd.invoke(ping, "");
         Thread.sleep(300);
-        ihd.invoke(ping, new Object());
+        ihd.invoke(ping, "");
         Thread.sleep(300);
-        ihd.invoke(ping, new Object());
+        ihd.invoke(ping, "");
         assertTrue(ihd.sessionExists(ihd.tstSession));
         Thread.sleep(2000);
         assertFalse(ihd.sessionExists(ihd.tstSession));

@@ -50,7 +50,7 @@ public class TstTransport extends StatefulTransport implements InvocationHandler
         return invoke(request, "test");
     }
 
-    public Response invoke(Request request, Object connectionDetails) {
+    public Response invoke(Request request, String connectionDetails) {
         if (request instanceof OpenConnection) {
             return new ConnectionOpened();
         } else if (request instanceof InvokeMethod) {

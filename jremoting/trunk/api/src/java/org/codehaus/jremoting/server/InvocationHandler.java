@@ -35,6 +35,6 @@ public interface InvocationHandler {
      * @param connectionDetails Some details of the connection.
      * @return the response that is a consequence of the request
      */
-    Response invoke(Request request, Object connectionDetails);
+    Response invoke(Request request, String connectionDetails);
 
 }

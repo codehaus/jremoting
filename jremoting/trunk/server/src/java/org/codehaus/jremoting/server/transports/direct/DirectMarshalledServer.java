@@ -63,7 +63,7 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
         this(serverMonitor, new DefaultInvocationHandler(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory()));
     }
 
-    public byte[] invoke(byte[] request, Object connectionDetails) {
+    public byte[] invoke(byte[] request, String connectionDetails) {
         return marshalledInvokerAdapter.invoke(request, connectionDetails);
     }
 
@@ -83,7 +83,7 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
             this.facadesClassLoader = facadesClassLoader;
         }
 
-        public byte[] invoke(byte[] request, Object connectionDetails) {
+        public byte[] invoke(byte[] request, String connectionDetails) {
 
             try {
                 Request ar = (Request) SerializationHelper.getInstanceFromBytes(request, facadesClassLoader);

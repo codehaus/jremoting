@@ -37,11 +37,11 @@ public abstract class AbstractStreamEncoder implements StreamEncoder {
     private final OutputStream outputStream;
     private final ServerMonitor serverMonitor;
     private final ClassLoader facadesClassLoader;
-    private final Object connectionDetails;
+    private final String connectionDetails;
 
     public AbstractStreamEncoder(ServerMonitor serverMonitor,
                                       InputStream inputStream, OutputStream outputStream,
-                                      ClassLoader facadesClassLoader, Object connectionDetails) {
+                                      ClassLoader facadesClassLoader, String connectionDetails) {
         this.serverMonitor = serverMonitor;
         this.inputStream = inputStream;
         this.outputStream = outputStream;
@@ -49,7 +49,7 @@ public abstract class AbstractStreamEncoder implements StreamEncoder {
         this.connectionDetails = connectionDetails;
     }
 
-    public Object getConnectionDetails() {
+    public String getConnectionDetails() {
         return connectionDetails;
     }
 

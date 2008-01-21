@@ -87,7 +87,7 @@ public class DefaultInvocationHandler extends SessionAdapter implements Invocati
         this.contextFactory = contextFactory != null ? contextFactory : new ThreadLocalServerContextFactory();
     }
 
-    public Response invoke(Request request, Object connectionDetails) {
+    public Response invoke(Request request, String connectionDetails) {
 
         try {
             if (suspended) {
@@ -331,7 +331,7 @@ public class DefaultInvocationHandler extends SessionAdapter implements Invocati
         }
     }
 
-    private Response doOpenConnectionRequest(Object connectionDetails) {
+    private Response doOpenConnectionRequest(String connectionDetails) {
         return new ConnectionOpened(authenticator.getAuthenticationChallenge(), newSession(connectionDetails));
     }
 

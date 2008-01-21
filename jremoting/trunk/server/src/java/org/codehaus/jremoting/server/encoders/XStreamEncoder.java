@@ -50,7 +50,7 @@ public class XStreamEncoder extends AbstractStreamEncoder {
     private BufferedOutputStream bufferedOutputStream;
 
     public XStreamEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
-                               OutputStream outputStream, Object connectionDetails, XStream xStream) {
+                               OutputStream outputStream, String connectionDetails, XStream xStream) {
         super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
         this.xStream = xStream;
         xStream.registerConverter(new AnnotationReflectionConverter(

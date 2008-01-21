@@ -90,9 +90,9 @@ public class AbstractServerTestCase extends MockObjectTestCase {
     }
 
     private Response putTestEntry() throws IOException, ClassNotFoundException {
-        ConnectionOpened co = (ConnectionOpened) invocationHandler.invoke(new OpenConnection(), new Object());
+        ConnectionOpened co = (ConnectionOpened) invocationHandler.invoke(new OpenConnection(), "");
         Request request = new InvokeMethod("foo", "Main", "put(java.lang.Object, java.lang.Object)", new Object[]{"1", "2"}, (long) 0, co.getSessionID());
-        return invocationHandler.invoke(serDeSerRequest(request), new Object());
+        return invocationHandler.invoke(serDeSerRequest(request), "");
     }
 
     private Request serDeSerRequest(Request request) throws IOException, ClassNotFoundException {
@@ -116,39 +116,39 @@ public class AbstractServerTestCase extends MockObjectTestCase {
     public void testPublishAndSuspendBlocksOperations() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
         server.suspend();
-        assertTrue(serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new OpenConnection()), new Object())) instanceof ServicesSuspended);
+        assertTrue(serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new OpenConnection()), "")) instanceof ServicesSuspended);
     }
 
     public void testPublishAndSuspendAndResumeDoesNotBlockOperation() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
         server.suspend();
         server.resume();
-        assertTrue(serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new OpenConnection()), new Object())) instanceof ConnectionOpened);
+        assertTrue(serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new OpenConnection()), "")) instanceof ConnectionOpened);
     }
 
     public void testStubRetrievalFailsWhenItsAppropriate() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        Response response = serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new RetrieveStub("foo", "Main")), new Object()));
+        Response response = serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new RetrieveStub("foo", "Main")), ""));
         assertTrue(response instanceof StubRetrievalFailed);
     }
 
     public void testRequestFailsOnUnknownRequestType() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        Response response = serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new MyRequest()), new Object()));
+        Response response = serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new MyRequest()), ""));
         assertTrue(response instanceof RequestFailed);
         assertEquals("Unknown Request Type: org.codehaus.jremoting.server.adapters.AbstractServerTestCase$MyRequest", ((RequestFailed) response).getFailureReason());
     }
 
     public void testListServicesRespondsAppropriately() throws PublicationException, IOException, ClassNotFoundException {
         server.publish(impl, "foo", Map.class);
-        Response response = invocationHandler.invoke(serDeSerRequest(new ListServices()), new Object());
+        Response response = invocationHandler.invoke(serDeSerRequest(new ListServices()), "");
         assertTrue(serDeSerResponse(response) instanceof ServicesList);
         assertEquals(1, ((ServicesList ) response).getServices().length);
         assertEquals("foo", ((ServicesList ) response).getServices()[0]);
     }
 
     public void testListServicesRespondsAppropriatelyWhenThereAreNone() throws PublicationException, IOException, ClassNotFoundException {
-        Response response = invocationHandler.invoke(serDeSerRequest(new ListServices()), new Object());
+        Response response = invocationHandler.invoke(serDeSerRequest(new ListServices()), "");
         assertTrue(serDeSerResponse(response) instanceof ServicesList);
         assertEquals(0, ((ServicesList ) response).getServices().length);
     }

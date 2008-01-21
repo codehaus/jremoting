@@ -42,7 +42,7 @@ public class NullServerMonitor implements ServerMonitor {
     public void stopServerError(Class clazz, String s, Exception e) {
     }
 
-    public void newSession(Session session, int newSize, Object connectionDetails) {
+    public void newSession(Session session, int newSize, String connectionDetails) {
     }
 
     public void removeSession(Session session, int newSize) {

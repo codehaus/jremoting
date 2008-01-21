@@ -45,7 +45,7 @@ public class SessionAdapter extends PublicationAdapter {
         return new Long((++sessionId << 16) + ((long) (Math.random() * 65536)));
     }
 
-    protected Long newSession(Object connectionDetails) {
+    protected Long newSession(String connectionDetails) {
         long sessionNum = getNewSessionNum();
         Session session = new Session(sessionNum);
         session.setConnectionDetails(connectionDetails);

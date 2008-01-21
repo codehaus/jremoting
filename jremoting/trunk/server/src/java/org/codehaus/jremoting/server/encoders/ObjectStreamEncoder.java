@@ -42,7 +42,7 @@ public class ObjectStreamEncoder extends AbstractStreamEncoder {
     private ObjectOutputStream objectOutputStream;
 
     public ObjectStreamEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
-                                    OutputStream outputStream, Object connectionDetails) {
+                                    OutputStream outputStream, String connectionDetails) {
         super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
     }
 

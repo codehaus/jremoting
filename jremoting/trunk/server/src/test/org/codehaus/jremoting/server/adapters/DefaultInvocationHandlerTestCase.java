@@ -33,15 +33,15 @@ public class DefaultInvocationHandlerTestCase extends TestCase {
 
     public void testOpenConnection() {
         DefaultInvocationHandler invocationHandle = new DefaultInvocationHandler(new NullServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), null);
-        ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.invoke(new OpenConnection(), new Object());
+        ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.invoke(new OpenConnection(), "");
         assertNotNull(connectionOpened);
         assertNotNull(connectionOpened.getSessionID());
     }
 
     public void testCloseConnectionAfterOpenConnection() {
         DefaultInvocationHandler invocationHandle = new DefaultInvocationHandler(new NullServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), null);
-        ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.invoke(new OpenConnection(), new Object());
-        ConnectionClosed connectionClosed = (ConnectionClosed) invocationHandle.invoke(new CloseConnection(connectionOpened.getSessionID()), new Object());
+        ConnectionOpened connectionOpened = (ConnectionOpened) invocationHandle.invoke(new OpenConnection(), "");
+        ConnectionClosed connectionClosed = (ConnectionClosed) invocationHandle.invoke(new CloseConnection(connectionOpened.getSessionID()), "");
         assertNotNull(connectionClosed);
         assertNotNull(connectionClosed.getSessionID());
         assertEquals(connectionClosed.getSessionID(), connectionOpened.getSessionID());
@@ -50,7 +50,7 @@ public class DefaultInvocationHandlerTestCase extends TestCase {
 
     public void testCloseConnectionErrorsOnBogusSession() {
         DefaultInvocationHandler invocationHandle = new DefaultInvocationHandler(null, new RefusingStubRetriever(), new NullAuthenticator(), null);
-        Response response = invocationHandle.invoke(new CloseConnection((long) 123), new Object());
+        Response response = invocationHandle.invoke(new CloseConnection((long) 123), "");
         assertTrue(response instanceof NoSuchSession);
         NoSuchSession noSuchSession = (NoSuchSession) response;
         assertNotNull(noSuchSession);

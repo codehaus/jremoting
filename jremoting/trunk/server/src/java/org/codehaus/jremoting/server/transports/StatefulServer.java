@@ -45,7 +45,7 @@ public abstract class StatefulServer implements Server {
         this.serverMonitor = serverMonitor;
     }
 
-    public Response invoke(Request request, Object connectionDetails) {
+    public Response invoke(Request request, String connectionDetails) {
         if (getState().equals(STARTED) || request instanceof CollectGarbage) {
             return invocationHandler.invoke(request, connectionDetails);
         } else {
