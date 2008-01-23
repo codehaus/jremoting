@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+<title>Frequently Asked Questions</title>
+</head>
+
+<body>
+<h3>Is Swiby mixing data and display again, just like the bad old days of Web 1.0?</h3>
+<p>It can do if you want :
+</p>
+<div class="source">
+<pre>require 'swiby'
+
+	
+title "Buy Delirium Tremens"
+	
+content {
+  label &quot;Buy a bottle of Delirium Tremens&quot;    
+  next_line
+  button &quot;yes&quot; { $context.goto(&quot;buy.swiby?buy=dt&amp;qty=1&quot;) }
+  button &quot;no&quot; { $context.goto(&quot;product_list.swiby&quot;) }
+}
+</pre>
+</div>
+<p>Alternatively you could do no mixing of data and UI:</p>
+<div class="source">
+<pre>require 'swiby'
+
+
+prod = $context.get(&quot;/product/&quot; + $req.query_string.id + &quot;.rb&quot;)
+
+	
+title &quot;Buy DT&quot;
+
+
+	
+content {
+
+
+  label &quot;Buy a &quot; + $prod.container + &quot; of &quot; $prod.name    
+  next_line
+  button &quot;yes&quot; { $context.goto(&quot;buy.swiby?buy=&quot; + $prod.id + &quot;&amp;qty=1&quot;) }
+  button &quot;no&quot; { $context.goto(&quot;product_list.swiby&quot;) }
+}
+</pre>
+</div>
+<h3>&nbsp;</h3>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<sitemap>
+    <section>
+        <name>About</name>
+        <page>index.html</page>
+        <page>encoding.html</page>
+        <page>transports.html</page>
+        <page>stubs.html</page>
+    </section>
+    <section>
+         <name>Project Info</name>
+         <page>team.html</page>
+     </section>
+</sitemap>
