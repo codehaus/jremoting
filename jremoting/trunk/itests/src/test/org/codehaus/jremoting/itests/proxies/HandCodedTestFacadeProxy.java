@@ -28,15 +28,15 @@ import java.io.IOException;
 /**
  * Class HandCodedProxyTestFacadeProxy
  *
- * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
+ * @author Paul Hammant
  * @author Benjamin David Hall
  * @version $Revision: 1.3 $
  */
-public class HandCodedProxyTestFacadeProxy implements TestFacade {
+public class HandCodedTestFacadeProxy implements TestFacade {
 
     private TestFacade actualImpl;
 
-    public HandCodedProxyTestFacadeProxy(TestFacade actualImpl) {
+    public HandCodedTestFacadeProxy(TestFacade actualImpl) {
         this.actualImpl = actualImpl;
     }
 

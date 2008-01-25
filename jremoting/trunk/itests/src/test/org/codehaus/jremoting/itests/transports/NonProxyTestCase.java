@@ -33,6 +33,10 @@ public class NonProxyTestCase extends AbstractHelloTestCase {
 
     }
 
+    protected int getNumIterationsForSpeedTest() {
+        return super.getNumIterationsForSpeedTest() * 1000000;
+    }    
+
     protected void tearDown() throws Exception {
     }
 }

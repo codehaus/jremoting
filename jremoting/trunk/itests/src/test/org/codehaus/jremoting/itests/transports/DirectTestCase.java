@@ -57,9 +57,10 @@ public class DirectTestCase extends AbstractHelloTestCase {
         testClient = (TestFacade) jremotinClient.lookupService("Hello");
     }
 
-    public void testHelloCall() throws Exception {
-        super.testHelloCall();
+    protected int getNumIterationsForSpeedTest() {
+        return super.getNumIterationsForSpeedTest() * 1000;   
     }
+
 
     protected void tearDown() throws Exception {
         super.tearDown();

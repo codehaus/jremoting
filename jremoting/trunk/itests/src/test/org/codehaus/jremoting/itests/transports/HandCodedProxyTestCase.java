@@ -18,18 +18,22 @@
 package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.itests.TestFacadeImpl;
-import org.codehaus.jremoting.itests.proxies.HandCodedProxyTestFacadeProxy;
+import org.codehaus.jremoting.itests.proxies.HandCodedTestFacadeProxy;
 
 /**
  * Test Hand Coded Stub for comparison sake
  *
  * @author Paul Hammant
  */
-public class CodedProxyTestCase extends AbstractHelloTestCase {
+public class HandCodedProxyTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
         testServer = new TestFacadeImpl();
-        testClient = new HandCodedProxyTestFacadeProxy(testServer);
+        testClient = new HandCodedTestFacadeProxy(testServer);
+    }
+
+    protected int getNumIterationsForSpeedTest() {
+        return super.getNumIterationsForSpeedTest() * 100000;
     }
 
     protected void tearDown() throws Exception {

@@ -27,6 +27,8 @@ import org.codehaus.jremoting.itests.TstObject;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Extended by classes that name the transport.
@@ -218,6 +220,23 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
 
     public void testSpeed() throws Exception {
 
+        int iterations = getNumIterationsForSpeedTest();
+
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < iterations; i++) {
+            testClient.testSpeed();
+        }
+        long end = System.currentTimeMillis();
+
+        BigDecimal its = BigDecimal.valueOf(iterations);
+        BigDecimal dur = BigDecimal.valueOf(end - start);
+        BigDecimal durInSecs = dur.divide(BigDecimal.valueOf(1000));
+        BigDecimal numPerSec = its.divide(durInSecs, 0, RoundingMode.HALF_EVEN);
+        System.err.println("[testSpeed] " + this.getClass().getName() + ", milis, " + numPerSec + "/sec");
+
+    }
+
+    protected int getNumIterationsForSpeedTest() {
         int iterations = 1; // default
         String iterationsStr = "@SPEEDTEST-ITERATIONS@";
         try {
@@ -227,15 +246,7 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
             // the Ant task before the test is run.  However this may be run in a
             // IDE, in which case the test is not run.
         }
-
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < iterations; i++) {
-            testClient.testSpeed();
-        }
-        long end = System.currentTimeMillis();
-
-        System.err.println("[testSpeed] " + this.getClass().getName() + " " + (end-start));
-
+        return iterations;
     }
 
     public void testToString() {
