@@ -44,7 +44,6 @@ the end user compared to sockets/pipes<br /><br /><span style="font-weight: bold
 <div class="source">
 <pre>server = new <span style="font-weight: bold;">DirectMarshalledServer</span>((ServerMonitor) mockServerMonitor.proxy());<br /><br />jremotingClient = new JRemotingClient(new <span style="font-weight: bold;">DirectMarshalledTransport</span>(new ConsoleClientMonitor(), server));<br /><br /></pre>
 </div>
-<h3>Comparitive speeds</h3>On a single MacBook Pro (2.13Ghz Core2Duo)
+<h3>Comparitive speeds</h3>On a single MacBook Pro (2.16Ghz Core2Duo)
 with server and client on the same machine. &nbsp;For a 1000
-invocations of&nbsp;testSpeed() over the transport in question.<br /><br />Handed Coded Proxy - 0 <br />Without Proxy (direcly wiring client to server) - 0<br /><br />Sockets<br />SSL Sockets<br />Pipes<br />Direct<br />DirectMarshalled<h3></h3><h3>Comparitive Speed.</h3><br /><br /><br /><br /><br /><h3>&nbsp;</h3>
-</body></html>
+invocations of&nbsp;testSpeed() over the transport in question.<br /><br /><span style="font-weight: bold;">JRemoting Transports</span><br />ByteStream and ObjectStream Piped types - 4,500 reqs/sec<br />ByteStream and ObjectStream Socket types - 2,800 reqs/sec<br />XStream&nbsp;Socket - 1,800 reqs/sec<br />Direct Un-marshalled - 120,482 reqs/sec<br />Direct Marshalled - 6,906 reqs/sec<br /><br /><span style="font-weight: bold;">Non RPC </span><br style="font-weight: bold;" />Dynamic proxy - 7 million reqs/sec<br />Hand-coded proxy - 109 million reqs/sec<br />Direcly wiring client to server (without proxy) -&nbsp;551 million reqs/sec<br /></body></html>
