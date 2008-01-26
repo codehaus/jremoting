@@ -37,9 +37,9 @@ import java.net.InetSocketAddress;
  *
  * @author Paul Hammant
  */
-public class ObjectStreamTestCase extends AbstractHelloTestCase {
+public class ObjectStreamOverSocketTestCase extends AbstractHelloTestCase {
 
-    public ObjectStreamTestCase() {
+    public ObjectStreamOverSocketTestCase() {
 
         // See http://developer.java.sun.com/developer/bugParade/bugs/4499841.html
         // This bug prevents ObjectStream from functioning correctly when used

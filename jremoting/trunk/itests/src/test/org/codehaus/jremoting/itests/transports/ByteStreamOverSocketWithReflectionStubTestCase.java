@@ -40,7 +40,7 @@ import java.net.InetSocketAddress;
  *
  * @author Paul Hammant
  */
-public class ByteStreamTestCase extends AbstractHelloTestCase {
+public class ByteStreamOverSocketWithReflectionStubTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();

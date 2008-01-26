@@ -26,7 +26,7 @@ import java.util.concurrent.ScheduledExecutorService;
  *
  * @author Paul Hammant
  */
-public class XStreamTestCase extends AbstractHelloTestCase {
+public class XStreamAndXppTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
