@@ -24,7 +24,7 @@ package org.codehaus.jremoting.util;
  */
 public class StaticStubHelper {
 
-    private static final String STUB_PREFIX = "JRemotingGenerated";
+    private static final String STUB_PREFIX = "JRemotingStub";
     private static final String STUB_POSTFIX = "Main";
     
     public static String formatProxyClassName(String generatedName) {
