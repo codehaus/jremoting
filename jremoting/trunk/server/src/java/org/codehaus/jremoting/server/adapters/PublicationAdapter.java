@@ -105,12 +105,36 @@ public class PublicationAdapter implements Publisher {
 
         Class clazz = primaryFacade.getFacadeClass();
 
-        Method methods[] = null;
+        populateMethods(clazz, mainMethodMap);        
+
+        // as the main service is lookup-able, it has a prexisting impl.
+        services.put(StaticStubHelper.formatServiceName(service), mainServiceHandler);
+
+        // add method maps for all the additional facades.
+        for (PublicationItem secondaryFacade : secondaryFacades) {
+            Class facadeClass = secondaryFacade.getFacadeClass();
+            String encodedClassName = MethodNameHelper.encodeClassName(secondaryFacade.getFacadeClass().getName());
+            Map<String, Method> methodMap = new HashMap<String, Method>();
+            ServiceHandler serviceHandler = new ServiceHandler(this, service + "_" + encodedClassName, methodMap, publicationDescription, facadeClass);
+
+            populateMethods(facadeClass, methodMap);
+
+            services.put(service + "_" + encodedClassName, serviceHandler);
+        }
+
+        if (publicationDelegate != null) {
+            publicationDelegate.publish(impl, service, publicationDescription);
+        }
+
+    }
+
+    private void populateMethods(Class facadeClass, Map<String, Method> methodMap) {
+        Method[] methods = null;
         try {
             Method ts = Object.class.getMethod("toString", new Class[0]);
             Method hc = Object.class.getMethod("hashCode", new Class[0]);
-            Method eq = Object.class.getMethod("equals", Object.class);
-            Method[] interfaceMethods = clazz.getMethods();
+            Method eq = Object.class.getMethod("equals", new Class[]{Object.class});
+            Method[] interfaceMethods = facadeClass.getMethods();
             methods = new Method[interfaceMethods.length + 3];
             System.arraycopy(interfaceMethods, 0, methods, 0, interfaceMethods.length);
             methods[interfaceMethods.length] = ts;
@@ -120,55 +144,14 @@ public class PublicationAdapter implements Publisher {
             // never!
         }
 
+
         for (Method method : methods) {
             String methodSignature = MethodNameHelper.getMethodSignature(method);
 
-            if (!mainMethodMap.containsKey(methodSignature)) {
-                mainMethodMap.put(methodSignature, method);
+            if (!methodMap.containsKey(methodSignature)) {
+                methodMap.put(methodSignature, method);
             }
         }
-
-        // as the main service is lookup-able, it has a prexisting impl.
-        services.put(StaticStubHelper.formatServiceName(service), mainServiceHandler);
-
-        // add method maps for all the additional facades.
-        for (PublicationItem secondaryFacade : secondaryFacades) {
-            Class facadeClass = secondaryFacade.getFacadeClass();
-            String encodedClassName = MethodNameHelper.encodeClassName(secondaryFacade.getFacadeClass().getName());
-            HashMap<String, Method> methodMap = new HashMap<String, Method>();
-            ServiceHandler serviceHandler = new ServiceHandler(this, service + "_" + encodedClassName, methodMap, publicationDescription, facadeClass);
-
-            methods = null;
-            try {
-                Method ts = Object.class.getMethod("toString", new Class[0]);
-                Method hc = Object.class.getMethod("hashCode", new Class[0]);
-                Method eq = Object.class.getMethod("equals", new Class[]{Object.class});
-                Method[] interfaceMethods = facadeClass.getMethods();
-                methods = new Method[interfaceMethods.length + 3];
-                System.arraycopy(interfaceMethods, 0, methods, 0, interfaceMethods.length);
-                methods[interfaceMethods.length] = ts;
-                methods[interfaceMethods.length + 1] = hc;
-                methods[interfaceMethods.length + 2] = eq;
-            } catch (NoSuchMethodException e) {
-                // never!
-            }
-
-
-            for (Method method : methods) {
-                String methodSignature = MethodNameHelper.getMethodSignature(method);
-
-                if (!methodMap.containsKey(methodSignature)) {
-                    methodMap.put(methodSignature, method);
-                }
-            }
-
-            services.put(service + "_" + encodedClassName, serviceHandler);
-        }
-
-        if (publicationDelegate != null) {
-            publicationDelegate.publish(impl, service, publicationDescription);
-        }
-
     }
 
     public void redirect(String serviceName, String to) {
