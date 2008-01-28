@@ -98,7 +98,7 @@ public class ServiceHandler {
 
 
     public String toString() {
-        return "DefaultServiceHandler:" + publishedThing;
+        return "ServiceHandler:" + publishedThing;
     }
 
     public void addInstance(Long reference, Object instance) {
