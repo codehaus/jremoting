@@ -99,25 +99,16 @@ public class PublicationAdapter implements Publisher {
 
         // add method maps for main lookup-able service.
         Map<String, Method> mainMethodMap = new HashMap<String, Method>();
-        ServiceHandler mainServiceHandler = new ServiceHandler(this, service + "_Main", mainMethodMap, publicationDescription, primaryFacade.getFacadeClass());
-
+        ServiceHandler mainServiceHandler = new ServiceHandler(this, service + "_Main", publicationDescription, primaryFacade.getFacadeClass());
         mainServiceHandler.addInstance(new Long(0), impl);
-
-        Class clazz = primaryFacade.getFacadeClass();
-
-        populateMethods(clazz, mainMethodMap);        
 
         // as the main service is lookup-able, it has a prexisting impl.
         services.put(StaticStubHelper.formatServiceName(service), mainServiceHandler);
 
         // add method maps for all the additional facades.
         for (PublicationItem secondaryFacade : secondaryFacades) {
-            Class facadeClass = secondaryFacade.getFacadeClass();
             String encodedClassName = MethodNameHelper.encodeClassName(secondaryFacade.getFacadeClass().getName());
-            Map<String, Method> methodMap = new HashMap<String, Method>();
-            ServiceHandler serviceHandler = new ServiceHandler(this, service + "_" + encodedClassName, methodMap, publicationDescription, facadeClass);
-
-            populateMethods(facadeClass, methodMap);
+            ServiceHandler serviceHandler = new ServiceHandler(this, service + "_" + encodedClassName, publicationDescription, secondaryFacade.getFacadeClass());
 
             services.put(service + "_" + encodedClassName, serviceHandler);
         }
@@ -126,32 +117,6 @@ public class PublicationAdapter implements Publisher {
             publicationDelegate.publish(impl, service, publicationDescription);
         }
 
-    }
-
-    private void populateMethods(Class facadeClass, Map<String, Method> methodMap) {
-        Method[] methods = null;
-        try {
-            Method ts = Object.class.getMethod("toString", new Class[0]);
-            Method hc = Object.class.getMethod("hashCode", new Class[0]);
-            Method eq = Object.class.getMethod("equals", new Class[]{Object.class});
-            Method[] interfaceMethods = facadeClass.getMethods();
-            methods = new Method[interfaceMethods.length + 3];
-            System.arraycopy(interfaceMethods, 0, methods, 0, interfaceMethods.length);
-            methods[interfaceMethods.length] = ts;
-            methods[interfaceMethods.length + 1] = hc;
-            methods[interfaceMethods.length + 2] = eq;
-        } catch (NoSuchMethodException e) {
-            // never!
-        }
-
-
-        for (Method method : methods) {
-            String methodSignature = MethodNameHelper.getMethodSignature(method);
-
-            if (!methodMap.containsKey(methodSignature)) {
-                methodMap.put(methodSignature, method);
-            }
-        }
     }
 
     public void redirect(String serviceName, String to) {

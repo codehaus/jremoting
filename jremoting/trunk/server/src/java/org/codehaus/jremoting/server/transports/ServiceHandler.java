@@ -28,11 +28,13 @@ import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.adapters.PublicationAdapter;
 import org.codehaus.jremoting.server.monitors.NullMethodInvocationMonitor;
 import org.codehaus.jremoting.util.FacadeRefHolder;
+import org.codehaus.jremoting.util.MethodNameHelper;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -47,7 +49,7 @@ public class ServiceHandler {
 
     private WeakHashMap<Long, WeakReference<Object>> instancesByRefID = new WeakHashMap<Long, WeakReference<Object>>();
     private WeakHashMap<Object, Long> ReferencesForInstances = new WeakHashMap<Object, Long>();
-    private Map<String, Method> methodMap;
+    private Map<String, Method> methodMap = new HashMap<String, Method>();
     private static int c_nextReference = 0;
     private String publishedThing;
     private Object mainInstance;
@@ -59,13 +61,39 @@ public class ServiceHandler {
     private final Long zero = new Long(0);
 
     public ServiceHandler(PublicationAdapter publicationAdapter,
-            String publishedThing, Map<String, Method> methodMap,
-                                Publication publicationDescription, Class facadeClass) {
+            String publishedThing, Publication publicationDescription, Class facadeClass) {
         this.publicationAdapter = publicationAdapter;
         this.publishedThing = publishedThing;
-        this.methodMap = methodMap;
         this.publicationDescription = publicationDescription;
         this.facadeClass = facadeClass;
+        populateMethods(facadeClass);
+    }
+
+
+    private void populateMethods(Class facadeClass) {
+        Method[] methods = null;
+        try {
+            Method ts = Object.class.getMethod("toString", new Class[0]);
+            Method hc = Object.class.getMethod("hashCode", new Class[0]);
+            Method eq = Object.class.getMethod("equals", new Class[]{Object.class});
+            Method[] interfaceMethods = facadeClass.getMethods();
+            methods = new Method[interfaceMethods.length + 3];
+            System.arraycopy(interfaceMethods, 0, methods, 0, interfaceMethods.length);
+            methods[interfaceMethods.length] = ts;
+            methods[interfaceMethods.length + 1] = hc;
+            methods[interfaceMethods.length + 2] = eq;
+        } catch (NoSuchMethodException e) {
+            // never!
+        }
+
+
+        for (Method method : methods) {
+            String methodSignature = MethodNameHelper.getMethodSignature(method);
+
+            if (!methodMap.containsKey(methodSignature)) {
+                methodMap.put(methodSignature, method);
+            }
+        }
     }
 
 
