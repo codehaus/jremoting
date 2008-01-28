@@ -99,7 +99,7 @@ public class PublicationAdapter implements Publisher {
 
         // add method maps for main lookup-able service.
         Map<String, Method> mainMethodMap = new HashMap<String, Method>();
-        ServiceHandler mainServiceHandler = new ServiceHandler(this, service + "_Main", publicationDescription, primaryFacade.getFacadeClass());
+        ServiceHandler mainServiceHandler = makeServiceHandler(service + "_Main", publicationDescription, primaryFacade);
         mainServiceHandler.addInstance(new Long(0), impl);
 
         // as the main service is lookup-able, it has a prexisting impl.
@@ -108,8 +108,8 @@ public class PublicationAdapter implements Publisher {
         // add method maps for all the additional facades.
         for (PublicationItem secondaryFacade : secondaryFacades) {
             String encodedClassName = MethodNameHelper.encodeClassName(secondaryFacade.getFacadeClass().getName());
-            ServiceHandler serviceHandler = new ServiceHandler(this, service + "_" + encodedClassName, publicationDescription, secondaryFacade.getFacadeClass());
-
+            ServiceHandler serviceHandler = makeServiceHandler(service + "_" + encodedClassName,
+                    publicationDescription, secondaryFacade);
             services.put(service + "_" + encodedClassName, serviceHandler);
         }
 
@@ -117,6 +117,10 @@ public class PublicationAdapter implements Publisher {
             publicationDelegate.publish(impl, service, publicationDescription);
         }
 
+    }
+
+    private ServiceHandler makeServiceHandler(String thing, Publication publicationDescription, PublicationItem item) {
+        return new ServiceHandler(this, thing, publicationDescription, item.getFacadeClass());
     }
 
     public void redirect(String serviceName, String to) {
