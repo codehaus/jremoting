@@ -1,9 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Overview</title>
-
-</head>
-
-
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Overview</title></head>
 <body>
 <h1>What is it?</h1>
 <p>It is a transparent remoting technology for Java.
@@ -13,11 +9,11 @@ Facade Pattern while architecting the interface(s) as an RPC call is
 not cheap.</p>
 
 
-<p style="font-weight: bold;">Server side publishing</p>
+<h3>Server side publishing</h3>
 <div class="source">
-<pre>Bank myBank = new BankImpl();<br />server = new SocketServer(new ConsoleServerMonitor(), new InetSocketAddress(3333));<br />server.publish(myBank, "BankService", Bank.class);<br />server.start();</pre>
+<h3>Bank myBank = new BankImpl();<br />server = new SocketServer(new ConsoleServerMonitor(), new InetSocketAddress(3333));<br />server.publish(myBank, "BankService", Bank.class);<br />server.start();</h3>
 </div>
-<p style="font-weight: bold;">Client side usage</p>
+<h3>Client side usage</h3>
 <div class="source">
 <pre>jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new InetSocketAddress("localhost", 10333)));<br />Bank remoteBank = (Bank) jremotingClient.lookupService("BankService");</pre>
 </div>

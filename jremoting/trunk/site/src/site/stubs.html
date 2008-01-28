@@ -2,5 +2,26 @@
 <html><head><meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type" />
 <title>JRemoting Home</title></head>
 <body>
-<h3>Overview</h3>J<br /><br /><br /><h3>&nbsp;</h3>
+<h3>Overview</h3>By default JRemoting will deliver client server
+capabilty without the need for the user to make stubs classes (like RMI
+does with the rmic operation). &nbsp;Reflections's dynamic proxy
+capability is used to deliver that.<br /><br />There are problems with
+this approach. &nbsp;Foremost is that it will not work in a client that
+is an applet that is trying to exist inside the 'sandbox' without extra
+permissions. There's also a &nbsp;speed issue, but its barely
+significant.<br /><br />BCEL Stubs<br /><br />BCEL is an Apache technology that can make Java class files at runtime. &nbsp;We use that to make Stub classes. <br /><br />BcelStubGenerator<br /><br />Use
+like RMI's rmic. &nbsp;It can make stubs in advance of need. &nbsp;This
+will allow you to include the stub in the jar file your making for your
+client, or to put in a more general stubs jar that you will keep on
+the&nbsp;client side.<br /><br />Use in Maven2 like so -
+<div class="source">
+<pre>&lt;build&gt;<br />  &lt;plugins&gt;<br />    &lt;plugin&gt;<br />      &lt;groupId&gt;${pom.groupId}&lt;/groupId&gt;<br />      &lt;artifactId&gt;jremoting-tools&lt;/artifactId&gt;<br />      &lt;executions&gt;<br />        &lt;execution&gt;<br />          &lt;id&gt;SomeName&lt;/id&gt;<br />          &lt;phase&gt;test-compile&lt;/phase&gt;<br />          &lt;goals&gt;<br />            &lt;goal&gt;generate&lt;/goal&gt;<br />          &lt;/goals&gt;<br />          &lt;configuration&gt;<br />            &lt;genName&gt;SomeName&lt;/genName&gt;<br />            &lt;facade&gt;com.foo.YourFacade&lt;/facade&gt;<br />            &lt;classGenDir&gt;target/stub-classes&lt;/classGenDir&gt;<br />            &lt;secondaryFacades&gt;com.foo.AnotherFacade,com.foo.YetAnotherFacade&lt;/secondaryFacades&gt;<br />            &lt;verbose&gt;true&lt;/verbose&gt;<br />          &lt;/configuration&gt;<br />        &lt;/execution&gt;<br />      &lt;/executions&gt;<br />    &lt;/plugin&gt;<br />  &lt;/plugins&gt;<br />&lt;/build&gt;</pre>
+</div>
+Client usage :<br /><br />StubsOnClient<br /><br />JRemoting will look in the client's classpath for the Stub class<br /><br />StubsFromServer<br /><br />JRemoting
+will ask the server for the Stub class (and mount it in a classloader
+meaning it will also have the applet problems above).<br /><br />For
+this mode, the server can either retrieve the Stubs from the server's
+classpath (FromClassLoaderStubRetriever), or from a separate jar
+(JarFileStubRetriever), or make them dynamically with
+BcelDynamicStubRetriever.<br /><br /><br /><br /><br /><br /><h3>&nbsp;</h3>
 </body></html>
