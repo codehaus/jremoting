@@ -66,11 +66,10 @@ public class ServiceHandler {
         this.publishedThing = publishedThing;
         this.publicationDescription = publicationDescription;
         this.facadeClass = facadeClass;
-        populateMethods(facadeClass);
+        populateMethods();
     }
 
-
-    private void populateMethods(Class facadeClass) {
+    private void populateMethods() {
         Method[] methods = null;
         try {
             Method ts = Object.class.getMethod("toString", new Class[0]);
@@ -85,11 +84,8 @@ public class ServiceHandler {
         } catch (NoSuchMethodException e) {
             // never!
         }
-
-
         for (Method method : methods) {
             String methodSignature = MethodNameHelper.getMethodSignature(method);
-
             if (!methodMap.containsKey(methodSignature)) {
                 methodMap.put(methodSignature, method);
             }
