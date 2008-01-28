@@ -101,7 +101,8 @@ public class StubsViaReflection implements StubFactory {
                 return null;
             } else {
                 Class<?>[] argTypes = method.getParameterTypes();
-                return stubHelper.processObjectRequest(signature, args, argTypes);
+                Object o = stubHelper.processObjectRequest(signature, args, argTypes);
+                return o;
             }
         }
     }

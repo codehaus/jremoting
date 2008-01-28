@@ -36,6 +36,10 @@ public class BadServerSideEvent extends Response {
         this.message = message;
     }
 
+    // for Externalisation
+    public BadServerSideEvent() {
+    }
+
     public String getMessage() {
         return message;
     }
