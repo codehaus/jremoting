@@ -18,8 +18,8 @@
 package org.codehaus.jremoting.server.transports;
 
 import org.codehaus.jremoting.server.Connection;
+import org.codehaus.jremoting.server.ServerDelegate;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,15 +49,15 @@ public abstract class ConnectingServer extends StatefulServer {
         this.pruneSessionInterval = seconds;
     }
 
-    public ConnectingServer(ServerMonitor serverMonitor, DefaultInvocationHandler invocationHandler,
+    public ConnectingServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate,
                             ScheduledExecutorService executor) {
-        super(serverMonitor, invocationHandler, executor);
+        super(serverMonitor, serverDelegate, executor);
     }
 
     public void started() {
         pruner =  executorService.scheduleAtFixedRate(new Runnable() {
             public void run() {
-                invocationHandler.pruneSessionsStaleForLongerThan(pruneStaleLongerThan);
+                serverDelegate.pruneSessionsStaleForLongerThan(pruneStaleLongerThan);
             }
         }, pruneSessionInterval, pruneSessionInterval, TimeUnit.SECONDS);
         super.started();

@@ -18,52 +18,51 @@
 
 package org.codehaus.jremoting.server.transports;
 
+import org.codehaus.jremoting.JRemotingException;
 import org.codehaus.jremoting.requests.CollectGarbage;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.BadServerSideEvent;
 import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.server.ServerDelegate;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.Server;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
-import org.codehaus.jremoting.JRemotingException;
 
 import java.util.concurrent.ScheduledExecutorService;
-import java.net.InetSocketAddress;
 
 public abstract class StatefulServer implements Server {
 
-    protected DefaultInvocationHandler invocationHandler;
+    protected ServerDelegate serverDelegate;
     private String state = UNSTARTED;
     protected final ServerMonitor serverMonitor;
     protected final ScheduledExecutorService executorService;
 
-    public StatefulServer(ServerMonitor serverMonitor, DefaultInvocationHandler invocationHandler,
+    public StatefulServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate,
                           ScheduledExecutorService executorService) {
-        this.invocationHandler = invocationHandler;
+        this.serverDelegate = serverDelegate;
         this.executorService = executorService;
         this.serverMonitor = serverMonitor;
     }
 
     public Response invoke(Request request, String connectionDetails) {
         if (getState().equals(STARTED) || request instanceof CollectGarbage) {
-            return invocationHandler.invoke(request, connectionDetails);
+            return serverDelegate.invoke(request, connectionDetails);
         } else {
             return new BadServerSideEvent("Service is not started");
         }
     }
 
     public void suspend() {
-        invocationHandler.suspend();
+        serverDelegate.suspend();
     }
 
     public void resume() {
-        invocationHandler.resume();
+        serverDelegate.resume();
     }
 
     public boolean isSuspended() {
-        return invocationHandler.isSuspended();
+        return serverDelegate.isSuspended();
     }
 
     public final void start() {
@@ -92,32 +91,32 @@ public abstract class StatefulServer implements Server {
 
 
     public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
-        invocationHandler.publish(impl, service, primaryFacade);
+        serverDelegate.publish(impl, service, primaryFacade);
     }
 
     public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
-        invocationHandler.publish(impl, service, publicationDescription);
+        serverDelegate.publish(impl, service, publicationDescription);
     }
 
     public void publish(Object impl, String service, Class facadeClass, Class... additionalFacades) {
-        invocationHandler.publish(impl, service, new Publication(facadeClass).addAdditionalFacades(additionalFacades));
+        serverDelegate.publish(impl, service, new Publication(facadeClass).addAdditionalFacades(additionalFacades));
     }
 
     public void redirect(String serviceName, String to) {
-        invocationHandler.redirect(serviceName, to);        
+        serverDelegate.redirect(serviceName, to);
     }
 
 
     public void unPublish(Object impl, String service) throws PublicationException {
-        invocationHandler.unPublish(impl, service);
+        serverDelegate.unPublish(impl, service);
     }
 
     public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
-        invocationHandler.replacePublished(oldImpl, service, withImpl);
+        serverDelegate.replacePublished(oldImpl, service, withImpl);
     }
 
     public boolean isPublished(String service) {
-        return invocationHandler.isPublished(service);
+        return serverDelegate.isPublished(service);
     }
 
     public String getState() {

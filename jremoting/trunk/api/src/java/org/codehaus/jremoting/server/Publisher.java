@@ -74,6 +74,9 @@ public interface Publisher {
     boolean isPublished(String service);
 
 
+    void redirect(String serviceName, String to);
+
+
 
 
 }

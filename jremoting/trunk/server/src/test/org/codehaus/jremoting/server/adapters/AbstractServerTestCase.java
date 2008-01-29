@@ -22,7 +22,7 @@ import org.codehaus.jremoting.responses.ServicesList;
 import org.codehaus.jremoting.responses.ServicesSuspended;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
+import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -32,31 +32,31 @@ import org.jmock.MockObjectTestCase;
 
 public class AbstractServerTestCase extends MockObjectTestCase {
 
-    private DefaultInvocationHandler invocationHandler;
+    private DefaultServerDelegate serverDelegate;
     private ConnectingServer server;
     HashMap impl = new HashMap();
 
     protected void setUp() throws Exception {
 
-        invocationHandler = new DefaultInvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
-        server = new ConnectingServer(new ConsoleServerMonitor(), invocationHandler, Executors.newScheduledThreadPool(10)) {
+        serverDelegate = new DefaultServerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
+        server = new ConnectingServer(new ConsoleServerMonitor(), serverDelegate, Executors.newScheduledThreadPool(10)) {
         };
 
     }
 
     public void testPublishAndUnpublish() throws PublicationException, IOException, ClassNotFoundException {
-        server.publish(impl, "foo", Map.class);
+        server.publish(impl, "serverDelegate", Map.class);
         putTestEntry();
-        server.unPublish(impl, "foo");
+        server.unPublish(impl, "serverDelegate");
         Response resp = serDeSerResponse(putTestEntry());
         assertTrue(resp instanceof NotPublished);
     }
 
     public void testPublishAndUnpublishDoes() throws PublicationException {
-        server.publish(impl, "foo", Map.class);
-        server.unPublish(impl, "foo");
+        server.publish(impl, "serverDelegate", Map.class);
+        server.unPublish(impl, "serverDelegate");
         try {
-            server.unPublish(impl, "foo");
+            server.unPublish(impl, "serverDelegate");
             fail("should have barfed");
         } catch (PublicationException e) {
         }
@@ -64,35 +64,35 @@ public class AbstractServerTestCase extends MockObjectTestCase {
 
     public void testCantUnpublishSomethingThatWasNeverPublished() throws PublicationException {
         try {
-            server.unPublish(impl, "foo");
+            server.unPublish(impl, "serverDelegate");
             fail("should have barfed");
         } catch (PublicationException e) {
         }
     }
 
     public void testCantPublishServiceTwice() throws PublicationException {
-        server.publish(impl, "foo", Map.class);
+        server.publish(impl, "serverDelegate", Map.class);
         try {
-            server.publish(impl, "foo", Map.class);
+            server.publish(impl, "serverDelegate", Map.class);
             fail("should have barfed");
         } catch (PublicationException e) {
-            assertEquals("Service 'foo' already published",e.getMessage());
+            assertEquals("Service 'serverDelegate' already published",e.getMessage());
         }
     }
 
     public void testPublishAndRePublish() throws PublicationException, IOException, ClassNotFoundException {
         HashMap impl2 = new HashMap();
-        server.publish(impl, "foo", Map.class);
-        server.replacePublished(impl, "foo", impl2);
+        server.publish(impl, "serverDelegate", Map.class);
+        server.replacePublished(impl, "serverDelegate", impl2);
         putTestEntry();
         assertEquals("2", impl2.get("1"));
         assertNull(impl.get("1"));
     }
 
     private Response putTestEntry() throws IOException, ClassNotFoundException {
-        ConnectionOpened co = (ConnectionOpened) invocationHandler.invoke(new OpenConnection(), "");
-        Request request = new InvokeMethod("foo", "Main", "put(java.lang.Object, java.lang.Object)", new Object[]{"1", "2"}, (long) 0, co.getSessionID());
-        return invocationHandler.invoke(serDeSerRequest(request), "");
+        ConnectionOpened co = (ConnectionOpened) serverDelegate.invoke(new OpenConnection(), "");
+        Request request = new InvokeMethod("serverDelegate", "Main", "put(java.lang.Object, java.lang.Object)", new Object[]{"1", "2"}, (long) 0, co.getSessionID());
+        return serverDelegate.invoke(serDeSerRequest(request), "");
     }
 
     private Request serDeSerRequest(Request request) throws IOException, ClassNotFoundException {
@@ -114,41 +114,41 @@ public class AbstractServerTestCase extends MockObjectTestCase {
     }
 
     public void testPublishAndSuspendBlocksOperations() throws PublicationException, IOException, ClassNotFoundException {
-        server.publish(impl, "foo", Map.class);
+        server.publish(impl, "serverDelegate", Map.class);
         server.suspend();
-        assertTrue(serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new OpenConnection()), "")) instanceof ServicesSuspended);
+        assertTrue(serDeSerResponse(serverDelegate.invoke(serDeSerRequest(new OpenConnection()), "")) instanceof ServicesSuspended);
     }
 
     public void testPublishAndSuspendAndResumeDoesNotBlockOperation() throws PublicationException, IOException, ClassNotFoundException {
-        server.publish(impl, "foo", Map.class);
+        server.publish(impl, "serverDelegate", Map.class);
         server.suspend();
         server.resume();
-        assertTrue(serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new OpenConnection()), "")) instanceof ConnectionOpened);
+        assertTrue(serDeSerResponse(serverDelegate.invoke(serDeSerRequest(new OpenConnection()), "")) instanceof ConnectionOpened);
     }
 
     public void testStubRetrievalFailsWhenItsAppropriate() throws PublicationException, IOException, ClassNotFoundException {
-        server.publish(impl, "foo", Map.class);
-        Response response = serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new RetrieveStub("foo", "Main")), ""));
+        server.publish(impl, "serverDelegate", Map.class);
+        Response response = serDeSerResponse(serverDelegate.invoke(serDeSerRequest(new RetrieveStub("serverDelegate", "Main")), ""));
         assertTrue(response instanceof StubRetrievalFailed);
     }
 
     public void testRequestFailsOnUnknownRequestType() throws PublicationException, IOException, ClassNotFoundException {
-        server.publish(impl, "foo", Map.class);
-        Response response = serDeSerResponse(invocationHandler.invoke(serDeSerRequest(new MyRequest()), ""));
+        server.publish(impl, "serverDelegate", Map.class);
+        Response response = serDeSerResponse(serverDelegate.invoke(serDeSerRequest(new MyRequest()), ""));
         assertTrue(response instanceof RequestFailed);
         assertEquals("Unknown Request Type: org.codehaus.jremoting.server.adapters.AbstractServerTestCase$MyRequest", ((RequestFailed) response).getFailureReason());
     }
 
     public void testListServicesRespondsAppropriately() throws PublicationException, IOException, ClassNotFoundException {
-        server.publish(impl, "foo", Map.class);
-        Response response = invocationHandler.invoke(serDeSerRequest(new ListServices()), "");
+        server.publish(impl, "serverDelegate", Map.class);
+        Response response = serverDelegate.invoke(serDeSerRequest(new ListServices()), "");
         assertTrue(serDeSerResponse(response) instanceof ServicesList);
         assertEquals(1, ((ServicesList ) response).getServices().length);
-        assertEquals("foo", ((ServicesList ) response).getServices()[0]);
+        assertEquals("serverDelegate", ((ServicesList ) response).getServices()[0]);
     }
 
     public void testListServicesRespondsAppropriatelyWhenThereAreNone() throws PublicationException, IOException, ClassNotFoundException {
-        Response response = invocationHandler.invoke(serDeSerRequest(new ListServices()), "");
+        Response response = serverDelegate.invoke(serDeSerRequest(new ListServices()), "");
         assertTrue(serDeSerResponse(response) instanceof ServicesList);
         assertEquals(0, ((ServicesList ) response).getServices().length);
     }

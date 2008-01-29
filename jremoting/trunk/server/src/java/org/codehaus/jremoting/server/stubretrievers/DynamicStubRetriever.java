@@ -237,4 +237,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     public boolean isPublished(String service) {
         return facadeClasses.containsKey(service);
     }
+
+    public void redirect(String serviceName, String to) {
+    }
 }

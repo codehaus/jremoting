@@ -51,7 +51,7 @@ import org.codehaus.jremoting.responses.ServicesSuspended;
 import org.codehaus.jremoting.responses.StubClass;
 import org.codehaus.jremoting.responses.StubRetrievalFailed;
 import org.codehaus.jremoting.server.Authenticator;
-import org.codehaus.jremoting.server.InvocationHandler;
+import org.codehaus.jremoting.server.ServerDelegate;
 import org.codehaus.jremoting.server.Publisher;
 import org.codehaus.jremoting.server.ServerContextFactory;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -70,7 +70,7 @@ import org.codehaus.jremoting.util.StaticStubHelper;
  *
  * @author Paul Hammant
  */
-public class DefaultInvocationHandler extends SessionAdapter implements InvocationHandler {
+public class DefaultServerDelegate extends SessionAdapter implements ServerDelegate {
 
     private final StubRetriever stubRetriever;
     private final Authenticator authenticator;
@@ -78,7 +78,7 @@ public class DefaultInvocationHandler extends SessionAdapter implements Invocati
 
     private final ServerContextFactory contextFactory;
 
-    public DefaultInvocationHandler(ServerMonitor serverMonitor, StubRetriever stubRetriever,
+    public DefaultServerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever,
                            Authenticator authenticator, ServerContextFactory contextFactory) {
         super(stubRetriever instanceof Publisher ? (Publisher) stubRetriever : null, serverMonitor);
         this.stubRetriever = stubRetriever;
@@ -142,10 +142,10 @@ public class DefaultInvocationHandler extends SessionAdapter implements Invocati
             npe.printStackTrace();
             if (request instanceof InvokeMethod) {
                 String methd = ((InvokeMethod) request).getMethodSignature();
-                serverMonitor.unexpectedException(DefaultInvocationHandler.class, "InvokerDelegate.invoke() NPE processing method " + methd, npe);
+                serverMonitor.unexpectedException(DefaultServerDelegate.class, "InvokerDelegate.invoke() NPE processing method " + methd, npe);
                 throw new NullPointerException("Null pointer exception, processing method " + methd);
             } else {
-                serverMonitor.unexpectedException(DefaultInvocationHandler.class, "InvokerDelegate.invoke() NPE", npe);
+                serverMonitor.unexpectedException(DefaultServerDelegate.class, "InvokerDelegate.invoke() NPE", npe);
                 throw npe;
             }
         }

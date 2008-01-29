@@ -84,11 +84,11 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
             JRemotingClient cssf = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
                 new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12333)));
-            cssf.lookupService("foo");
+            cssf.lookupService("serverDelegate");
 
             fail("should have barfed");
         } catch (ConnectionException e) {
-            assertTrue(e.getMessage().contains("Service 'foo' not published"));
+            assertTrue(e.getMessage().contains("Service 'serverDelegate' not published"));
         } finally {
             server.stop();
         }

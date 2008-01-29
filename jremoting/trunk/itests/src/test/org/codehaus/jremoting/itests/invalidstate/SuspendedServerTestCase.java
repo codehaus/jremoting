@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.itests.invalidstate;
 
-import junit.framework.AssertionFailedError;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
@@ -31,7 +30,7 @@ import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
+import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -155,7 +154,7 @@ public class SuspendedServerTestCase extends MockObjectTestCase {
 
     private SocketServer startServer() throws PublicationException {
         SocketServer server = new SocketServer(new ConsoleServerMonitor(),
-                new DefaultInvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory()),
+                new DefaultServerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory()),
             new org.codehaus.jremoting.server.encoders.ByteStreamEncoding(),
                 Executors.newScheduledThreadPool(10), this.getClass().getClassLoader(), new InetSocketAddress(12201));
         TestFacadeImpl testServer = new TestFacadeImpl();

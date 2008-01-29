@@ -29,7 +29,7 @@ import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
+import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
@@ -101,7 +101,7 @@ public class RedirectedServerTestCase extends MockObjectTestCase {
 
     private SocketServer startServer() throws PublicationException {
         SocketServer server = new SocketServer(new ConsoleServerMonitor(),
-                new DefaultInvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory()),
+                new DefaultServerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory()),
             new org.codehaus.jremoting.server.encoders.ByteStreamEncoding(),
                 Executors.newScheduledThreadPool(10), this.getClass().getClassLoader(), new InetSocketAddress(12201));
         server.redirect("Hello55", "localhost", 12202);

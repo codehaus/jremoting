@@ -29,49 +29,49 @@ import org.jmock.MockObjectTestCase;
 
 public class AuthenticationTestCase extends MockObjectTestCase {
 
-    private DefaultInvocationHandler invocationHandler;
+    private DefaultServerDelegate serverDelegate;
     private ConnectingServer server;
     HashMap impl = new HashMap();
 
     private void makeServer() {
-        server = new ConnectingServer(new ConsoleServerMonitor(), invocationHandler, Executors.newScheduledThreadPool(10)){};
+        server = new ConnectingServer(new ConsoleServerMonitor(), serverDelegate, Executors.newScheduledThreadPool(10)){};
     }
 
     public void testNullAuthenticationAuthorizes() throws PublicationException, IOException, ClassNotFoundException {
-        invocationHandler = new DefaultInvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
+        serverDelegate = new DefaultServerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
         makeServer();
-        server.publish(impl, "foo", Map.class);
+        server.publish(impl, "serverDelegate", Map.class);
         Response resp = serDeSerResponse(putTestEntry(null));
         assertTrue(resp instanceof Service);
     }
 
     public void testNullAuthenticationBlocksIfMismatchedAuthentication() throws PublicationException, IOException, ClassNotFoundException {
-        invocationHandler = new DefaultInvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
+        serverDelegate = new DefaultServerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
         makeServer();
-        server.publish(impl, "foo", Map.class);
+        server.publish(impl, "serverDelegate", Map.class);
         Response resp = serDeSerResponse(putTestEntry(new NameAndPasswordAuthentication("", "")));
         assertTrue(resp instanceof AuthenticationFailed);
     }
 
     public void testWorkingPasswordAuthorizes() throws PublicationException, IOException, ClassNotFoundException {
-        invocationHandler = new DefaultInvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NameAndPasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
+        serverDelegate = new DefaultServerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NameAndPasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
         makeServer();
-        server.publish(impl, "foo", Map.class);
+        server.publish(impl, "serverDelegate", Map.class);
         Response resp = serDeSerResponse(putTestEntry(new NameAndPasswordAuthentication("fred", "wilma")));
         assertTrue(resp instanceof Service);
     }
 
     public void testBogusPasswordBlocks() throws PublicationException, IOException, ClassNotFoundException {
-        invocationHandler = new DefaultInvocationHandler(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NameAndPasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
+        serverDelegate = new DefaultServerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NameAndPasswordAuthenticator("fred", "wilma"), new ThreadLocalServerContextFactory());
         makeServer();
-        server.publish(impl, "foo", Map.class);
+        server.publish(impl, "serverDelegate", Map.class);
         Response resp = serDeSerResponse(putTestEntry(new NameAndPasswordAuthentication("FRED", "wilma")));
         assertTrue(resp instanceof AuthenticationFailed);
     }
 
     private Response putTestEntry(Authentication auth)  {
-        ConnectionOpened co = (ConnectionOpened) invocationHandler.invoke(new OpenConnection(), "");
-        return invocationHandler.invoke(new LookupService("foo", auth, co.getSessionID()), "");
+        ConnectionOpened co = (ConnectionOpened) serverDelegate.invoke(new OpenConnection(), "");
+        return serverDelegate.invoke(new LookupService("serverDelegate", auth, co.getSessionID()), "");
     }
 
     private Request serDeSerRequest(Request request) throws IOException, ClassNotFoundException {

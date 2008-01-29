@@ -24,7 +24,7 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.StreamEncoder;
 import org.codehaus.jremoting.server.StreamEncoding;
 import org.codehaus.jremoting.server.StubRetriever;
-import org.codehaus.jremoting.server.adapters.DefaultInvocationHandler;
+import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
@@ -100,15 +100,15 @@ public class SocketServer extends ConnectingServer {
                         ScheduledExecutorService executorService,
                         ServerContextFactory contextFactory,
                         ClassLoader facadesClassLoader, InetSocketAddress addr) {
-        this(serverMonitor, new DefaultInvocationHandler(serverMonitor, stubRetriever, authenticator, contextFactory),
+        this(serverMonitor, new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
                 streamEncoding, executorService, facadesClassLoader, addr);
     }    
 
-    public SocketServer(ServerMonitor serverMonitor, DefaultInvocationHandler invocationHandler,
+    public SocketServer(ServerMonitor serverMonitor, DefaultServerDelegate serverDelegate,
                                            StreamEncoding streamEncoding, ScheduledExecutorService executorService,
                                            ClassLoader facadesClassLoader, InetSocketAddress addr) {
 
-        super(serverMonitor, invocationHandler, executorService);
+        super(serverMonitor, serverDelegate, executorService);
         this.streamEncoding = streamEncoding;
         this.facadesClassLoader = facadesClassLoader;
         this.addr = addr;
