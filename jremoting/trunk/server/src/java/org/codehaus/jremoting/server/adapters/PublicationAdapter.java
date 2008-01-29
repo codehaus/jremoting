@@ -17,19 +17,20 @@
  */
 package org.codehaus.jremoting.server.adapters;
 
+import org.codehaus.jremoting.server.Publication;
+import org.codehaus.jremoting.server.PublicationException;
+import org.codehaus.jremoting.server.PublicationItem;
+import org.codehaus.jremoting.server.Publisher;
+import org.codehaus.jremoting.server.servicehandlers.ReflectionServiceHandler;
+import org.codehaus.jremoting.server.servicehandlers.ServiceHandler;
+import org.codehaus.jremoting.util.MethodNameHelper;
+import org.codehaus.jremoting.util.StaticStubHelper;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
-
-import org.codehaus.jremoting.server.Publication;
-import org.codehaus.jremoting.server.PublicationItem;
-import org.codehaus.jremoting.server.PublicationException;
-import org.codehaus.jremoting.server.Publisher;
-import org.codehaus.jremoting.server.servicehandlers.ServiceHandler;
-import org.codehaus.jremoting.util.StaticStubHelper;
-import org.codehaus.jremoting.util.MethodNameHelper;
 
 /**
  * Class PublicationAdapter
@@ -119,7 +120,7 @@ public class PublicationAdapter implements Publisher {
     }
 
     private ServiceHandler makeServiceHandler(String thing, Publication publicationDescription, PublicationItem item) {
-        return new ServiceHandler(this, thing, publicationDescription, item.getFacadeClass());
+        return new ReflectionServiceHandler(this, thing, publicationDescription, item.getFacadeClass());
     }
 
     public void redirect(String serviceName, String to) {

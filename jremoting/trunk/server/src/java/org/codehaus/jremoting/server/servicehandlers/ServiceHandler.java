@@ -45,16 +45,15 @@ import java.util.WeakHashMap;
  * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
  * @version $Revision: 1.2 $
  */
-public class ServiceHandler {
+public abstract class ServiceHandler {
 
     private WeakHashMap<Long, WeakReference<Object>> instancesByRefID = new WeakHashMap<Long, WeakReference<Object>>();
     private WeakHashMap<Object, Long> ReferencesForInstances = new WeakHashMap<Object, Long>();
-    private Map<String, Method> methodMap = new HashMap<String, Method>();
     private static int c_nextReference = 0;
     private String publishedThing;
     private Object mainInstance;
     private final Publication publicationDescription;
-    private final Class facadeClass;
+    protected final Class facadeClass;
     private MethodInvocationMonitor methodInvocationMonitor = new NullMethodInvocationMonitor();
     private Publisher publisher;
 
@@ -66,30 +65,6 @@ public class ServiceHandler {
         this.publishedThing = publishedThing;
         this.publicationDescription = publicationDescription;
         this.facadeClass = facadeClass;
-        populateMethods();
-    }
-
-    private void populateMethods() {
-        Method[] methods = null;
-        try {
-            Method ts = Object.class.getMethod("toString", new Class[0]);
-            Method hc = Object.class.getMethod("hashCode", new Class[0]);
-            Method eq = Object.class.getMethod("equals", new Class[]{Object.class});
-            Method[] interfaceMethods = facadeClass.getMethods();
-            methods = new Method[interfaceMethods.length + 3];
-            System.arraycopy(interfaceMethods, 0, methods, 0, interfaceMethods.length);
-            methods[interfaceMethods.length] = ts;
-            methods[interfaceMethods.length + 1] = hc;
-            methods[interfaceMethods.length + 2] = eq;
-        } catch (NoSuchMethodException e) {
-            // never!
-        }
-        for (Method method : methods) {
-            String methodSignature = MethodNameHelper.getMethodSignature(method);
-            if (!methodMap.containsKey(methodSignature)) {
-                methodMap.put(methodSignature, method);
-            }
-        }
     }
 
 
@@ -181,15 +156,9 @@ public class ServiceHandler {
         }
     }
 
-    private boolean isFacadeMethodSignature(String methodSignature) {
-        return methodMap.containsKey(methodSignature);
-    }
+    protected abstract boolean isFacadeMethodSignature(String methodSignature);
 
-    private Object invokeFacadeMethod(InvokeMethod request, String methodSignature, Object instance) throws IllegalAccessException, InvocationTargetException {
-        Method method = methodMap.get(methodSignature);
-        Object retVal = method.invoke(instance, request.getArgs());
-        return retVal;
-    }
+    protected abstract Object invokeFacadeMethod(InvokeMethod request, String methodSignature, Object instance) throws IllegalAccessException, InvocationTargetException;
 
     private void replaceSecondaryFacadesInArgList(Object[] args) {
 
@@ -223,11 +192,6 @@ public class ServiceHandler {
 
     public String encodeClassName(String className) {
         return className.replace('.', '$');
-    }
-
-    public String[] getListOfMethods() {
-        String[] methodNames = (String[]) methodMap.keySet().toArray(new String[0]);
-        return methodNames;
     }
 
     private Long getNewReference() {
