@@ -26,7 +26,7 @@ import org.codehaus.jremoting.responses.Response;
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public interface InvocationHandler extends Suspendable, Publisher  {
+public interface InvocationHandler extends Publisher  {
 
     /**
      * Handle a method invocation

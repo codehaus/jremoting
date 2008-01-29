@@ -1,4 +1,4 @@
 package org.codehaus.jremoting.server;
 
-public interface ServerDelegate extends InvocationHandler, Prunable {
+public interface ServerDelegate extends InvocationHandler, Prunable, Suspendable {
 }

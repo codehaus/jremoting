@@ -66,7 +66,7 @@ import org.codehaus.jremoting.util.MethodNameHelper;
 import org.codehaus.jremoting.util.StaticStubHelper;
 
 /**
- * Class DefaultInvocationHandler
+ * Class DefaultServerDelegate
  *
  * @author Paul Hammant
  */
