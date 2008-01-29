@@ -126,6 +126,11 @@ public class PublicationAdapter implements Publisher {
         redirected.put(serviceName,  to);
     }
 
+    public Object getInstanceForReference(String objectName, Long reference) {
+        ServiceHandler serviceHandler = getServiceHandler(objectName);
+        return serviceHandler.getInstanceForReference(reference);
+    }
+
     public String getRedirectedTo(String service) {
         return redirected.get(service);  
 

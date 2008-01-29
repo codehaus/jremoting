@@ -232,6 +232,7 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     }
 
     public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
+        throw new UnsupportedOperationException();
     }
 
     public boolean isPublished(String service) {
@@ -239,5 +240,10 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
     }
 
     public void redirect(String serviceName, String to) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Object getInstanceForReference(String objectName, Long reference) {
+        throw new UnsupportedOperationException();
     }
 }

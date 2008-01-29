@@ -25,7 +25,7 @@ import org.codehaus.jremoting.responses.NoSuchReference;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.MethodInvocationMonitor;
 import org.codehaus.jremoting.server.Publication;
-import org.codehaus.jremoting.server.adapters.PublicationAdapter;
+import org.codehaus.jremoting.server.Publisher;
 import org.codehaus.jremoting.server.monitors.NullMethodInvocationMonitor;
 import org.codehaus.jremoting.util.FacadeRefHolder;
 import org.codehaus.jremoting.util.MethodNameHelper;
@@ -56,13 +56,13 @@ public class ServiceHandler {
     private final Publication publicationDescription;
     private final Class facadeClass;
     private MethodInvocationMonitor methodInvocationMonitor = new NullMethodInvocationMonitor();
-    private PublicationAdapter publicationAdapter;
+    private Publisher publisher;
 
     private final Long zero = new Long(0);
 
-    public ServiceHandler(PublicationAdapter publicationAdapter,
+    public ServiceHandler(Publisher publisher,
             String publishedThing, Publication publicationDescription, Class facadeClass) {
-        this.publicationAdapter = publicationAdapter;
+        this.publisher = publisher;
         this.publishedThing = publishedThing;
         this.publicationDescription = publicationDescription;
         this.facadeClass = facadeClass;
@@ -189,8 +189,7 @@ public class ServiceHandler {
             // TODO find a faster way to do this....
             if (args[i] instanceof FacadeRefHolder) {
                 FacadeRefHolder frh = (FacadeRefHolder) args[i];
-                ServiceHandler serviceHandler = publicationAdapter.getServiceHandler(frh.getObjectName());
-                args[i] = serviceHandler.getInstanceForReference(frh.getReference());
+                args[i] = publisher.getInstanceForReference(frh.getObjectName(), frh.getReference());
             }
         }
     }

@@ -106,6 +106,9 @@ public abstract class StatefulServer implements Server {
         serverDelegate.redirect(serviceName, to);
     }
 
+    public Object getInstanceForReference(String objectName, Long reference) {
+        return serverDelegate.getInstanceForReference(objectName, reference);
+    }
 
     public void unPublish(Object impl, String service) throws PublicationException {
         serverDelegate.unPublish(impl, service);
