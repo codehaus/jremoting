@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server.transports;
+package org.codehaus.jremoting.server.servicehandlers;
 
 import org.codehaus.jremoting.requests.InvokeMethod;
 import org.codehaus.jremoting.responses.BadServerSideEvent;

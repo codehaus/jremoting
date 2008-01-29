@@ -59,9 +59,9 @@ import org.codehaus.jremoting.server.ServerSideContext;
 import org.codehaus.jremoting.server.Session;
 import org.codehaus.jremoting.server.StubRetrievalException;
 import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.server.servicehandlers.ServiceHandler;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.ServiceHandler;
 import org.codehaus.jremoting.util.MethodNameHelper;
 import org.codehaus.jremoting.util.StaticStubHelper;
 
