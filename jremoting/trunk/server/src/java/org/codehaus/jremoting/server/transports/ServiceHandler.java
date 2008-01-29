@@ -136,13 +136,12 @@ public class ServiceHandler {
 
         String methodSignature = request.getMethodSignature();
 
-        if (!methodMap.containsKey(methodSignature)) {
+        if (!isFacadeMethodSignature(methodSignature)) {
 
             methodInvocationMonitor.missingMethod(methodSignature, connectionDetails);
             return new BadServerSideEvent("Method '" + methodSignature + "' not present in impl");
         }
 
-        Method method = methodMap.get(methodSignature);
 
         Object instance = null;
 
@@ -163,7 +162,7 @@ public class ServiceHandler {
 
             replaceSecondaryFacadesInArgList(request.getArgs());
             methodInvocationMonitor.methodInvoked(instance.getClass(), methodSignature, connectionDetails);
-            return new MethodInvoked(method.invoke(instance, request.getArgs()));
+            return new MethodInvoked(invokeFacadeMethod(request, methodSignature, instance));
         } catch (InvocationTargetException ite) {
             Throwable t = ite.getTargetException();
 
@@ -180,6 +179,16 @@ public class ServiceHandler {
             t.printStackTrace();
             return new BadServerSideEvent("Some ServerSide exception problem :" + t.getClass().getName() + " message:" + t.getMessage());
         }
+    }
+
+    private boolean isFacadeMethodSignature(String methodSignature) {
+        return methodMap.containsKey(methodSignature);
+    }
+
+    private Object invokeFacadeMethod(InvokeMethod request, String methodSignature, Object instance) throws IllegalAccessException, InvocationTargetException {
+        Method method = methodMap.get(methodSignature);
+        Object retVal = method.invoke(instance, request.getArgs());
+        return retVal;
     }
 
     private void replaceSecondaryFacadesInArgList(Object[] args) {
