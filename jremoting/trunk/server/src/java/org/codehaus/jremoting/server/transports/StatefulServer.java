@@ -62,6 +62,10 @@ public abstract class StatefulServer implements Server {
         invocationHandler.resume();
     }
 
+    public boolean isSuspended() {
+        return invocationHandler.isSuspended();
+    }
+
     public final void start() {
         this.state = STARTING;
         starting();

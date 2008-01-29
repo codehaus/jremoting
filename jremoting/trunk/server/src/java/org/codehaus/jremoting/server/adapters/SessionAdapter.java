@@ -20,17 +20,19 @@ package org.codehaus.jremoting.server.adapters;
 import org.codehaus.jremoting.server.Publisher;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.Session;
+import org.codehaus.jremoting.server.Suspendable;
 
 import java.util.HashMap;
 
-public class SessionAdapter extends PublicationAdapter {
+public class SessionAdapter extends PublicationAdapter implements Suspendable {
 
     private Long lastSessionID = (long) 0;
     private Session lastSession;
     private static long sessionId = 0;
     private final HashMap<Long, Session> sessions = new HashMap<Long, Session>();
     private final ServerMonitor serverMonitor;
-
+    private boolean suspended;
+    
     public SessionAdapter(Publisher delegate, ServerMonitor serverMonitor) {
         super(delegate);
         this.serverMonitor = serverMonitor;
@@ -100,6 +102,16 @@ public class SessionAdapter extends PublicationAdapter {
         return false;
     }
 
+    public final void suspend() {
+        suspended = true;
+    }
 
+    public final void resume() {
+        suspended = false;
+    }
+
+    public final boolean isSuspended() {
+        return suspended;
+    }
 
 }

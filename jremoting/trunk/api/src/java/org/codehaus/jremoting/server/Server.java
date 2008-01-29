@@ -52,16 +52,6 @@ public interface Server extends Publisher, InvocationHandler {
     String UNSTARTED = "UNSTARTED";
 
     /**
-     * Suspend publishing
-     */
-    void suspend();
-
-    /**
-     * Resume publishing
-     */
-    void resume();
-
-    /**
      * Start publishing
      *
      */

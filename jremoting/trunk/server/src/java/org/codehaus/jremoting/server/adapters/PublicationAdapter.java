@@ -43,7 +43,6 @@ public class PublicationAdapter implements Publisher {
     private Map<String, ServiceHandler> services = new HashMap<String, ServiceHandler>();
     private Map<String, String> redirected = new HashMap<String, String>();
 
-
     public PublicationAdapter(Publisher delegate) {
         this.publicationDelegate = delegate;
     }

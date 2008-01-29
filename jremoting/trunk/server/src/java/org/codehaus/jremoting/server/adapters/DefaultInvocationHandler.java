@@ -72,7 +72,6 @@ import org.codehaus.jremoting.util.StaticStubHelper;
  */
 public class DefaultInvocationHandler extends SessionAdapter implements InvocationHandler {
 
-    private boolean suspended = false;
     private final StubRetriever stubRetriever;
     private final Authenticator authenticator;
     private final ServerMonitor serverMonitor;
@@ -91,7 +90,7 @@ public class DefaultInvocationHandler extends SessionAdapter implements Invocati
     public Response invoke(Request request, String connectionDetails) {
 
         try {
-            if (suspended) {
+            if (isSuspended()) {
                 return new ServicesSuspended();
             }
 
@@ -381,14 +380,6 @@ public class DefaultInvocationHandler extends SessionAdapter implements Invocati
         org.codehaus.jremoting.requests.Ping ping = (org.codehaus.jremoting.requests.Ping) request;
         super.doesSessionExistAndRefreshItIfItDoes(ping.getSession());
         return new Ping();
-    }
-
-    public void suspend() {
-        suspended = true;
-    }
-
-    public void resume() {
-        suspended = false;
     }
 
 }
