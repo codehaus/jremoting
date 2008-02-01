@@ -232,12 +232,13 @@ public abstract class AbstractHelloTestCase extends AbstractJRemotingTestCase {
         BigDecimal dur = BigDecimal.valueOf(end - start);
         BigDecimal durInSecs = dur.divide(BigDecimal.valueOf(1000));
         BigDecimal numPerSec = its.divide(durInSecs, 0, RoundingMode.HALF_EVEN);
-        System.err.println("[testSpeed] " + this.getClass().getName() + " " + numPerSec + " reqs/sec");
+        System.err.println("[testSpeed] " + this.getClass().getName() + " "
+                + numPerSec + " reqs/sec, duration " + dur.toString() + " milliseconds");
 
     }
 
     protected int getNumIterationsForSpeedTest() {
-        int iterations = 1; // default
+        int iterations = 10; // default
         String iterationsStr = "@SPEEDTEST-ITERATIONS@";
         try {
             iterations = Integer.parseInt(iterationsStr);
