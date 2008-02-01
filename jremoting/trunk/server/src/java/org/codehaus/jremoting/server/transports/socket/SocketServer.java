@@ -20,6 +20,7 @@ package org.codehaus.jremoting.server.transports.socket;
 import org.codehaus.jremoting.JRemotingException;
 import org.codehaus.jremoting.server.Authenticator;
 import org.codehaus.jremoting.server.ServerContextFactory;
+import org.codehaus.jremoting.server.ServerDelegate;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.StreamEncoder;
 import org.codehaus.jremoting.server.StreamEncoding;
@@ -104,7 +105,7 @@ public class SocketServer extends ConnectingServer {
                 streamEncoding, executorService, facadesClassLoader, addr);
     }    
 
-    public SocketServer(ServerMonitor serverMonitor, DefaultServerDelegate serverDelegate,
+    public SocketServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate,
                                            StreamEncoding streamEncoding, ScheduledExecutorService executorService,
                                            ClassLoader facadesClassLoader, InetSocketAddress addr) {
 
