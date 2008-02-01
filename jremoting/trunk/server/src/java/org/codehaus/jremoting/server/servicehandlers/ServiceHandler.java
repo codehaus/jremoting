@@ -31,12 +31,14 @@ import org.codehaus.jremoting.util.FacadeRefHolder;
 import org.codehaus.jremoting.util.MethodNameHelper;
 
 import java.io.Serializable;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.beans.PropertyVetoException;
 
 /**
  * Class ServiceHandler
