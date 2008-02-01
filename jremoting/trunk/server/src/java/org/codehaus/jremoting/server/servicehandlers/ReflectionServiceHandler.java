@@ -11,13 +11,13 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class ReflectionServiceHandler extends ServiceHandler {
+
     private Map<String, Method> methodMap = new HashMap<String, Method>();
 
     public ReflectionServiceHandler(Publisher publisher, String publishedThing, Publication publicationDescription, Class facadeClass) {
         super(publisher, publishedThing, publicationDescription, facadeClass);
         populateMethods();
     }
-
 
     private void populateMethods() {
         Method[] methods = null;
@@ -46,10 +46,10 @@ public class ReflectionServiceHandler extends ServiceHandler {
         return methodMap.containsKey(methodSignature);
     }
 
-    protected Object invokeFacadeMethod(InvokeMethod request, String methodSignature, Object instance) throws IllegalAccessException, InvocationTargetException {
+    protected Object invokeFacadeMethod(InvokeMethod request, String methodSignature, Object instance) 
+            throws IllegalAccessException, InvocationTargetException {
         Method method = methodMap.get(methodSignature);
-        Object retVal = method.invoke(instance, request.getArgs());
-        return retVal;
+        return method.invoke(instance, request.getArgs());
     }
 
     public String[] getListOfMethods() {
