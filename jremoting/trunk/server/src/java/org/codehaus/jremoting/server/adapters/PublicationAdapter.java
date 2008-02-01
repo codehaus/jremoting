@@ -119,7 +119,7 @@ public class PublicationAdapter implements Publisher {
 
     }
 
-    private ServiceHandler makeServiceHandler(String thing, Publication publicationDescription, PublicationItem item) {
+    protected ServiceHandler makeServiceHandler(String thing, Publication publicationDescription, PublicationItem item) {
         return new ReflectionServiceHandler(this, thing, publicationDescription, item.getFacadeClass());
     }
 
