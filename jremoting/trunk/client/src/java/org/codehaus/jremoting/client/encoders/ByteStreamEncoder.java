@@ -53,9 +53,7 @@ public class ByteStreamEncoder implements StreamEncoder {
     }
 
     private void writeRequest(Request request) throws IOException {
-
         byte[] aBytes = SerializationHelper.getBytesFromInstance(request);
-
         dataOutputStream.writeInt(aBytes.length);
         dataOutputStream.writeInt(request.getRequestCode());
         dataOutputStream.write(aBytes);

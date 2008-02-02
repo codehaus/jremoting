@@ -64,18 +64,8 @@ public class XStreamEncoder extends AbstractStreamEncoder {
 
     }
 
-    public synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException {
-        if (response != null) {
-            writeResponse(response);
-        }
-        return readRequest();
-    }
-
-    private void writeResponse(Response response) throws IOException {
-
-
+    protected void writeResponse(Response response) throws IOException {
         String xml = xStream.toXML(response);
-
         printWriter.write(xml + "\n");
         printWriter.flush();
         bufferedOutputStream.flush();
@@ -100,7 +90,7 @@ public class XStreamEncoder extends AbstractStreamEncoder {
         printWriter = new PrintWriter(bufferedOutputStream);
     }
 
-    private Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
+    protected Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
         String xml = SerializationHelper.getXml(lineNumberReader);
         try {
             Object o = xStream.fromXML(xml);

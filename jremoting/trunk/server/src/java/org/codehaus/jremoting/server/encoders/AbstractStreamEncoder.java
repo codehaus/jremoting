@@ -19,6 +19,8 @@ package org.codehaus.jremoting.server.encoders;
 
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.StreamEncoder;
+import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.responses.Response;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,13 +51,20 @@ public abstract class AbstractStreamEncoder implements StreamEncoder {
         this.connectionDetails = connectionDetails;
     }
 
+    public final synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException {
+        if (response != null) {
+            writeResponse(response);
+        }
+        return readRequest();
+    }
+
+    protected abstract Request readRequest() throws IOException, ClassNotFoundException;
+    protected abstract void writeResponse(Response response) throws IOException;
+
     public String getConnectionDetails() {
         return connectionDetails;
     }
 
-    /**
-     * Close the stream.
-     */
     public void close() {
         try {
             inputStream.close();

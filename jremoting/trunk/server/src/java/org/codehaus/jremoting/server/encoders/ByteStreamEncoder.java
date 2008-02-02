@@ -47,28 +47,8 @@ public class ByteStreamEncoder extends AbstractStreamEncoder {
         this.dataOutputStream = dataOutputStream;
     }
 
-    /**
-     * Write a response, and wait for a request
-     *
-     * @param response The response to send
-     * @return The new request
-     * @throws IOException            In an IO Exception
-     * @throws ConnectionException    In an IO Exception
-     * @throws ClassNotFoundException If a class not found during deserialization.
-     */
-    public synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException {
-
-        if (response != null) {
-            writeResponse(response);
-        }
-
-        return readRequest();
-    }
-
-    private void writeResponse(Response response) throws IOException {
-
+    protected void writeResponse(Response response) throws IOException {
         byte[] aBytes = SerializationHelper.getBytesFromInstance(response);
-
         dataOutputStream.writeInt(aBytes.length);
         dataOutputStream.write(aBytes);
         dataOutputStream.flush();
@@ -93,7 +73,7 @@ public class ByteStreamEncoder extends AbstractStreamEncoder {
     public void initialize() {
     }
 
-    private Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
+    protected Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
         int byteArraySize = dataInputStream.readInt();
         int requestCode = dataInputStream.readInt();
         if (byteArraySize < 0) {

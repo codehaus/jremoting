@@ -144,10 +144,7 @@ public class PublicationAdapter implements Publisher {
 
     public void unPublish(Object impl, String service) throws PublicationException {
 
-        String serviceName = StaticStubHelper.formatServiceName(service);
-        if (!services.containsKey(serviceName)) {
-            throw new PublicationException("Service '" + service + "' not published");
-        }
+        String serviceName = getServiceName(service);
         services.remove(serviceName);
         if (publicationDelegate != null) {
             publicationDelegate.unPublish(impl, service);
@@ -156,10 +153,7 @@ public class PublicationAdapter implements Publisher {
 
     public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
 
-        String serviceName = StaticStubHelper.formatServiceName(service);
-        if (!services.containsKey(serviceName)) {
-            throw new PublicationException("Service '" + service + "' not published");
-        }
+        String serviceName = getServiceName(service);
 
         ServiceHandler serviceHandler = services.get(serviceName);
 
@@ -167,6 +161,14 @@ public class PublicationAdapter implements Publisher {
         if (publicationDelegate != null) {
             publicationDelegate.replacePublished(oldImpl, service, withImpl);
         }
+    }
+
+    private String getServiceName(String service) {
+        String serviceName = StaticStubHelper.formatServiceName(service);
+        if (!services.containsKey(serviceName)) {
+            throw new PublicationException("Service '" + service + "' not published");
+        }
+        return serviceName;
     }
 
     public ServiceHandler getServiceHandler(String service) {

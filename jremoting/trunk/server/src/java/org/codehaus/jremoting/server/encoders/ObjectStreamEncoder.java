@@ -46,14 +46,7 @@ public class ObjectStreamEncoder extends AbstractStreamEncoder {
         super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
     }
 
-    public synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException {
-        if (response != null) {
-            writeResponse(response);
-        }
-        return readRequest();
-    }
-
-    private void writeResponse(Response response) throws IOException {
+    protected void writeResponse(Response response) throws IOException {
         objectOutputStream.writeObject(response);
         objectOutputStream.flush();
         objectOutputStream.reset();
@@ -80,7 +73,7 @@ public class ObjectStreamEncoder extends AbstractStreamEncoder {
         objectOutputStream = new ObjectOutputStream(getOutputStream());
     }
 
-    private Request readRequest() throws IOException, ClassNotFoundException {
+    protected Request readRequest() throws IOException, ClassNotFoundException {
         return (Request) objectInputStream.readObject();
     }
 }

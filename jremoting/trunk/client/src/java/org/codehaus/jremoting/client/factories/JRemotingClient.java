@@ -383,11 +383,7 @@ public class JRemotingClient {
                 if (stubRegistry == null) {
                     System.out.println("");
                 }
-                stubRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
-
-                InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, reference, session);
-                setContext(request);
-                Response response = transport.invoke(request, true);
+                Response response = invokeViaTransport(methodSignature, args, argClasses);
 
                 if (response instanceof MethodInvoked) {
                     MethodInvoked or = (MethodInvoked) response;
@@ -404,10 +400,7 @@ public class JRemotingClient {
 
         public void processVoidRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
             try {
-                stubRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
-                InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, reference, session);
-                setContext(request);
-                Response response = transport.invoke(request, true);
+                Response response = invokeViaTransport(methodSignature, args, argClasses);
 
                 if (response instanceof MethodInvoked) {
                     MethodInvoked or = (MethodInvoked) response;
@@ -419,6 +412,14 @@ public class JRemotingClient {
                 transport.getClientMonitor().invocationFailure(this.getClass(), publishedServiceName, objectName, methodSignature, ie);
                 throw ie;
             }
+        }
+
+        private Response invokeViaTransport(String methodSignature, Object[] args, Class[] argClasses) {
+            stubRegistry.marshallCorrection(publishedServiceName, methodSignature, args, argClasses);
+            InvokeMethod request = new InvokeMethod(publishedServiceName, objectName, methodSignature, args, reference, session);
+            setContext(request);
+            Response response = transport.invoke(request, true);
+            return response;
         }
 
         public void queueAsyncRequest(String methodSignature, Object[] args, Class[] argClasses) {
