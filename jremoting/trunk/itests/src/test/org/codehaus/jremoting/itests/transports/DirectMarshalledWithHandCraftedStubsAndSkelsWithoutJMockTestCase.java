@@ -17,8 +17,8 @@
  */
 package org.codehaus.jremoting.itests.transports;
 
-import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.direct.DirectMarshalledTransport;
 import org.codehaus.jremoting.itests.TestFacade;
@@ -30,32 +30,31 @@ import org.codehaus.jremoting.itests.stubs.HandCraftedTestFacadeStubFactory;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
+import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
 
 import java.util.concurrent.Executors;
 
 /**
- * Test Direct Marshalled Transport with hand-crafted stubs and skeletons.
+ * Test Direct Marshalled Transport with hand-crafted stubs and skeletons and without jmock monitors.
  *
  * @author Paul Hammant
  */
-public class DirectMarshalledWithHandCraftedStubsAndSkelsTestCase extends AbstractHelloTestCase {
+public class DirectMarshalledWithHandCraftedStubsAndSkelsWithoutJMockTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
-        super.setUp();
 
-        final DefaultServerDelegate dsd = new ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase.MyDefaultServerDelegate2((ServerMonitor) mockServerMonitor.proxy());
+        final DefaultServerDelegate dsd = new ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase.MyDefaultServerDelegate2(new NullServerMonitor());
 
         // server side setup.
-        server = new DirectMarshalledServer((ServerMonitor) mockServerMonitor.proxy(), dsd);
+        server = new DirectMarshalledServer(new NullServerMonitor(), dsd);
         testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
 
         // Client side setup
-        mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
-        DirectMarshalledTransport transport = new DirectMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(),
+        DirectMarshalledTransport transport = new DirectMarshalledTransport(new NullClientMonitor(),
                 Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
                 (DirectMarshalledServer) server,
                 this.getClass().getClassLoader());
@@ -63,19 +62,20 @@ public class DirectMarshalledWithHandCraftedStubsAndSkelsTestCase extends Abstra
 
         testClient = (TestFacade) jremotinClient.lookupService("Hello");
 
-    }                                                     
+    }
 
 
     protected int getNumIterationsForSpeedTest() {
         return super.getNumIterationsForSpeedTest() * 1000;
     }
 
+
     public void testSpeed() throws Exception {
         super.testSpeed();    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     protected void tearDown() throws Exception {
-        super.tearDown();
+        //super.tearDown();
         testClient = null;
         System.gc();
 
