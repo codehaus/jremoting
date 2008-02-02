@@ -25,24 +25,29 @@ import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
+import org.codehaus.jremoting.itests.stubs.ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase;
+import org.codehaus.jremoting.itests.stubs.HandCraftedTestFacadeStubFactory;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
 
 import java.util.concurrent.Executors;
-
 
 /**
  * Test Direct Marshalled Transport
  *
  * @author Paul Hammant
  */
-public class DirectMarshalledTestCase extends AbstractHelloTestCase {
+public class DirectMarshalledWithHandCraftedStubsAndSkelsTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
-        super.setUp();        
+        super.setUp();
+
+        final DefaultServerDelegate dsd = new ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase.MyDefaultServerDelegate2((ServerMonitor) mockServerMonitor.proxy());
+
         // server side setup.
-        server = new DirectMarshalledServer((ServerMonitor) mockServerMonitor.proxy());
+        server = new DirectMarshalledServer((ServerMonitor) mockServerMonitor.proxy(), dsd);
         testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
@@ -50,14 +55,19 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
-        jremotinClient = new JRemotingClient(new DirectMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(), Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), (DirectMarshalledServer) server, this.getClass().getClassLoader()));
+        DirectMarshalledTransport transport = new DirectMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(),
+                Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
+                (DirectMarshalledServer) server,
+                this.getClass().getClassLoader());
+        jremotinClient = new JRemotingClient(transport, new HandCraftedTestFacadeStubFactory());
 
         testClient = (TestFacade) jremotinClient.lookupService("Hello");
 
-    }
+    }                                                     
+
 
     protected int getNumIterationsForSpeedTest() {
-        return super.getNumIterationsForSpeedTest() * 1000;   
+        return super.getNumIterationsForSpeedTest() * 1000;
     }
 
     protected void tearDown() throws Exception {

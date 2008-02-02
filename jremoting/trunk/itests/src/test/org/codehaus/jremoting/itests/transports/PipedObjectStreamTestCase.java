@@ -90,6 +90,11 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
 
     }
 
+    protected int getNumIterationsForSpeedTest() {
+        return super.getNumIterationsForSpeedTest() * 2;    
+    }
+
+
     protected void tearDown() throws Exception {
         super.tearDown();
         testClient = null;

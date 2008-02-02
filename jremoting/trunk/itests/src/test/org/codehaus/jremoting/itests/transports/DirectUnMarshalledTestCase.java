@@ -16,7 +16,7 @@
  *
  */
 package org.codehaus.jremoting.itests.transports;
-
+                                                 
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.transports.direct.DirectTransport;
@@ -52,6 +52,10 @@ public class DirectUnMarshalledTestCase extends AbstractHelloTestCase {
 
         testClient = (TestFacade) jremotinClient.lookupService("Hello");
 
+    }
+
+    protected int getNumIterationsForSpeedTest() {
+        return super.getNumIterationsForSpeedTest() * 10000;
     }
 
     protected void tearDown() throws Exception {

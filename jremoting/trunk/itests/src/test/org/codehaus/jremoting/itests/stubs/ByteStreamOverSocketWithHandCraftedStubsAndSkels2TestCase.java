@@ -60,7 +60,7 @@ public class ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase extends A
     protected void setUp() throws Exception {
         super.setUp();
 
-        final DefaultServerDelegate dsd = new MyDefaultServerDelegate2();
+        final DefaultServerDelegate dsd = new MyDefaultServerDelegate2((ServerMonitor) mockServerMonitor.proxy());
 
         // server side setup.
         server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), dsd,
@@ -88,7 +88,7 @@ public class ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase extends A
         server.stop();
     }
 
-    private static class HandCraftedServiceHandler extends ServiceHandler {
+    public static class HandCraftedServiceHandler extends ServiceHandler {
 
         Map<String, Execr> map = new HashMap<String, Execr>();
 
@@ -295,9 +295,9 @@ public class ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase extends A
         }
     }
 
-    private class MyDefaultServerDelegate2 extends DefaultServerDelegate {
-        public MyDefaultServerDelegate2() {
-            super((ServerMonitor) ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase.this.mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
+    public static class MyDefaultServerDelegate2 extends DefaultServerDelegate {
+        public MyDefaultServerDelegate2(ServerMonitor serverMonitor) {
+            super(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
         }
 
         protected ServiceHandler makeServiceHandler(String thing, Publication publicationDescription, PublicationItem item) {
