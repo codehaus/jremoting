@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.itests.transports;
+package org.codehaus.jremoting.itests.stubs;
 
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
@@ -25,6 +25,7 @@ import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
+import org.codehaus.jremoting.itests.transports.AbstractHelloTestCase;
 import org.codehaus.jremoting.itests.stubs.ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase;
 import org.codehaus.jremoting.itests.stubs.HandCraftedTestFacadeStubFactory;
 import org.codehaus.jremoting.server.Publication;
