@@ -50,9 +50,9 @@ public class ByteStreamOverSocketTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("localhost", 10333)),
+        jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("localhost", 10333)),
                 new ThreadLocalContextFactory(), new StubsOnClient());
-        testClient = (TestFacade) jremotinClient.lookupService("Hello");
+        testClient = (TestFacade) jremotingClient.lookupService("Hello");
 
     }
 
@@ -61,7 +61,7 @@ public class ByteStreamOverSocketTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotinClient.close();
+        jremotingClient.close();
         server.stop();
     }
 

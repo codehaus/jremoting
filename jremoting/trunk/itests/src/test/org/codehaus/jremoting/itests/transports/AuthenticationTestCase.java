@@ -60,9 +60,9 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
     public void testHelloCall() throws Exception {
 
         // Client side setup
-        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 10333)), new NullContextFactory(),
+        jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 10333)), new NullContextFactory(),
                 new StubsOnClient(), new org.codehaus.jremoting.client.authentication.NameAndPasswordAuthenticator("fred", "wilma"));
-        testClient = (TestFacade) jremotinClient.lookupService("Hello");
+        testClient = (TestFacade) jremotingClient.lookupService("Hello");
 
         super.testHelloCall();
     }
@@ -70,11 +70,11 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
     public void testfailingChallenge() throws Exception {
 
         // Client side setup
-        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 10333)), new NullContextFactory(),
+        jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 10333)), new NullContextFactory(),
                 new StubsOnClient(), new org.codehaus.jremoting.client.authentication.NameAndPasswordAuthenticator("FRED", "wilma"));
 
         try {
-            testClient = (TestFacade) jremotinClient.lookupService("Hello");
+            testClient = (TestFacade) jremotingClient.lookupService("Hello");
             fail();
         } catch (ConnectionException e) {
             assertEquals("Authentication Failed", e.getMessage());
@@ -87,7 +87,7 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotinClient.close();
+        jremotingClient.close();
         server.stop();
     }
 

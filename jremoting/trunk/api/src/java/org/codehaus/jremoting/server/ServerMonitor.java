@@ -17,8 +17,6 @@
  */
 package org.codehaus.jremoting.server;
 
-import org.codehaus.jremoting.ConnectionException;
-
 import java.io.IOException;
 
 /**

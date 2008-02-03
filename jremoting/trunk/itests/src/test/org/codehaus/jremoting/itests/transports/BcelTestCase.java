@@ -75,9 +75,9 @@ public class BcelTestCase extends AbstractHelloTestCase {
         // Client side setup
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
-        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
+        jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 10201)), (ContextFactory) mock.proxy(), new StubsFromServer());
-        testClient = (TestFacade) jremotinClient.lookupService("Hello223");
+        testClient = (TestFacade) jremotingClient.lookupService("Hello223");
 
     }
 
@@ -90,7 +90,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotinClient.close();
+        jremotingClient.close();
         server.stop();
         super.tearDown();
     }

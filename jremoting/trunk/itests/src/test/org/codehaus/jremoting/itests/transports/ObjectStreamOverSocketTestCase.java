@@ -64,10 +64,10 @@ public class ObjectStreamOverSocketTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
+        jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStreamEncoding(),
                 new InetSocketAddress("127.0.0.1", 10002)));
-        testClient = (TestFacade) jremotinClient.lookupService("Hello");
+        testClient = (TestFacade) jremotingClient.lookupService("Hello");
 
 
     }
@@ -78,7 +78,7 @@ public class ObjectStreamOverSocketTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotinClient.close();
+        jremotingClient.close();
         server.stop();
     }
 

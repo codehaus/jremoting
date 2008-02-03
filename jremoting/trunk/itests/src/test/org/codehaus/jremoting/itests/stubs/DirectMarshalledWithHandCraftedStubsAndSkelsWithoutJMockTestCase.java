@@ -29,7 +29,6 @@ import org.codehaus.jremoting.itests.transports.AbstractHelloTestCase;
 import org.codehaus.jremoting.itests.stubs.ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase;
 import org.codehaus.jremoting.itests.stubs.HandCraftedTestFacadeStubFactory;
 import org.codehaus.jremoting.server.Publication;
-import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
@@ -59,9 +58,9 @@ public class DirectMarshalledWithHandCraftedStubsAndSkelsWithoutJMockTestCase ex
                 Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
                 (DirectMarshalledServer) server,
                 this.getClass().getClassLoader());
-        jremotinClient = new JRemotingClient(transport, new HandCraftedTestFacadeStubFactory());
+        jremotingClient = new JRemotingClient(transport, new HandCraftedTestFacadeStubFactory());
 
-        testClient = (TestFacade) jremotinClient.lookupService("Hello");
+        testClient = (TestFacade) jremotingClient.lookupService("Hello");
 
     }
 
@@ -80,7 +79,7 @@ public class DirectMarshalledWithHandCraftedStubsAndSkelsWithoutJMockTestCase ex
         testClient = null;
         System.gc();
 
-        jremotinClient.close();
+        jremotingClient.close();
 
         server.stop();
 

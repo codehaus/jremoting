@@ -84,9 +84,9 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         ((PipedServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        jremotinClient = new JRemotingClient(new PipedTransport(new ConsoleClientMonitor(),
+        jremotingClient = new JRemotingClient(new PipedTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.encoders.ObjectStreamEncoding(), in, out));
-        testClient = (TestFacade) jremotinClient.lookupService("Hello33");
+        testClient = (TestFacade) jremotingClient.lookupService("Hello33");
 
     }
 
@@ -99,7 +99,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         super.tearDown();
         testClient = null;
         System.gc();
-        jremotinClient.close();
+        jremotingClient.close();
         server.stop();
     }
 

@@ -61,9 +61,9 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
         ((PipedServer) server).makeNewConnection(in, out);
 
         // Client side setup
-        jremotinClient = new JRemotingClient(new PipedTransport(new ConsoleClientMonitor(),
+        jremotingClient = new JRemotingClient(new PipedTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(), in, out));
-        testClient = (TestFacade) jremotinClient.lookupService("Hello");
+        testClient = (TestFacade) jremotingClient.lookupService("Hello");
 
     }
 
@@ -76,7 +76,7 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
 
-        jremotinClient.close();
+        jremotingClient.close();
 
         server.stop();
 

@@ -27,7 +27,6 @@ import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
-import org.codehaus.jremoting.itests.TstObject;
 import org.codehaus.jremoting.itests.CustomSerializableParam;
 import org.codehaus.jremoting.itests.transports.AbstractHelloTestCase;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -41,7 +40,6 @@ import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.codehaus.jremoting.requests.InvokeMethod;
-import org.codehaus.jremoting.util.MethodNameHelper;
 
 import java.net.InetSocketAddress;
 import java.lang.reflect.InvocationTargetException;
@@ -72,9 +70,9 @@ public class ByteStreamOverSocketWithHandCraftedStubsAndSkelsTestCase extends Ab
         server.start();
 
         // Client side setup
-        jremotinClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("localhost", 10333)),
+        jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("localhost", 10333)),
                 new ThreadLocalContextFactory(), new HandCraftedTestFacadeStubFactory());
-        testClient = (TestFacade) jremotinClient.lookupService("Hello");
+        testClient = (TestFacade) jremotingClient.lookupService("Hello");
 
     }
 
@@ -83,7 +81,7 @@ public class ByteStreamOverSocketWithHandCraftedStubsAndSkelsTestCase extends Ab
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotinClient.close();
+        jremotingClient.close();
         server.stop();
     }
 

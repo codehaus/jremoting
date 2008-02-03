@@ -60,9 +60,9 @@ public class DirectMarshalledWithHandCraftedStubsAndSkelsTestCase extends Abstra
                 Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
                 (DirectMarshalledServer) server,
                 this.getClass().getClassLoader());
-        jremotinClient = new JRemotingClient(transport, new HandCraftedTestFacadeStubFactory());
+        jremotingClient = new JRemotingClient(transport, new HandCraftedTestFacadeStubFactory());
 
-        testClient = (TestFacade) jremotinClient.lookupService("Hello");
+        testClient = (TestFacade) jremotingClient.lookupService("Hello");
 
     }                                                     
 
@@ -80,7 +80,7 @@ public class DirectMarshalledWithHandCraftedStubsAndSkelsTestCase extends Abstra
         testClient = null;
         System.gc();
 
-        jremotinClient.close();
+        jremotingClient.close();
 
         server.stop();
 
