@@ -44,7 +44,7 @@ public class DirectMarshalledWithHandCraftedStubsAndSkelsWithoutJMockTestCase ex
 
     protected void setUp() throws Exception {
 
-        final DefaultServerDelegate dsd = new ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase.MyDefaultServerDelegate2(new NullServerMonitor());
+        final DefaultServerDelegate dsd = new HandCraftedServerDelegate(new NullServerMonitor());
 
         // server side setup.
         server = new DirectMarshalledServer(new NullServerMonitor(), dsd);

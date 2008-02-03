@@ -45,7 +45,7 @@ public class DirectMarshalledWithHandCraftedStubsAndSkelsTestCase extends Abstra
     protected void setUp() throws Exception {
         super.setUp();
 
-        final DefaultServerDelegate dsd = new ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase.MyDefaultServerDelegate2((ServerMonitor) mockServerMonitor.proxy());
+        final DefaultServerDelegate dsd = new HandCraftedServerDelegate((ServerMonitor) mockServerMonitor.proxy());
 
         // server side setup.
         server = new DirectMarshalledServer((ServerMonitor) mockServerMonitor.proxy(), dsd);

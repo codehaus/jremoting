@@ -58,7 +58,7 @@ public class ByteStreamOverSocketWithHandCraftedStubsAndSkelsTestCase extends Ab
     protected void setUp() throws Exception {
         super.setUp();
 
-        final DefaultServerDelegate dsd = new MyDefaultServerDelegate();
+        final DefaultServerDelegate dsd = new HandCraftedServerDelegate((ServerMonitor) mockServerMonitor.proxy());
 
         // server side setup.
         server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), dsd,
@@ -250,16 +250,6 @@ public class ByteStreamOverSocketWithHandCraftedStubsAndSkelsTestCase extends Ab
                 throw new InvocationTargetException(e);
             }
             return null;
-        }
-    }
-
-    private class MyDefaultServerDelegate extends DefaultServerDelegate {
-        public MyDefaultServerDelegate() {
-            super((ServerMonitor) ByteStreamOverSocketWithHandCraftedStubsAndSkelsTestCase.this.mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
-        }
-
-        protected ServiceHandler makeServiceHandler(String thing, Publication publicationDescription, PublicationItem item) {
-            return new HandCraftedServiceHandler(MyDefaultServerDelegate.this, thing, publicationDescription, item.getFacadeClass());
         }
     }
 }
