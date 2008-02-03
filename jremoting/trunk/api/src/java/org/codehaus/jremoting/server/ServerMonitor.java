@@ -29,13 +29,13 @@ import java.io.IOException;
  */
 public interface ServerMonitor {
 
-    void closeError(Class clazz, String s, IOException e);
+    void closeError(Class clazz, String desc, IOException e);
 
     void classNotFound(Class clazz, ClassNotFoundException e);
 
-    void unexpectedException(Class clazz, String s, Exception e);
+    void unexpectedException(Class clazz, String desc, Exception e);
 
-    void stopServerError(Class clazz, String s, Exception e);
+    void stopServerError(Class clazz, String desc, Exception e);
 
     void newSession(Session session, int newSize, String connectionDetails);
 
