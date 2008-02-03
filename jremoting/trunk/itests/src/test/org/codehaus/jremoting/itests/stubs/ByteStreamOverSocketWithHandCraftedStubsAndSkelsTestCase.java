@@ -47,7 +47,7 @@ import java.net.InetSocketAddress;
  *
  * @author Paul Hammant
  */
-public class ByteStreamOverSocketWithHandCraftedStubsAndSkels2TestCase extends AbstractHelloTestCase {
+public class ByteStreamOverSocketWithHandCraftedStubsAndSkelsTestCase extends AbstractHelloTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
