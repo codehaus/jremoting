@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head><meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type" />
+<title>Facades</title></head>
+<body>
+<h3>Overview</h3>The <a href="http://en.wikipedia.org/wiki/Fa%E7ade_pattern">Facade pattern</a> is what you should have in mind as you design an interface for publishing over JRemoting. &nbsp;It goes hand-in-hand with <a href="http://en.wikipedia.org/wiki/Immutable_object">Immutable objects</a>. Understanding both is key to making JRemoting work for you.<br /><br />Facades
+have methods that are going to be invoked over the wire. &nbsp;The
+results of those methods can either be immutable (also known as value
+objects), or other (secondary) facades. &nbsp;If the method returns a
+secondary facade, it could be the interface declared on the return type
+or a more derived interface. &nbsp;If an immutable it can be anything
+that is serializable, but cannot have a reference to anything that's a
+facade.<br /><p style="font-weight: bold;">Sample Facades and Immutables (Value Objects)</p>
+<div class="source">
+<pre>interface Bank {<br />    Account findAccount(int accountID)<br />}<br /><br />interface Account {<br />    Debit debitFunds(Amount amount, Account toAccount) throws UnsufficientFundsException<br />    Credit creditFunds(Amount amount, Account fromAccount)<br />}<br /><br />interface SavingsAccount {<br />    Rate getInterestRate()<br />}<br /><br />interface CheckingAccount {<br />    Amount getOverdraftLimit()<br />    void setupAutoTransfer(Amount maxBalance, Account destinationForSurplass)<br />}<br /><br /><br />class Txn implements Serializable {<br />    private Amount amount;<br />    private Date date;<br />    private String ref;<br />    public Amount getAmount() { .... }<br />    public Date getDate() { .... }<br />    public String getReference() { .... }<br />}<br /><br />class Debit extends Txn {<br />    private int toAccountID;<br />    public int getToAccount() { .... }<br />}<br /><br />class Credit extends Txn {<br />    private int fromAccountID;<br />    public int getFromAccount() { .... }<br />}<br /><br />class Amount implements Serializable {<br />    private BigDecimal value;<br />    public BigDecimal  getValue() { .... }<br />}<br /><br />
+</pre></div>The interface Bank above is the one that is the primary
+facade. &nbsp;SavingsAccount and CheckingAccount are the secondary
+facade. &nbsp;They are used as return types and parameters to methods
+on the primary facade and each other.<br /><br />The plain classes Txn,
+Debit, Credit and Amount are plain classes that are serializable. Date
+and BigDecimal are from Java's libraries and are Serializable out of
+the box.<br /><br />Note that Credit and Debit have a corresponding account ID rather than a reference to the Account itself.<br /><br />Note
+also that the debitFunds method on the primary facade has an exception.
+&nbsp;That exception is plain (it does not extend anything special from
+the JRemoting API).<br /><br /></body></html>
