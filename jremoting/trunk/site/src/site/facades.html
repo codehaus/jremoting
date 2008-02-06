@@ -18,7 +18,9 @@ facade. &nbsp;They are used as return types and parameters to methods
 on the primary facade and each other.<br /><br />The plain classes Txn,
 Debit, Credit and Amount are plain classes that are serializable. Date
 and BigDecimal are from Java's libraries and are Serializable out of
-the box.<br /><br />Note that Credit and Debit have a corresponding account ID rather than a reference to the Account itself.<br /><br />Note
+the box.<br /><br />Note that Credit and Debit have a corresponding account ID rather than a reference to the Account itself.<br /><br /><h3>Note
 also that the debitFunds method on the primary facade has an exception.
 &nbsp;That exception is plain (it does not extend anything special from
-the JRemoting API).<br /><br /></body></html>
+the JRemoting API) and is replicated on the client side by JRemoting.
+&nbsp;The same would be true of exceptions that are drived from
+RuntimeException. </h3><br /></body></html>
