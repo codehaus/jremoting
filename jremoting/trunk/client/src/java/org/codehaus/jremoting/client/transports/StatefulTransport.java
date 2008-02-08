@@ -127,7 +127,7 @@ public abstract class StatefulTransport implements Transport {
         return obj;
     }
 
-    public synchronized Response invoke(Request request, boolean retry) {
+    public Response invoke(Request request, boolean retry) {
         if (request instanceof Ping) {
             ((Ping) request).setSession(session);
         } else {

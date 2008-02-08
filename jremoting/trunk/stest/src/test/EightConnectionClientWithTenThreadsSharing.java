@@ -5,15 +5,16 @@ import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.stubs.StubsViaReflection;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.net.InetSocketAddress;
 
-public class Client {
+public class EightConnectionClientWithTenThreadsSharing {
     public static void main(String[] args) throws ConnectionException {
 
         // Client side setup
-        final Addition addition = (Addition) new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("localhost", 10333))).lookupService("Addition");
+        final Addition addition = (Addition) new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new SocketDetails("localhost", 10333, 8))).lookupService("Addition");
 
         for (int i = 0; i < 10; i++) {
             new Thread() {

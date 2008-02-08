@@ -76,7 +76,7 @@ public class PipedTransport extends StreamTransport {
      * @throws ConnectionException
      */
     public ConnectionOpened openConnection() throws ConnectionException {
-        setStreamEncoder(streamEncoding.makeStreamEncoder(inputStream, outputStream, getFacadesClassLoader()));
+        addStreamEncoder(streamEncoding.makeStreamEncoder(inputStream, outputStream, getFacadesClassLoader()));
         return super.openConnection();
     }
 

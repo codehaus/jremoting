@@ -24,6 +24,7 @@ import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
@@ -68,7 +69,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
             // Client side setup
             factory = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new ObjectStreamEncoding(), new InetSocketAddress("127.0.0.1", 12001)));
+                new ObjectStreamEncoding(), new SocketDetails("127.0.0.1", 12001)));
             testClient = (TestFacade) factory.lookupService("Hello");
 
             testClient.hello("hello");
@@ -109,7 +110,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
             // Client side setup
             factory = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12002)));
+                new ByteStreamEncoding(), new SocketDetails("127.0.0.1", 12002)));
             TestFacade testClient = (TestFacade) factory.lookupService("Hello");
 
 
@@ -146,7 +147,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
         try {
 
             // Client side setup
-            factory = new JRemotingClient(new RmiTransport(new ConsoleClientMonitor(), new InetSocketAddress("127.0.0.1", 12003)));
+            factory = new JRemotingClient(new RmiTransport(new ConsoleClientMonitor(), new SocketDetails("127.0.0.1", 12003)));
             TestFacade testClient = (TestFacade) factory.lookupService("Hello");
 
 
@@ -183,7 +184,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
             // Client side setup
             factory = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new ObjectStreamEncoding(), new InetSocketAddress("127.0.0.1", 12004)));
+                new ObjectStreamEncoding(), new SocketDetails("127.0.0.1", 12004)));
             TestFacade testClient = (TestFacade) factory.lookupService("Hello");
 
 

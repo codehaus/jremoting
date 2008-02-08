@@ -21,6 +21,7 @@ import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
@@ -66,7 +67,7 @@ public class ObjectStreamOverSocketTestCase extends AbstractHelloTestCase {
         // Client side setup
         jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStreamEncoding(),
-                new InetSocketAddress("127.0.0.1", 10002)));
+                new SocketDetails("127.0.0.1", 10002)));
         testClient = (TestFacade) jremotingClient.lookupService("Hello");
 
 

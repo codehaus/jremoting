@@ -21,6 +21,7 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.RmiInvoker;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.requests.Request;
@@ -28,7 +29,6 @@ import org.codehaus.jremoting.responses.Response;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.InetSocketAddress;
 import java.rmi.ConnectIOException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -48,7 +48,7 @@ public final class RmiTransport extends StatefulTransport {
     private RmiInvoker rmiInvoker;
     private String url;
 
-    public RmiTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, InetSocketAddress addr) throws ConnectionException {
+    public RmiTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, SocketDetails addr) throws ConnectionException {
 
         super(clientMonitor, executorService, connectionPinger, RmiTransport.class.getClassLoader());
 
@@ -67,7 +67,7 @@ public final class RmiTransport extends StatefulTransport {
         }
     }
 
-    public RmiTransport(ClientMonitor clientMonitor, InetSocketAddress addr) throws ConnectionException {
+    public RmiTransport(ClientMonitor clientMonitor, SocketDetails addr) throws ConnectionException {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), addr);
 
     }

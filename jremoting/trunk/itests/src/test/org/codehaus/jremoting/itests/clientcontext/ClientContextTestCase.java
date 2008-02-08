@@ -22,6 +22,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.StreamEncoding;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
@@ -159,7 +160,7 @@ public class ClientContextTestCase extends MockObjectTestCase {
 
         StreamEncoding factory0 = new org.codehaus.jremoting.client.encoders.ByteStreamEncoding();
         ClientMonitor cm = new ConsoleClientMonitor();
-        Transport handler = new SocketTransport(cm, factory0, new InetSocketAddress("127.0.0.1", 19333));
+        Transport handler = new SocketTransport(cm, factory0, new SocketDetails("127.0.0.1", 19333));
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();
         JRemotingClient jc = new JRemotingClient(handler, factory1);
 

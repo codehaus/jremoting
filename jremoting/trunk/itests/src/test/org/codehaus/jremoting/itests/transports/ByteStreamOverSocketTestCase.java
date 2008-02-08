@@ -24,6 +24,7 @@ import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.stubs.StubsOnClient;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
@@ -50,10 +51,18 @@ public class ByteStreamOverSocketTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("localhost", 10333)),
+        ConsoleClientMonitor consoleClientMonitor = new ConsoleClientMonitor();
+        ByteStreamEncoding byteStreamEncoding = new ByteStreamEncoding();
+        SocketDetails details = new SocketDetails("localhost", 10333);
+        SocketTransport transport = new SocketTransport(consoleClientMonitor, byteStreamEncoding, details);
+        jremotingClient = new JRemotingClient(transport,
                 new ThreadLocalContextFactory(), new StubsOnClient());
         testClient = (TestFacade) jremotingClient.lookupService("Hello");
 
+    }
+
+    public void testSpeed() throws Exception {
+        super.testSpeed();    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     protected void tearDown() throws Exception {

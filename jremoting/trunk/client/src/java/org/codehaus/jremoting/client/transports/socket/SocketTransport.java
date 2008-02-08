@@ -21,12 +21,12 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.client.StreamEncoding;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.StreamTransport;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -39,26 +39,28 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public class SocketTransport extends StreamTransport {
 
-    private final InetSocketAddress addr;
+    private final SocketDetails addr;
 
     public SocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                            StreamEncoding streamEncoding,
-                           InetSocketAddress addr) throws ConnectionException {
+                           SocketDetails addr) throws ConnectionException {
         this(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding, addr, defaultSocketTimeout());
     }
 
     public SocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                            StreamEncoding streamEncoding,
-                           InetSocketAddress addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
+                           SocketDetails addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding);
         this.addr = addr;
 
         try {
-            Socket socket = makeSocket(addr);
-            socket.setSoTimeout(socketTimeout);
-            setStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
+            for (int x = 0; x < addr.getConcurrentConnections(); x++) {
+                Socket socket = makeSocket(addr);
+                socket.setSoTimeout(socketTimeout);
+                addStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
+            }
         } catch (IOException ioe) {
             if (ioe.getMessage().startsWith("Connection refused")) {
                 throw new ConnectionRefusedException("Connection to port " + addr.getPort() + " on host " + addr.getHostName() + " refused.");
@@ -68,13 +70,13 @@ public class SocketTransport extends StreamTransport {
     }
 
 
-    public SocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, InetSocketAddress addr) throws ConnectionRefusedException, ConnectionException {
+    public SocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, SocketDetails addr) throws ConnectionRefusedException, ConnectionException {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
                 Thread.currentThread().getContextClassLoader(), streamEncoding, addr);
     }
 
 
-    public SocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, InetSocketAddress addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
+    public SocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, SocketDetails addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
                 Thread.currentThread().getContextClassLoader(), streamEncoding, addr, socketTimeout);
     }
@@ -89,14 +91,14 @@ public class SocketTransport extends StreamTransport {
         try {
             Socket socket = makeSocket(addr);
             socket.setSoTimeout(60 * 1000);
-            setStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
+            addStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
             return true;
         } catch (IOException ce) {
             return false;
         }
     }
 
-    protected Socket makeSocket(InetSocketAddress addr) throws IOException {
+    protected Socket makeSocket(SocketDetails addr) throws IOException {
         return new Socket(addr.getHostName(), addr.getPort());
     }
 

@@ -21,33 +21,33 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.StreamEncoding;
+import org.codehaus.jremoting.client.SocketDetails;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class SSLSocketTransport extends SocketTransport {
 
-    public SSLSocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, StreamEncoding streamEncoding, InetSocketAddress addr) throws ConnectionException {
+    public SSLSocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, StreamEncoding streamEncoding, SocketDetails addr) throws ConnectionException {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding, addr);
     }
 
-    public SSLSocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, StreamEncoding streamEncoding, InetSocketAddress addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
+    public SSLSocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, StreamEncoding streamEncoding, SocketDetails addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding, addr, socketTimeout);
     }
 
-    public SSLSocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, InetSocketAddress addr) throws ConnectionRefusedException, ConnectionException {
+    public SSLSocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, SocketDetails addr) throws ConnectionRefusedException, ConnectionException {
         super(clientMonitor, streamEncoding, addr);
     }
 
-    public SSLSocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, InetSocketAddress addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
+    public SSLSocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, SocketDetails addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
         super(clientMonitor, streamEncoding, addr, socketTimeout);
     }
 
-    protected Socket makeSocket(InetSocketAddress addr) throws IOException {
+    protected Socket makeSocket(SocketDetails addr) throws IOException {
         return SSLSocketFactory.getDefault().createSocket(addr.getHostName(), addr.getPort());
     }
 }

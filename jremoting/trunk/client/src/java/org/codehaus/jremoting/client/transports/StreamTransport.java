@@ -18,13 +18,14 @@
 package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.StreamEncoder;
 import org.codehaus.jremoting.client.ConnectionPinger;
+import org.codehaus.jremoting.client.StreamEncoder;
 import org.codehaus.jremoting.client.StreamEncoding;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
 import java.io.IOException;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
@@ -35,22 +36,42 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public abstract class StreamTransport extends StatefulTransport {
 
-    private StreamEncoder streamEncoder;
     protected final StreamEncoding streamEncoding;
+    private LinkedBlockingQueue<StreamEncoder> encoders = new LinkedBlockingQueue<StreamEncoder>();
 
     public StreamTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                                  ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                                                  StreamEncoding streamEncoding) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
         this.streamEncoding = streamEncoding;
+
     }
 
-    protected void setStreamEncoder(StreamEncoder streamEncoder) {
-        this.streamEncoder = streamEncoder;
+    protected void addStreamEncoder(StreamEncoder streamEncoder) {
+        try {
+            encoders.put(streamEncoder);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     protected Response performInvocation(Request request) throws IOException, ClassNotFoundException {
-        return streamEncoder.postRequest(request);
+        StreamEncoder se = null;
+        try {
+            se =  encoders.take();
+            return se.postRequest(request);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            if (se != null) {
+                try {
+                    encoders.put(se);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 
 

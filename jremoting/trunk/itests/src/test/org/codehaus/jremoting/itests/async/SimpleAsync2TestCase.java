@@ -18,6 +18,7 @@
 package org.codehaus.jremoting.itests.async;
 
 import org.codehaus.jremoting.client.ContextFactory;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.stubs.StubsFromServer;
@@ -80,7 +81,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
         jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 11009)), (ContextFactory) mock.proxy(), new StubsFromServer());
+                new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(), new SocketDetails("127.0.0.1", 11009)), (ContextFactory) mock.proxy(), new StubsFromServer());
         testClient = (AsyncTest) jremotingClient.lookupService("AsyncTestB");
 
     }

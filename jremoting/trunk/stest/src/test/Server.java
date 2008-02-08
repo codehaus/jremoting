@@ -16,12 +16,20 @@ public class Server {
         Addition addition = new Addition() {
             public double add(double a, double b) {
                 pc();
+                sleepTenMillis();
                 return a+b;
             }
         };
         Publication pd = new Publication(Addition.class);
         server.publish(addition, "Addition", pd);
         server.start();
+    }
+
+    private static void sleepTenMillis() {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+        }
     }
 
     private synchronized static void pc() {

@@ -6,6 +6,7 @@ import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.stubs.StubsOnClient;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
@@ -44,7 +45,7 @@ public class XStreamAndXppAndStubsOnClientTestCase extends AbstractHelloTestCase
         // Client side setup
         jremotingClient = new JRemotingClient(new SocketTransport(
                 new ConsoleClientMonitor(), new org.codehaus.jremoting.client.encoders.XStreamEncoding(
-                new XStream(new XppDriver())), new InetSocketAddress("127.0.0.1", 10099)
+                new XStream(new XppDriver())), new SocketDetails("127.0.0.1", 10099)
         ), new StubsOnClient());
         testClient = (TestFacade) jremotingClient.lookupService("Hello");
 

@@ -21,6 +21,7 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.InvocationException;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
@@ -62,7 +63,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     public void testNoServer() throws Exception {
         try {
             new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12345)));
+                new ByteStreamEncoding(), new SocketDetails("127.0.0.1", 12345)));
             fail("Should have have failed.");
         } catch (ConnectionRefusedException e) {
             // what we expetcted
@@ -83,7 +84,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         try {
 
             JRemotingClient cssf = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12333)));
+                new ByteStreamEncoding(), new SocketDetails("127.0.0.1", 12333)));
             cssf.lookupService("serverDelegate");
 
             fail("should have barfed");
@@ -111,7 +112,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
 
         SocketTransport invoker = new SocketTransport(new ConsoleClientMonitor(),
-                new ObjectStreamEncoding(), new InetSocketAddress("127.0.0.1", 12331));
+                new ObjectStreamEncoding(), new SocketDetails("127.0.0.1", 12331));
         JRemotingClient cssf = new JRemotingClient(invoker);
         cssf.lookupService("Hello");
         Object result = invoker.invoke(new InvokeMethod("Hello", "Main", "ping()", new Object[0], (long) 44332, (long) 21), true);
@@ -135,7 +136,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
             new JRemotingClient(new SocketTransport(new NullClientMonitor(),
-                new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12347), 500));
+                new ByteStreamEncoding(), new SocketDetails("127.0.0.1", 12347), 500));
             fail("Expected mismatch exception");
         } catch (InvocationException e) {
             assertTrue(e.getCause() instanceof SocketTimeoutException);
@@ -194,7 +195,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
             new JRemotingClient(new SocketTransport((ClientMonitor) mockClientMonitor.proxy(),
-                new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12347),  100));
+                new ByteStreamEncoding(), new SocketDetails("127.0.0.1", 12347),  100));
             fail("Expected mismatch exception");
         } catch (InvocationException e) {
             assertTrue(e.getCause() instanceof SocketTimeoutException);
@@ -222,7 +223,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // Client side setup
         try {
-            new JRemotingClient(new RmiTransport(new ConsoleClientMonitor(), new InetSocketAddress("127.0.0.1", 12348)));
+            new JRemotingClient(new RmiTransport(new ConsoleClientMonitor(), new SocketDetails("127.0.0.1", 12348)));
             fail("Expected mismatch exception");
         } catch (ConnectionException e) {
             if (e.getMessage().indexOf("mismatch") < 0) {

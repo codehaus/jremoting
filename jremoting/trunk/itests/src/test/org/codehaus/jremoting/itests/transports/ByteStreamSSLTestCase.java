@@ -24,6 +24,7 @@ import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.stubs.StubsViaReflection;
 import org.codehaus.jremoting.client.transports.socket.SSLSocketTransport;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
@@ -69,7 +70,7 @@ public class ByteStreamSSLTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        jremotingClient = new JRemotingClient(new SSLSocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new InetSocketAddress("localhost", 10334)),
+        jremotingClient = new JRemotingClient(new SSLSocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new SocketDetails("localhost", 10334)),
                 new ThreadLocalContextFactory(), new StubsViaReflection());
         testClient = (TestFacade) jremotingClient.lookupService("Hello");
 

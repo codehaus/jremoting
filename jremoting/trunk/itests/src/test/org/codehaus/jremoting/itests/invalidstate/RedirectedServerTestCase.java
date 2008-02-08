@@ -20,6 +20,7 @@ package org.codehaus.jremoting.itests.invalidstate;
 import org.codehaus.jremoting.RedirectedException;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.InvocationException;
+import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
@@ -74,7 +75,7 @@ public class RedirectedServerTestCase extends MockObjectTestCase {
             // Client side setup
 
             jRemotingClient = new JRemotingClient(new SocketTransport(clientMonitor,
-                    new ByteStreamEncoding(), new InetSocketAddress("127.0.0.1", 12201)));
+                    new ByteStreamEncoding(), new SocketDetails("127.0.0.1", 12201)));
 
             try {
                 jRemotingClient.lookupService("Hello55");
