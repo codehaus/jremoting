@@ -19,7 +19,7 @@ package org.codehaus.jremoting.client.encoders;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.util.ClassLoaderObjectInputStream;
-import org.codehaus.jremoting.client.StreamEncoder;
+import org.codehaus.jremoting.client.StreamConnection;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
@@ -32,17 +32,17 @@ import java.io.OutputStream;
 import java.io.BufferedInputStream;
 
 /**
- * Class ObjectStreamEncoder
+ * Class ObjectStreamConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ObjectStreamEncoder implements StreamEncoder {
+public class ObjectStreamConnection implements StreamConnection {
 
     private final ObjectInputStream objectInputStream;
     private final ObjectOutputStream objectOutputStream;
 
-    public ObjectStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+    public ObjectStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         try {
             objectOutputStream = new ObjectOutputStream(outputStream);
             objectInputStream = new ClassLoaderObjectInputStream(facadesClassLoader, new BufferedInputStream(inputStream));
@@ -53,9 +53,20 @@ public class ObjectStreamEncoder implements StreamEncoder {
         }
     }
 
-    public synchronized Response postRequest(Request request) throws IOException, ClassNotFoundException {
+    public synchronized Response streamRequest(Request request) throws IOException, ClassNotFoundException {
         writeRequest(request);
         return readResponse();
+    }
+
+    public void closeConnection() {
+        try {
+            objectInputStream.close();
+        } catch (IOException e) {
+        }
+        try {
+            objectOutputStream.close();
+        } catch (IOException e) {
+        }
     }
 
     private void writeRequest(Request request) throws IOException {

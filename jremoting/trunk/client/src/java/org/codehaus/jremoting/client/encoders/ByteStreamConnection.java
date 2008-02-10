@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.client.encoders;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.StreamEncoder;
+import org.codehaus.jremoting.client.StreamConnection;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.util.SerializationHelper;
@@ -26,30 +26,40 @@ import org.codehaus.jremoting.util.SerializationHelper;
 import java.io.*;
 
 /**
- * Class ByteStreamEncoder
+ * Class ByteStreamConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public class ByteStreamEncoder implements StreamEncoder {
+public class ByteStreamConnection implements StreamConnection {
 
     private final DataInputStream dataInputStream;
     private final DataOutputStream dataOutputStream;
     private final ClassLoader facadesClassLoader;
 
-    public ByteStreamEncoder(DataInputStream dataInputStream, DataOutputStream dataOutputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+    public ByteStreamConnection(DataInputStream dataInputStream, DataOutputStream dataOutputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         this.dataInputStream = dataInputStream;
         this.dataOutputStream = dataOutputStream;
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public synchronized Response postRequest(Request request) throws IOException, ClassNotFoundException {
-
+    public synchronized Response streamRequest(Request request) throws IOException, ClassNotFoundException {
         if (dataInputStream.available() != 0) {
             return readResponse();
         }
         writeRequest(request);
         return readResponse();
+    }
+
+    public void closeConnection() {
+        try {
+            dataInputStream.close();
+        } catch (IOException e) {
+        }
+        try {
+            dataOutputStream.close();
+        } catch (IOException e) {
+        }
     }
 
     private void writeRequest(Request request) throws IOException {

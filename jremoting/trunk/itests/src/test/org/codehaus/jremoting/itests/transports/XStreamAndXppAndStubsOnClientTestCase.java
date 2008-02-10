@@ -15,7 +15,7 @@ import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.server.encoders.XStreamEncoding;
+import org.codehaus.jremoting.server.encoders.XStreamConnectionFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.socket.SocketServer;
 
@@ -36,7 +36,7 @@ public class XStreamAndXppAndStubsOnClientTestCase extends AbstractHelloTestCase
         // server side setup.
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
-                new XStreamEncoding(new XStream(new XppDriver())), executorService, new ThreadLocalServerContextFactory(), new InetSocketAddress(10099));
+                new XStreamConnectionFactory(new XStream(new XppDriver())), executorService, new ThreadLocalServerContextFactory(), new InetSocketAddress(10099));
         testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
@@ -44,7 +44,7 @@ public class XStreamAndXppAndStubsOnClientTestCase extends AbstractHelloTestCase
 
         // Client side setup
         jremotingClient = new JRemotingClient(new SocketTransport(
-                new ConsoleClientMonitor(), new org.codehaus.jremoting.client.encoders.XStreamEncoding(
+                new ConsoleClientMonitor(), new org.codehaus.jremoting.client.encoders.XStreamConnectionFactory(
                 new XStream(new XppDriver())), new SocketDetails("127.0.0.1", 10099)
         ), new StubsOnClient());
         testClient = (TestFacade) jremotingClient.lookupService("Hello");

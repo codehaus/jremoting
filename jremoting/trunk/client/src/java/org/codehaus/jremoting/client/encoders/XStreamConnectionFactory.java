@@ -16,8 +16,8 @@
  */
 package org.codehaus.jremoting.client.encoders;
 
-import org.codehaus.jremoting.client.StreamEncoder;
-import org.codehaus.jremoting.client.StreamEncoding;
+import org.codehaus.jremoting.client.StreamConnection;
+import org.codehaus.jremoting.client.StreamConnectionFactory;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.io.InputStream;
@@ -25,19 +25,19 @@ import java.io.OutputStream;
 
 import com.thoughtworks.xstream.XStream;
 
-public class XStreamEncoding implements StreamEncoding {
+public class XStreamConnectionFactory implements StreamConnectionFactory {
 
     private final XStream xStream;
 
-    public XStreamEncoding(XStream xStream) {
+    public XStreamConnectionFactory(XStream xStream) {
         this.xStream = xStream;
     }
 
-    public XStreamEncoding() {
+    public XStreamConnectionFactory() {
         this(new XStream());
     }
 
-    public StreamEncoder makeStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
-        return new XStreamEncoder(inputStream, outputStream, facadesClassLoader, xStream);
+    public StreamConnection makeStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+        return new XStreamConnection(inputStream, outputStream, facadesClassLoader, xStream);
     }
 }

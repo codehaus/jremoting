@@ -17,13 +17,9 @@
 package org.codehaus.jremoting.client.transports.socket;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.ConnectionRefusedException;
-import org.codehaus.jremoting.client.StreamEncoding;
-import org.codehaus.jremoting.client.SocketDetails;
+import org.codehaus.jremoting.client.StreamConnectionFactory;
+import org.codehaus.jremoting.client.*;
 
-import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.net.Socket;
@@ -31,20 +27,20 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class SSLSocketTransport extends SocketTransport {
 
-    public SSLSocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, StreamEncoding streamEncoding, SocketDetails addr) throws ConnectionException {
-        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding, addr);
+    public SSLSocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, StreamConnectionFactory streamConnectionFactory, SocketDetails addr) throws ConnectionException {
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamConnectionFactory, addr);
     }
 
-    public SSLSocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, StreamEncoding streamEncoding, SocketDetails addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
-        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding, addr, socketTimeout);
+    public SSLSocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService, ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, StreamConnectionFactory streamConnectionFactory, SocketDetails addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamConnectionFactory, addr, socketTimeout);
     }
 
-    public SSLSocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, SocketDetails addr) throws ConnectionRefusedException, ConnectionException {
-        super(clientMonitor, streamEncoding, addr);
+    public SSLSocketTransport(ClientMonitor clientMonitor, StreamConnectionFactory streamConnectionFactory, SocketDetails addr) throws ConnectionRefusedException, ConnectionException {
+        super(clientMonitor, streamConnectionFactory, addr);
     }
 
-    public SSLSocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, SocketDetails addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
-        super(clientMonitor, streamEncoding, addr, socketTimeout);
+    public SSLSocketTransport(ClientMonitor clientMonitor, StreamConnectionFactory streamConnectionFactory, SocketDetails addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
+        super(clientMonitor, streamConnectionFactory, addr, socketTimeout);
     }
 
     protected Socket makeSocket(SocketDetails addr) throws IOException {

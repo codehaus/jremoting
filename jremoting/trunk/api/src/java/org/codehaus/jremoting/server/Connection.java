@@ -28,5 +28,5 @@ public interface Connection {
     /**
      * End the connection.
      */
-    void endConnection();
+    void closeConnection();
 }

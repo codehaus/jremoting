@@ -31,17 +31,17 @@ import java.io.OutputStream;
 
 
 /**
- * Class ObjectStreamEncoder
+ * Class ObjectStreamConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ObjectStreamEncoder extends AbstractStreamEncoder {
+public class ObjectStreamConnection extends AbstractStreamConnection {
 
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
 
-    public ObjectStreamEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
+    public ObjectStreamConnection(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
                                     OutputStream outputStream, String connectionDetails) {
         super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
     }
@@ -52,7 +52,7 @@ public class ObjectStreamEncoder extends AbstractStreamEncoder {
         objectOutputStream.reset();
     }
 
-    public void close() {
+    public void closeConnection() {
         try {
             if (objectInputStream != null) {
                 objectInputStream.close();
@@ -65,7 +65,7 @@ public class ObjectStreamEncoder extends AbstractStreamEncoder {
             }
         } catch (IOException e) {
         }
-        super.close();
+        super.closeConnection();
     }
 
     public void initialize() throws IOException {

@@ -21,7 +21,7 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
-import org.codehaus.jremoting.client.StreamEncoding;
+import org.codehaus.jremoting.client.StreamConnectionFactory;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.StreamTransport;
 import org.codehaus.jremoting.responses.ConnectionOpened;
@@ -39,6 +39,7 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public class PipedTransport extends StreamTransport {
 
+    private StreamConnectionFactory streamConnectionFactory;
     private PipedInputStream inputStream;
     private PipedOutputStream outputStream;
 
@@ -53,10 +54,11 @@ public class PipedTransport extends StreamTransport {
      * @param os
      */
     public PipedTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
-                                        ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, StreamEncoding streamEncoding, PipedInputStream is,
+                                        ConnectionPinger connectionPinger, ClassLoader facadesClassLoader, StreamConnectionFactory streamConnectionFactory, PipedInputStream is,
                                         PipedOutputStream os) {
 
-        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding);
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
+        this.streamConnectionFactory = streamConnectionFactory;
 
         inputStream = is;
         outputStream = os;
@@ -64,10 +66,10 @@ public class PipedTransport extends StreamTransport {
 
 
     public PipedTransport(ClientMonitor clientMonitor,
-                                        StreamEncoding streamEncoding,
+                                        StreamConnectionFactory streamConnectionFactory,
                                         PipedInputStream inputStream, PipedOutputStream outputStream) {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
-                Thread.currentThread().getContextClassLoader(), streamEncoding, inputStream, outputStream);
+                Thread.currentThread().getContextClassLoader(), streamConnectionFactory, inputStream, outputStream);
     }
 
     /**
@@ -76,7 +78,7 @@ public class PipedTransport extends StreamTransport {
      * @throws ConnectionException
      */
     public ConnectionOpened openConnection() throws ConnectionException {
-        addStreamEncoder(streamEncoding.makeStreamEncoder(inputStream, outputStream, getFacadesClassLoader()));
+        addStreamEncoder(streamConnectionFactory.makeStreamConnection(inputStream, outputStream, getFacadesClassLoader()));
         return super.openConnection();
     }
 

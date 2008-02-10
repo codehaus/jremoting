@@ -21,9 +21,8 @@ import com.thoughtworks.xstream.annotations.AnnotationProvider;
 import com.thoughtworks.xstream.annotations.AnnotationReflectionConverter;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.core.JVM;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.StreamEncoder;
+import org.codehaus.jremoting.client.StreamConnection;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.util.SerializationHelper;
@@ -38,19 +37,19 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 /**
- * Class XStreamEncoder
+ * Class XStreamConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.3 $
  */
-public class XStreamEncoder implements StreamEncoder {
+public class XStreamConnection implements StreamConnection {
 
     private final LineNumberReader lineNumberReader;
     private final PrintWriter printWriter;
     private final XStream xStream;
     private final BufferedOutputStream bufferedOutputStream;
 
-    public XStreamEncoder(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader, XStream xStream) throws ConnectionException {
+    public XStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader, XStream xStream) throws ConnectionException {
         bufferedOutputStream = new BufferedOutputStream(outputStream);
         printWriter = new PrintWriter(bufferedOutputStream);
         lineNumberReader = new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream)));
@@ -69,9 +68,20 @@ public class XStreamEncoder implements StreamEncoder {
 
     }
 
-    public synchronized Response postRequest(Request request) throws IOException, ClassNotFoundException {
+    public synchronized Response streamRequest(Request request) throws IOException, ClassNotFoundException {
         writeRequest(request);
         return readResponse();
+    }
+
+    public void closeConnection() {
+        try {
+            lineNumberReader.close();
+        } catch (IOException e) {
+        }
+        try {
+            bufferedOutputStream.close();
+        } catch (IOException e) {
+        }
     }
 
     private void writeRequest(Request request) throws IOException {

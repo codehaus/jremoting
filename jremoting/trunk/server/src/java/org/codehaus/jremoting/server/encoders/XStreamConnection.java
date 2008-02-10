@@ -37,19 +37,19 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 /**
- * Class XStreamEncoder
+ * Class XStreamConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class XStreamEncoder extends AbstractStreamEncoder {
+public class XStreamConnection extends AbstractStreamConnection {
 
     private LineNumberReader lineNumberReader;
     private PrintWriter printWriter;
     private XStream xStream;
     private BufferedOutputStream bufferedOutputStream;
 
-    public XStreamEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
+    public XStreamConnection(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
                                OutputStream outputStream, String connectionDetails, XStream xStream) {
         super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
         this.xStream = xStream;
@@ -71,7 +71,7 @@ public class XStreamEncoder extends AbstractStreamEncoder {
         bufferedOutputStream.flush();
     }
 
-    public void close() {
+    public void closeConnection() {
         try {
             getInputStream().close();
         } catch (IOException e) {
@@ -81,7 +81,7 @@ public class XStreamEncoder extends AbstractStreamEncoder {
         } catch (IOException e) {
         }
         printWriter.close();
-        super.close();
+        super.closeConnection();
     }
 
     public void initialize() throws IOException {

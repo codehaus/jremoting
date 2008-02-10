@@ -18,19 +18,14 @@
 package org.codehaus.jremoting.server.transports.socket;
 
 import org.codehaus.jremoting.JRemotingException;
-import org.codehaus.jremoting.server.Authenticator;
-import org.codehaus.jremoting.server.ServerContextFactory;
-import org.codehaus.jremoting.server.ServerDelegate;
-import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.StreamEncoder;
-import org.codehaus.jremoting.server.StreamEncoding;
-import org.codehaus.jremoting.server.StubRetriever;
+import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
+import org.codehaus.jremoting.server.encoders.ByteStreamConnectionFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
+import org.codehaus.jremoting.server.transports.RunningConnection;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -51,7 +46,7 @@ public class SocketServer extends ConnectingServer {
     private ServerSocket serverSocket;
     private Future daemon;
     private final InetSocketAddress addr;
-    private final StreamEncoding streamEncoding;
+    private final StreamConnectionFactory streamConnectionFactory;
     private final ClassLoader facadesClassLoader;
     private int socketTimeout = 60 * 1000;
 
@@ -75,20 +70,20 @@ public class SocketServer extends ConnectingServer {
                 defaultContextFactory(), addr);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, StreamEncoding streamEncoding, InetSocketAddress port) {
-        this(serverMonitor, defaultExecutor(), streamEncoding, port);
+    public SocketServer(ServerMonitor serverMonitor, StreamConnectionFactory streamConnectionFactory, InetSocketAddress port) {
+        this(serverMonitor, defaultExecutor(), streamConnectionFactory, port);
     }
 
     public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, InetSocketAddress addr) {
         this(serverMonitor, executorService, defaultStreamEncoding(), addr);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, StreamEncoding streamEncoding, InetSocketAddress addr) {
-        this(serverMonitor, defaultStubRetriever(), defaultAuthenticator(), streamEncoding, executorService, defaultContextFactory(), defaultClassLoader(), addr);
+    public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, StreamConnectionFactory streamConnectionFactory, InetSocketAddress addr) {
+        this(serverMonitor, defaultStubRetriever(), defaultAuthenticator(), streamConnectionFactory, executorService, defaultContextFactory(), defaultClassLoader(), addr);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamEncoding streamEncoding, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, InetSocketAddress addr) {
-        this(serverMonitor, stubRetriever, authenticator, streamEncoding, executorService, serverContextFactory, defaultClassLoader(), addr);
+    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamConnectionFactory streamConnectionFactory, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, InetSocketAddress addr) {
+        this(serverMonitor, stubRetriever, authenticator, streamConnectionFactory, executorService, serverContextFactory, defaultClassLoader(), addr);
     }
 
     public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, ScheduledExecutorService executorService, Authenticator authenticator) {
@@ -97,20 +92,20 @@ public class SocketServer extends ConnectingServer {
 
     public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever,
                         Authenticator authenticator,
-                        StreamEncoding streamEncoding,
+                        StreamConnectionFactory streamConnectionFactory,
                         ScheduledExecutorService executorService,
                         ServerContextFactory contextFactory,
                         ClassLoader facadesClassLoader, InetSocketAddress addr) {
         this(serverMonitor, new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
-                streamEncoding, executorService, facadesClassLoader, addr);
+                streamConnectionFactory, executorService, facadesClassLoader, addr);
     }    
 
     public SocketServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate,
-                                           StreamEncoding streamEncoding, ScheduledExecutorService executorService,
+                                           StreamConnectionFactory streamConnectionFactory, ScheduledExecutorService executorService,
                                            ClassLoader facadesClassLoader, InetSocketAddress addr) {
 
         super(serverMonitor, serverDelegate, executorService);
-        this.streamEncoding = streamEncoding;
+        this.streamConnectionFactory = streamConnectionFactory;
         this.facadesClassLoader = facadesClassLoader;
         this.addr = addr;
     }
@@ -120,8 +115,8 @@ public class SocketServer extends ConnectingServer {
         return Executors.newScheduledThreadPool(10);
     }
 
-    public static StreamEncoding defaultStreamEncoding() {
-        return new ByteStreamEncoding();
+    public static StreamConnectionFactory defaultStreamEncoding() {
+        return new ByteStreamConnectionFactory();
     }
 
     public static ClassLoader defaultClassLoader() {
@@ -179,7 +174,7 @@ public class SocketServer extends ConnectingServer {
         } catch (IOException ioe) {
             throw new JRemotingException("Error stopping Complete Socket server", ioe);
         }
-        killAllConnections();
+        closeConnections();
         if (daemon != null) {
             daemon.cancel(true);
         }
@@ -206,10 +201,23 @@ public class SocketServer extends ConnectingServer {
             try {
                 socket.setSoTimeout(socketTimeout);
                 if (getState().equals(STARTED)) {
-                    StreamEncoder streamEncoder = streamEncoding.createEncoder(serverMonitor, facadesClassLoader,
-                            socket.getInputStream(), socket.getOutputStream(), socket.getInetAddress().toString());
-                    SocketStreamConnection ssc = new SocketStreamConnection(SocketServer.this, socket, streamEncoder, serverMonitor);
-                    ssc.run();
+                    RunningConnection src = new RunningConnection(SocketServer.this,
+                            streamConnectionFactory.makeStreamConnection(serverMonitor, facadesClassLoader,
+                                socket.getInputStream(), socket.getOutputStream(), socket.getInetAddress().toString()),
+                            serverMonitor) {
+                        public void closeConnection() {
+                            super.closeConnection();
+                            try {
+                                socket.close();
+                            } catch (IOException e) {
+                                serverMonitor.closeError(this.getClass(), "SocketServer.closeConnection(): Error closing socket", e);
+                            }
+                        }
+
+                    };
+                    connectionStarting(src);
+                    src.run();
+                    connectionCompleted(src);
                 }
             } catch (IOException ioe) {
                 handleIOE(accepting, ioe);

@@ -19,10 +19,11 @@ package org.codehaus.jremoting.client.transports;
 
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.StreamEncoder;
-import org.codehaus.jremoting.client.StreamEncoding;
+import org.codehaus.jremoting.client.StreamConnection;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.responses.Response;
+import org.codehaus.jremoting.JRemotingException;
 
 import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -36,43 +37,60 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public abstract class StreamTransport extends StatefulTransport {
 
-    protected final StreamEncoding streamEncoding;
-    private LinkedBlockingQueue<StreamEncoder> encoders = new LinkedBlockingQueue<StreamEncoder>();
+    private LinkedBlockingQueue<StreamConnection> streamConnections = new LinkedBlockingQueue<StreamConnection>();
 
     public StreamTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
-                                                 ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
-                                                 StreamEncoding streamEncoding) {
+                           ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
-        this.streamEncoding = streamEncoding;
-
     }
 
-    protected void addStreamEncoder(StreamEncoder streamEncoder) {
+    protected void addStreamEncoder(StreamConnection streamConnection) {
         try {
-            encoders.put(streamEncoder);
+            streamConnections.put(streamConnection);
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
     protected Response performInvocation(Request request) throws IOException, ClassNotFoundException {
-        StreamEncoder se = null;
+        if (request instanceof CloseConnection) {
+            return closeConnections(request);
+        } else {
+            return performUnderlyingInvocation(request);
+        }
+    }
+
+    private Response closeConnections(Request request) throws ClassNotFoundException, IOException {
+        Response resp = performUnderlyingInvocation(request);
+        // close all connections
+        while (streamConnections.peek() != null) {
+            try {
+                streamConnections.take().closeConnection();
+            } catch (InterruptedException e) {
+            }
+        }
+        return resp;
+    }
+
+    protected Response performUnderlyingInvocation(Request request) throws ClassNotFoundException, IOException {
+
+        StreamConnection se = null;
+        boolean ioeCaught = false;
         try {
-            se =  encoders.take();
-            return se.postRequest(request);
+            se =  streamConnections.take();
+            return se.streamRequest(request);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            ioeCaught = true;
+            se.closeConnection();
+            throw ioe;
         } finally {
-            if (se != null) {
+            if (se != null && !ioeCaught) {
                 try {
-                    encoders.put(se);
+                    streamConnections.put(se);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         }
-        return null;
+        throw new JRemotingException("should never get here");
     }
-
-
 }

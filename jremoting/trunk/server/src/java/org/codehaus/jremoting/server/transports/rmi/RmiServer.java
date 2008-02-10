@@ -90,7 +90,7 @@ public class RmiServer extends ConnectingServer {
     }
 
     public void stopping() {
-        killAllConnections();
+        closeConnections();
 
         try {
             registry.unbind(RmiInvoker.class.getName());

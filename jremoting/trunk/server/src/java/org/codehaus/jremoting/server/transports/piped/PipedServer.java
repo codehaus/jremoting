@@ -20,12 +20,9 @@ package org.codehaus.jremoting.server.transports.piped;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.util.concurrent.ScheduledExecutorService;
-import org.codehaus.jremoting.server.Authenticator;
-import org.codehaus.jremoting.server.StubRetriever;
-import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.StreamEncoding;
-import org.codehaus.jremoting.server.StreamEncoder;
-import org.codehaus.jremoting.server.ServerContextFactory;
+
+import org.codehaus.jremoting.server.StreamConnectionFactory;
+import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 import org.codehaus.jremoting.server.transports.*;
 
@@ -41,29 +38,29 @@ import java.io.PipedOutputStream;
  */
 public class PipedServer extends ConnectingServer {
 
-    private final StreamEncoding streamEncoding;
+    private final StreamConnectionFactory streamConnectionFactory;
     private final ClassLoader facadesClassLoader;
 
     public PipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
                              ScheduledExecutorService executorService, ServerContextFactory contextFactory,
-                             StreamEncoding streamEncoding,
+                             StreamConnectionFactory streamConnectionFactory,
                              ClassLoader facadesClassLoader) {
         super(serverMonitor, new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
-        this.streamEncoding = streamEncoding;
+        this.streamConnectionFactory = streamConnectionFactory;
         this.facadesClassLoader = facadesClassLoader;
     }
 
     public PipedServer(ServerMonitor serverMonitor, DefaultServerDelegate serverDelegate,
                              ScheduledExecutorService executorService,
-                             StreamEncoding streamEncoding,
+                             StreamConnectionFactory streamConnectionFactory,
                              ClassLoader facadesClassLoader) {
         super(serverMonitor, serverDelegate, executorService);
-        this.streamEncoding = streamEncoding;
+        this.streamConnectionFactory = streamConnectionFactory;
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public PipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, StreamEncoding streamEncoding) {
-        this(serverMonitor, stubRetriever, authenticator, executorService, serverContextFactory, streamEncoding, PipedServer.class.getClassLoader());
+    public PipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, StreamConnectionFactory streamConnectionFactory) {
+        this(serverMonitor, stubRetriever, authenticator, executorService, serverContextFactory, streamConnectionFactory, PipedServer.class.getClassLoader());
     }
 
     public void makeNewConnection(final PipedInputStream in, final PipedOutputStream out) throws ConnectionException {
@@ -81,27 +78,28 @@ public class PipedServer extends ConnectingServer {
             pIS.connect(out);
             in.connect(pOS);
 
-            StreamEncoder streamEncoder = streamEncoding.createEncoder(serverMonitor, facadesClassLoader, pIS, pOS, "piped");
+            StreamConnection sc = streamConnectionFactory.makeStreamConnection(serverMonitor, facadesClassLoader, pIS, pOS, "piped");
 
-            StreamConnection streamConnection = new StreamConnection(this, streamEncoder, serverMonitor) {
-
-                protected void killConnection() {
-
+            RunningConnection runningConnection = new RunningConnection(this, sc, serverMonitor) {
+                public void closeConnection() {
+                    super.closeConnection();
                     try {
                         pIS.close();
                     } catch (IOException e) {
-                        serverMonitor.closeError(this.getClass(), "PipedStreamConnection.killConnection(): Some problem during closing of Input Stream", e);
+                        serverMonitor.closeError(this.getClass(), "PipedServer.closeConnection(): Some problem during closing of Input Stream", e);
                     }
 
                     try {
                         pOS.close();
                     } catch (IOException e) {
-                        serverMonitor.closeError(this.getClass(), "PipedStreamConnection.killConnection(): Some problem during closing of Output Stream", e);
+                        serverMonitor.closeError(this.getClass(), "PipedServer.closeConnection(): Some problem during closing of Output Stream", e);
                     }
                 }
             };
 
-            executorService.execute(streamConnection);
+            connectionStarting(runningConnection);
+            executorService.execute(runningConnection);
+            connectionCompleted(runningConnection);
 
         } catch (IOException pe) {
             throw new ConnectionException("Some problem setting up server : " + pe.getMessage());

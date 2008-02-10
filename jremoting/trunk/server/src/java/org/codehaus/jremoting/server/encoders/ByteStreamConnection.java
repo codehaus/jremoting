@@ -29,17 +29,17 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * Class ByteStreamEncoder
+ * Class ByteStreamConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public class ByteStreamEncoder extends AbstractStreamEncoder {
+public class ByteStreamConnection extends AbstractStreamConnection {
 
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
 
-    public ByteStreamEncoder(ServerMonitor serverMonitor, DataInputStream dataInputStream,
+    public ByteStreamConnection(ServerMonitor serverMonitor, DataInputStream dataInputStream,
                                     DataOutputStream dataOutputStream,
                                     ClassLoader facadesClassLoader, String connectionDetails) {
         super(serverMonitor, dataInputStream, dataOutputStream, facadesClassLoader, connectionDetails);
@@ -54,7 +54,7 @@ public class ByteStreamEncoder extends AbstractStreamEncoder {
         dataOutputStream.flush();
     }
 
-    public void close() {
+    public void closeConnection() {
         try {
             writeResponse(new ConnectionClosed());
         } catch (IOException e) {
@@ -67,7 +67,7 @@ public class ByteStreamEncoder extends AbstractStreamEncoder {
             dataOutputStream.close();
         } catch (IOException e) {
         }
-        super.close();
+        super.closeConnection();
     }
 
     public void initialize() {

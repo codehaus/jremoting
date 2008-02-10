@@ -19,7 +19,7 @@ package org.codehaus.jremoting.itests.invalidstate;
 
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.SocketDetails;
-import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
+import org.codehaus.jremoting.client.encoders.ByteStreamConnectionFactory;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
@@ -70,7 +70,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
 
             // Client side setup
             jRemotingClient = new JRemotingClient(new SocketTransport(new NullClientMonitor(),
-                    new ByteStreamEncoding(), new SocketDetails("127.0.0.1", 12201)));
+                    new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12201)));
             TestFacade testClient = (TestFacade) jRemotingClient.lookupService("Hello55");
             testClient.intParamReturningInt(100);
 
@@ -107,7 +107,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
                         return super.doesSessionExistAndRefreshItIfItDoes(session);
                     }
                 },
-            new org.codehaus.jremoting.server.encoders.ByteStreamEncoding(),
+            new org.codehaus.jremoting.server.encoders.ByteStreamConnectionFactory(),
                 Executors.newScheduledThreadPool(10), this.getClass().getClassLoader(), new InetSocketAddress(12201));
         TestFacadeImpl testServer = new TestFacadeImpl();
         server.publish(testServer, "Hello55", pd);

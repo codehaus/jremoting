@@ -24,7 +24,8 @@ import org.codehaus.jremoting.responses.ConnectionKilled;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.Connection;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.StreamEncoder;
+import org.codehaus.jremoting.server.InvocationHandler;
+import org.codehaus.jremoting.server.StreamConnection;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -34,53 +35,29 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 /**
- * Class StreamConnection
+ * Class RunningConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class StreamConnection implements Runnable, Connection {
+public abstract class RunningConnection implements Runnable, Connection {
 
-    /**
-     * The Abstract Server
-     */
-    private ConnectingServer connectingServer;
-
-    /**
-     * End connections
-     */
+    private InvocationHandler invocationHandler;
     private boolean endConnection = false;
+    private StreamConnection connection;
+    private final ServerMonitor serverMonitor;
 
-    /**
-     * The Sever stream encoder.
-     */
-    private StreamEncoder encoder;
-
-    protected final ServerMonitor serverMonitor;
-
-    /**
-     * Construct a StreamConnection
-     *
-     * @param connectingServer The Abstract Server handling requests
-     * @param encoder         The encoder.
-     */
-    public StreamConnection(ConnectingServer connectingServer, StreamEncoder encoder, ServerMonitor serverMonitor) {
-        this.connectingServer = connectingServer;
-        this.encoder = encoder;
+    public RunningConnection(InvocationHandler invocationHandler, StreamConnection connection, ServerMonitor serverMonitor) {
+        this.invocationHandler = invocationHandler;
+        this.connection = connection;
         this.serverMonitor = serverMonitor;
     }
 
-
-    /**
-     * Method run
-     */
     public void run() {
-
-        connectingServer.connectionStart(this);
 
         try {
 
-            encoder.initialize();
+            connection.initialize();
 
             boolean more = true;
             Request request = null;
@@ -88,42 +65,41 @@ public abstract class StreamConnection implements Runnable, Connection {
             while (more) {
                 try {
                     if (request != null) {
-                        response = connectingServer.invoke(request, encoder.getConnectionDetails());
+                        response = invocationHandler.invoke(request, connection.getConnectionDetails());
                     }
 
-                    request = encoder.writeResponseAndGetRequest(response);
+                    request = connection.writeResponseAndGetRequest(response);
                     if (endConnection) {
                         response = new ConnectionKilled();
                         more = false;
                     }
                 } catch (ConnectionException ace) {
                     more = false;
-                    serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected ConnectionException #0", ace);
-                    encoder.close();
+                    serverMonitor.unexpectedException(this.getClass(), "RunningConnection.run(): Unexpected ConnectionException #0", ace);
+                    connection.closeConnection();
                 } catch (IOException ioe) {
                     more = false;
                     if (ioe instanceof EOFException) {
-                        encoder.close();
+                        connection.closeConnection();
                     } else if (isSafeEnd(ioe)) {
-                        encoder.close();
+                        connection.closeConnection();
                     } else {
-                        serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected IOE #1", ioe);
-                        encoder.close();
+                        serverMonitor.unexpectedException(this.getClass(), "RunningConnection.run(): Unexpected IOE #1", ioe);
+                        connection.closeConnection();
                     }
                 } catch (NullPointerException npe) {
-                    serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected NPE", npe);
+                    serverMonitor.unexpectedException(this.getClass(), "RunningConnection.run(): Unexpected NPE", npe);
                     response = new BadServerSideEvent("NullPointerException on server: " + npe.getMessage());
                 }
             }
         } catch (StreamCorruptedException e) {
-            serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected IOE #2 (possible transport mismatch?)", e);
+            serverMonitor.unexpectedException(this.getClass(), "RunningConnection.run(): Unexpected IOE #2 (possible transport mismatch?)", e);
         } catch (IOException e) {
-            serverMonitor.unexpectedException(this.getClass(), "StreamConnection.run(): Unexpected IOE #3", e);
+            serverMonitor.unexpectedException(this.getClass(), "RunningConnection.run(): Unexpected IOE #3", e);
         } catch (ClassNotFoundException e) {
             serverMonitor.classNotFound(this.getClass(), e);
         }
 
-        connectingServer.connectionCompleted(this);
     }
 
     private boolean isSafeEnd(IOException ioe) {
@@ -144,14 +120,9 @@ public abstract class StreamConnection implements Runnable, Connection {
     /**
      * Method endConnection
      */
-    public void endConnection() {
+    public void closeConnection() {
         endConnection = true;
-        encoder.close();
+        connection.closeConnection();
     }
-
-    /**
-     * Method killConnection
-     */
-    protected abstract void killConnection();
 
 }

@@ -18,11 +18,8 @@
 package org.codehaus.jremoting.client.transports.socket;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.ConnectionPinger;
-import org.codehaus.jremoting.client.ConnectionRefusedException;
-import org.codehaus.jremoting.client.SocketDetails;
-import org.codehaus.jremoting.client.StreamEncoding;
+import org.codehaus.jremoting.client.StreamConnectionFactory;
+import org.codehaus.jremoting.client.*;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.StreamTransport;
 
@@ -39,27 +36,29 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public class SocketTransport extends StreamTransport {
 
+    private StreamConnectionFactory streamConnectionFactory;
     private final SocketDetails addr;
 
     public SocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
-                           StreamEncoding streamEncoding,
+                           StreamConnectionFactory streamConnectionFactory,
                            SocketDetails addr) throws ConnectionException {
-        this(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding, addr, defaultSocketTimeout());
+        this(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamConnectionFactory, addr, defaultSocketTimeout());
     }
 
     public SocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
-                           StreamEncoding streamEncoding,
-                           SocketDetails addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
-        super(clientMonitor, executorService, connectionPinger, facadesClassLoader, streamEncoding);
+                           StreamConnectionFactory streamConnectionFactory,
+                           SocketDetails addr, int socketTimeout) throws ConnectionException {
+        super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
+        this.streamConnectionFactory = streamConnectionFactory;
         this.addr = addr;
 
         try {
             for (int x = 0; x < addr.getConcurrentConnections(); x++) {
                 Socket socket = makeSocket(addr);
                 socket.setSoTimeout(socketTimeout);
-                addStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
+                addStreamEncoder(streamConnectionFactory.makeStreamConnection(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
             }
         } catch (IOException ioe) {
             if (ioe.getMessage().startsWith("Connection refused")) {
@@ -70,15 +69,15 @@ public class SocketTransport extends StreamTransport {
     }
 
 
-    public SocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, SocketDetails addr) throws ConnectionRefusedException, ConnectionException {
+    public SocketTransport(ClientMonitor clientMonitor, StreamConnectionFactory streamConnectionFactory, SocketDetails addr) throws ConnectionException {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
-                Thread.currentThread().getContextClassLoader(), streamEncoding, addr);
+                Thread.currentThread().getContextClassLoader(), streamConnectionFactory, addr);
     }
 
 
-    public SocketTransport(ClientMonitor clientMonitor, StreamEncoding streamEncoding, SocketDetails addr, int socketTimeout) throws ConnectionRefusedException, ConnectionException {
+    public SocketTransport(ClientMonitor clientMonitor, StreamConnectionFactory streamConnectionFactory, SocketDetails addr, int socketTimeout) throws ConnectionException {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
-                Thread.currentThread().getContextClassLoader(), streamEncoding, addr, socketTimeout);
+                Thread.currentThread().getContextClassLoader(), streamConnectionFactory, addr, socketTimeout);
     }
 
     private static int defaultSocketTimeout() {
@@ -91,7 +90,7 @@ public class SocketTransport extends StreamTransport {
         try {
             Socket socket = makeSocket(addr);
             socket.setSoTimeout(60 * 1000);
-            addStreamEncoder(streamEncoding.makeStreamEncoder(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
+            addStreamEncoder(streamConnectionFactory.makeStreamConnection(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
             return true;
         } catch (IOException ce) {
             return false;

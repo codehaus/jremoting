@@ -19,7 +19,7 @@ package org.codehaus.jremoting.itests.stubs;
 
 
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
-import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
+import org.codehaus.jremoting.client.encoders.ByteStreamConnectionFactory;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.socket.SocketTransport;
@@ -54,7 +54,7 @@ public class ByteStreamOverSocketWithHandCraftedStubsTestCase extends AbstractHe
         server.start();
 
         // Client side setup
-        jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(), new SocketDetails("localhost", 10333)),
+        jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamConnectionFactory(), new SocketDetails("localhost", 10333)),
                 new ThreadLocalContextFactory(), new HandCraftedTestFacadeStubFactory());
         testClient = (TestFacade) jremotingClient.lookupService("Hello");
 

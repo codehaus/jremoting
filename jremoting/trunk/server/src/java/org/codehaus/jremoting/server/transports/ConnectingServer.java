@@ -36,10 +36,10 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class ConnectingServer extends StatefulServer {
 
-    private List<Connection> connections = new ArrayList<Connection>();
+    private final List<Connection> connections = new ArrayList<Connection>();
     private ScheduledFuture pruner;
-    int pruneStaleLongerThan = 5 * 60 * 1000;
-    int pruneSessionInterval = 100;
+    private int pruneStaleLongerThan = 5 * 60 * 1000;
+    private int pruneSessionInterval = 100;
 
     public void setPruneStaleLongerThan(int millis) {
         this.pruneStaleLongerThan = millis;
@@ -65,11 +65,11 @@ public abstract class ConnectingServer extends StatefulServer {
 
     public void stopping() {
         pruner.cancel(true);
-        killAllConnections();
+        closeConnections();
         super.stopping();
     }
 
-    protected void connectionStart(Connection connection) {
+    protected void connectionStarting(Connection connection) {
         if (connection == null) {
             throw new RuntimeException("whoaa!");
         }
@@ -84,7 +84,7 @@ public abstract class ConnectingServer extends StatefulServer {
         }
     }
 
-    protected void killAllConnections() {
+    protected void closeConnections() {
         // Copy the connections into an array to avoid ConcurrentModificationExceptions
         //  as the connections are closed.
         Connection[] connections;
@@ -92,7 +92,7 @@ public abstract class ConnectingServer extends StatefulServer {
             connections = this.connections.toArray(new Connection[0]);
         }
         for (Connection connection : connections) {
-            connection.endConnection();
+            connection.closeConnection();
         }
     }
 

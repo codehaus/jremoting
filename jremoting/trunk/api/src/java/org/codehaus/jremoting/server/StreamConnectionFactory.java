@@ -22,9 +22,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 
-public interface StreamEncoding {
+public interface StreamConnectionFactory {
 
-    public StreamEncoder createEncoder(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
-                                           InputStream inputStream, OutputStream outputStream, String connectionDetails) throws IOException;
+    public StreamConnection makeStreamConnection(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
+                                               InputStream inputStream, OutputStream outputStream,
+                                               String connectionDetails) throws IOException;
 
 }

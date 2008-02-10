@@ -49,7 +49,12 @@ public class ReflectionServiceHandler extends ServiceHandler {
     protected Object invokeFacadeMethod(InvokeMethod request, String methodSignature, Object instance) 
             throws IllegalAccessException, InvocationTargetException {
         Method method = methodMap.get(methodSignature);
-        return method.invoke(instance, request.getArgs());
+        Object[] args = request.getArgs();
+        return invokeMethod(instance, method, args);
+    }
+
+    protected Object invokeMethod(Object instance, Method method, Object[] args) throws IllegalAccessException, InvocationTargetException {
+        return method.invoke(instance, args);
     }
 
     public String[] getListOfMethods() {

@@ -26,7 +26,7 @@ import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
+import org.codehaus.jremoting.server.encoders.ByteStreamConnectionFactory;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
@@ -49,7 +49,7 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
 
         // server side setup.
         server = new PipedServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
-                Executors.newScheduledThreadPool(10) ,new ThreadLocalServerContextFactory(), new ByteStreamEncoding());
+                Executors.newScheduledThreadPool(10) ,new ThreadLocalServerContextFactory(), new ByteStreamConnectionFactory());
         testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
@@ -62,7 +62,7 @@ public class PipedByteStreamTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         jremotingClient = new JRemotingClient(new PipedTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(), in, out));
+                new org.codehaus.jremoting.client.encoders.ByteStreamConnectionFactory(), in, out));
         testClient = (TestFacade) jremotingClient.lookupService("Hello");
 
     }

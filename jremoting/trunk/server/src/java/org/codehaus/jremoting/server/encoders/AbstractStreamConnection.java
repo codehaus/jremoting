@@ -18,7 +18,7 @@
 package org.codehaus.jremoting.server.encoders;
 
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.StreamEncoder;
+import org.codehaus.jremoting.server.StreamConnection;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
@@ -28,12 +28,12 @@ import java.io.OutputStream;
 
 
 /**
- * Class AbstractStreamEncoder
+ * Class AbstractStreamConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public abstract class AbstractStreamEncoder implements StreamEncoder {
+public abstract class AbstractStreamConnection implements StreamConnection {
 
     private final InputStream inputStream;
     private final OutputStream outputStream;
@@ -41,7 +41,7 @@ public abstract class AbstractStreamEncoder implements StreamEncoder {
     private final ClassLoader facadesClassLoader;
     private final String connectionDetails;
 
-    public AbstractStreamEncoder(ServerMonitor serverMonitor,
+    public AbstractStreamConnection(ServerMonitor serverMonitor,
                                       InputStream inputStream, OutputStream outputStream,
                                       ClassLoader facadesClassLoader, String connectionDetails) {
         this.serverMonitor = serverMonitor;
@@ -65,17 +65,17 @@ public abstract class AbstractStreamEncoder implements StreamEncoder {
         return connectionDetails;
     }
 
-    public void close() {
+    public void closeConnection() {
         try {
             inputStream.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "AbstractStreamEncoder.closeConnection(): Failed closing an JRemoting connection input stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractStreamConnection.closeConnection(): Failed closing an JRemoting connection input stream: ", e);
         }
 
         try {
             outputStream.close();
         } catch (IOException e) {
-            serverMonitor.closeError(this.getClass(), "AbstractStreamEncoder.closeConnection(): Failed closing an JRemoting connection output stream: ", e);
+            serverMonitor.closeError(this.getClass(), "AbstractStreamConnection.closeConnection(): Failed closing an JRemoting connection output stream: ", e);
         }
     }
 

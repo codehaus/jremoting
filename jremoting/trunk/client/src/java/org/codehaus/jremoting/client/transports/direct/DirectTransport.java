@@ -22,11 +22,13 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.InvocationHandler;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.io.IOException;
 
 /**
  * Class DirectTransport

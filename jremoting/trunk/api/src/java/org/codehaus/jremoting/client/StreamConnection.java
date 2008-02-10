@@ -23,11 +23,13 @@ import org.codehaus.jremoting.responses.Response;
 import java.io.IOException;
 
 /**
- * Class StreamEncoder
+ * Class StreamConnection
  *
  * @author Paul Hammant
  * @version $Revision: 1.2 $
  */
-public interface StreamEncoder {
-    Response postRequest(Request request) throws IOException, ClassNotFoundException;
+public interface StreamConnection {
+    Response streamRequest(Request request) throws IOException, ClassNotFoundException;
+
+    void closeConnection();
 }

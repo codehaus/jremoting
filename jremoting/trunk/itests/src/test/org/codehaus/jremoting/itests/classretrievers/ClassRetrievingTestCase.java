@@ -28,7 +28,7 @@ import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.stubretrievers.DynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
+import org.codehaus.jremoting.server.encoders.ByteStreamConnectionFactory;
 import org.codehaus.jremoting.server.transports.piped.PipedServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
@@ -54,7 +54,7 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
         // server side setup.
         DynamicStubRetriever dyncgen = new BcelDynamicStubRetriever();
         server = new PipedServer(new NullServerMonitor(), dyncgen, new NullAuthenticator(), Executors.newScheduledThreadPool(10), new ThreadLocalServerContextFactory(),
-                new ByteStreamEncoding());
+                new ByteStreamConnectionFactory());
         testServer = new TestImpl();
         server.publish(testServer, "Kewl", TestFacade.class);
         dyncgen.generate("Kewl", TestFacade.class, this.getClass().getClassLoader());
@@ -70,7 +70,7 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null)); 
         JRemotingClient jc = new JRemotingClient(new PipedTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(), in, out), (ContextFactory) mock.proxy(), new StubsFromServer());
+                new org.codehaus.jremoting.client.encoders.ByteStreamConnectionFactory(), in, out), (ContextFactory) mock.proxy(), new StubsFromServer());
         testClient = (TestFacade) jc.lookupService("Kewl");
 
     }

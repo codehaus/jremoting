@@ -22,11 +22,13 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMarshalledInvoker;
 import org.codehaus.jremoting.util.SerializationHelper;
 
 import java.util.concurrent.ScheduledExecutorService;
+import java.io.IOException;
 
 /**
  * Class DirectMarshalledTransport

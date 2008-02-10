@@ -25,6 +25,7 @@ import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.requests.Request;
+import org.codehaus.jremoting.requests.CloseConnection;
 import org.codehaus.jremoting.responses.Response;
 
 import java.io.IOException;
@@ -68,8 +69,16 @@ public final class RmiTransport extends StatefulTransport {
     }
 
     public RmiTransport(ClientMonitor clientMonitor, SocketDetails addr) throws ConnectionException {
-        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), addr);
+        this(clientMonitor, defaultScheduledThreadPool(), defaultConnectionPinger(), addr);
 
+    }
+
+    public static ConnectionPinger defaultConnectionPinger() {
+        return new NeverConnectionPinger();
+    }
+
+    public static ScheduledExecutorService defaultScheduledThreadPool() {
+        return Executors.newScheduledThreadPool(10);
     }
 
     protected boolean tryReconnect() {
@@ -80,7 +89,6 @@ public final class RmiTransport extends StatefulTransport {
             return false;
         }
     }
-
 
     protected Response performInvocation(Request request) throws IOException, ClassNotFoundException {
         try {

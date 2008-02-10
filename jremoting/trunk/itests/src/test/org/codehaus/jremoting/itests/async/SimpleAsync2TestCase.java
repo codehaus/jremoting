@@ -27,8 +27,7 @@ import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.server.encoders.ByteStreamEncoding;
-import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
+import org.codehaus.jremoting.server.encoders.ByteStreamConnectionFactory;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.socket.SocketServer;
 import org.jmock.Mock;
@@ -67,7 +66,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
 
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), stubRetriever, new NullAuthenticator(),
-                new ByteStreamEncoding(), executorService,
+                new ByteStreamConnectionFactory(), executorService,
                 new ThreadLocalServerContextFactory(), new InetSocketAddress(11009));
 
         asyncTestImpl = new AsyncTestImpl();
@@ -81,7 +80,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
         jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.encoders.ByteStreamEncoding(), new SocketDetails("127.0.0.1", 11009)), (ContextFactory) mock.proxy(), new StubsFromServer());
+                new org.codehaus.jremoting.client.encoders.ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 11009)), (ContextFactory) mock.proxy(), new StubsFromServer());
         testClient = (AsyncTest) jremotingClient.lookupService("AsyncTestB");
 
     }

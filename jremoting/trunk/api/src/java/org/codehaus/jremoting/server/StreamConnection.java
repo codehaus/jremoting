@@ -6,7 +6,7 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
-public interface StreamEncoder {
+public interface StreamConnection {
 
     /**
      * Write a Response, then Get a new Request over the stream.
@@ -21,7 +21,7 @@ public interface StreamEncoder {
 
     String getConnectionDetails();
 
-    void close();
+    void closeConnection();
 
     void initialize() throws IOException;
 }

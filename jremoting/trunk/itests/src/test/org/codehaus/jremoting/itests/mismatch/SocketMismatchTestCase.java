@@ -18,8 +18,8 @@
 package org.codehaus.jremoting.itests.mismatch;
 
 import org.codehaus.jremoting.ConnectionException;
-import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
-import org.codehaus.jremoting.client.encoders.ObjectStreamEncoding;
+import org.codehaus.jremoting.client.encoders.ByteStreamConnectionFactory;
+import org.codehaus.jremoting.client.encoders.ObjectStreamConnectionFactory;
 import org.codehaus.jremoting.client.factories.JRemotingClient;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
@@ -69,7 +69,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
             // Client side setup
             factory = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new ObjectStreamEncoding(), new SocketDetails("127.0.0.1", 12001)));
+                new ObjectStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12001)));
             testClient = (TestFacade) factory.lookupService("Hello");
 
             testClient.hello("hello");
@@ -99,7 +99,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
     public void dont_testObjectStreamByteStreamMismatch() throws Exception {
 
         // server side setup.
-        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.encoders.ObjectStreamEncoding(), new InetSocketAddress(12002));
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.encoders.ObjectStreamConnectionFactory(), new InetSocketAddress(12002));
         TestFacadeImpl testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
@@ -110,7 +110,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
             // Client side setup
             factory = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new ByteStreamEncoding(), new SocketDetails("127.0.0.1", 12002)));
+                new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12002)));
             TestFacade testClient = (TestFacade) factory.lookupService("Hello");
 
 
@@ -184,7 +184,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
             // Client side setup
             factory = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new ObjectStreamEncoding(), new SocketDetails("127.0.0.1", 12004)));
+                new ObjectStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12004)));
             TestFacade testClient = (TestFacade) factory.lookupService("Hello");
 
 
