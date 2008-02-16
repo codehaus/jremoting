@@ -71,11 +71,11 @@ public abstract class StreamTransport extends StatefulTransport {
         return resp;
     }
 
-    protected Response performUnderlyingInvocation(Request request) throws ClassNotFoundException, IOException {
-
+    private Response performUnderlyingInvocation(Request request) throws ClassNotFoundException, IOException {
         StreamConnection se = null;
         boolean ioeCaught = false;
         try {
+            //TODO there is a possibility that after IOE or IE, there are none left in the pool
             se =  streamConnections.take();
             return se.streamRequest(request);
         } catch (InterruptedException e) {
@@ -85,10 +85,7 @@ public abstract class StreamTransport extends StatefulTransport {
             throw ioe;
         } finally {
             if (se != null && !ioeCaught) {
-                try {
-                    streamConnections.put(se);
-                } catch (InterruptedException e) {
-                }
+                this.addStreamEncoder(se);
             }
         }
         throw new JRemotingException("should never get here");

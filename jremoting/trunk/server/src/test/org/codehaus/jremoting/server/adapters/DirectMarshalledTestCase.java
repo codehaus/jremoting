@@ -17,7 +17,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
+import org.codehaus.jremoting.server.transports.DirectMarshalledServer;
 import org.jmock.MockObjectTestCase;
 
 import java.io.ByteArrayInputStream;

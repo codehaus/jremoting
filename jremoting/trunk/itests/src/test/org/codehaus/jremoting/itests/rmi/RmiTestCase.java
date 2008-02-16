@@ -17,9 +17,9 @@
  */
 package org.codehaus.jremoting.itests.rmi;
 
-import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.factories.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.rmi.RmiTransport;
+import org.codehaus.jremoting.client.transports.RmiTransport;
 import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
@@ -28,7 +28,7 @@ import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.transports.rmi.RmiServer;
+import org.codehaus.jremoting.server.transports.RmiServer;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -64,8 +64,8 @@ public class RmiTestCase extends MockObjectTestCase {
         server.start();
 
         // Client side setup
-        JRemotingClient jc = new JRemotingClient(new RmiTransport(new ConsoleClientMonitor(), new SocketDetails("127.0.0.1", 10003)));
-        testClient = (TestFacade) jc.lookupService("Hello");
+        ServiceResolver jc = new ServiceResolver(new RmiTransport(new ConsoleClientMonitor(), new SocketDetails("127.0.0.1", 10003)));
+        testClient = (TestFacade) jc.serviceResolver("Hello");
 
 
     }

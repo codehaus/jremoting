@@ -47,12 +47,12 @@ public final class Publication {
         return this;
     }
 
-    public Publication addAdditionalFacade(PublicationItem publicationDescriptionItem) {
-        return addAdditionalFacade(new PublicationItem[]{publicationDescriptionItem});
+    public Publication addAdditionalFacade(PublicationItem publicationItem) {
+        return addAdditionalFacade(new PublicationItem[]{publicationItem});
     }
 
-    public Publication addAdditionalFacade(PublicationItem... publicationDescriptionItems) {
-        for (PublicationItem publicationDescriptionItem : publicationDescriptionItems) {
+    public Publication addAdditionalFacade(PublicationItem... publicationItems) {
+        for (PublicationItem publicationDescriptionItem : publicationItems) {
             if (publicationDescriptionItem == null) {
                 throw new RuntimeException("'PubDescItem' cannot be null");
             }

@@ -27,14 +27,14 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        ServiceResolver factory = new ServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             @Override
             protected Object getInstance(String facadeClassName, String publishedServiceName, String objectName, StubHelper stubHelper) throws ConnectionException {
                 return "bar";
             }
         };
 
-        Object bar = factory.lookupService("foo");
+        Object bar = factory.serviceResolver("foo");
         factory.close();
         assertNotNull(bar);
         assertEquals("bar", bar);
@@ -50,14 +50,14 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        ServiceResolver factory = new ServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
         };
 
         try {
-            factory.lookupService("foo");
+            factory.serviceResolver("foo");
         } catch (ConnectionException e) {
             assertEquals("Service 'foo' not published", e.getMessage());
         }
@@ -73,14 +73,14 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        ServiceResolver factory = new ServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
         };
 
         try {
-            factory.lookupService("foo");
+            factory.serviceResolver("foo");
         } catch (ConnectionException e) {
             assertEquals("foo", e.getMessage());
         }
@@ -94,14 +94,14 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        ServiceResolver factory = new ServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) throws ConnectionException, ClassNotFoundException {
                 return null;
             }
         };
 
         try {
-            factory.lookupService("foo");
+            factory.serviceResolver("foo");
         } catch (RuntimeException e) {
             assertEquals("foo", e.getMessage());
         }
@@ -115,14 +115,14 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        ServiceResolver factory = new ServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) {
                 return null;
             }
         };
 
         try {
-            factory.lookupService("foo");
+            factory.serviceResolver("foo");
         } catch (Error e) {
             assertEquals("foo", e.getMessage());
         }
@@ -136,7 +136,7 @@ public class XAbstractFactoryTestCase extends MockObjectTestCase {
 
         Mock cf = mock(ContextFactory.class);
 
-        JRemotingClient factory = new JRemotingClient((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
+        ServiceResolver factory = new ServiceResolver((Transport) ih.proxy(), (ContextFactory) cf.proxy()) {
             protected Class getStubClass(String publishedServiceName, String objectName) {
                 return null;
             }

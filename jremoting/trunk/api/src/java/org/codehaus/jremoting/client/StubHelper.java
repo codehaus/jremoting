@@ -90,10 +90,10 @@ public interface StubHelper {
     /**
      * Method getReference
      *
-     * @param factory
+     * @param serviceResolver
      * @return
      */
-    Long getReference(Object factory);
+    Long getReference(Object serviceResolver);
 
     boolean isEquals(Object o1, Object o2);
 

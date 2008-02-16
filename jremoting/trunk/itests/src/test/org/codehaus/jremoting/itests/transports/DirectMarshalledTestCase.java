@@ -18,16 +18,16 @@
 package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.ClientMonitor;
-import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.factories.ServiceResolver;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
-import org.codehaus.jremoting.client.transports.direct.DirectMarshalledTransport;
+import org.codehaus.jremoting.client.transports.DirectMarshalledTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.transports.direct.DirectMarshalledServer;
+import org.codehaus.jremoting.server.transports.DirectMarshalledServer;
 
 import java.util.concurrent.Executors;
 
@@ -50,9 +50,9 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
-        jremotingClient = new JRemotingClient(new DirectMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(), Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), (DirectMarshalledServer) server, this.getClass().getClassLoader()));
+        jremotingClient = new ServiceResolver(new DirectMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(), Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), (DirectMarshalledServer) server, this.getClass().getClassLoader()));
 
-        testClient = (TestFacade) jremotingClient.lookupService("Hello");
+        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
 
     }
 

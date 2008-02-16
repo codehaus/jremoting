@@ -17,7 +17,6 @@
  */
 package org.codehaus.jremoting.server.adapters;
 
-
 import org.codehaus.jremoting.Contextualizable;
 import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.requests.CloseConnection;
@@ -75,7 +74,6 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
     private final StubRetriever stubRetriever;
     private final Authenticator authenticator;
     private final ServerMonitor serverMonitor;
-
     private final ServerContextFactory contextFactory;
 
     public DefaultServerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever,
@@ -88,12 +86,10 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
     }
 
     public Response invoke(Request request, String connectionDetails) {
-
         try {
             if (isSuspended()) {
                 return new ServicesSuspended();
             }
-
             // Method request is positioned first as
             // it is the one we want to be most speedy.
             if (request.getRequestCode() == RequestConstants.METHODREQUEST) {
@@ -154,27 +150,21 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
     private void setClientContext(Contextualizable request) {
         long session = request.getSessionID();
         Context clientSideContext = request.getContext();
-
         // *always* happens before method invocations.
         contextFactory.set(new ServerSideContext(session, clientSideContext));
 
     }
 
     private Response doMethodFacadeRequest(InvokeFacadeMethod facadeRequest, Object connectionDetails) {
-
         if (!doesSessionExistAndRefreshItIfItDoes(facadeRequest.getSessionID()) && (connectionDetails == null || !connectionDetails.equals("callback"))) {
             return new NoSuchSession(facadeRequest.getSessionID());
         }
-
         String publishedThing = facadeRequest.getService() + "_" + facadeRequest.getObjectName();
-
         if (!isPublished(publishedThing)) {
             return new NotPublished();
         }
-
         ServiceHandler serviceHandler = getServiceHandler(publishedThing);
         Response response = serviceHandler.handleMethodInvocation(facadeRequest, connectionDetails);
-
         if (response instanceof ExceptionThrown) {
             return response;
         } else if (response instanceof ProblemResponse) {
@@ -188,7 +178,6 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
                 return doMethodFacadeRequestNonArray(methodResponse, facadeRequest);
             } else {
                 return doMethodFacadeRequestArray(methodResponse, facadeRequest);
-
             }
         } else {
             // unknown reply type from
@@ -208,45 +197,31 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
         for (int i = 0; i < instances.length; i++) {
             Object impl = instances[i];
             ServiceHandler mainServiceHandler = getServiceHandler(StaticStubHelper.formatServiceName(invokeFacadeMethod.getService()));
-
-            objectNames[i] = MethodNameHelper.encodeClassName(mainServiceHandler.getMostDerivedType(instances[i]).getName());
-
+            objectNames[i] = MethodNameHelper.encodeClassName(mainServiceHandler.getMostDerivedType(impl).getName());
             ServiceHandler serviceHandler2 = getServiceHandler(StaticStubHelper.formatServiceName(invokeFacadeMethod.getService(), objectNames[i]));
-
             if (serviceHandler2 == null) {
                 return new NotPublished();
             }
-
-            if (instances[i] == null) {
+            if (impl == null) {
                 refs[i] = null;
             } else {
-                refs[i] = serviceHandler2.getOrMakeReferenceIDForInstance(instances[i]);
-
-                Session session = getSession(invokeFacadeMethod.getSessionID());
-
-                session.addInstanceInUse(refs[i], instances[i]);
+                refs[i] = serviceHandler2.getOrMakeReferenceIDForInstance(impl);
+                getSession(invokeFacadeMethod.getSessionID()).addInstanceInUse(refs[i], impl);
             }
         }
-
         return new FacadeArrayMethodInvoked(refs, objectNames);
     }
 
     private Response doMethodFacadeRequestNonArray(Object instance, InvokeFacadeMethod invokeFacadeMethod) {
-
         if (!doesSessionExistAndRefreshItIfItDoes(invokeFacadeMethod.getSessionID())) {
             return new NoSuchSession(invokeFacadeMethod.getSessionID());
         }
-
         ServiceHandler mainServiceHandler = getServiceHandler(StaticStubHelper.formatServiceName(invokeFacadeMethod.getService()));
-
         String objectName = MethodNameHelper.encodeClassName(mainServiceHandler.getMostDerivedType(instance).getName());
-
         ServiceHandler serviceHandler = getServiceHandler(invokeFacadeMethod.getService() + "_" + objectName);
-
         if (serviceHandler == null) {
             return new NotPublished();
         }
-
         Long newRef = serviceHandler.getOrMakeReferenceIDForInstance(instance);
 
         // make sure the instance is not garbage collected.
@@ -259,68 +234,48 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
     }
 
     private Response doMethodRequest(InvokeMethod invokeMethod, Object connectionDetails) {
-
         if (!doesSessionExistAndRefreshItIfItDoes(invokeMethod.getSessionID()) && (connectionDetails == null || !connectionDetails.equals("callback"))) {
             return new NoSuchSession(invokeMethod.getSessionID());
         }
-
         String publishedThing = invokeMethod.getService() + "_" + invokeMethod.getObjectName();
-
         if (!isPublished(publishedThing)) {
             return new NotPublished();
         }
-
         ServiceHandler serviceHandler = getServiceHandler(publishedThing);
-
         return serviceHandler.handleMethodInvocation(invokeMethod, connectionDetails);
     }
 
     private Response doMethodAsyncRequest(InvokeAsyncMethod methodRequest, Object connectionDetails) {
-
         long session = methodRequest.getSessionID();
         if (!doesSessionExistAndRefreshItIfItDoes(session)) {
             return new NoSuchSession(session);
         }
-
-
         String publishedThing = methodRequest.getService() + "_" + methodRequest.getObjectName();
-
         if (!isPublished(publishedThing)) {
             return new NotPublished();
         }
-
-
         Session sess = getSession(session);
-
         ServiceHandler serviceHandler = getServiceHandler(publishedThing);
-
         GroupedMethodRequest[] requests = methodRequest.getGroupedRequests();
         for (GroupedMethodRequest rawRequest : requests) {
             serviceHandler.handleMethodInvocation(new InvokeMethod(methodRequest.getService(), methodRequest.getObjectName(), rawRequest.getMethodSignature(), rawRequest.getArgs(), methodRequest.getReference(), methodRequest.getSessionID()), connectionDetails);
         }
-
         return new MethodInvoked();
-
     }
 
     private Response doLookupRequest(Request request) {
         LookupService lr = (LookupService) request;
         String publishedServiceName = lr.getService();
-
         if (!authenticator.checkAuthority(lr.getAuthentication(), publishedServiceName)) {
             return new AuthenticationFailed();
         }
-
         String service = StaticStubHelper.formatServiceName(publishedServiceName);
-
         if (isRedirected(publishedServiceName)) {
             return new Redirected(getRedirectedTo(publishedServiceName));
         }
-
         if (!isPublished(service)) {
             return new NotPublished();
         }
-
         //TODO a decent ref number for main?
         return new Service((long) 0, getFacadeClass(service).getName(), getAdditionalFacades(service));
     }
@@ -328,7 +283,6 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
     private Response doClassRequest(Request request) {
         RetrieveStub cr = (RetrieveStub) request;
         String publishedThing = cr.getService() + "_" + cr.getObjectName();
-
         try {
             return new StubClass(stubRetriever.getStubClassBytes(publishedThing));
         } catch (StubRetrievalException e) {
@@ -356,11 +310,9 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
     private Response doGarbageCollectionRequest(Request request) {
         CollectGarbage gcr = (CollectGarbage) request;
         String publishedThing = gcr.getService() + "_" + gcr.getObjectName();
-
         if (!isPublished(publishedThing)) {
             return new NotPublished();
         }
-
         long session = gcr.getSessionID();
         if (doesSessionExistAndRefreshItIfItDoes(session)) {
             Session sess = getSession(session);
@@ -381,5 +333,4 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
         super.doesSessionExistAndRefreshItIfItDoes(ping.getSession());
         return new Ping();
     }
-
 }

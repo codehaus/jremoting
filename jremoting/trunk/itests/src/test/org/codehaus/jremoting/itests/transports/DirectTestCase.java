@@ -19,15 +19,15 @@ package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.context.NullContextFactory;
-import org.codehaus.jremoting.client.factories.JRemotingClient;
-import org.codehaus.jremoting.client.transports.direct.DirectTransport;
+import org.codehaus.jremoting.client.factories.ServiceResolver;
+import org.codehaus.jremoting.client.transports.DirectTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.transports.direct.DirectServer;
+import org.codehaus.jremoting.server.transports.DirectServer;
 
 
 /**
@@ -49,9 +49,9 @@ public class DirectTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
-        jremotingClient = new JRemotingClient(
+        jremotingClient = new ServiceResolver(
                 new DirectTransport((ClientMonitor) mockClientMonitor.proxy(), server), new NullContextFactory());
-        testClient = (TestFacade) jremotingClient.lookupService("Hello");
+        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
     }
 
     protected int getNumIterationsForSpeedTest() {

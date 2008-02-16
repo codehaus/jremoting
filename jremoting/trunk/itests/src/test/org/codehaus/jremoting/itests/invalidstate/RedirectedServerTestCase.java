@@ -21,10 +21,10 @@ import org.codehaus.jremoting.RedirectedException;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.SocketDetails;
-import org.codehaus.jremoting.client.encoders.ByteStreamConnectionFactory;
-import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory;
+import org.codehaus.jremoting.client.factories.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
-import org.codehaus.jremoting.client.transports.socket.SocketTransport;
+import org.codehaus.jremoting.client.transports.SocketTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
@@ -35,7 +35,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.socket.SocketServer;
+import org.codehaus.jremoting.server.transports.SocketServer;
 import org.codehaus.jremoting.tools.generator.BcelStubGenerator;
 import org.jmock.MockObjectTestCase;
 
@@ -67,18 +67,18 @@ public class RedirectedServerTestCase extends MockObjectTestCase {
         // server side setup.
         final SocketServer server = startServer();
 
-        JRemotingClient jRemotingClient = null;
+        ServiceResolver serviceResolver = null;
         try {
 
             ClientMonitor clientMonitor = new NullClientMonitor();
 
             // Client side setup
 
-            jRemotingClient = new JRemotingClient(new SocketTransport(clientMonitor,
+            serviceResolver = new ServiceResolver(new SocketTransport(clientMonitor,
                     new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12201)));
 
             try {
-                jRemotingClient.lookupService("Hello55");
+                serviceResolver.serviceResolver("Hello55");
                 fail("should have barfed");
             } catch (RedirectedException e) {
                 assertEquals("redirected to: localhost:12202", e.getMessage());
@@ -88,7 +88,7 @@ public class RedirectedServerTestCase extends MockObjectTestCase {
         } finally {
             System.gc();
             try {
-                jRemotingClient.close();
+                serviceResolver.close();
             } catch (InvocationException e) {
             }
             try {
@@ -103,7 +103,7 @@ public class RedirectedServerTestCase extends MockObjectTestCase {
     private SocketServer startServer() throws PublicationException {
         SocketServer server = new SocketServer(new ConsoleServerMonitor(),
                 new DefaultServerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory()),
-            new org.codehaus.jremoting.server.encoders.ByteStreamConnectionFactory(),
+            new org.codehaus.jremoting.server.streams.ByteStreamConnectionFactory(),
                 Executors.newScheduledThreadPool(10), this.getClass().getClassLoader(), new InetSocketAddress(12201));
         server.redirect("Hello55", "localhost", 12202);
         server.start();

@@ -19,17 +19,17 @@ package org.codehaus.jremoting.itests.classretrievers;
 
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.stubs.StubsFromServer;
-import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.factories.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.piped.PipedTransport;
+import org.codehaus.jremoting.client.transports.PipedTransport;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.NullServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
 import org.codehaus.jremoting.server.stubretrievers.DynamicStubRetriever;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
-import org.codehaus.jremoting.server.encoders.ByteStreamConnectionFactory;
-import org.codehaus.jremoting.server.transports.piped.PipedServer;
+import org.codehaus.jremoting.server.transports.PipedServer;
+import org.codehaus.jremoting.server.streams.ByteStreamConnectionFactory;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
@@ -69,9 +69,9 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
         // Client side setup
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null)); 
-        JRemotingClient jc = new JRemotingClient(new PipedTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.encoders.ByteStreamConnectionFactory(), in, out), (ContextFactory) mock.proxy(), new StubsFromServer());
-        testClient = (TestFacade) jc.lookupService("Kewl");
+        ServiceResolver jc = new ServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
+                new org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory(), in, out), (ContextFactory) mock.proxy(), new StubsFromServer());
+        testClient = (TestFacade) jc.serviceResolver("Kewl");
 
     }
 

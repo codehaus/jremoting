@@ -41,7 +41,7 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <rmic base="${project.build.outputDirectory}" classname="org.codehaus.jremoting.server.transports.rmi.RmiServer.RmiInvokerImpl" stubVersion="1.2">
+                                <rmic base="${project.build.outputDirectory}" classname="org.codehaus.jremoting.server.transports.RmiServer.RmiInvokerImpl" stubVersion="1.2">
                                     <classpath>
                                         <path refid="maven.compile.classpath" />
                                     </classpath>

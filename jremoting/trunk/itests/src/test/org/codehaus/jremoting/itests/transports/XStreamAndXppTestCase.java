@@ -2,9 +2,9 @@ package org.codehaus.jremoting.itests.transports;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
-import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.factories.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.socket.SocketTransport;
+import org.codehaus.jremoting.client.transports.SocketTransport;
 import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
@@ -12,11 +12,11 @@ import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.streams.XStreamConnectionFactory;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.server.encoders.XStreamConnectionFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.socket.SocketServer;
+import org.codehaus.jremoting.server.transports.SocketServer;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
@@ -42,9 +42,9 @@ public class XStreamAndXppTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.encoders.XStreamConnectionFactory(new XStream(new XppDriver())), new SocketDetails("127.0.0.1", 10099)));
-        testClient = (TestFacade) jremotingClient.lookupService("Hello");
+        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+                new org.codehaus.jremoting.client.streams.XStreamConnectionFactory(new XStream(new XppDriver())), new SocketDetails("127.0.0.1", 10099)));
+        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
 
     }
 

@@ -19,10 +19,10 @@ package org.codehaus.jremoting.itests.invalidstate;
 
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.SocketDetails;
-import org.codehaus.jremoting.client.encoders.ByteStreamConnectionFactory;
-import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory;
+import org.codehaus.jremoting.client.factories.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
-import org.codehaus.jremoting.client.transports.socket.SocketTransport;
+import org.codehaus.jremoting.client.transports.SocketTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
@@ -34,7 +34,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.codehaus.jremoting.server.transports.socket.SocketServer;
+import org.codehaus.jremoting.server.transports.SocketServer;
 import org.codehaus.jremoting.tools.generator.BcelStubGenerator;
 import org.jmock.MockObjectTestCase;
 
@@ -65,13 +65,13 @@ public class BouncingServerTestCase extends MockObjectTestCase {
         // server side setup.
         SocketServer server = startServer();
 
-        JRemotingClient jRemotingClient = null;
+        ServiceResolver serviceResolver = null;
         try {
 
             // Client side setup
-            jRemotingClient = new JRemotingClient(new SocketTransport(new NullClientMonitor(),
+            serviceResolver = new ServiceResolver(new SocketTransport(new NullClientMonitor(),
                     new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12201)));
-            TestFacade testClient = (TestFacade) jRemotingClient.lookupService("Hello55");
+            TestFacade testClient = (TestFacade) serviceResolver.serviceResolver("Hello55");
             testClient.intParamReturningInt(100);
 
             try {
@@ -84,7 +84,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
         } finally {
             System.gc();
             try {
-                jRemotingClient.close();
+                serviceResolver.close();
             } catch (InvocationException e) {
             }
             try {
@@ -107,7 +107,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
                         return super.doesSessionExistAndRefreshItIfItDoes(session);
                     }
                 },
-            new org.codehaus.jremoting.server.encoders.ByteStreamConnectionFactory(),
+            new org.codehaus.jremoting.server.streams.ByteStreamConnectionFactory(),
                 Executors.newScheduledThreadPool(10), this.getClass().getClassLoader(), new InetSocketAddress(12201));
         TestFacadeImpl testServer = new TestFacadeImpl();
         server.publish(testServer, "Hello55", pd);

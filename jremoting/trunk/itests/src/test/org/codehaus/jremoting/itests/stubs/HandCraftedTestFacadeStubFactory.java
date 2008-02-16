@@ -53,8 +53,8 @@ public class HandCraftedTestFacadeStubFactory implements StubFactory {
             this.objectName = objectName;
         }
 
-        public Long jRemotingGetReferenceID(Object factoryThatIsAsking) {
-            return stubHelper.getReference(factoryThatIsAsking);
+        public Long jRemotingGetReferenceID(Object serviceResolver) {
+            return stubHelper.getReference(serviceResolver);
         }
 
         public String jRemotingGetObjectName() {

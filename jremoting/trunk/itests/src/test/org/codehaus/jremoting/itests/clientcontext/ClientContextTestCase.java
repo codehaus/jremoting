@@ -23,10 +23,10 @@ import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.StreamConnectionFactory;
 import org.codehaus.jremoting.client.SocketDetails;
-import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.factories.ServiceResolver;
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.socket.SocketTransport;
+import org.codehaus.jremoting.client.transports.SocketTransport;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.PublicationException;
 import org.codehaus.jremoting.server.ServerMonitor;
@@ -36,8 +36,8 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
-import org.codehaus.jremoting.server.encoders.ByteStreamConnectionFactory;
-import org.codehaus.jremoting.server.transports.socket.SocketServer;
+import org.codehaus.jremoting.server.streams.ByteStreamConnectionFactory;
+import org.codehaus.jremoting.server.transports.SocketServer;
 import org.jmock.MockObjectTestCase;
 
 import java.util.HashMap;
@@ -158,13 +158,13 @@ public class ClientContextTestCase extends MockObjectTestCase {
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        StreamConnectionFactory factory0 = new org.codehaus.jremoting.client.encoders.ByteStreamConnectionFactory();
+        StreamConnectionFactory factory0 = new org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory();
         ClientMonitor cm = new ConsoleClientMonitor();
         Transport handler = new SocketTransport(cm, factory0, new SocketDetails("127.0.0.1", 19333));
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();
-        JRemotingClient jc = new JRemotingClient(handler, factory1);
+        ServiceResolver jc = new ServiceResolver(handler, factory1);
 
-        final AccountManager clientSideAccountManager = (AccountManager) jc.lookupService("OurAccountManager");
+        final AccountManager clientSideAccountManager = (AccountManager) jc.serviceResolver("OurAccountManager");
 
         Thread threadOne = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 11);
         Thread threadTwo = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 22);

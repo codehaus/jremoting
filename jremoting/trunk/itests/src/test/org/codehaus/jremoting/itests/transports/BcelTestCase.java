@@ -19,10 +19,10 @@ package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.SocketDetails;
-import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.factories.ServiceResolver;
 import org.codehaus.jremoting.client.stubs.StubsFromServer;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.socket.SocketTransport;
+import org.codehaus.jremoting.client.transports.SocketTransport;
 import org.codehaus.jremoting.itests.TestFacade;
 import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
@@ -32,8 +32,8 @@ import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
-import org.codehaus.jremoting.server.encoders.ByteStreamConnectionFactory;
-import org.codehaus.jremoting.server.transports.socket.SocketServer;
+import org.codehaus.jremoting.server.streams.ByteStreamConnectionFactory;
+import org.codehaus.jremoting.server.transports.SocketServer;
 import org.jmock.Mock;
 
 import java.util.concurrent.Executors;
@@ -76,9 +76,9 @@ public class BcelTestCase extends AbstractHelloTestCase {
         // Client side setup
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
-        jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.encoders.ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 10201)), (ContextFactory) mock.proxy(), new StubsFromServer());
-        testClient = (TestFacade) jremotingClient.lookupService("Hello223");
+        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+                new org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 10201)), (ContextFactory) mock.proxy(), new StubsFromServer());
+        testClient = (TestFacade) jremotingClient.serviceResolver("Hello223");
 
     }
 
