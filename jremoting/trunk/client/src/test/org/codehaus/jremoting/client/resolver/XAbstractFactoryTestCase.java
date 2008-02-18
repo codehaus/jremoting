@@ -1,4 +1,4 @@
-package org.codehaus.jremoting.client.factories;
+package org.codehaus.jremoting.client.resolver;
 
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ContextFactory;

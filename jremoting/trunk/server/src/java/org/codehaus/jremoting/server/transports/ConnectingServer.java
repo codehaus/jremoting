@@ -40,6 +40,7 @@ public abstract class ConnectingServer extends StatefulServer {
     private ScheduledFuture pruner;
     private int pruneStaleLongerThan = 5 * 60 * 1000;
     private int pruneSessionInterval = 100;
+    protected final ScheduledExecutorService executorService;
 
     public void setPruneStaleLongerThan(int millis) {
         this.pruneStaleLongerThan = millis;
@@ -50,8 +51,9 @@ public abstract class ConnectingServer extends StatefulServer {
     }
 
     public ConnectingServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate,
-                            ScheduledExecutorService executor) {
-        super(serverMonitor, serverDelegate, executor);
+                            ScheduledExecutorService executorService) {
+        super(serverMonitor, serverDelegate);
+        this.executorService = executorService;
     }
 
     public void started() {
@@ -71,7 +73,7 @@ public abstract class ConnectingServer extends StatefulServer {
 
     protected void connectionStarting(Connection connection) {
         if (connection == null) {
-            throw new RuntimeException("whoaa!");
+            throw new NullPointerException("whoaa!");
         }
         synchronized (connections) {
             connections.add(connection);

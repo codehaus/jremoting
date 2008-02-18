@@ -46,6 +46,11 @@
             <groupId>xpp3</groupId>
             <artifactId>xpp3_min</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.0-M0</version>
+        </dependency>
     </dependencies>
 	<build>
 		<plugins>

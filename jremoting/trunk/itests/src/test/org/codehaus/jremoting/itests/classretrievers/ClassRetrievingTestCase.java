@@ -19,7 +19,7 @@ package org.codehaus.jremoting.itests.classretrievers;
 
 import org.codehaus.jremoting.client.ContextFactory;
 import org.codehaus.jremoting.client.stubs.StubsFromServer;
-import org.codehaus.jremoting.client.factories.ServiceResolver;
+import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.PipedTransport;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;

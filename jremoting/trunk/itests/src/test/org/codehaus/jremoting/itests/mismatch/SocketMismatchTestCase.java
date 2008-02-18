@@ -20,7 +20,7 @@ package org.codehaus.jremoting.itests.mismatch;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory;
 import org.codehaus.jremoting.client.streams.ObjectStreamConnectionFactory;
-import org.codehaus.jremoting.client.factories.ServiceResolver;
+import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.RmiTransport;
 import org.codehaus.jremoting.client.transports.SocketTransport;

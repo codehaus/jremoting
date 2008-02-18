@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.stubs;
 
-import org.codehaus.jremoting.client.factories.ServiceResolver;
+import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
 import org.codehaus.jremoting.client.transports.DirectMarshalledTransport;

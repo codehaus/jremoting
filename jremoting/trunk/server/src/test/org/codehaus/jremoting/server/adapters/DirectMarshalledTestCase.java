@@ -37,7 +37,7 @@ public class DirectMarshalledTestCase extends MockObjectTestCase {
 
     protected void setUp() throws Exception {
         serverDelegate = new DefaultServerDelegate(new ConsoleServerMonitor(), new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
-        server = new DirectMarshalledServer(new ConsoleServerMonitor(), Executors.newScheduledThreadPool(10), serverDelegate);
+        server = new DirectMarshalledServer(new ConsoleServerMonitor(), serverDelegate);
     }
 
     public void testPublishAndUnpublish() throws PublicationException, IOException, ClassNotFoundException {

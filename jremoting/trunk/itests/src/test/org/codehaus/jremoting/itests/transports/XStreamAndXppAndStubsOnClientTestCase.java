@@ -2,7 +2,7 @@ package org.codehaus.jremoting.itests.transports;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
-import org.codehaus.jremoting.client.factories.ServiceResolver;
+import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.stubs.StubsOnClient;
 import org.codehaus.jremoting.client.transports.SocketTransport;

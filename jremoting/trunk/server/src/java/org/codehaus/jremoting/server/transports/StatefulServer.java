@@ -36,12 +36,9 @@ public abstract class StatefulServer implements Server {
     protected ServerDelegate serverDelegate;
     private String state = UNSTARTED;
     protected final ServerMonitor serverMonitor;
-    protected final ScheduledExecutorService executorService;
 
-    public StatefulServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate,
-                          ScheduledExecutorService executorService) {
+    public StatefulServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate) {
         this.serverDelegate = serverDelegate;
-        this.executorService = executorService;
         this.serverMonitor = serverMonitor;
     }
 

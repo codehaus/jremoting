@@ -66,7 +66,7 @@ public class SocketServer extends ConnectingServer {
 
 
     public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, InetSocketAddress addr) {
-        this(serverMonitor, stubRetriever, defaultAuthenticator(), defaultStreamEncoding(), defaultExecutor(),
+        this(serverMonitor, stubRetriever, defaultAuthenticator(), defaultStreamConnectionFactory(), defaultExecutor(),
                 defaultContextFactory(), addr);
     }
 
@@ -75,7 +75,7 @@ public class SocketServer extends ConnectingServer {
     }
 
     public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, InetSocketAddress addr) {
-        this(serverMonitor, executorService, defaultStreamEncoding(), addr);
+        this(serverMonitor, executorService, defaultStreamConnectionFactory(), addr);
     }
 
     public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, StreamConnectionFactory streamConnectionFactory, InetSocketAddress addr) {
@@ -87,7 +87,7 @@ public class SocketServer extends ConnectingServer {
     }
 
     public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, ScheduledExecutorService executorService, Authenticator authenticator) {
-        this(serverMonitor, defaultStubRetriever(), authenticator, defaultStreamEncoding(), executorService, defaultContextFactory(), addr);
+        this(serverMonitor, defaultStubRetriever(), authenticator, defaultStreamConnectionFactory(), executorService, defaultContextFactory(), addr);
     }
 
     public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever,
@@ -96,9 +96,9 @@ public class SocketServer extends ConnectingServer {
                         ScheduledExecutorService executorService,
                         ServerContextFactory contextFactory,
                         ClassLoader facadesClassLoader, InetSocketAddress addr) {
-        this(serverMonitor, new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
+        this(serverMonitor, defaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
                 streamConnectionFactory, executorService, facadesClassLoader, addr);
-    }    
+    }
 
     public SocketServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate,
                                            StreamConnectionFactory streamConnectionFactory, ScheduledExecutorService executorService,
@@ -111,11 +111,15 @@ public class SocketServer extends ConnectingServer {
     }
 
 
+    private static DefaultServerDelegate defaultServerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerContextFactory contextFactory) {
+        return new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory);
+    }
+
     public static ScheduledExecutorService defaultExecutor() {
         return Executors.newScheduledThreadPool(10);
     }
 
-    public static StreamConnectionFactory defaultStreamEncoding() {
+    public static StreamConnectionFactory defaultStreamConnectionFactory() {
         return new ByteStreamConnectionFactory();
     }
 

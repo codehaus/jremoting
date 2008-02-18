@@ -44,15 +44,18 @@ public class DirectServer extends StatefulServer {
      * @param stubRetriever
      * @param authenticator
      * @param serverMonitor
-     * @param executorService
      * @param contextFactory
      */
-    public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ScheduledExecutorService executorService, ServerContextFactory contextFactory) {
-        super(serverMonitor, new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
+    public DirectServer(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ServerContextFactory contextFactory) {
+        super(serverMonitor, defaultServerDelegate(stubRetriever, authenticator, serverMonitor, contextFactory));
     }
 
     public DirectServer(ServerMonitor monitor) {
-        this(new RefusingStubRetriever(), new NullAuthenticator(), monitor, Executors.newScheduledThreadPool(10), new ThreadLocalServerContextFactory());
+        this(new RefusingStubRetriever(), new NullAuthenticator(), monitor, new ThreadLocalServerContextFactory());
+    }
+
+    private static DefaultServerDelegate defaultServerDelegate(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ServerContextFactory contextFactory) {
+        return new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory);
     }
 
 }

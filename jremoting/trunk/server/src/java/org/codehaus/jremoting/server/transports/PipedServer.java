@@ -44,7 +44,7 @@ public class PipedServer extends ConnectingServer {
                              ScheduledExecutorService executorService, ServerContextFactory contextFactory,
                              StreamConnectionFactory streamConnectionFactory,
                              ClassLoader facadesClassLoader) {
-        super(serverMonitor, new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
+        super(serverMonitor, defaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
         this.streamConnectionFactory = streamConnectionFactory;
         this.facadesClassLoader = facadesClassLoader;
     }
@@ -60,6 +60,10 @@ public class PipedServer extends ConnectingServer {
 
     public PipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, StreamConnectionFactory streamConnectionFactory) {
         this(serverMonitor, stubRetriever, authenticator, executorService, serverContextFactory, streamConnectionFactory, PipedServer.class.getClassLoader());
+    }
+
+    private static DefaultServerDelegate defaultServerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerContextFactory contextFactory) {
+        return new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory);
     }
 
     public void makeNewConnection(final PipedInputStream in, final PipedOutputStream out) throws ConnectionException {

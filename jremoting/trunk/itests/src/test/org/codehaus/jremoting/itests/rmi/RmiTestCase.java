@@ -17,7 +17,7 @@
  */
 package org.codehaus.jremoting.itests.rmi;
 
-import org.codehaus.jremoting.client.factories.ServiceResolver;
+import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.RmiTransport;
 import org.codehaus.jremoting.client.SocketDetails;

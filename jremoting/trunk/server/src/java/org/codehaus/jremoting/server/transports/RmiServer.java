@@ -55,11 +55,15 @@ public class RmiServer extends ConnectingServer {
     }
 
     public RmiServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory contextFactory, InetSocketAddress addr) {
-        this(serverMonitor, new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService, addr);
+        this(serverMonitor, defaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService, addr);
     }
 
     public RmiServer(ServerMonitor serverMonitor, InetSocketAddress addr) {
         this(serverMonitor, new FromClassLoaderStubRetriever(), new NullAuthenticator(), defaultExecutorService(), defaultContextFactory(), addr);
+    }
+
+    private static DefaultServerDelegate defaultServerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerContextFactory contextFactory) {
+        return new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory);
     }
 
     private static ServerContextFactory defaultContextFactory() {

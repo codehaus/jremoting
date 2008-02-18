@@ -43,17 +43,9 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
 
     private final ServerMarshalledInvokerImpl marshalledInvokerAdapter;
 
-    private DirectMarshalledServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate, ScheduledExecutorService executorService, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
-        super(serverMonitor, serverDelegate, executorService);
-        this.marshalledInvokerAdapter = marshalledInvokerAdapter;
-    }
-
     private DirectMarshalledServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate, ServerMarshalledInvokerImpl marshalledInvokerAdapter) {
-        this(serverMonitor, serverDelegate, Executors.newScheduledThreadPool(10), marshalledInvokerAdapter);
-    }
-
-    public DirectMarshalledServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, ServerDelegate serverDelegate) {
-        this(serverMonitor, serverDelegate, executorService, new ServerMarshalledInvokerImpl(serverDelegate));
+        super(serverMonitor, serverDelegate);
+        this.marshalledInvokerAdapter = marshalledInvokerAdapter;
     }
 
     public DirectMarshalledServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate) {
@@ -61,7 +53,11 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
     }
 
     public DirectMarshalledServer(ServerMonitor serverMonitor) {
-        this(serverMonitor, new DefaultServerDelegate(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory()));
+        this(serverMonitor, defaultServerDelegate(serverMonitor));
+    }
+
+    private static DefaultServerDelegate defaultServerDelegate(ServerMonitor serverMonitor) {
+        return new DefaultServerDelegate(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
     }
 
     public byte[] invoke(byte[] request, String connectionDetails) {

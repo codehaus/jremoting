@@ -20,7 +20,7 @@ package org.codehaus.jremoting.itests.stubs;
 
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
 import org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory;
-import org.codehaus.jremoting.client.factories.ServiceResolver;
+import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.transports.SocketTransport;
 import org.codehaus.jremoting.client.SocketDetails;
@@ -51,7 +51,7 @@ public class ByteStreamOverSocketWithHandCraftedStubsAndSkelsTestCase extends Ab
 
         // server side setup.
         server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), dsd,
-                SocketServer.defaultStreamEncoding(), SocketServer.defaultExecutor(),
+                SocketServer.defaultStreamConnectionFactory(), SocketServer.defaultExecutor(),
                 SocketServer.defaultClassLoader(),
                 new InetSocketAddress(10333));
         testServer = new TestFacadeImpl();

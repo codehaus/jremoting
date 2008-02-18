@@ -24,7 +24,7 @@ import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory;
 import org.codehaus.jremoting.client.streams.ObjectStreamConnectionFactory;
-import org.codehaus.jremoting.client.factories.ServiceResolver;
+import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
 import org.codehaus.jremoting.client.transports.RmiTransport;

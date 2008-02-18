@@ -1,4 +1,4 @@
-package org.codehaus.jremoting.client.factories;
+package org.codehaus.jremoting.client.resolver;
 
 import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
