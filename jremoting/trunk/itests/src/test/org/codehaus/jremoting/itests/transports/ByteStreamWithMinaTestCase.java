@@ -73,6 +73,8 @@ public class ByteStreamWithMinaTestCase extends AbstractHelloTestCase {
         Thread.sleep(300);
         jremotingClient.close();
         server.stop();
+        //Thread.sleep(000);
+        
     }
 
 

@@ -73,9 +73,8 @@ public class ByteStreamConnection extends AbstractStreamConnection {
     public void initialize() {
     }
 
-    protected Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
+    protected Request readRequest() throws IOException, ClassNotFoundException {
         int byteArraySize = dataInputStream.readInt();
-        int requestCode = dataInputStream.readInt();
         if (byteArraySize < 0) {
             throw new ConnectionException("Transport mismatch, Unable to " + "read packet of data from ByteStream.");
         }

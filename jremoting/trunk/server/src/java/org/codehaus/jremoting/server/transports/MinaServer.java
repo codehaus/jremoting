@@ -149,7 +149,7 @@ public class MinaServer extends StatefulServer {
         acceptor.getSessionConfig().setReadBufferSize( 2048 );
         acceptor.getSessionConfig().setIdleTime( IdleStatus.BOTH_IDLE, 10 );
 
-        acceptor.setDefaultLocalAddress(addr);;
+        acceptor.setDefaultLocalAddress(addr);
         try {
             acceptor.bind();
         } catch (IOException ioe) {
@@ -160,6 +160,7 @@ public class MinaServer extends StatefulServer {
 
     public void stopping() {
         acceptor.unbind();
+        acceptor.dispose();
         super.stopping();
     }
 
