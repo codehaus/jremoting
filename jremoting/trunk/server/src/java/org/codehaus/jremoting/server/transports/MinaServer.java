@@ -172,14 +172,4 @@ public class MinaServer extends StatefulServer {
         super.redirect(serviceName, host + ":" + port);
     }
 
-    protected void handleIOE(boolean accepting, IOException ioe) {
-        // some JVM revisions report 'socket closed' , some 'Socket closed'
-        if (accepting & ioe.getMessage().equalsIgnoreCase("socket closed")) {
-            // do nothing, server shut down during accept();
-        } else {
-            serverMonitor.unexpectedException(this.getClass(), "SocketStreamServer: Some problem connecting client via sockets: " + ioe.getMessage(), ioe);
-        }
-    }
-
-
 }
