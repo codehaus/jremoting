@@ -17,24 +17,24 @@
  */
 package org.codehaus.jremoting.server.transports;
 
+import org.apache.mina.common.IdleStatus;
+import org.apache.mina.common.IoAcceptor;
+import org.apache.mina.common.IoHandlerAdapter;
+import org.apache.mina.common.IoSession;
+import org.apache.mina.filter.codec.ProtocolCodecFactory;
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.codehaus.jremoting.JRemotingException;
-import org.codehaus.jremoting.util.SerializationHelper;
-import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.server.*;
-import org.codehaus.jremoting.server.streams.ByteStreamProtocolCodecFactory;
 import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
+import org.codehaus.jremoting.server.streams.ByteStreamProtocolCodecFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
-import org.apache.mina.common.*;
-import org.apache.mina.filter.codec.*;
-import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
-import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.charset.Charset;
 
 /**
  * Class MinaServer
@@ -124,31 +124,23 @@ public class MinaServer extends StatefulServer {
 
     public void starting() {
         acceptor = new NioSocketAcceptor();
-
         acceptor.getFilterChain().addLast( "codec", new ProtocolCodecFilter(codecFactory));
         acceptor.setHandler(new IoHandlerAdapter() {
             @Override
             public void exceptionCaught(IoSession session, Throwable cause) {
-                cause.printStackTrace();
+                serverMonitor.unexpectedException(MinaServer.class, "Mina Exception Caught", cause);
             }
-
             @Override
             public void messageReceived(IoSession session, Object message) {
-                Request req = (Request) message;
-                Response resp = MinaServer.this.invoke(req, session.getRemoteAddress().toString());
-                session.write(resp);
+                session.write(MinaServer.this.invoke((Request) message, session.getRemoteAddress().toString()));
             }
-
             @Override
             public void sessionIdle(IoSession session, IdleStatus status) {
                 System.out.println("IDLE " + session.getIdleCount(status));
             }
-
         });
-
         acceptor.getSessionConfig().setReadBufferSize( 2048 );
         acceptor.getSessionConfig().setIdleTime( IdleStatus.BOTH_IDLE, 10 );
-
         acceptor.setDefaultLocalAddress(addr);
         try {
             acceptor.bind();

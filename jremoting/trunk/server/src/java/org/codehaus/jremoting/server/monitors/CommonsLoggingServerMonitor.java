@@ -61,7 +61,7 @@ public class CommonsLoggingServerMonitor implements ServerMonitor {
 
     }
 
-    public void unexpectedException(Class clazz, String s, Exception e) {
+    public void unexpectedException(Class clazz, String s, Throwable e) {
         Log log = LogFactory.getLog(clazz);
         if (log.isDebugEnabled()) {
             log.debug("<unexpectedException>" + s, e);

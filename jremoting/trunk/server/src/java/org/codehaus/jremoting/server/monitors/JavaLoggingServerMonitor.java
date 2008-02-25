@@ -54,7 +54,7 @@ public class JavaLoggingServerMonitor implements ServerMonitor {
         delegate.classNotFound(clazz, e);
     }
 
-    public void unexpectedException(Class clazz, String s, Exception e) {
+    public void unexpectedException(Class clazz, String s, Throwable e) {
         Logger logger = Logger.getLogger(clazz.getName());
         logger.log(Level.INFO, "<unexpectedException>" + s, e);
         delegate.unexpectedException(clazz, s, e);

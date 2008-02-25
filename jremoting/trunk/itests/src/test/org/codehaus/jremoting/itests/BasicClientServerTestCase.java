@@ -163,7 +163,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
                 wrong[0] = true;
             }
 
-            public void unexpectedException(Class clazz, String s, Exception e) {
+            public void unexpectedException(Class clazz, String s, Throwable e) {
                 mismatch[0] = s.contains("mismatch");
                 didIt[0] = true;
             }

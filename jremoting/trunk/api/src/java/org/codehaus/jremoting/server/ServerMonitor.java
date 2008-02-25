@@ -31,7 +31,7 @@ public interface ServerMonitor {
 
     void classNotFound(Class clazz, ClassNotFoundException e);
 
-    void unexpectedException(Class clazz, String desc, Exception e);
+    void unexpectedException(Class clazz, String desc, Throwable e);
 
     void stopServerError(Class clazz, String desc, Exception e);
 

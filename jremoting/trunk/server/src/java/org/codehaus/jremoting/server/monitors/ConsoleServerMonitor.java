@@ -38,7 +38,7 @@ public class ConsoleServerMonitor implements ServerMonitor {
         System.out.println("[classNotFound] " + e.getMessage());
     }
 
-    public void unexpectedException(Class clazz, String s, Exception e) {
+    public void unexpectedException(Class clazz, String s, Throwable e) {
         System.out.println("[unexpectedException] " + s + " : " + e.getMessage());
         e.printStackTrace();
     }

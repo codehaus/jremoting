@@ -58,7 +58,7 @@ public class Log4JServerMonitor implements ServerMonitor {
         delegate.classNotFound(clazz, e);
     }
 
-    public void unexpectedException(Class clazz, String s, Exception e) {
+    public void unexpectedException(Class clazz, String s, Throwable e) {
         Logger logger = Logger.getLogger(clazz);
         if (logger.isDebugEnabled()) {
             logger.debug("<unexpectedException>" + s, e);

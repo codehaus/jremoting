@@ -36,7 +36,7 @@ public class NullServerMonitor implements ServerMonitor {
     public void classNotFound(Class clazz, ClassNotFoundException e) {
     }
 
-    public void unexpectedException(Class clazz, String s, Exception e) {
+    public void unexpectedException(Class clazz, String s, Throwable e) {
     }
 
     public void stopServerError(Class clazz, String s, Exception e) {
