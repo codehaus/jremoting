@@ -1,30 +1,91 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html><head><meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type" />
-<title>JRemoting Home</title></head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 1 September 2005), see www.w3.org" />
+  <meta content="text/html; charset=us-ascii" http-equiv=
+  "Content-Type" />
+
+  <title>JRemoting Home</title>
+</head>
+
 <body>
-<h2>Overview</h2>By default JRemoting will deliver client server
-capabilty without the need for the user to make stubs classes (like RMI
-does with the rmic operation). &nbsp;Reflections's dynamic proxy
-capability is used to deliver that.<br /><br />There are problems with
-this approach. &nbsp;Foremost is that it will not work in a client that
-is an applet that is trying to exist inside the 'sandbox' without extra
-permissions. There's also a &nbsp;speed issue, but its barely
-significant.<br /><h2>BCEL Stubs</h2>BCEL is an Apache technology that can make Java class files at runtime. &nbsp;We use that to make Stub classes. <br /><h3>BcelStubGenerator</h3>Use
-like RMI's rmic. &nbsp;It can make stubs in advance of need. &nbsp;This
-will allow you to include the stub in the jar file your making for your
-client, or to put in a more general stubs jar that you will keep on
-the&nbsp;client side.<br /><br />Use in Maven2 like so -
-<div class="source">
-<pre>&lt;build&gt;<br />  &lt;plugins&gt;<br />    &lt;plugin&gt;<br />      &lt;groupId&gt;${pom.groupId}&lt;/groupId&gt;<br />      &lt;artifactId&gt;jremoting-tools&lt;/artifactId&gt;<br />      &lt;executions&gt;<br />        &lt;execution&gt;<br />          &lt;id&gt;SomeName&lt;/id&gt;<br />          &lt;phase&gt;test-compile&lt;/phase&gt;<br />          &lt;goals&gt;<br />            &lt;goal&gt;generate&lt;/goal&gt;<br />          &lt;/goals&gt;<br />          &lt;configuration&gt;<br />            &lt;genName&gt;SomeName&lt;/genName&gt;<br />            &lt;facade&gt;com.foo.YourFacade&lt;/facade&gt;<br />            &lt;classGenDir&gt;target/stub-classes&lt;/classGenDir&gt;<br />            &lt;secondaryFacades&gt;com.foo.AnotherFacade,com.foo.YetAnotherFacade&lt;/secondaryFacades&gt;<br />            &lt;verbose&gt;true&lt;/verbose&gt;<br />          &lt;/configuration&gt;<br />        &lt;/execution&gt;<br />      &lt;/executions&gt;<br />    &lt;/plugin&gt;<br />  &lt;/plugins&gt;<br />&lt;/build&gt;</pre>
-</div><h2>
-Client usage</h2><h3>StubsOnClient</h3>JRemoting will look in the client's classpath for the Stub class<br /><h3>StubsFromServer</h3>JRemoting
-will ask the server for the Stub class (and mount it in a classloader
-meaning it will also have the applet problems above).<br /><br />For
-this mode, the server can either retrieve the Stubs from the server's
-classpath (FromClassLoaderStubRetriever), or from a separate jar
-(JarFileStubRetriever), or make them dynamically with
-BcelDynamicStubRetriever.<br /><h3>StubsViaReflection</h3>Stubs
-are made dynamically via Java's reflection. &nbsp;These won't be safe
-for applet clients that are in the sandbox, and are slightly slower
-than real stubs.<br /><br /><br /><br /><br /><br /><h3>&nbsp;</h3>
-</body></html>
+  <h2>Overview</h2>By default JRemoting will deliver client server
+  capabilty without the need for the user to make stubs classes
+  (like RMI does with the rmic operation). &nbsp;Reflections's
+  dynamic proxy capability is used to deliver that.<br />
+  <br />
+  There are problems with this approach. &nbsp;Foremost is that it
+  will not work in a client that is an applet that is trying to
+  exist inside the 'sandbox' without extra permissions. There's
+  also a &nbsp;speed issue, but its barely significant.<br />
+
+  <h2>BCEL Stubs</h2>BCEL is an Apache technology that can make
+  Java class files at runtime. &nbsp;We use that to make Stub
+  classes.<br />
+
+  <h3>BcelStubGenerator</h3>Use like RMI's rmic. &nbsp;It can make
+  stubs in advance of need. &nbsp;This will allow you to include
+  the stub in the jar file your making for your client, or to put
+  in a more general stubs jar that you will keep on the&nbsp;client
+  side.<br />
+  <br />
+  Use in Maven2 like so -
+
+  <div class="source">
+    <pre>
+&lt;build&gt;<br />
+  &lt;plugins&gt;<br />
+    &lt;plugin&gt;<br />
+      &lt;groupId&gt;${pom.groupId}&lt;/groupId&gt;<br />
+      &lt;artifactId&gt;jremoting-tools&lt;/artifactId&gt;<br />
+      &lt;executions&gt;<br />
+        &lt;execution&gt;<br />
+          &lt;id&gt;SomeName&lt;/id&gt;<br />
+          &lt;phase&gt;test-compile&lt;/phase&gt;<br />
+          &lt;goals&gt;<br />
+            &lt;goal&gt;generate&lt;/goal&gt;<br />
+          &lt;/goals&gt;<br />
+          &lt;configuration&gt;<br />
+            &lt;genName&gt;SomeName&lt;/genName&gt;<br />
+            &lt;facade&gt;com.foo.YourFacade&lt;/facade&gt;<br />
+            &lt;classGenDir&gt;target/stub-classes&lt;/classGenDir&gt;<br />
+            &lt;secondaryFacades&gt;com.foo.AnotherFacade,com.foo.YetAnotherFacade&lt;/secondaryFacades&gt;<br />
+            &lt;verbose&gt;true&lt;/verbose&gt;<br />
+          &lt;/configuration&gt;<br />
+        &lt;/execution&gt;<br />
+      &lt;/executions&gt;<br />
+    &lt;/plugin&gt;<br />
+  &lt;/plugins&gt;<br />
+&lt;/build&gt;
+</pre>
+  </div>
+
+  <h2>Client usage</h2>
+
+  <h3>StubsOnClient</h3>JRemoting will look in the client's
+  classpath for the Stub class<br />
+
+  <h3>StubsFromServer</h3>JRemoting will ask the server for the
+  Stub class (and mount it in a classloader meaning it will also
+  have the applet problems above).<br />
+  <br />
+  For this mode, the server can either retrieve the Stubs from the
+  server's classpath (FromClassLoaderStubRetriever), or from a
+  separate jar (JarFileStubRetriever), or make them dynamically
+  with BcelDynamicStubRetriever.<br />
+
+  <h3>StubsViaReflection</h3>Stubs are made dynamically via Java's
+  reflection. &nbsp;These won't be safe for applet clients that are
+  in the sandbox, and are slightly slower than real stubs.<br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+
+  <h3>&nbsp;</h3>
+</body>
+</html>

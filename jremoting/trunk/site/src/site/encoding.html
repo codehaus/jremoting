@@ -1,22 +1,49 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html><head><meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type" />
-<title>Encoding</title></head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 1 September 2005), see www.w3.org" />
+  <meta content="text/html; charset=us-ascii" http-equiv=
+  "Content-Type" />
+
+  <title>Encoding</title>
+</head>
+
 <body>
-<h3>Overview</h3>JRemoting has three stream encoding implementations
--&nbsp;ByteStreamEncoding, ObjectStreamEncoding and XStreamEncoding.
-&nbsp;ByteStreamEncoding is the default and slightly faster on the wire
-than ObjectStream. &nbsp;Both are binary encodings.
-&nbsp;XStreamEncoding leverages <a href="http://xstream.codehaus.org/">XStream</a> for serializing to/from XML which makes it&nbsp;text based.<br /><p style="font-weight: bold;">Server side usage</p>
-<div class="source">
-<pre>server = new SocketServer(new ConsoleServerMonitor(), new <span style="font-weight: bold;">ByteStreamEncoding</span>(), new InetSocketAddress(10333));<br /></pre>
-</div>
-<p style="font-weight: bold;">Client side usage</p>
-<div class="source">
-<pre>jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new <span style="font-weight: bold;">ByteStreamEncoding</span>(), new InetSocketAddress("localhost", 10333)));<br /></pre>
-</div>
-To use either of XStreamEncoding or ObjectStreamEncoding, use them in
-place of ByteStreamEncoding when setting up the client and server
-sides. &nbsp;<br /><br />Encodings mush be matched, of course, on both
-sides to work at all. &nbsp;JRemoting will fail, not necessarily
-quickly or clearly when you've mismatched encodings.<br /><br /><br /><h3>&nbsp;</h3>
-</body></html>
+  <h3>Overview</h3>JRemoting has three stream encoding
+  implementations -&nbsp;ByteStreamEncoding, ObjectStreamEncoding
+  and XStreamEncoding. &nbsp;ByteStreamEncoding is the default and
+  slightly faster on the wire than ObjectStream. &nbsp;Both are
+  binary encodings. &nbsp;XStreamEncoding leverages <a href=
+  "http://xstream.codehaus.org/">XStream</a> for serializing
+  to/from XML which makes it&nbsp;text based.<br />
+
+  <p style="font-weight: bold;">Server side usage</p>
+
+  <div class="source">
+    <pre>
+server = new SocketServer(new ConsoleServerMonitor(), new <span style="font-weight: bold;">ByteStreamEncoding</span>(), new InetSocketAddress(10333));<br />
+</pre>
+  </div>
+
+  <p style="font-weight: bold;">Client side usage</p>
+
+  <div class="source">
+    <pre>
+jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new <span style="font-weight: bold;">ByteStreamEncoding</span>(), new InetSocketAddress("localhost", 10333)));<br />
+</pre>
+  </div>To use either of XStreamEncoding or ObjectStreamEncoding,
+  use them in place of ByteStreamEncoding when setting up the
+  client and server sides. &nbsp;<br />
+  <br />
+  Encodings mush be matched, of course, on both sides to work at
+  all. &nbsp;JRemoting will fail, not necessarily quickly or
+  clearly when you've mismatched encodings.<br />
+  <br />
+  <br />
+
+  <h3>&nbsp;</h3>
+</body>
+</html>

@@ -1,50 +1,61 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Frequently Asked Questions</title>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 1 September 2005), see www.w3.org" />
+
+  <title>Frequently Asked Questions</title>
 </head>
 
 <body>
-<h3>Is Swiby mixing data and display again, just like the bad old days of Web 1.0?</h3>
-<p>It can do if you want :
-</p>
-<div class="source">
-<pre>require 'swiby'
+  <h3>Is Swiby mixing data and display again, just like the bad old
+  days of Web 1.0?</h3>
 
-	
+  <p>It can do if you want :</p>
+
+  <div class="source">
+    <pre>
+require 'swiby'
+
+        
 title "Buy Delirium Tremens"
-	
+        
 content {
-  label &quot;Buy a bottle of Delirium Tremens&quot;    
+  label "Buy a bottle of Delirium Tremens"    
   next_line
-  button &quot;yes&quot; { $context.goto(&quot;buy.swiby?buy=dt&amp;qty=1&quot;) }
-  button &quot;no&quot; { $context.goto(&quot;product_list.swiby&quot;) }
+  button "yes" { $context.goto("buy.swiby?buy=dt&amp;qty=1") }
+  button "no" { $context.goto("product_list.swiby") }
 }
 </pre>
-</div>
-<p>Alternatively you could do no mixing of data and UI:</p>
-<div class="source">
-<pre>require 'swiby'
+  </div>
+
+  <p>Alternatively you could do no mixing of data and UI:</p>
+
+  <div class="source">
+    <pre>
+require 'swiby'
 
 
-prod = $context.get(&quot;/product/&quot; + $req.query_string.id + &quot;.rb&quot;)
+prod = $context.get("/product/" + $req.query_string.id + ".rb")
 
-	
-title &quot;Buy DT&quot;
+        
+title "Buy DT"
 
 
-	
+        
 content {
 
 
-  label &quot;Buy a &quot; + $prod.container + &quot; of &quot; $prod.name    
+  label "Buy a " + $prod.container + " of " $prod.name    
   next_line
-  button &quot;yes&quot; { $context.goto(&quot;buy.swiby?buy=&quot; + $prod.id + &quot;&amp;qty=1&quot;) }
-  button &quot;no&quot; { $context.goto(&quot;product_list.swiby&quot;) }
+  button "yes" { $context.goto("buy.swiby?buy=" + $prod.id + "&amp;qty=1") }
+  button "no" { $context.goto("product_list.swiby") }
 }
 </pre>
-</div>
-<h3>&nbsp;</h3>
+  </div>
+
+  <h3>&nbsp;</h3>
 </body>
 </html>
