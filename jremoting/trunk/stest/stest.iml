@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module relativePaths="true" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="false">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <output-test url="file://$MODULE_DIR$/../stests/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -8,9 +8,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="api" />
-    <orderEntry type="module" module-name="client" />
-    <orderEntry type="module" module-name="server" />
+    <orderEntry type="module" module-name="jremoting-api" />
+    <orderEntry type="module" module-name="jremoting-client" />
+    <orderEntry type="module" module-name="jremoting-itests" />
+    <orderEntry type="module" module-name="jremoting-parent" />
+    <orderEntry type="module" module-name="jremoting-server" />
+    <orderEntry type="module" module-name="jremoting-tools" />
     <orderEntryProperties />
   </component>
 </module>

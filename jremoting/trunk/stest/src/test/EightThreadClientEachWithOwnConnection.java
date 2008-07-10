@@ -1,9 +1,9 @@
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.SocketDetails;
-import org.codehaus.jremoting.client.encoders.ByteStreamEncoding;
-import org.codehaus.jremoting.client.factories.JRemotingClient;
+import org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory;
+import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.transports.socket.SocketTransport;
+import org.codehaus.jremoting.client.transports.SocketTransport;
 
 public class EightThreadClientEachWithOwnConnection {
     public static void main(String[] args) throws ConnectionException {
@@ -14,8 +14,8 @@ public class EightThreadClientEachWithOwnConnection {
                     System.out.println("Client Starting ...");
                     try {
                         Thread.sleep(1000);
-                        mathLoop((Addition) new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamEncoding(),
-                                new SocketDetails("localhost", 10333, 1))).lookupService("Addition"));
+                        mathLoop((Addition) new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamConnectionFactory(),
+                                new SocketDetails("localhost", 10333, 1))).serviceResolver("Addition"));
                     } catch (Throwable e) {
                         System.out.println("Client Quitting ...");
                         e.printStackTrace();

@@ -1,6 +1,6 @@
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
-import org.codehaus.jremoting.server.transports.socket.SocketServer;
+import org.codehaus.jremoting.server.transports.SocketServer;
 
 import java.net.InetSocketAddress;
 

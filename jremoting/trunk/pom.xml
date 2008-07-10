@@ -12,6 +12,7 @@
     <module>client</module>
     <module>tools</module>
     <module>itests</module>
+    <module>stest</module>
   </modules>
   <developers>
     <developer>
