@@ -78,7 +78,7 @@ public class RedirectedServerTestCase extends MockObjectTestCase {
                     new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12201)));
 
             try {
-                serviceResolver.serviceResolver("Hello55");
+                serviceResolver.resolveService("Hello55");
                 fail("should have barfed");
             } catch (RedirectedException e) {
                 assertEquals("redirected to: localhost:12202", e.getMessage());

@@ -30,7 +30,6 @@ import org.codehaus.jremoting.itests.TestFacade2;
 import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.transports.SocketServer;
 import org.codehaus.jremoting.server.transports.MinaServer;
 
 import java.net.InetSocketAddress;
@@ -58,7 +57,7 @@ public class ByteStreamWithMinaTestCase extends AbstractHelloTestCase {
         SocketTransport transport = new SocketTransport(consoleClientMonitor, byteStreamEncoding, details);
         jremotingClient = new ServiceResolver(transport,
                 new ThreadLocalContextFactory(), new StubsOnClient());
-        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
+        testClient = (TestFacade) jremotingClient.resolveService("Hello");
 
     }
 

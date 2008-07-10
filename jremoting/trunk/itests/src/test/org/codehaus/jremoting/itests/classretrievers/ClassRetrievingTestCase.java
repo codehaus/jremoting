@@ -71,7 +71,7 @@ public class ClassRetrievingTestCase extends MockObjectTestCase {
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null)); 
         ServiceResolver jc = new ServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory(), in, out), (ContextFactory) mock.proxy(), new StubsFromServer());
-        testClient = (TestFacade) jc.serviceResolver("Kewl");
+        testClient = (TestFacade) jc.resolveService("Kewl");
 
     }
 

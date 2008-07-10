@@ -63,7 +63,7 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
         // Client side setup
         jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 10333)), new NullContextFactory(),
                 new StubsOnClient(), new org.codehaus.jremoting.client.authentication.NameAndPasswordAuthenticator("fred", "wilma"));
-        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
+        testClient = (TestFacade) jremotingClient.resolveService("Hello");
 
         super.testHelloCall();
     }
@@ -75,7 +75,7 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
                 new StubsOnClient(), new org.codehaus.jremoting.client.authentication.NameAndPasswordAuthenticator("FRED", "wilma"));
 
         try {
-            testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
+            testClient = (TestFacade) jremotingClient.resolveService("Hello");
             fail();
         } catch (ConnectionException e) {
             assertEquals("Authentication Failed", e.getMessage());

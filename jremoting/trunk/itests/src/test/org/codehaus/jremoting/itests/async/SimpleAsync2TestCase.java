@@ -81,7 +81,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
         jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 11009)), (ContextFactory) mock.proxy(), new StubsFromServer());
-        testClient = (AsyncTest) jremotingClient.serviceResolver("AsyncTestB");
+        testClient = (AsyncTest) jremotingClient.resolveService("AsyncTestB");
 
     }
 

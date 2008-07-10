@@ -72,7 +72,7 @@ public class ByteStreamSSLTestCase extends AbstractHelloTestCase {
         // Client side setup
         jremotingClient = new ServiceResolver(new SSLSocketTransport(new ConsoleClientMonitor(), new ByteStreamConnectionFactory(), new SocketDetails("localhost", 10334)),
                 new ThreadLocalContextFactory(), new StubsViaReflection());
-        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
+        testClient = (TestFacade) jremotingClient.resolveService("Hello");
 
     }
 

@@ -68,7 +68,7 @@ public class ObjectStreamOverSocketTestCase extends AbstractHelloTestCase {
         jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStreamConnectionFactory(),
                 new SocketDetails("127.0.0.1", 10002)));
-        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
+        testClient = (TestFacade) jremotingClient.resolveService("Hello");
 
 
     }

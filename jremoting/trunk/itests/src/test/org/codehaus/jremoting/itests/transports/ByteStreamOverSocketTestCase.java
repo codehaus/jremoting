@@ -57,7 +57,7 @@ public class ByteStreamOverSocketTestCase extends AbstractHelloTestCase {
         SocketTransport transport = new SocketTransport(consoleClientMonitor, byteStreamEncoding, details);
         jremotingClient = new ServiceResolver(transport,
                 new ThreadLocalContextFactory(), new StubsOnClient());
-        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
+        testClient = (TestFacade) jremotingClient.resolveService("Hello");
 
     }
 

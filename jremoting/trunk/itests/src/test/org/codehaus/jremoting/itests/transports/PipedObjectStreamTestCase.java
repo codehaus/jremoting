@@ -86,7 +86,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
         // Client side setup
         jremotingClient = new ServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.streams.ObjectStreamConnectionFactory(), in, out));
-        testClient = (TestFacade) jremotingClient.serviceResolver("Hello33");
+        testClient = (TestFacade) jremotingClient.resolveService("Hello33");
 
     }
 

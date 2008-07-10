@@ -47,7 +47,7 @@ public class XStreamAndXppAndStubsOnClientTestCase extends AbstractHelloTestCase
                 new ConsoleClientMonitor(), new org.codehaus.jremoting.client.streams.XStreamConnectionFactory(
                 new XStream(new XppDriver())), new SocketDetails("127.0.0.1", 10099)
         ), new StubsOnClient());
-        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
+        testClient = (TestFacade) jremotingClient.resolveService("Hello");
 
     }
 

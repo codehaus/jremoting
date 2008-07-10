@@ -44,7 +44,7 @@ public class XStreamAndXppTestCase extends AbstractHelloTestCase {
         // Client side setup
         jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.streams.XStreamConnectionFactory(new XStream(new XppDriver())), new SocketDetails("127.0.0.1", 10099)));
-        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
+        testClient = (TestFacade) jremotingClient.resolveService("Hello");
 
     }
 

@@ -198,7 +198,7 @@ public class ServiceResolver {
         return obj.jRemotingGetReferenceID(this);
     }
 
-    public final Object serviceResolver(String publishedServiceName) throws ConnectionException, RedirectedException {
+    public final Object resolveService(String publishedServiceName) throws ConnectionException, RedirectedException {
         Response response = transport.invoke(new LookupService(publishedServiceName, authenticator.authenticate(authChallenge), session), true);
 
         if (response instanceof NotPublished) {

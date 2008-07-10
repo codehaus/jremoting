@@ -61,7 +61,7 @@ public class DirectMarshalledWithHandCraftedStubsAndSkelsTestCase extends Abstra
                 this.getClass().getClassLoader());
         jremotingClient = new ServiceResolver(transport, new HandCraftedTestFacadeStubFactory());
 
-        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
+        testClient = (TestFacade) jremotingClient.resolveService("Hello");
 
     }                                                     
 

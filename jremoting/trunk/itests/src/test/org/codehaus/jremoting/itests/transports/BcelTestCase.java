@@ -78,7 +78,7 @@ public class BcelTestCase extends AbstractHelloTestCase {
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
         jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 10201)), (ContextFactory) mock.proxy(), new StubsFromServer());
-        testClient = (TestFacade) jremotingClient.serviceResolver("Hello223");
+        testClient = (TestFacade) jremotingClient.resolveService("Hello223");
 
     }
 

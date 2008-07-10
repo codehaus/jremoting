@@ -164,7 +164,7 @@ public class ClientContextTestCase extends MockObjectTestCase {
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();
         ServiceResolver jc = new ServiceResolver(handler, factory1);
 
-        final AccountManager clientSideAccountManager = (AccountManager) jc.serviceResolver("OurAccountManager");
+        final AccountManager clientSideAccountManager = (AccountManager) jc.resolveService("OurAccountManager");
 
         Thread threadOne = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 11);
         Thread threadTwo = makeAmountTransferringThread(clientSideAccountManager, "fredsAccount", "wilmasAccount", 22);

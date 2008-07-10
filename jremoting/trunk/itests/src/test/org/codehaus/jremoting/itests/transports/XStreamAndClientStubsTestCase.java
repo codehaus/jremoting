@@ -57,7 +57,7 @@ public class XStreamAndClientStubsTestCase extends AbstractHelloTestCase {
         jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new XStreamConnectionFactory(),  new SocketDetails("127.0.0.1", 10333)),
                 new ThreadLocalContextFactory(), new StubsOnClient());
 
-        testClient = (TestFacade) jremotingClient.serviceResolver("Hello");
+        testClient = (TestFacade) jremotingClient.resolveService("Hello");
 
     }
 

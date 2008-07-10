@@ -65,7 +65,7 @@ public class RmiTestCase extends MockObjectTestCase {
 
         // Client side setup
         ServiceResolver jc = new ServiceResolver(new RmiTransport(new ConsoleClientMonitor(), new SocketDetails("127.0.0.1", 10003)));
-        testClient = (TestFacade) jc.serviceResolver("Hello");
+        testClient = (TestFacade) jc.resolveService("Hello");
 
 
     }
