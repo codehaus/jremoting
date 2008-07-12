@@ -62,7 +62,7 @@ public class RmiServer extends ConnectingServer {
         this(serverMonitor, new FromClassLoaderStubRetriever(), new NullAuthenticator(), defaultExecutorService(), defaultContextFactory(), addr);
     }
 
-    private static DefaultServerDelegate defaultServerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerContextFactory contextFactory) {
+    private static ServerDelegate defaultServerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerContextFactory contextFactory) {
         return new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory);
     }
 

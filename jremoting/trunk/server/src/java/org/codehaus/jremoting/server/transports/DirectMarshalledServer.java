@@ -56,7 +56,7 @@ public class DirectMarshalledServer extends StatefulServer implements ServerMars
         this(serverMonitor, defaultServerDelegate(serverMonitor));
     }
 
-    private static DefaultServerDelegate defaultServerDelegate(ServerMonitor serverMonitor) {
+    private static ServerDelegate defaultServerDelegate(ServerMonitor serverMonitor) {
         return new DefaultServerDelegate(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
     }
 

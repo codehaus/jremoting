@@ -110,8 +110,7 @@ public class SocketServer extends ConnectingServer {
         this.addr = addr;
     }
 
-
-    private static DefaultServerDelegate defaultServerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerContextFactory contextFactory) {
+    private static ServerDelegate defaultServerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerContextFactory contextFactory) {
         return new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory);
     }
 

@@ -23,6 +23,7 @@ import org.codehaus.jremoting.server.StubRetriever;
 import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.ServerContextFactory;
+import org.codehaus.jremoting.server.ServerDelegate;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.StatefulServer;
@@ -54,7 +55,7 @@ public class DirectServer extends StatefulServer {
         this(new RefusingStubRetriever(), new NullAuthenticator(), monitor, new ThreadLocalServerContextFactory());
     }
 
-    private static DefaultServerDelegate defaultServerDelegate(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ServerContextFactory contextFactory) {
+    private static ServerDelegate defaultServerDelegate(StubRetriever stubRetriever, Authenticator authenticator, ServerMonitor serverMonitor, ServerContextFactory contextFactory) {
         return new DefaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory);
     }
 
