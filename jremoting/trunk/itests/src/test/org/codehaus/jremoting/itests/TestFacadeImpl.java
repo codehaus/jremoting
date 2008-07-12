@@ -171,7 +171,6 @@ public class TestFacadeImpl implements TestFacade, Externalizable {
 
     protected void finalize() throws Throwable {
         super.finalize();
-        //System.out.println( "impl finalized" );
     }
 
 

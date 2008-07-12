@@ -22,6 +22,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.SocketDetails;
+import org.codehaus.jremoting.client.pingers.TimingOutPinger;
 import org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory;
 import org.codehaus.jremoting.client.streams.ObjectStreamConnectionFactory;
 import org.codehaus.jremoting.client.resolver.ServiceResolver;
@@ -220,18 +221,20 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
         server.start();
+        RecordingClientMonitor rcm = new RecordingClientMonitor();
 
         // Client side setup
+        ServiceResolver sr;
         try {
-            new ServiceResolver(new RmiTransport(new ConsoleClientMonitor(), new SocketDetails("127.0.0.1", 12348)));
+            TimingOutPinger pinger = new TimingOutPinger(1, 2);
+            RmiTransport transport = new RmiTransport(rcm, pinger,
+                    new SocketDetails("127.0.0.1", 12348));
             fail("Expected mismatch exception");
         } catch (ConnectionException e) {
-            if (e.getMessage().indexOf("mismatch") < 0) {
-                throw e;
-            }
-
-        } finally {
-            server.stop();
+            assertTrue(e.getMessage().indexOf("mismatch") > 0);
         }
+        server.stop();
+        assertEquals("methodLogging\n", rcm.sb.toString());
+
     }
 }

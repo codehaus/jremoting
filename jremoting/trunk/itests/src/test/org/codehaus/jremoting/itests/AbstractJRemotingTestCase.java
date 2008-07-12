@@ -58,7 +58,6 @@ public abstract class AbstractJRemotingTestCase extends MockObjectTestCase {
 
         // test the server has logged the message.
         assertEquals("Hello!?", ((TestFacadeImpl) testServer).getStoredState("void:hello(String)"));
-        System.out.println("");
     }
 
 

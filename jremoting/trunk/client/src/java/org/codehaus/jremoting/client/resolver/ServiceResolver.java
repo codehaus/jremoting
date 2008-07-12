@@ -374,9 +374,6 @@ public class ServiceResolver {
 
         public Object processObjectRequest(String methodSignature, Object[] args, Class[] argClasses) throws Throwable {
             try {
-                if (stubRegistry == null) {
-                    System.out.println("");
-                }
                 Response response = invokeViaTransport(methodSignature, args, argClasses);
                 if (response instanceof MethodInvoked) {
                     MethodInvoked or = (MethodInvoked) response;

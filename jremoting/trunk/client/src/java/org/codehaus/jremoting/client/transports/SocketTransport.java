@@ -20,7 +20,7 @@ package org.codehaus.jremoting.client.transports;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.StreamConnectionFactory;
 import org.codehaus.jremoting.client.*;
-import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
+import org.codehaus.jremoting.client.pingers.TimingOutPinger;
 import org.codehaus.jremoting.client.transports.StreamTransport;
 
 import java.io.IOException;
@@ -70,13 +70,13 @@ public class SocketTransport extends StreamTransport {
 
 
     public SocketTransport(ClientMonitor clientMonitor, StreamConnectionFactory streamConnectionFactory, SocketDetails addr) throws ConnectionException {
-        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
+        this(clientMonitor, Executors.newScheduledThreadPool(10), new TimingOutPinger(),
                 Thread.currentThread().getContextClassLoader(), streamConnectionFactory, addr);
     }
 
 
     public SocketTransport(ClientMonitor clientMonitor, StreamConnectionFactory streamConnectionFactory, SocketDetails addr, int socketTimeout) throws ConnectionException {
-        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
+        this(clientMonitor, Executors.newScheduledThreadPool(10), new TimingOutPinger(),
                 Thread.currentThread().getContextClassLoader(), streamConnectionFactory, addr, socketTimeout);
     }
 

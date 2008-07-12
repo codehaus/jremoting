@@ -132,6 +132,7 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
                 return doServiceListRequest();
 
             } else {
+
                 return new RequestFailed("Unknown Request Type: " + request.getClass().getName());
             }
         } catch (NullPointerException npe) {

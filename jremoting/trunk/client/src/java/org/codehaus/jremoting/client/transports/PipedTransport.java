@@ -22,7 +22,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.StreamConnectionFactory;
-import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
+import org.codehaus.jremoting.client.pingers.TimingOutPinger;
 import org.codehaus.jremoting.client.transports.StreamTransport;
 import org.codehaus.jremoting.responses.ConnectionOpened;
 
@@ -68,7 +68,7 @@ public class PipedTransport extends StreamTransport {
     public PipedTransport(ClientMonitor clientMonitor,
                                         StreamConnectionFactory streamConnectionFactory,
                                         PipedInputStream inputStream, PipedOutputStream outputStream) {
-        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
+        this(clientMonitor, Executors.newScheduledThreadPool(10), new TimingOutPinger(),
                 Thread.currentThread().getContextClassLoader(), streamConnectionFactory, inputStream, outputStream);
     }
 

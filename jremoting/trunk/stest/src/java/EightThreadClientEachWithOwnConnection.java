@@ -17,7 +17,7 @@ public class EightThreadClientEachWithOwnConnection {
                         mathLoop((Addition) new ServiceResolver(new SocketTransport(
                                 new ConsoleClientMonitor(), 
                                 new ByteStreamConnectionFactory(),
-                                new SocketDetails("localhost", 10333, 1))).resolveService("Addition"));
+                                new SocketDetails("209.20.68.189", 10333, 1))).resolveService("Addition"));
                     } catch (Throwable e) {
                         System.out.println("Client Quitting ...");
                         e.printStackTrace();

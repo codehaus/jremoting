@@ -18,6 +18,7 @@
 package org.codehaus.jremoting.util;
 
 import java.io.*;
+import java.net.SocketTimeoutException;
 
 import org.codehaus.jremoting.JRemotingException;
 
@@ -85,22 +86,28 @@ public class SerializationHelper {
     }
 
     public static String getXml(LineNumberReader lineNumberReader) throws IOException {
-        StringBuffer obj = new StringBuffer();
-        String line = lineNumberReader.readLine();
-        obj.append(line).append("\n");
-        if (!(line.endsWith("/>"))) {
-            line = lineNumberReader.readLine();
-            while (line != null) {
-                obj.append(line).append("\n");
-                if (!Character.isWhitespace(line.charAt(0))) {
-                    line = null;
-                } else {
-                    line = lineNumberReader.readLine();
+        StringBuffer doc = new StringBuffer();
+        try {
+            String line = lineNumberReader.readLine();
+            doc.append(line).append("\n");
+            if (!(line.endsWith("/>"))) {
+                line = lineNumberReader.readLine();
+                while (line != null) {
+                    doc.append(line).append("\n");
+                    if (!Character.isWhitespace(line.charAt(0))) {
+                        line = null;
+                    } else {
+                        line = lineNumberReader.readLine();
+                    }
                 }
             }
-
+            return doc.toString();
+        } catch (SocketTimeoutException e) {
+            //System.out.println(">>>> SocketTimeOut");
+            //e.printStackTrace();
+            //System.out.println("<<<< SocketTimeOut");
+            return doc.toString();
         }
-        return obj.toString();
     }
 
 

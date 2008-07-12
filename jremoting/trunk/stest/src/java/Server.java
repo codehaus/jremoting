@@ -16,7 +16,7 @@ public class Server {
         Addition addition = new Addition() {
             public double add(double a, double b) {
                 pc();
-                sleepTenMillis();
+                //sleepTenMillis();
                 return a+b;
             }
         };

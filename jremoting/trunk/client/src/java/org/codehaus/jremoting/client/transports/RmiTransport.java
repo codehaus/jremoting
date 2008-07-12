@@ -22,7 +22,7 @@ import org.codehaus.jremoting.RmiInvoker;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.SocketDetails;
-import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
+import org.codehaus.jremoting.client.pingers.TimingOutPinger;
 import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
@@ -61,19 +61,22 @@ public final class RmiTransport extends StatefulTransport {
         } catch (MalformedURLException mfue) {
             throw new ConnectionException("Malformed URL, host/port (" + addr.getHostName() + "/" + addr.getPort() + ") must be wrong: " + mfue.getMessage());
         } catch (ConnectIOException cioe) {
-            throw new ConnectionException("Cannot connect to remote RMI server. " + "It is possible that transport mismatch");
+            throw new ConnectionException("Cannot connect to remote RMI server. " + "It is possible that transport mismatch", cioe);
         } catch (RemoteException re) {
             throw new ConnectionException("Unknown Remote Exception : " + re.getMessage());
         }
     }
 
+    public RmiTransport(ClientMonitor clientMonitor, ConnectionPinger connectionPinger, SocketDetails addr) throws ConnectionException {
+        this(clientMonitor, defaultScheduledThreadPool(), connectionPinger, addr);
+    }
+
     public RmiTransport(ClientMonitor clientMonitor, SocketDetails addr) throws ConnectionException {
         this(clientMonitor, defaultScheduledThreadPool(), defaultConnectionPinger(), addr);
-
     }
 
     public static ConnectionPinger defaultConnectionPinger() {
-        return new NeverConnectionPinger();
+        return new TimingOutPinger();
     }
 
     public static ScheduledExecutorService defaultScheduledThreadPool() {

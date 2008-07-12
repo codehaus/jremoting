@@ -53,11 +53,11 @@ public abstract class StatefulTransport implements Transport {
     protected final ConnectionPinger connectionPinger;
     protected final ClientMonitor clientMonitor;
     private final ClassLoader facadesClassLoader;
-    protected boolean stopped = false;
     protected final ScheduledExecutorService executorService;
     protected final boolean methodLogging;
     private long session;
     private long lastRealRequest = System.currentTimeMillis();
+    private boolean open;
 
     public StatefulTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader) {
@@ -77,6 +77,12 @@ public abstract class StatefulTransport implements Transport {
     }
 
     public ConnectionOpened openConnection() throws ConnectionException {
+        synchronized(this) {
+            if (open) {
+                throw new IllegalStateException("already open");
+            }
+            open = true;
+        }
         Response resp = invoke(new OpenConnection(), true);
         connectionPinger.start(this);
         if (!(resp instanceof ConnectionOpened)) {
@@ -86,15 +92,19 @@ public abstract class StatefulTransport implements Transport {
     }
 
     public void closeConnection(long session) {
+        synchronized(this) {
+            if (!open) {
+                throw new IllegalStateException("not open");
+            }
+            open = false;
+        }
         ConnectionClosed closed = (ConnectionClosed) invoke(new CloseConnection(session), true);
         connectionPinger.stop();
-        // TODO check closed ?
-        stopped = true;
     }
 
     public void ping() {
 
-        if (stopped) {
+        if (!open) {
             throw new ConnectionClosedException("Connection closed");
         }
 

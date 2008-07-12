@@ -21,6 +21,7 @@ import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.client.pingers.NeverConnectionPinger;
+import org.codehaus.jremoting.client.pingers.TimingOutPinger;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.InvocationHandler;
@@ -45,7 +46,7 @@ public final class DirectTransport extends StatefulTransport {
     }
 
     public DirectTransport(ClientMonitor clientMonitor, InvocationHandler invoker) {
-        this(clientMonitor, Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), invoker);
+        this(clientMonitor, Executors.newScheduledThreadPool(10), new TimingOutPinger(), invoker);
         this.invoker = invoker;
     }
 
