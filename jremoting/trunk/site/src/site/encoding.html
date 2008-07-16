@@ -12,19 +12,20 @@
 </head>
 
 <body>
-  <h3>Overview</h3>JRemoting has three stream encoding
-  implementations -&nbsp;ByteStreamEncoding, ObjectStreamEncoding
-  and XStreamEncoding. &nbsp;ByteStreamEncoding is the default and
+  <h3>Overview</h3>
+  JRemoting has three stream encoding
+  implementations -&nbsp;ByteStream, ObjectStream
+  and XmlStream. &nbsp;ByteStream is the default and
   slightly faster on the wire than ObjectStream. &nbsp;Both are
-  binary encodings. &nbsp;XStreamEncoding leverages <a href=
+  binary encodings. &nbsp;XmlStream leverages <a href=
   "http://xstream.codehaus.org/">XStream</a> for serializing
-  to/from XML which makes it&nbsp;text based.<br />
+&nbsp;text based.<br />
 
   <p style="font-weight: bold;">Server side usage</p>
 
   <div class="source">
     <pre>
-server = new SocketServer(new ConsoleServerMonitor(), new <span style="font-weight: bold;">ByteStreamEncoding</span>(), new InetSocketAddress(10333));<br />
+server = new SocketServer(new ConsoleServerMonitor(), new <span style="font-weight: bold;">ByteStream</span>(), new InetSocketAddress(10333));<br />
 </pre>
   </div>
 
@@ -32,11 +33,12 @@ server = new SocketServer(new ConsoleServerMonitor(), new <span style="font-weig
 
   <div class="source">
     <pre>
-jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new <span style="font-weight: bold;">ByteStreamEncoding</span>(), new InetSocketAddress("localhost", 10333)));<br />
+jremotingClient = new JRemotingClient(new SocketTransport(new ConsoleClientMonitor(), new <span style="font-weight: bold;">ByteStream</span>(), new InetSocketAddress("localhost", 10333)));<br />
 </pre>
-  </div>To use either of XStreamEncoding or ObjectStreamEncoding,
-  use them in place of ByteStreamEncoding when setting up the
-  client and server sides. &nbsp;<br />
+  </div>
+  To use either of XmlStream or ObjectStream,
+  use them in place of ByteStream when setting up the
+client and server sides. &nbsp;<br />
   <br />
   Encodings mush be matched, of course, on both sides to work at
   all. &nbsp;JRemoting will fail, not necessarily quickly or
