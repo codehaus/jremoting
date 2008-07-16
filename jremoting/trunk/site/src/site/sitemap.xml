@@ -2,7 +2,7 @@
     <section>
         <name>About</name>
         <page>index.html</page>
-        <page>encoding.html</page>
+        <page>streams.html</page>
         <page>transports.html</page>
         <page>stubs.html</page>
         <page>facades.html</page>
