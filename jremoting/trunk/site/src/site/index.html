@@ -10,7 +10,6 @@
 </head>
 
 <body>
-
   <p>It is a transparent remoting technology for Java. &nbsp;You
   can publish an object to one or more remote clients via one of
   the interfaces it implements. &nbsp;It is best to honor the
@@ -20,12 +19,13 @@
   <h3>Server side publishing</h3>
 
   <div class="source">
-  <pre>
+    <pre>
     Bank myBank = new BankImpl();
     server = new SocketServer(new ConsoleServerMonitor(), new InetSocketAddress(3333));
     server.publish(myBank, "BankService", Bank.class);
     server.start();
-  </pre>
+  
+</pre>
   </div>
 
   <h3>Client side usage</h3>
@@ -34,7 +34,8 @@
     <pre>
 serviceResolver = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new SocketDetails("localhost", 10333)));<br />
 Bank remoteBank = (Bank) serviceResolver.resolveService("BankService");
-    </pre>
+    
+</pre>
   </div>
 </body>
 </html>

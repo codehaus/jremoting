@@ -25,18 +25,21 @@
     <pre>
 server = new <span style=
 "font-weight: bold;">SocketServer</span>(new ConsoleServerMonitor(), 
-                          new InetSocketAddress(portNum));</pre>
+                          new InetSocketAddress(portNum));
+</pre>
   </div>
 
   <p style="font-weight: bold;">Client side usage</p>
 
   <div class="source">
-    <pre>serviceResolver = new ServiceResolver(new <span style=
+    <pre>
+serviceResolver = new ServiceResolver(new <span style=
 "font-weight: bold;">SocketTransport</span>(new ConsoleClientMonitor(), 
-                                                          new InetSocketAddress("somehost.com", portNum)));</pre>
+                                                          new InetSocketAddress("somehost.com", portNum)));
+</pre>
   </div>
 
-<h3>Secure Socket Transport</h3>As above, but using SSL.
+  <h3>Secure Socket Transport</h3>As above, but using SSL.
   &nbsp;You need to set the keyStore and/or trustStore for the VM
   in question. See<br />
   <br />
@@ -47,7 +50,8 @@ server = new <span style=
 -Djavax.net.ssl.keyStore=/path/to/keyStore -Djavax.net.ssl.keyStore=/path/to/trustStore -Djavax.net.ssl.keyStorePassword=yourPassword<br />
 <br />
 server = new <span style=
-"font-weight: bold;">SSLSocketServer</span>(new ConsoleServerMonitor(), new InetSocketAddress(portNum));</pre>
+"font-weight: bold;">SSLSocketServer</span>(new ConsoleServerMonitor(), new InetSocketAddress(portNum));
+</pre>
   </div>
 
   <p style="font-weight: bold;">Client side usage</p>
@@ -56,10 +60,11 @@ server = new <span style=
     <pre>
 serviceResolver = new ServiceResolver(new <span style=
 "font-weight: bold;">SSLSocketTransport</span>(new ConsoleClientMonitor(), 
-                                                             new InetSocketAddress("somehost.com", portNum)));</pre>
+                                                             new InetSocketAddress("somehost.com", portNum)));
+</pre>
   </div>
 
-<h3>Piped Transport</h3>Using Java's built-in pipes, this
+  <h3>Piped Transport</h3>Using Java's built-in pipes, this
   transport will join two parts of the same application with RPC.
   &nbsp;Interestingly you could have a large hierachy of
   clasloaders with the objects to be serialized duplicated in the
@@ -80,10 +85,11 @@ PipedOutputStream out = new PipedOutputStream();<br />
 server.makeNewConnection(in, out);<br />
 <br />
 serviceResolver = new ServiceResolver(new <span style=
-"font-weight: bold;">PipedTransport</span>(new ConsoleClientMonitor(), in, out));<br /></pre>
+"font-weight: bold;">PipedTransport</span>(new ConsoleClientMonitor(), in, out));<br />
+</pre>
   </div>
 
-<h3>Direct Transport</h3>Directly wiring a JRemoting server to a
+  <h3>Direct Transport</h3>Directly wiring a JRemoting server to a
   client mostly serves as a quality/development consideration for
   us. &nbsp;The transport is very fast as no serialization is
   taking place. &nbsp;If you can find a use for it, you'l note that
@@ -97,10 +103,11 @@ server = new <span style=
 "font-weight: bold;">DirectServer</span>((ServerMonitor) mockServerMonitor.proxy());<br />
 <br />
 serviceResolver = new ServiceResolver(new <span style=
-"font-weight: bold;">DirectTransport</span>(new ConsoleClientMonitor(), server));</pre>
+"font-weight: bold;">DirectTransport</span>(new ConsoleClientMonitor(), server));
+</pre>
   </div>
 
-<h3>Direct Transport, with serialization</h3>As above, but with a
+  <h3>Direct Transport, with serialization</h3>As above, but with a
   delivrate serialize/deserialize step. &nbsp;Again of marginal use
   for the end user compared to sockets/pipes<br />
   <br />
@@ -112,10 +119,11 @@ server = new <span style=
 "font-weight: bold;">DirectMarshalledServer</span>((ServerMonitor) mockServerMonitor.proxy());<br />
 <br />
 serviceResolver = new ServiceResolver(new <span style=
-"font-weight: bold;">DirectMarshalledTransport</span>(new ConsoleClientMonitor(), server));</pre>
+"font-weight: bold;">DirectMarshalledTransport</span>(new ConsoleClientMonitor(), server));
+</pre>
   </div>
 
-<h3>NIO</h3>Todo<br />
+  <h3>NIO</h3>Todo<br />
 
   <h3>Servlets</h3>Todo
 
@@ -133,9 +141,9 @@ serviceResolver = new ServiceResolver(new <span style=
   Direct Un-marshalled - 120,482 reqs/sec<br />
   Direct Marshalled - 6,906 reqs/sec<br />
   <br />
-  <span style="font-weight: bold;">Non RPC</span><strong> (for comparison)<br style=
-  "font-weight: bold;" />
-  </strong>Dynamic proxy - 7 million reqs/sec<br />
+  <span style="font-weight: bold;">Non RPC</span> <strong>(for
+  comparison)<br style="font-weight: bold;" /></strong> Dynamic
+  proxy - 7 million reqs/sec<br />
   Hand-coded proxy - 109 million reqs/sec<br />
   Direcly wiring client to server (no proxy, no nothing) -&nbsp;551
   million reqs/sec<br />

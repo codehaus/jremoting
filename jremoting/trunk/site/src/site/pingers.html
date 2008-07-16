@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -12,15 +12,21 @@
 </head>
 
 <body>
-<p>A ConnectionPinger is a mechanism by which the Client keeps a connection alive to a server. This will prevent the server from marking references eligible for garbage collection.</p>
-<h3>TimingOutPinger</h3>
+  <p>A ConnectionPinger is a mechanism by which the Client keeps a
+  connection alive to a server. This will prevent the server from
+  marking references eligible for garbage collection.</p>
 
-<p>
-	This will ping every X seconds and will give up pinging after Y seconds beyond the last real request.</p>
-<h3>NeverConnectionPinger</h3>
+  <h3>TimingOutPinger</h3>
 
-<p>This does not ping at all.</p>
-<h3>PerpetualPinger</h3>
-<p>This one keeps going regardless.</p>
+  <p>This will ping every X seconds and will give up pinging after
+  Y seconds beyond the last real request.</p>
+
+  <h3>NeverConnectionPinger</h3>
+
+  <p>This does not ping at all.</p>
+
+  <h3>PerpetualPinger</h3>
+
+  <p>This one keeps going regardless.</p>
 </body>
 </html>

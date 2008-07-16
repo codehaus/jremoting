@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -13,12 +13,17 @@
 
 <body>
   <h3>Overview</h3>
-<p>A Monitor is a mechanism by which the Server or client side user can tap into events that are happening during RPC</p>
-<h3>Server Side</h3>
-<div class="source">
-	<p>On the serverside you implement a interface called ServerMonitor:</p>
-<pre>
-	void closeError(Class clazz, String desc, IOException e);
+
+  <p>A Monitor is a mechanism by which the Server or client side
+  user can tap into events that are happening during RPC</p>
+
+  <h3>Server Side</h3>
+
+  <div class="source">
+    <p>On the serverside you implement a interface called
+    ServerMonitor:</p>
+    <pre>
+        void closeError(Class clazz, String desc, IOException e);
 
     void classNotFound(Class clazz, ClassNotFoundException e);
 
@@ -31,15 +36,21 @@
     void removeSession(Session session, int newSize);
 
     void staleSession(Session session, int newSize);
-	</pre>
-	</div>
-<p>
-	Pre-made implementations are CommonsLoggingServerMonitor, JavaLoggingServerMonitor, Log4JServerMonitor and NullServerMonitor. It is specified as the first parameter in the applicable Server class.
-</p>
-<h3>Client Side</h3>
-<div class="source">
-	<p>On the serverside you implement a interface called ServerMonitor:</p>
-<pre>
+        
+</pre>
+  </div>
+
+  <p>Pre-made implementations are CommonsLoggingServerMonitor,
+  JavaLoggingServerMonitor, Log4JServerMonitor and
+  NullServerMonitor. It is specified as the first parameter in the
+  applicable Server class.</p>
+
+  <h3>Client Side</h3>
+
+  <div class="source">
+    <p>On the serverside you implement a interface called
+    ServerMonitor:</p>
+    <pre>
     void methodCalled(Class clazz, String methodSignature, long duration, String annotation);
 
     boolean methodLogging();
@@ -60,14 +71,18 @@
 
     void pingFailure(Class clazz, JRemotingException jre);
 
-	</pre>
-	</div>
-<p>
-	Pre-made implementations are CommonsLoggingClientMonitor, JavaLoggingClientMonitor, Log4JClientMonitor, SimpleRetryingClientMonitor and NullClientMonitor. It is specified as the first parameter in the applicable Transport class.
-</p>
-<p>
-	Note also that implementations decide on <b>when</b> or <b>if</b> to do retries if a particular wire invocation fails by throwing exceptions from the serviceAbend() method.
-</p>
+        
+</pre>
+  </div>
 
+  <p>Pre-made implementations are CommonsLoggingClientMonitor,
+  JavaLoggingClientMonitor, Log4JClientMonitor,
+  SimpleRetryingClientMonitor and NullClientMonitor. It is
+  specified as the first parameter in the applicable Transport
+  class.</p>
+
+  <p>Note also that implementations decide on <b>when</b> or
+  <b>if</b> to do retries if a particular wire invocation fails by
+  throwing exceptions from the serviceAbend() method.</p>
 </body>
 </html>

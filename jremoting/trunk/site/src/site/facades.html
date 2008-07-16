@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -13,7 +13,8 @@
 
 <body>
   <h3>Overview</h3>
-<p>The <a href=
+
+  <p>The <a href=
   "http://en.wikipedia.org/wiki/Fa%E7ade_pattern">Facade
   pattern</a> is what you should have in mind as you design an
   interface for publishing over JRemoting. &nbsp;It goes
@@ -21,14 +22,15 @@
   "http://en.wikipedia.org/wiki/Immutable_object">Immutable
   objects</a>. Understanding both is key to making JRemoting work
   for you.</p>
-  
-  <p>Facades have methods that are going to be invoked over the wire.
-  &nbsp;The results of those methods can either be immutable (also
-  known as value objects), or other (secondary) facades. &nbsp;If
-  the method returns a secondary facade, it could be the interface
-  declared on the return type or a more derived interface. &nbsp;If
-  an immutable it can be anything that is serializable, but cannot
-  have a reference to anything that's a facade.</p>
+
+  <p>Facades have methods that are going to be invoked over the
+  wire. &nbsp;The results of those methods can either be immutable
+  (also known as value objects), or other (secondary) facades.
+  &nbsp;If the method returns a secondary facade, it could be the
+  interface declared on the return type or a more derived
+  interface. &nbsp;If an immutable it can be anything that is
+  serializable, but cannot have a reference to anything that's a
+  facade.</p>
 
   <p style="font-weight: bold;">Sample Facades and Immutables
   (Value Objects)</p>
@@ -80,23 +82,21 @@ class Amount implements Serializable {
 
 </pre>
   </div>
-<p>The interface Bank above is the one that is the primary
+
+  <p>The interface Bank above is the one that is the primary
   facade. &nbsp;SavingsAccount and CheckingAccount are the
   secondary facade. &nbsp;They are used as return types and
-  parameters to methods on the primary facade and each other.
-  
-  The plain classes Txn, Debit, Credit and Amount are plain classes
+  parameters to methods on the primary facade and each other. The
+  plain classes Txn, Debit, Credit and Amount are plain classes
   that are serializable. Date and BigDecimal are from Java's
-  libraries and are Serializable out of the box.
-  
-  Note that Credit and Debit have a corresponding account ID rather
-  than a reference to the Account itself.
-  </p>
+  libraries and are Serializable out of the box. Note that Credit
+  and Debit have a corresponding account ID rather than a reference
+  to the Account itself.</p>
 
-  <p>Note also that the debitFunds method on the primary facade
-  has an exception. &nbsp;That exception is plain (it does not
-  extend anything special from the JRemoting API) and is replicated
-  on the client side by JRemoting. &nbsp;The same would be true of
+  <p>Note also that the debitFunds method on the primary facade has
+  an exception. &nbsp;That exception is plain (it does not extend
+  anything special from the JRemoting API) and is replicated on the
+  client side by JRemoting. &nbsp;The same would be true of
   exceptions that are drived from RuntimeException.</p>
 </body>
 </html>

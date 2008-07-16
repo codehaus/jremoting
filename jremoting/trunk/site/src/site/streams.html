@@ -5,41 +5,44 @@
 <head>
   <meta name="generator" content=
   "HTML Tidy for Mac OS X (vers 1 September 2005), see www.w3.org" />
-  <meta content="text/html; charset=US-ASCII" http-equiv=
+  <meta content="text/html; charset=us-ascii" http-equiv=
   "Content-Type" />
 
   <title>Streams</title>
 </head>
 
 <body>
-  <p>Steams are how the RPC is encoded over the wire. JRemoting has three 
-  implementations -&nbsp;ByteStream, ObjectStream
-  and XmlStream. &nbsp;</p>
-  <p>ByteStream is the default and
-  slightly faster on the wire than ObjectStream. &nbsp;Both are
-  binary encodings. &nbsp;XmlStream leverages <a href=
-  "http://xstream.codehaus.org/">XStream</a> for an encoding that is
-text based.<br />
-  </p>
-<p style="font-weight: bold;">Server side usage</p>
+  <p>Steams are how the RPC is encoded over the wire. JRemoting has
+  three implementations -&nbsp;ByteStream, ObjectStream and
+  XmlStream. &nbsp;</p>
+
+  <p>ByteStream is the default and slightly faster on the wire than
+  ObjectStream. &nbsp;Both are binary encodings. &nbsp;XmlStream
+  leverages <a href="http://xstream.codehaus.org/">XStream</a> for
+  an encoding that is text based.<br /></p>
+
+  <p style="font-weight: bold;">Server side usage</p>
 
   <div class="source">
     <pre>
 server = new SocketServer(new ConsoleServerMonitor(),
-                          new <span style="font-weight: bold;">ByteStream</span>(), 
-                          new InetSocketAddress(10333));</pre>
+                          new <span style=
+"font-weight: bold;">ByteStream</span>(), 
+                          new InetSocketAddress(10333));
+</pre>
   </div>
 
   <p style="font-weight: bold;">Client side usage</p>
 
   <div class="source">
-    <pre>serviceResolver = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), 
+    <pre>
+serviceResolver = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), 
                                                          new <span style="font-weight: bold;">ByteStream</span>(), 
-                                                         new InetSocketAddress("localhost", 10333)))</pre>
-  </div>
-To use either of XmlStream or ObjectStream,
-  use them in place of ByteStream (as above) when setting up the
-client and server sides. &nbsp;<br />
+                                                         new InetSocketAddress("localhost", 10333)))
+</pre>
+  </div>To use either of XmlStream or ObjectStream, use them in
+  place of ByteStream (as above) when setting up the client and
+  server sides. &nbsp;<br />
   <br />
   Encodings mush be matched, of course, on both sides to work at
   all. &nbsp;JRemoting will fail, not necessarily quickly or
