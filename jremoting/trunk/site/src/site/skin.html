@@ -6,7 +6,7 @@
   <meta name="generator" content=
   "HTML Tidy for Mac OS X (vers 1 September 2005), see www.w3.org" />
 
-  <title>${title}</title>
+  <title>JRemoting - ${title}</title>
 <style type="text/css" media="all">
 /*<![CDATA[*/
 @import url("./style/pico.css");
@@ -40,7 +40,7 @@
 
   <div id="breadcrumbs">
     <div class="left">
-      Last Published: Jan 22, 2008
+      Last Published: July 15, 2008
     </div>
 
     <div class="clear"></div>
@@ -48,9 +48,24 @@
 
   <div id="leftColumn">
     <div id="navColumn">
-      <img src="images/JRemotingLogo.png" alt="JRemoting" width=
-      "126" height="204" />
+		<#list sitemap.sections as section>
+		<h1>${section.name}</h1>
+		<ul>
+		  <#list section.pages as otherPage> <#if otherPage = page>
+		  <li class="none"><strong>${otherPage.title}</strong></li>
+		  <#else>
+		  <li class="none"><a href="${otherPage.href}">${otherPage.title}</a></li>
+		  </#if> </#list>
+		</ul>
+		</#list>
     </div>
   </div>
+<div id="bodyColumn">
+<div id="contentBox">
+<div class="section">
+<h2>${title}</h2>
+${body}</div>
+</div>
+</div>
 </body>
 </html>
