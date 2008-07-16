@@ -33,7 +33,7 @@
         <configuration>
           <sourceDirectoryPath>${basedir}/src/site</sourceDirectoryPath>
           <sitemapPath>sitemap.xml</sitemapPath>
-          <skinPath>skin.html</skinPath>
+          <skinPath>skin.htm</skinPath>
           <resourcePaths>.</resourcePaths>
           <outputDirectoryPath>${project.build.directory}/site</outputDirectoryPath>
         </configuration>

@@ -12,24 +12,26 @@
 </head>
 
 <body>
-  <h2>Overview</h2>By default JRemoting will deliver client server
+<p>By default JRemoting will deliver client server
   capabilty without the need for the user to make stubs classes
   (like RMI does with the rmic operation). &nbsp;Reflections's
   dynamic proxy capability is used to deliver that. There are
   problems with this approach. &nbsp;Foremost is that it will not
   work in a client that is an applet that is trying to exist inside
   the 'sandbox' without extra permissions. There's also a
-  &nbsp;speed issue, but its barely significant.
+  &nbsp;speed issue, but its barely significant.</p>
 
-  <h2>BCEL Stubs</h2>BCEL is an Apache technology that can make
+  <h2>BCEL Stubs</h2>
+  <p>BCEL is an Apache technology that can make
   Java class files at runtime. &nbsp;We optionally use that to make
-  Stub classes.
+  Stub classes.</p>
 
-  <h3>BcelStubGenerator</h3>Use like RMI's rmic. &nbsp;It can make
+  <h3>BcelStubGenerator</h3>
+<p>Use like RMI's rmic. &nbsp;It can make
   stubs in advance of need. &nbsp;This will allow you to include
   the stub in the jar file your making for your client, or to put
   in a more general stubs jar that you will keep on the&nbsp;client
-  side. Use in Maven2 like so -
+  side. Use in Maven2 like so:<p>
 
   <div class="source">
     <pre>
@@ -62,11 +64,12 @@
 
   <h2>Client usage</h2>
 
-  <h3>StubsOnClient</h3>JRemoting will look in the client's
+  <h3>StubsOnClient</h3>
+  <p>JRemoting will look in the client's
   classpath for the Stub class. You will have generated the Stub
   class in question and bundled in the application jar destined for
   the client. This is good for applets, which by default cannot
-  dynamically mount classes or classloaders.
+  dynamically mount classes or classloaders.</p>
 
   <h3>StubsFromServer</h3>
 
@@ -83,9 +86,9 @@
   RmiServer) the <strong>StubRetriever</strong> instance is passed
   in.</p>
 
-  <h3>StubsViaReflection</h3>Stubs are made dynamically via Java's
+  <h3>StubsViaReflection</h3><p>Stubs are made dynamically via Java's
   reflection. &nbsp;These will not be safe for applet clients that
-  are in the sandbox, and are slightly slower than generated stubs.
+  are in the sandbox, and are slightly slower than generated stubs.</p>
 
   <h3>&nbsp;</h3>
 </body>

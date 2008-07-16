@@ -10,11 +10,11 @@
 </head>
 
 <body>
-  <p>It is a transparent remoting technology for Java. &nbsp;You
+  <p>It is a transparent RPC (remoting) technology for Java. &nbsp;You
   can publish an object to one or more remote clients via one of
   the interfaces it implements. &nbsp;It is best to honor the
   Facade Pattern while architecting the interface(s) as an RPC call
-  is not cheap.</p>
+  over TCP/IP is not cheap.</p>
 
   <h3>Server side publishing</h3>
 
@@ -37,5 +37,7 @@ Bank remoteBank = (Bank) serviceResolver.resolveService("BankService");
     
 </pre>
   </div>
+  <h3>Pluggability</h3>
+  <p>JRemoting is designed to have pluggable implementations of its component parts.  Explore the left navigation to see what is pluggable.</p>
 </body>
 </html>
