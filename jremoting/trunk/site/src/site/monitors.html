@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 1 September 2005), see www.w3.org" />
+  <meta content="text/html; charset=us-ascii" http-equiv=
+  "Content-Type" />
+
+  <title>Monitors</title>
+</head>
+
+<body>
+  <h3>Overview</h3>
+<p>A Monitor is a mechanism by which the Server or client side user can tap into events that are happening during RPC</p>
+<h3>Server Side</h3>
+<div class="source">
+	<p>On the serverside you implement a interface called ServerMonitor:</p>
+<pre>
+	void closeError(Class clazz, String desc, IOException e);
+
+    void classNotFound(Class clazz, ClassNotFoundException e);
+
+    void unexpectedException(Class clazz, String desc, Throwable e);
+
+    void stopServerError(Class clazz, String desc, Exception e);
+
+    void newSession(Session session, int newSize, String connectionDetails);
+
+    void removeSession(Session session, int newSize);
+
+    void staleSession(Session session, int newSize);
+	</pre>
+	</div>
+<p>
+	Pre-made implementations are CommonsLoggingServerMonitor, JavaLoggingServerMonitor, Log4JServerMonitor and NullServerMonitor. It is specified as the first parameter in the applicable Server class.
+</p>
+<h3>Client Side</h3>
+<div class="source">
+	<p>On the serverside you implement a interface called ServerMonitor:</p>
+<pre>
+    void methodCalled(Class clazz, String methodSignature, long duration, String annotation);
+
+    boolean methodLogging();
+
+    void serviceSuspended(Class clazz, Request request, int attempt, int suggestedWaitMillis);
+
+    void serviceAbend(Class clazz, int attempt, IOException cause);
+
+    void invocationFailure(Class clazz, String publishedServiceName, String objectName, String methodSignature, InvocationException ie);
+
+    void unexpectedConnectionClosed(Class clazz, String name, ConnectionClosedException cce);
+
+    void unexpectedInterruption(Class clazz, String name, InterruptedException ie);
+
+    void classNotFound(Class clazz, String msg, ClassNotFoundException cnfe);
+
+    void unexpectedIOException(Class clazz, String msg, IOException ioe);
+
+    void pingFailure(Class clazz, JRemotingException jre);
+
+	</pre>
+	</div>
+<p>
+	Pre-made implementations are CommonsLoggingClientMonitor, JavaLoggingClientMonitor, Log4JClientMonitor, SimpleRetryingClientMonitor and NullClientMonitor. It is specified as the first parameter in the applicable Transport class.
+</p>
+<p>
+	Note also that implementations decide on <b>when</b> or <b>if</b> to do retries if a particular wire invocation fails by throwing exceptions from the serviceAbend() method.
+</p>
+
+</body>
+</html>
