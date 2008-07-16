@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>jremoting-parent</artifactId>
 		<groupId>org.codehaus.jremoting</groupId>
-		<version>1.0</version>
+		<version>1.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>jremoting-itests</artifactId>
@@ -13,22 +13,22 @@
 		<dependency>
 			<groupId>${pom.groupId}</groupId>
 			<artifactId>jremoting-api</artifactId>
-			<version>${pom.version}</version>
+			<version>1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>${pom.groupId}</groupId>
 			<artifactId>jremoting-client</artifactId>
-			<version>${pom.version}</version>
+			<version>1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>${pom.groupId}</groupId>
 			<artifactId>jremoting-server</artifactId>
-			<version>${pom.version}</version>
+			<version>1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>${pom.groupId}</groupId>
 			<artifactId>jremoting-tools</artifactId>
-			<version>${pom.version}</version>
+			<version>1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>bcel</groupId>
