@@ -53,7 +53,8 @@ public class PerpetualPinger implements ConnectionPinger {
 
     public void start(Transport invoker) {
         this.invoker = invoker;
-        pingingFuture = invoker.getScheduledExecutorService().scheduleAtFixedRate(runnable, pingIntervalSeconds, pingIntervalSeconds, TimeUnit.SECONDS);
+        pingingFuture = invoker.getScheduledExecutorService()
+                .scheduleAtFixedRate(runnable, pingIntervalSeconds, pingIntervalSeconds, TimeUnit.SECONDS);
     }
 
     public void stop() {

@@ -23,8 +23,8 @@ import org.codehaus.jremoting.client.ConnectionRefusedException;
 import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.client.pingers.TimingOutPinger;
-import org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory;
-import org.codehaus.jremoting.client.streams.ObjectStreamConnectionFactory;
+import org.codehaus.jremoting.client.streams.ByteStream;
+import org.codehaus.jremoting.client.streams.ObjectStream;
 import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.monitors.NullClientMonitor;
@@ -64,7 +64,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
     public void testNoServer() throws Exception {
         try {
             new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
-                new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12345)));
+                new ByteStream(), new SocketDetails("127.0.0.1", 12345)));
             fail("Should have have failed.");
         } catch (ConnectionRefusedException e) {
             // what we expetcted
@@ -85,7 +85,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         try {
 
             ServiceResolver cssf = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
-                new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12333)));
+                new ByteStream(), new SocketDetails("127.0.0.1", 12333)));
             cssf.resolveService("serverDelegate");
 
             fail("should have barfed");
@@ -102,7 +102,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         mockServerMonitor.expects(once()).method("newSession").withAnyArguments();
 
         // server side setup.
-        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.streams.ObjectStreamConnectionFactory(), new InetSocketAddress(12331)
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.streams.ObjectStream(), new InetSocketAddress(12331)
         );
 
         TestFacadeImpl testServer = new TestFacadeImpl();
@@ -113,7 +113,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
 
         SocketTransport invoker = new SocketTransport(new ConsoleClientMonitor(),
-                new ObjectStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12331));
+                new ObjectStream(), new SocketDetails("127.0.0.1", 12331));
         ServiceResolver cssf = new ServiceResolver(invoker);
         cssf.resolveService("Hello");
         Object result = invoker.invoke(new InvokeMethod("Hello", "Main", "ping()", new Object[0], (long) 44332, (long) 21), true);
@@ -128,7 +128,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         // server side setup.
         // Object
-        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.streams.ObjectStreamConnectionFactory(), new InetSocketAddress(12347));
+        SocketServer server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.streams.ObjectStream(), new InetSocketAddress(12347));
         TestFacadeImpl testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
@@ -137,7 +137,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
             new ServiceResolver(new SocketTransport(new NullClientMonitor(),
-                new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12347), 500));
+                new ByteStream(), new SocketDetails("127.0.0.1", 12347), 500));
             fail("Expected mismatch exception");
         } catch (InvocationException e) {
             assertTrue(e.getCause() instanceof SocketTimeoutException);
@@ -182,7 +182,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
             public void staleSession(Session session, int newSize) {
             }
         };
-        SocketServer server = new SocketServer(sm, new org.codehaus.jremoting.server.streams.ObjectStreamConnectionFactory(), new InetSocketAddress(12347));
+        SocketServer server = new SocketServer(sm, new org.codehaus.jremoting.server.streams.ObjectStream(), new InetSocketAddress(12347));
         server.setSocketTimeout(10);
         TestFacadeImpl testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
@@ -196,7 +196,7 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
             new ServiceResolver(new SocketTransport((ClientMonitor) mockClientMonitor.proxy(),
-                new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 12347),  100));
+                new ByteStream(), new SocketDetails("127.0.0.1", 12347),  100));
             fail("Expected mismatch exception");
         } catch (InvocationException e) {
             assertTrue(e.getCause() instanceof SocketTimeoutException);

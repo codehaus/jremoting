@@ -19,7 +19,7 @@ package org.codehaus.jremoting.itests.transports;
 
 
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
-import org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory;
+import org.codehaus.jremoting.client.streams.ByteStream;
 import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.stubs.StubsOnClient;
@@ -52,7 +52,7 @@ public class ByteStreamWithMinaTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         ConsoleClientMonitor consoleClientMonitor = new ConsoleClientMonitor();
-        ByteStreamConnectionFactory byteStreamEncoding = new ByteStreamConnectionFactory();
+        ByteStream byteStreamEncoding = new ByteStream();
         SocketDetails details = new SocketDetails("localhost", 10333);
         SocketTransport transport = new SocketTransport(consoleClientMonitor, byteStreamEncoding, details);
         jremotingClient = new ServiceResolver(transport,

@@ -21,7 +21,7 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.ClientMonitor;
 import org.codehaus.jremoting.client.Context;
 import org.codehaus.jremoting.client.Transport;
-import org.codehaus.jremoting.client.StreamConnectionFactory;
+import org.codehaus.jremoting.client.Stream;
 import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.context.ThreadLocalContextFactory;
@@ -36,7 +36,7 @@ import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.monitors.ConsoleServerMonitor;
 import org.codehaus.jremoting.server.stubretrievers.BcelDynamicStubRetriever;
-import org.codehaus.jremoting.server.streams.ByteStreamConnectionFactory;
+import org.codehaus.jremoting.server.streams.ByteStream;
 import org.codehaus.jremoting.server.transports.SocketServer;
 import org.jmock.MockObjectTestCase;
 
@@ -152,13 +152,13 @@ public class ClientContextTestCase extends MockObjectTestCase {
         ServerMonitor serverMonitor = new ConsoleServerMonitor();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         SocketServer server = new SocketServer(serverMonitor, stubRetriever, new NullAuthenticator(),
-                new ByteStreamConnectionFactory(), executorService, sscf, new InetSocketAddress(19333));
+                new ByteStream(), executorService, sscf, new InetSocketAddress(19333));
 
         Publication pd = new Publication(AccountManager.class);
         server.publish(accountManager, "OurAccountManager", pd);
         server.start();
 
-        StreamConnectionFactory factory0 = new org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory();
+        Stream factory0 = new org.codehaus.jremoting.client.streams.ByteStream();
         ClientMonitor cm = new ConsoleClientMonitor();
         Transport handler = new SocketTransport(cm, factory0, new SocketDetails("127.0.0.1", 19333));
         ThreadLocalContextFactory factory1 = new ThreadLocalContextFactory();

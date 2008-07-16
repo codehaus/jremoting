@@ -14,18 +14,30 @@
  * limitations under the License.
  *
  */
-package org.codehaus.jremoting.server;
+package org.codehaus.jremoting.client.streams;
 
-import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.client.StreamConnection;
+import org.codehaus.jremoting.client.Stream;
+import org.codehaus.jremoting.ConnectionException;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
 
-public interface StreamConnectionFactory {
+import com.thoughtworks.xstream.XStream;
 
-    public StreamConnection makeStreamConnection(ServerMonitor serverMonitor, ClassLoader facadesClassLoader,
-                                               InputStream inputStream, OutputStream outputStream,
-                                               String connectionDetails) throws IOException;
+public class XmlStream implements Stream {
 
+    private final XStream xStream;
+
+    public XmlStream(XStream xStream) {
+        this.xStream = xStream;
+    }
+
+    public XmlStream() {
+        this(new XStream());
+    }
+
+    public StreamConnection makeStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+        return new XStreamConnection(inputStream, outputStream, facadesClassLoader, xStream);
+    }
 }

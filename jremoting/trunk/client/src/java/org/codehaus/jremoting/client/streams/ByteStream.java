@@ -17,12 +17,12 @@
 package org.codehaus.jremoting.client.streams;
 
 import org.codehaus.jremoting.client.StreamConnection;
-import org.codehaus.jremoting.client.StreamConnectionFactory;
+import org.codehaus.jremoting.client.Stream;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.io.*;
 
-public class ByteStreamConnectionFactory implements StreamConnectionFactory {
+public class ByteStream implements Stream {
     public StreamConnection makeStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         return new ByteStreamConnection(new DataInputStream(inputStream), new DataOutputStream(new BufferedOutputStream(outputStream)), facadesClassLoader);
     }

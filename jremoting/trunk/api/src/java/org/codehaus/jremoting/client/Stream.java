@@ -22,7 +22,7 @@ import org.codehaus.jremoting.ConnectionException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public interface StreamConnectionFactory {
+public interface Stream {
 
     StreamConnection makeStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException;
 

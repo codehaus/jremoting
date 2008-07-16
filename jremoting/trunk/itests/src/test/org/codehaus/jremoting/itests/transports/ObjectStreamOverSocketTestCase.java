@@ -19,7 +19,7 @@ package org.codehaus.jremoting.itests.transports;
 
 import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
-import org.codehaus.jremoting.client.streams.ObjectStreamConnectionFactory;
+import org.codehaus.jremoting.client.streams.ObjectStream;
 import org.codehaus.jremoting.client.transports.SocketTransport;
 import org.codehaus.jremoting.client.SocketDetails;
 import org.codehaus.jremoting.itests.TestFacade;
@@ -55,7 +55,7 @@ public class ObjectStreamOverSocketTestCase extends AbstractHelloTestCase {
         super.setUp();
 
         // server side setup.
-        server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.streams.ObjectStreamConnectionFactory(), new InetSocketAddress(10002));
+        server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new org.codehaus.jremoting.server.streams.ObjectStream(), new InetSocketAddress(10002));
 
         testServer = new TestFacadeImpl();
 
@@ -66,7 +66,7 @@ public class ObjectStreamOverSocketTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
-                new ObjectStreamConnectionFactory(),
+                new ObjectStream(),
                 new SocketDetails("127.0.0.1", 10002)));
         testClient = (TestFacade) jremotingClient.resolveService("Hello");
 

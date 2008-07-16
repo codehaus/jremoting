@@ -22,7 +22,7 @@ import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.server.streams.ByteStreamConnectionFactory;
+import org.codehaus.jremoting.server.streams.ByteStream;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.ConnectingServer;
 import org.codehaus.jremoting.server.transports.RunningConnection;
@@ -46,7 +46,7 @@ public class SocketServer extends ConnectingServer {
     private ServerSocket serverSocket;
     private Future daemon;
     private final InetSocketAddress addr;
-    private final StreamConnectionFactory streamConnectionFactory;
+    private final Stream Stream;
     private final ClassLoader facadesClassLoader;
     private int socketTimeout = 60 * 1000;
 
@@ -66,46 +66,46 @@ public class SocketServer extends ConnectingServer {
 
 
     public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, InetSocketAddress addr) {
-        this(serverMonitor, stubRetriever, defaultAuthenticator(), defaultStreamConnectionFactory(), defaultExecutor(),
+        this(serverMonitor, stubRetriever, defaultAuthenticator(), defaultStream(), defaultExecutor(),
                 defaultContextFactory(), addr);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, StreamConnectionFactory streamConnectionFactory, InetSocketAddress port) {
-        this(serverMonitor, defaultExecutor(), streamConnectionFactory, port);
+    public SocketServer(ServerMonitor serverMonitor, Stream Stream, InetSocketAddress port) {
+        this(serverMonitor, defaultExecutor(), Stream, port);
     }
 
     public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, InetSocketAddress addr) {
-        this(serverMonitor, executorService, defaultStreamConnectionFactory(), addr);
+        this(serverMonitor, executorService, defaultStream(), addr);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, StreamConnectionFactory streamConnectionFactory, InetSocketAddress addr) {
-        this(serverMonitor, defaultStubRetriever(), defaultAuthenticator(), streamConnectionFactory, executorService, defaultContextFactory(), defaultClassLoader(), addr);
+    public SocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, Stream Stream, InetSocketAddress addr) {
+        this(serverMonitor, defaultStubRetriever(), defaultAuthenticator(), Stream, executorService, defaultContextFactory(), defaultClassLoader(), addr);
     }
 
-    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamConnectionFactory streamConnectionFactory, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, InetSocketAddress addr) {
-        this(serverMonitor, stubRetriever, authenticator, streamConnectionFactory, executorService, serverContextFactory, defaultClassLoader(), addr);
+    public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, Stream Stream, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, InetSocketAddress addr) {
+        this(serverMonitor, stubRetriever, authenticator, Stream, executorService, serverContextFactory, defaultClassLoader(), addr);
     }
 
     public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, ScheduledExecutorService executorService, Authenticator authenticator) {
-        this(serverMonitor, defaultStubRetriever(), authenticator, defaultStreamConnectionFactory(), executorService, defaultContextFactory(), addr);
+        this(serverMonitor, defaultStubRetriever(), authenticator, defaultStream(), executorService, defaultContextFactory(), addr);
     }
 
     public SocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever,
                         Authenticator authenticator,
-                        StreamConnectionFactory streamConnectionFactory,
+                        Stream Stream,
                         ScheduledExecutorService executorService,
                         ServerContextFactory contextFactory,
                         ClassLoader facadesClassLoader, InetSocketAddress addr) {
         this(serverMonitor, defaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory),
-                streamConnectionFactory, executorService, facadesClassLoader, addr);
+                Stream, executorService, facadesClassLoader, addr);
     }
 
     public SocketServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate,
-                                           StreamConnectionFactory streamConnectionFactory, ScheduledExecutorService executorService,
+                                           Stream Stream, ScheduledExecutorService executorService,
                                            ClassLoader facadesClassLoader, InetSocketAddress addr) {
 
         super(serverMonitor, serverDelegate, executorService);
-        this.streamConnectionFactory = streamConnectionFactory;
+        this.Stream = Stream;
         this.facadesClassLoader = facadesClassLoader;
         this.addr = addr;
     }
@@ -118,8 +118,8 @@ public class SocketServer extends ConnectingServer {
         return Executors.newScheduledThreadPool(10);
     }
 
-    public static StreamConnectionFactory defaultStreamConnectionFactory() {
-        return new ByteStreamConnectionFactory();
+    public static Stream defaultStream() {
+        return new ByteStream();
     }
 
     public static ClassLoader defaultClassLoader() {
@@ -205,7 +205,7 @@ public class SocketServer extends ConnectingServer {
                 socket.setSoTimeout(socketTimeout);
                 if (getState().equals(STARTED)) {
                     RunningConnection src = new RunningConnection(SocketServer.this,
-                            streamConnectionFactory.makeStreamConnection(serverMonitor, facadesClassLoader,
+                            Stream.makeStreamConnection(serverMonitor, facadesClassLoader,
                                 socket.getInputStream(), socket.getOutputStream(), socket.getInetAddress().toString()),
                             serverMonitor) {
                         public void closeConnection() {

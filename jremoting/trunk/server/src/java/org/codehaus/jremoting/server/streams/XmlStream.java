@@ -3,21 +3,21 @@ package org.codehaus.jremoting.server.streams;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.StreamConnectionFactory;
+import org.codehaus.jremoting.server.Stream;
 import org.codehaus.jremoting.server.StreamConnection;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class XStreamConnectionFactory implements StreamConnectionFactory {
+public class XmlStream implements Stream {
 
     private XStream xStream;
 
-    public XStreamConnectionFactory(XStream xstream) {
+    public XmlStream(XStream xstream) {
         this.xStream = xstream;
     }
 
-    public XStreamConnectionFactory() {
+    public XmlStream() {
         this (new XStream(new DomDriver()));
     }
 

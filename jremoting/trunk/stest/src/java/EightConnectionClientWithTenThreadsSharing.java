@@ -1,7 +1,7 @@
 import org.codehaus.jremoting.client.transports.SocketTransport;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.SocketDetails;
-import org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory;
+import org.codehaus.jremoting.client.streams.ByteStream;
 import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.ConnectionException;
 
@@ -11,7 +11,7 @@ public class EightConnectionClientWithTenThreadsSharing {
         // Client side setup
         final Addition addition = (Addition) new ServiceResolver(new SocketTransport(
                 new ConsoleClientMonitor(),
-                new ByteStreamConnectionFactory(),
+                new ByteStream(),
                 new SocketDetails("localhost", 10333, 8))).resolveService("Addition");
 
         for (int i = 0; i < 10; i++) {

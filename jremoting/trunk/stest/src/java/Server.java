@@ -12,7 +12,10 @@ public class Server {
     public static void main(String[] args) {
 
                // server side setup.
-        SocketServer server = new SocketServer(new ConsoleServerMonitor(), new InetSocketAddress(10333));
+        SocketServer server = new SocketServer(
+                new ConsoleServerMonitor(),
+                new InetSocketAddress(10333));
+
         Addition addition = new Addition() {
             public double add(double a, double b) {
                 pc();

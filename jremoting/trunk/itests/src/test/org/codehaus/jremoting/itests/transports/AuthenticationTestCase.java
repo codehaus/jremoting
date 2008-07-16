@@ -19,7 +19,7 @@ package org.codehaus.jremoting.itests.transports;
 
 
 import org.codehaus.jremoting.client.context.NullContextFactory;
-import org.codehaus.jremoting.client.streams.ByteStreamConnectionFactory;
+import org.codehaus.jremoting.client.streams.ByteStream;
 import org.codehaus.jremoting.client.resolver.ServiceResolver;
 import org.codehaus.jremoting.client.monitors.ConsoleClientMonitor;
 import org.codehaus.jremoting.client.stubs.StubsOnClient;
@@ -61,7 +61,7 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
     public void testHelloCall() throws Exception {
 
         // Client side setup
-        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 10333)), new NullContextFactory(),
+        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("127.0.0.1", 10333)), new NullContextFactory(),
                 new StubsOnClient(), new org.codehaus.jremoting.client.authentication.NameAndPasswordAuthenticator("fred", "wilma"));
         testClient = (TestFacade) jremotingClient.resolveService("Hello");
 
@@ -71,7 +71,7 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
     public void testfailingChallenge() throws Exception {
 
         // Client side setup
-        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStreamConnectionFactory(), new SocketDetails("127.0.0.1", 10333)), new NullContextFactory(),
+        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("127.0.0.1", 10333)), new NullContextFactory(),
                 new StubsOnClient(), new org.codehaus.jremoting.client.authentication.NameAndPasswordAuthenticator("FRED", "wilma"));
 
         try {

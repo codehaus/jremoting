@@ -12,7 +12,7 @@ import org.codehaus.jremoting.itests.TestFacade3;
 import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
-import org.codehaus.jremoting.server.streams.XStreamConnectionFactory;
+import org.codehaus.jremoting.server.streams.XmlStream;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
@@ -35,7 +35,7 @@ public class XStreamAndXppTestCase extends AbstractHelloTestCase {
         // server side setup.
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(10);
         server = new SocketServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
-                new XStreamConnectionFactory(new XStream(new XppDriver())), executorService, new ThreadLocalServerContextFactory(), new InetSocketAddress(10099));
+                new XmlStream(new XStream(new XppDriver())), executorService, new ThreadLocalServerContextFactory(), new InetSocketAddress(10099));
         testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
         server.publish(testServer, "Hello", pd);
@@ -43,7 +43,7 @@ public class XStreamAndXppTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.streams.XStreamConnectionFactory(new XStream(new XppDriver())), new SocketDetails("127.0.0.1", 10099)));
+                new org.codehaus.jremoting.client.streams.XmlStream(new XStream(new XppDriver())), new SocketDetails("127.0.0.1", 10099)));
         testClient = (TestFacade) jremotingClient.resolveService("Hello");
 
     }

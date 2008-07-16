@@ -17,27 +17,14 @@
 package org.codehaus.jremoting.client.streams;
 
 import org.codehaus.jremoting.client.StreamConnection;
-import org.codehaus.jremoting.client.StreamConnectionFactory;
+import org.codehaus.jremoting.client.Stream;
 import org.codehaus.jremoting.ConnectionException;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.thoughtworks.xstream.XStream;
-
-public class XStreamConnectionFactory implements StreamConnectionFactory {
-
-    private final XStream xStream;
-
-    public XStreamConnectionFactory(XStream xStream) {
-        this.xStream = xStream;
-    }
-
-    public XStreamConnectionFactory() {
-        this(new XStream());
-    }
-
+public class ObjectStream implements Stream {
     public StreamConnection makeStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
-        return new XStreamConnection(inputStream, outputStream, facadesClassLoader, xStream);
+        return new ObjectStreamConnection(inputStream, outputStream, facadesClassLoader);
     }
 }

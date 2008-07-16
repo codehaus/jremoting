@@ -16,9 +16,8 @@
  */
 package org.codehaus.jremoting.server.transports;
 
-import org.codehaus.jremoting.server.StreamConnectionFactory;
+import org.codehaus.jremoting.server.Stream;
 import org.codehaus.jremoting.server.*;
-import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 
 import javax.net.ssl.SSLServerSocketFactory;
 import java.io.IOException;
@@ -42,32 +41,32 @@ public class SSLSocketServer extends SocketServer {
         super(serverMonitor, stubRetriever, addr);
     }
 
-    public SSLSocketServer(ServerMonitor serverMonitor, StreamConnectionFactory streamConnectionFactory, InetSocketAddress port) {
-        super(serverMonitor, streamConnectionFactory, port);
+    public SSLSocketServer(ServerMonitor serverMonitor, Stream Stream, InetSocketAddress port) {
+        super(serverMonitor, Stream, port);
     }
 
     public SSLSocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, InetSocketAddress addr) {
         super(serverMonitor, executorService, addr);
     }
 
-    public SSLSocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, StreamConnectionFactory streamConnectionFactory, InetSocketAddress addr) {
-        super(serverMonitor, executorService, streamConnectionFactory, addr);
+    public SSLSocketServer(ServerMonitor serverMonitor, ScheduledExecutorService executorService, Stream Stream, InetSocketAddress addr) {
+        super(serverMonitor, executorService, Stream, addr);
     }
 
-    public SSLSocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamConnectionFactory streamConnectionFactory, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, InetSocketAddress addr) {
-        super(serverMonitor, stubRetriever, authenticator, streamConnectionFactory, executorService, serverContextFactory, addr);
+    public SSLSocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, Stream Stream, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, InetSocketAddress addr) {
+        super(serverMonitor, stubRetriever, authenticator, Stream, executorService, serverContextFactory, addr);
     }
 
     public SSLSocketServer(ServerMonitor serverMonitor, InetSocketAddress addr, ScheduledExecutorService executorService, Authenticator authenticator) {
         super(serverMonitor, addr, executorService, authenticator);
     }
 
-    public SSLSocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, StreamConnectionFactory streamConnectionFactory, ScheduledExecutorService executorService, ServerContextFactory contextFactory, ClassLoader facadesClassLoader, InetSocketAddress addr) {
-        super(serverMonitor, stubRetriever, authenticator, streamConnectionFactory, executorService, contextFactory, facadesClassLoader, addr);
+    public SSLSocketServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, Stream Stream, ScheduledExecutorService executorService, ServerContextFactory contextFactory, ClassLoader facadesClassLoader, InetSocketAddress addr) {
+        super(serverMonitor, stubRetriever, authenticator, Stream, executorService, contextFactory, facadesClassLoader, addr);
     }
 
-    public SSLSocketServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate, StreamConnectionFactory streamConnectionFactory, ScheduledExecutorService executorService, ClassLoader facadesClassLoader, InetSocketAddress addr) {
-        super(serverMonitor, serverDelegate, streamConnectionFactory, executorService, facadesClassLoader, addr);
+    public SSLSocketServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate, Stream Stream, ScheduledExecutorService executorService, ClassLoader facadesClassLoader, InetSocketAddress addr) {
+        super(serverMonitor, serverDelegate, Stream, executorService, facadesClassLoader, addr);
     }
 
     @Override

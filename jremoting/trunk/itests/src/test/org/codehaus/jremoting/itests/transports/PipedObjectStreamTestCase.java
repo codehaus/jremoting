@@ -27,7 +27,7 @@ import org.codehaus.jremoting.itests.TestFacadeImpl;
 import org.codehaus.jremoting.server.Publication;
 import org.codehaus.jremoting.server.ServerMonitor;
 import org.codehaus.jremoting.server.context.ThreadLocalServerContextFactory;
-import org.codehaus.jremoting.server.streams.ObjectStreamConnectionFactory;
+import org.codehaus.jremoting.server.streams.ObjectStream;
 import org.codehaus.jremoting.server.authenticators.NullAuthenticator;
 import org.codehaus.jremoting.server.stubretrievers.RefusingStubRetriever;
 import org.codehaus.jremoting.server.transports.PipedServer;
@@ -61,7 +61,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
 
         // server side setup.
         server = new PipedServer((ServerMonitor) mockServerMonitor.proxy(), new RefusingStubRetriever(), new NullAuthenticator(),
-                Executors.newScheduledThreadPool(10) ,new ThreadLocalServerContextFactory(), new ObjectStreamConnectionFactory());
+                Executors.newScheduledThreadPool(10) ,new ThreadLocalServerContextFactory(), new ObjectStream());
         testServer = new TestFacadeImpl();
         Publication pd = new Publication(TestFacade.class).addAdditionalFacades(TestFacade3.class, TestFacade2.class);
 
@@ -85,7 +85,7 @@ public class PipedObjectStreamTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         jremotingClient = new ServiceResolver(new PipedTransport(new ConsoleClientMonitor(),
-                new org.codehaus.jremoting.client.streams.ObjectStreamConnectionFactory(), in, out));
+                new org.codehaus.jremoting.client.streams.ObjectStream(), in, out));
         testClient = (TestFacade) jremotingClient.resolveService("Hello33");
 
     }

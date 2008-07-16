@@ -21,7 +21,7 @@ import org.codehaus.jremoting.ConnectionException;
 
 import java.util.concurrent.ScheduledExecutorService;
 
-import org.codehaus.jremoting.server.StreamConnectionFactory;
+import org.codehaus.jremoting.server.Stream;
 import org.codehaus.jremoting.server.*;
 import org.codehaus.jremoting.server.adapters.DefaultServerDelegate;
 
@@ -37,29 +37,29 @@ import java.io.PipedOutputStream;
  */
 public class PipedServer extends ConnectingServer {
 
-    private final StreamConnectionFactory streamConnectionFactory;
+    private final Stream Stream;
     private final ClassLoader facadesClassLoader;
 
     public PipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator,
                              ScheduledExecutorService executorService, ServerContextFactory contextFactory,
-                             StreamConnectionFactory streamConnectionFactory,
+                             Stream Stream,
                              ClassLoader facadesClassLoader) {
         super(serverMonitor, defaultServerDelegate(serverMonitor, stubRetriever, authenticator, contextFactory), executorService);
-        this.streamConnectionFactory = streamConnectionFactory;
+        this.Stream = Stream;
         this.facadesClassLoader = facadesClassLoader;
     }
 
     public PipedServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate,
                              ScheduledExecutorService executorService,
-                             StreamConnectionFactory streamConnectionFactory,
+                             Stream Stream,
                              ClassLoader facadesClassLoader) {
         super(serverMonitor, serverDelegate, executorService);
-        this.streamConnectionFactory = streamConnectionFactory;
+        this.Stream = Stream;
         this.facadesClassLoader = facadesClassLoader;
     }
 
-    public PipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, StreamConnectionFactory streamConnectionFactory) {
-        this(serverMonitor, stubRetriever, authenticator, executorService, serverContextFactory, streamConnectionFactory, PipedServer.class.getClassLoader());
+    public PipedServer(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ScheduledExecutorService executorService, ServerContextFactory serverContextFactory, Stream Stream) {
+        this(serverMonitor, stubRetriever, authenticator, executorService, serverContextFactory, Stream, PipedServer.class.getClassLoader());
     }
 
     private static ServerDelegate defaultServerDelegate(ServerMonitor serverMonitor, StubRetriever stubRetriever, Authenticator authenticator, ServerContextFactory contextFactory) {
@@ -81,7 +81,7 @@ public class PipedServer extends ConnectingServer {
             pIS.connect(out);
             in.connect(pOS);
 
-            StreamConnection sc = streamConnectionFactory.makeStreamConnection(serverMonitor, facadesClassLoader, pIS, pOS, "piped");
+            StreamConnection sc = Stream.makeStreamConnection(serverMonitor, facadesClassLoader, pIS, pOS, "piped");
 
             RunningConnection runningConnection = new RunningConnection(this, sc, serverMonitor) {
                 public void closeConnection() {
