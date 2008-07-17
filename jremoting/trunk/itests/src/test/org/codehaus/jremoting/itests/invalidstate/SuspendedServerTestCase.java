@@ -76,7 +76,7 @@ public class SuspendedServerTestCase extends MockObjectTestCase {
 
             serviceResolver = new ServiceResolver(new SocketTransport(clientMonitor,
                     new ByteStream(), new SocketDetails("127.0.0.1", 12201)));
-            TestFacade testClient = (TestFacade) serviceResolver.resolveService("Hello55");
+            TestFacade testClient = serviceResolver.resolveService("Hello55");
 
             testClient.intParamReturningInt(100);
 
@@ -121,7 +121,7 @@ public class SuspendedServerTestCase extends MockObjectTestCase {
 
             serviceResolver = new ServiceResolver(new SocketTransport(clientMonitor,
                     new ByteStream(), new SocketDetails("127.0.0.1", 12201)));
-            TestFacade testClient = (TestFacade) serviceResolver.resolveService("Hello55");
+            TestFacade testClient = serviceResolver.resolveService("Hello55");
 
             testClient.intParamReturningInt(100);
 

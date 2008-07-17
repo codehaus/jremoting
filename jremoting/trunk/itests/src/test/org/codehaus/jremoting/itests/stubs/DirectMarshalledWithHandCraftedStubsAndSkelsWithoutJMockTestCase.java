@@ -57,9 +57,9 @@ public class DirectMarshalledWithHandCraftedStubsAndSkelsWithoutJMockTestCase ex
                 Executors.newScheduledThreadPool(10), new NeverConnectionPinger(),
                 (DirectMarshalledServer) server,
                 this.getClass().getClassLoader());
-        jremotingClient = new ServiceResolver(transport, new HandCraftedTestFacadeStubFactory());
+        sr = new ServiceResolver(transport, new HandCraftedTestFacadeStubFactory());
 
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
 
     }
 
@@ -78,7 +78,7 @@ public class DirectMarshalledWithHandCraftedStubsAndSkelsWithoutJMockTestCase ex
         testClient = null;
         System.gc();
 
-        jremotingClient.close();
+        sr.close();
 
         server.stop();
 

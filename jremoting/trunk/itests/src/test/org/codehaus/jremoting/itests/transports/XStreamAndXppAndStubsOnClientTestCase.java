@@ -43,11 +43,11 @@ public class XStreamAndXppAndStubsOnClientTestCase extends AbstractHelloTestCase
         server.start();
 
         // Client side setup
-        jremotingClient = new ServiceResolver(new SocketTransport(
+        sr = new ServiceResolver(new SocketTransport(
                 new ConsoleClientMonitor(), new org.codehaus.jremoting.client.streams.XmlStream(
                 new XStream(new XppDriver())), new SocketDetails("127.0.0.1", 10099)
         ), new StubsOnClient());
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
 
     }
 
@@ -56,7 +56,7 @@ public class XStreamAndXppAndStubsOnClientTestCase extends AbstractHelloTestCase
         testClient = null;
         System.gc();
         Thread.sleep(400);
-        jremotingClient.close();
+        sr.close();
         server.stop();
     }
 

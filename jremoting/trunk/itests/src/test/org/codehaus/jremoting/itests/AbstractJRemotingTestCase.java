@@ -34,7 +34,7 @@ public abstract class AbstractJRemotingTestCase extends MockObjectTestCase {
     protected StatefulServer server;
     protected TestFacadeImpl testServer;
     protected TestFacade testClient;
-    protected ServiceResolver jremotingClient;
+    protected ServiceResolver sr;
     protected boolean bugParadeBug4499841StillExists = true;
     protected Mock mockClientMonitor;
     protected Mock mockServerMonitor;

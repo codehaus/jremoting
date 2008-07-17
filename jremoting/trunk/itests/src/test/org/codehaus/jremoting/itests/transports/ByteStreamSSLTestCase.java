@@ -70,9 +70,9 @@ public class ByteStreamSSLTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        jremotingClient = new ServiceResolver(new SSLSocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("localhost", 10334)),
+        sr = new ServiceResolver(new SSLSocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("localhost", 10334)),
                 new ThreadLocalContextFactory(), new StubsViaReflection());
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
 
     }
 
@@ -85,7 +85,7 @@ public class ByteStreamSSLTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotingClient.close();
+        sr.close();
         server.stop();
         Thread.sleep(300);
     }

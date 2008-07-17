@@ -49,9 +49,9 @@ public class DirectTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
-        jremotingClient = new ServiceResolver(
+        sr = new ServiceResolver(
                 new DirectTransport((ClientMonitor) mockClientMonitor.proxy(), server), new NullContextFactory());
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
     }
 
     protected int getNumIterationsForSpeedTest() {
@@ -63,7 +63,7 @@ public class DirectTestCase extends AbstractHelloTestCase {
         super.tearDown();
         testClient = null;
         System.gc();
-        jremotingClient.close();
+        sr.close();
         server.stop();
     }
 

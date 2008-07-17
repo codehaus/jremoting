@@ -54,9 +54,9 @@ public class ByteStreamOverSocketWithHandCraftedStubsTestCase extends AbstractHe
         server.start();
 
         // Client side setup
-        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("localhost", 10333)),
+        sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("localhost", 10333)),
                 new ThreadLocalContextFactory(), new HandCraftedTestFacadeStubFactory());
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
 
     }
 
@@ -67,7 +67,7 @@ public class ByteStreamOverSocketWithHandCraftedStubsTestCase extends AbstractHe
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotingClient.close();
+        sr.close();
         server.stop();
     }
 

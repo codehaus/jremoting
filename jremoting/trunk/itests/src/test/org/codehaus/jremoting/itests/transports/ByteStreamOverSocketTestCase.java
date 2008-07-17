@@ -55,9 +55,9 @@ public class ByteStreamOverSocketTestCase extends AbstractHelloTestCase {
         ByteStream byteStreamEncoding = new ByteStream();
         SocketDetails details = new SocketDetails("localhost", 10333);
         SocketTransport transport = new SocketTransport(consoleClientMonitor, byteStreamEncoding, details);
-        jremotingClient = new ServiceResolver(transport,
+        sr = new ServiceResolver(transport,
                 new ThreadLocalContextFactory(), new StubsOnClient());
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
 
     }
 
@@ -70,7 +70,7 @@ public class ByteStreamOverSocketTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotingClient.close();
+        sr.close();
         server.stop();
     }
 

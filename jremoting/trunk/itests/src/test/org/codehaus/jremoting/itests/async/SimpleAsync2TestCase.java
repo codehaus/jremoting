@@ -41,7 +41,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
 
     AsyncTestImpl asyncTestImpl;
     AsyncTest testClient;
-    ServiceResolver jremotingClient;
+    ServiceResolver sr;
     SocketServer server;
     private Mock mockServerMonitor;
 
@@ -79,9 +79,9 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         // Client side setup
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
-        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+        sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.streams.ByteStream(), new SocketDetails("127.0.0.1", 11009)), (ContextFactory) mock.proxy(), new StubsFromServer());
-        testClient = (AsyncTest) jremotingClient.resolveService("AsyncTestB");
+        testClient = sr.resolveService("AsyncTestB");
 
     }
 
@@ -131,7 +131,7 @@ public class SimpleAsync2TestCase extends MockObjectTestCase {
         testClient = null;
         System.gc();
 
-        jremotingClient.close();
+        sr.close();
 
         server.stop();
 

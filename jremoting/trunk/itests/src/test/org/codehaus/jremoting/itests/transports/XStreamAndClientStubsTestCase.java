@@ -54,10 +54,10 @@ public class XStreamAndClientStubsTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new XmlStream(),  new SocketDetails("127.0.0.1", 10333)),
+        sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new XmlStream(),  new SocketDetails("127.0.0.1", 10333)),
                 new ThreadLocalContextFactory(), new StubsOnClient());
 
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
 
     }
 
@@ -66,7 +66,7 @@ public class XStreamAndClientStubsTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotingClient.close();
+        sr.close();
         server.stop();
     }
 

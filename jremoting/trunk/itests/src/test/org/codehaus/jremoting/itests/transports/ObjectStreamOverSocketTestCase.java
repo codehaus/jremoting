@@ -65,10 +65,10 @@ public class ObjectStreamOverSocketTestCase extends AbstractHelloTestCase {
         server.start();
 
         // Client side setup
-        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+        sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStream(),
                 new SocketDetails("127.0.0.1", 10002)));
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
 
 
     }
@@ -79,7 +79,7 @@ public class ObjectStreamOverSocketTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotingClient.close();
+        sr.close();
         server.stop();
     }
 

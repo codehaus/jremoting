@@ -198,7 +198,8 @@ public class ServiceResolver {
         return obj.jRemotingGetReferenceID(this);
     }
 
-    public final Object resolveService(String publishedServiceName) throws ConnectionException, RedirectedException {
+    @SuppressWarnings("unchecked")
+    public final <T> T resolveService(String publishedServiceName) throws ConnectionException, RedirectedException {
         Response response = transport.invoke(new LookupService(publishedServiceName, authenticator.authenticate(authChallenge), session), true);
 
         if (response instanceof NotPublished) {
@@ -228,7 +229,7 @@ public class ServiceResolver {
 
         stubHelper.registerInstance(retVal);
 
-        return retVal;
+        return (T) retVal;
 
     }
 

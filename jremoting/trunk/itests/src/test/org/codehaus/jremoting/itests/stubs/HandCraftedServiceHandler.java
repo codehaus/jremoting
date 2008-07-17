@@ -68,34 +68,34 @@ public class HandCraftedServiceHandler extends ServiceHandler {
 
         private static class HashCode extends Execr {
             Object exec(Object target, Object[] args) {
-                return ((TestFacade) target).hashCode();
+                return (target).hashCode();
             }
         }
 
         private static class TestSpeed extends Execr {
             Object exec(Object target, Object[] args) {
-                ((TestFacade) target).testSpeed();
+                ((TestFacade)target).testSpeed();
                 return null;
             }
         }
 
         private static class Hello extends Execr {
             Object exec(Object target, Object[] args) {
-                ((TestFacade) target).hello((String) args[0]);
+                ((TestFacade)target).hello((String) args[0]);
                 return null;
             }
         }
 
         private static class IntParam extends Execr {
             Object exec(Object target, Object[] args) {
-                return ((TestFacade) target).intParamReturningInt((Integer) args[0]);
+                return ((TestFacade)target).intParamReturningInt((Integer) args[0]);
             }
         }
 
         private static class ShortParam extends Execr {
             Object exec(Object target, Object[] args) throws InvocationTargetException {
                 try {
-                    return ((TestFacade) target).shortParamThatMayReturnBoolOrThrow((Short) args[0]);
+                    return ((TestFacade)target).shortParamThatMayReturnBoolOrThrow((Short) args[0]);
                 } catch (PropertyVetoException e) {
                     throw new InvocationTargetException(e);
                 } catch (IOException e) {
@@ -106,26 +106,26 @@ public class HandCraftedServiceHandler extends ServiceHandler {
 
         private static class FloatAnd extends Execr {
             Object exec(Object target, Object[] args) {
-                return ((TestFacade) target).floatAndDoubleParamsReturningStrungBuffer((Float) args[0], (Double) args[1]);
+                return ((TestFacade)target).floatAndDoubleParamsReturningStrungBuffer((Float) args[0], (Double) args[1]);
             }
         }
 
         private static class MakeTest extends Execr {
             Object exec(Object target, Object[] args) {
-                return ((TestFacade) target).makeTestFacade2Or3((String) args[0]);
+                return ((TestFacade)target).makeTestFacade2Or3((String) args[0]);
             }
         }
 
         private static class Morph extends Execr {
             Object exec(Object target, Object[] args) {
-                ((TestFacade) target).morphName((TestFacade2) args[0]);
+                ((TestFacade)target).morphName((TestFacade2) args[0]);
                 return null;
             }
         }
 
         private static class FindTest extends Execr {
             Object exec(Object target, Object[] args) {
-                return ((TestFacade) target).findTestFacade2ByName((String) args[0]);
+                return ((TestFacade)target).findTestFacade2ByName((String) args[0]);
 
             }
         }
@@ -139,7 +139,7 @@ public class HandCraftedServiceHandler extends ServiceHandler {
 
         private static class GetTest extends Execr {
             Object exec(Object target, Object[] args) {
-                return ((TestFacade) target).getTestFacade2s();
+                return ((TestFacade)target).getTestFacade2s();
             }
         }
 
@@ -151,54 +151,54 @@ public class HandCraftedServiceHandler extends ServiceHandler {
 
         private static class GetTestObjects extends Execr {
             Object exec(Object target, Object[] args) {
-                return ((TestFacade) target).getTestObjects();
+                return ((TestFacade)target).getTestObjects();
             }
         }
 
         private static class ChgTestObjs extends Execr {
             Object exec(Object target, Object[] args) {
-                ((TestFacade) target).changeTestObjectNames();
+                ((TestFacade)target).changeTestObjectNames();
                 return null;
             }
         }
 
         private static class MakeNew extends Execr {
             Object exec(Object target, Object[] args) {
-                ((TestFacade) target).makeNewTestObjectNames();
+                ((TestFacade)target).makeNewTestObjectNames();
                 return null;
             }
         }
 
         private static class ToString extends Execr {
             Object exec(Object target, Object[] args) {
-                String s = ((TestFacade) target).toString();
+                String s = (target).toString();
                 return s;
             }
         }
 
         private static class Ping extends Execr {
             Object exec(Object target, Object[] args) {
-                ((TestFacade) target).ping();
+                ((TestFacade)target).ping();
                 return null;
             }
         }
 
         private static class ByteArray extends Execr {
             Object exec(Object target, Object[] args) {
-                return ((TestFacade) target).byteArrayParamReturningByte((Byte) args[0], (byte[]) args[1]);
+                return ((TestFacade)target).byteArrayParamReturningByte((Byte) args[0], (byte[]) args[1]);
             }
         }
 
         private static class ThrowSpecial extends Execr {
             Object exec(Object target, Object[] args) {
-                ((TestFacade) target).throwSpecialException((Integer) args[0]);
+                ((TestFacade)target).throwSpecialException((Integer) args[0]);
                 return null;
             }
         }
 
         private static class TestLong extends Execr {
             Object exec(Object target, Object[] args) {
-                ((TestFacade) target).testLong((Long) args[0]);
+                ((TestFacade)target).testLong((Long) args[0]);
                 return null;
             }
         }
@@ -206,7 +206,7 @@ public class HandCraftedServiceHandler extends ServiceHandler {
         private static class Equals extends Execr {
             Object exec(Object target, Object[] args) {
                 if (target instanceof TestFacade) {
-                    return ((TestFacade) target).equals(args[0]);
+                    return (target).equals(args[0]);
                 } else if (target instanceof TestFacade3) {
                     return ((TestFacade3) target).equals(args[0]);
                 } else {
@@ -217,7 +217,7 @@ public class HandCraftedServiceHandler extends ServiceHandler {
 
         private static class TestCustom extends Execr {
             Object exec(Object target, Object[] args) {
-                return ((TestFacade) target).testCustomSerializableParameter((CustomSerializableParam) args[0]);
+                return ((TestFacade)target).testCustomSerializableParameter((CustomSerializableParam) args[0]);
             }
         }
     }

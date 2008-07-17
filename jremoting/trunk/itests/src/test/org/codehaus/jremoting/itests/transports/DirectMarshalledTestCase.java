@@ -50,9 +50,9 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
-        jremotingClient = new ServiceResolver(new DirectMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(), Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), (DirectMarshalledServer) server, this.getClass().getClassLoader()));
+        sr = new ServiceResolver(new DirectMarshalledTransport((ClientMonitor) mockClientMonitor.proxy(), Executors.newScheduledThreadPool(10), new NeverConnectionPinger(), (DirectMarshalledServer) server, this.getClass().getClassLoader()));
 
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
 
     }
 
@@ -65,7 +65,7 @@ public class DirectMarshalledTestCase extends AbstractHelloTestCase {
         testClient = null;
         System.gc();
 
-        jremotingClient.close();
+        sr.close();
 
         server.stop();
 

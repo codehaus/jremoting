@@ -41,7 +41,7 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
 
     AsyncTestImpl asyncTestImpl;
     AsyncTest testClient;
-    ServiceResolver jremotingClient;
+    ServiceResolver sr;
     SocketServer server;
 
     protected abstract DynamicStubRetriever getAbstractDynamicGeneratorClassRetriever(ClassLoader cl);
@@ -82,9 +82,9 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
         // Client side setup
         Mock mock = mock(ContextFactory.class);
         mock.expects(atLeastOnce()).method("getClientContext").withNoArguments().will(returnValue(null));
-        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+        sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new org.codehaus.jremoting.client.streams.ByteStream(),new SocketDetails("127.0.0.1", 11003)), (ContextFactory) mock.proxy(), new StubsFromServer());
-        testClient = (AsyncTest) jremotingClient.resolveService("AsyncTest");
+        testClient = sr.resolveService("AsyncTest");
 
     }
 
@@ -132,7 +132,7 @@ public abstract class AbstractSimpleAsyncTestCase extends MockObjectTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotingClient.close();
+        sr.close();
         server.stop();
     }
 

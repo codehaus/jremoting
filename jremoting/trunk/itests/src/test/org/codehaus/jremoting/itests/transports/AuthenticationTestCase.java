@@ -61,9 +61,9 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
     public void testHelloCall() throws Exception {
 
         // Client side setup
-        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("127.0.0.1", 10333)), new NullContextFactory(),
+        sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("127.0.0.1", 10333)), new NullContextFactory(),
                 new StubsOnClient(), new org.codehaus.jremoting.client.authentication.NameAndPasswordAuthenticator("fred", "wilma"));
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
 
         super.testHelloCall();
     }
@@ -71,11 +71,11 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
     public void testfailingChallenge() throws Exception {
 
         // Client side setup
-        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("127.0.0.1", 10333)), new NullContextFactory(),
+        sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("127.0.0.1", 10333)), new NullContextFactory(),
                 new StubsOnClient(), new org.codehaus.jremoting.client.authentication.NameAndPasswordAuthenticator("FRED", "wilma"));
 
         try {
-            testClient = (TestFacade) jremotingClient.resolveService("Hello");
+            testClient = sr.resolveService("Hello");
             fail();
         } catch (ConnectionException e) {
             assertEquals("Authentication Failed", e.getMessage());
@@ -88,7 +88,7 @@ public class AuthenticationTestCase extends AbstractJRemotingTestCase {
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotingClient.close();
+        sr.close();
         server.stop();
     }
 

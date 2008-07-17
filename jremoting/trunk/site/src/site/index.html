@@ -33,7 +33,7 @@
   <div class="source">
     <pre>
 serviceResolver = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new SocketDetails("localhost", 10333)));<br />
-Bank remoteBank = (Bank) serviceResolver.resolveService("BankService");
+Bank remoteBank = serviceResolver.resolveService("BankService");
     
 </pre>
   </div>

@@ -52,9 +52,9 @@ public class ByteStreamOverSocketWithReflectionStubTestCase extends AbstractHell
         server.start();
 
         // Client side setup
-        jremotingClient = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("localhost", 10333)),
+        sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new ByteStream(), new SocketDetails("localhost", 10333)),
                 new ThreadLocalContextFactory(), new StubsViaReflection());
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
 
     }
 
@@ -63,7 +63,7 @@ public class ByteStreamOverSocketWithReflectionStubTestCase extends AbstractHell
         testClient = null;
         System.gc();
         Thread.sleep(300);
-        jremotingClient.close();
+        sr.close();
         server.stop();
     }
 

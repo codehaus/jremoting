@@ -48,9 +48,9 @@ public class DirectUnMarshalledTestCase extends AbstractHelloTestCase {
 
         // Client side setup
         mockClientMonitor.expects(atLeastOnce()).method("methodLogging").will(returnValue(false));
-        jremotingClient = new ServiceResolver(new DirectTransport((ClientMonitor) mockClientMonitor.proxy(), server));
+        sr = new ServiceResolver(new DirectTransport((ClientMonitor) mockClientMonitor.proxy(), server));
 
-        testClient = (TestFacade) jremotingClient.resolveService("Hello");
+        testClient = sr.resolveService("Hello");
 
     }
 
@@ -62,7 +62,7 @@ public class DirectUnMarshalledTestCase extends AbstractHelloTestCase {
         super.tearDown();
         testClient = null;
         System.gc();
-        jremotingClient.close();
+        sr.close();
         server.stop();
     }
 

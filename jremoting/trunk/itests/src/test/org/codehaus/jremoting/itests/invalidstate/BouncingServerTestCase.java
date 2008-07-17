@@ -71,7 +71,7 @@ public class BouncingServerTestCase extends MockObjectTestCase {
             // Client side setup
             serviceResolver = new ServiceResolver(new SocketTransport(new NullClientMonitor(),
                     new ByteStream(), new SocketDetails("127.0.0.1", 12201)));
-            TestFacade testClient = (TestFacade) serviceResolver.resolveService("Hello55");
+            TestFacade testClient = serviceResolver.resolveService("Hello55");
             testClient.intParamReturningInt(100);
 
             try {

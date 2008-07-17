@@ -63,14 +63,14 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ServiceResolver factory = null;
+        ServiceResolver sr = null;
         TestFacade testClient;
         try {
 
             // Client side setup
-            factory = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+            sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStream(), new SocketDetails("127.0.0.1", 12001)));
-            testClient = (TestFacade) factory.resolveService("Hello");
+            testClient = sr.resolveService("Hello");
 
             testClient.hello("hello");
 
@@ -86,7 +86,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
             System.gc();
 
             try {
-                factory.close();
+                sr.close();
             } catch (Exception e) {
             }
 
@@ -105,13 +105,13 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ServiceResolver factory = null;
+        ServiceResolver sr = null;
         try {
 
             // Client side setup
-            factory = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+            sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ByteStream(), new SocketDetails("127.0.0.1", 12002)));
-            TestFacade testClient = (TestFacade) factory.resolveService("Hello");
+            TestFacade testClient = sr.resolveService("Hello");
 
 
             testClient.hello("hello");
@@ -124,7 +124,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
 
             try {
-                factory.close();
+                sr.close();
             } catch (Exception e) {
             }
 
@@ -143,12 +143,12 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ServiceResolver factory = null;
+        ServiceResolver sr = null;
         try {
 
             // Client side setup
-            factory = new ServiceResolver(new RmiTransport(new ConsoleClientMonitor(), new SocketDetails("127.0.0.1", 12003)));
-            TestFacade testClient = (TestFacade) factory.resolveService("Hello");
+            sr = new ServiceResolver(new RmiTransport(new ConsoleClientMonitor(), new SocketDetails("127.0.0.1", 12003)));
+            TestFacade testClient = sr.resolveService("Hello");
 
 
             testClient.hello("hello");
@@ -161,7 +161,7 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
 
             try {
-                factory.close();
+                sr.close();
             } catch (Exception e) {
             }
 
@@ -179,14 +179,13 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
         server.publish(testServer, "Hello", pd);
         server.start();
 
-        ServiceResolver factory = null;
+        ServiceResolver sr = null;
         try {
 
             // Client side setup
-            factory = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+            sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStream(), new SocketDetails("127.0.0.1", 12004)));
-            TestFacade testClient = (TestFacade) factory.resolveService("Hello");
-
+            TestFacade testClient = sr.resolveService("Hello");
 
             testClient.hello("hello");
             fail("ByteStreams and RMI trasnports cannot interoperate");
@@ -196,9 +195,8 @@ public class SocketMismatchTestCase extends MockObjectTestCase {
 
             System.gc();
 
-
             try {
-                factory.close();
+                sr.close();
             } catch (Exception e) {
             }
 

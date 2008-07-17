@@ -84,9 +84,9 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
 
-            ServiceResolver cssf = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
+            ServiceResolver sr = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(),
                 new ByteStream(), new SocketDetails("127.0.0.1", 12333)));
-            cssf.resolveService("serverDelegate");
+            sr.resolveService("serverDelegate");
 
             fail("should have barfed");
         } catch (ConnectionException e) {
@@ -114,8 +114,8 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
 
         SocketTransport invoker = new SocketTransport(new ConsoleClientMonitor(),
                 new ObjectStream(), new SocketDetails("127.0.0.1", 12331));
-        ServiceResolver cssf = new ServiceResolver(invoker);
-        cssf.resolveService("Hello");
+        ServiceResolver sr = new ServiceResolver(invoker);
+        sr.resolveService("Hello");
         Object result = invoker.invoke(new InvokeMethod("Hello", "Main", "ping()", new Object[0], (long) 44332, (long) 21), true);
 
         assertTrue(result instanceof NoSuchSession);
