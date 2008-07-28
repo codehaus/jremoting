@@ -45,7 +45,7 @@ public class NullClientMonitor implements ClientMonitor {
     }
 
     public void serviceAbend(Class clazz, int attempt, IOException cause) {
-        throw new InvocationException("JRemoting Service has Abended.", cause);
+        throw new InvocationException("JRemoting Service has Abnormally ended.", cause);
     }
 
     public void invocationFailure(Class clazz, String publishedServiceName, String objectName, String methodSignature, InvocationException ie) {

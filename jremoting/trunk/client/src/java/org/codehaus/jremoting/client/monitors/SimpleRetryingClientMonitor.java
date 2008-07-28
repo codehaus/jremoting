@@ -101,7 +101,6 @@ public class SimpleRetryingClientMonitor implements ClientMonitor {
 
     public void serviceAbend(Class clazz, int attempt, IOException cause) {
 
-        // Lets say that ten retries is too many.
         if (attempt >= maxReconnectAttempts) {
             String msg;
             if (maxReconnectAttempts <= 0) {
@@ -127,14 +126,20 @@ public class SimpleRetryingClientMonitor implements ClientMonitor {
 
         }
 
-        printMessage("JRemoting service abnormally ended, Trying to reconnect (attempt " + attempt + ")");
+        int millis = calculateDelayMillis(attempt);
+
+        printMessage("JRemoting service abnormally ended, Trying to reconnect (attempt " + attempt + ") in " + millis + " millis");
 
         // Increasing wait time.
         try {
-            Thread.sleep((2 ^ attempt) * 500);
+            Thread.sleep(millis);
         } catch (InterruptedException ie) {
             unexpectedInterruption(this.getClass(), this.getClass().getName(), ie);
         }
+    }
+
+    protected int calculateDelayMillis(int attempt) {
+        return (2 ^ attempt) * 500;
     }
 
     public void invocationFailure(Class clazz, String publishedServiceName, String objectName, String methodSignature, InvocationException ie) {
@@ -161,7 +166,7 @@ public class SimpleRetryingClientMonitor implements ClientMonitor {
         delegate.pingFailure(clazz, jre);
     }
 
-    void printMessage(String message) {
+    protected void printMessage(String message) {
     }
 
 }

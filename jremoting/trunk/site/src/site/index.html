@@ -15,6 +15,27 @@
   the interfaces it implements. &nbsp;It is best to honor the
   Facade Pattern while architecting the interface(s) as an RPC call
   over TCP/IP is not cheap.</p>
+  <p>Here is an example of a simple facade-style interface and a POJO implementation of it:</p>
+
+  <div class="source">
+    <pre>
+    public interface Bank {
+        void credit(BigDecimal amount);
+        void debit(BigDecimal amount);
+    }
+
+    public Bank implements BankImpl {
+        // fields
+        public void credit(BigDecimal amount) {
+            // etc
+        }
+        public void debit(BigDecimal amount) {
+            // etc
+        }
+        // other methods
+    }
+    </pre>
+  </div>
 
   <h3>Server side publishing</h3>
 
@@ -32,8 +53,8 @@
 
   <div class="source">
     <pre>
-serviceResolver = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new SocketDetails("localhost", 10333)));<br />
-Bank remoteBank = serviceResolver.resolveService("BankService");
+    serviceResolver = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new SocketDetails("localhost", 10333)));<br />
+    Bank remoteBank = serviceResolver.resolveService("BankService");
     
 </pre>
   </div>
