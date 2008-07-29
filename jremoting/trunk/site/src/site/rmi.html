@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<p>It is our view that RMI sucks.  Admittedly it sucks less in 2008 than it did ten years ago, but it is still preoccupoed  on forcing end users to be aware of the <a href="http://blogs.sun.com/jag/resource/Fallacies.html">eight fallacies of distributed computing</a>, for every invocation. From the outset, these are what were annoying about RMI :</p>
+<p>It is our view that RMI sucks.  Admittedly it sucks less in 2008 than it did ten years ago, but it is still preoccupied  on forcing end users to be aware of the <a href="http://blogs.sun.com/jag/resource/Fallacies.html">eight fallacies of distributed computing</a>, for every invocation. From the outset, these are what were annoying about RMI :</p>
 <ul>
   <li><s>RMI forces you to extend 'UnicastRemoteObject'</s> -fixed in latter JDKs</li>
   <li>RMI forces you to catch a checked exception - 'RemoteException' - wherever methods are called.</li>
@@ -20,7 +20,7 @@
   <li><s>Cumbersome RMI stub compiler</s> - fixed in latter JDKs</li>
   <li>Static, though optional, RMI registry</li>
 </ul>
-<p>A developer coding for a remote divide should do so in a way that respects the <a href="facades.html">Facade Pattern</a> but should be able to leave outtage concerns to more centralised places.</p>
-<p>Centralised places could be, a handler servlet (through which all requests go), or a container such as Spring, PicoContainer or Guice (we all adhere to Inversion of Control these days right?).</p>
+<p>A developer coding for a remote divide should do so in a way that respects the <a href="facades.html">Facade Pattern</a> but should be able to leave outage concerns to more centralized places.</p>
+<p>Centralized places could be, a handler servlet (through which all requests go), or a container such as Spring, PicoContainer or Guice (we all adhere to Inversion of Control these days right?).</p>
 </body>
 </html>
