@@ -32,10 +32,9 @@
   serializable, but cannot have a reference to anything that's a
   facade.</p>
 
-  <p style="font-weight: bold;">Sample Facades and Immutables
-  (Value Objects)</p>
-
-  <div class="source">
+  <h2 style="font-weight: bold;">Sample Facades and Immutables
+  (Value Objects)</h2>
+<div class="source">
     <pre>
 interface Bank {
     Account findAccount(int accountID)
@@ -46,11 +45,11 @@ interface Account {
     Credit creditFunds(Amount amount, Account fromAccount)
 }
 
-interface SavingsAccount {
+interface SavingsAccount extends Account {
     Rate getInterestRate()
 }
 
-interface CheckingAccount {
+interface CheckingAccount extends Account {
     Amount getOverdraftLimit()
     void setupAutoTransfer(Amount maxBalance, Account destinationForSurplass)
 }
@@ -97,6 +96,30 @@ class Amount implements Serializable {
   an exception. &nbsp;That exception is plain (it does not extend
   anything special from the JRemoting API) and is replicated on the
   client side by JRemoting. &nbsp;The same would be true of
-  exceptions that are drived from RuntimeException.</p>
+exceptions that are drived from RuntimeException.</p>
+  <p>With primary and secondary facades, you have to specify both on the server side. The primary one is the one you resolve over the wire, the secondary ones are activated during operation. Like primary facades, the secondary ones are eligible for garbage collection.</p>
+  <h3>Publishing</h3>
+
+  <div class="source">
+    <pre>
+    Bank myBank = new BankImpl();
+    server = new SocketServer(new ConsoleServerMonitor(), new InetSocketAddress(10333));
+    server.publish(myBank, "BankService", Bank.class, 
+                   SavingsAccount.class, CheckingAccount.class); // secondary facades are varargs
+    server.start();
+  
+</pre>
+</div>
+
+  <h3>Client side usage</h3>
+
+  <div class="source">
+    <pre>
+    serviceResolver = new ServiceResolver(new SocketTransport(new ConsoleClientMonitor(), new SocketDetails("localhost", 10333)));<br />
+    Bank remoteBank = serviceResolver.resolveService("BankService");
+    
+</pre>
+  </div>
+  
 </body>
 </html>
