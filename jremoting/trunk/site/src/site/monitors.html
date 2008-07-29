@@ -12,11 +12,14 @@
 </head>
 
 <body>
-<p>A Monitor is a mechanism by which the Server or client side
-  user can tap into events that are happening during RPC. A use is logging, but another concerns <a href="#robustness">Connection Rubstness</a>.</p>
+  <p>A Monitor is a mechanism by which the Server or client side
+  user can tap into events that are happening during RPC. A use is
+  logging, but another concerns <a href="#robustness">Connection
+  Rubstness</a>.</p>
 
   <h2>Server Side</h2>
-<div class="source">
+
+  <div class="source">
     <p>On the serverside you implement a interface called
     ServerMonitor:</p>
     <pre>
@@ -43,7 +46,8 @@
   applicable Server class.</p>
 
   <h2>Client Side</h2>
-<div class="source">
+
+  <div class="source">
     <p>On the serverside you implement a interface called
     ServerMonitor:</p>
     <pre>
@@ -77,16 +81,32 @@
   specified as the first parameter in the applicable Transport
   class.</p>
 
-  <h2><a name="robustness" id="robustness"></a>Connection Robustness</h2>
-  <p>The Client Monitor has a mechanism to participate in the robustness of the connection. Connections are dropped and this provides a way for the user to decide how connections are recovered. By default failing connections will be reported by way of InvocationException (a derivative of RuntimeException) immediately. By chaining the client monitor of your choice to another called SimpleRetryingClientMonitor you'll be able to control the attempt to reconnect/retry.</p>
-  <h3></h3>
+  <h2><a name="robustness" id="robustness"></a>Connection
+  Robustness</h2>
+
+  <p>The Client Monitor has a mechanism to participate in the
+  robustness of the connection. Connections are dropped and this
+  provides a way for the user to decide how connections are
+  recovered. By default failing connections will be reported by way
+  of InvocationException (a derivative of RuntimeException)
+  immediately. By chaining the client monitor of your choice to
+  another called SimpleRetryingClientMonitor you'll be able to
+  control the attempt to reconnect/retry.</p>
+
   <div class="source">
     <pre>
 serviceResolver = new ServiceResolver(new SocketTransport(
                           new ConsoleClientMonitor(<strong>new SimpleRetryingClientMonitor(100)</strong>), 
-                                                    new SocketDetails(&quot;localhost&quot;, 10333)));<br /></pre>
-</div>
-  <p>In the above case we specified 100 retries, and the policy for SimpleRetryingClientMonitor is to retry progressively but with an increasing delay between retries (2 to the power of the retry # multiplied by 500 millies). Override method calculateDelayMillis(attempt) if you want to change that.</p>
+                                                    new SocketDetails("localhost", 10333)));<br />
+</pre>
+  </div>
+
+  <p>In the above case we specified 100 retries, and the policy for
+  SimpleRetryingClientMonitor is to retry progressively but with an
+  increasing delay between retries (2 to the power of the retry #
+  multiplied by 500 millies). Override method
+  calculateDelayMillis(attempt) if you want to change that.</p>
+
   <p>&nbsp;</p>
 </body>
 </html>

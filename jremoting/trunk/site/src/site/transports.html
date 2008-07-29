@@ -92,8 +92,8 @@ serviceResolver = new ServiceResolver(new <span style=
   <h3>Direct Transport</h3>Directly wiring a JRemoting server to a
   client mostly serves as a quality/development consideration for
   us. &nbsp;The transport is very fast as no serialization is
-  taking place. &nbsp;If you can find a use for it, you will note that
-  you can't have a complex classloader design for this.<br />
+  taking place. &nbsp;If you can find a use for it, you will note
+  that you can't have a complex classloader design for this.<br />
   <br />
   <span style="font-weight: bold;">Usage</span>
 
@@ -107,8 +107,12 @@ serviceResolver = new ServiceResolver(new <span style=
   </div>
 
   <h3>Direct Transport - marshaled</h3>As above, but with a
-  deliberate serialize/deserialize step. &nbsp;Again of marginal use
-  for the end user compared to sockets/pipes.  This one could leverage a hierarchy of classloaders.  Specifically, the things that would be serialized and/or the facade in question could be duplicated within the app, as long as they are are not in the same branch of a classloader tree.<br />
+  deliberate serialize/deserialize step. &nbsp;Again of marginal
+  use for the end user compared to sockets/pipes. This one could
+  leverage a hierarchy of classloaders. Specifically, the things
+  that would be serialized and/or the facade in question could be
+  duplicated within the app, as long as they are are not in the
+  same branch of a classloader tree.<br />
   <br />
   <span style="font-weight: bold;">Usage</span>
 
