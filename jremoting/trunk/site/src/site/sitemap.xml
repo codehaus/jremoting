@@ -16,4 +16,8 @@
         <page>monitors.html</page>
         <page>pingers.html</page>
     </section>
+	<section>
+        <name>Reports</name>
+        <link title="Maven Reports">http://jremoting.codehaus.org/maven/</link>
+    </section>
 </sitemap>
