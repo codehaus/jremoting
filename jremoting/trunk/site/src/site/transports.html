@@ -12,22 +12,25 @@
 </head>
 
 <body>
-  <h3>Overview</h3>JRemoting has a number of 'transports' to
+  <h3>Overview</h3>
+  <p>JRemoting has a number of 'transports' to
   connect clients to servers. Some of the work over the internet,
   some are for more local situations.
 
-  <h3>Socket Transport</h3>This will work over the internet or an
-  intranet, between two different machines. &nbsp;It will also work
+  </p>
+  <h3>Socket Transport</h3>
+  <p>This will work over the internet or an
+    intranet, between two different machines. &nbsp;It will also work
   between two different processes on the same machine.<br />
-  <span style="font-weight: bold;">Server side usage</span>
-
-  <div class="source">
+</p>
+  <p><span style="font-weight: bold;">Server side usage</span> </p>
+<div class="source">
     <pre>
 server = new <span style=
 "font-weight: bold;">SocketServer</span>(new ConsoleServerMonitor(), 
                           new InetSocketAddress(portNum));
 </pre>
-  </div>
+</div>
 
   <p style="font-weight: bold;">Client side usage</p>
 
@@ -39,12 +42,14 @@ serviceResolver = new ServiceResolver(new <span style=
 </pre>
   </div>
 
-  <h3>Secure Socket Transport</h3>As above, but using SSL.
-  &nbsp;You need to set the keyStore and/or trustStore for the VM
-  in question. See<br />
-  <br />
-  <span style="font-weight: bold;">Server side usage</span>
-
+  <h3>Secure Socket Transport</h3>
+  <p>As above, but using SSL.
+    &nbsp;You need to set the keyStore and/or trustStore for the VM
+    in question.<br />
+    <br />
+    <span style="font-weight: bold;">Server side usage</span>
+    
+  </p>
   <div class="source">
     <pre>
 -Djavax.net.ssl.keyStore=/path/to/keyStore -Djavax.net.ssl.keyStore=/path/to/trustStore -Djavax.net.ssl.keyStorePassword=yourPassword
@@ -64,7 +69,8 @@ serviceResolver = new ServiceResolver(new <span style=
 </pre>
   </div>
 
-  <h3>Piped Transport</h3>Using Java's built-in pipes, this
+  <h3>Piped Transport</h3>
+  <p>Using Java's built-in pipes, this
   transport will join two parts of the same application with RPC.
   &nbsp;Interestingly you could have a large hierarchy of
   clasloaders with the objects to be serialized duplicated in the
@@ -75,6 +81,7 @@ serviceResolver = new ServiceResolver(new <span style=
   <br />
   <span style="font-weight: bold;">Usage</span>
 
+  </p>
   <div class="source">
     <pre>
 PipedServer server = new <span style=
@@ -89,7 +96,8 @@ serviceResolver = new ServiceResolver(new <span style=
 </pre>
   </div>
 
-  <h3>Direct Transport</h3>Directly wiring a JRemoting server to a
+  <h3>Direct Transport</h3>
+  <p>Directly wiring a JRemoting server to a
   client mostly serves as a quality/development consideration for
   us. &nbsp;The transport is very fast as no serialization is
   taking place. &nbsp;If you can find a use for it, you will note
@@ -97,6 +105,7 @@ serviceResolver = new ServiceResolver(new <span style=
   <br />
   <span style="font-weight: bold;">Usage</span>
 
+  </p>
   <div class="source">
     <pre>
 server = new <span style=
@@ -106,16 +115,18 @@ serviceResolver = new ServiceResolver(new <span style=
 </pre>
   </div>
 
-  <h3>Direct Transport - marshaled</h3>As above, but with a
-  deliberate serialize/deserialize step. &nbsp;Again of marginal
-  use for the end user compared to sockets/pipes. This one could
-  leverage a hierarchy of classloaders. Specifically, the things
-  that would be serialized and/or the facade in question could be
-  duplicated within the app, as long as they are are not in the
-  same branch of a classloader tree.<br />
-  <br />
-  <span style="font-weight: bold;">Usage</span>
-
+  <h3>Direct Transport - marshaled</h3>
+  <p>As above, but with a
+    deliberate serialize/deserialize step. &nbsp;Again of marginal
+    use for the end user compared to sockets/pipes. This one could
+    leverage a hierarchy of classloaders. Specifically, the things
+    that would be serialized and/or the facade in question could be
+    duplicated within the app, as long as they are are not in the
+    same branch of a classloader tree.<br />
+    <br />
+    <span style="font-weight: bold;">Usage</span>
+    
+  </p>
   <div class="source">
     <pre>
 server = new <span style=
@@ -126,9 +137,11 @@ serviceResolver = new ServiceResolver(new <span style=
   </div>
 
   <h3>Over RMI</h3>
-  This is just like the Socket based transports, except that it leverages classic RMI for the transport.<br /><br />
-  <span style="font-weight: bold;">Server side usage</span>
+  <p>This is just like the Socket based transports, except that it leverages classic RMI for the transport.<br />
+    <br />
+    <span style="font-weight: bold;">Server side usage</span>
 
+  </p>
   <div class="source">
     <pre>
 server = new <span style=
@@ -147,11 +160,13 @@ serviceResolver = new ServiceResolver(new <span style=
   </div>
 
   <h3>Using Apache Mina for NIO on the server side</h3>
-  This is just like the Socket based transports, except that it on the server 
+  <p>This is just like the Socket based transports, except that it on the server 
   side <a href="http://mina.apache.org/">Apache Mina</a> is used to leverage NIO. 
-  This does not have as fast throughput as plain sockets, it is just able to scale to more concurrent connections<br /><br />
+  This does not have as fast throughput as plain sockets, it is just able to scale to more concurrent connections<br />
+  <br />
   <span style="font-weight: bold;">Server side usage</span>
 
+  </p>
   <div class="source">
     <pre>
 server = new <span style=
@@ -170,15 +185,18 @@ serviceResolver = new ServiceResolver(new <span style=
   </div>
 
 
-  <h3>Servlets</h3>Todo
+  <h3>Servlets</h3>
+  <p>Todo
 
+  </p>
   <h3>Comparative speeds</h3>
-  On a single MacBook Pro (2.16Ghz
+  <p>On a single MacBook Pro (2.16Ghz
   Core2Duo) with server and client on the same machine.<br />
   <br />
   <span style="font-weight: bold;">JRemoting
-  Transports</span><br />
-  ByteStream or ObjectStream Piped types - 4,500 reqs/sec<br />
+Transports</span><br />
+</p>
+  <p>ByteStream or ObjectStream Piped types - 4,500 reqs/sec<br />
   ByteStream or ObjectStream over Socket types (incl SSL) - 2,800 reqs/sec<br />
   ByteStream or ObjectStream with Mina server - 2,100 reqs/sec<br />
   XStream over Sockets - 1,800 reqs/sec<br />
@@ -188,10 +206,13 @@ serviceResolver = new ServiceResolver(new <span style=
   Direct Marshalled - 6,906 reqs/sec<br />
   <br />
   <span style="font-weight: bold;">Non RPC</span> <strong>(for
-  comparison)<br style="font-weight: bold;" /></strong> Dynamic
+  comparison)<br style="font-weight: bold;" />
+</strong> </p>
+  <p>Dynamic
   proxy - 7 million reqs/sec<br />
   Hand-coded proxy - 109 million reqs/sec<br />
   Directly wiring client to server (no proxy, no nothing) - 551
   million reqs/sec<br />
+    </p>
 </body>
 </html>
