@@ -147,7 +147,9 @@ serviceResolver = new ServiceResolver(new <span style=
   </div>
 
   <h3>Using Apache Mina for NIO on the server side</h3>
-  This is just like the Socket based transports, except that it on the server side <a href="http://mina.apache.org/">Apache Mina</a> is used to leverage NIO<br /><br />
+  This is just like the Socket based transports, except that it on the server 
+  side <a href="http://mina.apache.org/">Apache Mina</a> is used to leverage NIO. 
+  This does not have faster throughput, it is just able to scale to more concurrent sockets<br /><br />
   <span style="font-weight: bold;">Server side usage</span>
 
   <div class="source">
