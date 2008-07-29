@@ -149,7 +149,7 @@ serviceResolver = new ServiceResolver(new <span style=
   <h3>Using Apache Mina for NIO on the server side</h3>
   This is just like the Socket based transports, except that it on the server 
   side <a href="http://mina.apache.org/">Apache Mina</a> is used to leverage NIO. 
-  This does not have faster throughput, it is just able to scale to more concurrent sockets<br /><br />
+  This does not have as fast throughput as plain sockets, it is just able to scale to more concurrent connections<br /><br />
   <span style="font-weight: bold;">Server side usage</span>
 
   <div class="source">
@@ -172,16 +172,15 @@ serviceResolver = new ServiceResolver(new <span style=
 
   <h3>Servlets</h3>Todo
 
-  <h3>Comparative speeds</h3>On a single MacBook Pro (2.16Ghz
-  Core2Duo) with server and client on the same machine. &nbsp;For a
-  1000 invocations of&nbsp;testSpeed() over the transport in
-  question.<br />
+  <h3>Comparative speeds</h3>
+  On a single MacBook Pro (2.16Ghz
+  Core2Duo) with server and client on the same machine.<br />
   <br />
   <span style="font-weight: bold;">JRemoting
   Transports</span><br />
-  ByteStream and ObjectStream Piped types - 4,500 reqs/sec<br />
-  ByteStream and ObjectStream over Socket types (incl SSL) - 2,800
-  reqs/sec<br />
+  ByteStream or ObjectStream Piped types - 4,500 reqs/sec<br />
+  ByteStream or ObjectStream over Socket types (incl SSL) - 2,800 reqs/sec<br />
+  ByteStream or ObjectStream with Mina server - 2,100 reqs/sec<br />
   XStream over Sockets - 1,800 reqs/sec<br />
   Over classic RMI - 2,100 reqs/sec<br />
 
