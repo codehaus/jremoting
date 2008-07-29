@@ -108,7 +108,7 @@ serviceResolver = new ServiceResolver(new <span style=
 
   <h3>Direct Transport - marshaled</h3>As above, but with a
   deliberate serialize/deserialize step. &nbsp;Again of marginal use
-  for the end user compared to sockets/pipes<br />
+  for the end user compared to sockets/pipes.  This one could leverage a hierarchy of classloaders.  Specifically, the things that would be serialized and/or the facade in question could be duplicated within the app, as long as they are are not in the same branch of a classloader tree.<br />
   <br />
   <span style="font-weight: bold;">Usage</span>
 
