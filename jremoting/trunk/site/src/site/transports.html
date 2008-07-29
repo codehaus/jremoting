@@ -47,8 +47,8 @@ serviceResolver = new ServiceResolver(new <span style=
 
   <div class="source">
     <pre>
--Djavax.net.ssl.keyStore=/path/to/keyStore -Djavax.net.ssl.keyStore=/path/to/trustStore -Djavax.net.ssl.keyStorePassword=yourPassword<br />
-<br />
+-Djavax.net.ssl.keyStore=/path/to/keyStore -Djavax.net.ssl.keyStore=/path/to/trustStore -Djavax.net.ssl.keyStorePassword=yourPassword
+
 server = new <span style=
 "font-weight: bold;">SSLSocketServer</span>(new ConsoleServerMonitor(), new InetSocketAddress(portNum));
 </pre>
@@ -66,7 +66,7 @@ serviceResolver = new ServiceResolver(new <span style=
 
   <h3>Piped Transport</h3>Using Java's built-in pipes, this
   transport will join two parts of the same application with RPC.
-  &nbsp;Interestingly you could have a large hierachy of
+  &nbsp;Interestingly you could have a large hierarchy of
   clasloaders with the objects to be serialized duplicated in the
   tree (once for client side, once for server side) and it would
   work. Perhaps even if they were different versions of the same
@@ -78,21 +78,21 @@ serviceResolver = new ServiceResolver(new <span style=
   <div class="source">
     <pre>
 PipedServer server = new <span style=
-"font-weight: bold;">PipedServer</span>(new ConsoleServerMonitor(), new InetSocketAddress(portNum));<br />
-<br />
-PipedInputStream in = new PipedInputStream();<br />
-PipedOutputStream out = new PipedOutputStream();<br />
-server.makeNewConnection(in, out);<br />
-<br />
+"font-weight: bold;">PipedServer</span>(new ConsoleServerMonitor(), new InetSocketAddress(portNum));
+
+PipedInputStream in = new PipedInputStream();
+PipedOutputStream out = new PipedOutputStream();
+server.makeNewConnection(in, out);
+
 serviceResolver = new ServiceResolver(new <span style=
-"font-weight: bold;">PipedTransport</span>(new ConsoleClientMonitor(), in, out));<br />
+"font-weight: bold;">PipedTransport</span>(new ConsoleClientMonitor(), in, out));
 </pre>
   </div>
 
   <h3>Direct Transport</h3>Directly wiring a JRemoting server to a
   client mostly serves as a quality/development consideration for
   us. &nbsp;The transport is very fast as no serialization is
-  taking place. &nbsp;If you can find a use for it, you'l note that
+  taking place. &nbsp;If you can find a use for it, you will note that
   you can't have a complex classloader design for this.<br />
   <br />
   <span style="font-weight: bold;">Usage</span>
@@ -101,14 +101,13 @@ serviceResolver = new ServiceResolver(new <span style=
     <pre>
 server = new <span style=
 "font-weight: bold;">DirectServer</span>((ServerMonitor) mockServerMonitor.proxy());<br />
-<br />
 serviceResolver = new ServiceResolver(new <span style=
 "font-weight: bold;">DirectTransport</span>(new ConsoleClientMonitor(), server));
 </pre>
   </div>
 
-  <h3>Direct Transport, with serialization</h3>As above, but with a
-  delivrate serialize/deserialize step. &nbsp;Again of marginal use
+  <h3>Direct Transport - marshaled</h3>As above, but with a
+  deliberate serialize/deserialize step. &nbsp;Again of marginal use
   for the end user compared to sockets/pipes<br />
   <br />
   <span style="font-weight: bold;">Usage</span>
@@ -116,8 +115,7 @@ serviceResolver = new ServiceResolver(new <span style=
   <div class="source">
     <pre>
 server = new <span style=
-"font-weight: bold;">DirectMarshalledServer</span>((ServerMonitor) mockServerMonitor.proxy());<br />
-<br />
+"font-weight: bold;">DirectMarshalledServer</span>((ServerMonitor) mockServerMonitor.proxy());
 serviceResolver = new ServiceResolver(new <span style=
 "font-weight: bold;">DirectMarshalledTransport</span>(new ConsoleClientMonitor(), server));
 </pre>
@@ -127,7 +125,7 @@ serviceResolver = new ServiceResolver(new <span style=
 
   <h3>Servlets</h3>Todo
 
-  <h3>Comparitive speeds</h3>On a single MacBook Pro (2.16Ghz
+  <h3>Comparative speeds</h3>On a single MacBook Pro (2.16Ghz
   Core2Duo) with server and client on the same machine. &nbsp;For a
   1000 invocations of&nbsp;testSpeed() over the transport in
   question.<br />
@@ -135,17 +133,17 @@ serviceResolver = new ServiceResolver(new <span style=
   <span style="font-weight: bold;">JRemoting
   Transports</span><br />
   ByteStream and ObjectStream Piped types - 4,500 reqs/sec<br />
-  ByteStream and ObjectStream Socket types (incl SSL) - 2,800
+  ByteStream and ObjectStream over Socket types (incl SSL) - 2,800
   reqs/sec<br />
-  XStream&nbsp;Socket - 1,800 reqs/sec<br />
-  Direct Un-marshalled - 120,482 reqs/sec<br />
+  XStream over Sockets - 1,800 reqs/sec<br />
+  Direct - 120,482 reqs/sec<br />
   Direct Marshalled - 6,906 reqs/sec<br />
   <br />
   <span style="font-weight: bold;">Non RPC</span> <strong>(for
   comparison)<br style="font-weight: bold;" /></strong> Dynamic
   proxy - 7 million reqs/sec<br />
   Hand-coded proxy - 109 million reqs/sec<br />
-  Direcly wiring client to server (no proxy, no nothing) -&nbsp;551
+  Directly wiring client to server (no proxy, no nothing) - 551
   million reqs/sec<br />
 </body>
 </html>
