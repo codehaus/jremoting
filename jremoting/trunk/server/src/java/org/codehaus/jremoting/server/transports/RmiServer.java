@@ -35,6 +35,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.server.ServerNotActiveException;
+import java.rmi.server.ExportException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -81,13 +82,21 @@ public class RmiServer extends ConnectingServer {
 
             UnicastRemoteObject.exportObject(rmiInvoker);
 
-            registry = LocateRegistry.createRegistry(addr.getPort());
+            registry = createOrMakeRegistry(addr.getPort());
 
             registry.rebind(RmiInvoker.class.getName(), rmiInvoker);
         } catch (RemoteException re) {
             throw new JRemotingException("Some problem setting up RMI server", re);
         }
         super.starting();
+    }
+
+    protected Registry createOrMakeRegistry(int port) throws RemoteException {
+        try {
+            return LocateRegistry.createRegistry(port);
+        } catch (ExportException e) {
+            return LocateRegistry.getRegistry(addr.getPort());
+        }
     }
 
     public void stopping() {

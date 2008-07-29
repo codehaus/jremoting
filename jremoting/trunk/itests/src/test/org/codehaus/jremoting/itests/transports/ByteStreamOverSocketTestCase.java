@@ -62,7 +62,7 @@ public class ByteStreamOverSocketTestCase extends AbstractHelloTestCase {
     }
 
     public void testSpeed() throws Exception {
-        super.testSpeed();    //To change body of overridden methods use File | Settings | File Templates.
+        super.testSpeed();  
     }
 
     protected void tearDown() throws Exception {

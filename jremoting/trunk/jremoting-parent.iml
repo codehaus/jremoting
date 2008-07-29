@@ -5,34 +5,26 @@
     <exclude-output />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/target/checkout" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
-      <library name="junit:junit:3.8.2">
+      <library>
         <CLASSES>
           <root url="jar://$M2_REPOSITORY$/junit/junit/3.8.2/junit-3.8.2.jar!/" />
         </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPOSITORY$/junit/junit/3.8.2/junit-3.8.2-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPOSITORY$/junit/junit/3.8.2/junit-3.8.2-sources.jar!/" />
-        </SOURCES>
+        <JAVADOC />
+        <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="jmock:jmock:1.2.0">
+      <library>
         <CLASSES>
           <root url="jar://$M2_REPOSITORY$/jmock/jmock/1.2.0/jmock-1.2.0.jar!/" />
         </CLASSES>
-        <JAVADOC>
-          <root url="jar://$M2_REPOSITORY$/jmock/jmock/1.2.0/jmock-1.2.0-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$M2_REPOSITORY$/jmock/jmock/1.2.0/jmock-1.2.0-sources.jar!/" />
-        </SOURCES>
+        <JAVADOC />
+        <SOURCES />
       </library>
     </orderEntry>
     <orderEntryProperties />
