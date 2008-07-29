@@ -2,6 +2,7 @@
     <section>
         <name>About</name>
         <page>index.html</page>
+        <page>news.html</page>
         <page>team.html</page>
         <page>facades.html</page>
         <page>rmi.html</page>
