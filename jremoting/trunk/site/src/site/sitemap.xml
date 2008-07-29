@@ -6,10 +6,9 @@
         <page>team.html</page>
         <page>facades.html</page>
         <page>rmi.html</page>
-        <page>reports.html</page>
     </section>
 	<section>
-        <name>Pluggability</name>
+        <name>Pluggable Design</name>
         <page>streams.html</page>
         <page>transports.html</page>
         <page>stubs.html</page>

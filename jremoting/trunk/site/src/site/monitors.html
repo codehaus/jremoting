@@ -48,26 +48,34 @@
   <h2>Client Side</h2>
 
   <div class="source">
-    <p>On the serverside you implement a interface called
+    <p>On the server side you implement a interface called
     ServerMonitor:</p>
     <pre>
-    void methodCalled(Class clazz, String methodSignature, long duration, String annotation);
+    void methodCalled(Class clazz, String methodSignature, 
+                      long duration, String annotation);
 
     boolean methodLogging();
 
-    void serviceSuspended(Class clazz, Request request, int attempt, int suggestedWaitMillis);
+    void serviceSuspended(Class clazz, Request request, int attempt, 
+                          int suggestedWaitMillis);
 
     void serviceAbend(Class clazz, int attempt, IOException cause);
 
-    void invocationFailure(Class clazz, String publishedServiceName, String objectName, String methodSignature, InvocationException ie);
+    void invocationFailure(Class clazz, String publishedServiceName, 
+                           String objectName, String methodSignature, 
+                           InvocationException ie);
 
-    void unexpectedConnectionClosed(Class clazz, String name, ConnectionClosedException cce);
+    void unexpectedConnectionClosed(Class clazz, String name, 
+                                    ConnectionClosedException cce);
 
-    void unexpectedInterruption(Class clazz, String name, InterruptedException ie);
+    void unexpectedInterruption(Class clazz, String name, 
+                                InterruptedException ie);
 
-    void classNotFound(Class clazz, String msg, ClassNotFoundException cnfe);
+    void classNotFound(Class clazz, String msg, 
+                       ClassNotFoundException cnfe);
 
-    void unexpectedIOException(Class clazz, String msg, IOException ioe);
+    void unexpectedIOException(Class clazz, String msg, 
+                               IOException ioe);
 
     void pingFailure(Class clazz, JRemotingException jre);
 

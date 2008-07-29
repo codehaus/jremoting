@@ -52,7 +52,10 @@ serviceResolver = new ServiceResolver(new <span style=
   </p>
   <div class="source">
     <pre>
--Djavax.net.ssl.keyStore=/path/to/keyStore -Djavax.net.ssl.keyStore=/path/to/trustStore -Djavax.net.ssl.keyStorePassword=yourPassword
+Pass these to java as env vars:
+-Djavax.net.ssl.keyStore=/path/to/keyStore 
+-Djavax.net.ssl.keyStore=/path/to/trustStore 
+-Djavax.net.ssl.keyStorePassword=yourPassword
 
 server = new <span style=
 "font-weight: bold;">SSLSocketServer</span>(new ConsoleServerMonitor(), new InetSocketAddress(portNum));
