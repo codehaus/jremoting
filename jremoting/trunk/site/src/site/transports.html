@@ -35,7 +35,7 @@ server = new <span style=
     <pre>
 serviceResolver = new ServiceResolver(new <span style=
 "font-weight: bold;">SocketTransport</span>(new ConsoleClientMonitor(), 
-                                                          new InetSocketAddress("somehost.com", portNum)));
+                                                          new SocketDetails("somehost.com", portNum)));
 </pre>
   </div>
 
@@ -60,7 +60,7 @@ server = new <span style=
     <pre>
 serviceResolver = new ServiceResolver(new <span style=
 "font-weight: bold;">SSLSocketTransport</span>(new ConsoleClientMonitor(), 
-                                                             new InetSocketAddress("somehost.com", portNum)));
+                                                             new SocketDetails("somehost.com", portNum)));
 </pre>
   </div>
 
@@ -125,6 +125,27 @@ serviceResolver = new ServiceResolver(new <span style=
 </pre>
   </div>
 
+  <h3>Over RMI</h3>
+  This is just like the Socket based transports, except that it leverages classic RMI for the transport.<br /><br />
+  <span style="font-weight: bold;">Server side usage</span>
+
+  <div class="source">
+    <pre>
+server = new <span style=
+"font-weight: bold;">RmiServer</span>(new ConsoleServerMonitor(), 
+                          new InetSocketAddress(portNum));
+</pre>
+  </div>
+
+  <p style="font-weight: bold;">Client side usage</p>
+  <div class="source">
+    <pre>
+serviceResolver = new ServiceResolver(new <span style=
+"font-weight: bold;">RmiTransport</span>(new ConsoleClientMonitor(), 
+                                                          new SocketDetails("somehost.com", portNum)));
+</pre>
+  </div>
+
   <h3>NIO</h3>Todo<br />
 
   <h3>Servlets</h3>Todo
@@ -140,6 +161,8 @@ serviceResolver = new ServiceResolver(new <span style=
   ByteStream and ObjectStream over Socket types (incl SSL) - 2,800
   reqs/sec<br />
   XStream over Sockets - 1,800 reqs/sec<br />
+  Over classic RMI - 2,100 reqs/sec<br />
+
   Direct - 120,482 reqs/sec<br />
   Direct Marshalled - 6,906 reqs/sec<br />
   <br />
