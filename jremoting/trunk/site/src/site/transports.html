@@ -146,7 +146,27 @@ serviceResolver = new ServiceResolver(new <span style=
 </pre>
   </div>
 
-  <h3>NIO</h3>Todo<br />
+  <h3>Using Apache Mina for NIO on the server side</h3>
+  This is just like the Socket based transports, except that it on the server side <a href="http://mina.apache.org/">Apache Mina</a> is used to leverage NIO<br /><br />
+  <span style="font-weight: bold;">Server side usage</span>
+
+  <div class="source">
+    <pre>
+server = new <span style=
+"font-weight: bold;">MinaServer</span>(new ConsoleServerMonitor(), 
+                          new InetSocketAddress(portNum));
+</pre>
+  </div>
+
+  <p style="font-weight: bold;">Client side usage</p>
+  <div class="source">
+    <pre>
+serviceResolver = new ServiceResolver(new <span style=
+"font-weight: bold;">SocketTransport</span>(new ConsoleClientMonitor(), 
+                                                          new SocketDetails("somehost.com", portNum)));
+</pre>
+  </div>
+
 
   <h3>Servlets</h3>Todo
 
