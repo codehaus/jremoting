@@ -23,7 +23,7 @@ import org.codehaus.jremoting.client.ConnectionPinger;
 import org.codehaus.jremoting.client.transports.StatefulTransport;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
-import org.codehaus.jremoting.server.ServerMarshalledInvoker;
+import org.codehaus.jremoting.server.MarshalledInvocationHandler;
 import org.codehaus.jremoting.util.SerializationHelper;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,10 +36,10 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public final class DirectMarshalledTransport extends StatefulTransport {
 
-    private ServerMarshalledInvoker invoker;
+    private MarshalledInvocationHandler invoker;
 
     public DirectMarshalledTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
-                                             ConnectionPinger connectionPinger, ServerMarshalledInvoker invoker,
+                                             ConnectionPinger connectionPinger, MarshalledInvocationHandler invoker,
                                              ClassLoader facadesClassLoader) {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
         this.invoker = invoker;

@@ -23,7 +23,7 @@ package org.codehaus.jremoting.server;
  * @author Paul Hammant
  * @version * $Revision: 1.2 $
  */
-public interface ServerMarshalledInvoker {
+public interface MarshalledInvocationHandler {
 
     /**
      * Handle a method Invocation using byte array representations of the request and response
