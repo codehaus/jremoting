@@ -11,7 +11,6 @@
     <module>server</module>
     <module>client</module>
     <module>tools</module>
-    <module>itests</module>
     <!--module>stest</module-->
   </modules>
   <developers>
@@ -357,6 +356,17 @@
             </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>itests</id>
+      <modules>
+        <module>api</module>
+        <module>server</module>
+        <module>client</module>
+        <module>tools</module>
+        <module>itests</module>
+        <module>stest</module>
+      </modules>
     </profile>
   </profiles>
 </project>
