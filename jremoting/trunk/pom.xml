@@ -157,6 +157,12 @@
       <groupId>jmock</groupId>
       <artifactId>jmock</artifactId>
     </dependency>
+    <dependency>
+      <groupId>net.sf.retrotranslator</groupId>
+      <artifactId>retrotranslator-runtime</artifactId>
+      <version>1.2.4</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -327,6 +333,30 @@
           </plugin>
         </plugins>
       </reporting>
+    </profile>
+    <profile>
+      <id>retro</id>
+      <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>retrotranslator-maven-plugin</artifactId>
+                <version>1.0-beta-1-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>retrotranslate</id>
+                        <goals>
+                            <goal>translate-project</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>retro</classifier>
+                            <attach>true</attach>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>
