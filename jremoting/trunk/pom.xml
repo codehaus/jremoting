@@ -335,6 +335,13 @@
     </profile>
     <profile>
       <id>retro</id>
+        <modules>
+          <module>api</module>
+          <module>server</module>
+          <module>client</module>
+          <module>tools</module>
+          <module>itests</module>
+        </modules>
       <build>
         <plugins>
             <plugin>
