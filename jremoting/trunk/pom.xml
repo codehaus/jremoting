@@ -340,7 +340,6 @@
           <module>server</module>
           <module>client</module>
           <module>tools</module>
-          <module>itests</module>
         </modules>
       <build>
         <plugins>
@@ -374,6 +373,37 @@
         <module>itests</module>
         <module>stest</module>
       </modules>
+    </profile>
+    <profile>
+      <id>all</id>
+        <modules>
+          <module>api</module>
+          <module>server</module>
+          <module>client</module>
+          <module>tools</module>
+          <module>itests</module>
+        </modules>
+      <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>retrotranslator-maven-plugin</artifactId>
+                <version>1.0-beta-1-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>retrotranslate</id>
+                        <goals>
+                            <goal>translate-project</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>retro</classifier>
+                            <attach>true</attach>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>
