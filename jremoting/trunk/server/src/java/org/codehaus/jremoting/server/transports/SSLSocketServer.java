@@ -20,6 +20,7 @@ import org.codehaus.jremoting.server.Stream;
 import org.codehaus.jremoting.server.*;
 
 import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ServerSocketFactory;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -27,7 +28,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class SSLSocketServer extends SocketServer {
 
-    
+    private ServerSocketFactory serverSocketFactory;
 
     public SSLSocketServer(ServerMonitor serverMonitor, InetSocketAddress addr) {
         super(serverMonitor, addr);
@@ -71,6 +72,13 @@ public class SSLSocketServer extends SocketServer {
 
     @Override
     protected ServerSocket makeServerSocket(InetSocketAddress addr) throws IOException {
-        return SSLServerSocketFactory.getDefault().createServerSocket(addr.getPort(), 50, addr.getAddress());
+        makeServerSocketFactory();
+        return serverSocketFactory.createServerSocket(addr.getPort(), 50, addr.getAddress());
+    }
+
+    protected synchronized void makeServerSocketFactory() {
+        if (serverSocketFactory == null) {
+            serverSocketFactory = SSLServerSocketFactory.getDefault();
+        }
     }
 }
