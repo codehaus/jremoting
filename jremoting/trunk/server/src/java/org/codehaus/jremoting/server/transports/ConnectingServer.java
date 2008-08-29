@@ -56,6 +56,9 @@ public abstract class ConnectingServer extends StatefulServer {
         this.executorService = executorService;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void started() {
         pruner =  executorService.scheduleAtFixedRate(new Runnable() {
             public void run() {
@@ -65,6 +68,9 @@ public abstract class ConnectingServer extends StatefulServer {
         super.started();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void stopping() {
         pruner.cancel(true);
         closeConnections();

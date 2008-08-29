@@ -53,6 +53,9 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */    
     public void generate(String service, Class primaryFacade, ClassLoader classLoader) throws PublicationException {
         generate(service, new Publication(primaryFacade), classLoader);
     }
@@ -206,10 +209,16 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
         facadeClasses.put(service, primaryFacade);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
         facadeClasses.put(service, publicationDescription.getPrimaryFacade());
         PublicationItem[] secondaryFacades = publicationDescription.getAdditionalFacades();
@@ -219,6 +228,9 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void unPublish(Object impl, String service) throws PublicationException {
         facadeClasses.remove(service);
         Set facades = facadeClasses.keySet();
@@ -231,18 +243,30 @@ public class DynamicStubRetriever implements DynamicStubGenerator, StubRetriever
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isPublished(String service) {
         return facadeClasses.containsKey(service);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void redirect(String serviceName, String to) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object getInstanceForReference(String objectName, Long reference) {
         throw new UnsupportedOperationException();
     }

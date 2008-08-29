@@ -38,15 +38,16 @@ import org.codehaus.jremoting.util.SerializationHelper;
  */
 public class DirectMarshalledServer extends StatefulServer implements MarshalledInvocationHandler {
 
-    private final MarshalledInvocationHandlerImpl marshalledInvokerAdapter;
+    private final MarshalledInvocationHandler marshalledInvokerAdapter;
 
-    private DirectMarshalledServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate, MarshalledInvocationHandlerImpl marshalledInvokerAdapter) {
+    public DirectMarshalledServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate, MarshalledInvocationHandler marshalledInvokerAdapter) {
         super(serverMonitor, serverDelegate);
         this.marshalledInvokerAdapter = marshalledInvokerAdapter;
     }
 
     public DirectMarshalledServer(ServerMonitor serverMonitor, ServerDelegate serverDelegate) {
-        this(serverMonitor, serverDelegate, new MarshalledInvocationHandlerImpl(serverDelegate));
+        this(serverMonitor, serverDelegate, new MarshalledInvocationHandlerImpl(serverDelegate,
+                DirectMarshalledServer.class.getClassLoader(), serverMonitor));
     }
 
     public DirectMarshalledServer(ServerMonitor serverMonitor) {
@@ -57,38 +58,32 @@ public class DirectMarshalledServer extends StatefulServer implements Marshalled
         return new DefaultServerDelegate(serverMonitor, new RefusingStubRetriever(), new NullAuthenticator(), new ThreadLocalServerContextFactory());
     }
 
-    public byte[] invoke(byte[] request, String connectionDetails) {
+    /**
+     * {@inheritDoc}
+     */
+    public byte[] invoke(byte[] request, String connectionDetails) throws ClassNotFoundException {
         return marshalledInvokerAdapter.invoke(request, connectionDetails);
     }
 
-
     private static class MarshalledInvocationHandlerImpl implements MarshalledInvocationHandler {
 
-        private InvocationHandler invoker;
+        private InvocationHandler invocationHandler;
+        private final ServerMonitor serverMonitor;
         private ClassLoader facadesClassLoader;
 
-        public MarshalledInvocationHandlerImpl(InvocationHandler invoker) {
-            this.invoker = invoker;
-            facadesClassLoader = getClass().getClassLoader();
-        }
-
-        public MarshalledInvocationHandlerImpl(InvocationHandler invoker, ClassLoader facadesClassLoader) {
-            this.invoker = invoker;
+        public MarshalledInvocationHandlerImpl(InvocationHandler invocationHandler, ClassLoader facadesClassLoader,
+                                               ServerMonitor serverMonitor) {
+            this.invocationHandler = invocationHandler;
             this.facadesClassLoader = facadesClassLoader;
+            this.serverMonitor = serverMonitor;
         }
 
-        public byte[] invoke(byte[] request, String connectionDetails) {
-
-            try {
-                Request ar = (Request) SerializationHelper.getInstanceFromBytes(request, facadesClassLoader);
-                Response response = invoker.invoke(ar, connectionDetails);
-
-                return SerializationHelper.getBytesFromInstance(response);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-
-                return null;
-            }
+        /**
+         * {@inheritDoc}
+         */            
+        public byte[] invoke(byte[] request, String connectionDetails) throws ClassNotFoundException {
+            Request ar = (Request) SerializationHelper.getInstanceFromBytes(request, facadesClassLoader);
+            return SerializationHelper.getBytesFromInstance(invocationHandler.invoke(ar, connectionDetails));
         }
     }
 

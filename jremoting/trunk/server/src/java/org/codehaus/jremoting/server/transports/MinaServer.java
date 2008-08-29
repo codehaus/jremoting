@@ -128,7 +128,7 @@ public class MinaServer extends StatefulServer {
         acceptor.setHandler(new IoHandlerAdapter() {
             @Override
             public void exceptionCaught(IoSession session, Throwable cause) {
-                serverMonitor.unexpectedException(MinaServer.class, "Mina Exception Caught", cause);
+                serverMonitor.unexpectedException(MinaServer.class, "MinaServer: Mina Exception Caught", cause);
             }
             @Override
             public void messageReceived(IoSession session, Object message) {

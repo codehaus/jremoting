@@ -36,28 +36,19 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public class SocketTransport extends StreamTransport {
 
-    private Stream Stream;
+    private final Stream Stream;
     private final SocketDetails addr;
 
     public SocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                            ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
                            Stream Stream,
                            SocketDetails addr) throws ConnectionException {
-        this(clientMonitor, executorService, connectionPinger, facadesClassLoader, Stream, addr, defaultSocketTimeout());
-    }
-
-    public SocketTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
-                           ConnectionPinger connectionPinger, ClassLoader facadesClassLoader,
-                           Stream Stream,
-                           SocketDetails addr, int socketTimeout) throws ConnectionException {
         super(clientMonitor, executorService, connectionPinger, facadesClassLoader);
         this.Stream = Stream;
         this.addr = addr;
-
         try {
             for (int x = 0; x < addr.getConcurrentConnections(); x++) {
                 Socket socket = makeSocket(addr);
-                socket.setSoTimeout(socketTimeout);
                 addStreamEncoder(Stream.makeStreamConnection(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
             }
         } catch (IOException ioe) {
@@ -68,28 +59,17 @@ public class SocketTransport extends StreamTransport {
         }
     }
 
-
     public SocketTransport(ClientMonitor clientMonitor, Stream Stream, SocketDetails addr) throws ConnectionException {
         this(clientMonitor, Executors.newScheduledThreadPool(10), new TimingOutPinger(),
                 Thread.currentThread().getContextClassLoader(), Stream, addr);
     }
 
-
-    public SocketTransport(ClientMonitor clientMonitor, Stream Stream, SocketDetails addr, int socketTimeout) throws ConnectionException {
-        this(clientMonitor, Executors.newScheduledThreadPool(10), new TimingOutPinger(),
-                Thread.currentThread().getContextClassLoader(), Stream, addr, socketTimeout);
-    }
-
-    private static int defaultSocketTimeout() {
-        return 45*1000;
-    }
-
-
+    /**
+     * {@inheritDoc}
+     */
     protected boolean tryReconnect() {
-
         try {
             Socket socket = makeSocket(addr);
-            socket.setSoTimeout(60 * 1000);
             addStreamEncoder(Stream.makeStreamConnection(socket.getInputStream(), socket.getOutputStream(), getFacadesClassLoader()));
             return true;
         } catch (IOException ce) {
@@ -97,8 +77,26 @@ public class SocketTransport extends StreamTransport {
         }
     }
 
+    /*
+     * Make a suitable socket for an address.
+     * Override this method if you want something more custom.
+     *
+     * @param addr
+     * @return
+     * @throws IOException
+     */
     protected Socket makeSocket(SocketDetails addr) throws IOException {
-        return new Socket(addr.getHostName(), addr.getPort());
+        Socket socket = new Socket(addr.getHostName(), addr.getPort());
+        socket.setSoTimeout(getSocketTimeOut());
+        return socket;
+    }
+
+    /**
+     * Get the timeout
+     * @return the timeout value in miliseconds
+     */
+    protected int getSocketTimeOut() {
+        return 45 * 1000;
     }
 
 }

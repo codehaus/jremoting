@@ -20,24 +20,66 @@ package org.codehaus.jremoting.server;
 import java.io.IOException;
 
 /**
- * Class ServerMonitor
+ * Class ServerMonitor is used in many server pieces to indicate select events.
+ * Some indicate trouble, some are informational.  
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
  */
 public interface ServerMonitor {
 
+    /**
+     * Unexpected error (IOException) during close of connection
+     *
+     * @param clazz the class where the exception occurred
+     * @param desc some accompanying text
+     * @param e the exception in question.
+     */
     void closeError(Class clazz, String desc, IOException e);
 
+    /**
+     * A class was needed that is available in the classpath. Most likely, during
+     * deserialization of the request that arrived over a connection to a client.
+     *
+     * @param clazz the class where the exception occurred
+     * @param e the exception in question.
+     */
     void classNotFound(Class clazz, ClassNotFoundException e);
 
+    /**
+     * An unexpected exception occurred.
+     * @param clazz the class where the exception occurred
+     * @param desc some accompanying text
+     * @param e the exception in question.
+     */
     void unexpectedException(Class clazz, String desc, Throwable e);
 
+    /**
+     * An unexpected exception occurred during the stopping of a server.
+     * @param clazz the class where the exception occurred
+     * @param desc some accompanying text
+     * @param e the exception in question.
+     */
     void stopServerError(Class clazz, String desc, Exception e);
 
-    void newSession(Session session, int newSize, String connectionDetails);
+    /**
+     * New Session created
+     * @param session the session being created
+     * @param numberOfSessions the number of sessions over all
+     * @param connectionDetails
+     */
+    void newSession(Session session, int numberOfSessions, String connectionDetails);
 
-    void removeSession(Session session, int newSize);
+    /**
+     * Existing Session being removed
+     * @param session the session to be removed
+     * @param numberOfSessions the number of sessions over all
+     */
+    void removeSession(Session session, int numberOfSessions);
 
-    void staleSession(Session session, int newSize);
+    /**
+     * A session has gone stale through non-use
+     * @param session the session that has gone stale
+     * @param numberOfSessions the number of sessions over all
+     */
+    void staleSession(Session session, int numberOfSessions);
 }

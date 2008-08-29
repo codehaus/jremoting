@@ -85,6 +85,9 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
         this.contextFactory = contextFactory != null ? contextFactory : new ThreadLocalServerContextFactory();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Response invoke(Request request, String connectionDetails) {
         try {
             if (isSuspended()) {
@@ -139,10 +142,10 @@ public class DefaultServerDelegate extends SessionAdapter implements ServerDeleg
             npe.printStackTrace();
             if (request instanceof InvokeMethod) {
                 String methd = ((InvokeMethod) request).getMethodSignature();
-                serverMonitor.unexpectedException(DefaultServerDelegate.class, "InvokerDelegate.invoke() NPE processing method " + methd, npe);
+                serverMonitor.unexpectedException(DefaultServerDelegate.class, "DefaultServerDelegate.invoke() NPE processing method " + methd, npe);
                 throw new NullPointerException("Null pointer exception, processing method " + methd);
             } else {
-                serverMonitor.unexpectedException(DefaultServerDelegate.class, "InvokerDelegate.invoke() NPE", npe);
+                serverMonitor.unexpectedException(DefaultServerDelegate.class, "DefaultServerDelegate.invoke() NPE", npe);
                 throw npe;
             }
         }

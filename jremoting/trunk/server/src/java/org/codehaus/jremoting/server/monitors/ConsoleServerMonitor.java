@@ -47,15 +47,15 @@ public class ConsoleServerMonitor implements ServerMonitor {
         System.out.println("[stopServerError] " + s + " : " + e.getMessage());
     }
 
-    public void newSession(Session session, int newSize, String connectionDetails) {
-        System.out.println("[newSession] " + session.getSession() + " , sessions: " + newSize);
+    public void newSession(Session session, int numberOfSessions, String connectionDetails) {
+        System.out.println("[newSession] " + session.getSession() + " , sessions: " + numberOfSessions);
     }
 
     public void removeSession(Session session, int newSize) {
         System.out.println("[removeSession] " + session.getSession() + " , sessions: " + newSize);
     }
 
-    public void staleSession(Session session, int newSize) {
-        System.out.println("[staleSession] " + session.getSession() + " , sessions: " + newSize);
+    public void staleSession(Session session, int numberOfSessions) {
+        System.out.println("[staleSession] " + session.getSession() + " , sessions: " + numberOfSessions);
     }
 }

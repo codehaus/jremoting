@@ -21,7 +21,6 @@ package org.codehaus.jremoting.server;
  * An Connection is connection in progress from a client to a server.
  *
  * @author Paul Hammant
- * @version * $Revision: 1.2 $
  */
 public interface Connection {
 

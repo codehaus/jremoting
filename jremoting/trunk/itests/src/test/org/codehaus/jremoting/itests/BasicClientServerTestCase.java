@@ -137,7 +137,11 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
             new ServiceResolver(new SocketTransport(new NullClientMonitor(),
-                new ByteStream(), new SocketDetails("127.0.0.1", 12347), 500));
+                new ByteStream(), new SocketDetails("127.0.0.1", 12347)){
+                protected int getSocketTimeOut() {
+                    return 500;
+                }
+            });
             fail("Expected mismatch exception");
         } catch (InvocationException e) {
             assertTrue(e.getCause() instanceof SocketTimeoutException);
@@ -196,7 +200,11 @@ public class BasicClientServerTestCase extends MockObjectTestCase {
         // Client side setup
         try {
             new ServiceResolver(new SocketTransport((ClientMonitor) mockClientMonitor.proxy(),
-                new ByteStream(), new SocketDetails("127.0.0.1", 12347),  100));
+                new ByteStream(), new SocketDetails("127.0.0.1", 12347)){
+                protected int getSocketTimeOut() {
+                    return 100;    
+                }
+            });
             fail("Expected mismatch exception");
         } catch (InvocationException e) {
             assertTrue(e.getCause() instanceof SocketTimeoutException);

@@ -42,6 +42,9 @@ public abstract class StatefulServer implements Server {
         this.serverMonitor = serverMonitor;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Response invoke(Request request, String connectionDetails) {
         if (getState().equals(STARTED) || request instanceof CollectGarbage) {
             return serverDelegate.invoke(request, connectionDetails);
@@ -62,6 +65,9 @@ public abstract class StatefulServer implements Server {
         return serverDelegate.isSuspended();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public final void start() {
         this.state = STARTING;
         starting();
@@ -69,9 +75,19 @@ public abstract class StatefulServer implements Server {
         started();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void starting() {}
+
+    /**
+     * {@inheritDoc}
+     */
     public void started() {}
 
+    /**
+     * {@inheritDoc}
+     */
     public final void stop() {
         if (!getState().equals(STARTED)) {
             throw new JRemotingException("Server Not Started at time of stop");
@@ -83,42 +99,75 @@ public abstract class StatefulServer implements Server {
         stopped();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void stopping() {}
+
+    /**
+     * {@inheritDoc}
+     */
     public void stopped() {}
 
-
+    /**
+     * {@inheritDoc}
+     */
     public void publish(Object impl, String service, Class primaryFacade) throws PublicationException {
         serverDelegate.publish(impl, service, primaryFacade);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void publish(Object impl, String service, Publication publicationDescription) throws PublicationException {
         serverDelegate.publish(impl, service, publicationDescription);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void publish(Object impl, String service, Class facadeClass, Class... additionalFacades) {
         serverDelegate.publish(impl, service, new Publication(facadeClass).addAdditionalFacades(additionalFacades));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void redirect(String serviceName, String to) {
         serverDelegate.redirect(serviceName, to);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object getInstanceForReference(String objectName, Long reference) {
         return serverDelegate.getInstanceForReference(objectName, reference);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void unPublish(Object impl, String service) throws PublicationException {
         serverDelegate.unPublish(impl, service);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void replacePublished(Object oldImpl, String service, Object withImpl) throws PublicationException {
         serverDelegate.replacePublished(oldImpl, service, withImpl);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isPublished(String service) {
         return serverDelegate.isPublished(service);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getState() {
         return state;
     }

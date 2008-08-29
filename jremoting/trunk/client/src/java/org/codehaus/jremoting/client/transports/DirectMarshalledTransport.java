@@ -32,11 +32,10 @@ import java.util.concurrent.ScheduledExecutorService;
  * Class DirectMarshalledTransport
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
  */
 public final class DirectMarshalledTransport extends StatefulTransport {
 
-    private MarshalledInvocationHandler invoker;
+    private final MarshalledInvocationHandler invoker;
 
     public DirectMarshalledTransport(ClientMonitor clientMonitor, ScheduledExecutorService executorService,
                                              ConnectionPinger connectionPinger, MarshalledInvocationHandler invoker,
@@ -45,18 +44,22 @@ public final class DirectMarshalledTransport extends StatefulTransport {
         this.invoker = invoker;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected boolean tryReconnect() {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected Response performInvocation(Request request) {
 
+        byte[] serRequest = SerializationHelper.getBytesFromInstance(request);
         try {
-            byte[] serRequest = SerializationHelper.getBytesFromInstance(request);
             byte[] serResponse = invoker.invoke(serRequest, null);
-
-            Object instanceFromBytes = SerializationHelper.getInstanceFromBytes(serResponse, getFacadesClassLoader());
-            return (Response) instanceFromBytes;
+            return (Response) SerializationHelper.getInstanceFromBytes(serResponse, getFacadesClassLoader());
         } catch (ClassNotFoundException cnfe) {
             String msg = "Some ClassNotFoundException on client side";
             clientMonitor.classNotFound(DirectMarshalledTransport.class, msg, cnfe);

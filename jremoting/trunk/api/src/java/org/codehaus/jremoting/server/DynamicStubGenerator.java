@@ -21,12 +21,11 @@ package org.codehaus.jremoting.server;
  * Interface StubGenerator
  *
  * @author Paul Hammant
- * @version * $Revision: 1.2 $
  */
 public interface DynamicStubGenerator {
 
     /**
-     * Generate a proxy.
+     * Generate a stub.
      *
      * @param service            the name of the generated proxy.  As used in lookup.
      * @param primaryFacade the princial lookupable interface
@@ -36,7 +35,7 @@ public interface DynamicStubGenerator {
     void generate(String service, Class primaryFacade, ClassLoader facadesClassLoader) throws PublicationException;
 
     /**
-     * Generate a proxy.
+     * Generate a stub.
      *
      * @param service                 the name of the generated proxy.  As used in lookup.
      * @param publicationDescription a descriptor detailing complex cases.

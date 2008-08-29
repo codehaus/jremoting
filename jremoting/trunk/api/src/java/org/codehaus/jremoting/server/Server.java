@@ -63,7 +63,7 @@ public interface Server extends Publisher, InvocationHandler {
     void stop();
     
     /**
-     * Get the state for teh server.
+     * Get the server's state.
      *
      * @return the state.
      */

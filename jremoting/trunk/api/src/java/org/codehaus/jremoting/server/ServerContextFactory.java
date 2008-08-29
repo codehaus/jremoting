@@ -26,10 +26,22 @@ import org.codehaus.jremoting.client.Context;
 
 public interface ServerContextFactory {
 
+    /**
+     * Get Server side context
+     * @return the context
+     */
     ServerSideContext get();
 
+    /**
+     * Set server side context
+     * @param context the context
+     */
     void set(ServerSideContext context);
 
+    /**
+     * Is server side context set
+     * @return if set
+     */
     boolean isSet();
 
 }

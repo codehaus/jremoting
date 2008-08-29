@@ -18,18 +18,18 @@
 package org.codehaus.jremoting.server;
 
 /**
- * Interface ServerMarshalledInvoker
+ * Handle a Requests and give an appropriate responses for marshalled connections
  *
  * @author Paul Hammant
- * @version * $Revision: 1.2 $
  */
 public interface MarshalledInvocationHandler {
 
     /**
-     * Handle a method Invocation using byte array representations of the request and response
+     * Handle a Request and give an appropriate response
      *
      * @param request a byte array representing a request
+     * @param connectionDetails some information about the connection
      * @return a byte array representing the response
      */
-    byte[] invoke(byte[] request, String connectionDetails);
+    byte[] invoke(byte[] request, String connectionDetails) throws ClassNotFoundException;
 }

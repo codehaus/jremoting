@@ -21,15 +21,14 @@ import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
 /**
- * Interface InvocationHandler
+ * Handle a Requests and give an appropriate responses
  *
  * @author Paul Hammant
- * @version * $Revision: 1.2 $
  */
 public interface InvocationHandler {
 
     /**
-     * Handle a method invocation
+     * Handle a Request and give an appropriate response
      *
      * @param request           The request to handle
      * @param connectionDetails Some details of the connection.

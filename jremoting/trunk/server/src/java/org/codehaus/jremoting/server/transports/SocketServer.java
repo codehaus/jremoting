@@ -49,11 +49,6 @@ public class SocketServer extends ConnectingServer {
     private final Stream Stream;
     private final ClassLoader facadesClassLoader;
     private int socketTimeout = 60 * 1000;
-
-    public void setSocketTimeout(int millis) {
-        this.socketTimeout = millis;
-    }
-
     protected boolean accepting = true;
 
     public SocketServer(ServerMonitor serverMonitor, InetSocketAddress addr) {
@@ -138,6 +133,9 @@ public class SocketServer extends ConnectingServer {
         return new ThreadLocalServerContextFactory();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void starting() {
         try {
             serverSocket = makeServerSocket(addr);
@@ -151,6 +149,9 @@ public class SocketServer extends ConnectingServer {
         return new ServerSocket(addr.getPort(),50, addr.getAddress());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void started() {
         super.started();
         daemon = executorService.submit(new Runnable() {
@@ -171,6 +172,9 @@ public class SocketServer extends ConnectingServer {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void stopping() {
         try {
             serverSocket.close();
@@ -184,6 +188,9 @@ public class SocketServer extends ConnectingServer {
         super.stopping();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void stopped() {
         super.stopped();
     }
@@ -199,6 +206,9 @@ public class SocketServer extends ConnectingServer {
             this.socket = socket;
         }
 
+    /**
+     * {@inheritDoc}
+     */
         public void run() {
             // see http://developer.java.sun.com/developer/bugParade/bugs/4508149.html
             try {
@@ -238,7 +248,8 @@ public class SocketServer extends ConnectingServer {
         }
     }
 
-    
-
+    public void setSocketTimeout(int millis) {
+        this.socketTimeout = millis;
+    }
 
 }

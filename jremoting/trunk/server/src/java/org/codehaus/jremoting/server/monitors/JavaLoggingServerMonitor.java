@@ -66,10 +66,10 @@ public class JavaLoggingServerMonitor implements ServerMonitor {
         delegate.stopServerError(clazz, s, e);
     }
 
-    public void newSession(Session session, int newSize, String connectionDetails) {
+    public void newSession(Session session, int numberOfSessions, String connectionDetails) {
         Logger logger = Logger.getLogger(this.getClass().getName());
         logger.log(Level.INFO, "<newSession>" + session.getSession());
-        delegate.newSession(session, newSize, connectionDetails);
+        delegate.newSession(session, numberOfSessions, connectionDetails);
     }
 
     public void removeSession(Session session, int newSize) {
@@ -78,9 +78,9 @@ public class JavaLoggingServerMonitor implements ServerMonitor {
         delegate.removeSession(session, newSize);
     }
 
-    public void staleSession(Session session, int newSize) {
+    public void staleSession(Session session, int numberOfSessions) {
         Logger logger = Logger.getLogger(this.getClass().getName());
         logger.log(Level.INFO, "<staleSession>" + session.getSession());
-        delegate.staleSession(session, newSize);
+        delegate.staleSession(session, numberOfSessions);
     }
 }
