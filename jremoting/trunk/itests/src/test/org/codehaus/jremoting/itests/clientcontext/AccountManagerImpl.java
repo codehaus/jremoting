@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
- * @version $Revision: 1.2 $
+ *
  */
 
 public class AccountManagerImpl implements AccountManager {

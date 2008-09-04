@@ -23,7 +23,7 @@ import org.codehaus.jremoting.ConnectionException;
  * Class ConnectionRefusedException
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class ConnectionRefusedException extends ConnectionException {
     private static final long serialVersionUID = -752955811189030450L;

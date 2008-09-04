@@ -27,7 +27,7 @@ import java.io.ObjectOutput;
  * Class ExceptionThrown
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class ExceptionThrown extends Response {
 

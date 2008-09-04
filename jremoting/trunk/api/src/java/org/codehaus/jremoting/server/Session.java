@@ -23,7 +23,7 @@ import java.util.HashMap;
  * Class Session
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class Session {
 

@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
  * MethodInvocationMonitor
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public interface MethodInvocationMonitor {
 

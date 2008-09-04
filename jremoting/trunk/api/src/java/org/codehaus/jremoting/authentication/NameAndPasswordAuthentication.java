@@ -25,7 +25,7 @@ import java.io.ObjectOutput;
  * Class NamePasswordAuthentication
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class NameAndPasswordAuthentication extends Authentication {
 

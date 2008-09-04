@@ -29,7 +29,7 @@ import java.io.ObjectOutput;
  * Class CollectGarbage
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class CollectGarbage extends Servicable implements Sessionable {
 

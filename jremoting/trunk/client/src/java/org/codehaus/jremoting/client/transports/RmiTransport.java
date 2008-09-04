@@ -41,7 +41,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * Class RmiTransport
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class RmiTransport extends StatefulTransport {
 

@@ -5,7 +5,7 @@ import org.codehaus.jremoting.client.Context;
 
 /**
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 
 public class NullContextFactory implements ContextFactory {

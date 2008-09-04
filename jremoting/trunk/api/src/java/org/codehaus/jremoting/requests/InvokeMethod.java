@@ -29,7 +29,7 @@ import java.io.ObjectOutput;
  * Class InvokeMethod
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class InvokeMethod extends Servicable implements Contextualizable {
 

@@ -21,7 +21,7 @@ package org.codehaus.jremoting.server;
  * Class StubRetrievalException
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class StubRetrievalException extends Exception {
     private static final long serialVersionUID = 7059787167877322282L;

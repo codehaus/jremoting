@@ -319,7 +319,7 @@ public class ServiceResolver {
             }
         }
 
-        private Object facadeArrayMethodInvoked(Response response, Class returnClassType) {
+        private Object facadeArrayMethodInvoked(Response response, Class returnClassType) throws ConnectionException {
             FacadeArrayMethodInvoked mfar = (FacadeArrayMethodInvoked) response;
             Long[] refs = mfar.getReferences();
             String[] objectNames = mfar.getObjectNames();
@@ -330,7 +330,7 @@ public class ServiceResolver {
             return instances;
         }
 
-        private void facadeArrayMethodInvokedRef(Class returnClassType, Long[] refs, String[] objectNames, Object[] instances, int i) {
+        private void facadeArrayMethodInvokedRef(Class returnClassType, Long[] refs, String[] objectNames, Object[] instances, int i) throws ConnectionException {
             Long ref = refs[i];
             if (ref == null) {
                 instances[i] = null;
@@ -341,14 +341,14 @@ public class ServiceResolver {
                     // TODO = by interface not impl
                     DefaultStubHelper sh = new DefaultStubHelper(contextFactory, publishedServiceName, objectNames[i], refs[i], service);
                     Object retFacade = null;
-                    try {
+                    //try {
                         retFacade = stubRegistry.getInstance(returnClassType.getName(), publishedServiceName, objectNames[i], sh);
-                    } catch (Exception e) {
-                        // TODO - get rid of this
-                        System.out.println("objNameWithoutArray=" + returnClassType.getName());
-                        System.out.flush();
-                        e.printStackTrace();
-                    }
+//                    } catch (Exception e) {
+//                        // TODO - get rid of this
+//                        System.out.println("objNameWithoutArray=" + returnClassType.getName());
+//                        System.out.flush();
+//                        e.printStackTrace();
+//                    }
                     sh.registerInstance(retFacade);
                     instances[i] = retFacade;
                 }

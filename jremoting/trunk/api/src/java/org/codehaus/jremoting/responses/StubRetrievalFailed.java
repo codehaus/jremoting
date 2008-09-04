@@ -27,7 +27,7 @@ import java.io.ObjectOutput;
  * Class RequestFailed
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class StubRetrievalFailed extends Response implements ProblemResponse{
 

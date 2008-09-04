@@ -40,7 +40,7 @@ import java.net.InetSocketAddress;
  * Class MinaServer
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class MinaServer extends StatefulServer {
 

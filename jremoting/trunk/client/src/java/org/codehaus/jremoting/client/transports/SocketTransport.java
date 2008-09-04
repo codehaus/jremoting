@@ -32,7 +32,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * Class SocketTransport
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class SocketTransport extends StreamTransport {
 

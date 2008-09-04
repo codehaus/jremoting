@@ -25,7 +25,7 @@ import org.codehaus.jremoting.server.Authenticator;
  * Check the Authority of a client to a service.
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class NullAuthenticator implements Authenticator {
 

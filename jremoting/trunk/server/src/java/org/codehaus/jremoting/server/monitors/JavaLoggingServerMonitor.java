@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  * Class JavaLoggingServerMonitor
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class JavaLoggingServerMonitor implements ServerMonitor {
 

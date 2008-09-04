@@ -25,7 +25,7 @@ import java.io.ObjectOutput;
  * Class NoSuchReference
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class NoSuchReference extends NotPublished implements ProblemResponse{
 

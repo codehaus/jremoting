@@ -39,7 +39,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * Class SocketServer
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class SocketServer extends ConnectingServer {
 

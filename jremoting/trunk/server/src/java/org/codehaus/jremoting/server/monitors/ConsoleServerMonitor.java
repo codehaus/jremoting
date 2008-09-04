@@ -26,7 +26,7 @@ import java.io.IOException;
  * Class ConsoleServerMonitor
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class ConsoleServerMonitor implements ServerMonitor {
 

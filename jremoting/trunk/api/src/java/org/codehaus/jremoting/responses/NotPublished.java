@@ -24,7 +24,7 @@ import org.codehaus.jremoting.responses.Response;
  * Class NotPublished
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class NotPublished extends Response implements ProblemResponse {
     private static final long serialVersionUID = -3066320698994620378L;

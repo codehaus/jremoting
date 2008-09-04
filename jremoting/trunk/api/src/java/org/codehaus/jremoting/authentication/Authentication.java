@@ -23,7 +23,7 @@ import java.io.Externalizable;
  * Class Authentication
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public abstract class Authentication implements Externalizable {
     private static final long serialVersionUID = -2853239663635108419L;

@@ -50,9 +50,9 @@ import java.net.SocketTimeoutException;
  * @author Paul Hammant
  */
 public class BasicClientServerTestCase extends MockObjectTestCase {
+
     private Mock mockServerMonitor;
     private Mock mockClientMonitor;
-
 
     protected void setUp() throws Exception {
         mockServerMonitor = mock(ServerMonitor.class);

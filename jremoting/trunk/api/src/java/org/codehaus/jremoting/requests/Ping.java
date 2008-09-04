@@ -27,7 +27,7 @@ import java.io.Serializable;
  * Class Ping
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class Ping extends Request implements Serializable {
     private long session;

@@ -29,7 +29,7 @@ import java.io.ObjectOutput;
  * Class InvokeAsyncMethod
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class InvokeAsyncMethod extends Servicable implements Contextualizable {
 

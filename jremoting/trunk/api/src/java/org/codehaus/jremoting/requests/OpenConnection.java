@@ -25,7 +25,7 @@ import java.io.ObjectOutput;
  * Class OpenConnection
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class OpenConnection extends Request {
     private static final long serialVersionUID = -6544916187702327377L;

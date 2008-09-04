@@ -26,7 +26,7 @@ import java.io.IOException;
  * Class NullServerMonitor
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class NullServerMonitor implements ServerMonitor {
 

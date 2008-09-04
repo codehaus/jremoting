@@ -25,7 +25,7 @@ import org.codehaus.jremoting.requests.RequestConstants;
  * Class RetrieveStub
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class RetrieveStub extends Servicable {
     private static final long serialVersionUID = -4942430631067275194L;

@@ -25,7 +25,7 @@ import java.io.ObjectOutput;
  * Class TryLater
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public abstract class TryLater extends Response implements ProblemResponse {
 

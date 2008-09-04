@@ -33,7 +33,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * Class StreamTransport
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public abstract class StreamTransport extends StatefulTransport {
 

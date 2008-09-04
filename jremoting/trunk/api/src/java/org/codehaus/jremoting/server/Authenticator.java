@@ -31,7 +31,7 @@ public interface Authenticator {
     /**
      * Check the authority of a particular 'user' to a service
      *
-     * @param auth             the authenicatin that needs to be checked.
+     * @param auth             the authentication that needs to be checked.
      * @param publishedService the name of the published service.
      */
     boolean checkAuthority(Authentication auth, String publishedService);

@@ -26,7 +26,7 @@ import java.net.URLClassLoader;
  * Class JarFileStubRetriever
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class JarFileStubRetriever extends FromClassLoaderStubRetriever {
 

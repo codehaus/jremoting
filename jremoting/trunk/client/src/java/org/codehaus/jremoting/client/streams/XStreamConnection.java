@@ -17,12 +17,14 @@
 package org.codehaus.jremoting.client.streams;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.StreamException;
 import com.thoughtworks.xstream.annotations.AnnotationProvider;
 import com.thoughtworks.xstream.annotations.AnnotationReflectionConverter;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.core.JVM;
 import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.StreamConnection;
+import org.codehaus.jremoting.client.InvocationException;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.util.SerializationHelper;
@@ -101,6 +103,8 @@ public class XStreamConnection implements StreamConnection {
             } else {
                 throw e;
             }
+        } catch (StreamException e) {
+            throw new InvocationException("XStream inernal exception", e);
         }
     }
 

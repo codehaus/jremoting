@@ -25,7 +25,7 @@ import java.io.ObjectOutput;
  * Class NoSuchSession
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class NoSuchSession extends NotPublished implements ProblemResponse{
 

@@ -34,7 +34,7 @@ import org.codehaus.jremoting.util.SerializationHelper;
  * Class DirectMarshalledServer
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class DirectMarshalledServer extends StatefulServer implements MarshalledInvocationHandler {
 

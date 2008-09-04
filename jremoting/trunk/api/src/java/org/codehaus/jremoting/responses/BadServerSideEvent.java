@@ -25,7 +25,7 @@ import java.io.ObjectOutput;
  * Class BadServerSideEvent
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class BadServerSideEvent extends Response {
 

@@ -27,7 +27,7 @@ import java.io.ObjectOutput;
  * Class Servicable
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public abstract class Servicable extends Request {
 

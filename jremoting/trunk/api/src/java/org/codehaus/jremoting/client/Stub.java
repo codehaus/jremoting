@@ -21,7 +21,7 @@ package org.codehaus.jremoting.client;
  * Interface Stub
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public interface Stub {
 

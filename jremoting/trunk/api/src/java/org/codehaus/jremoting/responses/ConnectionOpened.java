@@ -28,7 +28,7 @@ import java.io.ObjectOutput;
  * Class ConnectionOpened
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class ConnectionOpened extends Response implements Sessionable {
 

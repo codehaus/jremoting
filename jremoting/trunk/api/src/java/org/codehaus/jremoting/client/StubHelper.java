@@ -23,7 +23,7 @@ package org.codehaus.jremoting.client;
  *
  * @author Paul Hammant
  * @author Vinay Chandrasekharan <a href="mailto:vinayc77@yahoo.com">vinayc77@yahoo.com</a>
- * @version $Revision: 1.2 $
+ *
  */
 public interface StubHelper {
 

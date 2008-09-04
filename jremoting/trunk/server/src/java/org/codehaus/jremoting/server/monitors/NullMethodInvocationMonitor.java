@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
  * Class NullMethodInvocationMonitor
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class NullMethodInvocationMonitor implements MethodInvocationMonitor {
 

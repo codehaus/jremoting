@@ -26,7 +26,7 @@ import org.codehaus.jremoting.JRemotingException;
  * Class SerializationHelper
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class SerializationHelper {
 

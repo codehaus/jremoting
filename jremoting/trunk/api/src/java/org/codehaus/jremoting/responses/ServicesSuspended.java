@@ -22,7 +22,7 @@ package org.codehaus.jremoting.responses;
  * Class ServicesSuspended
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class ServicesSuspended extends TryLater {
 

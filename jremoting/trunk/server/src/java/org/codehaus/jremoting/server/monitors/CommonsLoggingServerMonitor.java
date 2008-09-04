@@ -28,7 +28,7 @@ import java.io.IOException;
  * Class CommonsLoggingServerMonitor
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class CommonsLoggingServerMonitor implements ServerMonitor {
 

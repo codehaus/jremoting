@@ -20,6 +20,7 @@ package org.codehaus.jremoting.server.streams;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.StreamConnection;
 import org.codehaus.jremoting.util.ClassLoaderObjectInputStream;
 
 import java.io.BufferedInputStream;
@@ -34,9 +35,9 @@ import java.io.OutputStream;
  * Class ObjectStreamConnection
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
-public class ObjectStreamConnection extends AbstractStreamConnection {
+public class ObjectStreamConnection extends StreamConnection {
 
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
@@ -53,17 +54,11 @@ public class ObjectStreamConnection extends AbstractStreamConnection {
     }
 
     public void closeConnection() {
-        try {
-            if (objectInputStream != null) {
-                objectInputStream.close();
-            }
-        } catch (IOException e) {
+        if (objectInputStream != null) {
+            closeCloseable(objectInputStream, "object input stream");
         }
-        try {
-            if (objectOutputStream != null) {
-                objectOutputStream.close();
-            }
-        } catch (IOException e) {
+        if (objectOutputStream != null) {
+            closeCloseable(objectOutputStream, "object output stream");
         }
         super.closeConnection();
     }

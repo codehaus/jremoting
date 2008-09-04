@@ -27,7 +27,7 @@ import java.io.Serializable;
  * Class Request
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public abstract class Request implements Externalizable, Serializable {
     private static final long serialVersionUID = 402067040826754548L;

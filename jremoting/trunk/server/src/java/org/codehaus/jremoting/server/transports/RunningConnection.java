@@ -35,10 +35,10 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 /**
- * Class RunningConnection
+ * Class RunningConnection is a connection that that will be run implicitly in a different thread.
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public abstract class RunningConnection implements Runnable, Connection {
 
@@ -53,6 +53,9 @@ public abstract class RunningConnection implements Runnable, Connection {
         this.serverMonitor = serverMonitor;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void run() {
 
         try {
@@ -118,7 +121,7 @@ public abstract class RunningConnection implements Runnable, Connection {
     }
 
     /**
-     * Method endConnection
+     * {@inheritDoc}
      */
     public void closeConnection() {
         endConnection = true;

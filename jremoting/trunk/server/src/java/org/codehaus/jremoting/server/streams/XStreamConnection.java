@@ -25,6 +25,7 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.StreamConnection;
 import org.codehaus.jremoting.util.SerializationHelper;
 
 import java.io.BufferedOutputStream;
@@ -40,9 +41,9 @@ import java.io.PrintWriter;
  * Class XStreamConnection
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
-public class XStreamConnection extends AbstractStreamConnection {
+public class XStreamConnection extends StreamConnection {
 
     private LineNumberReader lineNumberReader;
     private PrintWriter printWriter;
@@ -72,15 +73,8 @@ public class XStreamConnection extends AbstractStreamConnection {
     }
 
     public void closeConnection() {
-        try {
-            getInputStream().close();
-        } catch (IOException e) {
-        }
-        try {
-            lineNumberReader.close();
-        } catch (IOException e) {
-        }
-        printWriter.close();
+        closeCloseable(lineNumberReader, "line number reader");
+        closeCloseable(printWriter, "print writer reader");
         super.closeConnection();
     }
 

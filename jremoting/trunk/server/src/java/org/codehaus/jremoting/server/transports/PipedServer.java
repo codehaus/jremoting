@@ -33,7 +33,7 @@ import java.io.PipedOutputStream;
  * Class PipedServer
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class PipedServer extends ConnectingServer {
 

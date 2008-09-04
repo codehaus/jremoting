@@ -21,6 +21,7 @@ import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.client.NotPublishedException;
 import org.codehaus.jremoting.client.Transport;
 import org.codehaus.jremoting.client.StubFactory;
+import org.codehaus.jremoting.client.StubHelper;
 import org.codehaus.jremoting.requests.RetrieveStub;
 import org.codehaus.jremoting.responses.ProblemResponse;
 import org.codehaus.jremoting.responses.RequestFailed;
@@ -37,13 +38,13 @@ import java.lang.reflect.InvocationTargetException;
  * Class StubsFromServer
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class StubsFromServer implements StubFactory {
 
     private final HashMap publishedServiceClassLoaders = new HashMap();
 
-    public Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, org.codehaus.jremoting.client.StubHelper stubHelper) throws ConnectionException {
+    public Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, StubHelper stubHelper) throws ConnectionException {
 
         TransportedStubClassLoader tcl = null;
         String stubClassName = StaticStubHelper.formatStubClassName(publishedServiceName, objectName);

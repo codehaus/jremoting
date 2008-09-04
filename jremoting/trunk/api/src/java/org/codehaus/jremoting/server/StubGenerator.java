@@ -22,7 +22,7 @@ package org.codehaus.jremoting.server;
  * Class StubGenerator
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public interface StubGenerator {
 

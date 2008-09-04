@@ -27,7 +27,7 @@ import java.io.ObjectOutput;
  * Class ServicesList
  *
  * @author Vinay Chandrasekharan
- * @version $Revision: 1.2 $
+ *
  */
 public final class ServicesList extends Response {
 

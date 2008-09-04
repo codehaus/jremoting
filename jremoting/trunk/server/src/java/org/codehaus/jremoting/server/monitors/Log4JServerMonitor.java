@@ -27,7 +27,7 @@ import java.io.IOException;
  * Class Log4JServerMonitor
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class Log4JServerMonitor implements ServerMonitor {
 

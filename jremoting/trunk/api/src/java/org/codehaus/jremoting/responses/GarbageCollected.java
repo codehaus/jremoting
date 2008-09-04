@@ -27,7 +27,7 @@ import java.io.ObjectOutput;
  * Class GarbageCollected
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class GarbageCollected extends Response {
     private static final long serialVersionUID = 105402122319065117L;

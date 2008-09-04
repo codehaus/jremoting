@@ -43,7 +43,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * Class RmiServer for serving of 'over RMI'
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class RmiServer extends ConnectingServer {
 

@@ -18,8 +18,21 @@ package org.codehaus.jremoting.client;
 
 import org.codehaus.jremoting.ConnectionException;
 
+/**
+ * A StubFactory determines how you are going to retrieve Stubs that allow for client-side invocations.
+ */
 public interface StubFactory {
 
+    /**
+     * Instantiate a Stub class for a particular type.
+     * @param facadeClassName
+     * @param publishedServiceName
+     * @param objectName
+     * @param transport
+     * @param stubHelper
+     * @return
+     * @throws ConnectionException
+     */
     Object instantiateStub(String facadeClassName, String publishedServiceName, String objectName, Transport transport, StubHelper stubHelper) throws ConnectionException;
 
 }

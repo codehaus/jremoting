@@ -28,7 +28,7 @@ import java.io.File;
  * Abstract parent for Stub Generators
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $*
+ **
  */
 
 public abstract class AbstractStubGenerator implements StubGenerator {

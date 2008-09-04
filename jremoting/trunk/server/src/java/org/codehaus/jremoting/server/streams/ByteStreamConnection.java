@@ -22,6 +22,7 @@ import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.ConnectionClosed;
 import org.codehaus.jremoting.responses.Response;
 import org.codehaus.jremoting.server.ServerMonitor;
+import org.codehaus.jremoting.server.StreamConnection;
 import org.codehaus.jremoting.util.SerializationHelper;
 
 import java.io.DataInputStream;
@@ -32,9 +33,9 @@ import java.io.IOException;
  * Class ByteStreamConnection
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
-public class ByteStreamConnection extends AbstractStreamConnection {
+public class ByteStreamConnection extends StreamConnection {
 
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
@@ -59,14 +60,8 @@ public class ByteStreamConnection extends AbstractStreamConnection {
             writeResponse(new ConnectionClosed());
         } catch (IOException e) {
         }
-        try {
-            dataInputStream.close();
-        } catch (IOException e) {
-        }
-        try {
-            dataOutputStream.close();
-        } catch (IOException e) {
-        }
+        closeCloseable(dataInputStream, "data input stream");
+        closeCloseable(dataOutputStream, "data output stream");
         super.closeConnection();
     }
 

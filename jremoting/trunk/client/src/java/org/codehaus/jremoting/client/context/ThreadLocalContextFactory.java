@@ -23,7 +23,7 @@ import org.codehaus.jremoting.client.SimpleContext;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
- * @version $Revision: 1.2 $
+ *
  */
 
 public class ThreadLocalContextFactory implements ContextFactory {

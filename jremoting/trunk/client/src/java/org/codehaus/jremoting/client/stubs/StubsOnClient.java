@@ -29,7 +29,7 @@ import java.lang.reflect.InvocationTargetException;
  * Class StubsOnClient
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class StubsOnClient implements StubFactory {
 

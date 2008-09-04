@@ -25,7 +25,7 @@ import org.codehaus.jremoting.server.Publisher;
  * Class RefusingStubRetriever
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class RefusingStubRetriever implements StubRetriever {
 

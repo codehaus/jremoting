@@ -28,7 +28,7 @@ import java.io.ObjectOutput;
  * Class GroupedMethodRequest
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class GroupedMethodRequest extends Request {
 

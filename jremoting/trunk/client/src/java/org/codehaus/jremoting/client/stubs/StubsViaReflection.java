@@ -32,7 +32,7 @@ import java.lang.reflect.Proxy;
  * Class StubsOnClient
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class StubsViaReflection implements StubFactory {
 

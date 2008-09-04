@@ -35,7 +35,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * Class PipedTransport
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class PipedTransport extends StreamTransport {
 

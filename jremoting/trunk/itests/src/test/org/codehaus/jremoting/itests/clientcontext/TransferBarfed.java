@@ -21,7 +21,7 @@ package org.codehaus.jremoting.itests.clientcontext;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
- * @version $Revision: 1.2 $
+ *
  */
 
 public class TransferBarfed extends Exception {

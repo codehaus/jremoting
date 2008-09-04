@@ -1,27 +1,74 @@
 package org.codehaus.jremoting.server;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Closeable;
 
-import org.codehaus.jremoting.ConnectionException;
 import org.codehaus.jremoting.requests.Request;
 import org.codehaus.jremoting.responses.Response;
 
-public interface StreamConnection {
+/**
+ *
+ */
+public abstract class StreamConnection {
 
-    /**
-     * Write a Response, then Get a new Request over the stream.
-     *
-     * @param response The response to pass back to the client
-     * @return The Request that is new and incoming
-     * @throws IOException            if a problem during write & read.
-     * @throws ConnectionException    if a problem during write & read.
-     * @throws ClassNotFoundException If a Class is not found during serialization.
-     */
-    Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException;
+    private final InputStream inputStream;
+    private final OutputStream outputStream;
+    private final ServerMonitor serverMonitor;
+    private final ClassLoader facadesClassLoader;
+    private final String connectionDetails;
 
-    String getConnectionDetails();
+    public StreamConnection(ServerMonitor serverMonitor,
+                                      InputStream inputStream, OutputStream outputStream,
+                                      ClassLoader facadesClassLoader, String connectionDetails) {
+        this.serverMonitor = serverMonitor;
+        this.inputStream = inputStream;
+        this.outputStream = outputStream;
+        this.facadesClassLoader = facadesClassLoader;
+        this.connectionDetails = connectionDetails;
+    }
 
-    void closeConnection();
+    public final synchronized Request writeResponseAndGetRequest(Response response) throws IOException, ClassNotFoundException {
+        if (response != null) {
+            writeResponse(response);
+        }
+        return readRequest();
+    }
 
-    void initialize() throws IOException;
+    protected abstract Request readRequest() throws IOException, ClassNotFoundException;
+
+    protected abstract void writeResponse(Response response) throws IOException;
+
+    public String getConnectionDetails() {
+        return connectionDetails;
+    }
+
+    public void closeConnection() {
+        closeCloseable(inputStream, "input stream");
+        closeCloseable(outputStream, "output stream");
+    }
+
+    protected void closeCloseable(Closeable closeable, String msg) {
+        try {
+            closeable.close();
+        } catch (IOException e) {
+            serverMonitor.closeError(this.getClass(), "StreamConnection.closeConnection(): Failed closing an JRemoting connection "+ msg +": ", e);
+        }
+    }
+
+    protected InputStream getInputStream() {
+        return inputStream;
+    }
+
+    protected OutputStream getOutputStream() {
+        return outputStream;
+    }
+
+    public ClassLoader getFacadesClassLoader() {
+        return facadesClassLoader;
+    }
+
+    public void initialize() throws IOException {
+    }
 }

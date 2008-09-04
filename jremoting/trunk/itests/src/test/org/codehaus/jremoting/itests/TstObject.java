@@ -23,7 +23,7 @@ import java.io.Serializable;
  * Class TstObject
  *
  * @author Paul Hammant <a href="mailto:Paul_Hammant@yahoo.com">Paul_Hammant@yahoo.com</a>
- * @version $Revision: 1.2 $
+ *
  */
 public class TstObject implements Serializable {
 

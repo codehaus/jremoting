@@ -21,7 +21,7 @@ package org.codehaus.jremoting.server.stubretrievers;
  * Class BcelDynamicStubRetriever
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class BcelDynamicStubRetriever extends DynamicStubRetriever {
 

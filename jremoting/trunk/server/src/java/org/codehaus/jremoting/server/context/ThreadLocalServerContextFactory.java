@@ -23,7 +23,7 @@ import org.codehaus.jremoting.server.ServerSideContext;
 
 /**
  * @author Paul Hammant and Rune Johanessen (pairing for part)
- * @version $Revision: 1.2 $
+ *
  */
 
 public class ThreadLocalServerContextFactory implements ServerContextFactory {

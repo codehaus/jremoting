@@ -35,7 +35,7 @@ import java.io.BufferedInputStream;
  * Class ObjectStreamConnection
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class ObjectStreamConnection implements StreamConnection {
 

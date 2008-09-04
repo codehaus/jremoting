@@ -26,7 +26,7 @@ import java.io.ObjectOutput;
  * Class Response
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public abstract class Response implements Externalizable {
     private static final long serialVersionUID = 6978853363408769332L;

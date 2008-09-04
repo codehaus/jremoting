@@ -21,7 +21,7 @@ package org.codehaus.jremoting.server;
  * Class PublicationException
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class PublicationException extends RuntimeException {
     private static final long serialVersionUID = 1837799299885106435L;

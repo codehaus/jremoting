@@ -30,7 +30,7 @@ import java.io.ObjectOutput;
  * Class LookupService
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class LookupService extends Servicable implements Sessionable {
 

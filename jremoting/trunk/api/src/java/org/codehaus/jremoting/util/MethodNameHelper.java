@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
  * Class MethodNameHelper
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class MethodNameHelper {
 

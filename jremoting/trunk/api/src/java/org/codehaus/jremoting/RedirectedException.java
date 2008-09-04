@@ -23,7 +23,7 @@ import java.io.IOException;
  * Class RedirectedException
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class RedirectedException extends ConnectionException {
 

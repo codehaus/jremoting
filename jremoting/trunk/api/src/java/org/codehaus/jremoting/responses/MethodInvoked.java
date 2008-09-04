@@ -27,7 +27,7 @@ import java.io.ObjectOutput;
  * Class MethodInvoked
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class MethodInvoked extends Response {
 

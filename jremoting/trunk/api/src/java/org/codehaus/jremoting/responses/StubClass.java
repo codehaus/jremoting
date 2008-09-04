@@ -27,7 +27,7 @@ import java.io.ObjectOutput;
  * Class StubClass
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class StubClass extends Response {
 

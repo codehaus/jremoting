@@ -33,7 +33,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * Class DirectTransport
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class DirectTransport extends StatefulTransport {
 

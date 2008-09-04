@@ -23,7 +23,7 @@ import java.io.Serializable;
  * Class FacadeRefHolder
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class FacadeRefHolder implements Serializable {
 

@@ -25,7 +25,7 @@ import org.codehaus.jremoting.requests.RequestConstants;
  * Class ListServices
  *
  * @author Vinay Chandrasekharan
- * @version $Revision: 1.2 $
+ *
  */
 public final class ListServices extends Request {
     private static final long serialVersionUID = 8447620862650263282L;

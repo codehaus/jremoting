@@ -28,7 +28,7 @@ import java.io.ObjectOutput;
  * Class InvokeFacadeMethod
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public final class InvokeFacadeMethod extends InvokeMethod {
 

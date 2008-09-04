@@ -26,7 +26,7 @@ import java.io.IOException;
  * Class StreamConnection
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public interface StreamConnection {
     Response streamRequest(Request request) throws IOException, ClassNotFoundException;

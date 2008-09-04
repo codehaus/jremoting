@@ -33,7 +33,7 @@ import java.util.Vector;
  * Ant task to generate proxies
  *
  * @author Paul Hammant
- * @version $Revision: 1.2 $
+ *
  */
 public class StubGeneratorTask extends Task {
 
