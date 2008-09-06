@@ -48,6 +48,9 @@ public class ByteStreamConnection extends StreamConnection {
         this.dataOutputStream = dataOutputStream;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected void writeResponse(Response response) throws IOException {
         byte[] aBytes = SerializationHelper.getBytesFromInstance(response);
         dataOutputStream.writeInt(aBytes.length);
@@ -55,6 +58,9 @@ public class ByteStreamConnection extends StreamConnection {
         dataOutputStream.flush();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeConnection() {
         try {
             writeResponse(new ConnectionClosed());
@@ -65,9 +71,9 @@ public class ByteStreamConnection extends StreamConnection {
         super.closeConnection();
     }
 
-    public void initialize() {
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     protected Request readRequest() throws IOException, ClassNotFoundException {
         int byteArraySize = dataInputStream.readInt();
         if (byteArraySize < 0) {

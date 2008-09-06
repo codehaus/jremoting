@@ -47,12 +47,18 @@ public class ObjectStreamConnection extends StreamConnection {
         super(serverMonitor, inputStream, outputStream, facadesClassLoader, connectionDetails);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected void writeResponse(Response response) throws IOException {
         objectOutputStream.writeObject(response);
         objectOutputStream.flush();
         objectOutputStream.reset();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeConnection() {
         if (objectInputStream != null) {
             closeCloseable(objectInputStream, "object input stream");
@@ -63,11 +69,17 @@ public class ObjectStreamConnection extends StreamConnection {
         super.closeConnection();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void initialize() throws IOException {
         objectInputStream = new ClassLoaderObjectInputStream(getFacadesClassLoader(), new BufferedInputStream(getInputStream()));
         objectOutputStream = new ObjectOutputStream(getOutputStream());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected Request readRequest() throws IOException, ClassNotFoundException {
         return (Request) objectInputStream.readObject();
     }

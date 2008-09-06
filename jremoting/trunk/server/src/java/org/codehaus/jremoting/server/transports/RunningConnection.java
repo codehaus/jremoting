@@ -35,7 +35,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 /**
- * Class RunningConnection is a connection that that will be run implicitly in a different thread.
+ * Class RunningConnection is a wrapper to a connection which implicitly runs in a different thread.
  *
  * @author Paul Hammant
  *

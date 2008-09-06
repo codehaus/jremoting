@@ -51,7 +51,7 @@ public class XStreamConnection implements StreamConnection {
     private final XStream xStream;
     private final BufferedOutputStream bufferedOutputStream;
 
-    public XStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader, XStream xStream) throws ConnectionException {
+    public XStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader, XStream xStream) {
         bufferedOutputStream = new BufferedOutputStream(outputStream);
         printWriter = new PrintWriter(bufferedOutputStream);
         lineNumberReader = new LineNumberReader(new BufferedReader(new InputStreamReader(inputStream)));

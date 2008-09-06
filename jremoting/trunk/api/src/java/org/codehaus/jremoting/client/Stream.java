@@ -22,8 +22,19 @@ import org.codehaus.jremoting.ConnectionException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * A factory for StreamConnections
+ */
 public interface Stream {
 
+    /**
+     * Make a StreamConnection for a pair of Input/Output streams.
+     * @param inputStream the input stream
+     * @param outputStream the output stream
+     * @param facadesClassLoader the classloader to use to load facade classes from
+     * @return the resulting new StreamConnection
+     * @throws ConnectionException if a problem during connection setup
+     */
     StreamConnection makeStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException;
 
 }

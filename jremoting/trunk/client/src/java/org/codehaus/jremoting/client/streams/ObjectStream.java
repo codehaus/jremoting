@@ -23,7 +23,14 @@ import org.codehaus.jremoting.ConnectionException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * A Stream implementation that makes ObjectStreamConnections
+ */
 public class ObjectStream implements Stream {
+
+    /**
+     * {@inheritDoc}
+     */
     public StreamConnection makeStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
         return new ObjectStreamConnection(inputStream, outputStream, facadesClassLoader);
     }

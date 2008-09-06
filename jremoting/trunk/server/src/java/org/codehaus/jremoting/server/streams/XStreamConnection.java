@@ -45,9 +45,9 @@ import java.io.PrintWriter;
  */
 public class XStreamConnection extends StreamConnection {
 
+    private final XStream xStream;
     private LineNumberReader lineNumberReader;
     private PrintWriter printWriter;
-    private XStream xStream;
     private BufferedOutputStream bufferedOutputStream;
 
     public XStreamConnection(ServerMonitor serverMonitor, ClassLoader facadesClassLoader, InputStream inputStream,
@@ -65,6 +65,9 @@ public class XStreamConnection extends StreamConnection {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected void writeResponse(Response response) throws IOException {
         String xml = xStream.toXML(response);
         printWriter.write(xml + "\n");
@@ -72,18 +75,27 @@ public class XStreamConnection extends StreamConnection {
         bufferedOutputStream.flush();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeConnection() {
         closeCloseable(lineNumberReader, "line number reader");
         closeCloseable(printWriter, "print writer reader");
         super.closeConnection();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void initialize() throws IOException {
         lineNumberReader = new LineNumberReader(new BufferedReader(new InputStreamReader(getInputStream())));
         bufferedOutputStream = new BufferedOutputStream(getOutputStream());
         printWriter = new PrintWriter(bufferedOutputStream);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected Request readRequest() throws IOException, ClassNotFoundException, ConnectionException {
         String xml = SerializationHelper.getXml(lineNumberReader);
         try {

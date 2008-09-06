@@ -37,7 +37,7 @@ public class ByteStreamConnection implements StreamConnection {
     private final DataOutputStream dataOutputStream;
     private final ClassLoader facadesClassLoader;
 
-    public ByteStreamConnection(DataInputStream dataInputStream, DataOutputStream dataOutputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+    public ByteStreamConnection(DataInputStream dataInputStream, DataOutputStream dataOutputStream, ClassLoader facadesClassLoader) {
         this.dataInputStream = dataInputStream;
         this.dataOutputStream = dataOutputStream;
         this.facadesClassLoader = facadesClassLoader;

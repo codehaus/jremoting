@@ -22,8 +22,15 @@ import org.codehaus.jremoting.ConnectionException;
 
 import java.io.*;
 
+/**
+ * A Stream implementation that makes ByteStreamConnections
+ */
 public class ByteStream implements Stream {
-    public StreamConnection makeStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+
+    /**
+     * {@inheritDoc}
+     */
+    public StreamConnection makeStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) {
         return new ByteStreamConnection(new DataInputStream(inputStream), new DataOutputStream(new BufferedOutputStream(outputStream)), facadesClassLoader);
     }
 }

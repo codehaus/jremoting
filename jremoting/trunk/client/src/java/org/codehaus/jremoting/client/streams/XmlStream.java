@@ -25,6 +25,9 @@ import java.io.OutputStream;
 
 import com.thoughtworks.xstream.XStream;
 
+/**
+ * A Stream implementation that makes XStreamConnections
+ */
 public class XmlStream implements Stream {
 
     private final XStream xStream;
@@ -37,7 +40,10 @@ public class XmlStream implements Stream {
         this(new XStream());
     }
 
-    public StreamConnection makeStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) throws ConnectionException {
+    /**
+     * {@inheritDoc}
+     */
+    public StreamConnection makeStreamConnection(InputStream inputStream, OutputStream outputStream, ClassLoader facadesClassLoader) {
         return new XStreamConnection(inputStream, outputStream, facadesClassLoader, xStream);
     }
 }
