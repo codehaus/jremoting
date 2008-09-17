@@ -8,27 +8,26 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>jremoting-itests</artifactId>
 	<name>JRemoting Integration Tests</name>
-	<version>1.0</version>
 	<dependencies>
 		<dependency>
 			<groupId>${pom.groupId}</groupId>
 			<artifactId>jremoting-api</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>${pom.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${pom.groupId}</groupId>
 			<artifactId>jremoting-client</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>${pom.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${pom.groupId}</groupId>
 			<artifactId>jremoting-server</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>${pom.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${pom.groupId}</groupId>
 			<artifactId>jremoting-tools</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>${pom.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>bcel</groupId>

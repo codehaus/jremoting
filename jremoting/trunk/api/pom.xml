@@ -8,5 +8,4 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>jremoting-api</artifactId>
   <name>JRemoting API</name>
-  <version>1.1-SNAPSHOT</version>
 </project>
